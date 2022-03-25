@@ -10,6 +10,7 @@ defmodule AshHq.Docs.Option do
   code_interface do
     define_for AshHq.Docs
     define :search, args: [:query, :library_versions]
+    define :read
   end
 
   attributes do

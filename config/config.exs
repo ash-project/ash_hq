@@ -13,7 +13,7 @@ config :ash_hq,
 config :elasticlunr,
   storage: Elasticlunr.Storage.Disk
 
-config :elasticlunr, Elasticlunr.Storage.Disk, directory: "/indexes/"
+config :elasticlunr, Elasticlunr.Storage.Disk, directory: "indexes/"
 
 config :ash_hq, ash_apis: [AshHq.Docs]
 
