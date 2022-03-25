@@ -25,7 +25,15 @@ config :ash_hq, AshHqWeb.Endpoint,
   secret_key_base: "FxKFwVYhDFah3bLLXXqWdpdcLf5e5T1UyVM6XQp7kCt/Reg5yuAEI3upAVDRoP5e",
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    npx: [
+      "tailwindcss",
+      "--input=css/app.css",
+      "--output=../priv/static/assets/app.css",
+      "--postcss",
+      "--watch",
+      cd: Path.expand("../assets", __DIR__)
+    ]
   ]
 
 # ## SSL Support
@@ -58,7 +66,7 @@ config :ash_hq, AshHqWeb.Endpoint,
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/ash_hq_web/(live|views)/.*(ex)$",
+      ~r"lib/ash_hq_web/(live|views|pages|components)/.*(ex)$",
       ~r"lib/ash_hq_web/templates/.*(eex)$"
     ]
   ]

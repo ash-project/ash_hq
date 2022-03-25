@@ -8,6 +8,7 @@ defmodule AshHqWeb.Router do
     plug :put_root_layout, {AshHqWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug AshHqWeb.SessionPlug
   end
 
   pipeline :api do
@@ -17,7 +18,9 @@ defmodule AshHqWeb.Router do
   scope "/", AshHqWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    live_session :main, root_layout: {AshHqWeb.LayoutView, "root.html"} do
+      live "/", AppViewLive
+    end
   end
 
   # Other scopes may use custom stacks.

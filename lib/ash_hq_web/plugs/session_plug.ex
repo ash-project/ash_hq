@@ -1,0 +1,22 @@
+defmodule AshHqWeb.SessionPlug do
+  @moduledoc false
+  @behaviour Plug
+
+  @cookies_to_replicate [
+    "theme"
+  ]
+
+  def init(_), do: []
+
+  def call(conn, _) do
+    Enum.reduce(@cookies_to_replicate, conn, fn cookie, conn ->
+      case conn.req_cookies[cookie] do
+        value when value in [nil, "", "null"] ->
+          Plug.Conn.put_session(conn, cookie, nil)
+
+        value ->
+          Plug.Conn.put_session(conn, cookie, value)
+      end
+    end)
+  end
+end

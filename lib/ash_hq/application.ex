@@ -8,6 +8,7 @@ defmodule AshHq.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      {Finch, name: AshHq.Finch},
       # Start the Ecto repository
       AshHq.Repo,
       # Start the Telemetry supervisor
@@ -15,7 +16,8 @@ defmodule AshHq.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: AshHq.PubSub},
       # Start the Endpoint (http/https)
-      AshHqWeb.Endpoint
+      AshHqWeb.Endpoint,
+      AshHq.Docs.Indexer
       # Start a worker by calling: AshHq.Worker.start_link(arg)
       # {AshHq.Worker, arg}
     ]

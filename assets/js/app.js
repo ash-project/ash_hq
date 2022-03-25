@@ -1,7 +1,3 @@
-// We import the CSS which is extracted to its own file by esbuild.
-// Remove this line if you add a your own CSS build pipeline (e.g postcss).
-import "../css/app.css"
-
 // If you want to use Phoenix channels, run `mix help phx.gen.channel`
 // to get started and then uncomment the line below.
 // import "./user_socket.js"
@@ -26,13 +22,68 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 
+window.matchMedia('(prefers-color-scheme: dark)').matches
+
+const Hooks = {};
+
+Hooks.ColorTheme = {
+  mounted() {
+    this.handleEvent('set_theme', (payload) => {
+      document.documentElement.classList.add(payload.theme);
+      if(payload.theme === "dark") {
+        document.documentElement.classList.remove("light");
+      } else {
+        document.documentElement.classList.remove("dark");
+      };
+
+      document.cookie = 'theme' + '=' + payload.theme + ';path=/';
+    })
+  }
+}
+
+Hooks.CmdK = {
+  mounted() {
+    window.addEventListener("keydown", (event) => {
+      if(event.metaKey && event.key === "k") {
+        document.getElementById("search-button").click()
+      }
+    })
+    window.addEventListener("keydown", (event) => {
+      if(event.key === "Escape") {
+        document.getElementById("close-search").click()
+      }
+    })
+  }
+}
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+let liveSocket = new LiveSocket("/live", Socket, {
+  params: {_csrf_token: csrfToken}, 
+  hooks: Hooks,
+  metadata: {
+    keydown: (e) => {
+      return {
+        key: e.key,
+        metaKey: e.metaKey
+      }
+    }
+  }
+});
 
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", info => topbar.show())
 window.addEventListener("phx:page-loading-stop", info => topbar.hide())
+window.addEventListener("js:focus", e => e.target.focus())
+window.addEventListener("js:noscroll-main", e =>  {
+  console.log(e.target.id)
+
+  if(e.target.style.display === "none") {
+    document.getElementById("main-container").classList.add("overflow-hidden")
+  } else {
+    document.getElementById("main-container").classList.remove("overflow-hidden")
+  }
+})
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()

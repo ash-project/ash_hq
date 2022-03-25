@@ -33,6 +33,17 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      # {:ash, github: "ash-project/ash", override: true},
+      {:ash, path: "../ash", override: true},
+      {:ash_postgres, github: "ash-project/ash_postgres"},
+      {:ash_phoenix, github: "ash-project/ash_phoenix"},
+      {:elasticlunr, "~> 0.6.6"},
+      {:earmark, "~> 1.4"},
+      {:ecto, git: "https://github.com/elixir-ecto/ecto.git", override: true},
+      {:surface, "~> 0.7.3"},
+      {:surface_heroicons, "~> 0.6.0"},
+      {:makeup, "~> 1.1"},
+      {:makeup_elixir, "~> 0.16.0"},
       {:phoenix, "~> 1.6.6"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
@@ -40,6 +51,8 @@ defmodule AshHq.MixProject do
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.17.5"},
+      {:nimble_options, "~> 0.4.0", override: true},
+      {:finch, "~> 0.10.2"},
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.6"},
       {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
@@ -60,11 +73,16 @@ defmodule AshHq.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      seed: ["run priv/repo/seeds.exs"],
+      setup: ["ash_postgres.create", "ash_postgres.migrate", "seed"],
+      reset: ["drop", "setup"],
+      drop: ["ash_postgres.drop"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.deploy": ["esbuild default --minify", "phx.digest"]
+      "assets.deploy": [
+        "cmd --cd assets npm run deploy",
+        "esbuild default --minify",
+        "phx.digest"
+      ]
     ]
   end
 end

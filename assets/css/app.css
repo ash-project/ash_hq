@@ -1,6 +1,13 @@
 /* This file is for your main application CSS */
-@import "./phoenix.css";
+@import "syntax.css";
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+@import "@fontsource/fira-code";
 
+.search-hit {
+  color: red
+}
 /* Alerts and form errors used by phx.new */
 .alert {
   padding: 15px;

@@ -10,6 +10,22 @@ import Config
 config :ash_hq,
   ecto_repos: [AshHq.Repo]
 
+config :elasticlunr,
+  storage: Elasticlunr.Storage.Disk
+
+config :elasticlunr, Elasticlunr.Storage.Disk, directory: "/indexes/"
+
+config :ash_hq, ash_apis: [AshHq.Docs]
+
+config :ash_hq, AshHq.Docs,
+  resources: [
+    registry: AshHq.Docs.Registry
+  ]
+
+config :ash_hq, AshHq.Repo,
+  timeout: :timer.minutes(10),
+  ownership_timeout: :timer.minutes(10)
+
 # Configures the endpoint
 config :ash_hq, AshHqWeb.Endpoint,
   url: [host: "localhost"],
