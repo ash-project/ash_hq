@@ -6,7 +6,7 @@
 @import "@fontsource/fira-code";
 
 .search-hit {
-  color: red
+  color: #fb923c
 }
 /* Alerts and form errors used by phx.new */
 .alert {

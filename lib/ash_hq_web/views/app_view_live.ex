@@ -19,17 +19,16 @@ defmodule AshHqWeb.AppViewLive do
         <Search id="search-box" close={close_search()} />
         <div class="flex justify-between pt-4 px-4">
           <div class="flex flex-row align-baseline">
-            <img class="h-10 hidden dark:block" src="/images/ash-framework-dark.png"/>
-            <img class="h-10 dark:hidden" src="/images/ash-framework-light.png"/>
+            <img class="h-10 hidden dark:block" src="/images/ash-framework-dark.png">
+            <img class="h-10 dark:hidden" src="/images/ash-framework-light.png">
           </div>
           <div class="flex flex-row">
             <button phx-click="toggle_theme">
               {#case @configured_theme}
                 {#match "light"}
-                  <Heroicons.Outline.SunIcon class="w-10 h-10"/>
-
+                  <Heroicons.Outline.SunIcon class="w-10 h-10" />
                 {#match _}
-                  <Heroicons.Outline.MoonIcon class="w-10 h-10"/>
+                  <Heroicons.Outline.MoonIcon class="w-10 h-10" />
               {/case}
             </button>
           </div>
@@ -43,7 +42,11 @@ defmodule AshHqWeb.AppViewLive do
               A declarative foundation for modern applications. Use extensions like <CalloutText>Ash GraphQL</CalloutText> and <CalloutText>Ash Json Api</CalloutText> to add APIs in minutes,
               or build your own extensions. Plug-and-play with other excellent tools like <CalloutText>Phoenix</CalloutText> and <CalloutText>Absinthe</CalloutText>.
             </div>
-            <button id="search-button" class="w-96 button hide xl:block border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 mt-4" phx-click={toggle_search()}>
+            <button
+              id="search-button"
+              class="w-96 button hide xl:block border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 mt-4"
+              phx-click={toggle_search()}
+            >
               <div class="flex flex-row justify-between items-center px-4">
                 <div class="h-12 flex flex-row justify-start items-center text-center space-x-4">
                   <Heroicons.Outline.SearchIcon class="w-4 h-4" />
@@ -54,17 +57,62 @@ defmodule AshHqWeb.AppViewLive do
             </button>
             <div class="pt-6 pb-6 w-full hidden md:block">
               <div class="flex flex-row justify-center space-x-24 xl:space-x-32">
-                <CodeExample id="define-a-resource" class="grow min-w-fit" text={post_example()} title="Define a resource" />
+                <CodeExample
+                  id="define-a-resource"
+                  class="grow min-w-fit"
+                  text={post_example()}
+                  title="Define a resource"
+                />
                 <div class="flex flex-col space-y-8">
-                  <CodeExample class="w-auto" collapsable id="use-it-programatically" text={changeset_example()} title="Use it programatically" />
-                  <CodeExample class="w-auto" collapsable id="graphql-interface" text={graphql_example()} title="Add a GraphQL interface" />
-                  <CodeExample class="w-auto" collapsable start_collapsed id="authorization-policies" text={policies_example()} title="Add authorization policies" />
-                  <CodeExample class="w-auto" collapsable start_collapsed id="aggregates" text={aggregate_example()} title="Define aggregates and calculations" />
-                  <CodeExample class="w-auto" collapsable start_collapsed id="pubsub" text={notifier_example()} title="Broadcast changes over Phoenix PubSub" />
-                  <CodeExample class="w-auto" collapsable start_collapsed id="live-view" text={live_view_example()} title="Use it with Phoenix LiveView" />
+                  <CodeExample
+                    class="w-auto"
+                    collapsable
+                    id="use-it-programatically"
+                    text={changeset_example()}
+                    title="Use it programatically"
+                  />
+                  <CodeExample
+                    class="w-auto"
+                    collapsable
+                    id="graphql-interface"
+                    text={graphql_example()}
+                    title="Add a GraphQL interface"
+                  />
+                  <CodeExample
+                    class="w-auto"
+                    collapsable
+                    start_collapsed
+                    id="authorization-policies"
+                    text={policies_example()}
+                    title="Add authorization policies"
+                  />
+                  <CodeExample
+                    class="w-auto"
+                    collapsable
+                    start_collapsed
+                    id="aggregates"
+                    text={aggregate_example()}
+                    title="Define aggregates and calculations"
+                  />
+                  <CodeExample
+                    class="w-auto"
+                    collapsable
+                    start_collapsed
+                    id="pubsub"
+                    text={notifier_example()}
+                    title="Broadcast changes over Phoenix PubSub"
+                  />
+                  <CodeExample
+                    class="w-auto"
+                    collapsable
+                    start_collapsed
+                    id="live-view"
+                    text={live_view_example()}
+                    title="Use it with Phoenix LiveView"
+                  />
                 </div>
               </div>
-             </div>
+            </div>
           </div>
         </div>
         <div class="bg-primary-black">

@@ -16,8 +16,7 @@ defmodule AshHq.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: AshHq.PubSub},
       # Start the Endpoint (http/https)
-      AshHqWeb.Endpoint,
-      AshHq.Docs.Indexer
+      AshHqWeb.Endpoint
       # Start a worker by calling: AshHq.Worker.start_link(arg)
       # {AshHq.Worker, arg}
     ]

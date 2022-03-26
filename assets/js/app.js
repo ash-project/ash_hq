@@ -85,6 +85,14 @@ window.addEventListener("js:noscroll-main", e =>  {
   }
 })
 
+window.addEventListener("phx:js:scroll-to", (e) => {
+  const target = document.getElementById(e.detail.id);
+  target.scrollIntoView();
+});
+
+
+
+
 // connect if there are any LiveViews on the page
 liveSocket.connect()
 

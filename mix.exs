@@ -37,7 +37,6 @@ defmodule AshHq.MixProject do
       {:ash, path: "../ash", override: true},
       {:ash_postgres, github: "ash-project/ash_postgres"},
       {:ash_phoenix, github: "ash-project/ash_phoenix"},
-      {:elasticlunr, "~> 0.6.6"},
       {:earmark, "~> 1.4"},
       {:ecto, git: "https://github.com/elixir-ecto/ecto.git", override: true},
       {:surface, "~> 0.7.3"},

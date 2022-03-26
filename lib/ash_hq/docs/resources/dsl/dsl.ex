@@ -55,7 +55,7 @@ defmodule AshHq.Docs.Dsl do
               :string,
               expr(
                 fragment(
-                  "ts_headline('english', ?, to_tsquery('english', ?  || ':*'), 'MaxFragments=3, StartSel=\"<span class=\"\"search-hit\"\">\", StopSel=</span>')",
+                  "ts_headline('english', ?, to_tsquery('english', ?  || ':*'), 'StartSel=\"<span class=\"\"search-hit\"\">\", StopSel=</span>')",
                   doc,
                   ^arg(:query)
                 )
@@ -79,7 +79,7 @@ defmodule AshHq.Docs.Dsl do
               :float,
               expr(
                 fragment(
-                  "ts_rank(setweight(to_tsvector(?), 'A') || setweight(to_tsvector(?), 'D'),  to_tsquery(?))",
+                  "ts_rank(setweight(to_tsvector(?), 'A') || setweight(to_tsvector(?), 'B'), to_tsquery(? || ':*'))",
                   name,
                   doc,
                   ^arg(:query)
