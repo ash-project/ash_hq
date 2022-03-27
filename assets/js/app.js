@@ -14,6 +14,7 @@
 //
 //     import "some-package"
 //
+import scrollIntoView from 'smooth-scroll-into-view-if-needed'
 
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html"
@@ -76,8 +77,6 @@ window.addEventListener("phx:page-loading-start", info => topbar.show())
 window.addEventListener("phx:page-loading-stop", info => topbar.hide())
 window.addEventListener("js:focus", e => e.target.focus())
 window.addEventListener("js:noscroll-main", e =>  {
-  console.log(e.target.id)
-
   if(e.target.style.display === "none") {
     document.getElementById("main-container").classList.add("overflow-hidden")
   } else {
@@ -87,11 +86,18 @@ window.addEventListener("js:noscroll-main", e =>  {
 
 window.addEventListener("phx:js:scroll-to", (e) => {
   const target = document.getElementById(e.detail.id);
-  target.scrollIntoView();
+  const boundary = document.getElementById(e.detail.boundary_id);
+  scrollIntoView(target, { 
+    behavior: 'smooth', 
+    block: 'center',
+    boundary: boundary
+  });
 });
 
-
-
+window.addEventListener("phx:selected-versions", (e) => {
+  const cookie = Object.keys(e.detail).map((key) => `${key}:${e.detail[key]}`).join(',');
+  document.cookie = 'selected_versions' + '=' + cookie + ';path=/';
+});
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()

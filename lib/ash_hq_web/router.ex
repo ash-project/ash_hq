@@ -19,7 +19,10 @@ defmodule AshHqWeb.Router do
     pipe_through :browser
 
     live_session :main, root_layout: {AshHqWeb.LayoutView, "root.html"} do
-      live "/", AppViewLive
+      live "/", AppViewLive, :home
+      live "/docs/", AppViewLive, :docs_dsl
+      live "/docs/dsl/:library/:version", AppViewLive, :docs_dsl
+      live "/docs/dsl/:library/:version/:extension", AppViewLive, :docs_dsl
     end
   end
 

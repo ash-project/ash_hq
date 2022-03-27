@@ -10,6 +10,6 @@
     "tailwindcss": "^3.0.23"
   },
   "dependencies": {
-    "@fontsource/fira-code": "^4.5.5"
+    "smooth-scroll-into-view-if-needed": "^1.1.33"
   }
 }

@@ -4,8 +4,24 @@ defmodule AshHq.Docs.Changes.AddArgToRelationship do
   def change(changeset, opts, _) do
     arg = opts[:arg]
     rel = opts[:rel]
+    attr = opts[:attr]
+    generate = opts[:generate]
 
-    arg_value = Ash.Changeset.get_argument(changeset, arg)
+    {changeset, arg_value} =
+      if attr do
+        val = Ash.Changeset.get_attribute(changeset, attr)
+
+        changeset =
+          if is_nil(val) && generate do
+            Ash.Changeset.force_change_attribute(changeset, attr, generate.())
+          else
+            changeset
+          end
+
+        {changeset, Ash.Changeset.get_attribute(changeset, attr)}
+      else
+        {changeset, Ash.Changeset.get_argument(changeset, arg)}
+      end
 
     relationship_value = Ash.Changeset.get_argument(changeset, rel)
 

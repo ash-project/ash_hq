@@ -8,6 +8,7 @@ defmodule AshHqWeb.Components.CodeExample do
   prop collapsable, :boolean, default: false
 
   data collapsed, :string, default: false
+  data code, :string, default: ""
 
   def render(assigns) do
     ~F"""
@@ -34,19 +35,23 @@ defmodule AshHqWeb.Components.CodeExample do
         {/if}
       </div>
       <div class={"pl-1 pt-2", "h-0": @collapsed}>
-      <div class="flex flex-row">
-        <div class="flex flex-col border-r border-gray-700 pr-1">
-          {#for {line, no} <- to_code(@text)}
-            <pre>{no}</pre>
-          {/for}
-        </div>
-        <div>
-          {#for {line, no} <- to_code(@text)}
-            <div class={"flex flex-row font-code mr-4", "invisible h-0": @collapsed}>
-              <div class="sm:hidden md:block mr-8 text-gray-600"></div>{Phoenix.HTML.raw(line)}
-            </div>
-          {/for}
-        </div>
+        <div class="flex flex-row">
+          <div class="flex flex-col border-r border-gray-700 pr-1">
+            {#if !@collapsed}
+              {#for {_line, no} <- @code}
+                <pre>{no}</pre>
+              {/for}
+            {#else}
+              <div class="invisible h-0">{to_string(List.last(@code) |> elem(0))}</div>
+            {/if}
+          </div>
+          <div>
+            {#for {line, _no} <- @code}
+              <div class={"flex flex-row mr-4", "invisible h-0": @collapsed}>
+                <div class="sm:hidden md:block mr-8 text-gray-600 font-mono" />{Phoenix.HTML.raw(line)}
+              </div>
+            {/for}
+          </div>
         </div>
       </div>
     </div>
@@ -59,9 +64,17 @@ defmodule AshHqWeb.Components.CodeExample do
 
   def update(assigns, socket) do
     if assigns.start_collapsed && assigns.collapsable do
-      {:ok, socket |> assign(assigns) |> assign(:collapsed, true)}
+      {:ok,
+       socket
+       |> assign(assigns)
+       |> assign(:collapsed, true)
+       |> assign(:code, to_code(assigns[:text]))}
     else
-      {:ok, socket |> assign(assigns) |> assign(:collapsed, false)}
+      {:ok,
+       socket
+       |> assign(assigns)
+       |> assign(:collapsed, false)
+       |> assign(:code, to_code(assigns[:text]))}
     end
   end
 

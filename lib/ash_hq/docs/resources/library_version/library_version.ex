@@ -1,10 +1,21 @@
 defmodule AshHq.Docs.LibraryVersion do
   use AshHq.Resource,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshHq.Docs.Extensions.Search]
+
+  search do
+    name_attribute :version
+    library_version_attribute :id
+    load_for_search [:library_name, :library_display_name]
+  end
 
   postgres do
     table "library_versions"
     repo AshHq.Repo
+  end
+
+  identities do
+    identity :unique_version_for_library, [:version, :library_id]
   end
 
   code_interface do
@@ -25,6 +36,9 @@ defmodule AshHq.Docs.LibraryVersion do
         allow_nil? false
       end
 
+      argument :guides, {:array, :map}
+
+      change manage_relationship(:guides, type: :direct_control)
       change manage_relationship(:library, type: :replace)
     end
 
@@ -49,6 +63,11 @@ defmodule AshHq.Docs.LibraryVersion do
     end
   end
 
+  aggregates do
+    first :library_name, :library, :name
+    first :library_display_name, :library, :display_name
+  end
+
   attributes do
     uuid_primary_key :id
 
@@ -57,6 +76,10 @@ defmodule AshHq.Docs.LibraryVersion do
     end
 
     attribute :data, :map
+
+    attribute :doc, :string do
+      allow_nil? false
+    end
 
     attribute :processed, :boolean do
       default false
@@ -80,5 +103,6 @@ defmodule AshHq.Docs.LibraryVersion do
     end
 
     has_many :extensions, AshHq.Docs.Extension
+    has_many :guides, AshHq.Docs.Guide
   end
 end

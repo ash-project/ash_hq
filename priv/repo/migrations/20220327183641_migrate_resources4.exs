@@ -1,4 +1,4 @@
-defmodule AshHq.Repo.Migrations.MigrateResources2 do
+defmodule AshHq.Repo.Migrations.MigrateResources4 do
   @moduledoc """
   Updates resources based on their most recent snapshots.
 
@@ -9,13 +9,13 @@ defmodule AshHq.Repo.Migrations.MigrateResources2 do
 
   def up do
     alter table(:library_versions) do
-      add :data, :map
+      add :doc, :text, null: false
     end
   end
 
   def down do
     alter table(:library_versions) do
-      remove :data
+      remove :doc
     end
   end
 end

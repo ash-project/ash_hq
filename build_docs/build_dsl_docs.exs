@@ -1,6 +1,8 @@
 require Logger
 [name, version, file, branch] = System.argv()
 
+Application.put_env(:dsl, :name, name)
+
 if branch == "true" do
   Mix.install([
     {String.to_atom(name), github: "ash-project/#{name}", ref: version}
@@ -24,7 +26,7 @@ defmodule Utils do
       default
   end
 
-  def build(extension) do
+  def build(extension, order) do
     extension_name = extension.name
 
     %{
@@ -32,17 +34,22 @@ defmodule Utils do
       target: extension[:target],
       default_for_target: extension[:default_for_target?] || false,
       type: extension[:type],
+      order: order,
+      doc: module_docs(extension.module) || "No documentation",
       dsls: build_sections(extension.module.sections())
     }
   end
 
   defp build_sections(sections, path \\ []) do
-    Enum.flat_map(sections, fn section ->
+    sections
+    |> Enum.with_index()
+    |> Enum.flat_map(fn {section, index} ->
       [%{
         name: section.name,
         options: schema(section.schema, path ++ [section.name]),
         doc: section.describe,
         type: :section,
+        order: index,
         examples: examples(section.examples),
         path: path
       }] ++
@@ -52,11 +59,14 @@ defmodule Utils do
   end
 
   defp build_entities(entities, path) do
-    Enum.flat_map(entities, fn entity ->
+    entities
+    |> Enum.with_index()
+    |> Enum.flat_map(fn {entity, index} ->
       [%{
         name: entity.name,
         recursive_as: Map.get(entity, :recursive_as),
         examples: examples(entity.examples),
+        order: index,
         doc: entity.describe,
         args: entity.args,
         type: :entity,
@@ -76,16 +86,26 @@ defmodule Utils do
   end
 
   defp schema(schema, path) do
-    Enum.map(schema, fn {name, value} ->
+    schema
+    |> Enum.with_index()
+    |> Enum.map(fn {{name, value}, index} ->
       %{
         name: name,
         path: path,
+        order: index,
         type: value[:type_name] || type(value[:type]),
         doc: value[:doc],
         required: value[:required] || false,
         default: inspect(value[:default])
       }
     end)
+  end
+
+  def module_docs(module) do
+    {:docs_v1, _, :elixir, _, %{"en" => docs}, _, _} = Code.fetch_docs(module)
+    docs
+  rescue
+    _ -> "No Documentation"
   end
 
   defp type({:behaviour, mod}), do: Module.split(mod) |> List.last()
@@ -114,30 +134,52 @@ defmodule Utils do
   defp type({:in, choices}), do: Enum.map_join(choices, " | ", &inspect/1)
   defp type({:or, subtypes}), do: Enum.map_join(subtypes, " | ", &type/1)
   defp type({:list, subtype}), do: type(subtype) <> "[]"
+
+  def doc_index?(module) do
+    Ash.Helpers.implements_behaviour?(module, Ash.DocIndex) && module.for_library() == Application.get_env(:dsl, :name)
+  end
 end
 
 dsls =
   for [app] <- :ets.match(:ac_tab, {{:loaded, :"$1"}, :_}),
       {:ok, modules} = :application.get_key(app, :modules),
-      module <- Enum.filter(modules, &Ash.Helpers.implements_behaviour?(&1, Ash.DocIndex)),
-      module.for_library() == name do
+      module <- Enum.filter(modules, &Utils.doc_index?/1) do
     module
   end
 
-extensions =
-  dsls
-  |> Enum.flat_map(fn dsl ->
-    dsl.extensions()
-  end)
+case Enum.at(dsls, 0) do
+  nil ->
+    File.write!(file, Base.encode64(:erlang.term_to_binary(nil)))
 
-data =
-  extensions
-  |> Enum.reduce(%{}, fn extension, acc ->
-    acc
-    |> Map.put_new(:extensions, [])
-    |> Map.update!(:extensions, fn extensions ->
-      [Utils.build(extension) | extensions]
-    end)
-  end)
+  dsl ->
+    extensions = dsl.extensions()
 
-File.write!(file, Base.encode64(:erlang.term_to_binary(data)))
+    acc = %{
+      doc: Utils.module_docs(dsl)
+    }
+
+    acc =
+      Utils.try_apply(fn -> dsl.guides() end, [])
+      |> Enum.with_index()
+      |> Enum.reduce(acc, fn {guide, order}, acc ->
+        acc
+        |> Map.put_new(:guides, [])
+        |> Map.update!(:guides, fn guides ->
+          [Map.put(guide, :order, order) | guides]
+        end)
+      end)
+
+    data =
+      extensions
+      |> Enum.with_index()
+      |> Enum.reduce(acc, fn {extension, i}, acc ->
+        acc
+        |> Map.put_new(:extensions, [])
+        |> Map.update!(:extensions, fn extensions ->
+          [Utils.build(extension, i) | extensions]
+        end)
+      end)
+
+
+    File.write!(file, Base.encode64(:erlang.term_to_binary(data)))
+end

@@ -17,7 +17,7 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "version",
+      "source": "name",
       "type": "text"
     },
     {
@@ -25,30 +25,30 @@
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
-      "references": {
-        "destination_field": "id",
-        "destination_field_default": null,
-        "destination_field_generated": null,
-        "multitenancy": {
-          "attribute": null,
-          "global": null,
-          "strategy": null
-        },
-        "name": "library_versions_library_id_fkey",
-        "on_delete": null,
-        "on_update": null,
-        "table": "libraries"
-      },
+      "references": null,
       "size": null,
-      "source": "library_id",
-      "type": "uuid"
+      "source": "display_name",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "[]",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "track_branches",
+      "type": [
+        "array",
+        "text"
+      ]
     }
   ],
   "base_filter": null,
   "check_constraints": [],
   "custom_indexes": [],
   "has_create_action": true,
-  "hash": "1923B17B390C75BB5D67CFA14A2EFD523A449CEDE0336BF012FC27D36D83C862",
+  "hash": "8CE51ECC5416FD94430ED9EFEB5F7A02820D09628BD0E1A19FA7D59EF0F91119",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -56,5 +56,5 @@
     "strategy": null
   },
   "repo": "Elixir.AshHq.Repo",
-  "table": "library_versions"
+  "table": "libraries"
 }

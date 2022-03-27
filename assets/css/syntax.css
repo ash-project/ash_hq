@@ -1,3 +1,11 @@
+ .collapsed-code .highlight{
+   height: 0
+ }
+
+ .collapsed-code .code{
+   height: 0
+ }
+
  .highlight .hll { background-color: #f1fa8c }
  .highlight  { background: #181920; color: #f8f8f2 }
  .highlight .c { color: #6272a4 } /* Comment */

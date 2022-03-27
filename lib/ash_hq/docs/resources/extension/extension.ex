@@ -25,9 +25,12 @@ defmodule AshHq.Docs.Extension do
       end
 
       argument :dsls, {:array, :map}
-
       change manage_relationship(:library_version, type: :replace)
       change {AshHq.Docs.Changes.AddArgToRelationship, arg: :library_version, rel: :dsls}
+
+      change {AshHq.Docs.Changes.AddArgToRelationship,
+              attr: :id, arg: :extension_id, rel: :dsls, generate: &Ash.UUID.generate/0}
+
       change manage_relationship(:dsls, type: :direct_control)
     end
   end
@@ -48,6 +51,10 @@ defmodule AshHq.Docs.Extension do
     attribute :type, :string do
       allow_nil? false
     end
+
+    attribute :order, :integer do
+      allow_nil? false
+    end
   end
 
   relationships do
@@ -56,5 +63,6 @@ defmodule AshHq.Docs.Extension do
     end
 
     has_many :dsls, AshHq.Docs.Dsl
+    has_many :options, AshHq.Docs.Option
   end
 end

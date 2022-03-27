@@ -61,6 +61,29 @@
       "type": "text"
     },
     {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "path",
+      "type": [
+        "array",
+        "text"
+      ]
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "order",
+      "type": "bigint"
+    },
+    {
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
@@ -82,13 +105,59 @@
       "size": null,
       "source": "dsl_id",
       "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": {
+        "destination_field": "id",
+        "destination_field_default": null,
+        "destination_field_generated": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "options_library_version_id_fkey",
+        "on_delete": null,
+        "on_update": null,
+        "table": "library_versions"
+      },
+      "size": null,
+      "source": "library_version_id",
+      "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": {
+        "destination_field": "id",
+        "destination_field_default": null,
+        "destination_field_generated": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "options_extension_id_fkey",
+        "on_delete": null,
+        "on_update": null,
+        "table": "extensions"
+      },
+      "size": null,
+      "source": "extension_id",
+      "type": "uuid"
     }
   ],
   "base_filter": null,
   "check_constraints": [],
   "custom_indexes": [],
   "has_create_action": true,
-  "hash": "F5150BA878A12A92AAB78AE98A2161EE1185AD6AD3D8CBF589CE95B653FE4D49",
+  "hash": "FBF706359DC61A36952BF0268C73222EB8695482D8002028E38D7198B5C9D9CE",
   "identities": [],
   "multitenancy": {
     "attribute": null,

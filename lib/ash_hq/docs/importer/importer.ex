@@ -36,15 +36,11 @@ defmodule AshHq.Docs.Importer do
         )
 
       # TODO: reenable this
-      # versions
-      # |> Enum.reject(fn version ->
-      #   Enum.find(already_defined_versions, &(&1.version == version))
-      # end)
-
-      # |> Enum.concat(["master"])
-      # branches =
-      library.track_branches
-      |> Enum.map(&{&1, true})
+      versions
+      |> Enum.reject(fn version ->
+        Enum.find(already_defined_versions, &(&1.version == version))
+      end)
+      |> Enum.concat(Enum.map(library.track_branches, &{&1, true}))
       |> Enum.each(fn version ->
         {version, branch?} =
           case version do
@@ -67,7 +63,9 @@ defmodule AshHq.Docs.Importer do
         result = :erlang.binary_to_term(Base.decode64!(String.trim(output)))
         File.rm!(file)
 
-        LibraryVersion.build!(library.id, version, result)
+        if result do
+          LibraryVersion.build!(library.id, version, result, %{doc: result[:doc]})
+        end
       end)
     end
 
@@ -91,12 +89,7 @@ defmodule AshHq.Docs.Importer do
         Version.match?(Version.parse!(version), "> #{latest_version}")
       end)
     else
-      latest = Version.parse!(Enum.at(versions, 0))
-
-      Enum.take_while(versions, fn version ->
-        version = Version.parse!(version)
-        version.major == latest.major && version.minor == latest.minor
-      end)
+      Enum.take(versions, 1)
     end
   end
 end

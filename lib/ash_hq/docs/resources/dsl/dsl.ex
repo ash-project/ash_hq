@@ -1,6 +1,11 @@
 defmodule AshHq.Docs.Dsl do
   use AshHq.Resource,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshHq.Docs.Extensions.Search]
+
+  search do
+    load_for_search([:extension_type, :extension_name, :version_name, :library_name])
+  end
 
   postgres do
     table "dsls"
@@ -9,7 +14,6 @@ defmodule AshHq.Docs.Dsl do
 
   code_interface do
     define_for AshHq.Docs
-    define :search, args: [:query, :library_versions]
     define :read
   end
 
@@ -18,22 +22,15 @@ defmodule AshHq.Docs.Dsl do
       primary? true
     end
 
-    read :search do
-      argument :query, :string do
-        allow_nil? false
-      end
-
-      argument :library_versions, {:array, :uuid} do
-        allow_nil? false
-      end
-
-      prepare AshHq.Docs.Preparations.LoadSearchData
-      filter expr(matches(query: arg(:query)) and library_version_id in ^arg(:library_versions))
-    end
-
     create :create do
       argument :options, {:array, :map}
       argument :library_version, :uuid
+
+      argument :extension_id, :uuid do
+        allow_nil? false
+      end
+
+      change {AshHq.Docs.Changes.AddArgToRelationship, arg: :extension_id, rel: :options}
 
       change {AshHq.Docs.Changes.AddArgToRelationship, arg: :library_version, rel: :options}
       change manage_relationship(:options, type: :direct_control)
@@ -44,50 +41,13 @@ defmodule AshHq.Docs.Dsl do
       argument :options, {:array, :map}
       argument :library_version, :uuid
 
+      change {AshHq.Docs.Changes.AddArgToRelationship,
+              attr: :extension_id, arg: :extension_id, rel: :options}
+
       change {AshHq.Docs.Changes.AddArgToRelationship, arg: :library_version, rel: :options}
+
       change manage_relationship(:options, type: :direct_control)
       change manage_relationship(:library_version, type: :replace)
-    end
-  end
-
-  calculations do
-    calculate :search_headline,
-              :string,
-              expr(
-                fragment(
-                  "ts_headline('english', ?, to_tsquery('english', ?  || ':*'), 'StartSel=\"<span class=\"\"search-hit\"\">\", StopSel=</span>')",
-                  doc,
-                  ^arg(:query)
-                )
-              ) do
-      argument :query, :string do
-        allow_nil? false
-      end
-    end
-
-    calculate :matches,
-              :boolean,
-              expr(
-                fragment("to_tsvector(? || ?) @@ to_tsquery(? || ':*')", name, doc, ^arg(:query))
-              ) do
-      argument :query, :string do
-        allow_nil? false
-      end
-    end
-
-    calculate :match_rank,
-              :float,
-              expr(
-                fragment(
-                  "ts_rank(setweight(to_tsvector(?), 'A') || setweight(to_tsvector(?), 'B'), to_tsquery(? || ':*'))",
-                  name,
-                  doc,
-                  ^arg(:query)
-                )
-              ) do
-      argument :query, :string do
-        allow_nil? false
-      end
     end
   end
 
@@ -103,6 +63,7 @@ defmodule AshHq.Docs.Dsl do
     attribute :args, {:array, :string}
     attribute :path, {:array, :string}
     attribute :recursive_as, :string
+    attribute :order, :integer, allow_nil?: false
 
     attribute :type, :atom do
       allow_nil? false
@@ -112,6 +73,9 @@ defmodule AshHq.Docs.Dsl do
 
   aggregates do
     first :extension_type, :extension, :type
+    first :extension_name, :extension, :name
+    first :version_name, :library_version, :version
+    first :library_name, [:library_version, :library], :name
   end
 
   relationships do

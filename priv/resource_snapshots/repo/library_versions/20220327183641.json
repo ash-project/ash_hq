@@ -17,8 +17,38 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "name",
+      "source": "version",
       "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "data",
+      "type": "map"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "doc",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "false",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "processed",
+      "type": "boolean"
     },
     {
       "allow_nil?": false,
@@ -34,13 +64,13 @@
           "global": null,
           "strategy": null
         },
-        "name": "extensions_library_version_id_fkey",
+        "name": "library_versions_library_id_fkey",
         "on_delete": null,
         "on_update": null,
-        "table": "library_versions"
+        "table": "libraries"
       },
       "size": null,
-      "source": "library_version_id",
+      "source": "library_id",
       "type": "uuid"
     }
   ],
@@ -48,7 +78,7 @@
   "check_constraints": [],
   "custom_indexes": [],
   "has_create_action": true,
-  "hash": "82FD37547E06CC3763E82E53E135C5C4D77781C0C0AECEE69117725D6352407B",
+  "hash": "76A47AFAF9338FE216F05D047D3C62C8A8504ADDCC7A698D17A8EC23E597D64E",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -56,5 +86,5 @@
     "strategy": null
   },
   "repo": "Elixir.AshHq.Repo",
-  "table": "extensions"
+  "table": "library_versions"
 }

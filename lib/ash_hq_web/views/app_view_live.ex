@@ -2,11 +2,15 @@ defmodule AshHqWeb.AppViewLive do
   use Surface.LiveView,
     container: {:div, class: "h-full"}
 
-  alias AshHqWeb.Components.{CalloutText, CodeExample, Search}
+  alias AshHqWeb.Components.Search
+  alias AshHqWeb.Pages.{Docs, Home}
   alias Phoenix.LiveView.JS
+  require Ash.Query
 
   data configured_theme, :string, default: :system
   data searching, :boolean, default: false
+  data selected_versions, :map, default: %{}
+  data libraries, :list, default: []
 
   def render(assigns) do
     ~F"""
@@ -15,115 +19,165 @@ defmodule AshHqWeb.AppViewLive do
       class={"h-full font-sans": true, "#{@configured_theme}": true}
       phx-hook="ColorTheme"
     >
-      <div id="main-container" class="h-full bg-white dark:bg-primary-black dark:text-silver-phoenix">
-        <Search id="search-box" close={close_search()} />
+      <Search
+        id="search-box"
+        close={close_search()}
+        libraries={@libraries}
+        change_versions="change-versions"
+        selected_versions={@selected_versions}
+      />
+        <button
+          id="search-button"
+          class="hidden"
+          phx-click={AshHqWeb.AppViewLive.toggle_search()}
+        />
+      <div
+        id="main-container"
+        class="h-full bg-white dark:bg-primary-black dark:text-silver-phoenix overflow-x-hidden"
+      >
         <div class="flex justify-between pt-4 px-4">
           <div class="flex flex-row align-baseline">
-            <img class="h-10 hidden dark:block" src="/images/ash-framework-dark.png">
-            <img class="h-10 dark:hidden" src="/images/ash-framework-light.png">
+            <a href="/">
+              <img class="h-10 hidden dark:block" src="/images/ash-framework-dark.png">
+              <img class="h-10 dark:hidden" src="/images/ash-framework-light.png">
+            </a>
           </div>
-          <div class="flex flex-row">
+          <div class="flex flex-row align-middle items-center space-x-2">
+            <a href="/docs" class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600">Docs</a>
+            <div>|</div>
+            <a href="https://github.com/ash-project">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 dark:fill-gray-400 dark:hover:fill-gray-200 hover:fill-gray-600" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </a>
             <button phx-click="toggle_theme">
               {#case @configured_theme}
                 {#match "light"}
-                  <Heroicons.Outline.SunIcon class="w-10 h-10" />
+                  <Heroicons.Outline.SunIcon class="w-6 h-6 hover:text-gray-600" />
                 {#match _}
-                  <Heroicons.Outline.MoonIcon class="w-10 h-10" />
+                  <Heroicons.Outline.MoonIcon class="w-6 h-6 text-gray-400 fill-gray-400 hover:fill-gray-200 hover:text-gray-200 " />
               {/case}
             </button>
           </div>
         </div>
-        <div>
-          <div class="mt-4 dark:bg-primary-black dark:bg-dark-grid bg-light-grid px-12 pt-12 flex flex-col items-center">
-            <div class="text-5xl font-bold max-w-5xl mx-auto mt-2 text-center">
-              Build <CalloutText>powerful</CalloutText> and <CalloutText>extensible</CalloutText> Elixir applications with a next generation tool-chain.
-            </div>
-            <div class="text-xl font-light text-gray-700 dark:text-gray-400 max-w-4xl mx-auto mt-4 text-center">
-              A declarative foundation for modern applications. Use extensions like <CalloutText>Ash GraphQL</CalloutText> and <CalloutText>Ash Json Api</CalloutText> to add APIs in minutes,
-              or build your own extensions. Plug-and-play with other excellent tools like <CalloutText>Phoenix</CalloutText> and <CalloutText>Absinthe</CalloutText>.
-            </div>
-            <button
-              id="search-button"
-              class="w-96 button hide xl:block border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 mt-4"
-              phx-click={toggle_search()}
-            >
-              <div class="flex flex-row justify-between items-center px-4">
-                <div class="h-12 flex flex-row justify-start items-center text-center space-x-4">
-                  <Heroicons.Outline.SearchIcon class="w-4 h-4" />
-                  <div>Search Documentation</div>
-                </div>
-                <div>⌘ K</div>
-              </div>
-            </button>
-            <div class="pt-6 pb-6 w-full hidden md:block">
-              <div class="flex flex-row justify-center space-x-24 xl:space-x-32">
-                <CodeExample
-                  id="define-a-resource"
-                  class="grow min-w-fit"
-                  text={post_example()}
-                  title="Define a resource"
-                />
-                <div class="flex flex-col space-y-8">
-                  <CodeExample
-                    class="w-auto"
-                    collapsable
-                    id="use-it-programatically"
-                    text={changeset_example()}
-                    title="Use it programatically"
-                  />
-                  <CodeExample
-                    class="w-auto"
-                    collapsable
-                    id="graphql-interface"
-                    text={graphql_example()}
-                    title="Add a GraphQL interface"
-                  />
-                  <CodeExample
-                    class="w-auto"
-                    collapsable
-                    start_collapsed
-                    id="authorization-policies"
-                    text={policies_example()}
-                    title="Add authorization policies"
-                  />
-                  <CodeExample
-                    class="w-auto"
-                    collapsable
-                    start_collapsed
-                    id="aggregates"
-                    text={aggregate_example()}
-                    title="Define aggregates and calculations"
-                  />
-                  <CodeExample
-                    class="w-auto"
-                    collapsable
-                    start_collapsed
-                    id="pubsub"
-                    text={notifier_example()}
-                    title="Broadcast changes over Phoenix PubSub"
-                  />
-                  <CodeExample
-                    class="w-auto"
-                    collapsable
-                    start_collapsed
-                    id="live-view"
-                    text={live_view_example()}
-                    title="Use it with Phoenix LiveView"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="bg-primary-black">
-        </div>
+        {#case @live_action}
+          {#match :home}
+            <Home id="home" />
+          {#match :docs_dsl}
+            <Docs id="docs" params={@params} change_versions="change-versions" selected_versions={@selected_versions} libraries={@libraries} />
+        {/case}
       </div>
     </div>
     """
   end
 
+  def handle_params(params, uri, socket) do
+    {:noreply, assign(socket, params: params, uri: uri)}
+  end
+
+  def handle_event("change-versions", %{"versions" => versions}, socket) do
+    {:noreply,
+     socket
+     |> assign(:selected_versions, versions)
+     |> load_docs()
+     |> push_event("selected-versions", versions)}
+  end
+
+  def handle_event("toggle_theme", _, socket) do
+    theme =
+      case socket.assigns.configured_theme do
+        "light" ->
+          "dark"
+
+        "dark" ->
+          "light"
+      end
+
+    {:noreply,
+     socket
+     |> assign(:configured_theme, theme)
+     |> push_event("set_theme", %{theme: theme})}
+  end
+
+  defp load_docs(socket) do
+    new_libraries =
+      socket.assigns.libraries
+      |> Enum.map(fn library ->
+        Map.update!(library, :versions, fn versions ->
+          Enum.map(versions, fn version ->
+            if version.id == socket.assigns[:selected_versions][library.id] do
+              dsls_query = Ash.Query.sort(AshHq.Docs.Dsl, order: :asc)
+              options_query = Ash.Query.sort(AshHq.Docs.Option, order: :asc)
+
+              extensions_query =
+                AshHq.Docs.Extension
+                |> Ash.Query.sort(order: :asc)
+                |> Ash.Query.load(options: options_query, dsls: dsls_query)
+
+              AshHq.Docs.load!(version, extensions: extensions_query)
+            else
+              version
+            end
+          end)
+        end)
+      end)
+
+    assign(socket, :libraries, new_libraries)
+  end
+
   def mount(_params, session, socket) do
     configured_theme = session["theme"] || "dark"
+
+    configured_library_versions =
+      case session["selected_versions"] do
+        nil ->
+          %{}
+
+        "" ->
+          %{}
+
+        value ->
+          value
+          |> String.split(",")
+          |> Map.new(fn str ->
+            str
+            |> String.split(":")
+            |> List.to_tuple()
+          end)
+      end
+
+    socket =
+      socket
+      |> assign(:selected_versions, configured_library_versions)
+      |> AshPhoenix.LiveView.keep_live(
+        :libraries,
+        fn _socket ->
+          versions_query =
+            AshHq.Docs.LibraryVersion
+            |> Ash.Query.sort(version: :desc)
+            |> Ash.Query.filter(processed == true)
+
+          AshHq.Docs.Library.read!(load: [versions: versions_query])
+        end,
+        after_fetch: fn results, socket ->
+          selected_versions =
+            Enum.reduce(results, socket.assigns[:selected_versions] || %{}, fn library, acc ->
+              case Enum.at(library.versions, 0) do
+                nil ->
+                  acc
+
+                version ->
+                  Map.put_new(acc, library.id, version.id)
+              end
+            end)
+
+          socket
+          |> assign(
+            :selected_versions,
+            selected_versions
+          )
+          |> push_event("selected_versions", selected_versions)
+        end
+      )
+      |> load_docs()
 
     {:ok, assign(socket, configured_theme: configured_theme)}
   end
@@ -149,171 +203,5 @@ defmodule AshHqWeb.AppViewLive do
       time: 100
     )
     |> JS.dispatch("js:focus", to: "#search-input")
-  end
-
-  def handle_event("toggle_theme", _, socket) do
-    theme =
-      case socket.assigns.configured_theme do
-        "light" ->
-          "dark"
-
-        "dark" ->
-          "light"
-      end
-
-    {:noreply,
-     socket
-     |> assign(:configured_theme, theme)
-     |> push_event("set_theme", %{theme: theme})}
-  end
-
-  defp changeset_example() do
-    """
-    post = Example.Post.create!(%{
-      text: "Declarative programming is fun!"
-    })
-
-    Example.Post.react!(post, %{type: :like})
-
-    Example.Post
-    |> Ash.Query.filter(likes > 10)
-    |> Ash.Query.sort(likes: :desc)
-    |> Example.read!()
-    """
-  end
-
-  defp live_view_example() do
-    """
-    def mount(_params, _session, socket) do
-      form = AshPhoenix.Form.for_create(Example.Post, :create)
-
-      {:ok, assign(socket, :form, form}}
-    end
-
-    def handle_event("validate", %{"form" => input}, socket) do
-      form = AshPhoenix.Form.validate(socket.assigns.form, input)
-
-      {:ok, assign(socket, :form, form)}
-    end
-
-    def handle_event("submit", _, socket) do
-      case AshPhoenix.Form.submit(socket.assigns.form) do
-        {:ok, post} ->
-          {:ok, redirect_to_post(socket, post)}
-
-        {:error, form_with_errors} ->
-          {:noreply, assign(socket, :form, form_with_errors)}
-      end
-    end
-    """
-  end
-
-  defp graphql_example() do
-    """
-    graphql do
-      type :post
-
-      queries do
-        get :get_post, :read
-        list :feed, :read
-      end
-
-      mutations do
-        create :create_post, :create
-        update :react_to_post, :react
-      end
-    end
-    """
-  end
-
-  defp policies_example() do
-    """
-    policies do
-      policy action_type(:read) do
-        authorize_if expr(visibility == :everyone)
-        authorize_if relates_to_actor_via([:author, :friends])
-      end
-    end
-    """
-  end
-
-  defp notifier_example() do
-    """
-    pub_sub do
-      module ExampleEndpoint
-      prefix "post"
-
-      publish_all :create, ["created"]
-      publish :react, ["reaction", :id] event: "reaction"
-    end
-    """
-  end
-
-  defp aggregate_example() do
-    """
-    aggregates do
-      count :likes, :reactions do
-        filter expr(type == :like)
-      end
-
-      count :dislikes, :reactions do
-        filter expr(type == :dislike)
-      end
-    end
-
-    calculations do
-      calculate :like_ratio, :float do
-        expr(likes / likes + dislikes)
-      end
-    end
-    """
-  end
-
-  defp post_example() do
-    """
-    defmodule Example.Post do
-      use AshHq.Resource,
-        data_layer: AshPostgres.DataLayer
-
-      postgres do
-        table "posts"
-        repo Example.Repo
-      end
-
-      attributes do
-        attribute :text, :string do
-          allow_nil? false
-        end
-
-        attribute :visibility, :atom do
-          constraints [
-            one_of: [:friends, :everyone]
-          ]
-        end
-      end
-
-      actions do
-        update :react do
-          argument :type, Example.Types.ReactionType do
-            allow_nil? false
-          end
-
-          change manage_relationship(
-            :type,
-            :reactions,
-            type: :append
-          )
-        end
-      end
-
-      relationships do
-        belongs_to :author, Example.User do
-          required? true
-        end
-
-        has_many :reactions, Example.Reaction
-      end
-    end
-    """
   end
 end

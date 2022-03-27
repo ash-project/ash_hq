@@ -1,4 +1,4 @@
-defmodule AshHq.Repo.Migrations.MigrateResources9 do
+defmodule AshHq.Repo.Migrations.MigrateResources2 do
   @moduledoc """
   Updates resources based on their most recent snapshots.
 
@@ -9,17 +9,17 @@ defmodule AshHq.Repo.Migrations.MigrateResources9 do
 
   def up do
     alter table(:options) do
-      add :library_version_id,
-          references(:dsls, column: :id, name: "options_library_version_id_fkey", type: :uuid),
+      add :extension_id,
+          references(:extensions, column: :id, name: "options_extension_id_fkey", type: :uuid),
           null: false
     end
   end
 
   def down do
-    drop constraint(:options, "options_library_version_id_fkey")
+    drop constraint(:options, "options_extension_id_fkey")
 
     alter table(:options) do
-      remove :library_version_id
+      remove :extension_id
     end
   end
 end

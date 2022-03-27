@@ -21,16 +21,6 @@
       "type": "text"
     },
     {
-      "allow_nil?": false,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "type",
-      "type": "text"
-    },
-    {
       "allow_nil?": true,
       "default": "nil",
       "generated?": false,
@@ -41,14 +31,17 @@
       "type": "text"
     },
     {
-      "allow_nil?": false,
-      "default": "false",
+      "allow_nil?": true,
+      "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "required",
-      "type": "boolean"
+      "source": "examples",
+      "type": [
+        "array",
+        "text"
+      ]
     },
     {
       "allow_nil?": true,
@@ -57,8 +50,11 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "default",
-      "type": "text"
+      "source": "args",
+      "type": [
+        "array",
+        "text"
+      ]
     },
     {
       "allow_nil?": true,
@@ -74,6 +70,36 @@
       ]
     },
     {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "recursive_as",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "order",
+      "type": "bigint"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "type",
+      "type": "text"
+    },
+    {
       "allow_nil?": false,
       "default": "nil",
       "generated?": false,
@@ -87,13 +113,13 @@
           "global": null,
           "strategy": null
         },
-        "name": "options_dsl_id_fkey",
+        "name": "dsls_library_version_id_fkey",
         "on_delete": null,
         "on_update": null,
-        "table": "dsls"
+        "table": "library_versions"
       },
       "size": null,
-      "source": "dsl_id",
+      "source": "library_version_id",
       "type": "uuid"
     },
     {
@@ -110,13 +136,36 @@
           "global": null,
           "strategy": null
         },
-        "name": "options_library_version_id_fkey",
+        "name": "dsls_extension_id_fkey",
         "on_delete": null,
         "on_update": null,
-        "table": "library_versions"
+        "table": "extensions"
       },
       "size": null,
-      "source": "library_version_id",
+      "source": "extension_id",
+      "type": "uuid"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": {
+        "destination_field": "id",
+        "destination_field_default": null,
+        "destination_field_generated": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "dsls_dsl_id_fkey",
+        "on_delete": null,
+        "on_update": null,
+        "table": "dsls"
+      },
+      "size": null,
+      "source": "dsl_id",
       "type": "uuid"
     }
   ],
@@ -124,7 +173,7 @@
   "check_constraints": [],
   "custom_indexes": [],
   "has_create_action": true,
-  "hash": "DDF54A71D09EED13508CDC5952D0F563A3CEC4B90058F3A4C997F6EB249F42B6",
+  "hash": "D05F8F34E4E63000B51C31D954BB6F481E74BF2A4A9DD46C9899546DF9D49C9A",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -132,5 +181,5 @@
     "strategy": null
   },
   "repo": "Elixir.AshHq.Repo",
-  "table": "options"
+  "table": "dsls"
 }

@@ -3,7 +3,6 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-@import "@fontsource/fira-code";
 
 .search-hit {
   color: #fb923c

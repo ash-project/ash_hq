@@ -3,24 +3,26 @@ defmodule AshHqWeb.Components.Search do
 
   require Ash.Query
 
-  alias Surface.Components.Form
+  alias AshHqWeb.Routes
+  alias Surface.Components.{Form, LiveRedirect}
   alias Surface.Components.Form.{Label, Select}
 
   prop open, :boolean, default: false
   prop close, :event, required: true
+  prop libraries, :list, required: true
+  prop selected_versions, :map, required: true
+  prop change_versions, :event, required: true
 
   data versions, :map, default: %{}
-  data selected_versions, :map, default: %{}
   data search, :string, default: ""
   data results, :map, default: %{}
-  data libraries, :list, default: []
   data selected_item, :string
 
   def render(assigns) do
     ~F"""
     <div
       id={@id}
-      style={"display: none;"}
+      style="display: none;"
       class="transition absolute flex justify-center align-middle w-screen h-screen backdrop-blur-sm pb-8 bg-white bg-opacity-10"
       phx-hook="CmdK"
     >
@@ -31,7 +33,11 @@ defmodule AshHqWeb.Components.Search do
         phx-key="ArrowUp"
       >
         <div class="h-full px-6 my-6" :on-window-keydown="select-next" phx-key="ArrowDown">
-          <div class="w-full flex flex-row justify-start sticky top-0 pb-3 border-b border-gray-600">
+          <div
+            class="w-full flex flex-row justify-start sticky top-0 pb-3 border-b border-gray-600"
+            :on-window-keydown="go-to-doc"
+            phx-key="Enter"
+          >
             <Heroicons.Outline.SearchIcon class="h-6 w-6 mr-4 ml-4" />
             <div class="flex flex-row justify-between w-full">
               <Form for={:search} change="search" class="w-full">
@@ -47,23 +53,24 @@ defmodule AshHqWeb.Components.Search do
             </div>
           </div>
           <div class="grid grid-cols-9 h-[85%] mt-3">
-            <div class="col-span-1 border-r border-gray-600">
-              <Form for={:versions} change="change_versions">
+            <div class="col-span-3 md:col-span-2 xl:col-span-1 border-r border-gray-600">
+              <Form for={:versions} change={@change_versions}>
                 {#for library <- @libraries}
                   <Label field={library.id}>
-                    {library.name}
+                    {library.display_name}
                   </Label>
                   <div>
                     <Select
                       class="text-black"
                       name={"versions[#{library.id}]"}
+                      selected={Map.get(@selected_versions, library.id)}
                       options={Enum.map(library.versions, &{&1.version, &1.id})}
                     />
                   </div>
                 {/for}
               </Form>
             </div>
-            <div class="col-span-8 pl-4 overflow-y-auto">
+            <div class="pl-4 overflow-y-auto col-span-6 md:col-span-7 xl:col-span-8">
               {render_groups(assigns, @results)}
             </div>
           </div>
@@ -94,9 +101,9 @@ defmodule AshHqWeb.Components.Search do
     ~F"""
     <div>
       <div class="font-medium mb-1">
-        {#if results.path != []}
+        {#if Map.get(results, :path, []) != []}
           <div class="flex flex-row justify-start align-middle items-center text-center">
-            {#for path_item <- results.path}
+            {#for path_item <- Map.get(results, :path, [])}
               <Heroicons.Solid.ChevronRightIcon class="h-6 w-6" />
               <div>
                 {path_item}
@@ -106,18 +113,26 @@ defmodule AshHqWeb.Components.Search do
         {/if}
       </div>
       {#for item <- results.items}
-        <div id={item.id} class={
-          "rounded-lg mb-4 py-4 px-2",
-          "bg-gray-600": @selected_item == item.id,
-          "bg-gray-800": @selected_item != item.id
-        }>
-          {#if item.name != List.last(results.path)}
-            {item.name}
-          {/if}
-          <div class="text-gray-400">
-            {raw(item.search_headline)}
+        <LiveRedirect to={Routes.doc_link(item)}>
+          <div
+            id={item.id}
+            class={
+              "rounded-lg mb-4 py-4 px-2 hover:bg-gray-600",
+              "bg-gray-600": @selected_item.id == item.id,
+              "bg-gray-800": @selected_item.id != item.id
+            }
+          >
+            {#if item.__struct__ != AshHq.Docs.LibraryVersion && item.name != List.last(Map.get(results, :path, []))}
+              {item.name}
+            {/if}
+            {#if item.__struct__ == AshHq.Docs.LibraryVersion}
+              {item.version}
+            {/if}
+            <div class="text-gray-400">
+              {raw(item.search_headline)}
+            </div>
           </div>
-        </div>
+        </LiveRedirect>
       {/for}
       {render_groups(assigns, results.further, false)}
     </div>
@@ -125,39 +140,7 @@ defmodule AshHqWeb.Components.Search do
   end
 
   def mount(socket) do
-    socket =
-      AshPhoenix.LiveView.keep_live(
-        socket,
-        :libraries,
-        fn _socket ->
-          versions_query =
-            AshHq.Docs.LibraryVersion
-            |> Ash.Query.sort(version: :desc)
-            |> Ash.Query.filter(processed == true)
-
-          AshHq.Docs.Library.read!(load: [versions: versions_query])
-        end,
-        after_fetch: fn results, socket ->
-          socket
-          |> assign(
-            :selected_versions,
-            Map.new(results, fn library ->
-              version = Enum.at(library.versions, 0)
-              {library.id, version && version.id}
-            end)
-          )
-          |> search()
-        end
-      )
-
     {:ok, socket}
-  end
-
-  def handle_event("change_versions", %{"versions" => versions}, socket) do
-    {:noreply,
-     socket
-     |> assign(:selected_versions, versions)
-     |> search()}
   end
 
   def handle_event("search", %{"search" => search}, socket) do
@@ -165,10 +148,10 @@ defmodule AshHqWeb.Components.Search do
   end
 
   def handle_event("select-next", _, socket) do
-    if socket.assigns[:selected_item] && socket.assigns[:id_list] do
+    if socket.assigns[:selected_item] && socket.assigns[:item_list] do
       next =
-        socket.assigns.id_list
-        |> Enum.drop_while(&(&1 != socket.assigns.selected_item))
+        socket.assigns.item_list
+        |> Enum.drop_while(&(&1.id != socket.assigns.selected_item.id))
         |> Enum.at(1)
 
       {:noreply, set_selected_item(socket, next)}
@@ -178,11 +161,11 @@ defmodule AshHqWeb.Components.Search do
   end
 
   def handle_event("select-previous", _, socket) do
-    if socket.assigns[:selected_item] && socket.assigns[:id_list] do
+    if socket.assigns[:selected_item] && socket.assigns[:item_list] do
       next =
-        socket.assigns.id_list
+        socket.assigns.item_list
         |> Enum.reverse()
-        |> Enum.drop_while(&(&1 != socket.assigns.selected_item))
+        |> Enum.drop_while(&(&1.id != socket.assigns.selected_item.id))
         |> Enum.at(1)
 
       {:noreply, set_selected_item(socket, next)}
@@ -191,31 +174,45 @@ defmodule AshHqWeb.Components.Search do
     end
   end
 
+  def handle_event("go-to-doc", _, socket) do
+    case Enum.find(socket.assigns.item_list, fn item ->
+           item.id == socket.assigns.selected_item.id
+         end) do
+      nil ->
+        {:noreply, socket}
+
+      item ->
+        {:noreply, redirect(socket, to: Routes.doc_link(item))}
+    end
+  end
+
   defp search(socket) do
     if socket.assigns[:search] in [nil, ""] || socket.assigns[:selected_versions] in [nil, %{}] do
       assign(socket, :results, %{})
     else
-      docs =
-        AshHq.Docs.Dsl.search!(
-          socket.assigns.search,
-          Map.values(socket.assigns.selected_versions),
-          query: Ash.Query.limit(AshHq.Docs.Dsl, 10),
-          load: [:extension_type]
-        )
-
       search_results =
-        AshHq.Docs.Option.search!(
-          socket.assigns.search,
-          Map.values(socket.assigns.selected_versions),
-          query: Ash.Query.limit(AshHq.Docs.Option, 10),
-          load: [:extension_type]
-        )
-        |> Enum.concat(docs)
+        AshHq.Docs
+        |> Ash.Api.resources()
+        |> Enum.filter(&(AshHq.Docs.Extensions.Search in Ash.Resource.Info.extensions(&1)))
+        |> Enum.flat_map(fn resource ->
+          to_load = AshHq.Docs.Extensions.Search.load_for_search(resource)
+
+          resource.search!(socket.assigns.search, Map.values(socket.assigns.selected_versions),
+            query: Ash.Query.limit(resource, 10),
+            load: to_load
+          )
+        end)
         |> Enum.sort_by(&(-&1.match_rank))
 
       results =
         search_results
-        |> Enum.group_by(& &1.extension_type)
+        |> Enum.group_by(fn
+          %{extension_type: type} = result ->
+            type
+
+          %AshHq.Docs.LibraryVersion{library_display_name: library_display_name, version: version} ->
+            "#{library_display_name} #{version}"
+        end)
         |> Enum.sort_by(fn {_type, items} ->
           items
           |> Enum.map(& &1.match_rank)
@@ -226,49 +223,41 @@ defmodule AshHqWeb.Components.Search do
           {type, group_by_paths(items)}
         end)
 
-      selected_item =
-        case Enum.at(search_results, 0) do
-          nil ->
-            nil
-
-          item ->
-            item.id
-        end
-
-      id_list = id_list(results)
+      item_list = item_list(results)
+      selected_item = Enum.at(item_list, 0)
 
       socket
       |> assign(:results, results)
-      |> assign(:id_list, id_list)
+      |> assign(:item_list, item_list)
       |> set_selected_item(selected_item)
     end
   end
 
-  defp id_list(results) do
-    List.flatten(do_id_list(results))
+  defp item_list(results) do
+    List.flatten(do_item_list(results))
   end
 
-  defp do_id_list({_key, %{items: items, further: further}}) do
-    do_id_list(items) ++ do_id_list(further)
+  defp do_item_list({_key, %{items: items, further: further}}) do
+    do_item_list(items) ++ do_item_list(further)
   end
 
-  defp do_id_list(items) when is_list(items) do
-    Enum.map(items, &do_id_list/1)
+  defp do_item_list(items) when is_list(items) do
+    Enum.map(items, &do_item_list/1)
   end
 
-  defp do_id_list(%{id: id}), do: id
+  defp do_item_list(item), do: item
 
   defp set_selected_item(socket, nil), do: socket
 
   defp set_selected_item(socket, selected_item) do
     socket
     |> assign(:selected_item, selected_item)
-    |> push_event("js:scroll-to", %{id: selected_item})
+    |> push_event("js:scroll-to", %{id: selected_item.id, boundary_id: socket.assigns[:id]})
   end
 
   defp group_by_paths(items) do
     items
-    |> Enum.map(&{&1.path, &1})
+    |> Enum.map(&{Map.get(&1, :path, []), &1})
     |> do_group_by_paths()
   end
 
