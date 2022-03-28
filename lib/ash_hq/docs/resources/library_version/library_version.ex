@@ -1,7 +1,11 @@
 defmodule AshHq.Docs.LibraryVersion do
   use AshHq.Resource,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshHq.Docs.Extensions.Search]
+    extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
+
+  render_markdown do
+    render_attributes doc: :doc_html
+  end
 
   search do
     name_attribute :version
@@ -36,7 +40,9 @@ defmodule AshHq.Docs.LibraryVersion do
         allow_nil? false
       end
 
-      argument :guides, {:array, :map}
+      argument :guides, {:array, :map} do
+        allow_nil? false
+      end
 
       change manage_relationship(:guides, type: :direct_control)
       change manage_relationship(:library, type: :replace)
@@ -79,6 +85,13 @@ defmodule AshHq.Docs.LibraryVersion do
 
     attribute :doc, :string do
       allow_nil? false
+      constraints trim?: false, allow_empty?: true
+      default ""
+    end
+
+    attribute :doc_html, :string do
+      constraints trim?: false, allow_empty?: true
+      writable? false
     end
 
     attribute :processed, :boolean do

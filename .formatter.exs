@@ -4,6 +4,9 @@
   subdirectories: ["priv/*/migrations"],
   locals_without_parens: [
     name_attribute: 1,
-    library_version_attribute: 1
+    library_version_attribute: 1,
+    load_for_search: 1,
+    doc_attribute: 1,
+    render_attributes: 1
   ]
 ]

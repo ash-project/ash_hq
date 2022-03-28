@@ -47,7 +47,7 @@ defmodule Utils do
       [%{
         name: section.name,
         options: schema(section.schema, path ++ [section.name]),
-        doc: section.describe,
+        doc: section.describe || "No documentation",
         type: :section,
         order: index,
         examples: examples(section.examples),
@@ -67,7 +67,7 @@ defmodule Utils do
         recursive_as: Map.get(entity, :recursive_as),
         examples: examples(entity.examples),
         order: index,
-        doc: entity.describe,
+        doc: entity.describe || "No documentation",
         args: entity.args,
         type: :entity,
         path: path,
@@ -94,7 +94,7 @@ defmodule Utils do
         path: path,
         order: index,
         type: value[:type_name] || type(value[:type]),
-        doc: value[:doc],
+        doc: value[:doc] || "No documentation",
         required: value[:required] || false,
         default: inspect(value[:default])
       }
@@ -155,16 +155,15 @@ case Enum.at(dsls, 0) do
     extensions = dsl.extensions()
 
     acc = %{
-      doc: Utils.module_docs(dsl)
+      doc: Utils.module_docs(dsl),
+      guides: []
     }
 
     acc =
       Utils.try_apply(fn -> dsl.guides() end, [])
       |> Enum.with_index()
       |> Enum.reduce(acc, fn {guide, order}, acc ->
-        acc
-        |> Map.put_new(:guides, [])
-        |> Map.update!(:guides, fn guides ->
+         Map.update!(acc, :guides, fn guides ->
           [Map.put(guide, :order, order) | guides]
         end)
       end)

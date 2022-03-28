@@ -43,6 +43,8 @@ defmodule AshHqWeb.AppViewLive do
             </a>
           </div>
           <div class="flex flex-row align-middle items-center space-x-2">
+            <a href="/docs/guides/ash/main/Getting-Started" class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600">Get Started</a>
+            <div>|</div>
             <a href="/docs" class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600">Docs</a>
             <div>|</div>
             <a href="https://github.com/ash-project">
@@ -112,7 +114,7 @@ defmodule AshHqWeb.AppViewLive do
                 |> Ash.Query.sort(order: :asc)
                 |> Ash.Query.load(options: options_query, dsls: dsls_query)
 
-              AshHq.Docs.load!(version, extensions: extensions_query)
+              AshHq.Docs.load!(version, extensions: extensions_query, guides: :url_safe_name)
             else
               version
             end
@@ -154,6 +156,7 @@ defmodule AshHqWeb.AppViewLive do
             AshHq.Docs.LibraryVersion
             |> Ash.Query.sort(version: :desc)
             |> Ash.Query.filter(processed == true)
+            |> Ash.Query.deselect(:data)
 
           AshHq.Docs.Library.read!(load: [versions: versions_query])
         end,

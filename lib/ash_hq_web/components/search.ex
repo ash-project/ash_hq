@@ -89,9 +89,13 @@ defmodule AshHqWeb.Components.Search do
             {group}
           </div>
         {/if}
-        <div class={"mt-4", "border-l border-gray-700 pl-2": !first?}>
+        {#if Enum.empty?(results.items)}
           {render_results(assigns, results)}
-        </div>
+        {#else}
+          <div class={"mt-4", "border-l border-gray-700 pl-2": !first?}>
+            {render_results(assigns, results)}
+          </div>
+        {/if}
       </div>
     {/for}
     """
@@ -198,26 +202,39 @@ defmodule AshHqWeb.Components.Search do
           to_load = AshHq.Docs.Extensions.Search.load_for_search(resource)
 
           resource.search!(socket.assigns.search, Map.values(socket.assigns.selected_versions),
-            query: Ash.Query.limit(resource, 10),
+            query: Ash.Query.limit(resource, 25),
             load: to_load
           )
         end)
-        |> Enum.sort_by(&(-&1.match_rank))
+        |> Enum.sort_by(
+          &{-&1.match_rank, Map.get(&1, :extension_order, -1), Enum.count(Map.get(&1, :path, []))}
+        )
+
+      sort_rank =
+        search_results
+        |> Enum.with_index()
+        |> Map.new(fn {item, i} ->
+          {item.id, i}
+        end)
 
       results =
         search_results
         |> Enum.group_by(fn
-          %{extension_type: type} = result ->
+          %{extension_type: type} ->
             type
+
+          %AshHq.Docs.Guide{
+            library_version: %{version: version, library_display_name: library_display_name}
+          } ->
+            "#{library_display_name} #{version}"
 
           %AshHq.Docs.LibraryVersion{library_display_name: library_display_name, version: version} ->
             "#{library_display_name} #{version}"
         end)
         |> Enum.sort_by(fn {_type, items} ->
           items
-          |> Enum.map(& &1.match_rank)
-          |> Enum.max()
-          |> Kernel.*(-1)
+          |> Enum.map(&Map.get(sort_rank, &1.id))
+          |> Enum.min()
         end)
         |> Enum.map(fn {type, items} ->
           {type, group_by_paths(items)}

@@ -36,10 +36,11 @@ defmodule AshHq.Docs.Importer do
         )
 
       # TODO: reenable this
-      versions
-      |> Enum.reject(fn version ->
-        Enum.find(already_defined_versions, &(&1.version == version))
-      end)
+      # versions
+      # |> Enum.reject(fn version ->
+      #   Enum.find(already_defined_versions, &(&1.version == version))
+      # end)
+      []
       |> Enum.concat(Enum.map(library.track_branches, &{&1, true}))
       |> Enum.each(fn version ->
         {version, branch?} =
@@ -64,7 +65,10 @@ defmodule AshHq.Docs.Importer do
         File.rm!(file)
 
         if result do
-          LibraryVersion.build!(library.id, version, result, %{doc: result[:doc]})
+          LibraryVersion.build!(library.id, version, result, %{
+            doc: result[:doc],
+            guides: result[:guides]
+          })
         end
       end)
     end

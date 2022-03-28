@@ -1,10 +1,20 @@
 defmodule AshHq.Docs.Option do
   use AshHq.Resource,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshHq.Docs.Extensions.Search]
+    extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
+
+  render_markdown do
+    render_attributes doc: :html_doc
+  end
 
   search do
-    load_for_search([:extension_type, :extension_name, :version_name, :library_name])
+    load_for_search [
+      :extension_order,
+      :extension_type,
+      :extension_name,
+      :version_name,
+      :library_name
+    ]
   end
 
   postgres do
@@ -28,7 +38,16 @@ defmodule AshHq.Docs.Option do
       allow_nil? false
     end
 
-    attribute :doc, :string
+    attribute :doc, :string do
+      allow_nil? false
+      constraints trim?: false, allow_empty?: true
+      default ""
+    end
+
+    attribute :doc_html, :string do
+      constraints trim?: false, allow_empty?: true
+      writable? false
+    end
 
     attribute :required, :boolean do
       allow_nil? false
@@ -60,6 +79,7 @@ defmodule AshHq.Docs.Option do
   aggregates do
     first :extension_type, [:dsl, :extension], :type
     first :extension_name, [:dsl, :extension], :name
+    first :extension_order, [:dsl, :extension], :order
     first :version_name, :library_version, :version
     first :library_name, [:library_version, :library], :name
   end

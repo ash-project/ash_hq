@@ -30,28 +30,28 @@ defmodule AshHqWeb.Pages.Home do
           <div class="flex flex-row justify-center space-x-24 xl:space-x-32">
             <CodeExample
               id="define-a-resource"
-              class="grow min-w-fit"
+              class="grow min-w-fit max-w-[1000px]"
               text={post_example()}
               title="Define a resource"
             />
             <div class="flex flex-col space-y-8">
               <CodeExample
                 class="w-auto"
-                collapsable
-                id="use-it-programatically"
+                collapsible
+                id="use-it-programmatically"
                 text={changeset_example()}
-                title="Use it programatically"
+                title="Use it programmatically"
               />
               <CodeExample
                 class="w-auto"
-                collapsable
+                collapsible
                 id="graphql-interface"
                 text={graphql_example()}
                 title="Add a GraphQL interface"
               />
               <CodeExample
                 class="w-auto"
-                collapsable
+                collapsible
                 start_collapsed
                 id="authorization-policies"
                 text={policies_example()}
@@ -59,7 +59,7 @@ defmodule AshHqWeb.Pages.Home do
               />
               <CodeExample
                 class="w-auto"
-                collapsable
+                collapsible
                 start_collapsed
                 id="aggregates"
                 text={aggregate_example()}
@@ -67,7 +67,7 @@ defmodule AshHqWeb.Pages.Home do
               />
               <CodeExample
                 class="w-auto"
-                collapsable
+                collapsible
                 start_collapsed
                 id="pubsub"
                 text={notifier_example()}
@@ -75,7 +75,7 @@ defmodule AshHqWeb.Pages.Home do
               />
               <CodeExample
                 class="w-auto"
-                collapsable
+                collapsible
                 start_collapsed
                 id="live-view"
                 text={live_view_example()}

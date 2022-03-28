@@ -48,6 +48,10 @@ defmodule AshHq.Docs.Extension do
       default false
     end
 
+    attribute :doc, :string do
+      allow_nil? false
+    end
+
     attribute :type, :string do
       allow_nil? false
     end

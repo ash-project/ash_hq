@@ -3,5 +3,19 @@
     "activityBar.background": "#541337",
     "titleBar.activeBackground": "#761B4E",
     "titleBar.activeForeground": "#FEFCFD"
-  }
+  },
+  "cSpell.words": [
+    "citext",
+    "dsls",
+    "Heroicons",
+    "noreply",
+    "ossp",
+    "plainto",
+    "setweight",
+    "tailwindcss",
+    "trgm",
+    "tsquery",
+    "tsvector",
+    "Tsvector"
+  ]
 }

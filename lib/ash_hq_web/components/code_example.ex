@@ -5,7 +5,7 @@ defmodule AshHqWeb.Components.CodeExample do
   prop class, :css_class
   prop title, :string
   prop start_collapsed, :boolean, default: false
-  prop collapsable, :boolean, default: false
+  prop collapsible, :boolean, default: false
 
   data collapsed, :string, default: false
   data code, :string, default: ""
@@ -22,7 +22,7 @@ defmodule AshHqWeb.Components.CodeExample do
         {#if @title}
           <div class="justify-self-end text-white">{@title}</div>
           <div>
-            {#if @collapsable}
+            {#if @collapsible}
               <button class="hover:bg-gray-700" :on-click="fold">
                 {#if @collapsed}
                   <Heroicons.Solid.ChevronDoubleDownIcon class="w-4 h-4" />
@@ -63,7 +63,7 @@ defmodule AshHqWeb.Components.CodeExample do
   end
 
   def update(assigns, socket) do
-    if assigns.start_collapsed && assigns.collapsable do
+    if assigns.start_collapsed && assigns.collapsible do
       {:ok,
        socket
        |> assign(assigns)
