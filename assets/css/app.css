@@ -4,7 +4,6 @@
 @import "tailwindcss/utilities";
 
 @import "syntax.css";
-@import "markdown.css";
 
 .search-hit {
   color: #fb923c

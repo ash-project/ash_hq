@@ -1,6 +1,15 @@
 defmodule AshHq.Docs.Extension do
   use AshHq.Resource,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
+
+  render_markdown do
+    render_attributes doc: :html_doc
+  end
+
+  # search :load_for_search do
+
+  # end
 
   postgres do
     table "extensions"
@@ -50,6 +59,13 @@ defmodule AshHq.Docs.Extension do
 
     attribute :doc, :string do
       allow_nil? false
+      constraints trim?: false, allow_empty?: true
+      default ""
+    end
+
+    attribute :doc_html, :string do
+      constraints trim?: false, allow_empty?: true
+      writable? false
     end
 
     attribute :type, :string do

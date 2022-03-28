@@ -1,8 +1,8 @@
 defmodule AshHqWeb.Pages.Docs do
   use Surface.LiveComponent
 
-  alias AshHqWeb.Routes
-  alias Surface.Components.LiveRedirect
+  alias Phoenix.LiveView.JS
+  alias AshHqWeb.Components.DocSidebar
 
   prop params, :map, required: true
   prop change_versions, :event, required: true
@@ -14,112 +14,75 @@ defmodule AshHqWeb.Pages.Docs do
   data docs, :any
   data library_version, :any
   data guide, :any
+  data doc_path, :list, default: []
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~F"""
-    <div class="flex flex-row h-full dark:bg-dark-grid justify-center">
-      <aside class="w-64 h-full" aria-label="Sidebar">
-        <div class="overflow-y-auto py-4 px-3">
-          <ul class="space-y-2">
-            {#for library <- @libraries}
-              <li>
-                <LiveRedirect
-                  to={Routes.library_link(library, selected_version_name(library, @selected_versions))}
-                  class={"flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700", "dark:bg-gray-600": !@extension && @library && library.id == @library.id}
-                >
-                  <Heroicons.Outline.CollectionIcon class="w-6 h-6" />
-                  <span class="ml-3 mr-2">{library.display_name}</span>
-                  <span class="font-light text-gray-500">{selected_version_name(library, @selected_versions)}</span>
-                </LiveRedirect>
-                {#if @library && @library_version && library.id == @library.id}
-                  {#if !Enum.empty?(@library_version.guides)}
-                    <div class="ml-2 text-gray-500">
-                      Guides
-                    </div>
-                  {/if}
-                  {#for guide <- @library_version.guides}
-                    <li class="ml-3">
-                      <LiveRedirect
-                        to={Routes.guide_link(library, selected_version_name(library, @selected_versions), guide.url_safe_name)}
-                        class={"flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700", "dark:bg-gray-600": @guide && @guide.id == guide.id}
-                      >
-                        <Heroicons.Outline.BookOpenIcon class="h-4 w-4"/>
-                        <span class="ml-3 mr-2">{guide.name}</span>
-                      </LiveRedirect>
-                    </li>
-                  {/for}
-
-                  {#if !Enum.empty?(@library_version.guides)}
-                    <div class="ml-2 text-gray-500">
-                      Extensions
-                    </div>
-                  {/if}
-                  {#for extension <- get_extensions(library, @selected_versions)}
-                    <li class="ml-3">
-                      <LiveRedirect
-                        to={Routes.extension_link(library, selected_version_name(library, @selected_versions), extension.name)}
-                        class={"flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700", "dark:bg-gray-600": @extension && @extension.id == extension.id}
-                      >
-                        {render_icon(assigns, extension.type)}
-                        <span class="ml-3 mr-2">{extension.name}</span>
-                      </LiveRedirect>
-                    </li>
-
-                  {/for}
-                {/if}
-              </li>
-            {/for}
-          </ul>
-        </div>
-      </aside>
-      <div class="grow w-full prose prose-zinc md:prose-lg lg:prose-xl dark:prose-invert">
-        {raw(@docs)}
+    <div class="h-full w-full flex flex-col bg-light-grid dark:bg-dark-grid">
+      <div class="md:hidden flex flex-row justify-start space-x-12 mt-2 items-center border-b border-t border-gray-600 py-3 mb-10">
+        <button class="dark:hover:text-gray-600" phx-click={show_sidebar()}>
+          <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
+        </button>
+        {#if @doc_path && @doc_path != []}
+          <div class="flex flex-row space-x-1 items-center">
+            {#case @doc_path}
+              {#match [item]}
+                <div class="dark:text-white">
+                  {item}
+                </div>
+              {#match path}
+                {#for item <- :lists.droplast(path)}
+                  <span class="text-gray-500">
+                    {item}</span>
+                  <Heroicons.Outline.ChevronRightIcon class="w-3 h-3" />
+                {/for}
+                <span class="dark:text-white" />
+            {/case}
+          </div>
+        {/if}
       </div>
+      <div id="mobile-sidebar-container" class="hidden md:hidden relative w-screen h-full backdrop-blur-lg transition">
+        <div>
+        <DocSidebar
+          id="mobile-sidebar"
+          class="absolute left-0 top-0"
+          libraries={@libraries}
+          extension={@extension}
+          guide={@guide}
+          library={@library}
+          library_version={@library_version}
+          selected_versions={@selected_versions}
+        />
+        </div>
+      </div>
+        <div class="grow flex flex-row h-full justify-center space-x-12">
+          <DocSidebar
+            id="sidebar"
+            class="hidden md:block"
+            libraries={@libraries}
+            extension={@extension}
+            guide={@guide}
+            library={@library}
+            library_version={@library_version}
+            selected_versions={@selected_versions}
+          />
+          <div class="grow w-full prose prose-zinc md:prose-lg lg:prose-xl dark:prose-invert">
+            {raw(@docs)}
+          </div>
+        </div>
     </div>
     """
   end
 
-  def render_icon(assigns, "Resource") do
-    ~F"""
-    <Heroicons.Outline.ServerIcon class="h-4 w-4"/>
-    """
-  end
-
-  def render_icon(assigns, "Api") do
-    ~F"""
-    <Heroicons.Outline.SwitchHorizontalIcon class="h-4 w-4"/>
-    """
-  end
-
-  def render_icon(assigns, "DataLayer") do
-    ~F"""
-    <Heroicons.Outline.DatabaseIcon class="h-4 w-4"/>
-    """
-  end
-
-  def render_icon(assigns, "Flow") do
-    ~F"""
-    <Heroicons.Outline.MapIcon class="h-4 w-4"/>
-    """
-  end
-
-  def render_icon(assigns, "Notifier") do
-    ~F"""
-    <Heroicons.Outline.MailIcon class="h-4 w-4"/>
-    """
-  end
-
-  def render_icon(assigns, "Registry") do
-    ~F"""
-    <Heroicons.Outline.ViewListIcon class="h-4 w-4"/>
-    """
-  end
-
-  def render_icon(assigns, _) do
-    ~F"""
-    <Heroicons.Outline.PuzzleIcon class="h-4 w-4"/>
-    """
+  def show_sidebar() do
+    %JS{}
+    |> JS.toggle(
+      to: "#mobile-sidebar-container",
+      in: {"fade-in duration-100 transition", "hidden", "block"},
+      out: {"fade-out duration-100 transition", "block", "hidden"},
+      time: 100
+    )
   end
 
   def update(assigns, socket) do
@@ -129,16 +92,6 @@ defmodule AshHqWeb.Pages.Docs do
      |> assign_extension()
      |> assign_guide()
      |> assign_docs()}
-  end
-
-  defp selected_version_name(library, selected_versions) do
-    case Enum.find(library.versions, &(&1.id == selected_versions[library.id])) do
-      nil ->
-        nil
-
-      version ->
-        version.version
-    end
   end
 
   defp assign_guide(socket) do
@@ -155,16 +108,25 @@ defmodule AshHqWeb.Pages.Docs do
   defp assign_docs(socket) do
     cond do
       socket.assigns.extension ->
-        assign(socket, :docs, Earmark.as_html!(socket.assigns.extension.doc))
+        assign(socket,
+          docs: Earmark.as_html!(socket.assigns.extension.doc),
+          doc_path: [socket.assigns.library.name, socket.assigns.extension.name]
+        )
 
       socket.assigns.guide ->
-        assign(socket, :docs, Earmark.as_html!(socket.assigns.guide.text))
+        assign(socket,
+          docs: Earmark.as_html!(socket.assigns.guide.text),
+          doc_path: [socket.assigns.library.name, socket.assigns.guide.name]
+        )
 
       socket.assigns.library_version ->
-        assign(socket, :docs, Earmark.as_html!(socket.assigns.library_version.doc))
+        assign(socket,
+          docs: Earmark.as_html!(socket.assigns.library_version.doc),
+          doc_path: [socket.assigns.library.name]
+        )
 
       true ->
-        assign(socket, :docs, "")
+        assign(socket, docs: "", doc_path: [])
     end
   end
 
@@ -206,25 +168,6 @@ defmodule AshHqWeb.Pages.Docs do
         version.extensions
     end
   end
-
-  # defp render_sub_item_nav(assigns, library, path \\ []) do
-  #   ~F"""
-  #   <ul class="space-y-2">
-  #     {#for %{path: ^path, name: name} = dsl <- library.dsls}
-  #       <li class="ml-2">
-  #         <LiveRedirect
-  #           to={Routes.doc_link(dsl)}
-  #           class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-  #         >
-  #           <Heroicons.Outline.CollectionIcon class="w-6 h-6" />
-  #           <span class="ml-3 mr-2">{library.display_name}</span>
-  #           <span class="font-light text-gray-500">{selected_version_name(library, @selected_versions)}</span>
-  #         </LiveRedirect>
-  #       </li>
-  #     {/for}
-  #   </ul>
-  #   """
-  # end
 
   defp assign_library(socket) do
     if !socket.assigns[:library] ||

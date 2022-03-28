@@ -42,8 +42,15 @@ defmodule AshHq.MixProject do
       {:ecto, git: "https://github.com/elixir-ecto/ecto.git", override: true},
       {:surface, "~> 0.7.3"},
       {:surface_heroicons, "~> 0.6.0"},
+      # Syntax Highlighting
       {:makeup, "~> 1.1"},
       {:makeup_elixir, "~> 0.16.0"},
+      {:makeup_graphql, "~> 0.1.2"},
+      {:makeup_erlang, "~> 0.1.1"},
+      {:makeup_eex, "~> 0.1.1"},
+      {:makeup_js, "~> 0.1.0"},
+      {:makeup_sql, "~> 0.1.0"},
+      # Phoenix/Core dependencies
       {:phoenix, "~> 1.6.6"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},

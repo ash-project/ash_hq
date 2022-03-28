@@ -23,7 +23,7 @@ defmodule AshHqWeb.Components.Search do
     <div
       id={@id}
       style="display: none;"
-      class="transition absolute flex justify-center align-middle w-screen h-screen backdrop-blur-sm pb-8 bg-white bg-opacity-10"
+      class="absolute flex justify-center align-middle w-screen h-screen backdrop-blur-sm pb-8 bg-white bg-opacity-10"
       phx-hook="CmdK"
     >
       <div
@@ -126,7 +126,8 @@ defmodule AshHqWeb.Components.Search do
               "bg-gray-800": @selected_item.id != item.id
             }
           >
-            {#if item.__struct__ != AshHq.Docs.LibraryVersion && item.name != List.last(Map.get(results, :path, []))}
+            {#if item.__struct__ != AshHq.Docs.LibraryVersion &&
+                item.name != List.last(Map.get(results, :path, []))}
               {item.name}
             {/if}
             {#if item.__struct__ == AshHq.Docs.LibraryVersion}

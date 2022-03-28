@@ -71,10 +71,23 @@ let liveSocket = new LiveSocket("/live", Socket, {
   }
 });
 
-// Show progress bar on live navigation and form submits
+// Show progress bar on live navigation and form submits. Only displays if still
+// loading after 120 msec
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
-window.addEventListener("phx:page-loading-start", info => topbar.show())
-window.addEventListener("phx:page-loading-stop", info => topbar.hide())
+
+let topBarScheduled = undefined;
+window.addEventListener("phx:page-loading-start", () => {
+  if(!topBarScheduled) {
+    topBarScheduled = setTimeout(() => topbar.show(), 120);
+  };
+});
+window.addEventListener("phx:page-loading-stop", () => {
+  clearTimeout(topBarScheduled);
+  topBarScheduled = undefined;
+  topbar.hide();
+});
+
+
 window.addEventListener("js:focus", e => e.target.focus())
 window.addEventListener("js:noscroll-main", e =>  {
   if(e.target.style.display === "none") {
