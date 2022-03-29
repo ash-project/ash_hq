@@ -29,9 +29,9 @@ defmodule AshHqWeb.AppViewLive do
       <button id="search-button" class="hidden" phx-click={AshHqWeb.AppViewLive.toggle_search()} />
       <div
         id="main-container"
-        class="h-full bg-white dark:bg-primary-black dark:text-silver-phoenix overflow-x-hidden"
+        class="h-screen flex flex-col bg-white dark:bg-primary-black dark:text-silver-phoenix overflow-x-hidden overflow-clip"
       >
-        <div class="flex justify-between pt-4 px-4">
+        <div class={"flex justify-between pt-4 px-4", "w-full border-b bg-white dark:bg-primary-black pb-4 top-0": @live_action == :docs_dsl}>
           <div class="flex flex-row align-baseline">
             <a href="/">
               <img class="h-10 hidden dark:block" src="/images/ash-framework-dark.png">
@@ -40,7 +40,7 @@ defmodule AshHqWeb.AppViewLive do
           </div>
           <div class="flex flex-row align-middle items-center space-x-2">
             <a
-              href="/docs/guides/ash/main/Getting-Started"
+              href="/docs/guides/ash/main/getting-started"
               class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600"
             >Get Started</a>
             <div>|</div>
@@ -198,9 +198,17 @@ defmodule AshHqWeb.AppViewLive do
     js
     |> JS.dispatch("js:noscroll-main", to: "#search-box")
     |> JS.toggle(
-      in: "fade-in transition",
-      out: "fade-out transition",
-      to: "#search-box"
+      to: "#search-box",
+      in: {
+        "transition ease-in duration-100",
+        "opacity-0",
+        "opacity-100"
+      },
+      out: {
+        "transition ease-out duration-75",
+        "opacity-100",
+        "opacity-0"
+      }
     )
     |> JS.dispatch("js:focus", to: "#search-input")
   end

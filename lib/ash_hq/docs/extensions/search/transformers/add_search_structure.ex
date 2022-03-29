@@ -7,7 +7,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
   def transform(resource, dsl_state) do
     config = %{
       name_attribute: AshHq.Docs.Extensions.Search.name_attribute(resource),
-      doc_attribute: AshHq.Docs.Extensions.Search.name_attribute(resource),
+      doc_attribute: AshHq.Docs.Extensions.Search.doc_attribute(resource),
       library_version_attribute: AshHq.Docs.Extensions.Search.library_version_attribute(resource)
     }
 
@@ -75,7 +75,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
         calculation:
           Ash.Query.expr(
             fragment(
-              "ts_headline('simple', ?, plainto_tsquery('simple', ?), 'StartSel=\"<span class=\"\"search-hit\"\">\", StopSel=</span>')",
+              "ts_headline('english', ?, plainto_tsquery('english', ?), 'MaxFragments=3,StartSel=\"<span class=\"\"search-hit\"\">\", StopSel=</span>')",
               ^ref(config.doc_attribute),
               ^arg(:query)
             )

@@ -22,8 +22,8 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
-
-window.matchMedia('(prefers-color-scheme: dark)').matches
+import mermaid from "mermaid"
+mermaid.init(".mermaid")
 
 const Hooks = {};
 
@@ -40,6 +40,16 @@ Hooks.ColorTheme = {
       document.cookie = 'theme' + '=' + payload.theme + ';path=/';
     })
   }
+}
+
+Hooks.Docs = {
+  mounted() {
+    console.log(this.el)
+    mermaid.init(".mermaid")
+  },
+  beforeUpdate() {
+    console.log(this.el)
+  },
 }
 
 Hooks.CmdK = {
@@ -114,6 +124,7 @@ window.addEventListener("phx:selected-versions", (e) => {
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()
+
 
 // expose liveSocket on window for web console debug logs and latency simulation:
 // >> liveSocket.enableDebug()

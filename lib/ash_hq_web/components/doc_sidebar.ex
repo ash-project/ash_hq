@@ -24,7 +24,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                 to={Routes.library_link(library, selected_version_name(library, @selected_versions))}
                 class={
                   "flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700",
-                  "dark:bg-gray-600": !@extension && @library && library.id == @library.id
+                  "dark:bg-gray-600": !@guide && !@extension && @library && library.id == @library.id
                 }
               >
                 <Heroicons.Outline.CollectionIcon class="w-6 h-6" />

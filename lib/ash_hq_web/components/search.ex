@@ -23,7 +23,7 @@ defmodule AshHqWeb.Components.Search do
     <div
       id={@id}
       style="display: none;"
-      class="absolute flex justify-center align-middle w-screen h-screen backdrop-blur-sm pb-8 bg-white bg-opacity-10"
+      class="absolute flex justify-center align-middle w-screen h-full backdrop-blur-sm pb-8 bg-white bg-opacity-10"
       phx-hook="CmdK"
     >
       <div
@@ -59,9 +59,9 @@ defmodule AshHqWeb.Components.Search do
                   <Label field={library.id}>
                     {library.display_name}
                   </Label>
-                  <div>
+                  <div class="pb-2">
                     <Select
-                      class="text-black"
+                      class="text-black form-select rounded-md pt-1 py-2 w-3/4"
                       name={"versions[#{library.id}]"}
                       selected={Map.get(@selected_versions, library.id)}
                       options={Enum.map(library.versions, &{&1.version, &1.id})}
@@ -225,6 +225,11 @@ defmodule AshHqWeb.Components.Search do
             type
 
           %AshHq.Docs.Guide{
+            library_version: %{version: version, library_display_name: library_display_name}
+          } ->
+            "#{library_display_name} #{version}"
+
+          %AshHq.Docs.Extension{
             library_version: %{version: version, library_display_name: library_display_name}
           } ->
             "#{library_display_name} #{version}"

@@ -4,7 +4,7 @@ defmodule AshHq.Docs.Option do
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
   render_markdown do
-    render_attributes doc: :html_doc
+    render_attributes doc: :doc_html
   end
 
   search do

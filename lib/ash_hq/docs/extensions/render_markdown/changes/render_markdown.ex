@@ -6,7 +6,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
       if Ash.Changeset.changing_attribute?(changeset, opts[:source]) do
         source = Ash.Changeset.get_attribute(changeset, opts[:source])
 
-        case Earmark.as_html(source) do
+        case AshHq.Docs.Extensions.RenderMarkdown.as_html(source) do
           {:error, _, error_messages} ->
             Ash.Changeset.add_error(
               changeset,
@@ -18,6 +18,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
 
           {:ok, html_doc, _} ->
             html_doc = AshHq.Docs.Extensions.RenderMarkdown.Highlighter.highlight(html_doc)
+
             Ash.Changeset.force_change_attribute(changeset, opts[:destination], html_doc)
         end
       else

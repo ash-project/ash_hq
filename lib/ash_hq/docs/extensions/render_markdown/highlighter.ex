@@ -41,7 +41,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
         formatter_options: [highlight_tag: "span"]
       )
 
-    ~s(<pre><code class="makeup #{lang}">#{highlighted}</code></pre>)
+    ~s(<pre><code class="makeup #{lang} highlight">#{highlighted}</code></pre>)
   end
 
   entities = [{"&amp;", ?&}, {"&lt;", ?<}, {"&gt;", ?>}, {"&quot;", ?"}, {"&#39;", ?'}]

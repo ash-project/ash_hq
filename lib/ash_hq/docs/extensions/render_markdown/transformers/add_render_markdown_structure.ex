@@ -4,15 +4,18 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Transformers.AddRenderMarkdownStr
 
   def transform(resource, dsl) do
     resource
-    |> AshHq.Docs.Extensions.RenderMarkdown.attributes()
+    |> AshHq.Docs.Extensions.RenderMarkdown.render_attributes()
     |> Enum.reduce({:ok, dsl}, fn {source, destination}, {:ok, dsl} ->
       {:ok,
        dsl
        |> allow_nil_input(resource, destination)
-       |> Transformer.add_entity([:changes], :change,
-         change:
-           {AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown,
-            source: source, destination: destination}
+       |> Transformer.add_entity(
+         [:changes],
+         Transformer.build_entity!(Ash.Resource.Dsl, [:changes], :change,
+           change:
+             {AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown,
+              source: source, destination: destination}
+         )
        )}
     end)
   end

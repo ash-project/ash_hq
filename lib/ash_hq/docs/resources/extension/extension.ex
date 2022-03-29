@@ -4,12 +4,12 @@ defmodule AshHq.Docs.Extension do
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
   render_markdown do
-    render_attributes doc: :html_doc
+    render_attributes doc: :doc_html
   end
 
-  # search :load_for_search do
-
-  # end
+  search do
+    load_for_search library_version: [:library_display_name, :library_name]
+  end
 
   postgres do
     table "extensions"

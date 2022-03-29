@@ -45,7 +45,7 @@ defmodule AshHq.Docs.Guide do
   end
 
   calculations do
-    calculate :url_safe_name, :string, expr(fragment("replace(?, ' ', '-')", name))
+    calculate :url_safe_name, :string, expr(fragment("lower(replace(?, ' ', '-'))", name))
   end
 
   relationships do

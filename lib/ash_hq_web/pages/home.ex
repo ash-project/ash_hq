@@ -26,8 +26,8 @@ defmodule AshHqWeb.Pages.Home do
             <div>⌘ K</div>
           </div>
         </button>
-        <div class="pt-6 pb-6 w-full hidden md:block">
-          <div class="flex flex-row justify-center space-x-24 xl:space-x-32">
+        <div class="pt-6 pb-6 w-full hidden sm:block">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <CodeExample
               id="define-a-resource"
               class="grow min-w-fit max-w-[1000px]"

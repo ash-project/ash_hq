@@ -13,8 +13,8 @@ defmodule AshHq.Repo.Migrations.AddTsvectorIndices do
     for {table, {header, text}} <- @config do
       execute """
       CREATE INDEX #{table}_search_index ON #{table} USING GIN((
-        setweight(to_tsvector('simple', #{header}), 'A') ||
-        setweight(to_tsvector('simple', #{text}), 'D')
+        setweight(to_tsvector('english', #{header}), 'A') ||
+        setweight(to_tsvector('english', #{text}), 'D')
       ));
       """,
       """
