@@ -1,4 +1,4 @@
-# fly.toml file generated for lodge-shares on 2022-03-20T23:03:53-04:00
+# fly.toml file generated for ash-hq on 2022-03-29T12:13:43-04:00
 
 app = "ash-hq"
 
@@ -28,7 +28,7 @@ processes = []
     port = 443
 
   [[services.tcp_checks]]
-    grace_period = "30s" # allow some time for startup
+    grace_period = "30s"
     interval = "15s"
     restart_limit = 6
     timeout = "2s"

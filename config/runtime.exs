@@ -38,7 +38,7 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
-  host = System.get_env("PHX_HOST") || "ash-hq.com"
+  host = System.get_env("PHX_HOST") || "ash-hq.org"
   port = String.to_integer(System.get_env("PORT") || "4000")
 
   config :ash_hq, AshHqWeb.Endpoint,
