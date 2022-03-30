@@ -16,12 +16,12 @@ defmodule AshHqWeb.Routes do
   end
 
   def dsl_link(library, name, extension, item) do
-    case item.path do
-      [] ->
-        "/docs/dsl/#{sanitize_name(library.name)}/#{sanitize_name(name)}/#{sanitize_name(extension)}/#{sanitize_name(item.name)}"
+    case item do
+      %AshHq.Docs.Dsl{} = item ->
+        "/docs/dsl/#{sanitize_name(library.name)}/#{sanitize_name(name)}/#{sanitize_name(extension)}/#{Enum.map_join(item.path ++ [item.name], "/", &sanitize_name/1)}"
 
-      path ->
-        "/docs/dsl/#{sanitize_name(library.name)}/#{sanitize_name(name)}/#{sanitize_name(extension)}/#{sanitize_name(Enum.at(path, 0))}##{Enum.map_join(Enum.drop(path ++ [item.name], 1), "-", &sanitize_name/1)}"
+      %AshHq.Docs.Option{} = item ->
+        "/docs/dsl/#{sanitize_name(library.name)}/#{sanitize_name(name)}/#{sanitize_name(extension)}/#{Enum.map_join(item.path, "/", &sanitize_name/1)}##{item.name}"
     end
   end
 
@@ -70,12 +70,12 @@ defmodule AshHqWeb.Routes do
   end
 
   def doc_link(item) do
-    case item.path do
-      [] ->
-        "/docs/dsl/#{sanitize_name(item.library_name)}/#{sanitize_name(item.version_name)}/#{sanitize_name(item.extension_name)}/#{sanitize_name(item.name)}"
+    case item do
+      %AshHq.Docs.Dsl{} = item ->
+        "/docs/dsl/#{sanitize_name(item.library_name)}/#{sanitize_name(item.version_name)}/#{sanitize_name(item.extension_name)}/#{Enum.map_join(item.path ++ [item.name], "/", &sanitize_name/1)}"
 
-      path ->
-        "/docs/dsl/#{sanitize_name(item.library_name)}/#{sanitize_name(item.version_name)}/#{sanitize_name(item.extension_name)}/#{sanitize_name(Enum.at(path, 0))}##{Enum.map_join(Enum.drop(path ++ [item.name], 1), "-", &sanitize_name/1)}"
+      %AshHq.Docs.Option{} = item ->
+        "/docs/dsl/#{sanitize_name(item.library_name)}/#{sanitize_name(item.version_name)}/#{sanitize_name(item.extension_name)}/#{Enum.map_join(item.path, "/", &sanitize_name/1)}##{item.name}"
     end
   end
 

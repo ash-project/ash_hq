@@ -110,10 +110,10 @@ defmodule AshHqWeb.Pages.Docs do
             <div class="ml-2">
               <table>
                 {#for option <- @options}
-                  <tr id={path_to_name(option.path, option.name)}>
+                  <tr id={Routes.sanitize_name(option.name)}>
                     <td>
                       <div class="flex flex-row items-baseline">
-                        <a href={"##{path_to_name(option.path, option.name)}"}>
+                        <a href={"##{Routes.sanitize_name(option.name)}"}>
                           <Heroicons.Outline.LinkIcon class="h-3 m-3" />
                         </a>
                         <CalloutText>{option.name}</CalloutText>
@@ -195,30 +195,11 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   defp assign_dsl(socket) do
-    IO.inspect("here")
-
-    case socket.assigns[:params]["section"] do
+    case socket.assigns[:params]["dsl_path"] do
       nil ->
         assign(socket, :dsl, nil)
 
-      section ->
-        path =
-          socket.assigns.uri
-          |> URI.parse()
-          |> Map.get(:fragment)
-          |> case do
-            nil ->
-              []
-
-            "" ->
-              []
-
-            string ->
-              String.split(string, "-")
-          end
-
-        path = [section] ++ path
-
+      path ->
         dsl =
           Enum.find(
             socket.assigns.extension.dsls,
@@ -272,12 +253,14 @@ defmodule AshHqWeb.Pages.Docs do
   defp assign_module(socket) do
     if socket.assigns.library && socket.assigns.library_version &&
          socket.assigns[:params]["module"] do
+      module =
+        Enum.find(
+          socket.assigns.library_version.modules,
+          &(Routes.sanitize_name(&1.name) == socket.assigns[:params]["module"])
+        )
+
       assign(socket,
-        module:
-          Enum.find(
-            socket.assigns.library_version.modules,
-            &(Routes.sanitize_name(&1.name) == socket.assigns[:params]["module"])
-          )
+        module: module
       )
     else
       assign(socket, :module, nil)

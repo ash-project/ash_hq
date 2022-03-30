@@ -27,7 +27,6 @@ defmodule AshHqWeb.Components.Search do
       id={@id}
       style="display: none;"
       class="absolute flex justify-center align-middle w-screen h-full backdrop-blur-sm pb-8 bg-white bg-opacity-10"
-      phx-hook="CmdK"
     >
       <div
         :on-click-away={AshHqWeb.AppViewLive.toggle_search()}
@@ -191,9 +190,6 @@ defmodule AshHqWeb.Components.Search do
   end
 
   def handle_event("go-to-doc", _, socket) do
-    # socket.assigns.selected_item.id
-    # {:noreply, push_event("js:click", %{id: socket.assigns.selected_item.id})}
-
     case Enum.find(socket.assigns.item_list, fn item ->
            item.id == socket.assigns.selected_item.id
          end) do

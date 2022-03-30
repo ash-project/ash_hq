@@ -48,24 +48,6 @@ Hooks.Docs = {
   }
 }
 
-Hooks.CmdK = {
-  mounted() {
-    window.addEventListener("keydown", (event) => {
-      if(event.metaKey && event.key === "k") {
-        document.getElementById("search-button").click()
-      }
-    })
-    window.addEventListener("keydown", (event) => {
-      if(event.key === "Escape") {
-        document.getElementById("close-search").click()
-      }
-    })
-    window.addEventListener("phx:close-search", (_event) => {
-      document.getElementById("close-search").click()
-    })
-  }
-}
-
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   params: {_csrf_token: csrfToken}, 
@@ -127,6 +109,21 @@ window.addEventListener("phx:selected-types", (e) => {
   const cookie = e.detail.types.join(',');
   document.cookie = 'selected_types' + '=' + cookie + ';path=/';
 });
+
+window.addEventListener("keydown", (event) => {
+  if(event.metaKey && event.key === "k") {
+  console.log("here3")
+    document.getElementById("search-button").click()
+  }
+})
+window.addEventListener("keydown", (event) => {
+  if(event.key === "Escape") {
+    document.getElementById("close-search").click()
+  }
+})
+window.addEventListener("phx:close-search", (_event) => {
+  document.getElementById("close-search").click()
+})
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()
