@@ -224,26 +224,19 @@ defmodule AshHqWeb.Pages.Docs do
       |> Map.get(:fragment)
       |> case do
         nil ->
-          []
+          assign(socket, :function, nil)
 
         "" ->
-          []
+          assign(socket, :function, nil)
 
-        string ->
-          String.split(string, "-")
-      end
-      |> case do
-        [module, arity] ->
+        fragment ->
           assign(
             socket,
             :function,
             Enum.find(socket.assigns.module.functions, fn func ->
-              module == Routes.sanitize_name(func.name) && to_string(func.arity) == arity
+              "#{Routes.sanitize_name(func.name)}-#{func.arity}" == fragment
             end)
           )
-
-        _ ->
-          assign(socket, :function, nil)
       end
     else
       assign(socket, :function, nil)
