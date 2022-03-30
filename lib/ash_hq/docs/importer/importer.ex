@@ -67,7 +67,8 @@ defmodule AshHq.Docs.Importer do
         if result do
           LibraryVersion.build!(library.id, version, result, %{
             doc: result[:doc],
-            guides: result[:guides]
+            guides: result[:guides],
+            modules: result[:modules]
           })
         end
       end)

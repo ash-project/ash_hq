@@ -7,6 +7,7 @@
     library_version_attribute: 1,
     load_for_search: 1,
     doc_attribute: 1,
-    render_attributes: 1
+    render_attributes: 1,
+    header_ds?: false
   ]
 ]

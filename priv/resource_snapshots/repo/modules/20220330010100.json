@@ -2,7 +2,7 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "nil",
+      "default": "fragment(\"uuid_generate_v4()\")",
       "generated?": false,
       "primary_key?": true,
       "references": null,
@@ -17,7 +17,17 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "version",
+      "source": "name",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "\"\"",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "doc",
       "type": "text"
     },
     {
@@ -27,18 +37,18 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "data",
-      "type": "map"
+      "source": "doc_html",
+      "type": "text"
     },
     {
-      "allow_nil?": true,
-      "default": "false",
+      "allow_nil?": false,
+      "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "processed",
-      "type": "boolean"
+      "source": "order",
+      "type": "bigint"
     },
     {
       "allow_nil?": false,
@@ -54,13 +64,36 @@
           "global": null,
           "strategy": null
         },
-        "name": "library_versions_library_id_fkey",
+        "name": "modules_library_version_id_fkey",
         "on_delete": null,
         "on_update": null,
-        "table": "libraries"
+        "table": "library_versions"
       },
       "size": null,
-      "source": "library_id",
+      "source": "library_version_id",
+      "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": {
+        "destination_field": "id",
+        "destination_field_default": null,
+        "destination_field_generated": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "modules_extension_id_fkey",
+        "on_delete": null,
+        "on_update": null,
+        "table": "extensions"
+      },
+      "size": null,
+      "source": "extension_id",
       "type": "uuid"
     }
   ],
@@ -68,7 +101,7 @@
   "check_constraints": [],
   "custom_indexes": [],
   "has_create_action": true,
-  "hash": "8BF507A6047D503DBB4B89DF6A0D919984C2E8032AE06A68AE9F5C2E9F9E9D99",
+  "hash": "CA604CBE24468FEEFFCD5A869815BE621C0E31D6177533A959DEB5A6A88A37C4",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -76,5 +109,5 @@
     "strategy": null
   },
   "repo": "Elixir.AshHq.Repo",
-  "table": "library_versions"
+  "table": "modules"
 }

@@ -5,13 +5,16 @@ defmodule AshHqWeb.Components.Search do
 
   alias AshHqWeb.Routes
   alias Surface.Components.{Form, LiveRedirect}
-  alias Surface.Components.Form.{Label, Select}
+  alias Surface.Components.Form.{Checkbox, Label, Select}
 
   prop open, :boolean, default: false
   prop close, :event, required: true
   prop libraries, :list, required: true
   prop selected_versions, :map, required: true
   prop change_versions, :event, required: true
+  prop selected_types, :list, required: true
+  prop change_types, :event, required: true
+  prop uri, :string, required: true
 
   data versions, :map, default: %{}
   data search, :string, default: ""
@@ -33,14 +36,10 @@ defmodule AshHqWeb.Components.Search do
         phx-key="ArrowUp"
       >
         <div class="h-full px-6 my-6" :on-window-keydown="select-next" phx-key="ArrowDown">
-          <div
-            class="w-full flex flex-row justify-start sticky top-0 pb-3 border-b border-gray-600"
-            :on-window-keydown="go-to-doc"
-            phx-key="Enter"
-          >
+          <div class="w-full flex flex-row justify-start sticky top-0 pb-3 border-b border-gray-600">
             <Heroicons.Outline.SearchIcon class="h-6 w-6 mr-4 ml-4" />
             <div class="flex flex-row justify-between w-full">
-              <Form for={:search} change="search" class="w-full">
+              <Form for={:search} change="search" submit="go-to-doc" class="w-full">
                 <input
                   id="search-input"
                   name="search"
@@ -54,6 +53,14 @@ defmodule AshHqWeb.Components.Search do
           </div>
           <div class="grid grid-cols-9 h-[85%] mt-3">
             <div class="col-span-3 md:col-span-2 xl:col-span-1 border-r border-gray-600">
+              <Form for={:types} change={@change_types}>
+                {#for type <- AshHq.Docs.Extensions.Search.Types.types()}
+                  <Label field={type}>
+                    {type}
+                  </Label>
+                  <Checkbox id={"#{type}-selected"} value={type in @selected_types} name={"types[#{type}]"}/>
+                {/for}
+              </Form>
               <Form for={:versions} change={@change_versions}>
                 {#for library <- @libraries}
                   <Label field={library.id}>
@@ -61,6 +68,7 @@ defmodule AshHqWeb.Components.Search do
                   </Label>
                   <div class="pb-2">
                     <Select
+                      id={"versions-select-#{library.id}"}
                       class="text-black form-select rounded-md pt-1 py-2 w-3/4"
                       name={"versions[#{library.id}]"}
                       selected={Map.get(@selected_versions, library.id)}
@@ -117,9 +125,8 @@ defmodule AshHqWeb.Components.Search do
         {/if}
       </div>
       {#for item <- results.items}
-        <LiveRedirect to={Routes.doc_link(item)}>
+        <LiveRedirect to={Routes.doc_link(item)} opts={id: item.id}>
           <div
-            id={item.id}
             class={
               "rounded-lg mb-4 py-4 px-2 hover:bg-gray-600",
               "bg-gray-600": @selected_item.id == item.id,
@@ -146,6 +153,10 @@ defmodule AshHqWeb.Components.Search do
 
   def mount(socket) do
     {:ok, socket}
+  end
+
+  def update(assigns, socket) do
+    {:ok, socket |> assign(assigns) |> search()}
   end
 
   def handle_event("search", %{"search" => search}, socket) do
@@ -180,6 +191,9 @@ defmodule AshHqWeb.Components.Search do
   end
 
   def handle_event("go-to-doc", _, socket) do
+    # socket.assigns.selected_item.id
+    # {:noreply, push_event("js:click", %{id: socket.assigns.selected_item.id})}
+
     case Enum.find(socket.assigns.item_list, fn item ->
            item.id == socket.assigns.selected_item.id
          end) do
@@ -187,7 +201,7 @@ defmodule AshHqWeb.Components.Search do
         {:noreply, socket}
 
       item ->
-        {:noreply, redirect(socket, to: Routes.doc_link(item))}
+        {:noreply, push_redirect(socket, to: Routes.doc_link(item))}
     end
   end
 
@@ -198,7 +212,10 @@ defmodule AshHqWeb.Components.Search do
       search_results =
         AshHq.Docs
         |> Ash.Api.resources()
-        |> Enum.filter(&(AshHq.Docs.Extensions.Search in Ash.Resource.Info.extensions(&1)))
+        |> Enum.filter(fn resource ->
+          AshHq.Docs.Extensions.Search in Ash.Resource.Info.extensions(resource) &&
+            AshHq.Docs.Extensions.Search.type(resource) in socket.assigns.selected_types
+        end)
         |> Enum.flat_map(fn resource ->
           to_load = AshHq.Docs.Extensions.Search.load_for_search(resource)
 
@@ -223,6 +240,12 @@ defmodule AshHqWeb.Components.Search do
         |> Enum.group_by(fn
           %{extension_type: type} ->
             type
+
+          %AshHq.Docs.Function{module_name: module_name} ->
+            module_name
+
+          %AshHq.Docs.Module{name: name} ->
+            name
 
           %AshHq.Docs.Guide{
             library_version: %{version: version, library_display_name: library_display_name}

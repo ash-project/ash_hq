@@ -44,12 +44,8 @@ Hooks.ColorTheme = {
 
 Hooks.Docs = {
   mounted() {
-    console.log(this.el)
     mermaid.init(".mermaid")
-  },
-  beforeUpdate() {
-    console.log(this.el)
-  },
+  }
 }
 
 Hooks.CmdK = {
@@ -63,6 +59,9 @@ Hooks.CmdK = {
       if(event.key === "Escape") {
         document.getElementById("close-search").click()
       }
+    })
+    window.addEventListener("phx:close-search", (_event) => {
+      document.getElementById("close-search").click()
     })
   }
 }
@@ -99,16 +98,17 @@ window.addEventListener("phx:page-loading-stop", () => {
 
 
 window.addEventListener("js:focus", e => e.target.focus())
-window.addEventListener("js:noscroll-main", e =>  {
-  if(e.target.style.display === "none") {
-    document.getElementById("main-container").classList.add("overflow-hidden")
-  } else {
-    document.getElementById("main-container").classList.remove("overflow-hidden")
-  }
-})
+// window.addEventListener("js:noscroll-main", e =>  {
+//   if(e.target.style.display === "none") {
+//     document.getElementById("main-container").classList.add("overflow-hidden")
+//   } else {
+//     document.getElementById("main-container").classList.remove("overflow-hidden")
+//   }
+// })
 
 window.addEventListener("phx:js:scroll-to", (e) => {
   const target = document.getElementById(e.detail.id);
+  console.log(target);
   const boundary = document.getElementById(e.detail.boundary_id);
   scrollIntoView(target, { 
     behavior: 'smooth', 
@@ -120,6 +120,12 @@ window.addEventListener("phx:js:scroll-to", (e) => {
 window.addEventListener("phx:selected-versions", (e) => {
   const cookie = Object.keys(e.detail).map((key) => `${key}:${e.detail[key]}`).join(',');
   document.cookie = 'selected_versions' + '=' + cookie + ';path=/';
+});
+
+window.addEventListener("phx:selected-types", (e) => {
+  console.log(e.detail);
+  const cookie = e.detail.types.join(',');
+  document.cookie = 'selected_types' + '=' + cookie + ';path=/';
 });
 
 // connect if there are any LiveViews on the page

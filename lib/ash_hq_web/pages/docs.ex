@@ -2,13 +2,14 @@ defmodule AshHqWeb.Pages.Docs do
   use Surface.LiveComponent
 
   alias Phoenix.LiveView.JS
-  alias AshHqWeb.Components.{CalloutText, DocSidebar, ProgressiveHeading, Tag}
+  alias AshHqWeb.Components.{CalloutText, DocSidebar, Tag}
   alias AshHqWeb.Routes
 
   prop params, :map, required: true
   prop change_versions, :event, required: true
   prop selected_versions, :map, required: true
   prop libraries, :list, default: []
+  prop uri, :string
 
   data library, :any
   data extension, :any
@@ -17,6 +18,10 @@ defmodule AshHqWeb.Pages.Docs do
   data guide, :any
   data doc_path, :list, default: []
   data dsls, :list, default: []
+  data dsl, :any
+  data options, :list, default: []
+  data module, :any
+  data function, :any
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -41,26 +46,25 @@ defmodule AshHqWeb.Pages.Docs do
                   <Heroicons.Outline.ChevronRightIcon class="w-3 h-3" />
                 {/for}
                 <span class="dark:text-white">
-                <CalloutText>{List.last(path)}</CalloutText>
+                  <CalloutText>{List.last(path)}</CalloutText>
                 </span>
             {/case}
           </div>
         {/if}
       </div>
       <span class="lg:hidden">
-        <div
-          id="mobile-sidebar-container"
-          class="hidden fixed w-min h-full bg-primary-black transition"
-        >
+        <div id="mobile-sidebar-container" class="hidden fixed w-min h-full bg-primary-black transition">
           <DocSidebar
             id="mobile-sidebar"
             libraries={@libraries}
             extension={@extension}
-            dsls={@dsls}
+            module={@module}
+            function={@function}
             guide={@guide}
             library={@library}
             library_version={@library_version}
             selected_versions={@selected_versions}
+            dsl={@dsl}
           />
         </div>
       </span>
@@ -68,23 +72,66 @@ defmodule AshHqWeb.Pages.Docs do
         <DocSidebar
           id="sidebar"
           class="hidden lg:block mt-10"
+          module={@module}
+          function={@function}
           libraries={@libraries}
           extension={@extension}
-          dsls={@dsls}
           guide={@guide}
           library={@library}
           library_version={@library_version}
           selected_versions={@selected_versions}
+          dsl={@dsl}
         />
         <div
           id="docs-window"
-          class="grow w-full prose lg:max-w-3xl xl:max-w-5xl dark:prose-invert overflow-y-scroll overflow-x-visible"
+          class="grow w-full prose lg:max-w-3xl xl:max-w-5xl dark:prose-invert overflow-y-scroll overflow-x-visible mt-14"
           phx-hook="Docs"
         >
           {raw(@docs)}
-          {#if !Enum.empty?(@dsls)}
-            <h1>Dsl Documentation</h1>
-            {render_dsl_docs(assigns, @dsls)}
+          {#if @module}
+            {#for function <- @module.functions}
+              <p>
+                <div>
+                  <div class="flex flex-row items-baseline">
+                    <a href={"##{Routes.sanitize_name(function.name)}-#{function.arity}"}>
+                      <Heroicons.Outline.LinkIcon class="h-3 m-3" />
+                    </a>
+                    <h2 id={"#{Routes.sanitize_name(function.name)}-#{function.arity}"}>{function.name}/{function.arity}</h2>
+                  </div>
+                </div>
+                {#for head <- function.heads}
+                  <code class="makeup elixir">{head}</code>
+                {/for}
+                {raw(AshHq.Docs.Extensions.RenderMarkdown.render!(function, :doc))}
+              </p>
+            {/for}
+          {/if}
+          {#if !Enum.empty?(@options)}
+            <div class="ml-2">
+              <table>
+                {#for option <- @options}
+                  <tr id={path_to_name(option.path, option.name)}>
+                    <td>
+                      <div class="flex flex-row items-baseline">
+                        <a href={"##{path_to_name(option.path, option.name)}"}>
+                          <Heroicons.Outline.LinkIcon class="h-3 m-3" />
+                        </a>
+                        <CalloutText>{option.name}</CalloutText>
+                      </div>
+                    </td>
+                    <td>
+                      {option.type}
+                    </td>
+                    <td>
+                      {render_tags(assigns, option)}
+                    </td>
+                    <td>
+                      {raw(AshHq.Docs.Extensions.RenderMarkdown.render!(option, :doc))}
+                    </td>
+                  </tr>
+                {/for}
+              </table>
+            </div>
           {/if}
         </div>
       </div>
@@ -92,79 +139,8 @@ defmodule AshHqWeb.Pages.Docs do
     """
   end
 
-  defp render_dsl_docs(assigns, dsls, path \\ [], depth \\ nil) do
-    count = Enum.count(path)
-    depth = depth || count + 4
-
-    ~F"""
-    {#for dsl <- Enum.filter(dsls, &(&1.path == path)) |> Enum.sort_by(& &1.order)}
-      <div class={"w-full pl-2 border-gray-800 border-l", "ml-2": count > 0}>
-        <div id={path_to_name(dsl.path, dsl.name)} class="flex flex-row items-center">
-          <a href={"##{path_to_name(dsl.path, dsl.name)}"}><Heroicons.Outline.LinkIcon class="h-4 w-4" /></a>
-            {render_path(assigns, dsl.path, dsl.name)}
-        </div>
-        {render_options(assigns, get_options(dsl, @options), depth)}
-        {raw(AshHq.Docs.Extensions.RenderMarkdown.render!(dsl, :doc))}
-        {render_dsl_docs(assigns, dsls, path ++ [dsl.name], depth + 1)}
-      </div>
-    {/for}
-    """
-  end
-
   def path_to_name(path, name) do
     Enum.map_join(path ++ [name], "-", &Routes.sanitize_name/1)
-  end
-
-  defp render_options(assigns, [], _) do
-    ~F"""
-    """
-  end
-
-  defp render_options(assigns, options, depth) do
-    ~F"""
-    <div class="ml-2">
-      <table>
-        {#for option <- options}
-          <tr id={path_to_name(option.path, option.name)}>
-            <td>
-              <div class="flex flex-row items-baseline">
-                <a href={"##{path_to_name(option.path, option.name)}"}>
-                  <Heroicons.Outline.LinkIcon class="h-3 m-3" />
-                </a>
-                  <CalloutText>{option.name}</CalloutText>
-              </div>
-            </td>
-            <td>
-              {option.type}
-            </td>
-            <td>
-              {render_tags(assigns, option)}
-            </td>
-            <td>
-              {raw(AshHq.Docs.Extensions.RenderMarkdown.render!(option, :doc))}
-            </td>
-          </tr>
-        {/for}
-      </table>
-    </div>
-    """
-  end
-
-  defp render_path(assigns, path, name) do
-    ~F"""
-    <div class="flex flex-row space-x-1 items-center">
-     {#for item <- path}
-       <span class="text-gray-400">
-         {item}</span>
-       <Heroicons.Outline.ChevronRightIcon class="w-3 h-3" />
-     {/for}
-     <span class="dark:text-white">
-      <CalloutText>
-        {name}
-      </CalloutText>
-     </span>
-    </div>
-    """
   end
 
   defp render_tags(assigns, option) do
@@ -175,13 +151,6 @@ defmodule AshHqWeb.Pages.Docs do
       </Tag>
     {/if}
     """
-  end
-
-  defp get_options(dsl, options) do
-    Enum.filter(options, fn option ->
-      List.starts_with?(option.path, dsl.path ++ [dsl.name]) &&
-        Enum.count(option.path) - Enum.count(dsl.path) == 1
-    end)
   end
 
   def show_sidebar() do
@@ -203,10 +172,14 @@ defmodule AshHqWeb.Pages.Docs do
 
   def update(assigns, socket) do
     {:ok,
-     assign(socket, assigns)
+     socket
+     |> assign(assigns)
      |> assign_library()
      |> assign_extension()
      |> assign_guide()
+     |> assign_module()
+     |> assign_function()
+     |> assign_dsl()
      |> assign_docs()}
   end
 
@@ -221,21 +194,131 @@ defmodule AshHqWeb.Pages.Docs do
     assign(socket, :guide, guide)
   end
 
+  defp assign_dsl(socket) do
+    IO.inspect("here")
+
+    case socket.assigns[:params]["section"] do
+      nil ->
+        assign(socket, :dsl, nil)
+
+      section ->
+        path =
+          socket.assigns.uri
+          |> URI.parse()
+          |> Map.get(:fragment)
+          |> case do
+            nil ->
+              []
+
+            "" ->
+              []
+
+            string ->
+              String.split(string, "-")
+          end
+
+        path = [section] ++ path
+
+        dsl =
+          Enum.find(
+            socket.assigns.extension.dsls,
+            fn dsl ->
+              Enum.map(dsl.path, &Routes.sanitize_name/1) ++ [Routes.sanitize_name(dsl.name)] ==
+                path
+            end
+          )
+
+        assign(
+          socket,
+          :dsl,
+          dsl
+        )
+    end
+  end
+
+  defp assign_function(socket) do
+    if socket.assigns.module do
+      socket.assigns.uri
+      |> URI.parse()
+      |> Map.get(:fragment)
+      |> case do
+        nil ->
+          []
+
+        "" ->
+          []
+
+        string ->
+          String.split(string, "-")
+      end
+      |> case do
+        [module, arity] ->
+          assign(
+            socket,
+            :function,
+            Enum.find(socket.assigns.module.functions, fn func ->
+              module == Routes.sanitize_name(func.name) && to_string(func.arity) == arity
+            end)
+          )
+
+        _ ->
+          assign(socket, :function, nil)
+      end
+    else
+      assign(socket, :function, nil)
+    end
+  end
+
+  defp assign_module(socket) do
+    if socket.assigns.library && socket.assigns.library_version &&
+         socket.assigns[:params]["module"] do
+      assign(socket,
+        module:
+          Enum.find(
+            socket.assigns.library_version.modules,
+            &(Routes.sanitize_name(&1.name) == socket.assigns[:params]["module"])
+          )
+      )
+    else
+      assign(socket, :module, nil)
+    end
+  end
+
   defp assign_docs(socket) do
     cond do
+      socket.assigns.module ->
+        assign(socket,
+          docs: AshHq.Docs.Extensions.RenderMarkdown.render!(socket.assigns.module, :doc),
+          doc_paths: [socket.assigns.library.name, socket.assigns.module.name],
+          options: []
+        )
+
+      socket.assigns.dsl ->
+        assign(socket,
+          docs: AshHq.Docs.Extensions.RenderMarkdown.render!(socket.assigns.dsl, :doc),
+          doc_path:
+            [
+              socket.assigns.library.name,
+              socket.assigns.extension.name
+            ] ++ socket.assigns.dsl.path ++ [socket.assigns.dsl.name],
+          options:
+            Enum.filter(
+              socket.assigns.extension.options,
+              &(&1.path == socket.assigns.dsl.path ++ [socket.assigns.dsl.name])
+            )
+        )
+
       socket.assigns.extension ->
         assign(socket,
           docs: AshHq.Docs.Extensions.RenderMarkdown.render!(socket.assigns.extension, :doc),
           doc_path: [socket.assigns.library.name, socket.assigns.extension.name],
-          dsls: socket.assigns.extension.dsls,
-          options: socket.assigns.extension.options
+          options: []
         )
 
       socket.assigns.guide ->
         assign(socket,
           docs: AshHq.Docs.Extensions.RenderMarkdown.render!(socket.assigns.guide, :text),
           doc_path: [socket.assigns.library.name, socket.assigns.guide.name],
-          dsls: [],
           options: []
         )
 
@@ -244,7 +327,6 @@ defmodule AshHqWeb.Pages.Docs do
           docs:
             AshHq.Docs.Extensions.RenderMarkdown.render!(socket.assigns.library_version, :doc),
           doc_path: [socket.assigns.library.name],
-          dsls: [],
           options: []
         )
 
@@ -254,7 +336,7 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   defp assign_extension(socket) do
-    if socket.assigns.library do
+    if socket.assigns.library && socket.assigns[:params]["extension"] do
       extensions = get_extensions(socket.assigns.library, socket.assigns.selected_versions)
 
       assign(socket,

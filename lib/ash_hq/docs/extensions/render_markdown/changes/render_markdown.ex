@@ -6,7 +6,10 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
       if Ash.Changeset.changing_attribute?(changeset, opts[:source]) do
         source = Ash.Changeset.get_attribute(changeset, opts[:source])
 
-        case AshHq.Docs.Extensions.RenderMarkdown.as_html(source) do
+        case AshHq.Docs.Extensions.RenderMarkdown.as_html(
+               source,
+               AshHq.Docs.Extensions.RenderMarkdown.header_ids?(changeset.resource)
+             ) do
           {:error, _, error_messages} ->
             Ash.Changeset.add_error(
               changeset,

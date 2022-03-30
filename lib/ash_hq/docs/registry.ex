@@ -5,9 +5,11 @@ defmodule AshHq.Docs.Registry do
   entries do
     entry AshHq.Docs.Dsl
     entry AshHq.Docs.Extension
+    entry AshHq.Docs.Function
     entry AshHq.Docs.Guide
     entry AshHq.Docs.Library
     entry AshHq.Docs.LibraryVersion
+    entry AshHq.Docs.Module
     entry AshHq.Docs.Option
   end
 end

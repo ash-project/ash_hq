@@ -4,6 +4,11 @@ defmodule AshHq.Docs.Extensions.Search do
   @search %Ash.Dsl.Section{
     name: :search,
     schema: [
+      type: [
+        type: :string,
+        default: "DSL",
+        doc: "The type of item. Used to narrow down search results, displayed in the UI."
+      ],
       name_attribute: [
         type: :atom,
         default: :name,
@@ -32,6 +37,10 @@ defmodule AshHq.Docs.Extensions.Search do
 
   def name_attribute(resource) do
     Extension.get_opt(resource, [:search], :name_attribute, :name)
+  end
+
+  def type(resource) do
+    Extension.get_opt(resource, [:search], :type, "DSL")
   end
 
   def doc_attribute(resource) do

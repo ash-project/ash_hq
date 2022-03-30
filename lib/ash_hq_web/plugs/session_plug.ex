@@ -4,7 +4,8 @@ defmodule AshHqWeb.SessionPlug do
 
   @cookies_to_replicate [
     "theme",
-    "selected_versions"
+    "selected_versions",
+    "selected_types"
   ]
 
   def init(_), do: []

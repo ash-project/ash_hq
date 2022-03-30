@@ -11,6 +11,7 @@ defmodule AshHqWeb.AppViewLive do
   data searching, :boolean, default: false
   data selected_versions, :map, default: %{}
   data libraries, :list, default: []
+  data selected_types, :map, default: %{}
 
   def render(assigns) do
     ~F"""
@@ -21,8 +22,11 @@ defmodule AshHqWeb.AppViewLive do
     >
       <Search
         id="search-box"
+        uri={@uri}
         close={close_search()}
         libraries={@libraries}
+        selected_types={@selected_types}
+        change_types="change-types"
         change_versions="change-versions"
         selected_versions={@selected_versions}
       />
@@ -31,7 +35,10 @@ defmodule AshHqWeb.AppViewLive do
         id="main-container"
         class="h-screen flex flex-col bg-white dark:bg-primary-black dark:text-silver-phoenix overflow-x-hidden overflow-clip"
       >
-        <div class={"flex justify-between pt-4 px-4", "w-full border-b bg-white dark:bg-primary-black pb-4 top-0": @live_action == :docs_dsl}>
+        <div class={
+          "flex justify-between pt-4 px-4",
+          "w-full border-b bg-white dark:bg-primary-black pb-4 top-0": @live_action == :docs_dsl
+        }>
           <div class="flex flex-row align-baseline">
             <a href="/">
               <img class="h-10 hidden dark:block" src="/images/ash-framework-dark.png">
@@ -70,6 +77,7 @@ defmodule AshHqWeb.AppViewLive do
             <Docs
               id="docs"
               params={@params}
+              uri={@uri}
               change_versions="change-versions"
               selected_versions={@selected_versions}
               libraries={@libraries}
@@ -90,6 +98,23 @@ defmodule AshHqWeb.AppViewLive do
      |> assign(:selected_versions, versions)
      |> load_docs()
      |> push_event("selected-versions", versions)}
+  end
+
+  def handle_event("change-types", %{"types" => types}, socket) do
+    types =
+      types
+      |> Enum.filter(fn {_, value} ->
+        value == "true"
+      end)
+      |> Enum.map(&elem(&1, 0))
+
+    {:noreply,
+     socket
+     |> assign(
+       :selected_types,
+       types
+     )
+     |> push_event("selected-types", %{types: types})}
   end
 
   def handle_event("toggle_theme", _, socket) do
@@ -117,13 +142,23 @@ defmodule AshHqWeb.AppViewLive do
             if version.id == socket.assigns[:selected_versions][library.id] do
               dsls_query = Ash.Query.sort(AshHq.Docs.Dsl, order: :asc)
               options_query = Ash.Query.sort(AshHq.Docs.Option, order: :asc)
+              functions_query = Ash.Query.sort(AshHq.Docs.Function, name: :asc, arity: :asc)
+
+              modules_query =
+                AshHq.Docs.Module
+                |> Ash.Query.sort(order: :asc)
+                |> Ash.Query.load(functions: functions_query)
 
               extensions_query =
                 AshHq.Docs.Extension
                 |> Ash.Query.sort(order: :asc)
                 |> Ash.Query.load(options: options_query, dsls: dsls_query)
 
-              AshHq.Docs.load!(version, extensions: extensions_query, guides: :url_safe_name)
+              AshHq.Docs.load!(version,
+                extensions: extensions_query,
+                guides: :url_safe_name,
+                modules: modules_query
+              )
             else
               version
             end
@@ -153,6 +188,19 @@ defmodule AshHqWeb.AppViewLive do
             |> String.split(":")
             |> List.to_tuple()
           end)
+      end
+
+    all_types = AshHq.Docs.Extensions.Search.Types.types()
+
+    selected_types =
+      case session["selected_types"] do
+        nil ->
+          AshHq.Docs.Extensions.Search.Types.types()
+
+        types ->
+          types
+          |> String.split(",")
+          |> Enum.filter(&(&1 in all_types))
       end
 
     socket =
@@ -186,7 +234,12 @@ defmodule AshHqWeb.AppViewLive do
             :selected_versions,
             selected_versions
           )
+          |> assign(
+            :selected_types,
+            selected_types
+          )
           |> push_event("selected_versions", selected_versions)
+          |> push_event("selected_types", %{types: selected_types})
         end
       )
       |> load_docs()

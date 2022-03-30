@@ -2,7 +2,7 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "nil",
+      "default": "fragment(\"uuid_generate_v4()\")",
       "generated?": false,
       "primary_key?": true,
       "references": null,
@@ -21,24 +21,14 @@
       "type": "text"
     },
     {
-      "allow_nil?": true,
+      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "target",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "false",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "default_for_target",
-      "type": "boolean"
+      "source": "arity",
+      "type": "bigint"
     },
     {
       "allow_nil?": false,
@@ -48,6 +38,39 @@
       "references": null,
       "size": null,
       "source": "type",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "[]",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "heads",
+      "type": [
+        "array",
+        "text"
+      ]
+    },
+    {
+      "allow_nil?": false,
+      "default": "\"\"",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "doc",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "doc_html",
       "type": "text"
     },
     {
@@ -74,7 +97,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "extensions_library_version_id_fkey",
+        "name": "functions_library_version_id_fkey",
         "on_delete": null,
         "on_update": null,
         "table": "library_versions"
@@ -82,29 +105,42 @@
       "size": null,
       "source": "library_version_id",
       "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": {
+        "destination_field": "id",
+        "destination_field_default": null,
+        "destination_field_generated": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "functions_module_id_fkey",
+        "on_delete": null,
+        "on_update": null,
+        "table": "modules"
+      },
+      "size": null,
+      "source": "module_id",
+      "type": "uuid"
     }
   ],
   "base_filter": null,
   "check_constraints": [],
   "custom_indexes": [],
   "has_create_action": true,
-  "hash": "8AB07CA54C0746B18F3A17653FDB7E4FA46C1755F27CF44D11AE3F270DC2198D",
-  "identities": [
-    {
-      "base_filter": null,
-      "index_name": "extensions_unique_name_by_library_version_index",
-      "keys": [
-        "library_version_id",
-        "name"
-      ],
-      "name": "unique_name_by_library_version"
-    }
-  ],
+  "hash": "45955F25B5AC25310924E7A25A0EBA5323452D31E00613A034B14B9DED19BA61",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
     "strategy": null
   },
   "repo": "Elixir.AshHq.Repo",
-  "table": "extensions"
+  "table": "functions"
 }

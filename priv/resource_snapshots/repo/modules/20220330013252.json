@@ -2,7 +2,7 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "nil",
+      "default": "fragment(\"uuid_generate_v4()\")",
       "generated?": false,
       "primary_key?": true,
       "references": null,
@@ -21,28 +21,8 @@
       "type": "text"
     },
     {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "target",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "false",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "default_for_target",
-      "type": "boolean"
-    },
-    {
       "allow_nil?": false,
-      "default": "nil",
+      "default": "\"\"",
       "generated?": false,
       "primary_key?": false,
       "references": null,
@@ -51,13 +31,13 @@
       "type": "text"
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "type",
+      "source": "doc_html",
       "type": "text"
     },
     {
@@ -84,7 +64,7 @@
           "global": null,
           "strategy": null
         },
-        "name": "extensions_library_version_id_fkey",
+        "name": "modules_library_version_id_fkey",
         "on_delete": null,
         "on_update": null,
         "table": "library_versions"
@@ -98,23 +78,13 @@
   "check_constraints": [],
   "custom_indexes": [],
   "has_create_action": true,
-  "hash": "49ECA6AE6ACE210F1FE7A239D7350445E37E23E4C095E7F2B3534FC399DEEFFD",
-  "identities": [
-    {
-      "base_filter": null,
-      "index_name": "extensions_unique_name_by_library_version_index",
-      "keys": [
-        "library_version_id",
-        "name"
-      ],
-      "name": "unique_name_by_library_version"
-    }
-  ],
+  "hash": "094310FFB454BCA142DE4C89710570021077FAD9A3DA6398A61BC0821A0386F9",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
     "strategy": null
   },
   "repo": "Elixir.AshHq.Repo",
-  "table": "extensions"
+  "table": "modules"
 }

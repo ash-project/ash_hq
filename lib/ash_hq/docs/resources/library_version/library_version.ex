@@ -44,8 +44,16 @@ defmodule AshHq.Docs.LibraryVersion do
         allow_nil? false
       end
 
+      argument :modules, {:array, :map} do
+        allow_nil? false
+      end
+
+      change {AshHq.Docs.Changes.AddArgToRelationship,
+              attr: :id, arg: :library_version, rel: :modules, generate: &Ash.UUID.generate/0}
+
       change manage_relationship(:guides, type: :direct_control)
       change manage_relationship(:library, type: :replace)
+      change manage_relationship(:modules, type: :direct_control)
     end
 
     read :defined_for do
@@ -117,5 +125,6 @@ defmodule AshHq.Docs.LibraryVersion do
 
     has_many :extensions, AshHq.Docs.Extension
     has_many :guides, AshHq.Docs.Guide
+    has_many :modules, AshHq.Docs.Module
   end
 end

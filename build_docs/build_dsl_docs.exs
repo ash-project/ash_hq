@@ -108,6 +108,34 @@ defmodule Utils do
     _ -> "No Documentation"
   end
 
+  def build_function({{type, name, arity}, _, heads, %{"en" => docs}, _}, order) do
+    [%{
+      name: to_string(name),
+      type: type,
+      arity: arity,
+      order: order,
+      heads: heads,
+      doc: docs || "No documentation"
+    }]
+  end
+
+  def build_function(_, _), do: []
+
+  def build_module(module, order) do
+    {:docs_v1, _, :elixir, _, %{
+      "en" => module_doc
+    }, _, defs} = Code.fetch_docs(module)
+
+    %{
+      name: inspect(module),
+      doc: module_doc,
+      order: order,
+      functions: defs |> Enum.with_index() |> Enum.flat_map(fn {definition, i} ->
+        build_function(definition, i)
+      end)
+    }
+  end
+
   defp type({:behaviour, mod}), do: Module.split(mod) |> List.last()
   defp type({:ash_behaviour, mod}), do: Module.split(mod) |> List.last()
   defp type({:ash_behaviour, mod, _builtins}), do: Module.split(mod) |> List.last()
@@ -156,7 +184,8 @@ case Enum.at(dsls, 0) do
 
     acc = %{
       doc: Utils.module_docs(dsl),
-      guides: []
+      guides: [],
+      modules: []
     }
 
     acc =
@@ -165,6 +194,15 @@ case Enum.at(dsls, 0) do
       |> Enum.reduce(acc, fn {guide, order}, acc ->
          Map.update!(acc, :guides, fn guides ->
           [Map.put(guide, :order, order) | guides]
+        end)
+      end)
+
+    acc =
+      Utils.try_apply(fn -> dsl.code_modules() end, [])
+      |> Enum.with_index()
+      |> Enum.reduce(acc, fn {module, order}, acc ->
+        Map.update!(acc, :modules, fn modules ->
+          [Utils.build_module(module, order) | modules]
         end)
       end)
 

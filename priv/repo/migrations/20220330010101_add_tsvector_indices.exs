@@ -6,7 +6,9 @@ defmodule AshHq.Repo.Migrations.AddTsvectorIndices do
     library_versions: {:version, :doc},
     options: {:name, :doc},
     dsls: {:name, :doc},
-    extensions: {:name, :doc}
+    extensions: {:name, :doc},
+    functions: {:name, :doc},
+    modules: {:name, :doc}
   }
 
   def change do

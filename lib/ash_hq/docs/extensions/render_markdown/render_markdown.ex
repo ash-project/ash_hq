@@ -7,6 +7,11 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
         default: [],
         doc:
           "A keyword list of attributes that should have markdown rendered as html, and the attribute that should be written to."
+      ],
+      header_ids?: [
+        type: :boolean,
+        default: true,
+        doc: "Set to false to disable setting an id for each header."
       ]
     ]
   }
@@ -19,28 +24,32 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
     Ash.Dsl.Extension.get_opt(resource, [:render_markdown], :render_attributes, [])
   end
 
+  def header_ids?(resource) do
+    Ash.Dsl.Extension.get_opt(resource, [:render_markdown], :header_ids?, [])
+  end
+
   def render!(%resource{} = record, key, on_demand? \\ false) do
     cond do
       render_attributes(resource)[key] ->
         Map.get(record, render_attributes(resource)[key])
 
       on_demand? ->
-        as_html!(Map.get(record, key) || "")
+        as_html!(Map.get(record, key) || "", header_ids?(resource))
 
       true ->
         raise "#{resource} dos not render #{key} as markdown. Pass the `on_demand?` argument as `true` to render it dynamically."
     end
   end
 
-  def as_html!(text) do
+  def as_html!(text, add_ids?) do
     text
-    |> Earmark.as_html!(postprocessor: &add_ids/1)
+    |> Earmark.as_html!(opts(add_ids?))
     |> AshHq.Docs.Extensions.RenderMarkdown.Highlighter.highlight()
   end
 
-  def as_html(text) do
+  def as_html(text, add_ids?) do
     text
-    |> Earmark.as_html(postprocessor: &add_ids/1)
+    |> Earmark.as_html(opts(add_ids?))
     |> case do
       {:ok, html_doc, errors} ->
         {:ok, AshHq.Docs.Extensions.RenderMarkdown.Highlighter.highlight(html_doc), errors}
@@ -48,6 +57,14 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
       {:error, html_doc, errors} ->
         {:error, html_doc, errors}
     end
+  end
+
+  defp opts(true) do
+    [postprocessor: &add_ids/1]
+  end
+
+  defp opts(_) do
+    []
   end
 
   defp add_ids({tag, attrs, [contents], meta} = node)
