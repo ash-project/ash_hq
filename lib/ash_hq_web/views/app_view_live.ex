@@ -33,11 +33,11 @@ defmodule AshHqWeb.AppViewLive do
       <button id="search-button" class="hidden" phx-click={AshHqWeb.AppViewLive.toggle_search()} />
       <div
         id="main-container"
-        class={"h-screen flex flex-col bg-white dark:bg-primary-black dark:text-silver-phoenix overflow-x-hidden", "overflow-clip": @live_action == :docs_dsl}
+        class={"h-screen grid content-start grid-rows-[auto,1fr] w-screen bg-white dark:bg-primary-black dark:text-silver-phoenix", "overflow-scroll": @live_action == :home, "overflow-hidden": @live_action == :docs_dsl}
       >
         <div class={
-          "flex justify-between pt-4 px-4",
-          "w-full border-b bg-white dark:bg-primary-black pb-4 top-0": @live_action == :docs_dsl
+          "flex justify-between pt-4 px-4 h-min",
+          "border-b bg-white dark:bg-primary-black": @live_action == :docs_dsl
         }>
           <div class="flex flex-row align-baseline">
             <a href="/">
@@ -51,7 +51,7 @@ defmodule AshHqWeb.AppViewLive do
               class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600"
             >Get Started</a>
             <div>|</div>
-            <a href="/docs" class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600">Docs</a>
+            <a href="/docs/guides/ash/main/overview" class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600">Docs</a>
             <div>|</div>
             <a href="https://github.com/ash-project">
               <svg

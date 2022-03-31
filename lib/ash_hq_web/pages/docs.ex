@@ -25,7 +25,7 @@ defmodule AshHqWeb.Pages.Docs do
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~F"""
-    <div class="grow h-full w-full flex flex-col">
+    <div class="grid content-start overflow-hidden">
       <div class="lg:hidden flex flex-row justify-start space-x-12 items-center border-b border-t border-gray-600 py-3">
         <button class="dark:hover:text-gray-600" phx-click={show_sidebar()}>
           <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
@@ -51,8 +51,8 @@ defmodule AshHqWeb.Pages.Docs do
           </div>
         {/if}
       </div>
-      <span class="lg:hidden">
-        <div id="mobile-sidebar-container" class="hidden fixed w-min h-full bg-primary-black transition">
+      <span class="grid overflow-hidden lg:hidden ">
+        <div id="mobile-sidebar-container" class="overflow-hidden hidden fixed w-min h-full transition bg-primary-black">
           <DocSidebar
             id="mobile-sidebar"
             libraries={@libraries}
@@ -66,7 +66,7 @@ defmodule AshHqWeb.Pages.Docs do
           />
         </div>
       </span>
-      <div class="grow flex flex-row h-full justify-center space-x-12">
+      <div class="grow overflow-hidden flex flex-row h-full justify-center space-x-12 bg-primary-black">
         <DocSidebar
           id="sidebar"
           class="hidden lg:block mt-10"
@@ -81,26 +81,30 @@ defmodule AshHqWeb.Pages.Docs do
         />
         <div
           id="docs-window"
-          class="grow w-full prose lg:max-w-3xl xl:max-w-5xl dark:prose-invert overflow-y-scroll overflow-x-visible mt-14"
+          class="w-full prose bg-primary-black md:max-w-2xl lg:max-w-3xl xl:max-w-5xl dark:prose-invert overflow-y-scroll overflow-x-visible mt-14"
           phx-hook="Docs"
         >
-          {raw(@docs)}
+          <div id="module-docs" class="w-full nav-anchor">
+            {raw(@docs)}
+          </div>
           {#if @module}
             {#for function <- @module.functions}
-              <p>
-                <div>
-                  <div class="flex flex-row items-baseline">
-                    <a href={"##{Routes.sanitize_name(function.name)}-#{function.arity}"}>
-                      <Heroicons.Outline.LinkIcon class="h-3 m-3" />
-                    </a>
-                    <h2 id={"#{Routes.sanitize_name(function.name)}-#{function.arity}"}>{function.name}/{function.arity}</h2>
+              <div class="rounded-lg bg-slate-700 bg-opacity-50 px-2 mb-2 pb-1">
+                <p class="">
+                  <div class="">
+                    <div class="flex flex-row items-baseline h-min">
+                      <a href={"##{Routes.sanitize_name(function.name)}-#{function.arity}"}>
+                        <Heroicons.Outline.LinkIcon class="h-3 m-3" />
+                      </a>
+                      <h2 class="nav-anchor" id={"#{Routes.sanitize_name(function.name)}-#{function.arity}"}>{function.name}/{function.arity}</h2>
+                    </div>
                   </div>
-                </div>
-                {#for head <- function.heads}
-                  <code class="makeup elixir">{head}</code>
-                {/for}
-                {raw(AshHq.Docs.Extensions.RenderMarkdown.render!(function, :doc))}
-              </p>
+                  {#for head <- function.heads}
+                    <code class="makeup elixir">{head}</code>
+                  {/for}
+                  {raw(AshHq.Docs.Extensions.RenderMarkdown.render!(function, :doc))}
+                </p>
+              </div>
             {/for}
           {/if}
           {#if !Enum.empty?(@options)}
@@ -132,11 +136,8 @@ defmodule AshHqWeb.Pages.Docs do
           {/if}
         </div>
         {#if @module}
-          <div
-            class="grow w-min overflow-y-scroll overflow-x-visible mt-14 mb-"
-            phx-hook="Docs"
-          >
-            <RightNav functions={@module.functions}/>
+          <div class="w-min overflow-y-scroll overflow-x-visible mt-14 bg-primary-black bg-opacity-70" >
+            <RightNav functions={@module.functions} module={@module.name}/>
           </div>
         {/if}
       </div>

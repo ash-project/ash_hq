@@ -17,7 +17,7 @@ defmodule AshHqWeb.Components.DocSidebar do
 
   def render(assigns) do
     ~F"""
-    <aside id={@id} class={"w-64 h-full block overflow-y-scroll", @class} aria-label="Sidebar">
+    <aside id={@id} class={"grid w-64 h-full overflow-y-scroll", @class} aria-label="Sidebar">
       <div class="py-3 px-3">
         <ul class="space-y-2">
           {#for library <- @libraries}
@@ -48,7 +48,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                         guide.url_safe_name
                       )}
                       class={
-                        "flex items-center pt-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
+                        "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
                         "dark:bg-gray-600": @guide && @guide.id == guide.id
                       }
                     >
@@ -68,7 +68,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                     <LivePatch
                       to={Routes.extension_link(library, selected_version_name(library, @selected_versions), extension.name)}
                       class={
-                        "flex items-center pt-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
+                        "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
                         "dark:bg-gray-600": @extension && @extension.id == extension.id
                       }
                     >
@@ -116,13 +116,15 @@ defmodule AshHqWeb.Components.DocSidebar do
           <LivePatch
             to={Routes.dsl_link(@library, @library_version.version, @extension.name, dsl)}
             class={
-              "flex items-center pt-1 text-base font-normal rounded-lg hover:text-orange-300",
+              "flex items-center p-1 text-base font-normal rounded-lg hover:text-orange-300",
               "text-orange-600 dark:text-orange-400 font-bold": @dsl && @dsl.id == dsl.id
             }
           >
             {dsl.name}
           </LivePatch>
-          {render_dsls(assigns, dsls, path ++ [dsl.name])}
+          {#if @dsl && List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name])}
+            {render_dsls(assigns, dsls, path ++ [dsl.name])}
+          {/if}
         </li>
       {/for}
     </ul>

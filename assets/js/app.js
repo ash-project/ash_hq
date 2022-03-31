@@ -48,6 +48,77 @@ Hooks.Docs = {
   }
 }
 
+function onScrollChange() {
+  const docs = document.getElementById("docs-window");
+  if(docs) {
+    const scrollTop = docs.scrollTop;
+    const topEl = Array.from(document.getElementsByClassName("nav-anchor")).filter((el) => {
+      return (el.offsetTop + el.clientHeight) >= scrollTop;
+    })[0];
+    let hash;
+    if(window.location.hash){
+      hash = window.location.hash.substring(1);
+    }
+    if(topEl && topEl.id !== hash){
+      history.replaceState(null, null, `#${topEl.id}`)
+      window.location.hash = topEl.id;
+      const newTarget = document.getElementById(`right-nav-${topEl.id}`);
+      Array.from(document.getElementsByClassName("currently-active-nav")).forEach((el) => {
+        el.classList.remove("currently-active-nav");
+        el.classList.remove("text-orange-600");
+        el.classList.remove("dark:text-orange-400");
+      }) 
+      if(newTarget) {
+        newTarget.classList.add("dark:text-orange-400");
+        newTarget.classList.add("text-orange-600");
+        newTarget.classList.add("currently-active-nav")
+      }
+    }
+  }
+}
+
+function handleHashChange(clear) {
+  if (window.location.hash) {
+    const el = document.getElementById("right-nav-" + window.location.hash.substring(1))
+    if(el) {
+      if (clear) {
+        Array.from(document.getElementsByClassName("currently-active-nav")).forEach((el) => {
+          el.classList.remove("currently-active-nav");
+          el.classList.remove("text-orange-600");
+          el.classList.remove("dark:text-orange-400");
+        }) 
+      }
+      el.classList.add("dark:text-orange-400");
+      el.classList.add("text-orange-600");
+      el.classList.add("currently-active-nav")
+      scrollIntoView(el, {
+        behavior: 'smooth', 
+        block: 'center'
+      })
+    }
+  }
+}
+
+Hooks.RightNav = {
+  mounted() {
+    handleHashChange(false);
+    const docs = document.getElementById("docs-window");
+    if (docs) {
+      docs.addEventListener("scroll", () => onScrollChange())
+      if(this.interval) {
+        clearInterval(this.interval)
+      };
+
+      this.interval = setInterval(() => handleHashChange(true), 100);
+    }
+  },
+  destroyed() {
+    if(this.interval) {
+      clearInterval(this.interval)
+    }
+  }
+}
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   params: {_csrf_token: csrfToken}, 
@@ -94,9 +165,14 @@ window.addEventListener("phx:js:scroll-to", (e) => {
 
 let scrolled = false;
 
+window.addEventListener("phx:page-loading-start", () => {
+  scrolled = false;
+})
+
 window.addEventListener("phx:page-loading-stop", ({detail}) => {
   if(detail.kind === "initial" && window.location.hash && !scrolled){
     let hashEl = document.getElementById(window.location.hash.substring(1));
+    console.log(hashEl);
     hashEl && hashEl.scrollIntoView();
     scrolled = true;
   }
@@ -109,14 +185,12 @@ window.addEventListener("phx:selected-versions", (e) => {
 });
 
 window.addEventListener("phx:selected-types", (e) => {
-  console.log(e.detail);
   const cookie = e.detail.types.join(',');
   document.cookie = 'selected_types' + '=' + cookie + ';path=/';
 });
 
 window.addEventListener("keydown", (event) => {
   if(event.metaKey && event.key === "k") {
-  console.log("here3")
     document.getElementById("search-button").click()
   }
 })
