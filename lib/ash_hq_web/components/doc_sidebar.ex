@@ -113,15 +113,24 @@ defmodule AshHqWeb.Components.DocSidebar do
     <ul class={"ml-1 flex flex-col"}>
       {#for dsl <- Enum.filter(dsls, &(&1.path == path))}
         <li class="border-l pl-1 border-orange-600 border-opacity-30">
-          <LivePatch
-            to={Routes.dsl_link(@library, @library_version.version, @extension.name, dsl)}
-            class={
-              "flex items-center p-1 text-base font-normal rounded-lg hover:text-orange-300",
-              "text-orange-600 dark:text-orange-400 font-bold": @dsl && @dsl.id == dsl.id
-            }
-          >
-            {dsl.name}
-          </LivePatch>
+          <div class="flex flex-row items-center">
+            {#if Enum.any?(dsls, &(List.starts_with?(&1.path, dsl.path ++ [dsl.name])))}
+              {#if @dsl && List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name])}
+                <Heroicons.Outline.ChevronDownIcon class="w-3 h-3"/>
+              {#else}
+                <Heroicons.Outline.ChevronRightIcon class="w-3 h-3"/>
+              {/if}
+            {/if}
+            <LivePatch
+              to={Routes.dsl_link(@library, @library_version.version, @extension.name, dsl)}
+              class={
+                "flex items-center p-1 text-base font-normal rounded-lg hover:text-orange-300",
+                "text-orange-600 dark:text-orange-400 font-bold": @dsl && @dsl.id == dsl.id
+              }
+            >
+              {dsl.name}
+            </LivePatch>
+          </div>
           {#if @dsl && List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name])}
             {render_dsls(assigns, dsls, path ++ [dsl.name])}
           {/if}
