@@ -2,7 +2,7 @@ defmodule AshHqWeb.Pages.Docs do
   use Surface.LiveComponent
 
   alias Phoenix.LiveView.JS
-  alias AshHqWeb.Components.{CalloutText, DocSidebar, Tag}
+  alias AshHqWeb.Components.{CalloutText, DocSidebar, RightNav, Tag}
   alias AshHqWeb.Routes
 
   prop params, :map, required: true
@@ -21,7 +21,6 @@ defmodule AshHqWeb.Pages.Docs do
   data dsl, :any
   data options, :list, default: []
   data module, :any
-  data function, :any
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -59,7 +58,6 @@ defmodule AshHqWeb.Pages.Docs do
             libraries={@libraries}
             extension={@extension}
             module={@module}
-            function={@function}
             guide={@guide}
             library={@library}
             library_version={@library_version}
@@ -73,7 +71,6 @@ defmodule AshHqWeb.Pages.Docs do
           id="sidebar"
           class="hidden lg:block mt-10"
           module={@module}
-          function={@function}
           libraries={@libraries}
           extension={@extension}
           guide={@guide}
@@ -134,6 +131,14 @@ defmodule AshHqWeb.Pages.Docs do
             </div>
           {/if}
         </div>
+        {#if @module}
+          <div
+            class="grow w-min overflow-y-scroll overflow-x-visible mt-14 mb-"
+            phx-hook="Docs"
+          >
+            <RightNav functions={@module.functions}/>
+          </div>
+        {/if}
       </div>
     </div>
     """
@@ -178,7 +183,6 @@ defmodule AshHqWeb.Pages.Docs do
      |> assign_extension()
      |> assign_guide()
      |> assign_module()
-     |> assign_function()
      |> assign_dsl()
      |> assign_docs()}
   end
@@ -217,32 +221,6 @@ defmodule AshHqWeb.Pages.Docs do
     end
   end
 
-  defp assign_function(socket) do
-    if socket.assigns.module do
-      socket.assigns.uri
-      |> URI.parse()
-      |> Map.get(:fragment)
-      |> case do
-        nil ->
-          assign(socket, :function, nil)
-
-        "" ->
-          assign(socket, :function, nil)
-
-        fragment ->
-          assign(
-            socket,
-            :function,
-            Enum.find(socket.assigns.module.functions, fn func ->
-              "#{Routes.sanitize_name(func.name)}-#{func.arity}" == fragment
-            end)
-          )
-      end
-    else
-      assign(socket, :function, nil)
-    end
-  end
-
   defp assign_module(socket) do
     if socket.assigns.library && socket.assigns.library_version &&
          socket.assigns[:params]["module"] do
@@ -265,7 +243,7 @@ defmodule AshHqWeb.Pages.Docs do
       socket.assigns.module ->
         assign(socket,
           docs: AshHq.Docs.Extensions.RenderMarkdown.render!(socket.assigns.module, :doc),
-          doc_paths: [socket.assigns.library.name, socket.assigns.module.name],
+          doc_path: [socket.assigns.library.name, socket.assigns.module.name],
           options: []
         )
 

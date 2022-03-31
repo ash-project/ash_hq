@@ -33,7 +33,7 @@ defmodule AshHqWeb.AppViewLive do
       <button id="search-button" class="hidden" phx-click={AshHqWeb.AppViewLive.toggle_search()} />
       <div
         id="main-container"
-        class="h-screen flex flex-col bg-white dark:bg-primary-black dark:text-silver-phoenix overflow-x-hidden overflow-clip"
+        class={"h-screen flex flex-col bg-white dark:bg-primary-black dark:text-silver-phoenix overflow-x-hidden", "overflow-clip": @live_action == :docs_dsl}
       >
         <div class={
           "flex justify-between pt-4 px-4",

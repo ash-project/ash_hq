@@ -80,17 +80,10 @@ window.addEventListener("phx:page-loading-stop", () => {
 
 
 window.addEventListener("js:focus", e => e.target.focus())
-// window.addEventListener("js:noscroll-main", e =>  {
-//   if(e.target.style.display === "none") {
-//     document.getElementById("main-container").classList.add("overflow-hidden")
-//   } else {
-//     document.getElementById("main-container").classList.remove("overflow-hidden")
-//   }
-// })
+
 
 window.addEventListener("phx:js:scroll-to", (e) => {
   const target = document.getElementById(e.detail.id);
-  console.log(target);
   const boundary = document.getElementById(e.detail.boundary_id);
   scrollIntoView(target, { 
     behavior: 'smooth', 
@@ -98,6 +91,17 @@ window.addEventListener("phx:js:scroll-to", (e) => {
     boundary: boundary
   });
 });
+
+let scrolled = false;
+
+window.addEventListener("phx:page-loading-stop", ({detail}) => {
+  if(detail.kind === "initial" && window.location.hash && !scrolled){
+    let hashEl = document.getElementById(window.location.hash.substring(1));
+    hashEl && hashEl.scrollIntoView();
+    scrolled = true;
+  }
+  topbar.hide();
+})
 
 window.addEventListener("phx:selected-versions", (e) => {
   const cookie = Object.keys(e.detail).map((key) => `${key}:${e.detail[key]}`).join(',');

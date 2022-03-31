@@ -14,12 +14,11 @@ defmodule AshHqWeb.Components.DocSidebar do
   prop id, :string, required: true
   prop dsl, :any, required: true
   prop module, :any, required: true
-  prop function, :any, required: true
 
   def render(assigns) do
     ~F"""
     <aside id={@id} class={"w-64 h-full block overflow-y-scroll", @class} aria-label="Sidebar">
-      <div class="overflow-y-auto py-4 px-3">
+      <div class="py-3 px-3">
         <ul class="space-y-2">
           {#for library <- @libraries}
             <li>
@@ -49,7 +48,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                         guide.url_safe_name
                       )}
                       class={
-                        "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
+                        "flex items-center pt-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
                         "dark:bg-gray-600": @guide && @guide.id == guide.id
                       }
                     >
@@ -69,7 +68,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                     <LivePatch
                       to={Routes.extension_link(library, selected_version_name(library, @selected_versions), extension.name)}
                       class={
-                        "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
+                        "flex items-center pt-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
                         "dark:bg-gray-600": @extension && @extension.id == extension.id
                       }
                     >
@@ -90,31 +89,13 @@ defmodule AshHqWeb.Components.DocSidebar do
                       <LivePatch
                         to={Routes.module_link(library, @library_version.version, module.name)}
                         class={
-                          "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
-                          "dark:bg-gray-600": !@function && @module && @module.id == module.id
+                          "flex items-center pt-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
+                          "dark:bg-gray-600": @module && @module.id == module.id
                         }
                       >
                         <span class="ml-3 mr-2">{module.name}</span>
                         <Heroicons.Outline.CodeIcon class="h-4 w-4" />
                       </LivePatch>
-                      {#if @module && @module.id == module.id}
-                        <ul>
-                        {#for function <- @module.functions}
-                          <li class="border-l pl-1 border-orange-600 border-opacity-30">
-                            <LivePatch
-                              to={Routes.function_link(library, @library_version.version, module.name, function.name, function.arity)}
-                              class={
-                                "flex items-center p-1 text-base font-normal rounded-lg hover:text-orange-300",
-                                "text-orange-600 dark:text-orange-400 font-bold": @function && @function.id == function.id
-                              }
-                            >
-                              {function.name}/{function.arity}
-                            </LivePatch>
-                          </li>
-                        {/for}
-
-                        </ul>
-                      {/if}
                     </li>
                   {/for}
                 {/if}
@@ -135,7 +116,7 @@ defmodule AshHqWeb.Components.DocSidebar do
           <LivePatch
             to={Routes.dsl_link(@library, @library_version.version, @extension.name, dsl)}
             class={
-              "flex items-center p-1 text-base font-normal rounded-lg hover:text-orange-300",
+              "flex items-center pt-1 text-base font-normal rounded-lg hover:text-orange-300",
               "text-orange-600 dark:text-orange-400 font-bold": @dsl && @dsl.id == dsl.id
             }
           >
