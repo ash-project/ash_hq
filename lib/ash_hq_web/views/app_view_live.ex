@@ -12,6 +12,7 @@ defmodule AshHqWeb.AppViewLive do
   data selected_versions, :map, default: %{}
   data libraries, :list, default: []
   data selected_types, :map, default: %{}
+  data sidebar_state, :map, default: %{}
 
   def render(assigns) do
     ~F"""
@@ -78,6 +79,9 @@ defmodule AshHqWeb.AppViewLive do
               id="docs"
               params={@params}
               uri={@uri}
+              collapse_sidebar="collapse_sidebar"
+              expand_sidebar="expand_sidebar"
+              sidebar_state={@sidebar_state}
               change_versions="change-versions"
               selected_versions={@selected_versions}
               libraries={@libraries}
@@ -90,6 +94,20 @@ defmodule AshHqWeb.AppViewLive do
 
   def handle_params(params, uri, socket) do
     {:noreply, assign(socket, params: params, uri: uri)}
+  end
+
+  def handle_event("collapse_sidebar", %{"id" => id}, socket) do
+    new_state = Map.put(socket.assigns.sidebar_state, id, "closed")
+
+    {:noreply,
+     socket |> assign(:sidebar_state, new_state) |> push_event("js:sidebar-state", new_state)}
+  end
+
+  def handle_event("expand_sidebar", %{"id" => id}, socket) do
+    new_state = Map.put(socket.assigns.sidebar_state, id, "open")
+
+    {:noreply,
+     socket |> assign(:sidebar_state, new_state) |> push_event("sidebar-state", new_state)}
   end
 
   def handle_event("change-versions", %{"versions" => versions}, socket) do
@@ -131,6 +149,11 @@ defmodule AshHqWeb.AppViewLive do
      socket
      |> assign(:configured_theme, theme)
      |> push_event("set_theme", %{theme: theme})}
+  end
+
+  def handle_info({:new_sidebar_state, new_state}, socket) do
+    {:noreply,
+     socket |> assign(:sidebar_state, new_state) |> push_event("sidebar-state", new_state)}
   end
 
   defp load_docs(socket) do
@@ -203,6 +226,21 @@ defmodule AshHqWeb.AppViewLive do
           |> Enum.filter(&(&1 in all_types))
       end
 
+    sidebar_state =
+      case session["sidebar_state"] do
+        nil ->
+          %{}
+
+        value ->
+          value
+          |> String.split(",")
+          |> Map.new(fn str ->
+            str
+            |> String.split(":")
+            |> List.to_tuple()
+          end)
+      end
+
     socket =
       socket
       |> assign(:selected_versions, configured_library_versions)
@@ -244,7 +282,7 @@ defmodule AshHqWeb.AppViewLive do
       )
       |> load_docs()
 
-    {:ok, assign(socket, configured_theme: configured_theme)}
+    {:ok, assign(socket, configured_theme: configured_theme, sidebar_state: sidebar_state)}
   end
 
   def toggle_search(js \\ %JS{}) do

@@ -108,7 +108,7 @@ defmodule Utils do
     _ -> "No Documentation"
   end
 
-  def build_function({{type, name, arity}, _, heads, %{"en" => docs}, _}, order) do
+  def build_function({{type, name, arity}, _, heads, %{"en" => docs}, _}, order) when not(is_nil(type)) and not(is_nil(name)) and not(is_nil(arity)) do
     [%{
       name: to_string(name),
       type: type,

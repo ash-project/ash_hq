@@ -5,6 +5,7 @@ defmodule AshHqWeb.SessionPlug do
   @cookies_to_replicate [
     "theme",
     "selected_versions",
+    "sidebar_state",
     "selected_types"
   ]
 

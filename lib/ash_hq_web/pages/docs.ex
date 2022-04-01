@@ -5,22 +5,25 @@ defmodule AshHqWeb.Pages.Docs do
   alias AshHqWeb.Components.{CalloutText, DocSidebar, RightNav, Tag}
   alias AshHqWeb.Routes
 
-  prop(params, :map, required: true)
-  prop(change_versions, :event, required: true)
-  prop(selected_versions, :map, required: true)
-  prop(libraries, :list, default: [])
-  prop(uri, :string)
+  prop params, :map, required: true
+  prop change_versions, :event, required: true
+  prop selected_versions, :map, required: true
+  prop libraries, :list, default: []
+  prop uri, :string
+  prop sidebar_state, :map, required: true
+  prop collapse_sidebar, :event, required: true
+  prop expand_sidebar, :event, required: true
 
-  data(library, :any)
-  data(extension, :any)
-  data(docs, :any)
-  data(library_version, :any)
-  data(guide, :any)
-  data(doc_path, :list, default: [])
-  data(dsls, :list, default: [])
-  data(dsl, :any)
-  data(options, :list, default: [])
-  data(module, :any)
+  data library, :any
+  data extension, :any
+  data docs, :any
+  data library_version, :any
+  data guide, :any
+  data doc_path, :list, default: []
+  data dsls, :list, default: []
+  data dsl, :any
+  data options, :list, default: []
+  data module, :any
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -57,6 +60,9 @@ defmodule AshHqWeb.Pages.Docs do
             id="mobile-sidebar"
             libraries={@libraries}
             extension={@extension}
+            sidebar_state={@sidebar_state}
+            collapse_sidebar={@collapse_sidebar}
+            expand_sidebar={@expand_sidebar}
             module={@module}
             guide={@guide}
             library={@library}
@@ -73,6 +79,9 @@ defmodule AshHqWeb.Pages.Docs do
           module={@module}
           libraries={@libraries}
           extension={@extension}
+          sidebar_state={@sidebar_state}
+          collapse_sidebar={@collapse_sidebar}
+          expand_sidebar={@expand_sidebar}
           guide={@guide}
           library={@library}
           library_version={@library_version}
@@ -227,8 +236,14 @@ defmodule AshHqWeb.Pages.Docs do
             end
           )
 
-        assign(
-          socket,
+        new_state = Map.put(socket.assigns.sidebar_state, dsl.id, "open")
+
+        unless socket.assigns.sidebar_state[dsl.id] == "open" do
+          send(self(), {:new_sidebar_state, new_state})
+        end
+
+        socket
+        |> assign(
           :dsl,
           dsl
         )

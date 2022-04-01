@@ -14,6 +14,9 @@ defmodule AshHqWeb.Components.DocSidebar do
   prop id, :string, required: true
   prop dsl, :any, required: true
   prop module, :any, required: true
+  prop sidebar_state, :map, required: true
+  prop collapse_sidebar, :event, required: true
+  prop expand_sidebar, :event, required: true
 
   def render(assigns) do
     ~F"""
@@ -115,10 +118,16 @@ defmodule AshHqWeb.Components.DocSidebar do
         <li class="border-l pl-1 border-orange-600 border-opacity-30">
           <div class="flex flex-row items-center">
             {#if Enum.any?(dsls, &(List.starts_with?(&1.path, dsl.path ++ [dsl.name])))}
-              {#if @dsl && List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name])}
-                <Heroicons.Outline.ChevronDownIcon class="w-3 h-3"/>
-              {#else}
-                <Heroicons.Outline.ChevronRightIcon class="w-3 h-3"/>
+              {#if !(@dsl && List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name]))}
+                {#if @sidebar_state[dsl.id] == "open"}
+                  <button :on-click={@collapse_sidebar} phx-value-id={dsl.id}>
+                    <Heroicons.Outline.ChevronDownIcon class="w-3 h-3"/>
+                  </button>
+                {#else}
+                  <button :on-click={@expand_sidebar} phx-value-id={dsl.id}>
+                    <Heroicons.Outline.ChevronRightIcon class="w-3 h-3"/>
+                  </button>
+                {/if}
               {/if}
             {/if}
             <LivePatch
@@ -131,7 +140,7 @@ defmodule AshHqWeb.Components.DocSidebar do
               {dsl.name}
             </LivePatch>
           </div>
-          {#if @dsl && List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name])}
+          {#if @sidebar_state[dsl.id] == "open" || (@dsl && List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name]))}
             {render_dsls(assigns, dsls, path ++ [dsl.name])}
           {/if}
         </li>

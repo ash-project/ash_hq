@@ -5,10 +5,18 @@ defmodule AshHq.Docs.Importer do
 
   alias AshHq.Docs.LibraryVersion
   require Logger
+  require Ash.Query
 
-  def import() do
+  def import(only \\ nil) do
+    query =
+      if only do
+        AshHq.Docs.Library |> Ash.Query.filter(name in ^only)
+      else
+        AshHq.Docs.Library
+      end
+
     for %{name: name, latest_version: latest_version} = library <-
-          AshHq.Docs.Library.read!(load: :latest_version) do
+          AshHq.Docs.Library.read!(load: :latest_version, query: query) do
       latest_version =
         if latest_version do
           Version.parse!(latest_version)
