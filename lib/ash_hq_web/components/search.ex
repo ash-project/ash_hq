@@ -43,6 +43,7 @@ defmodule AshHqWeb.Components.Search do
                 <input
                   id="search-input"
                   name="search"
+                  phx-debounce="200"
                   class="text-lg bg-primary-black grow ring-0 outline-none w-full"
                 />
               </Form>
@@ -58,7 +59,7 @@ defmodule AshHqWeb.Components.Search do
                   <Label field={type}>
                     {type}
                   </Label>
-                  <Checkbox id={"#{type}-selected"} value={type in @selected_types} name={"types[#{type}]"}/>
+                  <Checkbox id={"#{type}-selected"} value={type in @selected_types} name={"types[#{type}]"} />
                 {/for}
               </Form>
               <Form for={:versions} change={@change_versions}>
@@ -126,13 +127,11 @@ defmodule AshHqWeb.Components.Search do
       </div>
       {#for item <- results.items}
         <LiveRedirect to={Routes.doc_link(item)} opts={id: item.id}>
-          <div
-            class={
-              "rounded-lg mb-4 py-4 px-2 hover:bg-gray-600",
-              "bg-gray-600": @selected_item.id == item.id,
-              "bg-gray-800": @selected_item.id != item.id
-            }
-          >
+          <div class={
+            "rounded-lg mb-4 py-4 px-2 hover:bg-gray-600",
+            "bg-gray-600": @selected_item.id == item.id,
+            "bg-gray-800": @selected_item.id != item.id
+          }>
             {#if item.__struct__ != AshHq.Docs.LibraryVersion &&
                 item.name != List.last(Map.get(results, :path, []))}
               {item.name}

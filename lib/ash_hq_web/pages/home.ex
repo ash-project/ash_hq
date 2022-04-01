@@ -1,12 +1,12 @@
 defmodule AshHqWeb.Pages.Home do
   use Surface.LiveComponent
 
-  alias AshHqWeb.Components.{CalloutText, CodeExample, Search}
+  alias AshHqWeb.Components.{CalloutText, CodeExample, SearchBar}
 
   def render(assigns) do
     ~F"""
     <div>
-      <div class="mt-4 dark:bg-primary-black dark:bg-dark-grid bg-light-grid px-12 pt-12 flex flex-col items-center">
+      <div class="my-2 dark:bg-primary-black dark:bg-dark-grid bg-light-grid px-12 pt-12 flex flex-col items-center mt-16">
         <div class="text-5xl font-bold max-w-5xl mx-auto mt-2 text-center">
           Build <CalloutText>powerful</CalloutText> and <CalloutText>extensible</CalloutText> Elixir applications with a next generation tool-chain.
         </div>
@@ -14,19 +14,8 @@ defmodule AshHqWeb.Pages.Home do
           A declarative foundation for modern applications. Use extensions like <CalloutText>Ash GraphQL</CalloutText> and <CalloutText>Ash Json Api</CalloutText> to add APIs in minutes,
           or build your own extensions. Plug-and-play with other excellent tools like <CalloutText>Phoenix</CalloutText> and <CalloutText>Absinthe</CalloutText>.
         </div>
-        <button
-          class="hidden sm:block w-96 button xl:block border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 mt-4"
-          phx-click={AshHqWeb.AppViewLive.toggle_search()}
-        >
-          <div class="flex flex-row justify-between items-center px-4">
-            <div class="h-12 flex flex-row justify-start items-center text-center space-x-4">
-              <Heroicons.Outline.SearchIcon class="w-4 h-4" />
-              <div>Search Documentation</div>
-            </div>
-            <div>⌘ K</div>
-          </div>
-        </button>
-        <div class="pt-6 pb-6 w-full hidden sm:block">
+        <SearchBar class="hidden sm:block mt-16" />
+        <div class="pt-6 pb-6 w-full hidden sm:block mt-36">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <CodeExample
               id="define-a-resource"

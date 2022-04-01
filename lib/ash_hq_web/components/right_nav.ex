@@ -13,19 +13,31 @@ defmodule AshHqWeb.Components.RightNav do
         {@module}
       </a>
       {#for %{type: :callback} = function <- @functions}
-        <a id={"right-nav-callback-#{Routes.sanitize_name(function.name)}-#{function.arity}"} class="hover:text-orange-300 right-nav" href={"#function-#{Routes.sanitize_name(function.name)}-#{function.arity}"}>
+        <a
+          id={"right-nav-callback-#{Routes.sanitize_name(function.name)}-#{function.arity}"}
+          class="hover:text-orange-300 right-nav"
+          href={"#function-#{Routes.sanitize_name(function.name)}-#{function.arity}"}
+        >
           {"#{function.name}/#{function.arity}"}
         </a>
       {/for}
 
       {#for %{type: :function} = function <- @functions}
-        <a id={"right-nav-function-#{Routes.sanitize_name(function.name)}-#{function.arity}"} class="hover:text-orange-300 right-nav" href={"#macro-#{Routes.sanitize_name(function.name)}-#{function.arity}"}>
+        <a
+          id={"right-nav-function-#{Routes.sanitize_name(function.name)}-#{function.arity}"}
+          class="hover:text-orange-300 right-nav"
+          href={"#macro-#{Routes.sanitize_name(function.name)}-#{function.arity}"}
+        >
           {"#{function.name}/#{function.arity}"}
         </a>
       {/for}
 
       {#for %{type: :macro} = function <- @functions}
-        <a id={"right-nav-macro-#{Routes.sanitize_name(function.name)}-#{function.arity}"} class="hover:text-orange-300 right-nav" href={"#macro-#{Routes.sanitize_name(function.name)}-#{function.arity}"}>
+        <a
+          id={"right-nav-macro-#{Routes.sanitize_name(function.name)}-#{function.arity}"}
+          class="hover:text-orange-300 right-nav"
+          href={"#macro-#{Routes.sanitize_name(function.name)}-#{function.arity}"}
+        >
           {"#{function.name}/#{function.arity}"}
         </a>
       {/for}

@@ -7,7 +7,10 @@ defmodule AshHq.Docs.Importer do
   require Logger
   require Ash.Query
 
-  def import(only \\ nil) do
+  def import(opts \\ []) do
+    only = opts[:only] || nil
+    only_branches? = opts[:only_branches?] || false
+
     query =
       if only do
         AshHq.Docs.Library |> Ash.Query.filter(name in ^only)
@@ -43,9 +46,16 @@ defmodule AshHq.Docs.Importer do
           versions
         )
 
-      versions
-      |> Enum.reject(fn version ->
-        Enum.find(already_defined_versions, &(&1.version == version))
+      if only_branches? do
+        []
+      else
+        versions
+        |> Enum.reject(fn version ->
+          Enum.find(already_defined_versions, &(&1.version == version))
+        end)
+      end
+      |> tap(fn versions ->
+        Enum.map(versions, & &1.version) |> IO.inspect()
       end)
       |> Enum.concat(Enum.map(library.track_branches, &{&1, true}))
       |> Enum.each(fn version ->

@@ -113,19 +113,19 @@ defmodule AshHqWeb.Components.DocSidebar do
 
   defp render_dsls(assigns, dsls, path) do
     ~F"""
-    <ul class={"ml-1 flex flex-col"}>
+    <ul class="ml-1 flex flex-col">
       {#for dsl <- Enum.filter(dsls, &(&1.path == path))}
         <li class="border-l pl-1 border-orange-600 border-opacity-30">
           <div class="flex flex-row items-center">
-            {#if Enum.any?(dsls, &(List.starts_with?(&1.path, dsl.path ++ [dsl.name])))}
+            {#if Enum.any?(dsls, &List.starts_with?(&1.path, dsl.path ++ [dsl.name]))}
               {#if !(@dsl && List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name]))}
                 {#if @sidebar_state[dsl.id] == "open"}
                   <button :on-click={@collapse_sidebar} phx-value-id={dsl.id}>
-                    <Heroicons.Outline.ChevronDownIcon class="w-3 h-3"/>
+                    <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
                   </button>
                 {#else}
                   <button :on-click={@expand_sidebar} phx-value-id={dsl.id}>
-                    <Heroicons.Outline.ChevronRightIcon class="w-3 h-3"/>
+                    <Heroicons.Outline.ChevronRightIcon class="w-3 h-3" />
                   </button>
                 {/if}
               {/if}
@@ -140,7 +140,8 @@ defmodule AshHqWeb.Components.DocSidebar do
               {dsl.name}
             </LivePatch>
           </div>
-          {#if @sidebar_state[dsl.id] == "open" || (@dsl && List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name]))}
+          {#if @sidebar_state[dsl.id] == "open" ||
+              (@dsl && List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name]))}
             {render_dsls(assigns, dsls, path ++ [dsl.name])}
           {/if}
         </li>

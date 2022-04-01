@@ -2,7 +2,7 @@ defmodule AshHqWeb.AppViewLive do
   use Surface.LiveView,
     container: {:div, class: "h-full"}
 
-  alias AshHqWeb.Components.Search
+  alias AshHqWeb.Components.{Search, SearchBar}
   alias AshHqWeb.Pages.{Docs, Home}
   alias Phoenix.LiveView.JS
   require Ash.Query
@@ -34,10 +34,14 @@ defmodule AshHqWeb.AppViewLive do
       <button id="search-button" class="hidden" phx-click={AshHqWeb.AppViewLive.toggle_search()} />
       <div
         id="main-container"
-        class={"h-screen grid content-start grid-rows-[auto,1fr] w-screen bg-white dark:bg-primary-black dark:text-silver-phoenix", "overflow-scroll": @live_action == :home, "overflow-hidden": @live_action == :docs_dsl}
+        class={
+          "h-screen grid content-start grid-rows-[auto,1fr] w-screen bg-white dark:bg-primary-black dark:text-silver-phoenix",
+          "overflow-scroll overflow-x-hidden": @live_action == :home,
+          "overflow-hidden": @live_action == :docs_dsl
+        }
       >
         <div class={
-          "flex justify-between pt-4 px-4 h-min",
+          "flex justify-between items-center py-4 px-4 h-min",
           "border-b bg-white dark:bg-primary-black": @live_action == :docs_dsl
         }>
           <div class="flex flex-row align-baseline">
@@ -46,13 +50,19 @@ defmodule AshHqWeb.AppViewLive do
               <img class="h-10 dark:hidden" src="/images/ash-framework-light.png">
             </a>
           </div>
+          {#if @live_action == :docs_dsl}
+            <SearchBar class="hidden lg:block" />
+          {/if}
           <div class="flex flex-row align-middle items-center space-x-2">
             <a
               href="/docs/guides/ash/main/getting-started"
               class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600"
             >Get Started</a>
             <div>|</div>
-            <a href="/docs/guides/ash/main/overview" class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600">Docs</a>
+            <a
+              href="/docs/guides/ash/main/overview"
+              class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600"
+            >Docs</a>
             <div>|</div>
             <a href="https://github.com/ash-project">
               <svg

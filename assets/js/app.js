@@ -196,17 +196,20 @@ window.addEventListener("phx:selected-types", (e) => {
 });
 
 window.addEventListener("keydown", (event) => {
-  if(event.metaKey && event.key === "k") {
+  if((event.metaKey || event.ctrlKey) && event.key === "k") {
     document.getElementById("search-button").click()
+    event.preventDefault();
   }
 })
 window.addEventListener("keydown", (event) => {
   if(event.key === "Escape") {
     document.getElementById("close-search").click()
+    event.preventDefault();
   }
 })
-window.addEventListener("phx:close-search", (_event) => {
+window.addEventListener("phx:close-search", (event) => {
   document.getElementById("close-search").click()
+  event.preventDefault();
 })
 
 // connect if there are any LiveViews on the page

@@ -54,8 +54,11 @@ defmodule AshHqWeb.Pages.Docs do
           </div>
         {/if}
       </div>
-      <span class="grid overflow-hidden lg:hidden ">
-        <div id="mobile-sidebar-container" class="overflow-hidden hidden fixed w-min h-full transition bg-primary-black">
+      <span class="grid overflow-hidden lg:hidden">
+        <div
+          id="mobile-sidebar-container"
+          class="overflow-hidden hidden fixed w-min h-full transition bg-primary-black"
+        >
           <DocSidebar
             id="mobile-sidebar"
             libraries={@libraries}
@@ -135,8 +138,8 @@ defmodule AshHqWeb.Pages.Docs do
           {/if}
         </div>
         {#if @module}
-          <div class="w-min overflow-y-scroll overflow-x-visible mt-14 bg-primary-black bg-opacity-70" >
-            <RightNav functions={@module.functions} module={@module.name}/>
+          <div class="w-min overflow-y-scroll overflow-x-visible mt-14 bg-primary-black bg-opacity-70">
+            <RightNav functions={@module.functions} module={@module.name} />
           </div>
         {/if}
       </div>

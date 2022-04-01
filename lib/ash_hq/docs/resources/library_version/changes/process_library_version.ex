@@ -1,6 +1,8 @@
 defmodule AshHq.Docs.LibraryVersion.Changes.ProcessLibraryVersion do
   use Ash.Resource.Change
 
+  require Logger
+
   alias AshHq.Docs
   alias AshHq.Docs.{Extension}
 
@@ -25,14 +27,21 @@ defmodule AshHq.Docs.LibraryVersion.Changes.ProcessLibraryVersion do
   defp process_extensions(library_version, extensions) do
     {extensions, notifications} =
       Enum.reduce(extensions, {[], []}, fn config, {extensions, notifications} ->
-        {extension, new_notifications} =
-          Extension.import!(library_version.id, config,
-            upsert?: true,
-            upsert_identity: :unique_name_by_library_version,
-            return_notifications?: true
-          )
+        case Extension.import(library_version.id, config,
+               upsert?: true,
+               upsert_identity: :unique_name_by_library_version,
+               return_notifications?: true
+             ) do
+          {:ok, extension, new_notifications} ->
+            {[extension | extensions], notifications ++ new_notifications}
 
-        {[extension | extensions], notifications ++ new_notifications}
+          {:error, %{changeset: changeset} = error} ->
+            Logger.error(
+              "Error importing extension with #{inspect(changeset.params)} #{Exception.format(:error, error)}"
+            )
+
+            {extensions, notifications}
+        end
       end)
 
     destroy_notifications =
