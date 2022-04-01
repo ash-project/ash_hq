@@ -5,25 +5,25 @@ defmodule AshHqWeb.Pages.Docs do
   alias AshHqWeb.Components.{CalloutText, DocSidebar, RightNav, Tag}
   alias AshHqWeb.Routes
 
-  prop params, :map, required: true
-  prop change_versions, :event, required: true
-  prop selected_versions, :map, required: true
-  prop libraries, :list, default: []
-  prop uri, :string
-  prop sidebar_state, :map, required: true
-  prop collapse_sidebar, :event, required: true
-  prop expand_sidebar, :event, required: true
+  prop(params, :map, required: true)
+  prop(change_versions, :event, required: true)
+  prop(selected_versions, :map, required: true)
+  prop(libraries, :list, default: [])
+  prop(uri, :string)
+  prop(sidebar_state, :map, required: true)
+  prop(collapse_sidebar, :event, required: true)
+  prop(expand_sidebar, :event, required: true)
 
-  data library, :any
-  data extension, :any
-  data docs, :any
-  data library_version, :any
-  data guide, :any
-  data doc_path, :list, default: []
-  data dsls, :list, default: []
-  data dsl, :any
-  data options, :list, default: []
-  data module, :any
+  data(library, :any)
+  data(extension, :any)
+  data(docs, :any)
+  data(library_version, :any)
+  data(guide, :any)
+  data(doc_path, :list, default: [])
+  data(dsls, :list, default: [])
+  data(dsl, :any)
+  data(options, :list, default: [])
+  data(module, :any)
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -57,7 +57,7 @@ defmodule AshHqWeb.Pages.Docs do
       <span class="grid overflow-hidden lg:hidden">
         <div
           id="mobile-sidebar-container"
-          class="overflow-hidden hidden fixed w-min h-full transition bg-primary-black"
+          class="overflow-hidden hidden fixed w-min h-full transition bg-white dark:bg-primary-black"
         >
           <DocSidebar
             id="mobile-sidebar"
@@ -75,10 +75,10 @@ defmodule AshHqWeb.Pages.Docs do
           />
         </div>
       </span>
-      <div class="grow overflow-hidden flex flex-row h-full justify-center space-x-12 bg-primary-black">
+      <div class="grow overflow-hidden flex flex-row h-full justify-center space-x-12 bg-white dark:bg-primary-black">
         <DocSidebar
           id="sidebar"
-          class="hidden lg:block mt-10"
+          class="hidden xl:block mt-10"
           module={@module}
           libraries={@libraries}
           extension={@extension}
@@ -93,10 +93,10 @@ defmodule AshHqWeb.Pages.Docs do
         />
         <div
           id="docs-window"
-          class="w-full prose bg-primary-black md:max-w-2xl lg:max-w-3xl xl:max-w-5xl dark:prose-invert overflow-y-scroll overflow-x-visible mt-14"
+          class="w-full prose dark:bg-primary-black md:max-w-1xl lg:max-w-2xl xl:max-w-3xl dark:prose-invert overflow-y-scroll overflow-x-visible mt-14"
           phx-hook="Docs"
         >
-          <div id="module-docs" class="w-full nav-anchor">
+          <div id="module-docs" class="w-full nav-anchor text-black dark:text-white">
             {raw(@docs)}
           </div>
           {#if @module}
@@ -138,7 +138,7 @@ defmodule AshHqWeb.Pages.Docs do
           {/if}
         </div>
         {#if @module}
-          <div class="w-min overflow-y-scroll overflow-x-visible mt-14 bg-primary-black bg-opacity-70">
+          <div class="w-min overflow-y-scroll overflow-x-visible mt-14 dark:bg-primary-black bg-opacity-70">
             <RightNav functions={@module.functions} module={@module.name} />
           </div>
         {/if}

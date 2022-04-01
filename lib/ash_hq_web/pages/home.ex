@@ -6,7 +6,7 @@ defmodule AshHqWeb.Pages.Home do
   def render(assigns) do
     ~F"""
     <div>
-      <div class="my-2 dark:bg-primary-black dark:bg-dark-grid bg-light-grid px-12 pt-12 flex flex-col items-center mt-16">
+      <div class="my-2 dark:bg-primary-black dark:bg-dark-grid bg-light-grid px-12 flex flex-col items-center pt-36">
         <div class="text-5xl font-bold max-w-5xl mx-auto mt-2 text-center">
           Build <CalloutText>powerful</CalloutText> and <CalloutText>extensible</CalloutText> Elixir applications with a next generation tool-chain.
         </div>
@@ -174,7 +174,7 @@ defmodule AshHqWeb.Pages.Home do
 
     calculations do
       calculate :like_ratio, :float do
-        expr(likes / likes + dislikes)
+        expr(likes / (likes + dislikes))
       end
     end
     """

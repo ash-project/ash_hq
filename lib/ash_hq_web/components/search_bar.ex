@@ -6,7 +6,10 @@ defmodule AshHqWeb.Components.SearchBar do
   def render(assigns) do
     ~F"""
     <button
-      class={"w-96 button border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600", @class}
+      class={
+        "w-96 button border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600",
+        @class
+      }
       phx-click={AshHqWeb.AppViewLive.toggle_search()}
     >
       <div class="flex flex-row justify-between items-center px-4">

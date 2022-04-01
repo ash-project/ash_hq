@@ -27,7 +27,6 @@ defmodule AshHqWeb.Components.Search do
       id={@id}
       style="display: none;"
       class="absolute flex justify-center align-middle w-screen h-full backdrop-blur-sm pb-8 bg-white bg-opacity-10"
-      phx-hook="CmdK"
     >
       <div
         :on-click-away={AshHqWeb.AppViewLive.toggle_search()}
@@ -43,7 +42,7 @@ defmodule AshHqWeb.Components.Search do
                 <input
                   id="search-input"
                   name="search"
-                  class="text-lg bg-primary-black grow ring-0 outline-none w-full"
+                  class="text-lg dark:bg-primary-black grow ring-0 outline-none w-full"
                 />
               </Form>
               <button id="close-search" class="mr-4 ml-4 h-6 w-6 hover:text-gray-400" :on-click={@close}>
@@ -54,28 +53,38 @@ defmodule AshHqWeb.Components.Search do
           <div class="grid grid-cols-9 h-[85%] mt-3">
             <div class="col-span-3 md:col-span-2 xl:col-span-1 border-r border-gray-600">
               <Form for={:types} change={@change_types}>
-                {#for type <- AshHq.Docs.Extensions.Search.Types.types()}
-                  <Label field={type}>
-                    {type}
-                  </Label>
-                  <Checkbox id={"#{type}-selected"} value={type in @selected_types} name={"types[#{type}]"} />
-                {/for}
+                <div class="flex flex-col border-b">
+                  <div>Search for:</div>
+                  {#for type <- AshHq.Docs.Extensions.Search.Types.types()}
+                    <div class="flex flex-row items-center">
+                      <Checkbox class="mr-4" id={"#{type}-selected"} value={type in @selected_types} name={"types[#{type}]"} />
+                      <Label field={type}>
+                        {type}
+                      </Label>
+                    </div>
+                  {/for}
+                </div>
               </Form>
               <Form for={:versions} change={@change_versions}>
+                <div class="flex flex-col space-y-2">
+                Project versions:
                 {#for library <- @libraries}
-                  <Label field={library.id}>
-                    {library.display_name}
-                  </Label>
-                  <div class="pb-2">
-                    <Select
-                      id={"versions-select-#{library.id}"}
-                      class="text-black form-select rounded-md pt-1 py-2 w-3/4"
-                      name={"versions[#{library.id}]"}
-                      selected={Map.get(@selected_versions, library.id)}
-                      options={Enum.map(library.versions, &{&1.version, &1.id})}
-                    />
+                  <div class="flex flex-col">
+                    <Label field={library.id}>
+                      {library.display_name}
+                    </Label>
+                    <div class="pb-2">
+                      <Select
+                        id={"versions-select-#{library.id}"}
+                        class="text-black form-select rounded-md pt-1 py-2 w-3/4 border dark:border-0 bg-gray-100 dark:bg-white"
+                        name={"versions[#{library.id}]"}
+                        selected={Map.get(@selected_versions, library.id)}
+                        options={Enum.map(library.versions, &{&1.version, &1.id})}
+                      />
+                    </div>
                   </div>
                 {/for}
+                </div>
               </Form>
             </div>
             <div class="pl-4 overflow-y-auto col-span-6 md:col-span-7 xl:col-span-8">
@@ -127,9 +136,9 @@ defmodule AshHqWeb.Components.Search do
       {#for item <- results.items}
         <LiveRedirect to={Routes.doc_link(item)} opts={id: item.id}>
           <div class={
-            "rounded-lg mb-4 py-4 px-2 hover:bg-gray-600",
-            "bg-gray-600": @selected_item.id == item.id,
-            "bg-gray-800": @selected_item.id != item.id
+            "rounded-lg mb-4 py-4 px-2 hover:bg-gray-400 dark:hover:bg-gray-600",
+            "bg-gray-400 dark:bg-gray-600": @selected_item.id == item.id,
+            "bg-gray-200 dark:bg-gray-800": @selected_item.id != item.id
           }>
             {#if item.__struct__ != AshHq.Docs.LibraryVersion &&
                 item.name != List.last(Map.get(results, :path, []))}
@@ -138,7 +147,7 @@ defmodule AshHqWeb.Components.Search do
             {#if item.__struct__ == AshHq.Docs.LibraryVersion}
               {item.version}
             {/if}
-            <div class="text-gray-400">
+            <div class="text-gray-700 dark:text-gray-400">
               {raw(item.search_headline)}
             </div>
           </div>
@@ -216,11 +225,15 @@ defmodule AshHqWeb.Components.Search do
 
           resource.search!(socket.assigns.search, Map.values(socket.assigns.selected_versions),
             query: Ash.Query.limit(resource, 25),
-            load: to_load
+            load:
+              List.wrap(to_load) ++
+                [name_matches: %{query: socket.assigns.search, similarity: 0.7}]
           )
         end)
         |> Enum.sort_by(
-          &{-&1.match_rank, Map.get(&1, :extension_order, -1), Enum.count(Map.get(&1, :path, []))}
+          # false comes first, and we want all things where the name matches to go first
+          &{name_match_rank(&1), -&1.match_rank, Map.get(&1, :extension_order, -1),
+           Enum.count(Map.get(&1, :path, []))}
         )
 
       sort_rank =
@@ -261,7 +274,7 @@ defmodule AshHqWeb.Components.Search do
           |> Enum.min()
         end)
         |> Enum.map(fn {type, items} ->
-          {type, group_by_paths(items)}
+          {type, group_by_paths(items, sort_rank)}
         end)
 
       item_list = item_list(results)
@@ -272,6 +285,18 @@ defmodule AshHqWeb.Components.Search do
       |> assign(:item_list, item_list)
       |> set_selected_item(selected_item)
     end
+  end
+
+  defp name_match_rank(record) do
+    if record.name_matches do
+      -search_length(record)
+    else
+      0
+    end
+  end
+
+  defp search_length(%resource{} = record) do
+    String.length(Map.get(record, AshHq.Docs.Extensions.Search.doc_attribute(resource)))
   end
 
   defp item_list(results) do
@@ -296,13 +321,13 @@ defmodule AshHqWeb.Components.Search do
     |> push_event("js:scroll-to", %{id: selected_item.id, boundary_id: socket.assigns[:id]})
   end
 
-  defp group_by_paths(items) do
+  defp group_by_paths(items, sort_rank) do
     items
     |> Enum.map(&{Map.get(&1, :path, []), &1})
-    |> do_group_by_paths()
+    |> do_group_by_paths(sort_rank)
   end
 
-  defp do_group_by_paths(items, path_acc \\ []) do
+  defp do_group_by_paths(items, sort_rank, path_acc \\ []) do
     {items_for_group, further} =
       Enum.split_with(items, fn
         {[], _} ->
@@ -322,10 +347,20 @@ defmodule AshHqWeb.Components.Search do
           {rest, item}
         end
       )
+      |> Enum.sort_by(fn {_nested, items} ->
+        items
+        |> Enum.map(&elem(&1, 1))
+        |> Enum.sort_by(&Map.get(sort_rank, &1.id))
+      end)
       |> Enum.map(fn {nested, items} ->
-        {nested, do_group_by_paths(items, path_acc ++ [nested])}
+        {nested, do_group_by_paths(items, sort_rank, path_acc ++ [nested])}
       end)
 
-    %{path: path_acc, items: Enum.map(items_for_group, &elem(&1, 1)), further: further_items}
+    items =
+      items_for_group
+      |> Enum.map(&elem(&1, 1))
+      |> Enum.sort_by(&Map.get(sort_rank, &1.id))
+
+    %{path: path_acc, items: items, further: further_items}
   end
 end

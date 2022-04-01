@@ -16,6 +16,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
      |> add_code_interface()
      |> add_search_action(config)
      |> add_search_headline_calculation(config)
+     |> add_name_matches_calculation(config)
      |> add_matches_calculation(config)
      |> add_match_rank_calculation(config)}
   end
@@ -51,14 +52,30 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
         arguments: [query_argument()],
         calculation:
           Ash.Query.expr(
-            contains(type(^ref(config.name_attribute), ^Ash.Type.CiString), ^arg(:query)) or
-              trigram_similarity(^ref(config.name_attribute), ^arg(:query)) >= 0.3 or
+            name_matches(query: arg(:query), similarity: 0.8) or
               fragment(
                 "to_tsvector(? || ?) @@ plainto_tsquery(?)",
                 ^ref(config.name_attribute),
                 ^ref(config.doc_attribute),
                 ^arg(:query)
               )
+          )
+      )
+    )
+  end
+
+  defp add_name_matches_calculation(dsl_state, config) do
+    Transformer.add_entity(
+      dsl_state,
+      [:calculations],
+      Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
+        name: :name_matches,
+        type: :boolean,
+        arguments: [query_argument(), similarity_argument()],
+        calculation:
+          Ash.Query.expr(
+            contains(type(^ref(config.name_attribute), ^Ash.Type.CiString), ^arg(:query)) or
+              trigram_similarity(^ref(config.name_attribute), ^arg(:query)) >= ^arg(:similarity)
           )
       )
     )
@@ -75,7 +92,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
         calculation:
           Ash.Query.expr(
             fragment(
-              "ts_headline('english', ?, plainto_tsquery('english', ?), 'MaxFragments=3,StartSel=\"<span class=\"\"search-hit\"\">\", StopSel=</span>')",
+              "ts_headline('english', ?, plainto_tsquery('english', ?), 'MaxFragments=2,StartSel=\"<span class=\"\"search-hit\"\">\", StopSel=</span>')",
               ^ref(config.doc_attribute),
               ^arg(:query)
             )
@@ -91,6 +108,17 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
       :argument,
       type: :string,
       name: :query,
+      allow_nil?: false
+    )
+  end
+
+  defp similarity_argument() do
+    Transformer.build_entity!(
+      Ash.Resource.Dsl,
+      [:calculations, :calculate],
+      :argument,
+      type: :float,
+      name: :similarity,
       allow_nil?: false
     )
   end

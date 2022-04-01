@@ -27,17 +27,56 @@ mermaid.init(".mermaid")
 
 const Hooks = {};
 
+const configuredThemeRow = document.cookie
+  .split('; ')
+  .find(row => row.startsWith('theme='))
+
+
+if (!configuredThemeRow) {
+  let theme;
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    theme = "dark";
+  } else {
+    theme = "light";
+  }
+}
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+  console.log("here")
+  const configuredThemeRow = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('theme='))
+
+    console.log(configuredThemeRow)
+
+  if(!configuredThemeRow || configuredThemeRow === "theme=system") {
+    setTheme("system")
+  }
+});
+
+function setTheme(theme) {
+  let setTheme;
+  if(theme == "system") {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme = "dark";
+    } else {
+      setTheme = "light";
+    }
+  }
+  document.documentElement.classList.add(setTheme);
+  if(setTheme === "dark") {
+    document.documentElement.classList.remove("light");
+  } else {
+    document.documentElement.classList.remove("dark");
+  };
+
+  document.cookie = 'theme' + '=' + theme + ';path=/';
+}
+
 Hooks.ColorTheme = {
   mounted() {
     this.handleEvent('set_theme', (payload) => {
-      document.documentElement.classList.add(payload.theme);
-      if(payload.theme === "dark") {
-        document.documentElement.classList.remove("light");
-      } else {
-        document.documentElement.classList.remove("dark");
-      };
-
-      document.cookie = 'theme' + '=' + payload.theme + ';path=/';
+      setTheme(payload.theme)
     })
   }
 }

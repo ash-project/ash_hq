@@ -55,7 +55,7 @@ defmodule AshHq.Docs.Importer do
         end)
       end
       |> tap(fn versions ->
-        Enum.map(versions, & &1.version) |> IO.inspect()
+        Enum.map(versions, & &1.version)
       end)
       |> Enum.concat(Enum.map(library.track_branches, &{&1, true}))
       |> Enum.each(fn version ->

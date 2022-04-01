@@ -7,6 +7,29 @@
     <%= csrf_meta_tag() %>
     <%= live_title_tag assigns[:page_title] || "Ash Framework" %>
     <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")}/>
+    <script>
+    const configuredThemeRow = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('theme='))
+
+    if (!configuredThemeRow || configuredThemeRow === "theme=system") {
+      let theme;
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        theme = "dark";
+      } else {
+        theme = "light";
+      }
+
+      document.documentElement.classList.add(theme);
+      if(theme === "dark") {
+        document.documentElement.classList.remove("light");
+      } else {
+        document.documentElement.classList.remove("dark");
+      };
+
+      document.cookie = 'theme=system;path=/';
+    }
+    </script>
   </head>
   <body class="h-full">
     <%= @inner_content %>
