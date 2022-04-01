@@ -21,12 +21,12 @@ RUN mix local.hex --force && \
   mix local.rebar --force && \
   mix deps.get && \
   mix deps.compile
-COPY ./config/runtime.exs config/runtime.exs
 COPY ./lib ./lib
 COPY ./priv ./priv
 COPY ./assets ./assets
 RUN mix assets.deploy
 RUN mix compile
+COPY ./config/runtime.exs config/runtime.exs
 COPY ./rel ./rel
 RUN mix release --overwrite
 RUN mkdir indexes
