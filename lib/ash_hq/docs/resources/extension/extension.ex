@@ -14,6 +14,10 @@ defmodule AshHq.Docs.Extension do
   postgres do
     table "extensions"
     repo AshHq.Repo
+
+    references do
+      reference :library_version, on_delete: :delete
+    end
   end
 
   identities do

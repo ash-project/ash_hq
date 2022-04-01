@@ -19,6 +19,10 @@ defmodule AshHq.Docs.Guide do
   postgres do
     repo AshHq.Repo
     table "guides"
+
+    references do
+      reference :library_version, on_delete: :delete
+    end
   end
 
   attributes do

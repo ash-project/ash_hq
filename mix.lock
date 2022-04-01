@@ -1,5 +1,5 @@
 %{
-  "ash": {:git, "https://github.com/ash-project/ash.git", "9bdd496688a1398ac8d2a36e1601505d9cd5608e", []},
+  "ash": {:git, "https://github.com/ash-project/ash.git", "e0177228680b0d1e9db1a35a472cca666afe16f3", []},
   "ash_phoenix": {:git, "https://github.com/ash-project/ash_phoenix.git", "9de0ff87780bd16d06dcde1bac6a8e041a31659d", []},
   "ash_postgres": {:git, "https://github.com/ash-project/ash_postgres.git", "48c6142040d389272d235b7e62d354a3a37a825e", []},
   "castore": {:hex, :castore, "0.1.16", "2675f717adc700475345c5512c381ef9273eb5df26bdd3f8c13e2636cf4cc175", [:mix], [], "hexpm", "28ed2c43d83b5c25d35c51bc0abf229ac51359c170cba76171a462ced2e4b651"},

@@ -20,6 +20,10 @@ defmodule AshHq.Docs.Option do
   postgres do
     table "options"
     repo AshHq.Repo
+
+    references do
+      reference :library_version, on_delete: :delete
+    end
   end
 
   code_interface do

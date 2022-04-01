@@ -12,13 +12,17 @@ defmodule AshHq.Docs.Module do
       :version_name,
       :library_name
     ]
-    
+
     type "Code"
   end
 
   postgres do
     table "modules"
     repo AshHq.Repo
+
+    references do
+      reference :library_version, on_delete: :delete
+    end
   end
 
   attributes do

@@ -5,22 +5,22 @@ defmodule AshHqWeb.Pages.Docs do
   alias AshHqWeb.Components.{CalloutText, DocSidebar, RightNav, Tag}
   alias AshHqWeb.Routes
 
-  prop params, :map, required: true
-  prop change_versions, :event, required: true
-  prop selected_versions, :map, required: true
-  prop libraries, :list, default: []
-  prop uri, :string
+  prop(params, :map, required: true)
+  prop(change_versions, :event, required: true)
+  prop(selected_versions, :map, required: true)
+  prop(libraries, :list, default: [])
+  prop(uri, :string)
 
-  data library, :any
-  data extension, :any
-  data docs, :any
-  data library_version, :any
-  data guide, :any
-  data doc_path, :list, default: []
-  data dsls, :list, default: []
-  data dsl, :any
-  data options, :list, default: []
-  data module, :any
+  data(library, :any)
+  data(extension, :any)
+  data(docs, :any)
+  data(library_version, :any)
+  data(guide, :any)
+  data(doc_path, :list, default: [])
+  data(dsls, :list, default: [])
+  data(dsl, :any)
+  data(options, :list, default: [])
+  data(module, :any)
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -88,24 +88,14 @@ defmodule AshHqWeb.Pages.Docs do
             {raw(@docs)}
           </div>
           {#if @module}
-            {#for function <- @module.functions}
-              <div class="rounded-lg bg-slate-700 bg-opacity-50 px-2 mb-2 pb-1">
-                <p class="">
-                  <div class="">
-                    <div class="flex flex-row items-baseline h-min">
-                      <a href={"##{Routes.sanitize_name(function.name)}-#{function.arity}"}>
-                        <Heroicons.Outline.LinkIcon class="h-3 m-3" />
-                      </a>
-                      <h2 class="nav-anchor" id={"#{Routes.sanitize_name(function.name)}-#{function.arity}"}>{function.name}/{function.arity}</h2>
-                    </div>
-                  </div>
-                  {#for head <- function.heads}
-                    <code class="makeup elixir">{head}</code>
-                  {/for}
-                  {raw(AshHq.Docs.Extensions.RenderMarkdown.render!(function, :doc))}
-                </p>
-              </div>
-            {/for}
+            <h1>Callbacks</h1>
+            {render_functions(assigns, @module.functions, :callback)}
+
+            <h1>Functions</h1>
+            {render_functions(assigns, @module.functions, :function)}
+
+            <h1>Macros</h1>
+            {render_functions(assigns, @module.functions, :macro)}
           {/if}
           {#if !Enum.empty?(@options)}
             <div class="ml-2">
@@ -142,6 +132,29 @@ defmodule AshHqWeb.Pages.Docs do
         {/if}
       </div>
     </div>
+    """
+  end
+
+  defp render_functions(assigns, functions, type) do
+    ~F"""
+    {#for function <- Enum.filter(functions, &(&1.type == type))}
+      <div class="rounded-lg bg-slate-700 bg-opacity-50 px-2 mb-2 pb-1">
+        <p class="">
+          <div class="">
+            <div class="flex flex-row items-baseline h-min">
+              <a href={"##{type}-#{Routes.sanitize_name(function.name)}-#{function.arity}"}>
+                <Heroicons.Outline.LinkIcon class="h-3 m-3" />
+              </a>
+              <h2 class="nav-anchor" id={"#{type}-#{Routes.sanitize_name(function.name)}-#{function.arity}"}>{function.name}/{function.arity}</h2>
+            </div>
+          </div>
+          {#for head <- function.heads}
+            <code class="makeup elixir">{head}</code>
+          {/for}
+          {raw(AshHq.Docs.Extensions.RenderMarkdown.render!(function, :doc))}
+        </p>
+      </div>
+    {/for}
     """
   end
 

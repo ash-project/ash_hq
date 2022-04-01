@@ -26,6 +26,8 @@ defmodule AshHq.Docs.LibraryVersion do
     define_for AshHq.Docs
     define :build, args: [:library, :version, :data]
     define :defined_for, args: [:library, :versions]
+    define :by_version, args: [:version]
+    define :destroy
     define :unprocessed
     define :process
   end
@@ -35,7 +37,19 @@ defmodule AshHq.Docs.LibraryVersion do
       primary? true
     end
 
+    read :by_version do
+      get? true
+
+      argument :version, :string do
+        allow_nil? false
+      end
+
+      filter expr(version == ^arg(:version))
+    end
+
     create :build do
+      argument :id, :uuid
+
       argument :library, :uuid do
         allow_nil? false
       end
@@ -47,6 +61,8 @@ defmodule AshHq.Docs.LibraryVersion do
       argument :modules, {:array, :map} do
         allow_nil? false
       end
+
+      change set_attribute(:id, {:arg, :id})
 
       change {AshHq.Docs.Changes.AddArgToRelationship,
               attr: :id, arg: :library_version, rel: :modules, generate: &Ash.UUID.generate/0}

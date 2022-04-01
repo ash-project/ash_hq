@@ -44,7 +44,6 @@ if config_env() == :prod do
   config :ash_hq, AshHqWeb.Endpoint,
     server: true,
     url: [host: host, port: 80],
-    force_ssl: [rewrite_on: [:x_forwarded_proto]],
     check_origin: [
       "http://#{host}",
       "https://#{host}",

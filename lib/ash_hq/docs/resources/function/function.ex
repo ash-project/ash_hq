@@ -4,23 +4,27 @@ defmodule AshHq.Docs.Function do
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
   render_markdown do
-    render_attributes doc: :doc_html
+    render_attributes(doc: :doc_html)
     header_ids?(false)
   end
 
   search do
-    load_for_search [
+    load_for_search([
       :version_name,
       :library_name,
       :module_name
-    ]
+    ])
 
     type "Code"
   end
 
   postgres do
     table "functions"
-    repo AshHq.Repo
+    repo(AshHq.Repo)
+
+    references do
+      reference(:library_version, on_delete: :delete)
+    end
   end
 
   attributes do
@@ -35,7 +39,7 @@ defmodule AshHq.Docs.Function do
     end
 
     attribute :type, :atom do
-      constraints one_of: [:function, :macro]
+      constraints one_of: [:function, :macro, :callback]
       allow_nil? false
     end
 

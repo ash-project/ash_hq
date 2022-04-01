@@ -35,12 +35,10 @@ defmodule AshHq.Docs.Importer do
           versions
         )
 
-      # TODO: reenable this
-      # versions
-      # |> Enum.reject(fn version ->
-      #   Enum.find(already_defined_versions, &(&1.version == version))
-      # end)
-      []
+      versions
+      |> Enum.reject(fn version ->
+        Enum.find(already_defined_versions, &(&1.version == version))
+      end)
       |> Enum.concat(Enum.map(library.track_branches, &{&1, true}))
       |> Enum.each(fn version ->
         {version, branch?} =
@@ -53,7 +51,7 @@ defmodule AshHq.Docs.Importer do
 
         {_, 0} =
           System.cmd("elixir", [
-            "./build_docs/build_dsl_docs.exs",
+            Path.join(:code.priv_dir(:ash_hq), "scripts/build_dsl_docs.exs"),
             name,
             version,
             file,
@@ -65,11 +63,24 @@ defmodule AshHq.Docs.Importer do
         File.rm!(file)
 
         if result do
-          LibraryVersion.build!(library.id, version, result, %{
-            doc: result[:doc],
-            guides: result[:guides],
-            modules: result[:modules]
-          })
+          AshHq.Repo.transaction(fn ->
+            id =
+              case LibraryVersion.by_version(version) do
+                {:ok, version} ->
+                  LibraryVersion.destroy!(version)
+                  version.id
+
+                _ ->
+                  Ash.UUID.generate()
+              end
+
+            LibraryVersion.build!(library.id, version, result, %{
+              id: id,
+              doc: result[:doc],
+              guides: result[:guides],
+              modules: result[:modules]
+            })
+          end)
         end
       end)
     end

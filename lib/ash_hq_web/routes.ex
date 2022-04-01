@@ -29,10 +29,6 @@ defmodule AshHqWeb.Routes do
     "/docs/module/#{sanitize_name(library.name)}/#{sanitize_name(version)}/#{sanitize_name(module)}"
   end
 
-  def function_link(library, version, module, function, arity) do
-    "/docs/module/#{sanitize_name(library.name)}/#{sanitize_name(version)}/#{sanitize_name(module)}##{sanitize_name(function)}-#{arity}"
-  end
-
   def doc_link(%AshHq.Docs.Module{
         name: name,
         library_name: library_name,
@@ -44,11 +40,12 @@ defmodule AshHqWeb.Routes do
   def doc_link(%AshHq.Docs.Function{
         name: name,
         arity: arity,
+        type: type,
         module_name: module_name,
         library_name: library_name,
         version_name: version_name
       }) do
-    "/docs/module/#{sanitize_name(library_name)}/#{sanitize_name(version_name)}/#{sanitize_name(module_name)}/##{sanitize_name(name)}-#{arity}"
+    "/docs/module/#{sanitize_name(library_name)}/#{sanitize_name(version_name)}/#{sanitize_name(module_name)}/##{type}-#{sanitize_name(name)}-#{arity}"
   end
 
   def doc_link(%AshHq.Docs.Guide{
