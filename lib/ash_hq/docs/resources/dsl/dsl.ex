@@ -32,9 +32,7 @@ defmodule AshHq.Docs.Dsl do
   end
 
   actions do
-    read :read do
-      primary? true
-    end
+    defaults [:read, :destroy]
 
     create :create do
       argument :options, {:array, :map}

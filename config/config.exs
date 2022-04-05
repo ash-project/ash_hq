@@ -10,6 +10,8 @@ import Config
 config :ash_hq,
   ecto_repos: [AshHq.Repo]
 
+config :ash, allow_flow: true
+
 config :ash_hq, ash_apis: [AshHq.Docs]
 
 config :ash_hq, AshHq.Docs,

@@ -29,7 +29,7 @@ defmodule AshHqWeb.Pages.Docs do
   def render(assigns) do
     ~F"""
     <div class="grid content-start overflow-hidden">
-      <div class="lg:hidden flex flex-row justify-start space-x-12 items-center border-b border-t border-gray-600 py-3">
+      <div class="xl:hidden flex flex-row justify-start space-x-12 items-center border-b border-t border-gray-600 py-3">
         <button class="dark:hover:text-gray-600" phx-click={show_sidebar()}>
           <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
         </button>
@@ -217,7 +217,7 @@ defmodule AshHqWeb.Pages.Docs do
     guide =
       if socket.assigns[:params]["guide"] && socket.assigns.library_version do
         Enum.find(socket.assigns.library_version.guides, fn guide ->
-          guide.url_safe_name == socket.assigns[:params]["guide"]
+          guide.route == Enum.join(socket.assigns[:params]["guide"], "/")
         end)
       end
 

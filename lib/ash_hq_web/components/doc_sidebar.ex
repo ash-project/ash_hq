@@ -37,28 +37,28 @@ defmodule AshHqWeb.Components.DocSidebar do
                 <span class="font-light text-gray-500">{selected_version_name(library, @selected_versions)}</span>
               </LivePatch>
               {#if @library && @library_version && library.id == @library.id}
-                {#if !Enum.empty?(@library_version.guides)}
+                {#for {category, guides} <- guides_by_category(@library_version.guides)}
                   <div class="ml-2 text-gray-500">
-                    Guides
+                    {category}
                   </div>
-                {/if}
-                {#for guide <- @library_version.guides}
-                  <li class="ml-3">
-                    <LivePatch
-                      to={Routes.guide_link(
-                        library,
-                        selected_version_name(library, @selected_versions),
-                        guide.url_safe_name
-                      )}
-                      class={
-                        "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
-                        "dark:bg-gray-600": @guide && @guide.id == guide.id
-                      }
-                    >
-                      <Heroicons.Outline.BookOpenIcon class="h-4 w-4" />
-                      <span class="ml-3 mr-2">{guide.name}</span>
-                    </LivePatch>
-                  </li>
+                  {#for guide <- guides}
+                    <li class="ml-3">
+                      <LivePatch
+                        to={Routes.guide_link(
+                          library,
+                          selected_version_name(library, @selected_versions),
+                          guide.route
+                        )}
+                        class={
+                          "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
+                          "dark:bg-gray-600": @guide && @guide.id == guide.id
+                        }
+                      >
+                        <Heroicons.Outline.BookOpenIcon class="h-4 w-4" />
+                        <span class="ml-3 mr-2">{guide.name}</span>
+                      </LivePatch>
+                    </li>
+                  {/for}
                 {/for}
 
                 {#if !Enum.empty?(@library_version.guides)}
@@ -190,6 +190,17 @@ defmodule AshHqWeb.Components.DocSidebar do
     ~F"""
     <Heroicons.Outline.PuzzleIcon class="h-4 w-4" />
     """
+  end
+
+  defp guides_by_category(guides) do
+    guides
+    |> Enum.group_by(& &1.category)
+    |> Enum.sort_by(fn {category, _guides} ->
+      Enum.find_index(["Guides", "Concepts", "Info"], &(&1 == category)) || :infinity
+    end)
+    |> Enum.map(fn {category, guides} ->
+      {category, Enum.sort_by(guides, & &1.order)}
+    end)
   end
 
   defp selected_version_name(library, selected_versions) do

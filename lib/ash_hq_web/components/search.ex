@@ -213,71 +213,12 @@ defmodule AshHqWeb.Components.Search do
     if socket.assigns[:search] in [nil, ""] || socket.assigns[:selected_versions] in [nil, %{}] do
       assign(socket, :results, %{})
     else
-      search_results =
-        AshHq.Docs
-        |> Ash.Api.resources()
-        |> Enum.filter(fn resource ->
-          AshHq.Docs.Extensions.Search in Ash.Resource.Info.extensions(resource) &&
-            AshHq.Docs.Extensions.Search.type(resource) in socket.assigns.selected_types
-        end)
-        |> Enum.flat_map(fn resource ->
-          to_load = AshHq.Docs.Extensions.Search.load_for_search(resource)
-
-          resource.search!(socket.assigns.search, Map.values(socket.assigns.selected_versions),
-            query: Ash.Query.limit(resource, 25),
-            load:
-              List.wrap(to_load) ++
-                [name_matches: %{query: socket.assigns.search, similarity: 0.7}]
-          )
-        end)
-        |> Enum.sort_by(
-          # false comes first, and we want all things where the name matches to go first
-          &{name_match_rank(&1), -&1.match_rank, Map.get(&1, :extension_order, -1),
-           Enum.count(Map.get(&1, :path, []))}
+      %{results: results, item_list: item_list} =
+        AshHq.Docs.Search.run!(
+          socket.assigns.search,
+          Map.values(socket.assigns.selected_versions)
         )
 
-      sort_rank =
-        search_results
-        |> Enum.with_index()
-        |> Map.new(fn {item, i} ->
-          {item.id, i}
-        end)
-
-      results =
-        search_results
-        |> Enum.group_by(fn
-          %{extension_type: type} ->
-            type
-
-          %AshHq.Docs.Function{module_name: module_name} ->
-            module_name
-
-          %AshHq.Docs.Module{name: name} ->
-            name
-
-          %AshHq.Docs.Guide{
-            library_version: %{version: version, library_display_name: library_display_name}
-          } ->
-            "#{library_display_name} #{version}"
-
-          %AshHq.Docs.Extension{
-            library_version: %{version: version, library_display_name: library_display_name}
-          } ->
-            "#{library_display_name} #{version}"
-
-          %AshHq.Docs.LibraryVersion{library_display_name: library_display_name, version: version} ->
-            "#{library_display_name} #{version}"
-        end)
-        |> Enum.sort_by(fn {_type, items} ->
-          items
-          |> Enum.map(&Map.get(sort_rank, &1.id))
-          |> Enum.min()
-        end)
-        |> Enum.map(fn {type, items} ->
-          {type, group_by_paths(items, sort_rank)}
-        end)
-
-      item_list = item_list(results)
       selected_item = Enum.at(item_list, 0)
 
       socket
@@ -287,80 +228,11 @@ defmodule AshHqWeb.Components.Search do
     end
   end
 
-  defp name_match_rank(record) do
-    if record.name_matches do
-      -search_length(record)
-    else
-      0
-    end
-  end
-
-  defp search_length(%resource{} = record) do
-    String.length(Map.get(record, AshHq.Docs.Extensions.Search.doc_attribute(resource)))
-  end
-
-  defp item_list(results) do
-    List.flatten(do_item_list(results))
-  end
-
-  defp do_item_list({_key, %{items: items, further: further}}) do
-    do_item_list(items) ++ do_item_list(further)
-  end
-
-  defp do_item_list(items) when is_list(items) do
-    Enum.map(items, &do_item_list/1)
-  end
-
-  defp do_item_list(item), do: item
-
   defp set_selected_item(socket, nil), do: socket
 
   defp set_selected_item(socket, selected_item) do
     socket
     |> assign(:selected_item, selected_item)
     |> push_event("js:scroll-to", %{id: selected_item.id, boundary_id: socket.assigns[:id]})
-  end
-
-  defp group_by_paths(items, sort_rank) do
-    items
-    |> Enum.map(&{Map.get(&1, :path, []), &1})
-    |> do_group_by_paths(sort_rank)
-  end
-
-  defp do_group_by_paths(items, sort_rank, path_acc \\ []) do
-    {items_for_group, further} =
-      Enum.split_with(items, fn
-        {[], _} ->
-          true
-
-        _ ->
-          false
-      end)
-
-    further_items =
-      further
-      |> Enum.group_by(
-        fn {[next | _rest], _item} ->
-          next
-        end,
-        fn {[_next | rest], item} ->
-          {rest, item}
-        end
-      )
-      |> Enum.sort_by(fn {_nested, items} ->
-        items
-        |> Enum.map(&elem(&1, 1))
-        |> Enum.sort_by(&Map.get(sort_rank, &1.id))
-      end)
-      |> Enum.map(fn {nested, items} ->
-        {nested, do_group_by_paths(items, sort_rank, path_acc ++ [nested])}
-      end)
-
-    items =
-      items_for_group
-      |> Enum.map(&elem(&1, 1))
-      |> Enum.sort_by(&Map.get(sort_rank, &1.id))
-
-    %{path: path_acc, items: items, further: further_items}
   end
 end

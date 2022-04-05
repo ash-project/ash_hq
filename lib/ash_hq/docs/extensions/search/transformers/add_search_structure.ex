@@ -174,6 +174,9 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
     [
       Transformer.build_entity!(Ash.Resource.Dsl, [:actions, :read], :prepare,
         preparation: AshHq.Docs.Preparations.LoadSearchData
+      ),
+      Transformer.build_entity!(Ash.Resource.Dsl, [:actions, :read], :prepare,
+        preparation: Ash.Resource.Preparation.Builtins.build(limit: 10)
       )
     ]
   end

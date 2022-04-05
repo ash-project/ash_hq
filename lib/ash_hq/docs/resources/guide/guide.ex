@@ -9,11 +9,24 @@ defmodule AshHq.Docs.Guide do
 
   search do
     doc_attribute :text
-    load_for_search [:url_safe_name, library_version: [:library_name, :library_display_name]]
+    load_for_search library_version: [:library_name, :library_display_name]
   end
 
   code_interface do
     define_for AshHq.Docs
+  end
+
+  actions do
+    defaults [:read, :update, :destroy]
+
+    create :create do
+      primary? true
+      allow_nil_input [:route]
+    end
+  end
+
+  changes do
+    change AshHq.Docs.Guide.Changes.SetRoute
   end
 
   postgres do
@@ -46,10 +59,15 @@ defmodule AshHq.Docs.Guide do
       constraints trim?: false, allow_empty?: true
       writable? false
     end
-  end
 
-  calculations do
-    calculate :url_safe_name, :string, expr(fragment("lower(replace(?, ' ', '-'))", name))
+    attribute :category, :string do
+      default "Guides"
+      allow_nil? false
+    end
+
+    attribute :route, :string do
+      allow_nil? false
+    end
   end
 
   relationships do

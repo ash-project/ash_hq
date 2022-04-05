@@ -1,4 +1,4 @@
-FROM hexpm/elixir:1.12.2-erlang-24.0.5-ubuntu-xenial-20210114
+FROM hexpm/elixir:1.13.3-erlang-24.0.5-ubuntu-xenial-20210114
 # install build dependencies
 USER root
 RUN apt-get update
@@ -9,6 +9,8 @@ RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 RUN apt-get update
 RUN apt-get install -y nodejs yarn
+RUN mix local.hex --force && \
+  mix local.rebar --force
 ENV MIX_ENV=prod
 COPY ./assets/package.json assets/package.json
 COPY ./assets/package-lock.json assets/package-lock.json
@@ -17,9 +19,7 @@ COPY ./mix.exs .
 COPY ./mix.lock .
 COPY ./config/config.exs config/config.exs
 COPY ./config/prod.exs config/prod.exs
-RUN mix local.hex --force && \
-  mix local.rebar --force && \
-  mix deps.get && \
+RUN mix deps.get && \
   mix deps.compile
 COPY ./lib ./lib
 COPY ./priv ./priv

@@ -32,6 +32,8 @@ defmodule AshHq.Docs.Extension do
   end
 
   actions do
+    defaults [:read, :update, :destroy]
+
     create :import do
       argument :library_version, :uuid do
         allow_nil? false

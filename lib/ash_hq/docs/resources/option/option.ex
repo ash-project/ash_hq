@@ -64,11 +64,10 @@ defmodule AshHq.Docs.Option do
   end
 
   actions do
-    read :read do
-      primary? true
-    end
+    defaults [:read, :update, :destroy]
 
     create :create do
+      primary? true
       argument :library_version, :uuid
 
       argument :extension_id, :uuid do

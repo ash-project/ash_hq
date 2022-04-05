@@ -49,7 +49,10 @@ defmodule AshHq.Docs.Module do
   end
 
   actions do
+    defaults [:read, :update, :destroy]
+
     create :create do
+      primary? true
       argument :functions, {:array, :map}
       argument :library_version, :uuid
 

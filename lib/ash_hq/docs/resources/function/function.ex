@@ -20,7 +20,7 @@ defmodule AshHq.Docs.Function do
 
   postgres do
     table "functions"
-    repo(AshHq.Repo)
+    repo AshHq.Repo
 
     references do
       reference(:library_version, on_delete: :delete)
@@ -68,7 +68,10 @@ defmodule AshHq.Docs.Function do
   end
 
   actions do
+    defaults [:read, :update, :destroy]
+
     create :create do
+      primary? true
       argument :library_version, :uuid
 
       change manage_relationship(:library_version, type: :replace)

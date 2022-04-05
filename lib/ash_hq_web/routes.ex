@@ -1,6 +1,6 @@
 defmodule AshHqWeb.Routes do
-  def guide_link(library, version, guide) do
-    "/docs/guides/#{sanitize_name(library.name)}/#{sanitize_name(version)}/#{sanitize_name(guide)}"
+  def guide_link(library, version, route) do
+    "/docs/guides/#{sanitize_name(library.name)}/#{sanitize_name(version)}/#{route}"
   end
 
   def library_link(library, nil) do
@@ -49,10 +49,10 @@ defmodule AshHqWeb.Routes do
   end
 
   def doc_link(%AshHq.Docs.Guide{
-        url_safe_name: url_safe_name,
+        route: route,
         library_version: %{library_name: library_name, version: version}
       }) do
-    "/docs/guides/#{sanitize_name(library_name)}/#{sanitize_name(version)}/#{url_safe_name}"
+    "/docs/guides/#{sanitize_name(library_name)}/#{sanitize_name(version)}/#{route}"
   end
 
   def doc_link(%AshHq.Docs.LibraryVersion{library_name: library_name, version: version}) do

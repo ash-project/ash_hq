@@ -16,9 +16,7 @@ defmodule AshHq.Docs.Library do
   end
 
   actions do
-    read :read do
-      primary? true
-    end
+    defaults [:read, :create, :update, :destroy]
 
     read :by_name do
       argument :name, :string do

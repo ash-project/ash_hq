@@ -33,9 +33,7 @@ defmodule AshHq.Docs.LibraryVersion do
   end
 
   actions do
-    read :read do
-      primary? true
-    end
+    defaults [:read, :update, :destroy]
 
     read :by_version do
       get? true
