@@ -93,6 +93,7 @@ defmodule AshHq.Docs.Importer do
               end
 
             LibraryVersion.build!(library.id, version, result, %{
+              timeout: :infinity,
               id: id,
               doc: result[:doc],
               guides: result[:guides],
@@ -105,7 +106,7 @@ defmodule AshHq.Docs.Importer do
 
     for version <- LibraryVersion.unprocessed!() do
       try do
-        LibraryVersion.process!(version)
+        LibraryVersion.process!(version, timeout: :infinity)
       rescue
         e ->
           Logger.error(

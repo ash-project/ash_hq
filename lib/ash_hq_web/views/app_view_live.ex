@@ -7,12 +7,12 @@ defmodule AshHqWeb.AppViewLive do
   alias Phoenix.LiveView.JS
   require Ash.Query
 
-  data(configured_theme, :string, default: :system)
-  data(searching, :boolean, default: false)
-  data(selected_versions, :map, default: %{})
-  data(libraries, :list, default: [])
-  data(selected_types, :map, default: %{})
-  data(sidebar_state, :map, default: %{})
+  data configured_theme, :string, default: :system
+  data searching, :boolean, default: false
+  data selected_versions, :map, default: %{}
+  data libraries, :list, default: []
+  data selected_types, :map, default: %{}
+  data sidebar_state, :map, default: %{}
 
   def render(assigns) do
     ~F"""
@@ -58,7 +58,7 @@ defmodule AshHqWeb.AppViewLive do
               href="/docs/guides/ash/main/getting-started"
               target="_blank"
               class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600"
-            >Get Started</a>
+            >Quick Start</a>
             <div>|</div>
             <a
               href="/docs/guides/ash/main/overview"
@@ -212,25 +212,40 @@ defmodule AshHqWeb.AppViewLive do
       socket.assigns.libraries
       |> Enum.map(fn library ->
         Map.update!(library, :versions, fn versions ->
+          latest_version =
+            Enum.find(versions, &String.contains?(&1.version, ".")) || Enum.at(versions, 0)
+
           Enum.map(versions, fn version ->
-            if version.id == socket.assigns[:selected_versions][library.id] do
-              dsls_query = Ash.Query.sort(AshHq.Docs.Dsl, order: :asc)
-              options_query = Ash.Query.sort(AshHq.Docs.Option, order: :asc)
-              functions_query = Ash.Query.sort(AshHq.Docs.Function, name: :asc, arity: :asc)
+            if (socket.assigns[:selected_versions][library.id] == "latest" && latest_version &&
+                  version.id == latest_version.id) ||
+                 version.id == socket.assigns[:selected_versions][library.id] do
+              dsls_query = AshHq.Docs.Dsl |> Ash.Query.sort(order: :asc) |> load_for_search()
+
+              options_query =
+                AshHq.Docs.Option |> Ash.Query.sort(order: :asc) |> load_for_search()
+
+              functions_query =
+                AshHq.Docs.Function
+                |> Ash.Query.sort(name: :asc, arity: :asc)
+                |> load_for_search()
+
+              guides_query = AshHq.Docs.Guide |> Ash.Query.new() |> load_for_search()
 
               modules_query =
                 AshHq.Docs.Module
                 |> Ash.Query.sort(order: :asc)
                 |> Ash.Query.load(functions: functions_query)
+                |> load_for_search()
 
               extensions_query =
                 AshHq.Docs.Extension
                 |> Ash.Query.sort(order: :asc)
                 |> Ash.Query.load(options: options_query, dsls: dsls_query)
+                |> load_for_search()
 
               AshHq.Docs.load!(version,
                 extensions: extensions_query,
-                guides: [],
+                guides: guides_query,
                 modules: modules_query
               )
             else
@@ -327,7 +342,7 @@ defmodule AshHqWeb.AppViewLive do
             :selected_types,
             selected_types
           )
-          |> push_event("selected_versions", selected_versions)
+          |> push_event("selected-versions", selected_versions)
           |> push_event("selected_types", %{types: selected_types})
         end
       )
@@ -363,5 +378,14 @@ defmodule AshHqWeb.AppViewLive do
       to: "#search-box"
     )
     |> JS.dispatch("js:focus", to: "#search-input")
+  end
+
+  defp load_for_search(query) do
+    Ash.Query.load(
+      query,
+      IO.inspect(AshHq.Docs.Extensions.Search.load_for_search(query.resource),
+        label: inspect(query.resource)
+      )
+    )
   end
 end

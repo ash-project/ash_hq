@@ -79,7 +79,7 @@ defmodule AshHqWeb.Components.Search do
                         class="text-black form-select rounded-md pt-1 py-2 w-3/4 border dark:border-0 bg-gray-100 dark:bg-white"
                         name={"versions[#{library.id}]"}
                         selected={Map.get(@selected_versions, library.id)}
-                        options={Enum.map(library.versions, &{&1.version, &1.id})}
+                        options={[{"latest", "latest"}] ++ Enum.map(library.versions, &{&1.version, &1.id})}
                       />
                     </div>
                   </div>
@@ -134,7 +134,7 @@ defmodule AshHqWeb.Components.Search do
         {/if}
       </div>
       {#for item <- results.items}
-        <LiveRedirect to={Routes.doc_link(item)} opts={id: item.id}>
+        <LiveRedirect to={Routes.doc_link(item, @selected_versions)} opts={id: item.id}>
           <div class={
             "rounded-lg mb-4 py-4 px-2 hover:bg-gray-400 dark:hover:bg-gray-600",
             "bg-gray-400 dark:bg-gray-600": @selected_item.id == item.id,
@@ -213,10 +213,31 @@ defmodule AshHqWeb.Components.Search do
     if socket.assigns[:search] in [nil, ""] || socket.assigns[:selected_versions] in [nil, %{}] do
       assign(socket, :results, %{})
     else
+      versions =
+        Enum.map(socket.assigns.selected_versions, fn
+          {library_id, "latest"} ->
+            Enum.find_value(socket.assigns.libraries, fn library ->
+              if library.id == library_id do
+                case Enum.find(library.versions, &String.contains?(&1.version, ".")) ||
+                       Enum.at(library.versions, 0) do
+                  nil ->
+                    nil
+
+                  version ->
+                    version.id
+                end
+              end
+            end)
+
+          {_, version_id} ->
+            version_id
+        end)
+        |> Enum.reject(&is_nil/1)
+
       %{results: results, item_list: item_list} =
         AshHq.Docs.Search.run!(
           socket.assigns.search,
-          Map.values(socket.assigns.selected_versions)
+          versions
         )
 
       selected_item = Enum.at(item_list, 0)

@@ -2,6 +2,9 @@ defmodule AshHqWeb.Pages.Home do
   use Surface.LiveComponent
 
   alias AshHqWeb.Components.{CalloutText, CodeExample, SearchBar}
+  alias Surface.Components.LiveRedirect
+
+  prop libraries, :list, default: []
 
   def render(assigns) do
     ~F"""
@@ -15,6 +18,23 @@ defmodule AshHqWeb.Pages.Home do
           or build your own extensions. Plug-and-play with other excellent tools like <CalloutText>Phoenix</CalloutText> and <CalloutText>Absinthe</CalloutText>.
         </div>
         <SearchBar class="hidden sm:block mt-16" />
+
+        <div class="grid grid-cols-3 w-full place-content-evenly mt-12">
+          <div class="grid grid-cols-1 text-center">
+            Data Layers
+            <LiveRedirect to={"/"}>
+              AshPostgres
+            </LiveRedirect>
+          </div>
+
+          <div class="grid grid-cols-1 text-center">
+            APIs
+          </div>
+
+          <div class="grid grid-cols-1 text-center">
+            Build your own
+          </div>
+        </div>
         <div class="pt-6 pb-6 w-full hidden sm:block mt-36">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <CodeExample

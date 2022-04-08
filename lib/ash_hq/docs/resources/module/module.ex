@@ -10,7 +10,8 @@ defmodule AshHq.Docs.Module do
   search do
     load_for_search [
       :version_name,
-      :library_name
+      :library_name,
+      :library_id
     ]
 
     type "Code"
@@ -69,6 +70,7 @@ defmodule AshHq.Docs.Module do
   aggregates do
     first :version_name, :library_version, :version
     first :library_name, [:library_version, :library], :name
+    first :library_id, [:library_version, :library], :id
   end
 
   relationships do

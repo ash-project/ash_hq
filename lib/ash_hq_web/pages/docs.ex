@@ -54,7 +54,7 @@ defmodule AshHqWeb.Pages.Docs do
           </div>
         {/if}
       </div>
-      <span class="grid overflow-hidden lg:hidden">
+      <span class="grid overflow-hidden xl:hidden">
         <div
           id="mobile-sidebar-container"
           class="overflow-hidden hidden fixed w-min h-full transition bg-white dark:bg-primary-black"
@@ -322,8 +322,8 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   defp assign_extension(socket) do
-    if socket.assigns.library && socket.assigns[:params]["extension"] do
-      extensions = get_extensions(socket.assigns.library, socket.assigns.selected_versions)
+    if socket.assigns.library_version && socket.assigns[:params]["extension"] do
+      extensions = socket.assigns.library_version.extensions
 
       assign(socket,
         extension:
@@ -340,16 +340,6 @@ defmodule AshHqWeb.Pages.Docs do
     {:ok, socket}
   end
 
-  defp get_extensions(library, selected_versions) do
-    case Enum.find(library.versions, &(&1.id == selected_versions[library.id])) do
-      nil ->
-        []
-
-      version ->
-        version.extensions
-    end
-  end
-
   defp assign_library(socket) do
     if !socket.assigns[:library] ||
          socket.assigns.params["library"] != Routes.sanitize_name(socket.assigns.library.name) do
@@ -364,10 +354,17 @@ defmodule AshHqWeb.Pages.Docs do
           socket =
             if socket.assigns[:params]["version"] do
               library_version =
-                Enum.find(
-                  library.versions,
-                  &(Routes.sanitize_name(&1.version) == socket.assigns[:params]["version"])
-                )
+                case socket.assigns[:params]["version"] do
+                  "latest" ->
+                    Enum.find(library.versions, &String.contains?(&1.version, ".")) ||
+                      Enum.at(library.versions, 0)
+
+                  version ->
+                    Enum.find(
+                      library.versions,
+                      &(Routes.sanitize_name(&1.version) == version)
+                    )
+                end
 
               if library_version do
                 new_selected_versions =

@@ -13,7 +13,8 @@ defmodule AshHq.Docs.Option do
       :extension_type,
       :extension_name,
       :version_name,
-      :library_name
+      :library_name,
+      :library_id
     ]
   end
 
@@ -85,6 +86,7 @@ defmodule AshHq.Docs.Option do
     first :extension_order, [:dsl, :extension], :order
     first :version_name, :library_version, :version
     first :library_name, [:library_version, :library], :name
+    first :library_id, [:library_version, :library], :id
   end
 
   relationships do
