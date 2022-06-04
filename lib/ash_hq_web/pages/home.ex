@@ -19,22 +19,6 @@ defmodule AshHqWeb.Pages.Home do
         </div>
         <SearchBar class="hidden sm:block mt-16" />
 
-        <div class="grid grid-cols-3 w-full place-content-evenly mt-12">
-          <div class="grid grid-cols-1 text-center">
-            Data Layers
-            <LiveRedirect to={"/"}>
-              AshPostgres
-            </LiveRedirect>
-          </div>
-
-          <div class="grid grid-cols-1 text-center">
-            APIs
-          </div>
-
-          <div class="grid grid-cols-1 text-center">
-            Build your own
-          </div>
-        </div>
         <div class="pt-6 pb-6 w-full hidden sm:block mt-36">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <CodeExample

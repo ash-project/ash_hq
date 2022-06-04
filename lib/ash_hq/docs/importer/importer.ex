@@ -54,9 +54,6 @@ defmodule AshHq.Docs.Importer do
           Enum.find(already_defined_versions, &(&1.version == version))
         end)
       end
-      |> tap(fn versions ->
-        Enum.map(versions, & &1.version)
-      end)
       |> Enum.concat(Enum.map(library.track_branches, &{&1, true}))
       |> Enum.each(fn version ->
         {version, branch?} =
@@ -83,7 +80,7 @@ defmodule AshHq.Docs.Importer do
         if result do
           AshHq.Repo.transaction(fn ->
             id =
-              case LibraryVersion.by_version(version) do
+              case LibraryVersion.by_version(library.id, version) do
                 {:ok, version} ->
                   LibraryVersion.destroy!(version)
                   version.id
@@ -92,29 +89,21 @@ defmodule AshHq.Docs.Importer do
                   Ash.UUID.generate()
               end
 
-            LibraryVersion.build!(library.id, version, result, %{
-              timeout: :infinity,
-              id: id,
-              doc: result[:doc],
-              guides: result[:guides],
-              modules: result[:modules]
-            })
+            LibraryVersion.build!(
+              library.id,
+              version,
+              %{
+                timeout: :infinity,
+                id: id,
+                extensions: result[:extensions],
+                doc: result[:doc],
+                guides: result[:guides],
+                modules: result[:modules]
+              }
+            )
           end)
         end
       end)
-    end
-
-    for version <- LibraryVersion.unprocessed!() do
-      try do
-        LibraryVersion.process!(version, timeout: :infinity)
-      rescue
-        e ->
-          Logger.error(
-            "Exception while importing: #{version.id}\n#{Exception.format(:error, e, __STACKTRACE__)}"
-          )
-
-          :ok
-      end
     end
   end
 

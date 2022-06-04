@@ -33,7 +33,7 @@ defmodule AshHqWeb.Routes do
         },
         selected_versions
       ) do
-    "/docs/module/#{sanitize_name(library_name)}/#{version(version_name, IO.inspect(library_id), selected_versions)}/#{sanitize_name(module_name)}/##{type}-#{sanitize_name(name)}-#{arity}"
+    "/docs/module/#{sanitize_name(library_name)}/#{version(version_name, library_id, selected_versions)}/#{sanitize_name(module_name)}/##{type}-#{sanitize_name(name)}-#{arity}"
   end
 
   def doc_link(

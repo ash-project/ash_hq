@@ -15,5 +15,5 @@ AshHq.Docs.Library.create!(%{name: "ash", display_name: "Ash", track_branches: [
 AshHq.Docs.Library.create!(%{
   name: "ash_postgres",
   display_name: "AshPostgres",
-  track_branches: ["master"]
+  track_branches: ["main"]
 })

@@ -27,14 +27,15 @@ defmodule AshHq.Docs.Extension do
   code_interface do
     define_for AshHq.Docs
 
-    define :import, args: [:library_version]
     define :destroy
   end
 
   actions do
     defaults [:read, :update, :destroy]
 
-    create :import do
+    create :create do
+      primary? true
+
       argument :library_version, :uuid do
         allow_nil? false
       end
@@ -46,7 +47,7 @@ defmodule AshHq.Docs.Extension do
       change {AshHq.Docs.Changes.AddArgToRelationship,
               attr: :id, arg: :extension_id, rel: :dsls, generate: &Ash.UUID.generate/0}
 
-      change manage_relationship(:dsls, type: :direct_control)
+      change manage_relationship(:dsls, type: :create)
     end
   end
 

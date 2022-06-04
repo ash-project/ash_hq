@@ -33,13 +33,12 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:ash, github: "ash-project/ash", override: true},
-      # {:ash, path: "../ash", override: true},
+      # {:ash, github: "ash-project/ash", override: true},
+      {:ash, path: "../ash", override: true},
       {:ash_postgres, github: "ash-project/ash_postgres"},
       # {:ash_postgres, path: "../ash_postgres"},
       {:ash_phoenix, github: "ash-project/ash_phoenix"},
-      {:earmark, "~> 1.5.0-pre1"},
-      {:ecto, git: "https://github.com/elixir-ecto/ecto.git", override: true},
+      {:earmark, "~> 1.5.0-pre1", override: true},
       {:surface, "~> 0.7.3"},
       {:surface_heroicons, "~> 0.6.0"},
       # Syntax Highlighting

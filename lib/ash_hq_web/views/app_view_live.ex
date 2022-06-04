@@ -21,16 +21,16 @@ defmodule AshHqWeb.AppViewLive do
       class={"h-full font-sans": true, "#{@configured_theme}": true}
       phx-hook="ColorTheme"
     >
-      <Search
-        id="search-box"
-        uri={@uri}
-        close={close_search()}
-        libraries={@libraries}
-        selected_types={@selected_types}
-        change_types="change-types"
-        change_versions="change-versions"
-        selected_versions={@selected_versions}
-      />
+    <Search
+      id="search-box"
+      uri={@uri}
+      close={close_search()}
+      libraries={@libraries}
+      selected_types={@selected_types}
+      change_types="change-types"
+      change_versions="change-versions"
+      selected_versions={@selected_versions}
+    />
       <button id="search-button" class="hidden" phx-click={AshHqWeb.AppViewLive.toggle_search()} />
       <div
         id="main-container"
@@ -307,48 +307,39 @@ defmodule AshHqWeb.AppViewLive do
           end)
       end
 
-    socket =
-      socket
-      |> assign(:selected_versions, configured_library_versions)
-      |> AshPhoenix.LiveView.keep_live(
-        :libraries,
-        fn _socket ->
-          versions_query =
-            AshHq.Docs.LibraryVersion
-            |> Ash.Query.sort(version: :desc)
-            |> Ash.Query.filter(processed == true)
-            |> Ash.Query.deselect(:data)
+    versions_query =
+      AshHq.Docs.LibraryVersion
+      |> Ash.Query.sort(version: :desc)
 
-          AshHq.Docs.Library.read!(load: [versions: versions_query])
-        end,
-        after_fetch: fn results, socket ->
-          selected_versions =
-            Enum.reduce(results, socket.assigns[:selected_versions] || %{}, fn library, acc ->
-              case Enum.at(library.versions, 0) do
-                nil ->
-                  acc
+    libraries = AshHq.Docs.Library.read!(load: [versions: versions_query])
 
-                version ->
-                  Map.put_new(acc, library.id, version.id)
-              end
-            end)
+    selected_versions =
+      Enum.reduce(libraries, %{}, fn library, acc ->
+        case Enum.at(library.versions, 0) do
+          nil ->
+            acc
 
-          socket
-          |> assign(
-            :selected_versions,
-            selected_versions
-          )
-          |> assign(
-            :selected_types,
-            selected_types
-          )
-          |> push_event("selected-versions", selected_versions)
-          |> push_event("selected_types", %{types: selected_types})
+          version ->
+            Map.put_new(acc, library.id, version.id)
         end
-      )
-      |> load_docs()
+      end)
 
-    {:ok, assign(socket, configured_theme: configured_theme, sidebar_state: sidebar_state)}
+    {:ok,
+     socket
+     |> assign(:libraries, libraries)
+     |> assign(
+       :selected_versions,
+       selected_versions
+     )
+     |> assign(
+       :selected_types,
+       selected_types
+     )
+     |> assign(:selected_versions, configured_library_versions)
+     |> assign(configured_theme: configured_theme, sidebar_state: sidebar_state)
+     |> push_event("selected-versions", selected_versions)
+     |> push_event("selected_types", %{types: selected_types})
+     |> load_docs()}
   end
 
   def toggle_search(js \\ %JS{}) do
@@ -383,9 +374,7 @@ defmodule AshHqWeb.AppViewLive do
   defp load_for_search(query) do
     Ash.Query.load(
       query,
-      IO.inspect(AshHq.Docs.Extensions.Search.load_for_search(query.resource),
-        label: inspect(query.resource)
-      )
+      AshHq.Docs.Extensions.Search.load_for_search(query.resource)
     )
   end
 end

@@ -24,12 +24,10 @@ defmodule AshHq.Docs.LibraryVersion do
 
   code_interface do
     define_for AshHq.Docs
-    define :build, args: [:library, :version, :data]
+    define :build, args: [:library, :version]
     define :defined_for, args: [:library, :versions]
-    define :by_version, args: [:version]
+    define :by_version, args: [:library, :version]
     define :destroy
-    define :unprocessed
-    define :process
   end
 
   actions do
@@ -42,7 +40,11 @@ defmodule AshHq.Docs.LibraryVersion do
         allow_nil? false
       end
 
-      filter expr(version == ^arg(:version))
+      argument :library, :uuid do
+        allow_nil? false
+      end
+
+      filter expr(version == ^arg(:version) and library == ^arg(:library))
     end
 
     create :build do
@@ -60,14 +62,22 @@ defmodule AshHq.Docs.LibraryVersion do
         allow_nil? false
       end
 
+      argument :extensions, {:array, :map} do
+        allow_nil? false
+      end
+
       change set_attribute(:id, {:arg, :id})
 
       change {AshHq.Docs.Changes.AddArgToRelationship,
               attr: :id, arg: :library_version, rel: :modules, generate: &Ash.UUID.generate/0}
 
-      change manage_relationship(:guides, type: :direct_control)
+      change {AshHq.Docs.Changes.AddArgToRelationship,
+              attr: :id, arg: :library_version, rel: :extensions, generate: &Ash.UUID.generate/0}
+
+      change manage_relationship(:guides, type: :create)
       change manage_relationship(:library, type: :replace)
-      change manage_relationship(:modules, type: :direct_control)
+      change manage_relationship(:modules, type: :create)
+      change manage_relationship(:extensions, type: :create)
     end
 
     read :defined_for do
@@ -80,14 +90,6 @@ defmodule AshHq.Docs.LibraryVersion do
       end
 
       filter expr(version in ^arg(:versions) and library_id == ^arg(:library))
-    end
-
-    read :unprocessed do
-      filter expr(processed == false)
-    end
-
-    update :process do
-      change AshHq.Docs.LibraryVersion.Changes.ProcessLibraryVersion
     end
   end
 
@@ -103,8 +105,6 @@ defmodule AshHq.Docs.LibraryVersion do
       allow_nil? false
     end
 
-    attribute :data, :map
-
     attribute :doc, :string do
       allow_nil? false
       constraints trim?: false, allow_empty?: true
@@ -113,11 +113,6 @@ defmodule AshHq.Docs.LibraryVersion do
 
     attribute :doc_html, :string do
       constraints trim?: false, allow_empty?: true
-      writable? false
-    end
-
-    attribute :processed, :boolean do
-      default false
       writable? false
     end
   end

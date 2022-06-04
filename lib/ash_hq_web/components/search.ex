@@ -211,7 +211,7 @@ defmodule AshHqWeb.Components.Search do
 
   defp search(socket) do
     if socket.assigns[:search] in [nil, ""] || socket.assigns[:selected_versions] in [nil, %{}] do
-      assign(socket, :results, %{})
+      assign(socket, results: %{}, item_list: [])
     else
       versions =
         Enum.map(socket.assigns.selected_versions, fn

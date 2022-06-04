@@ -36,6 +36,7 @@ defmodule AshHq.Docs.Dsl do
     defaults [:read, :destroy]
 
     create :create do
+      primary? true
       argument :options, {:array, :map}
       argument :library_version, :uuid
 
@@ -46,19 +47,6 @@ defmodule AshHq.Docs.Dsl do
       change {AshHq.Docs.Changes.AddArgToRelationship, arg: :extension_id, rel: :options}
 
       change {AshHq.Docs.Changes.AddArgToRelationship, arg: :library_version, rel: :options}
-      change manage_relationship(:options, type: :direct_control)
-      change manage_relationship(:library_version, type: :replace)
-    end
-
-    update :update do
-      argument :options, {:array, :map}
-      argument :library_version, :uuid
-
-      change {AshHq.Docs.Changes.AddArgToRelationship,
-              attr: :extension_id, arg: :extension_id, rel: :options}
-
-      change {AshHq.Docs.Changes.AddArgToRelationship, arg: :library_version, rel: :options}
-
       change manage_relationship(:options, type: :direct_control)
       change manage_relationship(:library_version, type: :replace)
     end
