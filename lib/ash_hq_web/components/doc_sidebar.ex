@@ -83,19 +83,24 @@ defmodule AshHqWeb.Components.DocSidebar do
                   <div class="ml-2 text-gray-500">
                     Modules
                   </div>
-                  {#for module <- @library_version.modules}
-                    <li class="ml-3">
-                      <LivePatch
-                        to={Routes.doc_link(module, @selected_versions)}
-                        class={
-                          "flex items-center pt-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
-                          "dark:bg-gray-600": @module && @module.id == module.id
-                        }
-                      >
-                        <span class="ml-3 mr-2">{module.name}</span>
-                        <Heroicons.Outline.CodeIcon class="h-4 w-4" />
-                      </LivePatch>
-                    </li>
+                  {#for {category, modules} <- modules_and_categories(@library_version.modules)}
+                    <div class="ml-4">
+                      <span class="text-sm text-gray-900 dark:text-gray-500">{category}</span>
+                    </div>
+                      {#for module <- modules}
+                        <li class="ml-4">
+                          <LivePatch
+                            to={Routes.doc_link(module, @selected_versions)}
+                            class={
+                              "flex items-center pt-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
+                              "dark:bg-gray-600": @module && @module.id == module.id
+                            }
+                          >
+                            <span class="ml-3 mr-2">{module.name}</span>
+                            <Heroicons.Outline.CodeIcon class="h-4 w-4" />
+                          </LivePatch>
+                        </li>
+                      {/for}
                   {/for}
                 {/if}
               {/if}
@@ -105,6 +110,17 @@ defmodule AshHqWeb.Components.DocSidebar do
       </div>
     </aside>
     """
+  end
+
+  defp modules_and_categories(modules) do
+    modules
+    |> Enum.group_by(&{&1.category_index, &1.category})
+    |> Enum.sort_by(fn {{index, _}, _} ->
+      index
+    end)
+    |> Enum.map(fn {{_, category}, list} ->
+      {category, list}
+    end)
   end
 
   defp render_dsls(assigns, dsls, path) do
@@ -192,7 +208,7 @@ defmodule AshHqWeb.Components.DocSidebar do
     guides
     |> Enum.group_by(& &1.category)
     |> Enum.sort_by(fn {category, _guides} ->
-      Enum.find_index(["Guides", "Concepts", "Info"], &(&1 == category)) || :infinity
+      Enum.find_index(["Tutorials", "Topics", "How To", "Misc"], &(&1 == category)) || :infinity
     end)
     |> Enum.map(fn {category, guides} ->
       {category, Enum.sort_by(guides, & &1.order)}

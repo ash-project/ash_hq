@@ -121,7 +121,7 @@ defmodule Utils do
 
   def build_function(_, _), do: []
 
-  def build_module(module, order) do
+  def build_module(module, category, category_index, order) do
     {:docs_v1, _, :elixir, _, %{
       "en" => module_doc
     }, _, defs} = Code.fetch_docs(module)
@@ -130,6 +130,8 @@ defmodule Utils do
       name: inspect(module),
       doc: module_doc,
       order: order,
+      category: category,
+      category_index: category_index,
       functions: defs |> Enum.with_index() |> Enum.flat_map(fn {definition, i} ->
         build_function(definition, i)
       end)
@@ -200,9 +202,13 @@ case Enum.at(dsls, 0) do
     acc =
       Utils.try_apply(fn -> dsl.code_modules() end, [])
       |> Enum.with_index()
-      |> Enum.reduce(acc, fn {module, order}, acc ->
-        Map.update!(acc, :modules, fn modules ->
-          [Utils.build_module(module, order) | modules]
+      |> Enum.reduce(acc, fn {{category, modules}, category_index}, acc ->
+        modules
+        |> Enum.with_index()
+        |> Enum.reduce(acc, fn {module, order}, acc ->
+          Map.update!(acc, :modules, fn modules ->
+            [Utils.build_module(module, category, category_index, order) | modules]
+          end)
         end)
       end)
 

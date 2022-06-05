@@ -33,6 +33,16 @@ defmodule AshHq.Docs.Module do
       allow_nil? false
     end
 
+    attribute :category, :string do
+      allow_nil? false
+      default "Misc"
+    end
+
+    attribute :category_index, :integer do
+      allow_nil? false
+      default 0
+    end
+
     attribute :doc, :string do
       allow_nil? false
       constraints trim?: false, allow_empty?: true

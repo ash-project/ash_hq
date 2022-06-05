@@ -41,6 +41,7 @@ defmodule AshHqWeb.Components.Search do
               <Form for={:search} change="search" submit="go-to-doc" class="w-full">
                 <input
                   id="search-input"
+                  phx-debounce="150"
                   name="search"
                   class="text-lg dark:bg-primary-black grow ring-0 outline-none w-full"
                 />

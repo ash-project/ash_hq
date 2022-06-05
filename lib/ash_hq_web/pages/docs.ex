@@ -4,26 +4,27 @@ defmodule AshHqWeb.Pages.Docs do
   alias Phoenix.LiveView.JS
   alias AshHqWeb.Components.{CalloutText, DocSidebar, RightNav, Tag}
   alias AshHqWeb.Routes
+  require Logger
 
-  prop(params, :map, required: true)
-  prop(change_versions, :event, required: true)
-  prop(selected_versions, :map, required: true)
-  prop(libraries, :list, default: [])
-  prop(uri, :string)
-  prop(sidebar_state, :map, required: true)
-  prop(collapse_sidebar, :event, required: true)
-  prop(expand_sidebar, :event, required: true)
+  prop params, :map, required: true
+  prop change_versions, :event, required: true
+  prop selected_versions, :map, required: true
+  prop libraries, :list, default: []
+  prop uri, :string
+  prop sidebar_state, :map, required: true
+  prop collapse_sidebar, :event, required: true
+  prop expand_sidebar, :event, required: true
 
-  data(library, :any)
-  data(extension, :any)
-  data(docs, :any)
-  data(library_version, :any)
-  data(guide, :any)
-  data(doc_path, :list, default: [])
-  data(dsls, :list, default: [])
-  data(dsl, :any)
-  data(options, :list, default: [])
-  data(module, :any)
+  data library, :any
+  data extension, :any
+  data docs, :any
+  data library_version, :any
+  data guide, :any
+  data doc_path, :list, default: []
+  data dsls, :list, default: []
+  data dsl, :any
+  data options, :list, default: []
+  data module, :any
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -97,7 +98,7 @@ defmodule AshHqWeb.Pages.Docs do
           phx-hook="Docs"
         >
           <div id="module-docs" class="w-full nav-anchor text-black dark:text-white">
-            {raw(@docs)}
+            {raw(render_links(assigns, @docs))}
           </div>
           {#if @module}
             <h1>Callbacks</h1>
@@ -318,6 +319,52 @@ defmodule AshHqWeb.Pages.Docs do
 
       true ->
         assign(socket, docs: "", doc_path: [], dsls: [])
+    end
+  end
+
+  defp render_links(assigns, docs) do
+    String.replace(docs, ~r/{{link:.*}}/, fn text ->
+      try do
+        "{{link:" <> rest = String.trim_trailing(text, "}}")
+        [library, type, item] = String.split(rest, ":")
+        render_link(assigns, library, type, item, text)
+      rescue
+        e ->
+          Logger.error("Invalid link #{inspect(e)}")
+          text
+      end
+    end)
+  end
+
+  defp render_link(assigns, library, type, item, source) do
+    library =
+      Enum.find(assigns[:libraries], &(&1.name == library)) ||
+        raise "No such library in link: #{source}"
+
+    selected_versions = assigns[:selected_versions]
+
+    version =
+      if selected_versions[library.id] == "latest" do
+        "latest"
+      else
+        case Enum.find(library.versions, &(&1.id == selected_versions[library.id])) do
+          nil ->
+            nil
+
+          version ->
+            version
+        end
+      end
+
+    if type == "guide" do
+      guide =
+        Enum.find(version.guides, &(&1.name == item)) || raise "No such guide in link: #{source}"
+
+      """
+      <a href="#{Routes.doc_link(guide, assigns[:selected_versions])}">#{item}</a>
+      """
+    else
+      raise "unimplemented link type #{inspect(type)} in #{source}"
     end
   end
 

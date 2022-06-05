@@ -16,6 +16,11 @@ defmodule AshHqWeb.Router do
   end
 
   scope "/", AshHqWeb do
+    pipe_through :api
+    post "/import/:library", ImportController, :import
+  end
+
+  scope "/", AshHqWeb do
     pipe_through :browser
 
     live_session :main, root_layout: {AshHqWeb.LayoutView, "root.html"} do
