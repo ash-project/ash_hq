@@ -65,8 +65,8 @@ defmodule AshHq.Docs.Importer do
         file = Path.expand("./#{Ash.UUID.generate()}.json")
 
         result =
-          with_retry(
-            fn ->
+          try do
+            with_retry(fn ->
               {_, 0} =
                 System.cmd("elixir", [
                   Path.join(:code.priv_dir(:ash_hq), "scripts/build_dsl_docs.exs"),
@@ -77,13 +77,11 @@ defmodule AshHq.Docs.Importer do
                 ])
 
               output = File.read!(file)
-              result = :erlang.binary_to_term(Base.decode64!(String.trim(output)))
-              result
-            end,
-            fn ->
-              File.rm!(file)
-            end
-          )
+              :erlang.binary_to_term(Base.decode64!(String.trim(output)))
+            end)
+          after
+            File.rm_rf!(file)
+          end
 
         if result do
           AshHq.Repo.transaction(fn ->
@@ -115,16 +113,14 @@ defmodule AshHq.Docs.Importer do
     end
   end
 
-  defp with_retry(func, afterwards, retries \\ 3) do
+  defp with_retry(func, retries \\ 3) do
     func.()
   rescue
     e ->
       if retries == 1 do
-        afterwards.()
-
         reraise e, __STACKTRACE__
       else
-        with_retry(func, afterwards, retries - 1)
+        with_retry(func, retries - 1)
       end
   end
 

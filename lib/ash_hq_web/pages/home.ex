@@ -2,7 +2,6 @@ defmodule AshHqWeb.Pages.Home do
   use Surface.LiveComponent
 
   alias AshHqWeb.Components.{CalloutText, CodeExample, SearchBar}
-  alias Surface.Components.LiveRedirect
 
   prop libraries, :list, default: []
 

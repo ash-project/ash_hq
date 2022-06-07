@@ -98,7 +98,7 @@ defmodule AshHqWeb.Pages.Docs do
           phx-hook="Docs"
         >
           <div id="module-docs" class="w-full nav-anchor text-black dark:text-white">
-            {raw(render_links(assigns, @docs))}
+            {raw(render_replacements(assigns, @docs))}
           </div>
           {#if @module}
             <h1>Callbacks</h1>
@@ -322,8 +322,61 @@ defmodule AshHqWeb.Pages.Docs do
     end
   end
 
-  defp render_links(assigns, docs) do
-    String.replace(docs, ~r/{{link:.*}}/, fn text ->
+  defp render_replacements(assigns, docs) do
+    docs
+    |> render_links(assigns)
+    |> render_mix_deps(assigns)
+  end
+
+  defp render_mix_deps(docs, assigns) do
+    String.replace(docs, ~r/^(?!\<\/code\>){{mix_dep:.*}}/, fn text ->
+      try do
+        "{{mix_dep:" <> library = String.trim_trailing(text, "}}")
+        render_mix_dep(assigns, library, text)
+      rescue
+        e ->
+          Logger.error("Invalid link #{inspect(e)}")
+          text
+      end
+    end)
+  end
+
+  defp render_mix_dep(assigns, library, source) do
+    library =
+      Enum.find(assigns[:libraries], &(&1.name == library)) ||
+        raise "No such library in link: #{source}"
+
+    selected_versions = assigns[:selected_versions]
+
+    version =
+      if selected_versions[library.id] == "latest" do
+        Enum.find(library.versions, &String.contains?(&1.version, ".")) ||
+          Enum.at(library.versions, 0)
+      else
+        case Enum.find(library.versions, &(&1.id == selected_versions[library.id])) do
+          nil ->
+            nil
+
+          version ->
+            version
+        end
+      end
+
+    if String.contains?(version, ".") do
+      case String.split(version, ".") do
+        [major, minor, "0"] ->
+          ~s({:#{library.name}, "~> #{major}.#{minor}"})
+
+        _ ->
+          ~s({:#{library.name}, "~> #{version}"})
+      end
+    else
+      ~s({:#{library.name}, github: "ash-project/#{library.name}", branch: "#{version}"})
+    end
+  end
+
+  defp render_links(docs, assigns) do
+    String.replace(docs, ~r/^(?!\<\/code\>){{link:.*}}/, fn text ->
       try do
         "{{link:" <> rest = String.trim_trailing(text, "}}")
         [library, type, item] = String.split(rest, ":")
@@ -345,7 +398,8 @@ defmodule AshHqWeb.Pages.Docs do
 
     version =
       if selected_versions[library.id] == "latest" do
-        "latest"
+        Enum.find(library.versions, &String.contains?(&1.version, ".")) ||
+          Enum.at(library.versions, 0)
       else
         case Enum.find(library.versions, &(&1.id == selected_versions[library.id])) do
           nil ->

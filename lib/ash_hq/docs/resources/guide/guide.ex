@@ -61,7 +61,7 @@ defmodule AshHq.Docs.Guide do
     end
 
     attribute :category, :string do
-      default "Guides"
+      default "Topics"
       allow_nil? false
     end
 

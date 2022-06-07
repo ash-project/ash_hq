@@ -55,13 +55,13 @@ defmodule AshHqWeb.AppViewLive do
           {/if}
           <div class="flex flex-row align-middle items-center space-x-2">
             <a
-              href="/docs/guides/ash/main/getting-started"
+              href="/docs/guides/ash/main/tutorials/quick-start.md"
               target="_blank"
               class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600"
             >Quick Start</a>
             <div>|</div>
             <a
-              href="/docs/guides/ash/main/overview"
+              href="/docs/guides/ash/main/topics/overview.md"
               target="_blank"
               class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600"
             >Docs</a>
