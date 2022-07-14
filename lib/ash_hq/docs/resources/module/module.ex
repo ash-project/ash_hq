@@ -43,6 +43,8 @@ defmodule AshHq.Docs.Module do
       default 0
     end
 
+    attribute :file, :string
+
     attribute :doc, :string do
       allow_nil? false
       constraints trim?: false, allow_empty?: true

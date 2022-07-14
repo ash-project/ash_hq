@@ -12,8 +12,14 @@ defmodule AshHqWeb.Components.CodeExample do
 
   def render(assigns) do
     ~F"""
-    <div class={"rounded-xl bg-silver-phoenix dark:bg-primary-black border border-gray-400 dark:border-gray-700 text-sm border-b", @class}>
-      <div class={"flex flex-row justify-between py-2 pl-2 pr-8", "border-gray-400 dark:border-gray-700 border-b": !@collapsed}>
+    <div class={
+      "rounded-xl bg-silver-phoenix dark:bg-primary-black border border-gray-400 dark:border-gray-700 text-sm border-b",
+      @class
+    }>
+      <div class={
+        "flex flex-row justify-between py-2 pl-2 pr-8",
+        "border-gray-400 dark:border-gray-700 border-b": !@collapsed
+      }>
         <div class="flex flex-row justify-start space-x-1">
           <div class="w-3 h-3 bg-gray-600 rounded-full" />
           <div class="w-3 h-3 bg-gray-600 rounded-full" />

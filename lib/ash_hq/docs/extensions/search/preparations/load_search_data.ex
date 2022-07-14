@@ -1,4 +1,4 @@
-defmodule AshHq.Docs.Preparations.LoadSearchData do
+defmodule AshHq.Extensions.Search.Preparations.LoadSearchData do
   use Ash.Resource.Preparation
 
   def prepare(query, _, _) do

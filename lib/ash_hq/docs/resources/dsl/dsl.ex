@@ -70,6 +70,14 @@ defmodule AshHq.Docs.Dsl do
       writable? false
     end
 
+    attribute :imports, {:array, :string} do
+      default []
+    end
+
+    attribute :links, :map do
+      default %{}
+    end
+
     attribute :examples, {:array, :string}
     attribute :args, {:array, :string}
     attribute :path, {:array, :string}

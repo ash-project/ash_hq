@@ -48,6 +48,8 @@ defmodule Utils do
         name: section.name,
         options: schema(section.schema, path ++ [section.name]),
         doc: section.describe || "No documentation",
+        links: Map.new(section.links),
+        imports: Enum.map(section.imports, &inspect/1),
         type: :section,
         order: index,
         examples: examples(section.examples),
@@ -68,11 +70,29 @@ defmodule Utils do
         examples: examples(entity.examples),
         order: index,
         doc: entity.describe || "No documentation",
+        imports: [],
+        links: Map.new(entity.links),
         args: entity.args,
         type: :entity,
         path: path,
-        options: schema(entity.schema, path ++ [entity.name]),
+        options: add_argument_indices(schema(entity.schema, path ++ [entity.name]), entity.args),
       }] ++ build_entities(List.flatten(Keyword.values(entity.entities)), path ++ [entity.name])
+    end)
+  end
+
+  defp add_argument_indices(values, []) do
+    values
+  end
+
+  defp add_argument_indices(values, arguments) do
+    Enum.map(values, fn value ->
+      case Enum.find_index(arguments, &(&1 == value.name)) do
+        nil ->
+          value
+
+        arg_index ->
+          Map.put(value, :argument_index, arg_index)
+      end
     end)
   end
 
@@ -108,10 +128,12 @@ defmodule Utils do
     _ -> "No Documentation"
   end
 
-  def build_function({{type, name, arity}, _, heads, %{"en" => docs}, _}, order) when not(is_nil(type)) and not(is_nil(name)) and not(is_nil(arity)) do
+  def build_function({{type, name, arity}, line, heads, %{"en" => docs}, _}, file, order) when not(is_nil(type)) and not(is_nil(name)) and not(is_nil(arity)) do
     [%{
       name: to_string(name),
       type: type,
+      file: file,
+      line: line,
       arity: arity,
       order: order,
       heads: heads,
@@ -119,24 +141,59 @@ defmodule Utils do
     }]
   end
 
-  def build_function(_, _), do: []
+  def build_function(_, _, _), do: []
 
   def build_module(module, category, category_index, order) do
     {:docs_v1, _, :elixir, _, %{
       "en" => module_doc
     }, _, defs} = Code.fetch_docs(module)
 
+    module_info =
+      try do
+        module.module_info(:compile)
+      rescue
+        _ ->
+          nil
+      end
+
+    file = file(module_info[:source])
+
     %{
       name: inspect(module),
       doc: module_doc,
+      file: file,
       order: order,
       category: category,
       category_index: category_index,
       functions: defs |> Enum.with_index() |> Enum.flat_map(fn {definition, i} ->
-        build_function(definition, i)
+        build_function(definition, file, i)
       end)
     }
   end
+
+  defp file(nil), do: nil
+  defp file(path) do
+    this_path = Path.split(__ENV__.file)
+    compile_path = Path.split(path)
+
+    this_path
+    |> remove_shared_root(compile_path)
+    |> Enum.drop_while(&(&1 != "deps"))
+    |> Enum.drop(2)
+    |> case do
+      [] ->
+        nil
+
+      other ->
+        Path.join(other)
+    end
+  end
+
+  defp remove_shared_root([left | left_rest], [left | right_rest]) do
+    remove_shared_root(left_rest, right_rest)
+  end
+
+  defp remove_shared_root(_, remaining), do: remaining
 
   defp type({:behaviour, mod}), do: Module.split(mod) |> List.last()
   defp type({:ash_behaviour, mod}), do: Module.split(mod) |> List.last()
@@ -164,6 +221,9 @@ defmodule Utils do
   defp type({:in, choices}), do: Enum.map_join(choices, " | ", &inspect/1)
   defp type({:or, subtypes}), do: Enum.map_join(subtypes, " | ", &type/1)
   defp type({:list, subtype}), do: type(subtype) <> "[]"
+  defp type({:mfa_or_fun, arity}), do: "MFA | function/#{arity}"
+  defp type(:literal), do: "any literal"
+  defp type({:tagged_tuple, tag, type}), do: "{:#{tag}, #{type(type)}}"
 
   def doc_index?(module) do
     Ash.Helpers.implements_behaviour?(module, Ash.DocIndex) && module.for_library() == Application.get_env(:dsl, :name)
@@ -217,6 +277,7 @@ case Enum.at(dsls, 0) do
       |> Enum.with_index()
       |> Enum.reduce(acc, fn {extension, i}, acc ->
         acc
+        |> Map.put(:default_guide, Utils.try_apply(fn -> dsl.default_guide() end))
         |> Map.put_new(:extensions, [])
         |> Map.update!(:extensions, fn extensions ->
           [Utils.build(extension, i) | extensions]

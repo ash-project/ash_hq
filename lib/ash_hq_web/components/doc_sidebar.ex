@@ -18,6 +18,7 @@ defmodule AshHqWeb.Components.DocSidebar do
   prop collapse_sidebar, :event, required: true
   prop expand_sidebar, :event, required: true
 
+  @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~F"""
     <aside id={@id} class={"grid w-64 h-full overflow-y-scroll pb-36", @class} aria-label="Sidebar">
@@ -87,20 +88,20 @@ defmodule AshHqWeb.Components.DocSidebar do
                     <div class="ml-4">
                       <span class="text-sm text-gray-900 dark:text-gray-500">{category}</span>
                     </div>
-                      {#for module <- modules}
-                        <li class="ml-4">
-                          <LivePatch
-                            to={Routes.doc_link(module, @selected_versions)}
-                            class={
-                              "flex items-center pt-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
-                              "dark:bg-gray-600": @module && @module.id == module.id
-                            }
-                          >
-                            <span class="ml-3 mr-2">{module.name}</span>
-                            <Heroicons.Outline.CodeIcon class="h-4 w-4" />
-                          </LivePatch>
-                        </li>
-                      {/for}
+                    {#for module <- modules}
+                      <li class="ml-4">
+                        <LivePatch
+                          to={Routes.doc_link(module, @selected_versions)}
+                          class={
+                            "flex items-center pt-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
+                            "dark:bg-gray-600": @module && @module.id == module.id
+                          }
+                        >
+                          <span class="ml-3 mr-2">{module.name}</span>
+                          <Heroicons.Outline.CodeIcon class="h-4 w-4" />
+                        </LivePatch>
+                      </li>
+                    {/for}
                   {/for}
                 {/if}
               {/if}
@@ -216,16 +217,16 @@ defmodule AshHqWeb.Components.DocSidebar do
   end
 
   defp selected_version_name(library, selected_versions) do
-    if selected_versions[library.id] == "latest" do
+    if (selected_versions[library.id] || "latest") == "latest" do
       "latest"
     else
-      case Enum.find(library.versions, &(&1.id == selected_versions[library.id])) do
-        nil ->
-          nil
+      Enum.find_value(library.versions, fn version ->
+        version.version
 
-        version ->
+        if version.id == selected_versions[library.id] do
           version.version
-      end
+        end
+      end)
     end
   end
 

@@ -8,6 +8,9 @@ defmodule AshHqWeb.Pages.Home do
   def render(assigns) do
     ~F"""
     <div>
+      <div class="w-full bg-orange-600 text-center py-2 text-lg font-semibold">
+        This site is still under construction and is live for preview purposes only.
+      </div>
       <div class="my-2 dark:bg-primary-black dark:bg-dark-grid bg-light-grid px-12 flex flex-col items-center pt-36">
         <div class="text-5xl font-bold max-w-5xl mx-auto mt-2 text-center">
           Build <CalloutText>powerful</CalloutText> and <CalloutText>extensible</CalloutText> Elixir applications with a next generation tool-chain.

@@ -22,46 +22,89 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
   end
 
   defp add_match_rank_calculation(dsl_state, config) do
-    Transformer.add_entity(
-      dsl_state,
-      [:calculations],
-      Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
-        name: :match_rank,
-        type: :float,
-        arguments: [query_argument()],
-        calculation:
-          Ash.Query.expr(
-            fragment(
-              "ts_rank(setweight(to_tsvector(?), 'A') || setweight(to_tsvector(?), 'D'), plainto_tsquery(?))",
-              ^ref(config.name_attribute),
-              ^ref(config.doc_attribute),
-              ^arg(:query)
-            )
-          )
-      )
-    )
-  end
-
-  defp add_matches_calculation(dsl_state, config) do
-    Transformer.add_entity(
-      dsl_state,
-      [:calculations],
-      Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
-        name: :matches,
-        type: :boolean,
-        arguments: [query_argument()],
-        calculation:
-          Ash.Query.expr(
-            name_matches(query: arg(:query), similarity: 0.8) or
+    if config.doc_attribute do
+      Transformer.add_entity(
+        dsl_state,
+        [:calculations],
+        Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
+          name: :match_rank,
+          type: :float,
+          arguments: [query_argument()],
+          calculation:
+            Ash.Query.expr(
               fragment(
-                "to_tsvector(? || ?) @@ plainto_tsquery(?)",
+                "ts_rank(setweight(to_tsvector(?), 'A') || setweight(to_tsvector(?), 'D'), plainto_tsquery(?))",
                 ^ref(config.name_attribute),
                 ^ref(config.doc_attribute),
                 ^arg(:query)
               )
-          )
+            )
+        )
       )
-    )
+    else
+      Transformer.add_entity(
+        dsl_state,
+        [:calculations],
+        Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
+          name: :match_rank,
+          type: :float,
+          arguments: [query_argument()],
+          calculation:
+            Ash.Query.expr(
+              fragment(
+                "ts_rank(to_tsvector(?), plainto_tsquery(?))",
+                ^ref(config.name_attribute),
+                ^ref(config.doc_attribute),
+                ^arg(:query)
+              )
+            )
+        )
+      )
+    end
+  end
+
+  defp add_matches_calculation(dsl_state, config) do
+    if config.doc_attribute do
+      Transformer.add_entity(
+        dsl_state,
+        [:calculations],
+        Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
+          name: :matches,
+          type: :boolean,
+          arguments: [query_argument()],
+          calculation:
+            Ash.Query.expr(
+              name_matches(query: arg(:query), similarity: 0.8) or
+                fragment(
+                  "to_tsvector(? || ?) @@ plainto_tsquery(?)",
+                  ^ref(config.name_attribute),
+                  ^ref(config.doc_attribute),
+                  ^arg(:query)
+                )
+            )
+        )
+      )
+    else
+      Transformer.add_entity(
+        dsl_state,
+        [:calculations],
+        Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
+          name: :matches,
+          type: :boolean,
+          arguments: [query_argument()],
+          calculation:
+            Ash.Query.expr(
+              name_matches(query: arg(:query), similarity: 0.8) or
+                fragment(
+                  "to_tsvector(?) @@ plainto_tsquery(?)",
+                  ^ref(config.name_attribute),
+                  ^ref(config.doc_attribute),
+                  ^arg(:query)
+                )
+            )
+        )
+      )
+    end
   end
 
   defp add_name_matches_calculation(dsl_state, config) do
@@ -82,23 +125,36 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
   end
 
   defp add_search_headline_calculation(dsl_state, config) do
-    Transformer.add_entity(
-      dsl_state,
-      [:calculations],
-      Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
-        name: :search_headline,
-        type: :string,
-        arguments: [query_argument()],
-        calculation:
-          Ash.Query.expr(
-            fragment(
-              "ts_headline('english', ?, plainto_tsquery('english', ?), 'MaxFragments=2,StartSel=\"<span class=\"\"search-hit\"\">\", StopSel=</span>')",
-              ^ref(config.doc_attribute),
-              ^arg(:query)
+    if config.doc_attribute do
+      Transformer.add_entity(
+        dsl_state,
+        [:calculations],
+        Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
+          name: :search_headline,
+          type: :string,
+          arguments: [query_argument()],
+          calculation:
+            Ash.Query.expr(
+              fragment(
+                "ts_headline('english', ?, plainto_tsquery('english', ?), 'MaxFragments=2,StartSel=\"<span class=\"\"search-hit\"\">\", StopSel=</span>')",
+                ^ref(config.doc_attribute),
+                ^arg(:query)
+              )
             )
-          )
+        )
       )
-    )
+    else
+      Transformer.add_entity(
+        dsl_state,
+        [:calculations],
+        Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
+          name: :search_headline,
+          type: :string,
+          arguments: [query_argument()],
+          calculation: Ash.Query.expr("")
+        )
+      )
+    end
   end
 
   defp query_argument() do
@@ -173,7 +229,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
   defp search_preparations() do
     [
       Transformer.build_entity!(Ash.Resource.Dsl, [:actions, :read], :prepare,
-        preparation: AshHq.Docs.Preparations.LoadSearchData
+        preparation: AshHq.Extensions.Search.Preparations.LoadSearchData
       ),
       Transformer.build_entity!(Ash.Resource.Dsl, [:actions, :read], :prepare,
         preparation: Ash.Resource.Preparation.Builtins.build(limit: 10)

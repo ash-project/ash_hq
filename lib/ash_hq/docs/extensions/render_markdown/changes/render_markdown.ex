@@ -5,9 +5,10 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
     Ash.Changeset.before_action(changeset, fn changeset ->
       if Ash.Changeset.changing_attribute?(changeset, opts[:source]) do
         source = Ash.Changeset.get_attribute(changeset, opts[:source])
+        text = remove_ash_hq_hidden_content(source)
 
         case AshHq.Docs.Extensions.RenderMarkdown.as_html(
-               source,
+               text,
                AshHq.Docs.Extensions.RenderMarkdown.header_ids?(changeset.resource)
              ) do
           {:error, _, error_messages} ->
@@ -28,5 +29,23 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
         changeset
       end
     end)
+  end
+
+  defp remove_ash_hq_hidden_content(nil), do: nil
+
+  defp remove_ash_hq_hidden_content(string) do
+    string
+    |> String.split("<!--- ash-hq-hide-start -->")
+    |> case do
+      [string] ->
+        string
+
+      strings ->
+        Enum.map_join(strings, "", fn string ->
+          string
+          |> String.split("<!--- ash-hq-hide-stop -->")
+          |> Enum.drop(1)
+        end)
+    end
   end
 end

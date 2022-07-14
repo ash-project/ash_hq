@@ -127,6 +127,12 @@ defmodule AshHq.Docs.Search.Steps.BuildResults do
   end
 
   defp search_length(%resource{} = record) do
-    String.length(Map.get(record, AshHq.Docs.Extensions.Search.doc_attribute(resource)))
+    case AshHq.Docs.Extensions.Search.doc_attribute(resource) do
+      nil ->
+        0
+
+      doc_attribute ->
+        String.length(Map.get(record, doc_attribute))
+    end
   end
 end

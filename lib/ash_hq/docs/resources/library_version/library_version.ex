@@ -3,10 +3,6 @@ defmodule AshHq.Docs.LibraryVersion do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  render_markdown do
-    render_attributes doc: :doc_html
-  end
-
   search do
     name_attribute :version
     library_version_attribute :id
@@ -105,16 +101,7 @@ defmodule AshHq.Docs.LibraryVersion do
       allow_nil? false
     end
 
-    attribute :doc, :string do
-      allow_nil? false
-      constraints trim?: false, allow_empty?: true
-      default ""
-    end
-
-    attribute :doc_html, :string do
-      constraints trim?: false, allow_empty?: true
-      writable? false
-    end
+    attribute :default_guide, :string
   end
 
   calculations do

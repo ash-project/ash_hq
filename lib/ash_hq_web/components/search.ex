@@ -58,7 +58,12 @@ defmodule AshHqWeb.Components.Search do
                   <div>Search for:</div>
                   {#for type <- AshHq.Docs.Extensions.Search.Types.types()}
                     <div class="flex flex-row items-center">
-                      <Checkbox class="mr-4" id={"#{type}-selected"} value={type in @selected_types} name={"types[#{type}]"} />
+                      <Checkbox
+                        class="mr-4"
+                        id={"#{type}-selected"}
+                        value={type in @selected_types}
+                        name={"types[#{type}]"}
+                      />
                       <Label field={type}>
                         {type}
                       </Label>
@@ -68,23 +73,23 @@ defmodule AshHqWeb.Components.Search do
               </Form>
               <Form for={:versions} change={@change_versions}>
                 <div class="flex flex-col space-y-2">
-                Project versions:
-                {#for library <- @libraries}
-                  <div class="flex flex-col">
-                    <Label field={library.id}>
-                      {library.display_name}
-                    </Label>
-                    <div class="pb-2">
-                      <Select
-                        id={"versions-select-#{library.id}"}
-                        class="text-black form-select rounded-md pt-1 py-2 w-3/4 border dark:border-0 bg-gray-100 dark:bg-white"
-                        name={"versions[#{library.id}]"}
-                        selected={Map.get(@selected_versions, library.id)}
-                        options={[{"latest", "latest"}] ++ Enum.map(library.versions, &{&1.version, &1.id})}
-                      />
+                  Project versions:
+                  {#for library <- @libraries}
+                    <div class="flex flex-col">
+                      <Label field={library.id}>
+                        {library.display_name}
+                      </Label>
+                      <div class="pb-2">
+                        <Select
+                          id={"versions-select-#{library.id}"}
+                          class="text-black form-select rounded-md pt-1 py-2 w-3/4 border dark:border-0 bg-gray-100 dark:bg-white"
+                          name={"versions[#{library.id}]"}
+                          selected={Map.get(@selected_versions, library.id)}
+                          options={[{"latest", "latest"}] ++ Enum.map(library.versions, &{&1.version, &1.id})}
+                        />
+                      </div>
                     </div>
-                  </div>
-                {/for}
+                  {/for}
                 </div>
               </Form>
             </div>

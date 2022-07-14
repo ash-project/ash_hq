@@ -35,6 +35,9 @@ defmodule AshHq.Docs.Function do
       allow_nil? false
     end
 
+    attribute :file, :string
+    attribute :line, :integer
+
     attribute :arity, :integer do
       allow_nil? false
     end

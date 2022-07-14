@@ -93,6 +93,8 @@ defmodule AshHqWeb.Routes do
     end
   end
 
+  # def sanitize_name(nil), do: ""
+
   def sanitize_name(name) do
     String.downcase(String.replace(name, ~r/[^A-Za-z0-9_]/, "-"))
   end

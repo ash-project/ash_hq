@@ -1,6 +1,6 @@
 defmodule AshHq.Docs.Extensions.Search.Types do
-  @search_types AshHq.Docs
-                |> Ash.Api.resources()
+  @search_types AshHq.Docs.Registry
+                |> Ash.Registry.entries()
                 |> Enum.filter(
                   &(AshHq.Docs.Extensions.Search in Ash.Resource.Info.extensions(&1))
                 )

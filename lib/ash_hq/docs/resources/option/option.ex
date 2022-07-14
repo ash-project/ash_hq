@@ -59,6 +59,8 @@ defmodule AshHq.Docs.Option do
       default false
     end
 
+    attribute :argument_index, :integer
+
     attribute :default, :string
     attribute :path, {:array, :string}
     attribute :order, :integer, allow_nil?: false
