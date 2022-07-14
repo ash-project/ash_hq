@@ -8,6 +8,8 @@ defmodule AshHq.Docs.Module do
   end
 
   search do
+    doc_attribute :doc
+
     load_for_search [
       :version_name,
       :library_name,

@@ -104,6 +104,7 @@ defmodule AshHqWeb.Pages.Docs do
             {raw(render_replacements(assigns, @docs))}
             {#if @dsl}
               {#for {category, links} <- @dsl.links || %{}}
+                {String.capitalize(category)}
                 {#for link <- links}
                   {render_links("{{link:#{link}}}", assigns)}
                 {/for}

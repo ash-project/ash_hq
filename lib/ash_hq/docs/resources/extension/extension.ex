@@ -8,6 +8,7 @@ defmodule AshHq.Docs.Extension do
   end
 
   search do
+    doc_attribute :doc
     load_for_search library_version: [:library_display_name, :library_name]
   end
 

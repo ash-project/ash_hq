@@ -54,7 +54,6 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
               fragment(
                 "ts_rank(to_tsvector(?), plainto_tsquery(?))",
                 ^ref(config.name_attribute),
-                ^ref(config.doc_attribute),
                 ^arg(:query)
               )
             )
@@ -98,7 +97,6 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
                 fragment(
                   "to_tsvector(?) @@ plainto_tsquery(?)",
                   ^ref(config.name_attribute),
-                  ^ref(config.doc_attribute),
                   ^arg(:query)
                 )
             )
@@ -230,9 +228,6 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
     [
       Transformer.build_entity!(Ash.Resource.Dsl, [:actions, :read], :prepare,
         preparation: AshHq.Extensions.Search.Preparations.LoadSearchData
-      ),
-      Transformer.build_entity!(Ash.Resource.Dsl, [:actions, :read], :prepare,
-        preparation: Ash.Resource.Preparation.Builtins.build(limit: 10)
       )
     ]
   end

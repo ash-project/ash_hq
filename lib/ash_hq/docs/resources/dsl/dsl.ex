@@ -8,6 +8,8 @@ defmodule AshHq.Docs.Dsl do
   end
 
   search do
+    doc_attribute :doc
+
     load_for_search [
       :extension_order,
       :extension_type,

@@ -7,19 +7,19 @@ defmodule AshHqWeb.Components.Search do
   alias Surface.Components.{Form, LiveRedirect}
   alias Surface.Components.Form.{Checkbox, Label, Select}
 
-  prop open, :boolean, default: false
-  prop close, :event, required: true
-  prop libraries, :list, required: true
-  prop selected_versions, :map, required: true
-  prop change_versions, :event, required: true
-  prop selected_types, :list, required: true
-  prop change_types, :event, required: true
-  prop uri, :string, required: true
+  prop(open, :boolean, default: false)
+  prop(close, :event, required: true)
+  prop(libraries, :list, required: true)
+  prop(selected_versions, :map, required: true)
+  prop(change_versions, :event, required: true)
+  prop(selected_types, :list, required: true)
+  prop(change_types, :event, required: true)
+  prop(uri, :string, required: true)
 
-  data versions, :map, default: %{}
-  data search, :string, default: ""
-  data results, :map, default: %{}
-  data selected_item, :string
+  data(versions, :map, default: %{})
+  data(search, :string, default: "")
+  data(results, :map, default: %{})
+  data(selected_item, :string)
 
   def render(assigns) do
     ~F"""
@@ -142,17 +142,24 @@ defmodule AshHqWeb.Components.Search do
       {#for item <- results.items}
         <LiveRedirect to={Routes.doc_link(item, @selected_versions)} opts={id: item.id}>
           <div class={
-            "rounded-lg mb-4 py-4 px-2 hover:bg-gray-400 dark:hover:bg-gray-600",
+            "rounded-lg mb-4 py-2 px-2 hover:bg-gray-400 dark:hover:bg-gray-600",
             "bg-gray-400 dark:bg-gray-600": @selected_item.id == item.id,
             "bg-gray-200 dark:bg-gray-800": @selected_item.id != item.id
           }>
-            {#if item.__struct__ != AshHq.Docs.LibraryVersion &&
-                item.name != List.last(Map.get(results, :path, []))}
-              {item.name}
-            {/if}
-            {#if item.__struct__ == AshHq.Docs.LibraryVersion}
-              {item.version}
-            {/if}
+            <div class="flex justify-between pb-2">
+              <div>
+                {#if item.__struct__ != AshHq.Docs.LibraryVersion &&
+                    item.name != List.last(Map.get(results, :path, []))}
+                  {item.name}
+                {/if}
+                {#if item.__struct__ == AshHq.Docs.LibraryVersion}
+                  {item.version}
+                {/if}
+              </div>
+              <div>
+                {item_type(item)}
+              </div>
+            </div>
             <div class="text-gray-700 dark:text-gray-400">
               {raw(item.search_headline)}
             </div>
@@ -215,8 +222,13 @@ defmodule AshHqWeb.Components.Search do
     end
   end
 
+  defp item_type(%resource{}) do
+    AshHq.Docs.Extensions.Search.item_type(resource)
+  end
+
   defp search(socket) do
-    if socket.assigns[:search] in [nil, ""] || socket.assigns[:selected_versions] in [nil, %{}] do
+    if socket.assigns[:search] in [nil, ""] || socket.assigns[:selected_versions] in [nil, %{}] ||
+         socket.assigns[:selected_types] == [] do
       assign(socket, results: %{}, item_list: [])
     else
       versions =
@@ -243,7 +255,8 @@ defmodule AshHqWeb.Components.Search do
       %{results: results, item_list: item_list} =
         AshHq.Docs.Search.run!(
           socket.assigns.search,
-          versions
+          versions,
+          %{types: socket.assigns[:selected_types]}
         )
 
       selected_item = Enum.at(item_list, 0)

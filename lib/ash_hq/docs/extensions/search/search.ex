@@ -9,6 +9,11 @@ defmodule AshHq.Docs.Extensions.Search do
         default: "DSL",
         doc: "The type of item. Used to narrow down search results, displayed in the UI."
       ],
+      item_type: [
+        type: :string,
+        doc:
+          "A name for what kind of thing this is, shows up next to it in search results. i.e Module, or Guide. Defaults to the last part of the module name."
+      ],
       name_attribute: [
         type: :atom,
         default: :name,
@@ -16,7 +21,6 @@ defmodule AshHq.Docs.Extensions.Search do
       ],
       doc_attribute: [
         type: :atom,
-        default: :doc,
         doc: "The text field to be used in the search"
       ],
       library_version_attribute: [
@@ -39,12 +43,17 @@ defmodule AshHq.Docs.Extensions.Search do
     Extension.get_opt(resource, [:search], :name_attribute, :name)
   end
 
+  def item_type(resource) do
+    Extension.get_opt(resource, [:search], :item_type, nil) ||
+      resource |> Module.split() |> List.last() |> to_string()
+  end
+
   def type(resource) do
     Extension.get_opt(resource, [:search], :type, "DSL")
   end
 
   def doc_attribute(resource) do
-    Extension.get_opt(resource, [:search], :doc_attribute, :name)
+    Extension.get_opt(resource, [:search], :doc_attribute, nil)
   end
 
   def library_version_attribute(resource) do

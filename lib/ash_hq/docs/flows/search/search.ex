@@ -2,71 +2,87 @@ defmodule AshHq.Docs.Search do
   use Ash.Flow
 
   flow do
-    api AshHq.Docs
+    api(AshHq.Docs)
 
     argument :query, :string do
-      allow_nil? false
+      allow_nil?(false)
     end
 
     argument :library_versions, {:array, :uuid} do
-      allow_nil? false
+      allow_nil?(false)
     end
 
-    returns :build_results
+    argument(:types, {:array, :string})
+
+    returns(:build_results)
   end
 
   steps do
-    read :options, AshHq.Docs.Option, :search do
-      input %{
+    custom :options, AshHq.Docs.Search.Steps.SearchResource do
+      input(%{
+        query: arg(:query),
         library_versions: arg(:library_versions),
-        query: arg(:query)
-      }
+        types: arg(:types),
+        resource: AshHq.Docs.Option
+      })
     end
 
-    read :dsls, AshHq.Docs.Dsl, :search do
-      input %{
+    custom :dsls, AshHq.Docs.Search.Steps.SearchResource do
+      input(%{
+        query: arg(:query),
         library_versions: arg(:library_versions),
-        query: arg(:query)
-      }
+        types: arg(:types),
+        resource: AshHq.Docs.Dsl
+      })
     end
 
-    read :guides, AshHq.Docs.Guide, :search do
-      input %{
+    custom :guides, AshHq.Docs.Search.Steps.SearchResource do
+      input(%{
+        query: arg(:query),
         library_versions: arg(:library_versions),
-        query: arg(:query)
-      }
+        types: arg(:types),
+        resource: AshHq.Docs.Guide
+      })
     end
 
-    read :library_versions, AshHq.Docs.LibraryVersion, :search do
-      input %{
+    custom :library_versions, AshHq.Docs.Search.Steps.SearchResource do
+      input(%{
+        query: arg(:query),
         library_versions: arg(:library_versions),
-        query: arg(:query)
-      }
+        types: arg(:types),
+        resource: AshHq.Docs.LibraryVersion
+      })
     end
 
-    read :extensions, AshHq.Docs.Extension, :search do
-      input %{
+    custom :extensions, AshHq.Docs.Search.Steps.SearchResource do
+      input(%{
+        query: arg(:query),
         library_versions: arg(:library_versions),
-        query: arg(:query)
-      }
+        types: arg(:types),
+        resource: AshHq.Docs.Extension
+      })
     end
 
-    read :functions, AshHq.Docs.Function, :search do
-      input %{
+    custom :functions, AshHq.Docs.Search.Steps.SearchResource do
+      input(%{
+        query: arg(:query),
         library_versions: arg(:library_versions),
-        query: arg(:query)
-      }
+        types: arg(:types),
+        resource: AshHq.Docs.Function
+      })
     end
 
-    read :modules, AshHq.Docs.Module, :search do
-      input %{
+    custom :modules, AshHq.Docs.Search.Steps.SearchResource do
+      input(%{
+        query: arg(:query),
         library_versions: arg(:library_versions),
-        query: arg(:query)
-      }
+        types: arg(:types),
+        resource: AshHq.Docs.Module
+      })
     end
 
     custom :build_results, AshHq.Docs.Search.Steps.BuildResults do
-      input %{
+      input(%{
         dsls: result(:dsls),
         options: result(:options),
         guides: result(:guides),
@@ -74,7 +90,7 @@ defmodule AshHq.Docs.Search do
         extensions: result(:extensions),
         functions: result(:functions),
         modules: result(:modules)
-      }
+      })
     end
   end
 end
