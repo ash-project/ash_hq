@@ -6,6 +6,7 @@ defmodule AshHq.Docs.Search do
 
     argument :query, :string do
       allow_nil?(false)
+      constraints trim?: false, allow_empty?: true
     end
 
     argument :library_versions, {:array, :uuid} do

@@ -7,6 +7,13 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
         source = Ash.Changeset.get_attribute(changeset, opts[:source])
         text = remove_ash_hq_hidden_content(source)
 
+        changeset =
+          if text != source do
+            Ash.Changeset.force_change_attribute(changeset, opts[:source], text)
+          else
+            changeset
+          end
+
         case AshHq.Docs.Extensions.RenderMarkdown.as_html(
                text,
                AshHq.Docs.Extensions.RenderMarkdown.header_ids?(changeset.resource)
