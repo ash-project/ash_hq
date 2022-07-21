@@ -7,7 +7,7 @@ defmodule AshHq.MixProject do
       version: "0.1.0",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:gettext] ++ Mix.compilers(),
+      compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -33,11 +33,11 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:ash, "~> 1.52.0-rc.18"},
-      # {:ash, github: "ash-project/ash", override: true},
+      # {:ash, "~> 1.52.0-rc.18"},
+      {:ash, github: "ash-project/ash", override: true},
       # {:ash, path: "../ash", override: true},
-      {:ash_postgres, "~> 0.42.0-rc.5"},
-      # {:ash_postgres, github: "ash-project/ash_postgres"},
+      # {:ash_postgres, "~> 0.42.0-rc.5"},
+      {:ash_postgres, github: "ash-project/ash_postgres"},
       # {:ash_postgres, path: "../ash_postgres"},
       {:ash_phoenix, github: "ash-project/ash_phoenix"},
       {:earmark, "~> 1.5.0-pre1", override: true},

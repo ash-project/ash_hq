@@ -3,7 +3,7 @@ defmodule AshHq.Docs.Search.Steps.SearchResource do
 
   def run(input, _opts, _context) do
     resource = input[:resource]
-    types = input[:types] |> IO.inspect()
+    types = input[:types]
     library_versions = input[:library_versions]
     query = input[:query]
 

@@ -6,6 +6,7 @@ config :ash_hq, AshHq.Repo,
   password: "postgres",
   hostname: "localhost",
   database: "ash_hq_dev",
+  port: 5432,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
