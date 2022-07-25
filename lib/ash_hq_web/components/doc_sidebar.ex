@@ -217,7 +217,7 @@ defmodule AshHqWeb.Components.DocSidebar do
   end
 
   defp selected_version_name(library, selected_versions) do
-    if (selected_versions[library.id] || "latest") == "latest" do
+    if selected_versions[library.id] in ["latest", nil, ""] do
       "latest"
     else
       Enum.find_value(library.versions, fn version ->
@@ -226,7 +226,7 @@ defmodule AshHqWeb.Components.DocSidebar do
         if version.id == selected_versions[library.id] do
           version.version
         end
-      end)
+      end) || "latest"
     end
   end
 

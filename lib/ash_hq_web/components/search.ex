@@ -44,6 +44,7 @@ defmodule AshHqWeb.Components.Search do
                   id="search-input"
                   phx-debounce="150"
                   name="search"
+                  value={@search}
                   class="text-lg dark:bg-primary-black grow ring-0 outline-none w-full"
                 />
               </Form>
@@ -86,7 +87,7 @@ defmodule AshHqWeb.Components.Search do
                           class="text-black form-select rounded-md pt-1 py-2 w-3/4 border dark:border-0 bg-gray-100 dark:bg-white"
                           name={"versions[#{library.id}]"}
                           selected={Map.get(@selected_versions, library.id)}
-                          options={[{"latest", "latest"}] ++ Enum.map(library.versions, &{&1.version, &1.id})}
+                          options={[{"None", nil}, {"latest", "latest"}] ++ Enum.map(library.versions, &{&1.version, &1.id})}
                         />
                       </div>
                     </div>
@@ -252,7 +253,7 @@ defmodule AshHqWeb.Components.Search do
           {_, version_id} ->
             version_id
         end)
-        |> Enum.reject(&is_nil/1)
+        |> Enum.reject(&(&1 == "" || is_nil(&1)))
 
       # %{results: results, item_list: item_list} =
       item_list =

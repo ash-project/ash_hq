@@ -217,7 +217,8 @@ defmodule AshHqWeb.AppViewLive do
             Enum.find(versions, &String.contains?(&1.version, ".")) || Enum.at(versions, 0)
 
           Enum.map(versions, fn version ->
-            if (socket.assigns[:selected_versions][library.id] == "latest" && latest_version &&
+            if (socket.assigns[:selected_versions][library.id] in ["latest", nil, ""] &&
+                  latest_version &&
                   version.id == latest_version.id) ||
                  version.id == socket.assigns[:selected_versions][library.id] do
               dsls_query = AshHq.Docs.Dsl |> Ash.Query.sort(order: :asc) |> load_for_search()
@@ -316,12 +317,17 @@ defmodule AshHqWeb.AppViewLive do
 
     selected_versions =
       Enum.reduce(libraries, %{}, fn library, acc ->
-        case Enum.at(library.versions, 0) do
-          nil ->
-            acc
+        # for now we only assume that ash will always appear in the docs
+        if library.name == "ash" do
+          case Enum.at(library.versions, 0) do
+            nil ->
+              acc
 
-          version ->
-            Map.put_new(acc, library.id, version.id)
+            version ->
+              Map.put_new(acc, library.id, version.id)
+          end
+        else
+          acc
         end
       end)
 
