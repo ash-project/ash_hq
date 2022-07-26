@@ -199,13 +199,11 @@ defmodule AshHqWeb.Pages.Docs do
                           <Heroicons.Outline.LinkIcon class="h-3 m-3" />
                         </a>
                         <CalloutText>{option.name}</CalloutText>
+                        {render_tags(assigns, option)}
                       </div>
                     </td>
                     <td>
                       {option.type}
-                    </td>
-                    <td>
-                      {render_tags(assigns, option)}
                     </td>
                     <td>
                       {raw(render_replacements(assigns, AshHq.Docs.Extensions.RenderMarkdown.render!(option, :doc)))}
