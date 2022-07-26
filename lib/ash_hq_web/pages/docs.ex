@@ -593,6 +593,11 @@ defmodule AshHqWeb.Pages.Docs do
           <a href="/docs/module/#{Routes.sanitize_name(library.name)}/#{Routes.sanitize_name(version.version)}/#{Routes.sanitize_name(item)}">#{item}</a>
           """
 
+        "extension" ->
+          """
+          <a href="/docs/dsl/#{Routes.sanitize_name(library.name)}/#{Routes.sanitize_name(version.version)}/#{Routes.sanitize_name(item)}">#{item}</a>
+          """
+
         type ->
           raise "unimplemented link type #{inspect(type)} in #{source}"
       end

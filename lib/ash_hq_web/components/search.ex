@@ -19,7 +19,7 @@ defmodule AshHqWeb.Components.Search do
 
   data versions, :map, default: %{}
   data search, :string, default: ""
-  # data(results, :map, default: %{})
+  data item_list, :list, default: []
   data selected_item, :string
 
   def render(assigns) do
