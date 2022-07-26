@@ -380,7 +380,8 @@ defmodule AshHqWeb.Pages.Docs do
           end)
 
         socket.assigns.library_version && socket.assigns.library_version.default_guide &&
-          !socket.assigns[:params]["dsl_path"] && !socket.assigns[:params]["module"] ->
+          !socket.assigns[:params]["dsl_path"] && !socket.assigns[:params]["module"] &&
+            !socket.assigns[:params]["extension"] ->
           Enum.find(socket.assigns.library_version.guides, fn guide ->
             guide.name == socket.assigns.library_version.default_guide
           end)

@@ -51,8 +51,15 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
         Enum.map_join(strings, "", fn string ->
           string
           |> String.split("<!--- ash-hq-hide-stop -->")
-          |> Enum.drop(1)
+          |> case do
+            [string] ->
+              string
+
+            [_ | rest] ->
+              Enum.join(rest)
+          end
         end)
     end
+    |> String.trim()
   end
 end
