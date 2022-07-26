@@ -63,6 +63,10 @@ defmodule AshHq.Docs.Option do
 
     attribute :argument_index, :integer
 
+    attribute :links, :map do
+      default %{}
+    end
+
     attribute :default, :string
     attribute :path, {:array, :string}
     attribute :order, :integer, allow_nil?: false

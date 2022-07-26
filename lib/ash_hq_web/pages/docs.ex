@@ -104,10 +104,14 @@ defmodule AshHqWeb.Pages.Docs do
             {raw(render_replacements(assigns, @docs))}
             {#if @dsl}
               {#for {category, links} <- @dsl.links || %{}}
-                {String.capitalize(category)}
-                {#for link <- links}
-                  {render_links("{{link:#{link}}}", assigns)}
-                {/for}
+                <h3>{String.capitalize(category)}</h3>
+                <ul>
+                  {#for link <- links}
+                    <li>
+                      {raw(render_links("{{link:#{link}}}", assigns))}
+                    </li>
+                  {/for}
+                </ul>
               {/for}
             {/if}
           </div>
@@ -147,6 +151,12 @@ defmodule AshHqWeb.Pages.Docs do
                   Arguments
                 </h3>
                 <table>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Doc</th>
+                    <th>Links</th>
+                  </tr>
                   {#for option <- positional_options(@options)}
                     <tr id={Routes.sanitize_name(option.name)}>
                       <td>
@@ -155,16 +165,17 @@ defmodule AshHqWeb.Pages.Docs do
                             <Heroicons.Outline.LinkIcon class="h-3 m-3" />
                           </a>
                           <CalloutText>{option.name}</CalloutText>
+                          {render_tags(assigns, option)}
                         </div>
                       </td>
                       <td>
                         {option.type}
                       </td>
                       <td>
-                        {render_tags(assigns, option)}
+                        {raw(render_replacements(assigns, AshHq.Docs.Extensions.RenderMarkdown.render!(option, :doc)))}
                       </td>
                       <td>
-                        {raw(render_replacements(assigns, AshHq.Docs.Extensions.RenderMarkdown.render!(option, :doc)))}
+                      {raw(Enum.map_join(List.flatten(Map.values(option.links || %{})), ", ", &render_links("{{link:#{&1}}}", assigns)))}
                       </td>
                     </tr>
                   {/for}
@@ -192,6 +203,9 @@ defmodule AshHqWeb.Pages.Docs do
                     </td>
                     <td>
                       {raw(render_replacements(assigns, AshHq.Docs.Extensions.RenderMarkdown.render!(option, :doc)))}
+                    </td>
+                    <td>
+                      {raw(Enum.map_join(List.flatten(Map.values(option.links || %{})), ", ", &render_links("{{link:#{&1}}}", assigns)))}
                     </td>
                   </tr>
                 {/for}
@@ -572,6 +586,11 @@ defmodule AshHqWeb.Pages.Docs do
 
           """
           <a href="/docs/dsl/#{Routes.sanitize_name(library.name)}/#{Routes.sanitize_name(version.version)}/#{item}">#{name}</a>
+          """
+
+        "module" ->
+          """
+          <a href="/docs/module/#{Routes.sanitize_name(library.name)}/#{Routes.sanitize_name(version.version)}/#{Routes.sanitize_name(item)}">#{item}</a>
           """
 
         type ->

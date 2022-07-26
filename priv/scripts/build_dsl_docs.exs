@@ -113,6 +113,7 @@ defmodule Utils do
         name: name,
         path: path,
         order: index,
+        links: Map.new(value[:links] || []),
         type: value[:type_name] || type(value[:type]),
         doc: value[:doc] || "No documentation",
         required: value[:required] || false,
