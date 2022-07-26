@@ -185,6 +185,12 @@ defmodule AshHqWeb.Pages.Docs do
                 Options
               </h3>
               <table>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Doc</th>
+                  <th>Links</th>
+                </tr>
                 {#for %{argument_index: nil} = option <- @options}
                   <tr id={Routes.sanitize_name(option.name)}>
                     <td>
