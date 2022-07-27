@@ -36,7 +36,7 @@ defmodule AshHqWeb.AppViewLive do
         id="main-container"
         class={
           "h-screen grid content-start grid-rows-[auto,1fr] w-screen bg-white dark:bg-primary-black dark:text-white",
-          "overflow-scroll overflow-x-hidden": @live_action == :home,
+          "overflow-y-auto overflow-x-hidden": @live_action == :home,
           "overflow-hidden": @live_action == :docs_dsl
         }
       >

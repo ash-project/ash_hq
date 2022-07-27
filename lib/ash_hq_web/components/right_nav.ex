@@ -8,7 +8,7 @@ defmodule AshHqWeb.Components.RightNav do
 
   def render(assigns) do
     ~F"""
-    <div id="right-nav" class="w-min hidden lg:flex flex-col overflow-y-scroll" phx-hook="RightNav">
+    <div id="right-nav" class="w-min hidden lg:flex flex-col overflow-y-auto" phx-hook="RightNav">
       <a id="right-nav-module-docs" class="hover:text-orange-300 right-nav" href="#module-docs">
         {@module}
       </a>
