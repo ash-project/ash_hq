@@ -212,10 +212,9 @@ defmodule AshHqWeb.AppViewLive do
     new_libraries =
       socket.assigns.libraries
       |> Enum.map(fn library ->
-        Map.update!(library, :versions, fn versions ->
-          latest_version =
-            Enum.find(versions, &String.contains?(&1.version, ".")) || Enum.at(versions, 0)
+        latest_version = AshHqWeb.Helpers.latest_version(library)
 
+        Map.update!(library, :versions, fn versions ->
           Enum.map(versions, fn version ->
             if (socket.assigns[:selected_versions][library.id] in ["latest", nil, ""] &&
                   latest_version &&
@@ -319,7 +318,7 @@ defmodule AshHqWeb.AppViewLive do
       Enum.reduce(libraries, %{}, fn library, acc ->
         # for now we only assume that ash will always appear in the docs
         if library.name == "ash" do
-          case Enum.at(library.versions, 0) do
+          case AshHqWeb.Helpers.latest_version(library) do
             nil ->
               acc
 

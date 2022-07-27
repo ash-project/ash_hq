@@ -95,7 +95,7 @@ defmodule AshHqWeb.Components.Search do
                 </div>
               </Form>
             </div>
-            <div class="pl-4 overflow-y-auto col-span-6 md:col-span-7 xl:col-span-8">
+            <div class="pl-4 overflow-auto col-span-6 md:col-span-7 xl:col-span-8">
               {render_items(assigns, @item_list)}
             </div>
           </div>
@@ -239,8 +239,7 @@ defmodule AshHqWeb.Components.Search do
           {library_id, "latest"} ->
             Enum.find_value(socket.assigns.libraries, fn library ->
               if library.id == library_id do
-                case Enum.find(library.versions, &String.contains?(&1.version, ".")) ||
-                       Enum.at(library.versions, 0) do
+                case AshHqWeb.Helpers.latest_version(library) do
                   nil ->
                     nil
 

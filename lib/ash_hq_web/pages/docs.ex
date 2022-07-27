@@ -76,7 +76,7 @@ defmodule AshHqWeb.Pages.Docs do
           />
         </div>
       </span>
-      <div class="grow overflow-hidden flex flex-row h-full justify-center space-x-12 bg-white dark:bg-primary-black">
+      <div class="grow w-full overflow-hidden flex flex-row h-full justify-center space-x-12 bg-white dark:bg-primary-black">
         <DocSidebar
           id="sidebar"
           class="hidden xl:block mt-10"
@@ -94,7 +94,7 @@ defmodule AshHqWeb.Pages.Docs do
         />
         <div
           id="docs-window"
-          class="w-full prose dark:bg-primary-black md:max-w-1xl lg:max-w-2xl xl:max-w-3xl dark:prose-invert overflow-y-scroll overflow-x-visible mt-14"
+          class="w-full prose prose-xl max-w-6xl dark:bg-primary-black dark:prose-invert overflow-y-scroll overflow-x-visible pr-8 mt-14"
           phx-hook="Docs"
         >
           <div id="module-docs" class="w-full nav-anchor text-black dark:text-white">
@@ -135,22 +135,26 @@ defmodule AshHqWeb.Pages.Docs do
           {#case child_dsls(@extension, @dsl)}
             {#match []}
             {#match children}
-            <h3> Nested DSLs </h3>
-            <ul>
-              {#for child <- children}
-                <li>
-                  <a href={Routes.doc_link(child, @selected_versions)}>{child.name}</a>
-                </li>
-              {/for}
-            </ul>
+              <h3>
+                Nested DSLs
+              </h3>
+              <ul>
+                {#for child <- children}
+                  <li>
+                    <a href={Routes.doc_link(child, @selected_versions)}>{child.name}</a>
+                  </li>
+                {/for}
+              </ul>
           {/case}
           <div class="ml-2">
-            {#if !Enum.empty?(@options)}
-              {#if Enum.any?(@options, & &1.argument_index)}
-                <h3>
-                  Arguments
-                </h3>
-                <table>
+            <table>
+              {#if !Enum.empty?(@options)}
+                {#if Enum.any?(@options, & &1.argument_index)}
+                  <td colspan="100%">
+                    <h3>
+                      Arguments
+                    </h3>
+                  </td>
                   <tr>
                     <th>Name</th>
                     <th>Type</th>
@@ -164,8 +168,10 @@ defmodule AshHqWeb.Pages.Docs do
                           <a href={"##{Routes.sanitize_name(option.name)}"}>
                             <Heroicons.Outline.LinkIcon class="h-3 m-3" />
                           </a>
-                          <CalloutText>{option.name}</CalloutText>
-                          {render_tags(assigns, option)}
+                          <div class="flex flex-row space-x-2">
+                            <CalloutText>{option.name}</CalloutText>
+                            {render_tags(assigns, option)}
+                          </div>
                         </div>
                       </td>
                       <td>
@@ -175,16 +181,24 @@ defmodule AshHqWeb.Pages.Docs do
                         {raw(render_replacements(assigns, AshHq.Docs.Extensions.RenderMarkdown.render!(option, :doc)))}
                       </td>
                       <td>
-                      {raw(Enum.map_join(List.flatten(Map.values(option.links || %{})), ", ", &render_links("{{link:#{&1}}}", assigns)))}
+                        {raw(
+                          Enum.map_join(
+                            List.flatten(Map.values(option.links || %{})),
+                            ", ",
+                            &render_links("{{link:#{&1}}}", assigns)
+                          )
+                        )}
                       </td>
                     </tr>
                   {/for}
-                </table>
-              {/if}
-              <h3>
-                Options
-              </h3>
-              <table>
+                {/if}
+                <tr>
+                  <td colspan="100%">
+                    <h3>
+                      Options
+                    </h3>
+                  </td>
+                </tr>
                 <tr>
                   <th>Name</th>
                   <th>Type</th>
@@ -209,18 +223,26 @@ defmodule AshHqWeb.Pages.Docs do
                       {raw(render_replacements(assigns, AshHq.Docs.Extensions.RenderMarkdown.render!(option, :doc)))}
                     </td>
                     <td>
-                      {raw(Enum.map_join(List.flatten(Map.values(option.links || %{})), ", ", &render_links("{{link:#{&1}}}", assigns)))}
+                      {raw(
+                        Enum.map_join(
+                          List.flatten(Map.values(option.links || %{})),
+                          ", ",
+                          &render_links("{{link:#{&1}}}", assigns)
+                        )
+                      )}
                     </td>
                   </tr>
                 {/for}
-              </table>
-            {/if}
+              {/if}
+            </table>
           </div>
         </div>
         {#if @module}
           <div class="w-min overflow-y-scroll overflow-x-visible mt-14 dark:bg-primary-black bg-opacity-70">
             <RightNav functions={@module.functions} module={@module.name} />
           </div>
+        {#else}
+          <div />
         {/if}
       </div>
     </div>
@@ -291,7 +313,6 @@ defmodule AshHqWeb.Pages.Docs do
     ~F"""
     {#case Enum.filter(functions, &(&1.type == type))}
       {#match []}
-
       {#match functions}
         <h1>{header}</h1>
         {#for function <- functions}
@@ -302,7 +323,10 @@ defmodule AshHqWeb.Pages.Docs do
                   <a href={"##{type}-#{Routes.sanitize_name(function.name)}-#{function.arity}"}>
                     <Heroicons.Outline.LinkIcon class="h-3 m-3" />
                   </a>
-                  <div class="nav-anchor text-xl font-semibold mb-2" id={"#{type}-#{Routes.sanitize_name(function.name)}-#{function.arity}"}>{function.name}/{function.arity} {render_source_code_link(assigns, function, @library, @library_version)}</div>
+                  <div
+                    class="nav-anchor text-xl font-semibold mb-2"
+                    id={"#{type}-#{Routes.sanitize_name(function.name)}-#{function.arity}"}
+                  >{function.name}/{function.arity} {render_source_code_link(assigns, function, @library, @library_version)}</div>
                 </div>
               </div>
               {#for head <- function.heads}
@@ -511,7 +535,7 @@ defmodule AshHqWeb.Pages.Docs do
     version =
       if selected_versions[library.id] == "latest" do
         Enum.find(library.versions, &String.contains?(&1.version, ".")) ||
-          Enum.at(library.versions, 0)
+          AshHqWeb.Helpers.latest_version(library)
       else
         case Enum.find(library.versions, &(&1.id == selected_versions[library.id])) do
           nil ->
@@ -557,9 +581,9 @@ defmodule AshHqWeb.Pages.Docs do
     selected_versions = assigns[:selected_versions]
 
     version =
-      if selected_versions[library.id] == "latest" do
+      if selected_versions[library.id] in ["latest", nil, ""] do
         Enum.find(library.versions, &String.contains?(&1.version, ".")) ||
-          Enum.at(library.versions, 0)
+          AshHqWeb.Helpers.latest_version(library)
       else
         case Enum.find(library.versions, &(&1.id == selected_versions[library.id])) do
           nil ->
@@ -644,8 +668,7 @@ defmodule AshHqWeb.Pages.Docs do
               library_version =
                 case socket.assigns[:params]["version"] do
                   "latest" ->
-                    Enum.find(library.versions, &String.contains?(&1.version, ".")) ||
-                      Enum.at(library.versions, 0)
+                    AshHqWeb.Helpers.latest_version(library)
 
                   version ->
                     Enum.find(
