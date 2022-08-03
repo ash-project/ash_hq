@@ -27,7 +27,7 @@ defmodule AshHqWeb.Components.DocSidebar do
           {#for library <- @libraries}
             <li>
               <LivePatch
-                to={Routes.library_link(library, selected_version_name(library, @selected_versions))}
+                to={Routes.library_link(library, selected_version_sanitized_name(library, @selected_versions))}
                 class={
                   "flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700",
                   "dark:bg-gray-600": !@module && !@guide && !@extension && @library && library.id == @library.id
@@ -225,6 +225,20 @@ defmodule AshHqWeb.Components.DocSidebar do
 
         if version.id == selected_versions[library.id] do
           version.version
+        end
+      end) || "latest"
+    end
+  end
+
+  defp selected_version_sanitized_name(library, selected_versions) do
+    if selected_versions[library.id] in ["latest", nil, ""] do
+      "latest"
+    else
+      Enum.find_value(library.versions, fn version ->
+        version.version
+
+        if version.id == selected_versions[library.id] do
+          version.sanitized_version
         end
       end) || "latest"
     end

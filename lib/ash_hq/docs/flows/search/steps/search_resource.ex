@@ -8,11 +8,18 @@ defmodule AshHq.Docs.Search.Steps.SearchResource do
     query = input[:query]
 
     if is_nil(types) || AshHq.Docs.Extensions.Search.type(resource) in types do
-      resource
-      |> Ash.Query.for_read(:search, %{
-        library_versions: library_versions,
-        query: query
-      })
+      query =
+        resource
+        |> Ash.Query.for_read(:search, %{
+          library_versions: library_versions,
+          query: query
+        })
+
+      query.resource
+      |> AshHq.Docs.Extensions.RenderMarkdown.render_attributes()
+      |> Enum.reduce(query, fn {source, target}, query ->
+        Ash.Query.deselect(query, [source, target])
+      end)
       |> AshHq.Docs.read()
     else
       {:ok, []}

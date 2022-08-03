@@ -19,6 +19,8 @@ defmodule AshHq.Docs.Function do
     ])
 
     type "Code"
+
+    show_docs_on :module_sanitized_name
   end
 
   postgres do
@@ -89,6 +91,7 @@ defmodule AshHq.Docs.Function do
     first :library_name, [:library_version, :library], :name
     first :library_id, [:library_version, :library], :id
     first :module_name, :module, :name
+    first :module_sanitized_name, :module, :sanitized_name
   end
 
   relationships do

@@ -18,6 +18,10 @@ defmodule AshHq.Docs.Option do
       :library_name,
       :library_id
     ]
+
+    sanitized_name_attribute :sanitized_path
+    use_path_for_name? true
+    show_docs_on :dsl_sanitized_path
   end
 
   postgres do
@@ -95,6 +99,7 @@ defmodule AshHq.Docs.Option do
     first :version_name, :library_version, :version
     first :library_name, [:library_version, :library], :name
     first :library_id, [:library_version, :library], :id
+    first :dsl_sanitized_path, :dsl, :sanitized_path
   end
 
   relationships do

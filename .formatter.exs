@@ -9,6 +9,8 @@
     load_for_search: 1,
     doc_attribute: 1,
     render_attributes: 1,
-    header_ds?: false
+    use_path_for_name?: 1,
+    sanitized_name_attribute: 1,
+    show_docs_on: 1
   ]
 ]

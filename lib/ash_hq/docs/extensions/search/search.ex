@@ -19,6 +19,22 @@ defmodule AshHq.Docs.Extensions.Search do
         default: :name,
         doc: "The name field to be used in search"
       ],
+      sanitized_name_attribute: [
+        type: :atom,
+        doc:
+          "The name of the attribute to store the sanitized name in. If not set, will default to the `sanitized_<name_attribute>`"
+      ],
+      show_docs_on: [
+        type: :atom,
+        doc:
+          "An attribute/calculation/aggregate that should map to a sanitized name that should match to signal that docs should be loaded"
+      ],
+      use_path_for_name?: [
+        type: :boolean,
+        default: false,
+        doc:
+          "Wether or not to write to the sanitized name attribute automatically by stripping the name of special characters"
+      ],
       doc_attribute: [
         type: :atom,
         doc: "The text field to be used in the search"
@@ -54,6 +70,33 @@ defmodule AshHq.Docs.Extensions.Search do
 
   def doc_attribute(resource) do
     Extension.get_opt(resource, [:search], :doc_attribute, nil)
+  end
+
+  def sanitized_name_attribute(resource) do
+    Extension.get_opt(
+      resource,
+      [:search],
+      :sanitized_name_attribute,
+      :"sanitized_#{name_attribute(resource)}"
+    )
+  end
+
+  def use_path_for_name?(resource) do
+    Extension.get_opt(
+      resource,
+      [:search],
+      :use_path_for_name?,
+      false
+    )
+  end
+
+  def show_docs_on(resource) do
+    Extension.get_opt(
+      resource,
+      [:search],
+      :show_docs_on,
+      sanitized_name_attribute(resource)
+    )
   end
 
   def library_version_attribute(resource) do

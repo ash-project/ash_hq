@@ -5,23 +5,78 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
   alias Ash.Dsl.Transformer
 
   def transform(resource, dsl_state) do
+    name_attribute = AshHq.Docs.Extensions.Search.name_attribute(resource)
+
     config = %{
       resource: resource,
-      name_attribute: AshHq.Docs.Extensions.Search.name_attribute(resource),
+      name_attribute: name_attribute,
       doc_attribute: AshHq.Docs.Extensions.Search.doc_attribute(resource),
       library_version_attribute: AshHq.Docs.Extensions.Search.library_version_attribute(resource),
-      table: AshPostgres.table(resource)
+      table: AshPostgres.table(resource),
+      sanitized_name_attribute: AshHq.Docs.Extensions.Search.sanitized_name_attribute(resource),
+      show_docs_on: AshHq.Docs.Extensions.Search.show_docs_on(resource)
     }
 
     {:ok,
      dsl_state
      |> add_code_interface()
+     |> add_sanitized_name(config)
      |> add_search_action(config)
      |> add_search_headline_calculation(config)
      |> add_name_matches_calculation(config)
      |> add_matches_calculation(config)
      |> add_indexes(config)
+     |> add_html_for_calculation(config)
      |> add_match_rank_calculation(config)}
+  end
+
+  defp add_html_for_calculation(dsl_state, config) do
+    if config.doc_attribute do
+      dsl_state
+      |> Transformer.add_entity(
+        [:calculations],
+        Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
+          name: :html_for,
+          type: :string,
+          arguments: [html_for_argument()],
+          calculation:
+            Ash.Query.expr(
+              if ^ref(config.show_docs_on) == ^arg(:for) do
+                ^ref(config.doc_attribute)
+              else
+                nil
+              end
+            )
+        )
+      )
+    else
+      dsl_state
+    end
+  end
+
+  defp add_sanitized_name(dsl_state, config) do
+    dsl_state
+    |> Transformer.add_entity(
+      [:attributes],
+      Transformer.build_entity!(
+        Ash.Resource.Dsl,
+        [:attributes],
+        :attribute,
+        name: config.sanitized_name_attribute,
+        type: :string,
+        allow_nil?: false
+      )
+    )
+    |> Transformer.add_entity(
+      [:changes],
+      Transformer.build_entity!(Ash.Resource.Dsl, [:changes], :change,
+        change:
+          {AshHq.Docs.Extensions.Search.Changes.SanitizeName,
+           source: config.name_attribute,
+           destination: config.sanitized_name_attribute,
+           use_path_for_name: AshHq.Docs.Extensions.Search.use_path_for_name?(config.resource)}
+      )
+    )
   end
 
   defp add_indexes(dsl_state, config) do
@@ -239,6 +294,17 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
         )
       )
     end
+  end
+
+  defp html_for_argument() do
+    Transformer.build_entity!(
+      Ash.Resource.Dsl,
+      [:calculations, :calculate],
+      :argument,
+      type: :string,
+      name: :for,
+      allow_nil?: false
+    )
   end
 
   defp query_argument() do

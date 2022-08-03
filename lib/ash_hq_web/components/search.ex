@@ -254,7 +254,6 @@ defmodule AshHqWeb.Components.Search do
         end)
         |> Enum.reject(&(&1 == "" || is_nil(&1)))
 
-      # %{results: results, item_list: item_list} =
       item_list =
         AshHq.Docs.Search.run!(
           socket.assigns.search,
@@ -265,7 +264,6 @@ defmodule AshHqWeb.Components.Search do
       selected_item = Enum.at(item_list, 0)
 
       socket
-      # |> assign(:results, results)
       |> assign(:item_list, item_list)
       |> set_selected_item(selected_item)
     end

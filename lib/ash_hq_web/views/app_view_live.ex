@@ -2,17 +2,29 @@ defmodule AshHqWeb.AppViewLive do
   use Surface.LiveView,
     container: {:div, class: "h-full"}
 
+  alias AshHq.Docs.Extensions.RenderMarkdown
   alias AshHqWeb.Components.{Search, SearchBar}
   alias AshHqWeb.Pages.{Docs, Home}
   alias Phoenix.LiveView.JS
   require Ash.Query
 
-  data configured_theme, :string, default: :system
-  data searching, :boolean, default: false
-  data selected_versions, :map, default: %{}
-  data libraries, :list, default: []
-  data selected_types, :map, default: %{}
-  data sidebar_state, :map, default: %{}
+  data(configured_theme, :string, default: :system)
+  data(searching, :boolean, default: false)
+  data(selected_versions, :map, default: %{})
+  data(libraries, :list, default: [])
+  data(selected_types, :map, default: %{})
+  data(sidebar_state, :map, default: %{})
+
+  data(library, :any, default: nil)
+  data(extension, :any, default: nil)
+  data(docs, :any, default: nil)
+  data(library_version, :any, default: nil)
+  data(guide, :any, default: nil)
+  data(doc_path, :list, default: [])
+  data(dsls, :list, default: [])
+  data(dsl, :any, default: nil)
+  data(options, :list, default: [])
+  data(module, :any, default: nil)
 
   def render(assigns) do
     ~F"""
@@ -125,8 +137,6 @@ defmodule AshHqWeb.AppViewLive do
             <Home id="home" />
           {#match :docs_dsl}
             <Docs
-              id="docs"
-              params={@params}
               uri={@uri}
               collapse_sidebar="collapse_sidebar"
               expand_sidebar="expand_sidebar"
@@ -134,6 +144,16 @@ defmodule AshHqWeb.AppViewLive do
               change_versions="change-versions"
               selected_versions={@selected_versions}
               libraries={@libraries}
+              library={@library}
+              extension={@extension}
+              docs={@docs}
+              library_version={@library_version}
+              guide={@guide}
+              doc_path={@doc_path}
+              dsls={@dsls}
+              dsl={@dsl}
+              options={@options}
+              module={@module}
             />
         {/case}
       </div>
@@ -142,7 +162,10 @@ defmodule AshHqWeb.AppViewLive do
   end
 
   def handle_params(params, uri, socket) do
-    {:noreply, assign(socket, params: params, uri: uri)}
+    {:noreply,
+     socket
+     |> assign(params: params, uri: uri)
+     |> load_docs()}
   end
 
   def handle_event("collapse_sidebar", %{"id" => id}, socket) do
@@ -220,29 +243,37 @@ defmodule AshHqWeb.AppViewLive do
                   latest_version &&
                   version.id == latest_version.id) ||
                  version.id == socket.assigns[:selected_versions][library.id] do
-              dsls_query = AshHq.Docs.Dsl |> Ash.Query.sort(order: :asc) |> load_for_search()
+              dsls_query =
+                AshHq.Docs.Dsl
+                |> Ash.Query.sort(order: :asc)
+                |> load_for_search(socket.assigns[:params]["dsl_path"])
 
               options_query =
-                AshHq.Docs.Option |> Ash.Query.sort(order: :asc) |> load_for_search()
+                AshHq.Docs.Option
+                |> Ash.Query.sort(order: :asc)
+                |> load_for_search(socket.assigns[:params]["dsl_path"])
 
               functions_query =
                 AshHq.Docs.Function
                 |> Ash.Query.sort(name: :asc, arity: :asc)
-                |> load_for_search()
+                |> load_for_search(socket.assigns[:params]["module"])
 
-              guides_query = AshHq.Docs.Guide |> Ash.Query.new() |> load_for_search()
+              guides_query =
+                AshHq.Docs.Guide
+                |> Ash.Query.new()
+                |> load_for_search(socket.assigns[:params]["guide"])
 
               modules_query =
                 AshHq.Docs.Module
                 |> Ash.Query.sort(order: :asc)
                 |> Ash.Query.load(functions: functions_query)
-                |> load_for_search()
+                |> load_for_search(socket.assigns[:params]["module"])
 
               extensions_query =
                 AshHq.Docs.Extension
                 |> Ash.Query.sort(order: :asc)
                 |> Ash.Query.load(options: options_query, dsls: dsls_query)
-                |> load_for_search()
+                |> load_for_search(socket.assigns[:params]["extension"])
 
               AshHq.Docs.load!(version,
                 extensions: extensions_query,
@@ -256,7 +287,14 @@ defmodule AshHqWeb.AppViewLive do
         end)
       end)
 
-    assign(socket, :libraries, new_libraries)
+    socket
+    |> assign(:libraries, new_libraries)
+    |> assign_library()
+    |> assign_extension()
+    |> assign_guide()
+    |> assign_module()
+    |> assign_dsl()
+    |> assign_docs()
   end
 
   def mount(_params, session, socket) do
@@ -344,8 +382,7 @@ defmodule AshHqWeb.AppViewLive do
      |> assign(:selected_versions, configured_library_versions)
      |> assign(configured_theme: configured_theme, sidebar_state: sidebar_state)
      |> push_event("selected-versions", selected_versions)
-     |> push_event("selected_types", %{types: selected_types})
-     |> load_docs()}
+     |> push_event("selected_types", %{types: selected_types})}
   end
 
   def toggle_search(js \\ %JS{}) do
@@ -377,10 +414,217 @@ defmodule AshHqWeb.AppViewLive do
     |> JS.dispatch("js:focus", to: "#search-input")
   end
 
-  defp load_for_search(query) do
-    Ash.Query.load(
-      query,
-      AshHq.Docs.Extensions.Search.load_for_search(query.resource)
-    )
+  defp load_for_search(query, docs_for) do
+    query
+    |> Ash.Query.load(AshHq.Docs.Extensions.Search.load_for_search(query.resource))
+    |> deselect_doc_attributes()
+    |> load_docs_for(docs_for)
+  end
+
+  defp load_docs_for(query, nil), do: query
+  defp load_docs_for(query, []), do: query
+
+  defp load_docs_for(query, true) do
+    query.resource
+    |> AshHq.Docs.Extensions.RenderMarkdown.render_attributes()
+    |> Enum.reduce(query, fn {source, target}, query ->
+      Ash.Query.select(query, [source, target])
+    end)
+  end
+
+  defp load_docs_for(query, name) when is_list(name) do
+    Ash.Query.load(query, html_for: %{for: Enum.join(name, "/")})
+  end
+
+  defp load_docs_for(query, name) do
+    Ash.Query.load(query, html_for: %{for: name})
+  end
+
+  defp deselect_doc_attributes(query) do
+    query.resource
+    |> AshHq.Docs.Extensions.RenderMarkdown.render_attributes()
+    |> Enum.reduce(query, fn {source, target}, query ->
+      Ash.Query.deselect(query, [source, target])
+    end)
+  end
+
+  defp assign_guide(socket) do
+    guide =
+      cond do
+        socket.assigns[:params]["guide"] && socket.assigns.library_version ->
+          Enum.find(socket.assigns.library_version.guides, fn guide ->
+            guide.route == Enum.join(socket.assigns[:params]["guide"], "/")
+          end)
+
+        socket.assigns.library_version && socket.assigns.library_version.default_guide &&
+          !socket.assigns[:params]["dsl_path"] && !socket.assigns[:params]["module"] &&
+            !socket.assigns[:params]["extension"] ->
+          Enum.find(socket.assigns.library_version.guides, fn guide ->
+            guide.name == socket.assigns.library_version.default_guide
+          end)
+
+        true ->
+          nil
+      end
+
+    assign(socket, :guide, guide)
+  end
+
+  defp assign_dsl(socket) do
+    case socket.assigns[:params]["dsl_path"] do
+      nil ->
+        assign(socket, :dsl, nil)
+
+      path ->
+        path = Enum.join(path, "/")
+
+        dsl =
+          Enum.find(
+            socket.assigns.extension.dsls,
+            fn dsl ->
+              dsl.sanitized_path == path
+            end
+          )
+
+        new_state = Map.put(socket.assigns.sidebar_state, dsl.id, "open")
+
+        unless socket.assigns.sidebar_state[dsl.id] == "open" do
+          send(self(), {:new_sidebar_state, new_state})
+        end
+
+        socket
+        |> assign(
+          :dsl,
+          dsl
+        )
+    end
+  end
+
+  defp assign_module(socket) do
+    if socket.assigns.library && socket.assigns.library_version &&
+         socket.assigns[:params]["module"] do
+      module =
+        Enum.find(
+          socket.assigns.library_version.modules,
+          &(&1.sanitized_name == socket.assigns[:params]["module"])
+        )
+
+      assign(socket,
+        module: module
+      )
+    else
+      assign(socket, :module, nil)
+    end
+  end
+
+  defp assign_docs(socket) do
+    cond do
+      socket.assigns.module ->
+        assign(socket,
+          docs: RenderMarkdown.as_html!(socket.assigns.module.html_for),
+          doc_path: [socket.assigns.library.name, socket.assigns.module.name],
+          options: []
+        )
+
+      socket.assigns.dsl ->
+        assign(socket,
+          docs: RenderMarkdown.as_html!(socket.assigns.dsl.html_for),
+          doc_path:
+            [
+              socket.assigns.library.name,
+              socket.assigns.extension.name
+            ] ++ socket.assigns.dsl.path ++ [socket.assigns.dsl.name],
+          options:
+            Enum.filter(
+              socket.assigns.extension.options,
+              &(&1.path == socket.assigns.dsl.path ++ [socket.assigns.dsl.name])
+            )
+        )
+
+      socket.assigns.extension ->
+        assign(socket,
+          docs: RenderMarkdown.as_html!(socket.assigns.extension.html_for),
+          doc_path: [socket.assigns.library.name, socket.assigns.extension.name],
+          options: []
+        )
+
+      socket.assigns.guide ->
+        assign(socket,
+          docs: RenderMarkdown.as_html!(socket.assigns.guide.html_for),
+          doc_path: [socket.assigns.library.name, socket.assigns.guide.name],
+          options: []
+        )
+
+      true ->
+        assign(socket, docs: "", doc_path: [], dsls: [])
+    end
+  end
+
+  defp assign_extension(socket) do
+    if socket.assigns.library_version && socket.assigns[:params]["extension"] do
+      extensions = socket.assigns.library_version.extensions
+
+      assign(socket,
+        extension:
+          Enum.find(extensions, fn extension ->
+            extension.sanitized_name == socket.assigns[:params]["extension"]
+          end)
+      )
+    else
+      assign(socket, :extension, nil)
+    end
+  end
+
+  defp assign_library(socket) do
+    case Enum.find(
+           socket.assigns.libraries,
+           &(&1.name == socket.assigns.params["library"])
+         ) do
+      nil ->
+        assign(socket, library: nil, library_version: nil)
+
+      library ->
+        socket =
+          if socket.assigns[:params]["version"] do
+            library_version =
+              case socket.assigns[:params]["version"] do
+                "latest" ->
+                  AshHqWeb.Helpers.latest_version(library)
+
+                version ->
+                  Enum.find(
+                    library.versions,
+                    &(&1.sanitized_version == version)
+                  )
+              end
+
+            if library_version do
+              socket =
+                assign(
+                  socket,
+                  library_version: library_version
+                )
+
+              if !socket.assigns[:library] ||
+                   socket.assigns.params["library"] !=
+                     socket.assigns.library.name do
+                new_selected_versions =
+                  Map.put(socket.assigns.selected_versions, library.id, library_version.id)
+
+                socket
+                |> assign(selected_versions: new_selected_versions)
+                |> push_event("selected-versions", new_selected_versions)
+              else
+                socket
+              end
+            else
+              assign(socket, :library_version, nil)
+            end
+          else
+            assign(socket, :library_version, nil)
+          end
+
+        assign(socket, :library, library)
+    end
   end
 end

@@ -18,6 +18,9 @@ defmodule AshHq.Docs.Dsl do
       :library_name,
       :library_id
     ]
+
+    sanitized_name_attribute :sanitized_path
+    use_path_for_name? true
   end
 
   postgres do

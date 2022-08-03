@@ -41,6 +41,16 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
     end
   end
 
+  def as_html!(text, add_ids? \\ true)
+
+  def as_html!(nil, _) do
+    ""
+  end
+
+  def as_html!(%Ash.NotLoaded{}, _) do
+    ""
+  end
+
   def as_html!(text, add_ids?) do
     text
     |> Earmark.as_html!(opts(add_ids?))

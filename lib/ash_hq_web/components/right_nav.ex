@@ -1,10 +1,8 @@
 defmodule AshHqWeb.Components.RightNav do
   use Surface.Component
 
-  alias AshHqWeb.Routes
-
-  prop functions, :list, default: []
-  prop module, :string, required: true
+  prop(functions, :list, default: [])
+  prop(module, :string, required: true)
 
   def render(assigns) do
     ~F"""
@@ -14,9 +12,9 @@ defmodule AshHqWeb.Components.RightNav do
       </a>
       {#for %{type: :callback} = function <- @functions}
         <a
-          id={"right-nav-callback-#{Routes.sanitize_name(function.name)}-#{function.arity}"}
+          id={"right-nav-callback-#{function.sanitized_name}-#{function.arity}"}
           class="hover:text-orange-300 right-nav"
-          href={"#function-#{Routes.sanitize_name(function.name)}-#{function.arity}"}
+          href={"#function-#{function.sanitized_name}-#{function.arity}"}
         >
           {"#{function.name}/#{function.arity}"}
         </a>
@@ -24,9 +22,9 @@ defmodule AshHqWeb.Components.RightNav do
 
       {#for %{type: :function} = function <- @functions}
         <a
-          id={"right-nav-function-#{Routes.sanitize_name(function.name)}-#{function.arity}"}
+          id={"right-nav-function-#{function.sanitized_name}-#{function.arity}"}
           class="hover:text-orange-300 right-nav"
-          href={"#macro-#{Routes.sanitize_name(function.name)}-#{function.arity}"}
+          href={"#macro-#{function.sanitized_name}-#{function.arity}"}
         >
           {"#{function.name}/#{function.arity}"}
         </a>
@@ -34,9 +32,9 @@ defmodule AshHqWeb.Components.RightNav do
 
       {#for %{type: :macro} = function <- @functions}
         <a
-          id={"right-nav-macro-#{Routes.sanitize_name(function.name)}-#{function.arity}"}
+          id={"right-nav-macro-#{function.sanitized_name}-#{function.arity}"}
           class="hover:text-orange-300 right-nav"
-          href={"#macro-#{Routes.sanitize_name(function.name)}-#{function.arity}"}
+          href={"#macro-#{function.sanitized_name}-#{function.arity}"}
         >
           {"#{function.name}/#{function.arity}"}
         </a>
