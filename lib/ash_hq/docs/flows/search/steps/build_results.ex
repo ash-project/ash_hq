@@ -23,7 +23,7 @@ defmodule AshHq.Docs.Search.Steps.BuildResults do
   end
 
   defp search_length(%resource{} = record) do
-    case AshHq.Docs.Extensions.Search.doc_attribute(resource) do
+    case AshHq.Docs.Extensions.Search.name_attribute(resource) do
       nil ->
         0
 
