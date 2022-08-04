@@ -2,7 +2,7 @@ defmodule AshHqWeb.Components.DocSidebar do
   use Surface.Component
 
   alias AshHqWeb.Routes
-  alias Surface.Components.LivePatch
+  alias Surface.Components.LiveRedirect
 
   prop class, :css_class, default: ""
   prop libraries, :list, required: true
@@ -42,7 +42,7 @@ defmodule AshHqWeb.Components.DocSidebar do
             {#if @sidebar_state["guides-#{Routes.sanitize_name(category)}"] == "open" || (@guide && Enum.any?(guides, &(&1.id == @guide.id))) || (@sidebar_state["guides-#{Routes.sanitize_name(category)}"] != "closed" && category == "Tutorials")}
               {#for guide <- guides}
                 <li class="ml-3">
-                  <LivePatch
+                  <LiveRedirect
                     to={Routes.doc_link(guide, @selected_versions)}
                     class={
                       "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
@@ -51,7 +51,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                   >
                     <Heroicons.Outline.BookOpenIcon class="h-4 w-4" />
                     <span class="ml-3 mr-2">{guide.name}</span>
-                  </LivePatch>
+                  </LiveRedirect>
                 </li>
               {/for}
             {/if}
@@ -74,7 +74,7 @@ defmodule AshHqWeb.Components.DocSidebar do
             {#if @sidebar_state["extensions"] == "open" || @extension}
               {#for extension <- get_extensions(@libraries)}
                 <li class="ml-3">
-                  <LivePatch
+                  <LiveRedirect
                     to={Routes.doc_link(extension, @selected_versions)}
                     class={
                       "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
@@ -83,7 +83,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                   >
                     <span class="ml-3 mr-2">{extension.name}</span>
                     {render_icon(assigns, extension.type)}
-                  </LivePatch>
+                  </LiveRedirect>
                   {#if @extension && @extension.id == extension.id && !Enum.empty?(extension.dsls)}
                     {render_dsls(assigns, extension.dsls, [])}
                   {/if}
@@ -110,7 +110,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                 </div>
                 {#for module <- modules}
                   <li class="ml-4">
-                    <LivePatch
+                    <LiveRedirect
                       to={Routes.doc_link(module, @selected_versions)}
                       class={
                         "flex items-center pt-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
@@ -119,7 +119,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                     >
                       <span class="ml-3 mr-2">{module.name}</span>
                       <Heroicons.Outline.CodeIcon class="h-4 w-4" />
-                    </LivePatch>
+                    </LiveRedirect>
                   </li>
                 {/for}
               {/for}
@@ -172,7 +172,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                 {/if}
               {/if}
             {/if}
-            <LivePatch
+            <LiveRedirect
               to={Routes.doc_link(dsl, @selected_versions)}
               class={
                 "flex items-center p-1 text-base font-normal rounded-lg hover:text-orange-300",
@@ -180,7 +180,7 @@ defmodule AshHqWeb.Components.DocSidebar do
               }
             >
               {dsl.name}
-            </LivePatch>
+            </LiveRedirect>
           </div>
           {#if @sidebar_state[dsl.id] == "open" ||
               (@dsl && List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name]))}
