@@ -29,18 +29,17 @@ defmodule AshHqWeb.Components.DocSidebar do
           </div>
           {#for {category, guides} <- guides_by_category(@libraries)}
             <div class="text-gray-500">
-              {#if @sidebar_state["guides-#{category}"] == "open" || (@guide && Enum.any?(guides, &(&1.id == @guide.id))) || (@sidebar_state["guides-#{category}"] != "closed" && category == "Tutorials")}
-                <button :on-click={@collapse_sidebar} phx-value-id={"guides-#{category}"}>
-                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
+              {#if @sidebar_state["guides-#{Routes.sanitize_name(category)}"] == "open" || (@guide && Enum.any?(guides, &(&1.id == @guide.id))) || (@sidebar_state["guides-#{Routes.sanitize_name(category)}"] != "closed" && category == "Tutorials")}
+                <button :on-click={@collapse_sidebar} phx-value-id={"guides-#{Routes.sanitize_name(category)}"} class="flex flex-row items-center">
+                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" /><div>{category}</div>
                 </button>
               {#else}
-                <button :on-click={@expand_sidebar} phx-value-id={"guides-#{category}"}>
-                  <Heroicons.Outline.ChevronRightIcon class="w-3 h-3" />
+                <button :on-click={@expand_sidebar} phx-value-id={"guides-#{Routes.sanitize_name(category)}"} class="flex flex-row items-center">
+                  <Heroicons.Outline.ChevronRightIcon class="w-3 h-3 mr-1" /><div>{category}</div>
                 </button>
               {/if}
-              {category}
             </div>
-            {#if @sidebar_state["guides-#{category}"] == "open" || (@guide && Enum.any?(guides, &(&1.id == @guide.id))) || (@sidebar_state["guides-#{category}"] != "closed" && category == "Tutorials")}
+            {#if @sidebar_state["guides-#{Routes.sanitize_name(category)}"] == "open" || (@guide && Enum.any?(guides, &(&1.id == @guide.id))) || (@sidebar_state["guides-#{Routes.sanitize_name(category)}"] != "closed" && category == "Tutorials")}
               {#for guide <- guides}
                 <li class="ml-3">
                   <LivePatch
@@ -63,15 +62,14 @@ defmodule AshHqWeb.Components.DocSidebar do
           <div class="ml-2 space-y-2">
             <div class="text-gray-500">
               {#if @sidebar_state["extensions"] == "open" || @extension}
-                <button :on-click={@collapse_sidebar} phx-value-id="extensions">
-                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
+                <button :on-click={@collapse_sidebar} phx-value-id="extensions" class="flex flex-row items-center">
+                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1"/>Extensions
                 </button>
               {#else}
-                <button :on-click={@expand_sidebar} phx-value-id="extensions">
-                  <Heroicons.Outline.ChevronRightIcon class="w-3 h-3" />
+                <button :on-click={@expand_sidebar} phx-value-id="extensions" class="flex flex-row items-center">
+                  <Heroicons.Outline.ChevronRightIcon class="w-3 h-3 mr-1"/>Extensions
                 </button>
               {/if}
-              Extensions
             </div>
             {#if @sidebar_state["extensions"] == "open" || @extension}
               {#for extension <- get_extensions(@libraries)}
@@ -95,15 +93,15 @@ defmodule AshHqWeb.Components.DocSidebar do
 
             <div class="text-gray-500">
               {#if @sidebar_state["modules"] == "open" || @module}
-                <button :on-click={@collapse_sidebar} phx-value-id="modules">
-                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
+                <button :on-click={@collapse_sidebar} phx-value-id="modules" class="flex flex-row items-center">
+                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />Modules
                 </button>
               {#else}
-                <button :on-click={@expand_sidebar} phx-value-id="modules">
-                  <Heroicons.Outline.ChevronRightIcon class="w-3 h-3" />
+                <button :on-click={@expand_sidebar} phx-value-id="modules" class="flex flex-row items-center">
+                  <Heroicons.Outline.ChevronRightIcon class="w-3 h-3 mr-1" />Modules
                 </button>
               {/if}
-              Modules
+
             </div>
             {#if @sidebar_state["modules"] == "open" || @module}
               {#for {category, modules} <- modules_and_categories(@libraries)}
