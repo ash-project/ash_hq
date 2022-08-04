@@ -27,7 +27,7 @@ defmodule AshHqWeb.Components.Search do
     <div
       id={@id}
       style="display: none;"
-      class="absolute flex justify-center align-middle w-screen h-full backdrop-blur-sm pb-8 bg-white bg-opacity-10"
+      class="absolute flex justify-center align-middle w-screen h-full backdrop-blur-sm pb-8 bg-white bg-opacity-10 z-50"
     >
       <div
         :on-click-away={AshHqWeb.AppViewLive.toggle_search()}
