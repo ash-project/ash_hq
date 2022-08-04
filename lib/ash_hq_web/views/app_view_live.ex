@@ -8,23 +8,23 @@ defmodule AshHqWeb.AppViewLive do
   alias Phoenix.LiveView.JS
   require Ash.Query
 
-  data(configured_theme, :string, default: :system)
-  data(searching, :boolean, default: false)
-  data(selected_versions, :map, default: %{})
-  data(libraries, :list, default: [])
-  data(selected_types, :map, default: %{})
-  data(sidebar_state, :map, default: %{})
+  data configured_theme, :string, default: :system
+  data searching, :boolean, default: false
+  data selected_versions, :map, default: %{}
+  data libraries, :list, default: []
+  data selected_types, :map, default: %{}
+  data sidebar_state, :map, default: %{}
 
-  data(library, :any, default: nil)
-  data(extension, :any, default: nil)
-  data(docs, :any, default: nil)
-  data(library_version, :any, default: nil)
-  data(guide, :any, default: nil)
-  data(doc_path, :list, default: [])
-  data(dsls, :list, default: [])
-  data(dsl, :any, default: nil)
-  data(options, :list, default: [])
-  data(module, :any, default: nil)
+  data library, :any, default: nil
+  data extension, :any, default: nil
+  data docs, :any, default: nil
+  data library_version, :any, default: nil
+  data guide, :any, default: nil
+  data doc_path, :list, default: []
+  data dsls, :list, default: []
+  data dsl, :any, default: nil
+  data options, :list, default: []
+  data module, :any, default: nil
 
   def render(assigns) do
     ~F"""
@@ -172,7 +172,7 @@ defmodule AshHqWeb.AppViewLive do
     new_state = Map.put(socket.assigns.sidebar_state, id, "closed")
 
     {:noreply,
-     socket |> assign(:sidebar_state, new_state) |> push_event("js:sidebar-state", new_state)}
+     socket |> assign(:sidebar_state, new_state) |> push_event("sidebar-state", new_state)}
   end
 
   def handle_event("expand_sidebar", %{"id" => id}, socket) do

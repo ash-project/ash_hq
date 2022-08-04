@@ -1,0 +1,15 @@
+# AshHq
+
+## Section
+
+<!-- livebook:{"attrs":{"action":"destroy","actions":["destroy","update","read","search","create"],"resource":"AshHq.Docs.Guide","resources":["AshHq.Docs.Dsl","AshHq.Docs.Extension","AshHq.Docs.Function","AshHq.Docs.Guide","AshHq.Docs.Library","AshHq.Docs.LibraryVersion","AshHq.Docs.Module","AshHq.Docs.Option"]},"kind":"Elixir.AshLivebook.Cells.Form","livebook_object":"smart_cell"} -->
+
+```elixir
+Ash.Resource.Info.action(AshHq.Docs.Guide, :destroy)
+```
+
+## Stuff
+
+```elixir
+
+```

@@ -97,9 +97,19 @@ defmodule AshHqWeb.Pages.Docs do
           class="w-full prose prose-xl max-w-6xl dark:bg-primary-black dark:prose-invert overflow-y-auto overflow-x-visible pr-8 mt-14"
           phx-hook="Docs"
         >
-          <div id="module-docs" class="w-full nav-anchor text-black dark:text-white">
+          <div id="module-docs" class="w-full nav-anchor text-black dark:text-white relative">
             {#if @module}
               <h2>{@module.name}{render_source_code_link(assigns, @module, @library, @library_version)}</h2>
+            {/if}
+            {#if @library_version}
+              <div class="absolute right-2 top-2 border rounded-lg flex flex-row">
+                <div class="border-r pl-2 pr-2 dark:text-black bg-orange-600 dark:bg-orange-600 rounded-l-lg">
+                  {@library.name}
+                </div>
+                <div class="pl-2 pr-2 rounded-r-lg bg-gray-300 dark:bg-inherit">
+                  {@library_version.version}
+                </div>
+              </div>
             {/if}
             {raw(render_replacements(assigns, @docs))}
             {#if @dsl}
@@ -316,7 +326,7 @@ defmodule AshHqWeb.Pages.Docs do
       {#match functions}
         <h1>{header}</h1>
         {#for function <- functions}
-          <div class="rounded-lg bg-slate-700 bg-opacity-50 px-2">
+          <div class="rounded-lg bg-slate-400 dark:bg-slate-700 bg-opacity-50 px-2">
             <p class="">
               <div class="">
                 <div class="flex flex-row items-baseline">

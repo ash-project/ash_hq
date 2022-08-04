@@ -21,100 +21,131 @@ defmodule AshHqWeb.Components.DocSidebar do
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~F"""
-    <aside id={@id} class={"grid h-full overflow-y-auto pb-36", @class} aria-label="Sidebar">
+    <aside id={@id} class={"grid h-full overflow-y-auto pb-36 w-2/12", @class} aria-label="Sidebar">
       <div class="py-3 px-3">
         <ul class="space-y-2">
-          {#for library <- @libraries}
-            <li>
-              <LivePatch
-                to={Routes.library_link(library, selected_version_sanitized_name(library, @selected_versions))}
-                class={
-                  "flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700",
-                  "dark:bg-gray-600": !@module && !@guide && !@extension && @library && library.id == @library.id
-                }
-              >
-                <Heroicons.Outline.CollectionIcon class="w-6 h-6" />
-                <span class="ml-3 mr-2">{library.display_name}</span>
-                <span class="font-light text-gray-500">{selected_version_name(library, @selected_versions)}</span>
-              </LivePatch>
-              {#if @library && @library_version && library.id == @library.id}
-                {#for {category, guides} <- guides_by_category(@library_version.guides)}
-                  <div class="ml-2 text-gray-500">
-                    {category}
-                  </div>
-                  {#for guide <- guides}
-                    <li class="ml-3">
-                      <LivePatch
-                        to={Routes.doc_link(guide, @selected_versions)}
-                        class={
-                          "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
-                          "dark:bg-gray-600": @guide && @guide.id == guide.id
-                        }
-                      >
-                        <Heroicons.Outline.BookOpenIcon class="h-4 w-4" />
-                        <span class="ml-3 mr-2">{guide.name}</span>
-                      </LivePatch>
-                    </li>
-                  {/for}
-                {/for}
+          <div>
+            Guides
+          </div>
+          {#for {category, guides} <- guides_by_category(@libraries)}
+            <div class="text-gray-500">
+              {#if @sidebar_state["guides-#{category}"] == "open" || (@guide && Enum.any?(guides, &(&1.id == @guide.id))) || (@sidebar_state["guides-#{category}"] != "closed" && category == "Tutorials")}
+                <button :on-click={@collapse_sidebar} phx-value-id={"guides-#{category}"}>
+                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
+                </button>
+              {#else}
+                <button :on-click={@expand_sidebar} phx-value-id={"guides-#{category}"}>
+                  <Heroicons.Outline.ChevronRightIcon class="w-3 h-3" />
+                </button>
+              {/if}
+              {category}
+            </div>
+            {#if @sidebar_state["guides-#{category}"] == "open" || (@guide && Enum.any?(guides, &(&1.id == @guide.id))) || (@sidebar_state["guides-#{category}"] != "closed" && category == "Tutorials")}
+              {#for guide <- guides}
+                <li class="ml-3">
+                  <LivePatch
+                    to={Routes.doc_link(guide, @selected_versions)}
+                    class={
+                      "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
+                      "bg-gray-300 dark:bg-gray-600": @guide && @guide.id == guide.id
+                    }
+                  >
+                    <Heroicons.Outline.BookOpenIcon class="h-4 w-4" />
+                    <span class="ml-3 mr-2">{guide.name}</span>
+                  </LivePatch>
+                </li>
+              {/for}
+            {/if}
+          {/for}
+          <div class="mt-4">
+            Reference
+          </div>
+          <div class="ml-2 space-y-2">
+            <div class="text-gray-500">
+              {#if @sidebar_state["extensions"] == "open" || @extension}
+                <button :on-click={@collapse_sidebar} phx-value-id="extensions">
+                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
+                </button>
+              {#else}
+                <button :on-click={@expand_sidebar} phx-value-id="extensions">
+                  <Heroicons.Outline.ChevronRightIcon class="w-3 h-3" />
+                </button>
+              {/if}
+              Extensions
+            </div>
+            {#if @sidebar_state["extensions"] == "open" || @extension}
+              {#for extension <- get_extensions(@libraries)}
+                <li class="ml-3">
+                  <LivePatch
+                    to={Routes.doc_link(extension, @selected_versions)}
+                    class={
+                      "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
+                      "dark:bg-gray-600": @extension && @extension.id == extension.id
+                    }
+                  >
+                    <span class="ml-3 mr-2">{extension.name}</span>
+                    {render_icon(assigns, extension.type)}
+                  </LivePatch>
+                  {#if @extension && @extension.id == extension.id && !Enum.empty?(extension.dsls)}
+                    {render_dsls(assigns, extension.dsls, [])}
+                  {/if}
+                </li>
+              {/for}
+            {/if}
 
-                {#if !Enum.empty?(@library_version.guides)}
-                  <div class="ml-2 text-gray-500">
-                    Extensions
-                  </div>
-                {/if}
-                {#for extension <- get_extensions(library, @selected_versions)}
-                  <li class="ml-3">
+            <div class="text-gray-500">
+              {#if @sidebar_state["modules"] == "open" || @module}
+                <button :on-click={@collapse_sidebar} phx-value-id="modules">
+                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
+                </button>
+              {#else}
+                <button :on-click={@expand_sidebar} phx-value-id="modules">
+                  <Heroicons.Outline.ChevronRightIcon class="w-3 h-3" />
+                </button>
+              {/if}
+              Modules
+            </div>
+            {#if @sidebar_state["modules"] == "open" || @module}
+              {#for {category, modules} <- modules_and_categories(@libraries)}
+                <div class="ml-4">
+                  <span class="text-sm text-gray-900 dark:text-gray-500">{category}</span>
+                </div>
+                {#for module <- modules}
+                  <li class="ml-4">
                     <LivePatch
-                      to={Routes.doc_link(extension, @selected_versions)}
+                      to={Routes.doc_link(module, @selected_versions)}
                       class={
-                        "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
-                        "dark:bg-gray-600": @extension && @extension.id == extension.id
+                        "flex items-center pt-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
+                        "dark:bg-gray-600": @module && @module.id == module.id
                       }
                     >
-                      <span class="ml-3 mr-2">{extension.name}</span>
-                      {render_icon(assigns, extension.type)}
+                      <span class="ml-3 mr-2">{module.name}</span>
+                      <Heroicons.Outline.CodeIcon class="h-4 w-4" />
                     </LivePatch>
-                    {#if @extension && @extension.id == extension.id && !Enum.empty?(extension.dsls)}
-                      {render_dsls(assigns, extension.dsls, [])}
-                    {/if}
                   </li>
                 {/for}
-                {#if !Enum.empty?(@library_version.modules)}
-                  <div class="ml-2 text-gray-500">
-                    Modules
-                  </div>
-                  {#for {category, modules} <- modules_and_categories(@library_version.modules)}
-                    <div class="ml-4">
-                      <span class="text-sm text-gray-900 dark:text-gray-500">{category}</span>
-                    </div>
-                    {#for module <- modules}
-                      <li class="ml-4">
-                        <LivePatch
-                          to={Routes.doc_link(module, @selected_versions)}
-                          class={
-                            "flex items-center pt-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
-                            "dark:bg-gray-600": @module && @module.id == module.id
-                          }
-                        >
-                          <span class="ml-3 mr-2">{module.name}</span>
-                          <Heroicons.Outline.CodeIcon class="h-4 w-4" />
-                        </LivePatch>
-                      </li>
-                    {/for}
-                  {/for}
-                {/if}
-              {/if}
-            </li>
-          {/for}
+              {/for}
+            {/if}
+          </div>
         </ul>
       </div>
     </aside>
     """
   end
 
-  defp modules_and_categories(modules) do
-    modules
+  defp modules_and_categories(libraries) do
+    libraries
+    |> Enum.flat_map(fn library ->
+      library.versions
+      |> Enum.find(&Ash.Resource.Info.loaded?(&1, :modules))
+      |> case do
+        nil ->
+          []
+
+        %{modules: modules} ->
+          modules
+      end
+    end)
     |> Enum.group_by(&{&1.category_index, &1.category})
     |> Enum.sort_by(fn {{index, _}, _} ->
       index
@@ -205,8 +236,19 @@ defmodule AshHqWeb.Components.DocSidebar do
     """
   end
 
-  defp guides_by_category(guides) do
-    guides
+  defp guides_by_category(libraries) do
+    libraries
+    |> Enum.flat_map(fn library ->
+      library.versions
+      |> Enum.find(&Ash.Resource.Info.loaded?(&1, :guides))
+      |> case do
+        nil ->
+          []
+
+        %{guides: guides} ->
+          guides
+      end
+    end)
     |> Enum.group_by(& &1.category)
     |> Enum.sort_by(fn {category, _guides} ->
       Enum.find_index(["Tutorials", "Topics", "How To", "Misc"], &(&1 == category)) || :infinity
@@ -216,45 +258,17 @@ defmodule AshHqWeb.Components.DocSidebar do
     end)
   end
 
-  defp selected_version_name(library, selected_versions) do
-    if selected_versions[library.id] in ["latest", nil, ""] do
-      "latest"
-    else
-      Enum.find_value(library.versions, fn version ->
-        version.version
-
-        if version.id == selected_versions[library.id] do
-          version.version
-        end
-      end) || "latest"
-    end
-  end
-
-  defp selected_version_sanitized_name(library, selected_versions) do
-    if selected_versions[library.id] in ["latest", nil, ""] do
-      "latest"
-    else
-      Enum.find_value(library.versions, fn version ->
-        version.version
-
-        if version.id == selected_versions[library.id] do
-          version.sanitized_version
-        end
-      end) || "latest"
-    end
-  end
-
-  defp get_extensions(library, selected_versions) do
-    if selected_versions[library.id] in ["latest", nil, ""] do
-      Enum.at(library.versions, 0).extensions
-    else
-      case Enum.find(library.versions, &(&1.id == selected_versions[library.id])) do
+  defp get_extensions(libraries) do
+    Enum.flat_map(libraries, fn library ->
+      library.versions
+      |> Enum.find(&Ash.Resource.Info.loaded?(&1, :extensions))
+      |> case do
         nil ->
           []
 
-        version ->
-          version.extensions
+        %{extensions: extensions} ->
+          extensions
       end
-    end
+    end)
   end
 end

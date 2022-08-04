@@ -74,7 +74,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
           {AshHq.Docs.Extensions.Search.Changes.SanitizeName,
            source: config.name_attribute,
            destination: config.sanitized_name_attribute,
-           use_path_for_name: AshHq.Docs.Extensions.Search.use_path_for_name?(config.resource)}
+           use_path_for_name?: AshHq.Docs.Extensions.Search.use_path_for_name?(config.resource)}
       )
     )
   end
