@@ -8,7 +8,8 @@ defmodule AshHq.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      {Finch, name: AshHq.Finch},
+      Supervisor.child_spec({Finch, name: AshHq.Finch}, id: AshHq.Finch),
+      Supervisor.child_spec({Finch, name: Swoosh.Finch}, id: Swoosh.Finch),
       # Start the Ecto repository
       AshHq.Repo,
       # Start the Telemetry supervisor

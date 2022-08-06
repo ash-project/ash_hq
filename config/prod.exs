@@ -50,4 +50,5 @@ config :logger, level: :info
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
 
-config :ash_hq, AshHq.Mailer, adapter: Swoosh.Adapters.PostmarkAdapter
+config :ash_hq, AshHq.Mailer, adapter: Swoosh.Adapters.Postmark
+config :swoosh, :api_client, Swoosh.ApiClient.Finch
