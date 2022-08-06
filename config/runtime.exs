@@ -87,4 +87,6 @@ if config_env() == :prod do
   #     config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
+
+  config :ash_hq, AshHq.Mailer, api_key: System.get_env("POSTMARK_API_KEY")
 end
