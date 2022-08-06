@@ -52,6 +52,13 @@ defmodule AshHq.MixProject do
       {:makeup_eex, "~> 0.1.1"},
       {:makeup_js, "~> 0.1.0"},
       {:makeup_sql, "~> 0.1.0"},
+      # Bamboo for Emailing
+      {:bamboo, "~> 2.2"},
+      {:premailex, "~> 0.3.0"},
+      {:bamboo_postmark, "~> 1.0"},
+      # Authentication
+      {:guardian, "~> 2.0"},
+      {:bcrypt_elixir, "~> 3.0"},
       # Phoenix/Core dependencies
       {:phoenix, "~> 1.6.6"},
       {:phoenix_ecto, "~> 4.4"},
@@ -62,7 +69,7 @@ defmodule AshHq.MixProject do
       {:phoenix_live_view, "~> 0.17.5"},
       {:nimble_options, "~> 0.4.0", override: true},
       {:finch, "~> 0.10.2"},
-      {:floki, ">= 0.30.0", only: :test},
+      {:floki, ">= 0.30.0"},
       {:phoenix_live_dashboard, "~> 0.6"},
       {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
       {:swoosh, "~> 1.3"},
@@ -71,6 +78,9 @@ defmodule AshHq.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
+      # Dependencies
+      {:sobelow, "~> 0.8", only: :dev},
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:elixir_sense, github: "elixir-lsp/elixir_sense"}
     ]
   end

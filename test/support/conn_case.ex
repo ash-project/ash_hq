@@ -36,4 +36,36 @@ defmodule AshHqWeb.ConnCase do
     on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
+
+  @doc """
+  Setup helper that registers and logs in users.
+
+      setup :register_and_log_in_user
+
+  It stores an updated connection and a registered user in the
+  test context.
+  """
+  def register_and_log_in_user(%{conn: conn}) do
+    user = AshHq.AccountsFixtures.user_fixture()
+    %{conn: log_in_user(conn, user), user: user}
+  end
+
+  @doc """
+  Logs the given `user` into the `conn`.
+
+  It returns an updated `conn`.
+  """
+  def log_in_user(conn, user) do
+    token =
+      AshHq.Accounts.UserToken
+      |> Ash.Changeset.new()
+      |> Ash.Changeset.for_create(:build_session_token, user: user)
+      |> AshHq.Accounts.create!()
+      |> Map.get(:__metadata__)
+      |> Map.get(:url_token)
+
+    conn
+    |> Phoenix.ConnTest.init_test_session(%{})
+    |> Plug.Conn.put_session(:user_token, token)
+  end
 end

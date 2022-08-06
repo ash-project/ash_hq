@@ -1,0 +1,33 @@
+<h5 class="px-5 pb-2 text-lg leading-normal text-center">Register</h5>
+<%= form_for @form, Routes.user_registration_path(@conn, :create), fn f -> %>
+  <%= if @form.submitted_once? do %>
+    <div class="alert alert-danger">
+      <small>Oops, something went wrong! Please check the errors below.</small>
+    </div>
+  <% end %>
+
+  <div class="mt-4 mb-4">
+    <%= label f, :email, class: "form-label" %>
+    <%= text_input f, :email, required: true, class: "form-input" %>
+    <%= error_tag f, :email %>
+  </div>
+
+  <div class="mb-4">
+    <%= label f, :password, class: "form-label" %>
+    <%= password_input f, :password, required: true, class: "form-input" %>
+    <%= error_tag f, :password %>
+  </div>
+
+  <div class="mt-6">
+    <%= submit "Register", class: "btn btn-dark w-full" %>
+  </div>
+<% end %>
+
+<div class="mt-3 text-center text-gray-600">
+  <small>Already have an account?</small>
+</div>
+
+<div class="mt-3">
+  <%= link "Log in", to: Routes.user_session_path(@conn, :new), class: "btn btn-link btn-sm" %>
+  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new), class: "btn btn-link btn-sm" %>
+</div>

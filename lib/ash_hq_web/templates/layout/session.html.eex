@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <%= csrf_meta_tag() %>
+    <%= live_title_tag assigns[:page_title] || "AshHq", suffix: " · Phoenix Framework" %>
+    <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+  </head>
+  <body class="flex flex-col h-full bg-gray-700">
+    <header>
+      <nav class="flex flex-wrap items-center justify-between py-2 px-4 fixed top-0 right-0 left-0 z-30 bg-gray-700">
+        <a class="inline-block mr-4 py-1 text-xl text-gray-300" href="#"><i class="fas fa-bolt"></i> AshHq</a>
+      </nav>
+    </header>
+
+    <main role="main" class="container mx-auto mb-8 px-4 max-w-6xl">
+      <p class="alert alert-info alert-left toast" role="alert"><%= get_flash(@conn, :info) %></p>
+      <p class="alert alert-danger alert-left toast" role="alert"><%= get_flash(@conn, :error) %></p>
+
+      <div class="flex justify-center p-2">
+        <div class="card w-full max-w-xs">
+          <div class="card-body">
+            <%= @inner_content %>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer bg-gray-800 text-gray-600 mt-auto py-6">
+      <div class="container mx-auto px-4 max-w-6xl">
+        <span class="text-muted">AshHq</span>
+      </div>
+    </footer>
+  </body>
+</html>

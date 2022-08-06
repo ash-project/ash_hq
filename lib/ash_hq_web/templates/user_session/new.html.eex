@@ -1,0 +1,36 @@
+<h5 class="px-5 pb-2 text-lg leading-normal text-center">Log in</h5>
+<%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user], fn f -> %>
+  <%= if @error_message do %>
+    <div class="alert alert-danger">
+      <small><%= @error_message %></small>
+    </div>
+  <% end %>
+
+  <div class="mt-4 mb-4">
+    <%= label f, :email, class: "form-label" %>
+    <%= text_input f, :email, required: true, class: "form-input" %>
+  </div>
+
+  <div class="mb-4">
+    <%= label f, :password, class: "form-label" %>
+    <%= password_input f, :password, required: true, class: "form-input" %>
+  </div>
+
+  <%= label f, :remember_me, class: "form-label" do %>
+    <%= checkbox f, :remember_me, class: "form-checkbox" %>
+    <span class="ml-1">Keep me logged in for 60 days</span>
+  <% end %>
+
+  <div class="mt-6">
+    <%= submit "Log in", class: "btn btn-dark w-full" %>
+  </div>
+<% end %>
+
+<div class="mt-3 text-center text-gray-600">
+  <small>Already have an account?</small>
+</div>
+
+<div class="mt-3">
+  <%= link "Register", to: Routes.user_registration_path(@conn, :new), class: "btn btn-link btn-sm" %>
+  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new), class: "btn btn-link btn-sm" %>
+</div>
