@@ -1,10 +1,11 @@
 defmodule AshHqWeb.Components.Search do
+  @moduledoc "The search overlay modal"
   use Surface.LiveComponent
 
   require Ash.Query
 
-  alias AshHqWeb.Routes
   alias AshHqWeb.Components.CalloutText
+  alias AshHqWeb.DocRoutes
   alias Surface.Components.{Form, LiveRedirect}
   alias Surface.Components.Form.{Checkbox, Label, Select}
 
@@ -108,7 +109,7 @@ defmodule AshHqWeb.Components.Search do
   defp render_items(assigns, items) do
     ~F"""
     {#for item <- items}
-      <LiveRedirect to={Routes.doc_link(item, @selected_versions)} opts={id: item.id}>
+      <LiveRedirect to={DocRoutes.doc_link(item, @selected_versions)} opts={id: item.id}>
         <div class={
           "rounded-lg mb-4 py-2 px-2 hover:bg-gray-300 dark:hover:bg-gray-700",
           "bg-gray-400 dark:bg-gray-600": @selected_item.id == item.id,
@@ -221,7 +222,7 @@ defmodule AshHqWeb.Components.Search do
         {:noreply, socket}
 
       item ->
-        {:noreply, push_redirect(socket, to: Routes.doc_link(item))}
+        {:noreply, push_redirect(socket, to: DocRoutes.doc_link(item))}
     end
   end
 

@@ -1,22 +1,28 @@
 defmodule AshHq.Docs.Function do
+  @moduledoc false
+
   use AshHq.Resource,
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
+  resource do
+    description "A function in a module exposed by an Ash library"
+  end
+
   render_markdown do
-    render_attributes(doc: :doc_html)
-    header_ids?(false)
+    render_attributes doc: :doc_html
+    header_ids? false
   end
 
   search do
     doc_attribute :doc
 
-    load_for_search([
+    load_for_search [
       :version_name,
       :library_name,
       :module_name,
       :library_id
-    ])
+    ]
 
     type "Code"
 
@@ -28,7 +34,7 @@ defmodule AshHq.Docs.Function do
     repo AshHq.Repo
 
     references do
-      reference(:library_version, on_delete: :delete)
+      reference :library_version, on_delete: :delete
     end
   end
 

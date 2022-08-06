@@ -1,4 +1,5 @@
 defmodule AshHqWeb.Components.SearchBar do
+  @moduledoc "A clickable search bar that brings up the search overlay"
   use Surface.Component
 
   prop class, :css_class, default: ""

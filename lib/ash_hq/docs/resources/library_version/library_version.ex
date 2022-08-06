@@ -1,7 +1,13 @@
 defmodule AshHq.Docs.LibraryVersion do
+  @moduledoc false
+
   use AshHq.Resource,
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
+
+  resource do
+    description "Represents a version of a library that has been imported."
+  end
 
   search do
     name_attribute :version

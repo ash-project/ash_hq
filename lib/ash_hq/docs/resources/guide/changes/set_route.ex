@@ -1,4 +1,7 @@
 defmodule AshHq.Docs.Guide.Changes.SetRoute do
+  @moduledoc """
+  Sets the route of a guide.
+  """
   use Ash.Resource.Change
 
   def change(changeset, _, _) do

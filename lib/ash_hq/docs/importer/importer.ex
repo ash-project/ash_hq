@@ -7,6 +7,7 @@ defmodule AshHq.Docs.Importer do
   require Logger
   require Ash.Query
 
+  # sobelow_skip ["Misc.BinToTerm", "Traversal.FileModule"]
   def import(opts \\ []) do
     only = opts[:only] || nil
     only_branches? = opts[:only_branches?] || false

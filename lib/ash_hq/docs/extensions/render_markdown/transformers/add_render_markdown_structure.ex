@@ -1,4 +1,11 @@
 defmodule AshHq.Docs.Extensions.RenderMarkdown.Transformers.AddRenderMarkdownStructure do
+  @moduledoc """
+  Adds the resource structure required for the render markdown extension
+
+  Currently, this simply adds the relevant change and adds the destination
+  attributes to the `allow_nil_input` of each action, since it will be adding them automatically.
+  """
+
   use Ash.Dsl.Transformer
   alias Ash.Dsl.Transformer
 
@@ -34,7 +41,5 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Transformers.AddRenderMarkdownStr
     end)
   end
 
-  def after?(Ash.Resource.Transformers.DefaultAccept), do: true
-  def after?(Ash.Resource.Transformers.SetPrimaryActions), do: true
-  def after?(_), do: false
+  def after?(_), do: true
 end

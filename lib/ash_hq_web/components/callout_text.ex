@@ -1,4 +1,5 @@
 defmodule AshHqWeb.Components.CalloutText do
+  @moduledoc "Highlights some text on the page"
   use Surface.Component
 
   slot default, required: true

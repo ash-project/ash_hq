@@ -1,4 +1,8 @@
 defmodule AshHq.Docs.Extensions.RenderMarkdown do
+  @moduledoc """
+  Sets up markdown text attributes to be transformed to html (in another column).
+  """
+
   @render_markdown %Ash.Dsl.Section{
     name: :render_markdown,
     schema: [

@@ -1,8 +1,9 @@
 defmodule AshHqWeb.Components.RightNav do
+  @moduledoc "The right nav shown for functions in a module."
   use Surface.Component
 
-  prop(functions, :list, default: [])
-  prop(module, :string, required: true)
+  prop functions, :list, default: []
+  prop module, :string, required: true
 
   def render(assigns) do
     ~F"""

@@ -1,23 +1,9 @@
 defmodule AshHq.Accounts.UserToken do
-  use Ash.Resource,
+  @moduledoc false
+
+  use AshHq.Resource,
     data_layer: AshPostgres.DataLayer,
     notifiers: [AshHq.Accounts.EmailNotifier]
-
-  alias AshHq.Accounts.UserToken.Changes, warn: false
-  alias AshHq.Accounts.Preparations, warn: false
-
-  postgres do
-    table "user_tokens"
-    repo AshHq.Repo
-
-    references do
-      reference :user, on_delete: :delete, on_update: :update
-    end
-  end
-
-  identities do
-    identity :token_context, [:context, :token]
-  end
 
   actions do
     defaults [:read]
@@ -25,8 +11,8 @@ defmodule AshHq.Accounts.UserToken do
     read :verify_email_token do
       argument :token, :url_encoded_binary, allow_nil?: false
       argument :context, :string, allow_nil?: false
-      prepare Preparations.SetHashedToken
-      prepare Preparations.DetermineDaysForToken
+      prepare AshHq.Accounts.Preparations.SetHashedToken
+      prepare AshHq.Accounts.Preparations.DetermineDaysForToken
 
       filter expr(
                token == ^context(:hashed_token) and context == ^arg(:context) and
@@ -41,7 +27,7 @@ defmodule AshHq.Accounts.UserToken do
 
       change manage_relationship(:user, type: :replace)
       change set_attribute(:context, "session")
-      change Changes.BuildSessionToken
+      change AshHq.Accounts.UserToken.Changes.BuildSessionToken
     end
 
     create :build_email_token do
@@ -50,7 +36,7 @@ defmodule AshHq.Accounts.UserToken do
       argument :user, :map
 
       change manage_relationship(:user, type: :replace)
-      change Changes.BuildHashedToken
+      change AshHq.Accounts.UserToken.Changes.BuildHashedToken
     end
   end
 
@@ -64,7 +50,26 @@ defmodule AshHq.Accounts.UserToken do
     create_timestamp :created_at
   end
 
+  identities do
+    identity :token_context, [:context, :token]
+  end
+
+  postgres do
+    table "user_tokens"
+    repo AshHq.Repo
+
+    references do
+      reference :user, on_delete: :delete, on_update: :update
+    end
+  end
+
   relationships do
     belongs_to :user, AshHq.Accounts.User
+  end
+
+  resource do
+    description """
+    Represents a token allowing a user to log in, reset their password, or confirm their email.
+    """
   end
 end

@@ -30,3 +30,6 @@ config :logger, level: :warn
 config :phoenix, :plug_init_mode, :runtime
 
 config :ash_hq, AshHq.Mailer, adapter: Swoosh.Adapters.Local
+
+config :plug_content_security_policy,
+  report_only: true

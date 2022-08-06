@@ -1,30 +1,31 @@
 defmodule AshHqWeb.Pages.Docs do
+  @moduledoc "The page for showing documentation"
   use Surface.Component
 
-  alias Phoenix.LiveView.JS
   alias AshHq.Docs.Extensions.RenderMarkdown
   alias AshHqWeb.Components.{CalloutText, DocSidebar, RightNav, Tag}
-  alias AshHqWeb.Routes
+  alias AshHqWeb.DocRoutes
+  alias Phoenix.LiveView.JS
   require Logger
 
-  prop(change_versions, :event, required: true)
-  prop(selected_versions, :map, required: true)
-  prop(libraries, :list, default: [])
-  prop(uri, :string)
-  prop(sidebar_state, :map, required: true)
-  prop(collapse_sidebar, :event, required: true)
-  prop(expand_sidebar, :event, required: true)
+  prop change_versions, :event, required: true
+  prop selected_versions, :map, required: true
+  prop libraries, :list, default: []
+  prop uri, :string
+  prop sidebar_state, :map, required: true
+  prop collapse_sidebar, :event, required: true
+  prop expand_sidebar, :event, required: true
 
-  prop(library, :any)
-  prop(extension, :any)
-  prop(docs, :any)
-  prop(library_version, :any)
-  prop(guide, :any)
-  prop(doc_path, :list, default: [])
-  prop(dsls, :list, default: [])
-  prop(dsl, :any)
-  prop(options, :list, default: [])
-  prop(module, :any)
+  prop library, :any
+  prop extension, :any
+  prop docs, :any
+  prop library_version, :any
+  prop guide, :any
+  prop doc_path, :list, default: []
+  prop dsls, :list, default: []
+  prop dsl, :any
+  prop options, :list, default: []
+  prop module, :any
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -137,7 +138,7 @@ defmodule AshHqWeb.Pages.Docs do
               {#for mod <- imports}
                 <ul>
                   <li>
-                    <a href={Routes.doc_link(mod, @selected_versions)}>{mod.name}</a>
+                    <a href={DocRoutes.doc_link(mod, @selected_versions)}>{mod.name}</a>
                   </li>
                 </ul>
               {/for}
@@ -151,7 +152,7 @@ defmodule AshHqWeb.Pages.Docs do
               <ul>
                 {#for child <- children}
                   <li>
-                    <a href={Routes.doc_link(child, @selected_versions)}>{child.name}</a>
+                    <a href={DocRoutes.doc_link(child, @selected_versions)}>{child.name}</a>
                   </li>
                 {/for}
               </ul>
@@ -281,13 +282,7 @@ defmodule AshHqWeb.Pages.Docs do
       dsl.imports || []
     end)
     |> Enum.flat_map(fn mod_name ->
-      case Enum.find_value(libraries, fn library ->
-             Enum.find_value(library.versions, fn version ->
-               if version.id == selected_versions[library.id] do
-                 Enum.find(version.modules, &(&1.name == mod_name))
-               end
-             end)
-           end) do
+      case find_module(libraries, selected_versions, mod_name) do
         nil ->
           Logger.warn("No such module found called #{inspect(mod_name)}")
           []
@@ -295,6 +290,16 @@ defmodule AshHqWeb.Pages.Docs do
         module ->
           [module]
       end
+    end)
+  end
+
+  defp find_module(libraries, selected_versions, mod_name) do
+    Enum.find_value(libraries, fn library ->
+      Enum.find_value(library.versions, fn version ->
+        if version.id == selected_versions[library.id] do
+          Enum.find(version.modules, &(&1.name == mod_name))
+        end
+      end)
     end)
   end
 
@@ -363,7 +368,7 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   def path_to_name(path, name) do
-    Enum.map_join(path ++ [name], "-", &Routes.sanitize_name/1)
+    Enum.map_join(path ++ [name], "-", &DocRoutes.sanitize_name/1)
   end
 
   defp render_tags(assigns, option) do
@@ -376,8 +381,8 @@ defmodule AshHqWeb.Pages.Docs do
     """
   end
 
-  def show_sidebar() do
-    %JS{}
+  def show_sidebar(js \\ %JS{}) do
+    js
     |> JS.toggle(
       to: "#mobile-sidebar-container",
       in: {
@@ -493,7 +498,7 @@ defmodule AshHqWeb.Pages.Docs do
               raise "No such guide in link: #{source}"
 
           """
-          <a href="#{Routes.doc_link(guide, assigns[:selected_versions])}">#{item}</a>
+          <a href="#{DocRoutes.doc_link(guide, assigns[:selected_versions])}">#{item}</a>
           """
 
         "dsl" ->
@@ -508,12 +513,12 @@ defmodule AshHqWeb.Pages.Docs do
 
         "module" ->
           """
-          <a href="/docs/module/#{library.name}/#{Routes.sanitize_name(version.version)}/#{Routes.sanitize_name(item)}">#{item}</a>
+          <a href="/docs/module/#{library.name}/#{DocRoutes.sanitize_name(version.version)}/#{DocRoutes.sanitize_name(item)}">#{item}</a>
           """
 
         "extension" ->
           """
-          <a href="/docs/dsl/#{library.name}/#{version.sanitized_version}/#{Routes.sanitize_name(item)}">#{item}</a>
+          <a href="/docs/dsl/#{library.name}/#{version.sanitized_version}/#{DocRoutes.sanitize_name(item)}">#{item}</a>
           """
 
         type ->

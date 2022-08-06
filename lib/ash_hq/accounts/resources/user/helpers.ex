@@ -1,4 +1,5 @@
 defmodule AshHq.Accounts.User.Helpers do
+  @moduledoc "Contains values used in various places for authentication"
   @reset_password_validity_in_days 1
   @confirm_validity_in_days 7
   @change_email_validity_in_days 7

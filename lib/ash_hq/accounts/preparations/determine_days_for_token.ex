@@ -1,9 +1,10 @@
 defmodule AshHq.Accounts.Preparations.DetermineDaysForToken do
-  use Ash.Resource.Preparation
+  @moduledoc """
+  Sets a `days_for_token` context on the query.
 
-  def determine_days_for_token() do
-    {__MODULE__, []}
-  end
+  This corresponds to how many days the token should be considered valid. See `AshHq.Accounts.User.Helpers` for more.
+  """
+  use Ash.Resource.Preparation
 
   def prepare(query, _opts, _) do
     Ash.Query.put_context(

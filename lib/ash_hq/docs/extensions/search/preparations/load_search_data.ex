@@ -1,4 +1,7 @@
 defmodule AshHq.Extensions.Search.Preparations.LoadSearchData do
+  @moduledoc """
+  Ensures that any data needed for search results is loaded.
+  """
   use Ash.Resource.Preparation
 
   def prepare(query, _, _) do
@@ -10,7 +13,7 @@ defmodule AshHq.Extensions.Search.Preparations.LoadSearchData do
       |> Ash.Query.load(
         search_headline: [query: query_string],
         match_rank: [query: query_string],
-        name_matches: %{query: query_string, similarity: 0.7}
+        name_matches: [query: query_string, similarity: 0.7]
       )
       |> Ash.Query.load(to_load)
       |> Ash.Query.sort(match_rank: {:asc, %{query: query_string}})

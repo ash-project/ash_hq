@@ -1,4 +1,10 @@
 defmodule AshHq.Docs.Extensions.Search do
+  @moduledoc """
+  Sets a resource up to be searchable. See the configuration for explanation of the options.
+
+  This generally involves ensuring that there is a url safe name attribute to be used in routing,
+  and configuring how the item will be searched for.
+  """
   alias Ash.Dsl.Extension
 
   @search %Ash.Dsl.Section{
@@ -23,6 +29,12 @@ defmodule AshHq.Docs.Extensions.Search do
         type: :atom,
         doc:
           "The name of the attribute to store the sanitized name in. If not set, will default to the `sanitized_<name_attribute>`"
+      ],
+      auto_sanitize_name_attribute?: [
+        type: :boolean,
+        default: true,
+        doc:
+          "Wether or not the name attribute will be sanitized by default. If not, you should have a change on the resource that sets it."
       ],
       show_docs_on: [
         type: :atom,
@@ -72,12 +84,22 @@ defmodule AshHq.Docs.Extensions.Search do
     Extension.get_opt(resource, [:search], :doc_attribute, nil)
   end
 
+  # sobelow_skip ["DOS.BinToAtom"]
   def sanitized_name_attribute(resource) do
     Extension.get_opt(
       resource,
       [:search],
       :sanitized_name_attribute,
       :"sanitized_#{name_attribute(resource)}"
+    )
+  end
+
+  def auto_sanitize_name_attribute?(resource) do
+    Extension.get_opt(
+      resource,
+      [:search],
+      :auto_sanitize_name_attribute?,
+      true
     )
   end
 

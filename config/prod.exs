@@ -52,3 +52,9 @@ config :logger, level: :info
 
 config :ash_hq, AshHq.Mailer, adapter: Swoosh.Adapters.Postmark
 config :swoosh, :api_client, Swoosh.ApiClient.Finch
+
+config :plug_content_security_policy,
+  nonces_for: [:script_src],
+  directives: %{
+    img_src: ~w('self' data data:)
+  }

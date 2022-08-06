@@ -6,10 +6,6 @@ defmodule AshHq.Accounts.UserToken.Changes.BuildHashedToken do
   @rand_size 32
   @hash_algorithm :sha256
 
-  def build_hashed_token() do
-    {__MODULE__, []}
-  end
-
   def change(changeset, _opts, _context) do
     token = :crypto.strong_rand_bytes(@rand_size)
 

@@ -1,4 +1,9 @@
 defmodule AshHq.Accounts.User.Changes.RemoveAllTokens do
+  @moduledoc """
+  Removes all tokens for a given user.
+
+  Since Ash does not yet support bulk actions, this goes straight to the data layer.
+  """
   use Ash.Resource.Change
   require Ash.Query
 

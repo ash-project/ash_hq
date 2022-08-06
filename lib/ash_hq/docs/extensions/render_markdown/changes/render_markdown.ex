@@ -1,4 +1,8 @@
 defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
+  @moduledoc """
+  Writes a markdown text attribute to its corresponding html attribute.
+  """
+
   use Ash.Resource.Change
 
   def change(changeset, opts, _) do

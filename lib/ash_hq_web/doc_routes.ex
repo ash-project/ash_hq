@@ -1,4 +1,5 @@
-defmodule AshHqWeb.Routes do
+defmodule AshHqWeb.DocRoutes do
+  @moduledoc "Helpers for routing to results of searches"
   def library_link(library, name) do
     "/docs/dsl/#{library.name}/#{name}"
   end

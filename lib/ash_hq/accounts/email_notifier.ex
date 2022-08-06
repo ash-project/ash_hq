@@ -1,4 +1,8 @@
 defmodule AshHq.Accounts.EmailNotifier do
+  @moduledoc """
+  Hooks into resource notifications on the user token resource to send emails
+  """
+
   def notify(%Ash.Notifier.Notification{
         resource: AshHq.Accounts.UserToken,
         action: %{name: :build_email_token},

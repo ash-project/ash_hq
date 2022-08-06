@@ -9,17 +9,15 @@ defmodule AshHqWeb.Router do
     plug :fetch_live_flash
     plug :put_root_layout, {AshHqWeb.LayoutView, :root}
     plug :protect_from_forgery
-    plug :put_secure_browser_headers
-    plug :fetch_current_user
     plug AshHqWeb.SessionPlug
+  end
+
+  pipeline :dead_view_authentication do
+    plug :fetch_current_user
   end
 
   pipeline :api do
     plug :accepts, ["json"]
-  end
-
-  pipeline :api_authenticated do
-    plug AshHqWeb.AuthAccessPipeline
   end
 
   scope "/", AshHqWeb do
@@ -30,7 +28,9 @@ defmodule AshHqWeb.Router do
   scope "/", AshHqWeb do
     pipe_through :browser
 
-    live_session :main, root_layout: {AshHqWeb.LayoutView, "root.html"} do
+    live_session :main,
+      on_mount: {AshHqWeb.LiveUserAuth, :live_user},
+      root_layout: {AshHqWeb.LayoutView, "root.html"} do
       live "/", AppViewLive, :home
       live "/docs/", AppViewLive, :docs_dsl
       live "/docs/guides/:library/:version/*guide", AppViewLive, :docs_dsl
@@ -45,7 +45,12 @@ defmodule AshHqWeb.Router do
   ## Authentication routes
 
   scope "/", AshHqWeb do
-    pipe_through [:browser, :redirect_if_user_is_authenticated, :put_session_layout]
+    pipe_through [
+      :browser,
+      :dead_view_authentication,
+      :redirect_if_user_is_authenticated,
+      :put_session_layout
+    ]
 
     get "/users/register", UserRegistrationController, :new
     post "/users/register", UserRegistrationController, :create
@@ -58,7 +63,7 @@ defmodule AshHqWeb.Router do
   end
 
   scope "/", AshHqWeb do
-    pipe_through [:browser, :require_authenticated_user]
+    pipe_through [:browser, :dead_view_authentication, :require_authenticated_user]
 
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
@@ -66,9 +71,9 @@ defmodule AshHqWeb.Router do
   end
 
   scope "/", AshHqWeb do
-    pipe_through [:browser]
+    pipe_through [:browser, :dead_view_authentication]
 
-    get "/users/log_out", UserSessionController, :delete
+    # get "/users/log_out", UserSessionController, :delete
     delete "/users/log_out", UserSessionController, :delete
     get "/users/confirm", UserConfirmationController, :new
     post "/users/confirm", UserConfirmationController, :create
@@ -91,7 +96,7 @@ defmodule AshHqWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/" do
-      pipe_through :browser
+      pipe_through [:browser, :dead_view_authentication]
 
       live_dashboard "/dashboard", metrics: AshHqWeb.Telemetry
     end
@@ -103,7 +108,7 @@ defmodule AshHqWeb.Router do
   # node running the Phoenix server.
   if Mix.env() == :dev do
     scope "/dev" do
-      pipe_through :browser
+      pipe_through [:browser, :dead_view_authentication]
 
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end

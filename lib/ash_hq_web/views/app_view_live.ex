@@ -5,7 +5,9 @@ defmodule AshHqWeb.AppViewLive do
   alias AshHq.Docs.Extensions.RenderMarkdown
   alias AshHqWeb.Components.{Search, SearchBar}
   alias AshHqWeb.Pages.{Docs, Home}
+  alias AshHqWeb.Router.Helpers, as: Routes
   alias Phoenix.LiveView.JS
+  alias Surface.Components.LiveRedirect
   require Ash.Query
 
   data configured_theme, :string, default: :system
@@ -14,6 +16,7 @@ defmodule AshHqWeb.AppViewLive do
   data libraries, :list, default: []
   data selected_types, :map, default: %{}
   data sidebar_state, :map, default: %{}
+  data current_user, :map
 
   data library, :any, default: nil
   data extension, :any, default: nil
@@ -130,6 +133,11 @@ defmodule AshHqWeb.AppViewLive do
                   <Heroicons.Solid.MoonIcon class="w-6 h-6 fill-gray-400 hover:fill-gray-200 hover:text-gray-200" />
               {/case}
             </button>
+            {#if @current_user}
+              <button class="flex flex-row space-x-2 items-center" phx-click={toggle_account_dropdown()}> <div>Account</div> <Heroicons.Solid.ChevronDownIcon class="w-4 h-4" /></button>
+            {#else}
+              <LiveRedirect to={Routes.user_session_path(AshHqWeb.Endpoint, :create)} >Sign In </LiveRedirect>
+            {/if}
           </div>
         </div>
         {#case @live_action}
@@ -159,6 +167,23 @@ defmodule AshHqWeb.AppViewLive do
       </div>
     </div>
     """
+  end
+
+  defp toggle_account_dropdown(js \\ %JS{}) do
+    js
+    |> JS.toggle(
+      to: "#account-dropdown",
+      in: {
+        "transition ease-in duration-100",
+        "opacity-0",
+        "opacity-100"
+      },
+      out: {
+        "transition ease-out duration-75",
+        "opacity-100",
+        "opacity-0"
+      }
+    )
   end
 
   def handle_params(params, uri, socket) do

@@ -1,8 +1,9 @@
 defmodule AshHqWeb.Components.Tag do
+  @moduledoc "Renders a simple pill style tag"
   use Surface.Component
 
-  prop(color, :atom, values: [:red])
-  slot(default)
+  prop color, :atom, values: [:red]
+  slot default
 
   def render(assigns) do
     ~F"""

@@ -1,4 +1,8 @@
 defmodule AshHq.Accounts.Emails do
+  @moduledoc """
+  Delivers emails.
+  """
+
   import Swoosh.Email
 
   def deliver_confirmation_instructions(user, url) do

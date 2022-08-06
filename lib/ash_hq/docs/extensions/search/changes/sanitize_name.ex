@@ -1,4 +1,8 @@
 defmodule AshHq.Docs.Extensions.Search.Changes.SanitizeName do
+  @moduledoc """
+  Writes the sanitized (url-safe) name of a record
+  """
+
   use Ash.Resource.Change
 
   def change(changeset, opts, _) do

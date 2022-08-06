@@ -1,4 +1,7 @@
 defmodule AshHq.Docs.Search.Steps.SearchResource do
+  @moduledoc """
+  Runs the search action of a given resource, or skips it if it should not be included in the results.
+  """
   use Ash.Flow.Step
 
   def run(input, _opts, _context) do

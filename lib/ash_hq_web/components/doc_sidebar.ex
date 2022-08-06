@@ -1,7 +1,8 @@
 defmodule AshHqWeb.Components.DocSidebar do
+  @moduledoc "The left sidebar of the docs pages"
   use Surface.Component
 
-  alias AshHqWeb.Routes
+  alias AshHqWeb.DocRoutes
   alias Surface.Components.LiveRedirect
 
   prop class, :css_class, default: ""
@@ -29,21 +30,21 @@ defmodule AshHqWeb.Components.DocSidebar do
           </div>
           {#for {category, guides} <- guides_by_category(@libraries)}
             <div class="text-gray-500">
-              {#if @sidebar_state["guides-#{Routes.sanitize_name(category)}"] == "open" || (@guide && Enum.any?(guides, &(&1.id == @guide.id))) || (@sidebar_state["guides-#{Routes.sanitize_name(category)}"] != "closed" && category == "Tutorials")}
-                <button :on-click={@collapse_sidebar} phx-value-id={"guides-#{Routes.sanitize_name(category)}"} class="flex flex-row items-center">
+              {#if @sidebar_state["guides-#{DocRoutes.sanitize_name(category)}"] == "open" || (@guide && Enum.any?(guides, &(&1.id == @guide.id))) || (@sidebar_state["guides-#{DocRoutes.sanitize_name(category)}"] != "closed" && category == "Tutorials")}
+                <button :on-click={@collapse_sidebar} phx-value-id={"guides-#{DocRoutes.sanitize_name(category)}"} class="flex flex-row items-center">
                   <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" /><div>{category}</div>
                 </button>
               {#else}
-                <button :on-click={@expand_sidebar} phx-value-id={"guides-#{Routes.sanitize_name(category)}"} class="flex flex-row items-center">
+                <button :on-click={@expand_sidebar} phx-value-id={"guides-#{DocRoutes.sanitize_name(category)}"} class="flex flex-row items-center">
                   <Heroicons.Outline.ChevronRightIcon class="w-3 h-3 mr-1" /><div>{category}</div>
                 </button>
               {/if}
             </div>
-            {#if @sidebar_state["guides-#{Routes.sanitize_name(category)}"] == "open" || (@guide && Enum.any?(guides, &(&1.id == @guide.id))) || (@sidebar_state["guides-#{Routes.sanitize_name(category)}"] != "closed" && category == "Tutorials")}
+            {#if @sidebar_state["guides-#{DocRoutes.sanitize_name(category)}"] == "open" || (@guide && Enum.any?(guides, &(&1.id == @guide.id))) || (@sidebar_state["guides-#{DocRoutes.sanitize_name(category)}"] != "closed" && category == "Tutorials")}
               {#for guide <- guides}
                 <li class="ml-3">
                   <LiveRedirect
-                    to={Routes.doc_link(guide, @selected_versions)}
+                    to={DocRoutes.doc_link(guide, @selected_versions)}
                     class={
                       "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
                       "bg-gray-300 dark:bg-gray-600": @guide && @guide.id == guide.id
@@ -75,7 +76,7 @@ defmodule AshHqWeb.Components.DocSidebar do
               {#for extension <- get_extensions(@libraries)}
                 <li class="ml-3">
                   <LiveRedirect
-                    to={Routes.doc_link(extension, @selected_versions)}
+                    to={DocRoutes.doc_link(extension, @selected_versions)}
                     class={
                       "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
                       "dark:bg-gray-600": @extension && @extension.id == extension.id
@@ -111,7 +112,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                 {#for module <- modules}
                   <li class="ml-4">
                     <LiveRedirect
-                      to={Routes.doc_link(module, @selected_versions)}
+                      to={DocRoutes.doc_link(module, @selected_versions)}
                       class={
                         "flex items-center pt-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
                         "dark:bg-gray-600": @module && @module.id == module.id
@@ -173,7 +174,7 @@ defmodule AshHqWeb.Components.DocSidebar do
               {/if}
             {/if}
             <LiveRedirect
-              to={Routes.doc_link(dsl, @selected_versions)}
+              to={DocRoutes.doc_link(dsl, @selected_versions)}
               class={
                 "flex items-center p-1 text-base font-normal rounded-lg hover:text-orange-300",
                 "text-orange-600 dark:text-orange-400 font-bold": @dsl && @dsl.id == dsl.id

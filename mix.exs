@@ -56,8 +56,9 @@ defmodule AshHq.MixProject do
       {:swoosh, "~> 1.3"},
       {:premailex, "~> 0.3.0"},
       # Authentication
-      {:guardian, "~> 2.0"},
       {:bcrypt_elixir, "~> 3.0"},
+      # CSP
+      {:plug_content_security_policy, "~> 0.2.1"},
       # Phoenix/Core dependencies
       {:phoenix, "~> 1.6.6"},
       {:phoenix_ecto, "~> 4.4"},
@@ -77,9 +78,15 @@ defmodule AshHq.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       # Dependencies
-      {:sobelow, "~> 0.8", only: :dev},
-      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
-      {:elixir_sense, github: "elixir-lsp/elixir_sense"}
+      {:elixir_sense, github: "elixir-lsp/elixir_sense"},
+      # Build/Check dependencies
+      {:git_ops, "~> 2.4.4", only: :dev},
+      {:ex_doc, "~> 0.23", only: :dev, runtime: false},
+      {:ex_check, "~> 0.14", only: :dev},
+      {:credo, ">= 0.0.0", only: :dev, runtime: false},
+      {:dialyxir, ">= 0.0.0", only: :dev, runtime: false},
+      {:sobelow, ">= 0.0.0", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.14", only: [:dev, :test]}
     ]
   end
 
@@ -94,8 +101,10 @@ defmodule AshHq.MixProject do
       seed: ["run priv/repo/seeds.exs"],
       setup: ["ash_postgres.create", "ash_postgres.migrate", "seed"],
       reset: ["drop", "setup"],
+      credo: "credo --strict",
       drop: ["ash_postgres.drop"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      sobelow: ["sobelow --skip"],
       "assets.deploy": [
         "cmd --cd assets npm run deploy",
         "esbuild default --minify",

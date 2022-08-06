@@ -1,7 +1,13 @@
 defmodule AshHq.Docs.Option do
+  @moduledoc false
+
   use AshHq.Resource,
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
+
+  resource do
+    description "Represents an option on a DSL section or entity"
+  end
 
   render_markdown do
     render_attributes doc: :doc_html

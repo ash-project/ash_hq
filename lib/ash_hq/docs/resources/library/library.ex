@@ -1,6 +1,11 @@
 defmodule AshHq.Docs.Library do
+  @moduledoc false
   use AshHq.Resource,
     data_layer: AshPostgres.DataLayer
+
+  resource do
+    description "Represents a library that will be imported into AshHq"
+  end
 
   postgres do
     table "libraries"

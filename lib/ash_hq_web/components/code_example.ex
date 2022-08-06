@@ -1,14 +1,14 @@
 defmodule AshHqWeb.Components.CodeExample do
+  @moduledoc "Renders a code example, as seen on the home page"
   use Surface.LiveComponent
 
-  prop text, :string, required: true
+  prop code, :string, required: true
   prop class, :css_class
   prop title, :string
   prop start_collapsed, :boolean, default: false
   prop collapsible, :boolean, default: false
 
   data collapsed, :string, default: false
-  data code, :string, default: ""
 
   def render(assigns) do
     ~F"""
@@ -73,19 +73,17 @@ defmodule AshHqWeb.Components.CodeExample do
       {:ok,
        socket
        |> assign(assigns)
-       |> assign(:collapsed, true)
-       |> assign(:code, to_code(assigns[:text]))}
+       |> assign(:collapsed, true)}
     else
       {:ok,
        socket
        |> assign(assigns)
-       |> assign(:collapsed, false)
-       |> assign(:code, to_code(assigns[:text]))}
+       |> assign(:collapsed, false)}
     end
   end
 
-  defp to_code(text) do
-    # TODO: do this at compile time
+  @doc false
+  def to_code(text) do
     lines =
       text
       # this is pretty naive, won't handle things like block comments

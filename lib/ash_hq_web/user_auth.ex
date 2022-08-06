@@ -1,4 +1,8 @@
 defmodule AshHqWeb.UserAuth do
+  @moduledoc """
+  Helpers for authenticating, logging in and logging out users.
+  """
+
   import Plug.Conn
   import Phoenix.Controller
 
@@ -106,14 +110,20 @@ defmodule AshHqWeb.UserAuth do
   def fetch_current_user(conn, _opts) do
     {user_token, conn} = ensure_user_token(conn)
 
-    user =
-      if user_token do
-        AshHq.Accounts.User
-        |> Ash.Query.for_read(:by_token, token: user_token, context: "session")
-        |> AshHq.Accounts.read_one!()
-      end
+    assign(conn, :current_user, user_for_session_token(user_token))
+  end
 
-    assign(conn, :current_user, user)
+  @doc """
+  Gets the user corresponding to a given session token.
+
+  If the session token is nil or does not exist, then `nil` is returned.
+  """
+  def user_for_session_token(nil), do: nil
+
+  def user_for_session_token(user_token) do
+    AshHq.Accounts.User
+    |> Ash.Query.for_read(:by_token, token: user_token, context: "session")
+    |> AshHq.Accounts.read_one!()
   end
 
   defp ensure_user_token(conn) do

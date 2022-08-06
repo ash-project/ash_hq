@@ -1,4 +1,8 @@
 defmodule AshHq.Accounts.Preparations.SetHashedToken do
+  @moduledoc """
+  Takes a provided token and hashes it, setting it as the context `hashed_token`
+  """
+
   use Ash.Resource.Preparation
 
   @hash_algorithm :sha256

@@ -1,7 +1,13 @@
 defmodule AshHq.Docs.Module do
+  @moduledoc false
+
   use AshHq.Resource,
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
+
+  resource do
+    description "Represents a module that has been exposed by a library"
+  end
 
   render_markdown do
     render_attributes doc: :doc_html

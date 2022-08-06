@@ -1,4 +1,8 @@
 defmodule AshHq.Docs.Changes.AddArgToRelationship do
+  @moduledoc """
+  A general utility to pass an argument of the current action down to a relationship change
+  that is being made.
+  """
   use Ash.Resource.Change
 
   def change(changeset, opts, _) do

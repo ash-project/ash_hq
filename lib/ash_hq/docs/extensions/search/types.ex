@@ -1,4 +1,8 @@
 defmodule AshHq.Docs.Extensions.Search.Types do
+  @moduledoc """
+  A static list of all search types that currently exist
+  """
+
   @search_types AshHq.Docs.Registry
                 |> Ash.Registry.entries()
                 |> Enum.filter(
@@ -7,7 +11,7 @@ defmodule AshHq.Docs.Extensions.Search.Types do
                 |> Enum.map(&AshHq.Docs.Extensions.Search.type/1)
                 |> Enum.uniq()
 
-  def types() do
+  def types do
     @search_types
   end
 end

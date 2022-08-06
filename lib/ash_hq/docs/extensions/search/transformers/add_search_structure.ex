@@ -1,4 +1,18 @@
 defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
+  @moduledoc """
+  Adds the resource structure required by the search extension.
+
+  * Adds a sanitized name attribute if it doesn't already exist
+  * Adds a change to set the sanitized name, if it should.
+  * Adds a `search_headline` calculation
+  * Adds a `name_matches` calculation
+  * Adds a `matches` calculation
+  * Adds relevant indexes using custom sql statements
+  * Adds an `html_for` calculation, that shows the html if a certain field matches, so docs are only shown on the right pages
+  * Adds a `match_rank` calculation.
+  * Adds a search action
+  * Adds a code interface for the search action
+  """
   use Ash.Dsl.Transformer
   import Ash.Filter.TemplateHelpers
   require Ash.Query
@@ -19,9 +33,9 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
 
     {:ok,
      dsl_state
-     |> add_code_interface()
      |> add_sanitized_name(config)
      |> add_search_action(config)
+     |> add_code_interface()
      |> add_search_headline_calculation(config)
      |> add_name_matches_calculation(config)
      |> add_matches_calculation(config)
@@ -55,28 +69,39 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
   end
 
   defp add_sanitized_name(dsl_state, config) do
-    dsl_state
-    |> Transformer.add_entity(
-      [:attributes],
-      Transformer.build_entity!(
-        Ash.Resource.Dsl,
-        [:attributes],
-        :attribute,
-        name: config.sanitized_name_attribute,
-        type: :string,
-        allow_nil?: false
+    dsl_state =
+      if Ash.Resource.Info.attribute(config.resource, config.sanitized_name_attribute) do
+        dsl_state
+      else
+        Transformer.add_entity(
+          dsl_state,
+          [:attributes],
+          Transformer.build_entity!(
+            Ash.Resource.Dsl,
+            [:attributes],
+            :attribute,
+            name: config.sanitized_name_attribute,
+            type: :string,
+            allow_nil?: false
+          )
+        )
+      end
+
+    if AshHq.Docs.Extensions.Search.auto_sanitize_name_attribute?(config.resource) do
+      Transformer.add_entity(
+        dsl_state,
+        [:changes],
+        Transformer.build_entity!(Ash.Resource.Dsl, [:changes], :change,
+          change:
+            {AshHq.Docs.Extensions.Search.Changes.SanitizeName,
+             source: config.name_attribute,
+             destination: config.sanitized_name_attribute,
+             use_path_for_name?: AshHq.Docs.Extensions.Search.use_path_for_name?(config.resource)}
+        )
       )
-    )
-    |> Transformer.add_entity(
-      [:changes],
-      Transformer.build_entity!(Ash.Resource.Dsl, [:changes], :change,
-        change:
-          {AshHq.Docs.Extensions.Search.Changes.SanitizeName,
-           source: config.name_attribute,
-           destination: config.sanitized_name_attribute,
-           use_path_for_name?: AshHq.Docs.Extensions.Search.use_path_for_name?(config.resource)}
-      )
-    )
+    else
+      dsl_state
+    end
   end
 
   defp add_indexes(dsl_state, config) do
@@ -275,7 +300,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
           calculation:
             Ash.Query.expr(
               fragment(
-                "ts_headline('english', ?, plainto_tsquery('english', ?), 'MaxFragments=2,StartSel=\"<span class=\"\"search-hit\"\">\", StopSel=</span>')",
+                ~S[ts_headline('english', ?, plainto_tsquery('english', ?), 'MaxFragments=2,StartSel=\"<span class=\"\"search-hit\"\">\", StopSel=</span>')],
                 ^ref(config.doc_attribute),
                 ^arg(:query)
               )
@@ -296,7 +321,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
     end
   end
 
-  defp html_for_argument() do
+  defp html_for_argument do
     Transformer.build_entity!(
       Ash.Resource.Dsl,
       [:calculations, :calculate],
@@ -307,7 +332,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
     )
   end
 
-  defp query_argument() do
+  defp query_argument do
     Transformer.build_entity!(
       Ash.Resource.Dsl,
       [:calculations, :calculate],
@@ -318,7 +343,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
     )
   end
 
-  defp similarity_argument() do
+  defp similarity_argument do
     Transformer.build_entity!(
       Ash.Resource.Dsl,
       [:calculations, :calculate],
@@ -357,7 +382,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
     )
   end
 
-  defp search_arguments() do
+  defp search_arguments do
     [
       Transformer.build_entity!(
         Ash.Resource.Dsl,
@@ -376,7 +401,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
     ]
   end
 
-  defp search_preparations() do
+  defp search_preparations do
     [
       Transformer.build_entity!(Ash.Resource.Dsl, [:actions, :read], :prepare,
         preparation: AshHq.Extensions.Search.Preparations.LoadSearchData

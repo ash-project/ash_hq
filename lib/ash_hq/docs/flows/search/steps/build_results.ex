@@ -1,4 +1,7 @@
 defmodule AshHq.Docs.Search.Steps.BuildResults do
+  @moduledoc """
+  Sorts the results of search.
+  """
   use Ash.Flow.Step
 
   def run(input, _opts, _context) do

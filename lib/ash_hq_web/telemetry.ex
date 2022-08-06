@@ -1,4 +1,5 @@
 defmodule AshHqWeb.Telemetry do
+  @moduledoc "Telemetry metrics registry/handler"
   use Supervisor
   import Telemetry.Metrics
 
