@@ -75,10 +75,6 @@ defmodule AshHqWeb.Router do
     get "/users/confirm/:token", UserConfirmationController, :confirm
   end
 
-  if Mix.env() == :dev do
-    forward "/sent_emails", Bamboo.SentEmailViewerPlug
-  end
-
   # Other scopes may use custom stacks.
   # scope "/api", AshHqWeb do
   #   pipe_through :api

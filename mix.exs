@@ -52,10 +52,9 @@ defmodule AshHq.MixProject do
       {:makeup_eex, "~> 0.1.1"},
       {:makeup_js, "~> 0.1.0"},
       {:makeup_sql, "~> 0.1.0"},
-      # Bamboo for Emailing
-      {:bamboo, "~> 2.2"},
+      # Emails
+      {:swoosh, "~> 1.3"},
       {:premailex, "~> 0.3.0"},
-      {:bamboo_postmark, "~> 1.0"},
       # Authentication
       {:guardian, "~> 2.0"},
       {:bcrypt_elixir, "~> 3.0"},
@@ -72,7 +71,6 @@ defmodule AshHq.MixProject do
       {:floki, ">= 0.30.0"},
       {:phoenix_live_dashboard, "~> 0.6"},
       {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
-      {:swoosh, "~> 1.3"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},
