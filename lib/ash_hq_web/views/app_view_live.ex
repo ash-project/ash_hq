@@ -134,7 +134,8 @@ defmodule AshHqWeb.AppViewLive do
               {/case}
             </button>
             {#if @current_user}
-              <button class="flex flex-row space-x-2 items-center" phx-click={toggle_account_dropdown()}> <div>Account</div> <Heroicons.Solid.ChevronDownIcon class="w-4 h-4" /></button>
+              <button class="flex flex-row space-x-2 items-center dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600" phx-click={toggle_account_dropdown()}> <div>Account</div> <Heroicons.Solid.ChevronDownIcon class="w-4 h-4" /></button>
+
             {#else}
               <LiveRedirect to={Routes.user_session_path(AshHqWeb.Endpoint, :create)} >Sign In </LiveRedirect>
             {/if}

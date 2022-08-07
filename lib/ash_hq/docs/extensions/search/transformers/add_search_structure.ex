@@ -299,8 +299,9 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
           arguments: [query_argument()],
           calculation:
             Ash.Query.expr(
+              # credo:disable-for-next-line
               fragment(
-                ~S[ts_headline('english', ?, plainto_tsquery('english', ?), 'MaxFragments=2,StartSel=\"<span class=\"\"search-hit\"\">\", StopSel=</span>')],
+                "ts_headline('english', ?, plainto_tsquery('english', ?), 'MaxFragments=2,StartSel=\"<span class=\"\"search-hit\"\">\", StopSel=</span>')",
                 ^ref(config.doc_attribute),
                 ^arg(:query)
               )
