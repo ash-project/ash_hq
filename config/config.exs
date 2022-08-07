@@ -72,11 +72,12 @@ import_config "#{config_env()}.exs"
 config :plug_content_security_policy,
   nonces_for: [:script_src],
   directives: %{
-    img_src: ~w('self' data data:),
+    img_src: ~w('self' data:image/svg+xml),
     default_src: ~w('none'),
     connect_src: ~w('self'),
     child_src: ~w('self'),
-    img_src: ~w('self'),
     script_src: ~w('self'),
-    style_src: ~w('self')
+    style_src: ~w('self'),
+    frame_src: ~w('self'),
+    worker_src: ~w('self')
   }

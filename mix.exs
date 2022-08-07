@@ -104,7 +104,7 @@ defmodule AshHq.MixProject do
       credo: "credo --strict",
       drop: ["ash_postgres.drop"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      sobelow: ["sobelow --skip"],
+      sobelow: ["sobelow --skip -i Config.Headers"],
       "assets.deploy": [
         "cmd --cd assets npm run deploy",
         "esbuild default --minify",
