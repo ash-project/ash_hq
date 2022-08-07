@@ -30,17 +30,31 @@ defmodule AshHqWeb.Components.DocSidebar do
           </div>
           {#for {category, guides} <- guides_by_category(@libraries)}
             <div class="text-gray-500">
-              {#if @sidebar_state["guides-#{DocRoutes.sanitize_name(category)}"] == "open" || (@guide && Enum.any?(guides, &(&1.id == @guide.id))) || (@sidebar_state["guides-#{DocRoutes.sanitize_name(category)}"] != "closed" && category == "Tutorials")}
-                <button :on-click={@collapse_sidebar} phx-value-id={"guides-#{DocRoutes.sanitize_name(category)}"} class="flex flex-row items-center">
+              {#if @sidebar_state["guides-#{DocRoutes.sanitize_name(category)}"] == "open" ||
+                  (@guide && Enum.any?(guides, &(&1.id == @guide.id))) ||
+                  (@sidebar_state["guides-#{DocRoutes.sanitize_name(category)}"] != "closed" &&
+                     category == "Tutorials")}
+                <button
+                  :on-click={@collapse_sidebar}
+                  phx-value-id={"guides-#{DocRoutes.sanitize_name(category)}"}
+                  class="flex flex-row items-center"
+                >
                   <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" /><div>{category}</div>
                 </button>
               {#else}
-                <button :on-click={@expand_sidebar} phx-value-id={"guides-#{DocRoutes.sanitize_name(category)}"} class="flex flex-row items-center">
+                <button
+                  :on-click={@expand_sidebar}
+                  phx-value-id={"guides-#{DocRoutes.sanitize_name(category)}"}
+                  class="flex flex-row items-center"
+                >
                   <Heroicons.Outline.ChevronRightIcon class="w-3 h-3 mr-1" /><div>{category}</div>
                 </button>
               {/if}
             </div>
-            {#if @sidebar_state["guides-#{DocRoutes.sanitize_name(category)}"] == "open" || (@guide && Enum.any?(guides, &(&1.id == @guide.id))) || (@sidebar_state["guides-#{DocRoutes.sanitize_name(category)}"] != "closed" && category == "Tutorials")}
+            {#if @sidebar_state["guides-#{DocRoutes.sanitize_name(category)}"] == "open" ||
+                (@guide && Enum.any?(guides, &(&1.id == @guide.id))) ||
+                (@sidebar_state["guides-#{DocRoutes.sanitize_name(category)}"] != "closed" &&
+                   category == "Tutorials")}
               {#for guide <- guides}
                 <li class="ml-3">
                   <LiveRedirect
@@ -63,12 +77,16 @@ defmodule AshHqWeb.Components.DocSidebar do
           <div class="ml-2 space-y-2">
             <div class="text-gray-500">
               {#if @sidebar_state["extensions"] == "open" || @extension}
-                <button :on-click={@collapse_sidebar} phx-value-id="extensions" class="flex flex-row items-center">
-                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1"/>Extensions
+                <button
+                  :on-click={@collapse_sidebar}
+                  phx-value-id="extensions"
+                  class="flex flex-row items-center"
+                >
+                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />Extensions
                 </button>
               {#else}
                 <button :on-click={@expand_sidebar} phx-value-id="extensions" class="flex flex-row items-center">
-                  <Heroicons.Outline.ChevronRightIcon class="w-3 h-3 mr-1"/>Extensions
+                  <Heroicons.Outline.ChevronRightIcon class="w-3 h-3 mr-1" />Extensions
                 </button>
               {/if}
             </div>
@@ -102,7 +120,6 @@ defmodule AshHqWeb.Components.DocSidebar do
                   <Heroicons.Outline.ChevronRightIcon class="w-3 h-3 mr-1" />Modules
                 </button>
               {/if}
-
             </div>
             {#if @sidebar_state["modules"] == "open" || @module}
               {#for {category, modules} <- modules_and_categories(@libraries)}

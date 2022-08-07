@@ -7,7 +7,7 @@ defmodule AshHqWeb.AppViewLive do
   alias AshHqWeb.Pages.{Docs, Home}
   alias AshHqWeb.Router.Helpers, as: Routes
   alias Phoenix.LiveView.JS
-  alias Surface.Components.LiveRedirect
+  alias Surface.Components.{Link, LiveRedirect}
   require Ash.Query
 
   data configured_theme, :string, default: :system
@@ -134,10 +134,59 @@ defmodule AshHqWeb.AppViewLive do
               {/case}
             </button>
             {#if @current_user}
-              <button class="flex flex-row space-x-2 items-center dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600" phx-click={toggle_account_dropdown()}> <div>Account</div> <Heroicons.Solid.ChevronDownIcon class="w-4 h-4" /></button>
+              <div class="relative inline-block text-left">
+                <div>
+                  <button
+                    phx-click={toggle_account_dropdown()}
+                    type="button"
+                    class="inline-flex items-center justify-center w-full rounded-md shadow-sm font-medium dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600"
+                    id="menu-button"
+                    aria-expanded="true"
+                    aria-haspopup="true"
+                  >
+                    Account
+                    <Heroicons.Solid.ChevronDownIcon class="-mr-1 ml-2 h-5 w-5" />
+                  </button>
+                </div>
 
+                <div
+                  id="account-dropdown"
+                  style="display: none;"
+                  class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:text-white dark:bg-primary-black ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="menu-button"
+                  tabindex="-1"
+                  phx-click-away={toggle_account_dropdown()}
+                >
+                  <div class="py-1" role="none">
+                    <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                    <a
+                      href="#"
+                      class="dark:text-white group flex items-center px-4 py-2 text-sm"
+                      role="menuitem"
+                      tabindex="-1"
+                      id="menu-item-0"
+                    >
+                      <Heroicons.Solid.PencilAltIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"/>
+                      Settings
+                    </a>
+                  </div>
+                  <div class="py-1" role="none">
+                    <Link label="logout" to={Routes.user_session_path(AshHqWeb.Endpoint, :delete)}
+                      class="dark:text-white group flex items-center px-4 py-2 text-sm"
+                      method={:delete}
+                      id="menu-item-6"
+                    >
+                      <Heroicons.Outline.LogoutIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" />
+                      Logout
+                    </Link>
+                  </div>
+                </div>
+              </div>
             {#else}
-              <LiveRedirect to={Routes.user_session_path(AshHqWeb.Endpoint, :create)} >Sign In </LiveRedirect>
+              <LiveRedirect to={Routes.user_session_path(AshHqWeb.Endpoint, :create)}>Sign In
+              </LiveRedirect>
             {/if}
           </div>
         </div>
@@ -175,14 +224,14 @@ defmodule AshHqWeb.AppViewLive do
     |> JS.toggle(
       to: "#account-dropdown",
       in: {
-        "transition ease-in duration-100",
-        "opacity-0",
-        "opacity-100"
+        "transition ease-out duration-100",
+        "opacity-0 scale-95",
+        "opacity-100 scale-100"
       },
       out: {
-        "transition ease-out duration-75",
-        "opacity-100",
-        "opacity-0"
+        "transition ease-in duration-75",
+        "opacity-100 scale-100",
+        "opacity-0 scale-05"
       }
     )
   end
