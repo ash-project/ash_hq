@@ -41,7 +41,7 @@ defmodule AshHqWeb.UserSettingsControllerTest do
                email: user.email,
                password: "new valid password"
              })
-             |> Accounts.read_one!()
+             |> Accounts.read_one!(authorize?: false)
     end
 
     test "does not update password on invalid data", %{conn: conn} do
@@ -78,8 +78,10 @@ defmodule AshHqWeb.UserSettingsControllerTest do
       assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
       assert get_flash(conn, :info) =~ "A link to confirm your email"
 
-      assert Accounts.get!(Accounts.User,
-               email: user.email
+      assert Accounts.get!(
+               Accounts.User,
+               [email: user.email],
+               authorize?: false
              )
     end
 
@@ -107,7 +109,7 @@ defmodule AshHqWeb.UserSettingsControllerTest do
           email: email,
           current_password: valid_user_password()
         })
-        |> Accounts.update!()
+        |> Accounts.update!(authorize?: false)
         |> Map.get(:__metadata__)
         |> Map.get(:token)
 
@@ -119,9 +121,9 @@ defmodule AshHqWeb.UserSettingsControllerTest do
       assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
       assert get_flash(conn, :info) =~ "Email changed successfully"
 
-      refute Accounts.get!(Accounts.User, [email: user.email], error?: false)
+      refute Accounts.get!(Accounts.User, [email: user.email], authorize?: false, error?: false)
 
-      assert Accounts.get!(Accounts.User, email: email)
+      assert Accounts.get!(Accounts.User, [email: email], authorize?: false)
 
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
       assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
@@ -133,7 +135,7 @@ defmodule AshHqWeb.UserSettingsControllerTest do
       assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
       assert get_flash(conn, :error) =~ "Email change link is invalid or it has expired"
 
-      assert Accounts.get!(Accounts.User, email: user.email)
+      assert Accounts.get!(Accounts.User, [email: user.email], authorize?: false)
     end
 
     test "redirects if user is not logged in", %{token: token} do

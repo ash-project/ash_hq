@@ -2,7 +2,8 @@ defmodule AshHq.Accounts.User do
   @moduledoc false
 
   use AshHq.Resource,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    authorizers: [Ash.Policy.Authorizer]
 
   actions do
     defaults [:read]
@@ -157,6 +158,17 @@ defmodule AshHq.Accounts.User do
   postgres do
     table "users"
     repo AshHq.Repo
+  end
+
+  policies do
+    policy always() do
+      description """
+      There are currently no usages of users that should be publicly
+      accessible, they should all be using authorize?: false.
+      """
+
+      forbid_if always()
+    end
   end
 
   relationships do

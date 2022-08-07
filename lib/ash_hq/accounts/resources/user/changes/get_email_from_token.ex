@@ -20,7 +20,7 @@ defmodule AshHq.Accounts.User.Changes.GetEmailFromToken do
           token: token,
           context: "change:#{changeset.data.email}"
         )
-        |> AshHq.Accounts.read_one()
+        |> AshHq.Accounts.read_one(authorize?: false)
         |> case do
           {:ok, %{sent_to: new_email}} ->
             Ash.Changeset.change_attribute(changeset, :email, new_email)

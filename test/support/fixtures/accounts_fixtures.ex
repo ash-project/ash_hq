@@ -16,6 +16,6 @@ defmodule AshHq.AccountsFixtures do
 
     AshHq.Accounts.User
     |> Ash.Changeset.for_create(:register, params)
-    |> AshHq.Accounts.create!()
+    |> AshHq.Accounts.create!(authorize?: false)
   end
 end

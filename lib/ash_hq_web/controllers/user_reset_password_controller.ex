@@ -10,14 +10,14 @@ defmodule AshHqWeb.UserResetPasswordController do
   end
 
   def create(conn, %{"user" => %{"email" => email}}) do
-    case Accounts.get(Accounts.User, email: email) do
+    case Accounts.get(Accounts.User, [email: email], authorize?: false) do
       {:ok, user} ->
         user
         |> Ash.Changeset.new()
         |> Ash.Changeset.for_update(:deliver_user_reset_password_instructions,
           reset_password_url_fun: &Routes.user_reset_password_url(conn, :edit, &1)
         )
-        |> Accounts.update!()
+        |> Accounts.update!(authorize?: false)
 
       {:error, _} ->
         nil
@@ -42,9 +42,13 @@ defmodule AshHqWeb.UserResetPasswordController do
   # leaked token giving the user access to the account.
   def update(conn, %{"user" => user_params}) do
     conn.assigns.user
-    |> AshPhoenix.Form.for_update(:change_password, api: AshHq.Accounts, as: "user")
+    |> AshPhoenix.Form.for_update(:change_password,
+      api: AshHq.Accounts,
+      as: "user",
+      authorize?: false
+    )
     |> AshPhoenix.Form.validate(user_params)
-    |> AshPhoenix.Form.submit()
+    |> AshPhoenix.Form.submit(api_opts: [authorize?: false])
     |> case do
       {:ok, _} ->
         conn
@@ -62,7 +66,7 @@ defmodule AshHqWeb.UserResetPasswordController do
     user =
       Accounts.User
       |> Ash.Query.for_read(:by_token, token: token, context: "reset_password")
-      |> Accounts.read_one!()
+      |> Accounts.read_one!(authorize?: false)
 
     if user do
       conn |> assign(:user, user) |> assign(:token, token)

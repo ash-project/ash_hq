@@ -23,10 +23,11 @@ defmodule AshHqWeb.UserSettingsController do
     |> AshPhoenix.Form.for_update(
       :deliver_update_email_instructions,
       api: AshHq.Accounts,
-      as: "user"
+      as: "user",
+      authorize?: false
     )
     |> AshPhoenix.Form.validate(params)
-    |> AshPhoenix.Form.submit()
+    |> AshPhoenix.Form.submit(api_opts: [authorize?: false])
     |> case do
       {:ok, _user} ->
         conn
@@ -54,10 +55,11 @@ defmodule AshHqWeb.UserSettingsController do
     |> AshPhoenix.Form.for_update(
       :change_password,
       api: AshHq.Accounts,
-      as: "user"
+      as: "user",
+      authorize?: false
     )
     |> AshPhoenix.Form.validate(params)
-    |> AshPhoenix.Form.submit()
+    |> AshPhoenix.Form.submit(api_opts: [authorize?: false])
     |> case do
       {:ok, user} ->
         conn
@@ -73,7 +75,7 @@ defmodule AshHqWeb.UserSettingsController do
   def confirm_email(conn, %{"token" => token}) do
     conn.assigns.current_user
     |> Ash.Changeset.for_update(:change_email, %{token: token})
-    |> AshHq.Accounts.update()
+    |> AshHq.Accounts.update(authorize?: false)
     |> case do
       {:ok, _} ->
         conn

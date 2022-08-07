@@ -25,7 +25,7 @@ defmodule AshHqWeb.UserAuthTest do
 
       assert AshHq.Accounts.User
              |> Ash.Query.for_read(:by_token, token: token, context: "session")
-             |> AshHq.Accounts.read_one!()
+             |> AshHq.Accounts.read_one!(authorize?: false)
     end
 
     test "clears everything previously stored in the session", %{conn: conn, user: user} do
@@ -54,7 +54,7 @@ defmodule AshHqWeb.UserAuthTest do
         Accounts.UserToken
         |> Ash.Changeset.new()
         |> Ash.Changeset.for_create(:build_session_token, user: user)
-        |> Accounts.create!()
+        |> Accounts.create!(authorize?: false)
         |> Map.get(:token)
 
       conn =
@@ -71,7 +71,7 @@ defmodule AshHqWeb.UserAuthTest do
 
       refute AshHq.Accounts.User
              |> Ash.Query.for_read(:by_token, token: user_token, context: "session")
-             |> AshHq.Accounts.read_one!()
+             |> AshHq.Accounts.read_one!(authorize?: false)
     end
 
     test "broadcasts to the given live_socket_id", %{conn: conn} do
@@ -102,7 +102,7 @@ defmodule AshHqWeb.UserAuthTest do
         Accounts.UserToken
         |> Ash.Changeset.new()
         |> Ash.Changeset.for_create(:build_session_token, user: user)
-        |> Accounts.create!()
+        |> Accounts.create!(authorize?: false)
         |> Map.get(:token)
 
       conn = conn |> put_session(:user_token, user_token) |> UserAuth.fetch_current_user([])
@@ -130,7 +130,7 @@ defmodule AshHqWeb.UserAuthTest do
         Accounts.UserToken
         |> Ash.Changeset.new()
         |> Ash.Changeset.for_create(:build_session_token, user: user)
-        |> Accounts.create!()
+        |> Accounts.create!(authorize?: false)
         |> Map.get(:token)
 
       conn = UserAuth.fetch_current_user(conn, [])

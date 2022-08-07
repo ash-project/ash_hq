@@ -53,5 +53,5 @@ config :logger, level: :info
 config :ash_hq, AshHq.Mailer, adapter: Swoosh.Adapters.Postmark
 config :swoosh, :api_client, Swoosh.ApiClient.Finch
 
-config :plug_content_security_policy,
-  report_only: true
+# config :plug_content_security_policy,
+#   report_only: true

@@ -3,7 +3,8 @@ defmodule AshHq.Accounts.UserToken do
 
   use AshHq.Resource,
     data_layer: AshPostgres.DataLayer,
-    notifiers: [AshHq.Accounts.EmailNotifier]
+    notifiers: [AshHq.Accounts.EmailNotifier],
+    authorizers: [Ash.Policy.Authorizer]
 
   actions do
     defaults [:read]
@@ -60,6 +61,17 @@ defmodule AshHq.Accounts.UserToken do
 
     references do
       reference :user, on_delete: :delete, on_update: :update
+    end
+  end
+
+  policies do
+    policy always() do
+      description """
+      There are currently no usages of user tokens resource that should be publicly
+      accessible, they should all be using authorize?: false.
+      """
+
+      forbid_if always()
     end
   end
 

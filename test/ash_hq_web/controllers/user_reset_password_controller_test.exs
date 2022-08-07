@@ -47,7 +47,7 @@ defmodule AshHqWeb.UserResetPasswordControllerTest do
       token =
         user
         |> Ash.Changeset.for_update(:deliver_user_reset_password_instructions)
-        |> Accounts.update!()
+        |> Accounts.update!(authorize?: false)
         |> Map.get(:__metadata__)
         |> Map.get(:token)
 
@@ -71,7 +71,7 @@ defmodule AshHqWeb.UserResetPasswordControllerTest do
       token =
         user
         |> Ash.Changeset.for_update(:deliver_user_reset_password_instructions)
-        |> Accounts.update!()
+        |> Accounts.update!(authorize?: false)
         |> Map.get(:__metadata__)
         |> Map.get(:token)
 
@@ -97,7 +97,7 @@ defmodule AshHqWeb.UserResetPasswordControllerTest do
                email: user.email,
                password: "new valid password"
              })
-             |> Accounts.read_one!()
+             |> Accounts.read_one!(authorize?: false)
     end
 
     test "does not reset password on invalid data", %{conn: conn, token: token} do

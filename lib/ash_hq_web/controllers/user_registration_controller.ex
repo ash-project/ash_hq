@@ -15,14 +15,14 @@ defmodule AshHqWeb.UserRegistrationController do
     User
     |> AshPhoenix.Form.for_create(:register, api: AshHq.Accounts, as: "user")
     |> AshPhoenix.Form.validate(user_params)
-    |> AshPhoenix.Form.submit()
+    |> AshPhoenix.Form.submit(api_opts: [authorize?: false])
     |> case do
       {:ok, user} ->
         user
         |> Ash.Changeset.for_update(:deliver_user_confirmation_instructions, %{
           confirmation_url_fun: &Routes.user_confirmation_url(conn, :confirm, &1)
         })
-        |> Accounts.update!()
+        |> Accounts.update!(authorize?: false)
 
         conn
         |> put_flash(:info, "User created successfully.")

@@ -15,7 +15,7 @@ defmodule AshHq.Accounts.User.Changes.CreateEmailConfirmationToken do
         sent_to: user.email,
         user: user
       )
-      |> AshHq.Accounts.create(return_notifications?: true)
+      |> AshHq.Accounts.create(return_notifications?: true, authorize?: false)
       |> case do
         {:ok, email_token, notifications} ->
           {:ok,

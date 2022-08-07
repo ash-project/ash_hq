@@ -34,7 +34,7 @@ defmodule AshHqWeb.UserConfirmationControllerTest do
     test "does not send confirmation token if account is confirmed", %{conn: conn, user: user} do
       user
       |> Ash.Changeset.for_update(:confirm)
-      |> Accounts.update!()
+      |> Accounts.update!(authorize?: false)
 
       conn =
         post(conn, Routes.user_confirmation_path(conn, :create), %{
@@ -63,7 +63,7 @@ defmodule AshHqWeb.UserConfirmationControllerTest do
       token =
         user
         |> Ash.Changeset.for_update(:deliver_user_confirmation_instructions)
-        |> Accounts.update!()
+        |> Accounts.update!(authorize?: false)
         |> Map.get(:__metadata__)
         |> Map.get(:token)
 
@@ -71,7 +71,7 @@ defmodule AshHqWeb.UserConfirmationControllerTest do
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :info) && get_flash(conn, :info) =~ "Account confirmed successfully"
 
-      assert Accounts.get!(Accounts.User, user.id).confirmed_at
+      assert Accounts.get!(Accounts.User, user.id, authorize?: false).confirmed_at
 
       refute get_session(conn, :user_token)
       assert Repo.all(Accounts.UserToken) == []
@@ -96,7 +96,7 @@ defmodule AshHqWeb.UserConfirmationControllerTest do
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :error) =~ "Account confirmation link is invalid or it has expired"
 
-      refute Accounts.get!(Accounts.User, user.id).confirmed_at
+      refute Accounts.get!(Accounts.User, user.id, authorize?: false).confirmed_at
     end
   end
 end

@@ -34,7 +34,7 @@ defmodule AshHqWeb.UserAuth do
       Accounts.UserToken
       |> Ash.Changeset.new()
       |> Ash.Changeset.for_create(:build_session_token, %{user: user})
-      |> Accounts.create!()
+      |> Accounts.create!(authorize?: false)
       |> Map.get(:token)
 
     user_return_to = get_session(conn, :user_return_to)
@@ -123,7 +123,7 @@ defmodule AshHqWeb.UserAuth do
   def user_for_session_token(user_token) do
     AshHq.Accounts.User
     |> Ash.Query.for_read(:by_token, token: user_token, context: "session")
-    |> AshHq.Accounts.read_one!()
+    |> AshHq.Accounts.read_one!(authorize?: false)
   end
 
   defp ensure_user_token(conn) do
