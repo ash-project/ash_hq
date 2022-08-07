@@ -1,5 +1,5 @@
 %{
-  "ash": {:git, "https://github.com/ash-project/ash.git", "fe12f40056661e84e702b3fb50badef1d9f3c99f", []},
+  "ash": {:git, "https://github.com/ash-project/ash.git", "8a2208601c79bbed7c7ff9e3d68683dade3c8a41", []},
   "ash_phoenix": {:git, "https://github.com/ash-project/ash_phoenix.git", "538784765f5c38cde1b9b527aa348b62d625c01f", []},
   "ash_postgres": {:git, "https://github.com/ash-project/ash_postgres.git", "e20e68e73af334dec540786b9275fcdf0cb86731", []},
   "bcrypt_elixir": {:hex, :bcrypt_elixir, "3.0.1", "9be815469e6bfefec40fa74658ecbbe6897acfb57614df1416eeccd4903f602c", [:make, :mix], [{:comeonin, "~> 5.3", [hex: :comeonin, repo: "hexpm", optional: false]}, {:elixir_make, "~> 0.6", [hex: :elixir_make, repo: "hexpm", optional: false]}], "hexpm", "486bb95efb645d1efc6794c1ddd776a186a9a713abf06f45708a6ce324fb96cf"},
