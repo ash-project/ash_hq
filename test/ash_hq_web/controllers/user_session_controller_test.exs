@@ -7,26 +7,13 @@ defmodule AshHqWeb.UserSessionControllerTest do
     %{user: user_fixture()}
   end
 
-  describe "GET /users/log_in" do
-    test "renders log in page", %{conn: conn} do
-      conn = get(conn, Routes.user_session_path(conn, :new))
-      response = html_response(conn, 200)
-      assert response =~ "Log in</h5>"
-      assert response =~ "Forgot your password?</a>"
-      assert response =~ "Register</a>"
-    end
-
-    test "redirects if already logged in", %{conn: conn, user: user} do
-      conn = conn |> log_in_user(user) |> get(Routes.user_session_path(conn, :new))
-      assert redirected_to(conn) == "/"
-    end
-  end
-
-  describe "POST /users/log_in" do
+  describe "POST /users/new_session/:token" do
     test "logs the user in", %{conn: conn, user: user} do
+      token = AshHqWeb.UserAuth.create_token_for_user(user)
+
       conn =
-        post(conn, Routes.user_session_path(conn, :create), %{
-          "user" => %{"email" => user.email, "password" => valid_user_password()}
+        post(conn, Routes.user_session_path(conn, :log_in), %{
+          "log_in" => %{"token" => Base.url_encode64(token, padding: false)}
         })
 
       assert get_session(conn, :user_token)
@@ -40,42 +27,18 @@ defmodule AshHqWeb.UserSessionControllerTest do
     end
 
     test "logs the user in with remember me", %{conn: conn, user: user} do
+      token = AshHqWeb.UserAuth.create_token_for_user(user)
+
       conn =
-        post(conn, Routes.user_session_path(conn, :create), %{
-          "user" => %{
-            "email" => user.email,
-            "password" => valid_user_password(),
+        post(conn, Routes.user_session_path(conn, :log_in), %{
+          "log_in" => %{
+            "token" => Base.url_encode64(token, padding: false),
             "remember_me" => "true"
           }
         })
 
       assert conn.resp_cookies["_reference_live_app_web_user_remember_me"]
       assert redirected_to(conn) =~ "/"
-    end
-
-    test "logs the user in with return to", %{conn: conn, user: user} do
-      conn =
-        conn
-        |> init_test_session(user_return_to: "/foo/bar")
-        |> post(Routes.user_session_path(conn, :create), %{
-          "user" => %{
-            "email" => user.email,
-            "password" => valid_user_password()
-          }
-        })
-
-      assert redirected_to(conn) == "/foo/bar"
-    end
-
-    test "emits error message with invalid credentials", %{conn: conn, user: user} do
-      conn =
-        post(conn, Routes.user_session_path(conn, :create), %{
-          "user" => %{"email" => user.email, "password" => "invalid password"}
-        })
-
-      response = html_response(conn, 200)
-      assert response =~ "Log in</h5>"
-      assert response =~ "Invalid email or password"
     end
   end
 

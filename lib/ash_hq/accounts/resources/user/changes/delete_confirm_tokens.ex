@@ -3,8 +3,6 @@ defmodule AshHq.Accounts.User.Changes.DeleteConfirmTokens do
   use Ash.Resource.Change
   require Ash.Query
 
-  def delete_confirm_tokens, do: {__MODULE__, []}
-
   def change(changeset, _opts, _context) do
     if Ash.Changeset.get_argument(changeset, :delete_confirm_tokens) do
       Ash.Changeset.after_action(changeset, fn _changeset, user ->

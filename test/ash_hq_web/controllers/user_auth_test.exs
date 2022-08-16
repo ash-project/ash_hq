@@ -24,8 +24,10 @@ defmodule AshHqWeb.UserAuthTest do
       assert redirected_to(conn) == "/"
 
       assert AshHq.Accounts.User
-             |> Ash.Query.for_read(:by_token, token: token, context: "session")
-             |> AshHq.Accounts.read_one!(authorize?: false)
+             |> Ash.Query.for_read(:by_token, %{token: token, context: "session"},
+               authorize?: false
+             )
+             |> AshHq.Accounts.read_one!()
     end
 
     test "clears everything previously stored in the session", %{conn: conn, user: user} do
@@ -52,9 +54,8 @@ defmodule AshHqWeb.UserAuthTest do
     test "erases session and cookies", %{conn: conn, user: user} do
       user_token =
         Accounts.UserToken
-        |> Ash.Changeset.new()
-        |> Ash.Changeset.for_create(:build_session_token, user: user)
-        |> Accounts.create!(authorize?: false)
+        |> Ash.Changeset.for_create(:build_session_token, %{user: user}, authorize?: false)
+        |> Accounts.create!()
         |> Map.get(:token)
 
       conn =
@@ -70,8 +71,10 @@ defmodule AshHqWeb.UserAuthTest do
       assert redirected_to(conn) == "/"
 
       refute AshHq.Accounts.User
-             |> Ash.Query.for_read(:by_token, token: user_token, context: "session")
-             |> AshHq.Accounts.read_one!(authorize?: false)
+             |> Ash.Query.for_read(:by_token, %{token: user_token, context: "session"},
+               authorize?: false
+             )
+             |> AshHq.Accounts.read_one!()
     end
 
     test "broadcasts to the given live_socket_id", %{conn: conn} do
@@ -100,9 +103,8 @@ defmodule AshHqWeb.UserAuthTest do
     test "authenticates user from session", %{conn: conn, user: user} do
       user_token =
         Accounts.UserToken
-        |> Ash.Changeset.new()
-        |> Ash.Changeset.for_create(:build_session_token, user: user)
-        |> Accounts.create!(authorize?: false)
+        |> Ash.Changeset.for_create(:build_session_token, %{user: user}, authorize?: false)
+        |> Accounts.create!()
         |> Map.get(:token)
 
       conn = conn |> put_session(:user_token, user_token) |> UserAuth.fetch_current_user([])
@@ -128,9 +130,8 @@ defmodule AshHqWeb.UserAuthTest do
     test "does not authenticate if data is missing", %{conn: conn, user: user} do
       _ =
         Accounts.UserToken
-        |> Ash.Changeset.new()
-        |> Ash.Changeset.for_create(:build_session_token, user: user)
-        |> Accounts.create!(authorize?: false)
+        |> Ash.Changeset.for_create(:build_session_token, %{user: user}, authorize?: false)
+        |> Accounts.create!()
         |> Map.get(:token)
 
       conn = UserAuth.fetch_current_user(conn, [])
@@ -157,7 +158,7 @@ defmodule AshHqWeb.UserAuthTest do
     test "redirects if user is not authenticated", %{conn: conn} do
       conn = conn |> fetch_flash() |> UserAuth.require_authenticated_user([])
       assert conn.halted
-      assert redirected_to(conn) == Routes.user_session_path(conn, :new)
+      assert redirected_to(conn) == Routes.app_view_path(conn, :log_in)
       assert get_flash(conn, :error) == "You must log in to access this page."
     end
 

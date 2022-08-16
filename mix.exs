@@ -34,8 +34,8 @@ defmodule AshHq.MixProject do
   defp deps do
     [
       # {:ash, "~> 1.52.0-rc.18"},
-      {:ash, github: "ash-project/ash", override: true},
-      # {:ash, path: "../ash", override: true},
+      # {:ash, github: "ash-project/ash", override: true},
+      {:ash, path: "../ash", override: true},
       # {:ash_postgres, "~> 0.42.0-rc.5"},
       {:ash_postgres, github: "ash-project/ash_postgres"},
       # {:ash_postgres, path: "../ash_postgres"},
@@ -104,7 +104,7 @@ defmodule AshHq.MixProject do
       credo: "credo --strict",
       drop: ["ash_postgres.drop"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      sobelow: ["sobelow --skip -i Config.Headers"],
+      sobelow: ["sobelow --skip -i Config.Headers,Config.CSRFRoute"],
       "assets.deploy": [
         "cmd --cd assets npm run deploy",
         "esbuild default --minify",

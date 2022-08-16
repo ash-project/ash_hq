@@ -14,8 +14,13 @@ defmodule AshHq.AccountsFixtures do
         password: valid_user_password()
       })
 
-    AshHq.Accounts.User
-    |> Ash.Changeset.for_create(:register, params)
-    |> AshHq.Accounts.create!(authorize?: false)
+    user =
+      AshHq.Accounts.User
+      |> Ash.Changeset.for_create(:register, params, authorize?: false)
+      |> AshHq.Accounts.create!()
+
+    Swoosh.TestAssertions.assert_email_sent()
+
+    user
   end
 end

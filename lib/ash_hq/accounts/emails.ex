@@ -40,13 +40,13 @@ defmodule AshHq.Accounts.Emails do
   end
 
   def deliver_update_email_instructions(user, url) do
-    deliver(user.email, "Update Your Email", """
+    deliver(user.email, "Confirm Your Email Change", """
 
     ==============================
 
     Hi #{user.email},
 
-    You can change your email by visiting the URL below:
+    You can confirm your email change by visiting the URL below:
 
     #{url}
 

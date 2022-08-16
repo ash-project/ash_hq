@@ -428,8 +428,7 @@ defmodule AshHqWeb.Pages.Docs do
 
     version =
       if selected_versions[library.id] == "latest" do
-        Enum.find(library.versions, &String.contains?(&1.version, ".")) ||
-          AshHqWeb.Helpers.latest_version(library)
+        AshHqWeb.Helpers.latest_version(library)
       else
         case Enum.find(library.versions, &(&1.id == selected_versions[library.id])) do
           nil ->
@@ -440,16 +439,16 @@ defmodule AshHqWeb.Pages.Docs do
         end
       end
 
-    if String.contains?(version, ".") do
-      case String.split(version, ".") do
-        [major, minor, "0"] ->
+    if version.branch do
+      ~s({:#{library.name}, github: "ash-project/#{library.name}", branch: "#{version}"})
+    else
+      case Version.parse(version) do
+        {:ok, %{major: major, minor: minor, patch: 0}} ->
           ~s({:#{library.name}, "~> #{major}.#{minor}"})
 
-        _ ->
+        {:ok, version} ->
           ~s({:#{library.name}, "~> #{version}"})
       end
-    else
-      ~s({:#{library.name}, github: "ash-project/#{library.name}", branch: "#{version}"})
     end
   end
 

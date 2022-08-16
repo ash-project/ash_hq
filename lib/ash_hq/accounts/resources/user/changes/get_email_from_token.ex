@@ -3,12 +3,6 @@ defmodule AshHq.Accounts.User.Changes.GetEmailFromToken do
 
   use Ash.Resource.Change
 
-  def get_email_from_token do
-    {__MODULE__, []}
-  end
-
-  def init(_), do: {:ok, []}
-
   def change(changeset, _opts, _) do
     changeset
     |> Ash.Changeset.before_action(fn changeset ->
@@ -16,11 +10,12 @@ defmodule AshHq.Accounts.User.Changes.GetEmailFromToken do
         token = Ash.Changeset.get_argument(changeset, :token)
 
         AshHq.Accounts.UserToken
-        |> Ash.Query.for_read(:verify_email_token,
-          token: token,
-          context: "change:#{changeset.data.email}"
+        |> Ash.Query.for_read(
+          :verify_email_token,
+          %{token: token, context: "change:#{changeset.data.email}"},
+          authorize?: false
         )
-        |> AshHq.Accounts.read_one(authorize?: false)
+        |> AshHq.Accounts.read_one()
         |> case do
           {:ok, %{sent_to: new_email}} ->
             Ash.Changeset.change_attribute(changeset, :email, new_email)

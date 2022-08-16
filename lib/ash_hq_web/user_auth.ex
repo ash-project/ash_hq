@@ -30,24 +30,36 @@ defmodule AshHqWeb.UserAuth do
   if you are not using LiveView.
   """
   def log_in_user(conn, user, params \\ %{}) do
-    token =
-      Accounts.UserToken
-      |> Ash.Changeset.new()
-      |> Ash.Changeset.for_create(:build_session_token, %{user: user})
-      |> Accounts.create!(authorize?: false)
-      |> Map.get(:token)
+    token = create_token_for_user(user)
 
-    user_return_to = get_session(conn, :user_return_to)
+    log_in_with_token(conn, token, params["remember_me"] == "true")
+  end
+
+  def log_in_with_token(conn, token, remember_me?, return_to \\ nil) do
+    user_return_to = return_to || get_session(conn, :user_return_to) || "/"
 
     conn
     |> renew_session()
     |> put_session(:user_token, token)
     |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
-    |> maybe_write_remember_me_cookie(token, params)
+    |> maybe_write_remember_me_cookie(token, remember_me?)
     |> redirect(to: user_return_to || signed_in_path(conn))
   end
 
-  defp maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}) do
+  @doc """
+  Gets a token for a user, effectively "logging them in".
+
+  This is used in liveviews, after which the token is sent to
+  the session creation endpoint, which stores the token in the session.
+  """
+  def create_token_for_user(user) do
+    Accounts.UserToken
+    |> Ash.Changeset.for_create(:build_session_token, %{user: user}, authorize?: false)
+    |> Accounts.create!()
+    |> Map.get(:token)
+  end
+
+  defp maybe_write_remember_me_cookie(conn, token, true) do
     put_resp_cookie(conn, @remember_me_cookie, token, @remember_me_options)
   end
 
@@ -100,7 +112,7 @@ defmodule AshHqWeb.UserAuth do
     conn
     |> renew_session()
     |> delete_resp_cookie(@remember_me_cookie)
-    |> redirect(to: "/")
+    |> redirect(to: Routes.app_view_path(AshHqWeb.Endpoint, :home))
   end
 
   @doc """
@@ -122,8 +134,8 @@ defmodule AshHqWeb.UserAuth do
 
   def user_for_session_token(user_token) do
     AshHq.Accounts.User
-    |> Ash.Query.for_read(:by_token, token: user_token, context: "session")
-    |> AshHq.Accounts.read_one!(authorize?: false)
+    |> Ash.Query.for_read(:by_token, %{token: user_token, context: "session"}, authorize?: false)
+    |> AshHq.Accounts.read_one!()
   end
 
   defp ensure_user_token(conn) do
@@ -166,7 +178,7 @@ defmodule AshHqWeb.UserAuth do
       conn
       |> put_flash(:error, "You must log in to access this page.")
       |> maybe_store_return_to()
-      |> redirect(to: Routes.user_session_path(conn, :new))
+      |> redirect(to: Routes.app_view_path(conn, :log_in))
       |> halt()
     end
   end

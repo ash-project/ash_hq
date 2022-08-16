@@ -4,7 +4,7 @@ defmodule AshHqWeb.AppViewLive do
 
   alias AshHq.Docs.Extensions.RenderMarkdown
   alias AshHqWeb.Components.{Search, SearchBar}
-  alias AshHqWeb.Pages.{Docs, Home}
+  alias AshHqWeb.Pages.{Docs, Home, LogIn, Register, ResetPassword, UserSettings}
   alias AshHqWeb.Router.Helpers, as: Routes
   alias Phoenix.LiveView.JS
   alias Surface.Components.{Link, LiveRedirect}
@@ -50,7 +50,7 @@ defmodule AshHqWeb.AppViewLive do
       <div
         id="main-container"
         class={
-          "h-screen grid content-start grid-rows-[auto,1fr] w-screen bg-white dark:bg-primary-black dark:text-white",
+          "h-screen w-screen bg-white dark:bg-primary-black dark:text-white",
           "overflow-y-auto overflow-x-hidden": @live_action == :home,
           "overflow-hidden": @live_action == :docs_dsl
         }
@@ -161,22 +161,21 @@ defmodule AshHqWeb.AppViewLive do
                 >
                   <div class="py-1" role="none">
                     <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-                    <a
-                      href="#"
+                    <LiveRedirect
+                      to={Routes.app_view_path(AshHqWeb.Endpoint, :user_settings)}
                       class="dark:text-white group flex items-center px-4 py-2 text-sm"
-                      role="menuitem"
-                      tabindex="-1"
-                      id="menu-item-0"
                     >
-                      <Heroicons.Solid.PencilAltIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"/>
+                      <Heroicons.Solid.PencilAltIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" />
                       Settings
-                    </a>
+                    </LiveRedirect>
                   </div>
                   <div class="py-1" role="none">
-                    <Link label="logout" to={Routes.user_session_path(AshHqWeb.Endpoint, :delete)}
+                    <Link
+                      label="logout"
+                      to={Routes.user_session_path(AshHqWeb.Endpoint, :delete)}
                       class="dark:text-white group flex items-center px-4 py-2 text-sm"
                       method={:delete}
-                      id="menu-item-6"
+                      id="logout-link"
                     >
                       <Heroicons.Outline.LogoutIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" />
                       Logout
@@ -185,11 +184,18 @@ defmodule AshHqWeb.AppViewLive do
                 </div>
               </div>
             {#else}
-              <LiveRedirect to={Routes.user_session_path(AshHqWeb.Endpoint, :create)}>Sign In
+              <LiveRedirect to={Routes.app_view_path(AshHqWeb.Endpoint, :log_in)}>
+                Sign In
               </LiveRedirect>
             {/if}
           </div>
         </div>
+        {#for flash <- List.wrap(live_flash(@flash, :error))}
+          <p class="alert alert-warning" role="alert">{flash}</p>
+        {/for}
+        {#for flash <- List.wrap(live_flash(@flash, :info))}
+          <p class="alert alert-info max-h-min" role="alert">{flash}</p>
+        {/for}
         {#case @live_action}
           {#match :home}
             <Home id="home" />
@@ -213,6 +219,14 @@ defmodule AshHqWeb.AppViewLive do
               options={@options}
               module={@module}
             />
+          {#match :user_settings}
+            <UserSettings id="user_settings" current_user={@current_user} />
+          {#match :log_in}
+            <LogIn id="log_in" />
+          {#match :register}
+            <Register id="register" />
+          {#match :reset_password}
+            <ResetPassword id="reset_password" params={@params} />
         {/case}
       </div>
     </div>
@@ -306,7 +320,7 @@ defmodule AshHqWeb.AppViewLive do
      socket |> assign(:sidebar_state, new_state) |> push_event("sidebar-state", new_state)}
   end
 
-  defp load_docs(socket) do
+  defp load_docs(%{assigns: %{live_action: :docs_dsl}} = socket) do
     new_libraries =
       socket.assigns.libraries
       |> Enum.map(fn library ->
@@ -371,6 +385,8 @@ defmodule AshHqWeb.AppViewLive do
     |> assign_dsl()
     |> assign_docs()
   end
+
+  defp load_docs(socket), do: socket
 
   def mount(_params, session, socket) do
     configured_theme = session["theme"] || "system"

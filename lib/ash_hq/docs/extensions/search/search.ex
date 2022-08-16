@@ -34,7 +34,7 @@ defmodule AshHq.Docs.Extensions.Search do
         type: :boolean,
         default: true,
         doc:
-          "Wether or not the name attribute will be sanitized by default. If not, you should have a change on the resource that sets it."
+          "Whether or not the name attribute will be sanitized by default. If not, you should have a change on the resource that sets it."
       ],
       show_docs_on: [
         type: :atom,
@@ -45,7 +45,7 @@ defmodule AshHq.Docs.Extensions.Search do
         type: :boolean,
         default: false,
         doc:
-          "Wether or not to write to the sanitized name attribute automatically by stripping the name of special characters"
+          "Whether or not to write to the sanitized name attribute automatically by stripping the name of special characters"
       ],
       doc_attribute: [
         type: :atom,

@@ -10,14 +10,6 @@ defmodule AshHqWeb.UserConfirmationControllerTest do
     %{user: user}
   end
 
-  describe "GET /users/confirm" do
-    test "renders the confirmation page", %{conn: conn} do
-      conn = get(conn, Routes.user_confirmation_path(conn, :new))
-      response = html_response(conn, 200)
-      assert response =~ "<h1>Resend confirmation instructions</h1>"
-    end
-  end
-
   describe "POST /users/confirm" do
     @tag :capture_log
     test "sends a new confirmation token", %{conn: conn, user: user} do
@@ -32,9 +24,11 @@ defmodule AshHqWeb.UserConfirmationControllerTest do
     end
 
     test "does not send confirmation token if account is confirmed", %{conn: conn, user: user} do
+      Repo.delete_all(Accounts.UserToken)
+
       user
-      |> Ash.Changeset.for_update(:confirm)
-      |> Accounts.update!(authorize?: false)
+      |> Ash.Changeset.for_update(:confirm, %{}, authorize?: false)
+      |> Accounts.update!()
 
       conn =
         post(conn, Routes.user_confirmation_path(conn, :create), %{
@@ -47,6 +41,8 @@ defmodule AshHqWeb.UserConfirmationControllerTest do
     end
 
     test "does not send confirmation token if email is invalid", %{conn: conn} do
+      Repo.delete_all(Accounts.UserToken)
+
       conn =
         post(conn, Routes.user_confirmation_path(conn, :create), %{
           "user" => %{"email" => "unknown@example.com"}
@@ -62,8 +58,10 @@ defmodule AshHqWeb.UserConfirmationControllerTest do
     test "confirms the given token once", %{conn: conn, user: user} do
       token =
         user
-        |> Ash.Changeset.for_update(:deliver_user_confirmation_instructions)
-        |> Accounts.update!(authorize?: false)
+        |> Ash.Changeset.for_update(:deliver_user_confirmation_instructions, %{},
+          authorize?: false
+        )
+        |> Accounts.update!()
         |> Map.get(:__metadata__)
         |> Map.get(:token)
 

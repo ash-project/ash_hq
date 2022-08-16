@@ -51,6 +51,15 @@ defmodule AshHqWeb.ConnCase do
   end
 
   @doc """
+  Setup helper that registers a user but does not log it in.
+
+      setup :register_user
+  """
+  def register_user(context) do
+    %{user: AshHq.AccountsFixtures.user_fixture()}
+  end
+
+  @doc """
   Logs the given `user` into the `conn`.
 
   It returns an updated `conn`.
@@ -58,9 +67,8 @@ defmodule AshHqWeb.ConnCase do
   def log_in_user(conn, user) do
     token =
       AshHq.Accounts.UserToken
-      |> Ash.Changeset.new()
-      |> Ash.Changeset.for_create(:build_session_token, user: user)
-      |> AshHq.Accounts.create!(authorize?: false)
+      |> Ash.Changeset.for_create(:build_session_token, %{user: user}, authorize?: false)
+      |> AshHq.Accounts.create!()
       |> Map.get(:__metadata__)
       |> Map.get(:url_token)
 

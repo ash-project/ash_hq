@@ -52,7 +52,14 @@ defmodule AshHq.Accounts.User do
           min_length: 12
         ]
 
+      argument :confirm, :boolean, default: true
+
+      argument :confirmation_url_fun, :function do
+        constraints arity: 2
+      end
+
       change AshHq.Accounts.User.Changes.HashPassword
+      change {AshHq.Accounts.User.Changes.CreateEmailConfirmationToken, on_argument: :confirm}
     end
 
     update :deliver_user_confirmation_instructions do
@@ -126,6 +133,24 @@ defmodule AshHq.Accounts.User do
       change AshHq.Accounts.User.Changes.RemoveAllTokens
     end
 
+    update :reset_password do
+      accept []
+
+      argument :password, :string,
+        allow_nil?: false,
+        constraints: [
+          max_length: 80,
+          min_length: 12
+        ]
+
+      argument :password_confirmation, :string, allow_nil?: false
+
+      validate confirm(:password, :password_confirmation)
+
+      change AshHq.Accounts.User.Changes.HashPassword
+      change AshHq.Accounts.User.Changes.RemoveAllTokens
+    end
+
     update :confirm do
       accept []
       argument :delete_confirm_tokens, :boolean, default: false
@@ -161,13 +186,31 @@ defmodule AshHq.Accounts.User do
   end
 
   policies do
-    policy always() do
-      description """
-      There are currently no usages of users that should be publicly
-      accessible, they should all be using authorize?: false.
-      """
+    policy action(:change_password) do
+      description "Allow the user to change their own password"
+      authorize_if expr(id == ^actor(:id))
+    end
 
-      forbid_if always()
+    policy action(:deliver_update_email_instructions) do
+      description "Allow a user to request an update their own email"
+      authorize_if expr(id == ^actor(:id))
+    end
+
+    policy action(:by_email_and_password) do
+      description "Allow looking up by email/password combo (logging in) for unauthenticated users only."
+      forbid_if actor_present()
+      authorize_if always()
+    end
+
+    policy action(:deliver_user_confirmation_instructions) do
+      description "A logged in user can request email confirmation for themselves to be sent again"
+      authorize_if expr(id == ^actor(:id))
+    end
+
+    policy action(:register) do
+      description "Allow looking up by email/password combo (logging in) for unauthenticated users only."
+      forbid_if actor_present()
+      authorize_if always()
     end
   end
 

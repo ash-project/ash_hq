@@ -1,23 +1,35 @@
 defmodule AshHqWeb.UserSessionController do
   use AshHqWeb, :controller
 
-  alias AshHq.Accounts
   alias AshHqWeb.UserAuth
 
-  def new(conn, _params) do
-    render(conn, "new.html", error_message: nil)
+  def log_in(conn, %{"log_in" => %{"token" => token} = params}) do
+    token = Base.url_decode64!(token, padding: false)
+    UserAuth.log_in_with_token(conn, token, params["remember_me"] == "true", params["return_to"])
   end
 
-  def create(conn, %{"user" => user_params}) do
-    Accounts.User
-    |> Ash.Query.for_read(:by_email_and_password, user_params)
-    |> Accounts.read_one(authorize?: false)
+  def log_in(conn, %{"log_in" => %{"email" => email, "password" => password} = params}) do
+    AshHq.Accounts.User
+    |> Ash.Query.for_read(:by_email_and_password, %{email: email, password: password},
+      authorize?: false
+    )
+    |> AshHq.Accounts.read_one()
     |> case do
-      {:ok, user} when not is_nil(user) ->
-        UserAuth.log_in_user(conn, user, user_params)
+      {:ok, nil} ->
+        redirect(conn, to: "/")
 
-      _ ->
-        render(conn, "new.html", error_message: "Invalid email or password")
+      {:ok, user} ->
+        token = AshHqWeb.UserAuth.create_token_for_user(user)
+
+        UserAuth.log_in_with_token(
+          conn,
+          token,
+          params["remember_me"] == "true",
+          params["return_to"]
+        )
+
+      {:error, _} ->
+        redirect(conn, to: "/")
     end
   end
 

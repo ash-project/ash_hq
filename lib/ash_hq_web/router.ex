@@ -40,6 +40,21 @@ defmodule AshHqWeb.Router do
       live "/docs/dsl/:library/:version/:extension/*dsl_path", AppViewLive, :docs_dsl
       live "/docs/module/:library/:version/:module", AppViewLive, :docs_dsl
     end
+
+    live_session :unauthenticated_only,
+      on_mount: {AshHqWeb.LiveUserAuth, :live_user_not_allowed},
+      root_layout: {AshHqWeb.LayoutView, "root.html"} do
+      live "/users/log_in", AppViewLive, :log_in
+      live "/users/register", AppViewLive, :register
+      live "/users/reset_password", AppViewLive, :reset_password
+      live "/users/reset_password/:token", AppViewLive, :reset_password
+    end
+
+    live_session :authenticated_only,
+      on_mount: {AshHqWeb.LiveUserAuth, :live_user_required},
+      root_layout: {AshHqWeb.LayoutView, "root.html"} do
+      live "/users/settings", AppViewLive, :user_settings
+    end
   end
 
   ## Authentication routes
@@ -52,30 +67,20 @@ defmodule AshHqWeb.Router do
       :put_session_layout
     ]
 
-    get "/users/register", UserRegistrationController, :new
-    post "/users/register", UserRegistrationController, :create
-    get "/users/log_in", UserSessionController, :new
-    post "/users/log_in", UserSessionController, :create
-    get "/users/reset_password", UserResetPasswordController, :new
-    post "/users/reset_password", UserResetPasswordController, :create
-    get "/users/reset_password/:token", UserResetPasswordController, :edit
-    put "/users/reset_password/:token", UserResetPasswordController, :update
+    get "/users/new_session", UserSessionController, :log_in
+    post "/users/new_session", UserSessionController, :log_in
   end
 
   scope "/", AshHqWeb do
     pipe_through [:browser, :dead_view_authentication, :require_authenticated_user]
 
-    get "/users/settings", UserSettingsController, :edit
-    put "/users/settings", UserSettingsController, :update
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
   end
 
   scope "/", AshHqWeb do
     pipe_through [:browser, :dead_view_authentication]
 
-    # get "/users/log_out", UserSessionController, :delete
     delete "/users/log_out", UserSessionController, :delete
-    get "/users/confirm", UserConfirmationController, :new
     post "/users/confirm", UserConfirmationController, :create
     get "/users/confirm/:token", UserConfirmationController, :confirm
   end

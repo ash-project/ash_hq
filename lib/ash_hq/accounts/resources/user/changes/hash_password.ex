@@ -5,12 +5,6 @@ defmodule AshHq.Accounts.User.Changes.HashPassword do
 
   alias Ash.Changeset
 
-  def hash_password do
-    {__MODULE__, []}
-  end
-
-  def init(_), do: {:ok, []}
-
   def change(changeset, _opts, _) do
     Changeset.before_action(changeset, fn changeset ->
       case Changeset.get_argument(changeset, :password) do

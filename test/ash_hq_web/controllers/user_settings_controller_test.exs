@@ -6,110 +6,21 @@ defmodule AshHqWeb.UserSettingsControllerTest do
 
   setup :register_and_log_in_user
 
-  describe "GET /users/settings" do
-    test "renders settings page", %{conn: conn} do
-      conn = get(conn, Routes.user_settings_path(conn, :edit))
-      response = html_response(conn, 200)
-      assert response =~ "Settings</h5>"
-    end
-
-    test "redirects if user is not logged in" do
-      conn = build_conn()
-      conn = get(conn, Routes.user_settings_path(conn, :edit))
-      assert redirected_to(conn) == Routes.user_session_path(conn, :new)
-    end
-  end
-
-  describe "PUT /users/settings (change password form)" do
-    test "updates the user password and resets tokens", %{conn: conn, user: user} do
-      new_password_conn =
-        put(conn, Routes.user_settings_path(conn, :update), %{
-          "action" => "update_password",
-          "current_password" => valid_user_password(),
-          "user" => %{
-            "password" => "new valid password",
-            "password_confirmation" => "new valid password"
-          }
-        })
-
-      assert redirected_to(new_password_conn) == Routes.user_settings_path(conn, :edit)
-      assert get_session(new_password_conn, :user_token) != get_session(conn, :user_token)
-      assert get_flash(new_password_conn, :info) =~ "Password updated successfully"
-
-      assert Accounts.User
-             |> Ash.Query.for_read(:by_email_and_password, %{
-               email: user.email,
-               password: "new valid password"
-             })
-             |> Accounts.read_one!(authorize?: false)
-    end
-
-    test "does not update password on invalid data", %{conn: conn} do
-      old_password_conn =
-        put(conn, Routes.user_settings_path(conn, :update), %{
-          "action" => "update_password",
-          "current_password" => "invalid",
-          "user" => %{
-            "password" => "too short",
-            "password_confirmation" => "does not match"
-          }
-        })
-
-      response = html_response(old_password_conn, 200)
-      assert response =~ "Settings</h5>"
-      assert response =~ "length must be greater than or equal to 12"
-      assert response =~ "Confirmation did not match value"
-      assert response =~ "errors below"
-
-      assert get_session(old_password_conn, :user_token) == get_session(conn, :user_token)
-    end
-  end
-
-  describe "PUT /users/settings (change email form)" do
-    @tag :capture_log
-    test "updates the user email", %{conn: conn, user: user} do
-      conn =
-        put(conn, Routes.user_settings_path(conn, :update), %{
-          "action" => "update_email",
-          "current_password" => valid_user_password(),
-          "user" => %{"email" => unique_user_email()}
-        })
-
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
-      assert get_flash(conn, :info) =~ "A link to confirm your email"
-
-      assert Accounts.get!(
-               Accounts.User,
-               [email: user.email],
-               authorize?: false
-             )
-    end
-
-    test "does not update email on invalid data", %{conn: conn} do
-      conn =
-        put(conn, Routes.user_settings_path(conn, :update), %{
-          "action" => "update_email",
-          "current_password" => "invalid",
-          "user" => %{"email" => "with spaces"}
-        })
-
-      response = html_response(conn, 200)
-      assert response =~ "Settings</h5>"
-      assert response =~ "must have the @ sign and no spaces"
-    end
-  end
-
   describe "GET /users/settings/confirm_email/:token" do
     setup %{user: user} do
       email = unique_user_email()
 
       token =
         user
-        |> Ash.Changeset.for_update(:deliver_update_email_instructions, %{
-          email: email,
-          current_password: valid_user_password()
-        })
-        |> Accounts.update!(authorize?: false)
+        |> Ash.Changeset.for_update(
+          :deliver_update_email_instructions,
+          %{
+            email: email,
+            current_password: valid_user_password()
+          },
+          authorize?: false
+        )
+        |> Accounts.update!()
         |> Map.get(:__metadata__)
         |> Map.get(:token)
 
@@ -118,7 +29,7 @@ defmodule AshHqWeb.UserSettingsControllerTest do
 
     test "updates the user email once", %{conn: conn, user: user, token: token, email: email} do
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(conn) == Routes.app_view_path(conn, :user_settings)
       assert get_flash(conn, :info) =~ "Email changed successfully"
 
       refute Accounts.get!(Accounts.User, [email: user.email], authorize?: false, error?: false)
@@ -126,13 +37,13 @@ defmodule AshHqWeb.UserSettingsControllerTest do
       assert Accounts.get!(Accounts.User, [email: email], authorize?: false)
 
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(conn) == Routes.app_view_path(conn, :user_settings)
       assert get_flash(conn, :error) =~ "Email change link is invalid or it has expired"
     end
 
     test "does not update email with invalid token", %{conn: conn, user: user} do
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, "oops"))
-      assert redirected_to(conn) == Routes.user_settings_path(conn, :edit)
+      assert redirected_to(conn) == Routes.app_view_path(conn, :user_settings)
       assert get_flash(conn, :error) =~ "Email change link is invalid or it has expired"
 
       assert Accounts.get!(Accounts.User, [email: user.email], authorize?: false)
@@ -141,7 +52,7 @@ defmodule AshHqWeb.UserSettingsControllerTest do
     test "redirects if user is not logged in", %{token: token} do
       conn = build_conn()
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
-      assert redirected_to(conn) == Routes.user_session_path(conn, :new)
+      assert redirected_to(conn) == Routes.app_view_path(conn, :log_in)
     end
   end
 end

@@ -101,6 +101,7 @@ defmodule AshHq.Docs.Importer do
               version,
               %{
                 timeout: :infinity,
+                branch: branch?,
                 id: id,
                 default_guide: result[:default_guide],
                 extensions: result[:extensions],

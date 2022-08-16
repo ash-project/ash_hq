@@ -17,9 +17,6 @@
     </header>
 
     <main role="main" class="container mx-auto mb-8 px-4 max-w-6xl">
-      <p class="alert alert-info alert-left toast" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger alert-left toast" role="alert"><%= get_flash(@conn, :error) %></p>
-
       <div class="flex justify-center p-2">
         <div class="card w-full max-w-xs">
           <div class="card-body">

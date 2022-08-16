@@ -3,23 +3,23 @@ defmodule AshHq.Accounts.User.Changes.CreateResetPasswordToken do
 
   use Ash.Resource.Change
 
-  def create_reset_password_token, do: {__MODULE__, []}
-
   def change(changeset, _opts, _context) do
     Ash.Changeset.after_action(changeset, fn changeset, user ->
       AshHq.Accounts.UserToken
-      |> Ash.Changeset.new()
-      |> Ash.Changeset.for_create(:build_email_token,
-        email: user.email,
-        context: "reset_password",
-        sent_to: user.email,
-        user: user
+      |> Ash.Changeset.for_create(
+        :build_email_token,
+        %{email: user.email, context: "reset_password", sent_to: user.email, user: user},
+        authorize?: false
       )
-      |> AshHq.Accounts.create(return_notifications?: true, authorize?: false)
+      |> AshHq.Accounts.create(return_notifications?: true)
       |> case do
         {:ok, email_token, notifications} ->
-          {:ok, %{user | __metadata__: Map.put(user.__metadata__, :token, email_token.token)},
-           Enum.map(notifications, &set_metadata(&1, user, changeset, email_token))}
+          {:ok,
+           %{
+             user
+             | __metadata__:
+                 Map.put(user.__metadata__, :token, email_token.__metadata__.url_token)
+           }, Enum.map(notifications, &set_metadata(&1, user, changeset, email_token))}
 
         {:error, error} ->
           {:error, error}

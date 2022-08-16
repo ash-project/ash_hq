@@ -3,19 +3,20 @@ defmodule AshHq.Accounts.User.Changes.CreateEmailUpdateToken do
 
   use Ash.Resource.Change
 
-  def create_email_update_token, do: {__MODULE__, []}
-
   def change(original_changeset, _opts, _context) do
     Ash.Changeset.after_action(original_changeset, fn changeset, user ->
       AshHq.Accounts.UserToken
-      |> Ash.Changeset.new()
-      |> Ash.Changeset.for_create(:build_email_token,
-        email: user.email,
-        context: "change:#{user.email}",
-        sent_to: original_changeset.attributes[:email],
-        user: user
+      |> Ash.Changeset.for_create(
+        :build_email_token,
+        %{
+          email: user.email,
+          context: "change:#{user.email}",
+          sent_to: original_changeset.attributes[:email],
+          user: user
+        },
+        authorize?: false
       )
-      |> AshHq.Accounts.create(return_notifications?: true, authorize?: false)
+      |> AshHq.Accounts.create(return_notifications?: true)
       |> case do
         {:ok, email_token, notifications} ->
           {:ok,
