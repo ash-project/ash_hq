@@ -1,0 +1,122 @@
+{
+  "attributes": [
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "sanitized_version",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"uuid_generate_v4()\")",
+      "generated?": false,
+      "primary_key?": true,
+      "references": null,
+      "size": null,
+      "source": "id",
+      "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "version",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "false",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "branch",
+      "type": "boolean"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "default_guide",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": {
+        "destination_field": "id",
+        "destination_field_default": null,
+        "destination_field_generated": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "library_versions_library_id_fkey",
+        "on_delete": null,
+        "on_update": null,
+        "schema": "public",
+        "table": "libraries"
+      },
+      "size": null,
+      "source": "library_id",
+      "type": "uuid"
+    }
+  ],
+  "base_filter": null,
+  "check_constraints": [],
+  "custom_indexes": [],
+  "custom_statements": [
+    {
+      "code?": false,
+      "down": "DROP INDEX library_versions_name_lower_index;",
+      "name": "name_index",
+      "up": "CREATE INDEX library_versions_name_lower_index ON library_versions(lower(version));\n"
+    },
+    {
+      "code?": false,
+      "down": "DROP INDEX library_versions_name_trigram_index;",
+      "name": "trigram_index",
+      "up": "CREATE INDEX library_versions_name_trigram_index ON library_versions USING GIST (version gist_trgm_ops);\n"
+    },
+    {
+      "code?": false,
+      "down": "DROP INDEX library_versions_search_index;",
+      "name": "search_index",
+      "up": "CREATE INDEX library_versions_search_index ON library_versions USING GIN((\n  to_tsvector('english', version)\n));\n"
+    }
+  ],
+  "has_create_action": true,
+  "hash": "7EC011BE577203A1B3276F1265AF51D192E7BB5855112087DDDE162145609BD9",
+  "identities": [
+    {
+      "base_filter": null,
+      "index_name": "library_versions_unique_version_for_library_index",
+      "keys": [
+        "library_id",
+        "version"
+      ],
+      "name": "unique_version_for_library"
+    }
+  ],
+  "multitenancy": {
+    "attribute": null,
+    "global": null,
+    "strategy": null
+  },
+  "repo": "Elixir.AshHq.Repo",
+  "schema": null,
+  "table": "library_versions"
+}
