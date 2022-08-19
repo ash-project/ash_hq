@@ -5,9 +5,9 @@ defmodule AshHq.Docs.Extensions.Search do
   This generally involves ensuring that there is a url safe name attribute to be used in routing,
   and configuring how the item will be searched for.
   """
-  alias Ash.Dsl.Extension
+  alias Spark.Dsl.Extension
 
-  @search %Ash.Dsl.Section{
+  @search %Spark.Dsl.Section{
     name: :search,
     schema: [
       type: [
@@ -63,7 +63,7 @@ defmodule AshHq.Docs.Extensions.Search do
       ]
     ]
   }
-  use Ash.Dsl.Extension,
+  use Spark.Dsl.Extension,
     sections: [@search],
     transformers: [AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure]
 

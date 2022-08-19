@@ -215,9 +215,10 @@ defmodule AshHq.Accounts.User do
   end
 
   relationships do
-    has_one :token, AshHq.Accounts.UserToken,
-      destination_field: :user_id,
-      private?: true
+    has_one :token, AshHq.Accounts.UserToken do
+      destination_attribute :user_id
+      private? true
+    end
   end
 
   resource do

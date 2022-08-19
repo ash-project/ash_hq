@@ -34,13 +34,14 @@ defmodule AshHq.MixProject do
   defp deps do
     [
       # {:ash, "~> 1.53"},
-      {:ash, github: "ash-project/ash", override: true},
+      {:ash, github: "ash-project/ash", override: true, branch: "2.0"},
       # {:ash, path: "../ash", override: true},
       # {:ash_postgres, "~> 0.42.0-rc.5"},
-      {:ash_postgres, github: "ash-project/ash_postgres"},
+      {:ash_postgres, github: "ash-project/ash_postgres", branch: "ash-2.0"},
       # {:ash_postgres, path: "../ash_postgres"},
-      {:ash_phoenix, github: "ash-project/ash_phoenix", override: true},
+      {:ash_phoenix, github: "ash-project/ash_phoenix", branch: "ash-2.0", override: true},
       # {:ash_livebook, path: "../ash_livebook", only: [:dev]},
+      {:spark, path: "../spark", override: true},
       {:earmark, "~> 1.5.0-pre1", override: true},
       {:surface, "~> 0.7.3"},
       {:surface_heroicons, "~> 0.6.0"},

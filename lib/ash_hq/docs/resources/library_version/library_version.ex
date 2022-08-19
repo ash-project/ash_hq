@@ -107,11 +107,6 @@ defmodule AshHq.Docs.LibraryVersion do
       allow_nil? false
     end
 
-    attribute :branch, :boolean do
-      allow_nil? false
-      default false
-    end
-
     attribute :default_guide, :string
   end
 

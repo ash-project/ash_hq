@@ -3,7 +3,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
   Sets up markdown text attributes to be transformed to html (in another column).
   """
 
-  @render_markdown %Ash.Dsl.Section{
+  @render_markdown %Spark.Dsl.Section{
     name: :render_markdown,
     schema: [
       render_attributes: [
@@ -20,16 +20,16 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
     ]
   }
 
-  use Ash.Dsl.Extension,
+  use Spark.Dsl.Extension,
     sections: [@render_markdown],
     transformers: [AshHq.Docs.Extensions.RenderMarkdown.Transformers.AddRenderMarkdownStructure]
 
   def render_attributes(resource) do
-    Ash.Dsl.Extension.get_opt(resource, [:render_markdown], :render_attributes, [])
+    Spark.Dsl.Extension.get_opt(resource, [:render_markdown], :render_attributes, [])
   end
 
   def header_ids?(resource) do
-    Ash.Dsl.Extension.get_opt(resource, [:render_markdown], :header_ids?, [])
+    Spark.Dsl.Extension.get_opt(resource, [:render_markdown], :header_ids?, [])
   end
 
   def render!(%resource{} = record, key, on_demand? \\ false) do

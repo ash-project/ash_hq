@@ -197,11 +197,10 @@ defmodule Utils do
   defp remove_shared_root(_, remaining), do: remaining
 
   defp type({:behaviour, mod}), do: Module.split(mod) |> List.last()
-  defp type({:ash_behaviour, mod}), do: Module.split(mod) |> List.last()
-  defp type({:ash_behaviour, mod, _builtins}), do: Module.split(mod) |> List.last()
+  defp type({:spark, mod}), do: Module.split(mod) |> List.last()
+  defp type({:spark_behaviour, mod}), do: Module.split(mod) |> List.last()
+  defp type({:spark_behaviour, mod, _builtins}), do: Module.split(mod) |> List.last()
   defp type({:custom, _, _, _}), do: "any"
-  defp type(:ash_type), do: "Type"
-  defp type(:ash_resource), do: "Resource"
   defp type(:any), do: "any"
   defp type(:keyword_list), do: "Keyword List"
   defp type({:keyword_list, _schema}), do: "Keyword List"
@@ -225,9 +224,11 @@ defmodule Utils do
   defp type({:mfa_or_fun, arity}), do: "MFA | function/#{arity}"
   defp type(:literal), do: "any literal"
   defp type({:tagged_tuple, tag, type}), do: "{:#{tag}, #{type(type)}}"
+  defp type({:spark_type, type, _}), do: inspect(type)
+  defp type({:spark_type, type, _, _}), do: inspect(type)
 
   def doc_index?(module) do
-    Ash.Helpers.implements_behaviour?(module, Ash.DocIndex) && module.for_library() == Application.get_env(:dsl, :name)
+    Ash.Helpers.implements_behaviour?(module, Spark.DocIndex) && module.for_library() == Application.get_env(:dsl, :name)
   end
 end
 

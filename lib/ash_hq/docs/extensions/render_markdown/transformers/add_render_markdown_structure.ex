@@ -6,16 +6,16 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Transformers.AddRenderMarkdownStr
   attributes to the `allow_nil_input` of each action, since it will be adding them automatically.
   """
 
-  use Ash.Dsl.Transformer
-  alias Ash.Dsl.Transformer
+  use Spark.Dsl.Transformer
+  alias Spark.Dsl.Transformer
 
-  def transform(resource, dsl) do
-    resource
-    |> AshHq.Docs.Extensions.RenderMarkdown.render_attributes()
+  def transform(dsl) do
+    dsl
+    |> Transformer.get_option([:render_markdown], :render_attributes, [])
     |> Enum.reduce({:ok, dsl}, fn {source, destination}, {:ok, dsl} ->
       {:ok,
        dsl
-       |> allow_nil_input(resource, destination)
+       |> allow_nil_input(destination)
        |> Transformer.add_entity(
          [:changes],
          Transformer.build_entity!(Ash.Resource.Dsl, [:changes], :change,
@@ -27,9 +27,9 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Transformers.AddRenderMarkdownStr
     end)
   end
 
-  defp allow_nil_input(dsl, resource, destination) do
-    resource
-    |> Ash.Resource.Info.actions()
+  defp allow_nil_input(dsl, destination) do
+    dsl
+    |> Transformer.get_entities([:actions])
     |> Enum.filter(&(&1.type == :create))
     |> Enum.reduce(dsl, fn action, dsl ->
       Transformer.replace_entity(

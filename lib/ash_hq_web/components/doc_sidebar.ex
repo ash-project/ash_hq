@@ -153,7 +153,7 @@ defmodule AshHqWeb.Components.DocSidebar do
     libraries
     |> Enum.flat_map(fn library ->
       library.versions
-      |> Enum.find(&Ash.Resource.Info.loaded?(&1, :modules))
+      |> Enum.find(&Ash.Resource.loaded?(&1, :modules))
       |> case do
         nil ->
           []
@@ -256,7 +256,7 @@ defmodule AshHqWeb.Components.DocSidebar do
     libraries
     |> Enum.flat_map(fn library ->
       library.versions
-      |> Enum.find(&Ash.Resource.Info.loaded?(&1, :guides))
+      |> Enum.find(&Ash.Resource.loaded?(&1, :guides))
       |> case do
         nil ->
           []
@@ -277,7 +277,7 @@ defmodule AshHqWeb.Components.DocSidebar do
   defp get_extensions(libraries) do
     Enum.flat_map(libraries, fn library ->
       library.versions
-      |> Enum.find(&Ash.Resource.Info.loaded?(&1, :extensions))
+      |> Enum.find(&Ash.Resource.loaded?(&1, :extensions))
       |> case do
         nil ->
           []

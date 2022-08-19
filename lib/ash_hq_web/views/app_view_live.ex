@@ -10,24 +10,24 @@ defmodule AshHqWeb.AppViewLive do
   alias Surface.Components.{Link, LiveRedirect}
   require Ash.Query
 
-  data configured_theme, :string, default: :system
-  data searching, :boolean, default: false
-  data selected_versions, :map, default: %{}
-  data libraries, :list, default: []
-  data selected_types, :map, default: %{}
-  data sidebar_state, :map, default: %{}
-  data current_user, :map
+  data(configured_theme, :string, default: :system)
+  data(searching, :boolean, default: false)
+  data(selected_versions, :map, default: %{})
+  data(libraries, :list, default: [])
+  data(selected_types, :map, default: %{})
+  data(sidebar_state, :map, default: %{})
+  data(current_user, :map)
 
-  data library, :any, default: nil
-  data extension, :any, default: nil
-  data docs, :any, default: nil
-  data library_version, :any, default: nil
-  data guide, :any, default: nil
-  data doc_path, :list, default: []
-  data dsls, :list, default: []
-  data dsl, :any, default: nil
-  data options, :list, default: []
-  data module, :any, default: nil
+  data(library, :any, default: nil)
+  data(extension, :any, default: nil)
+  data(docs, :any, default: nil)
+  data(library_version, :any, default: nil)
+  data(guide, :any, default: nil)
+  data(doc_path, :list, default: [])
+  data(dsls, :list, default: [])
+  data(dsl, :any, default: nil)
+  data(options, :list, default: [])
+  data(module, :any, default: nil)
 
   def render(assigns) do
     ~F"""
@@ -70,13 +70,13 @@ defmodule AshHqWeb.AppViewLive do
           {/if}
           <div class="flex flex-row align-middle items-center space-x-2">
             <a
-              href="/docs/guides/ash/main/tutorials/quick-start.md"
+              href="/docs/guides/ash/latest/tutorials/getting-started.md"
               target="_blank"
               class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600"
-            >Quick Start</a>
+            >Get Started</a>
             <div>|</div>
             <a
-              href="/docs/guides/ash/main/topics/overview.md"
+              href="/docs/guides/ash/latest/topics/overview.md"
               target="_blank"
               class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600"
             >Docs</a>
@@ -444,19 +444,8 @@ defmodule AshHqWeb.AppViewLive do
     libraries = AshHq.Docs.Library.read!(load: [versions: versions_query])
 
     selected_versions =
-      Enum.reduce(libraries, %{}, fn library, acc ->
-        # for now we only assume that ash will always appear in the docs
-        if library.name == "ash" do
-          case AshHqWeb.Helpers.latest_version(library) do
-            nil ->
-              acc
-
-            version ->
-              Map.put_new(acc, library.id, version.id)
-          end
-        else
-          acc
-        end
+      Enum.reduce(libraries, configured_library_versions, fn library, acc ->
+        Map.put_new(acc, library.id, "latest")
       end)
 
     {:ok,
@@ -470,7 +459,7 @@ defmodule AshHqWeb.AppViewLive do
        :selected_types,
        selected_types
      )
-     |> assign(:selected_versions, configured_library_versions)
+     |> assign(:selected_versions, selected_versions)
      |> assign(configured_theme: configured_theme, sidebar_state: sidebar_state)
      |> push_event("selected-versions", selected_versions)
      |> push_event("selected_types", %{types: selected_types})}
@@ -685,7 +674,7 @@ defmodule AshHqWeb.AppViewLive do
                 version ->
                   Enum.find(
                     library.versions,
-                    &(&1.sanitized_version == version)
+                    &(&1.version == version)
                   )
               end
 
@@ -696,9 +685,10 @@ defmodule AshHqWeb.AppViewLive do
                   library_version: library_version
                 )
 
-              if !socket.assigns[:library] ||
-                   socket.assigns.params["library"] !=
-                     socket.assigns.library.name do
+              if socket.assigns.params["version"] != "latest" &&
+                   (!socket.assigns[:library] ||
+                      socket.assigns.params["library"] !=
+                        socket.assigns.library.name) do
                 new_selected_versions =
                   Map.put(socket.assigns.selected_versions, library.id, library_version.id)
 

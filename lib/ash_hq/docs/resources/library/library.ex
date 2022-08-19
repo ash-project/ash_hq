@@ -42,16 +42,11 @@ defmodule AshHq.Docs.Library do
     attribute :display_name, :string do
       allow_nil? false
     end
-
-    attribute :track_branches, {:array, :string} do
-      default []
-    end
   end
 
   aggregates do
     first :latest_version, :versions, :version do
       sort version: :desc
-      filter expr(contains(version, "."))
     end
   end
 

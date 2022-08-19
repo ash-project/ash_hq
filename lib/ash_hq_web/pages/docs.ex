@@ -407,10 +407,11 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   defp render_mix_deps(docs, assigns) do
-    String.replace(docs, ~r/^(?!\<\/code\>){{mix_dep:.*}}/, fn text ->
+    String.replace(docs, ~r/{{mix_dep:.*}}/, fn text ->
       try do
         "{{mix_dep:" <> library = String.trim_trailing(text, "}}")
-        render_mix_dep(assigns, library, text)
+
+        "<pre><code>#{render_mix_dep(assigns, library, text)}</code></pre>"
       rescue
         e ->
           Logger.error("Invalid link #{inspect(e)}")
@@ -439,16 +440,12 @@ defmodule AshHqWeb.Pages.Docs do
         end
       end
 
-    if version.branch do
-      ~s({:#{library.name}, github: "ash-project/#{library.name}", branch: "#{version}"})
-    else
-      case Version.parse(version) do
-        {:ok, %{major: major, minor: minor, patch: 0}} ->
-          ~s({:#{library.name}, "~> #{major}.#{minor}"})
+    case Version.parse(version.version) do
+      {:ok, %{major: major, minor: minor, patch: 0}} ->
+        ~s({:#{library.name}, "~> #{major}.#{minor}"})
 
-        {:ok, version} ->
-          ~s({:#{library.name}, "~> #{version}"})
-      end
+      {:ok, version} ->
+        ~s({:#{library.name}, "~> #{version}"})
     end
   end
 
@@ -456,8 +453,8 @@ defmodule AshHqWeb.Pages.Docs do
     String.replace(docs, ~r/(?!<code>){{link:.*}}(?!<\/code>)/, fn text ->
       try do
         "{{link:" <> rest = String.trim_trailing(text, "}}")
-        [library, type, item] = String.split(rest, ":")
-        render_link(assigns, library, type, item, text)
+        [library, type, item | rest] = String.split(rest, ":")
+        render_link(assigns, library, type, item, text, rest)
       rescue
         e ->
           Logger.error("Invalid link #{inspect(e)}")
@@ -466,7 +463,7 @@ defmodule AshHqWeb.Pages.Docs do
     end)
   end
 
-  defp render_link(assigns, library, type, item, source) do
+  defp render_link(assigns, library, type, item, source, rest) do
     library =
       Enum.find(assigns[:libraries], &(&1.name == library)) ||
         raise "No such library in link: #{source}"
@@ -496,8 +493,10 @@ defmodule AshHqWeb.Pages.Docs do
             Enum.find(version.guides, &(&1.name == item)) ||
               raise "No such guide in link: #{source}"
 
+          text = Enum.at(rest, 0) || item
+
           """
-          <a href="#{DocRoutes.doc_link(guide, assigns[:selected_versions])}">#{item}</a>
+          <a href="#{DocRoutes.doc_link(guide, assigns[:selected_versions])}">#{text}</a>
           """
 
         "dsl" ->
@@ -507,17 +506,17 @@ defmodule AshHqWeb.Pages.Docs do
             |> Enum.join(".")
 
           """
-          <a href="/docs/dsl/#{library.name}/#{version.sanitized_version}/#{item}">#{name}</a>
+          <a href="/docs/dsl/#{library.name}/#{version.version}/#{item}">#{name}</a>
           """
 
         "module" ->
           """
-          <a href="/docs/module/#{library.name}/#{DocRoutes.sanitize_name(version.version)}/#{DocRoutes.sanitize_name(item)}">#{item}</a>
+          <a href="/docs/module/#{library.name}/#{version.version}/#{DocRoutes.sanitize_name(item)}">#{item}</a>
           """
 
         "extension" ->
           """
-          <a href="/docs/dsl/#{library.name}/#{version.sanitized_version}/#{DocRoutes.sanitize_name(item)}">#{item}</a>
+          <a href="/docs/dsl/#{library.name}/#{version.version}/#{DocRoutes.sanitize_name(item)}">#{item}</a>
           """
 
         type ->

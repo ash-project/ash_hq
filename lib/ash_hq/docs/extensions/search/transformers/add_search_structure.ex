@@ -13,22 +13,28 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
   * Adds a search action
   * Adds a code interface for the search action
   """
-  use Ash.Dsl.Transformer
+  use Spark.Dsl.Transformer
   import Ash.Filter.TemplateHelpers
   require Ash.Query
-  alias Ash.Dsl.Transformer
+  alias Spark.Dsl.Transformer
 
-  def transform(resource, dsl_state) do
-    name_attribute = AshHq.Docs.Extensions.Search.name_attribute(resource)
+  def transform(dsl_state) do
+    name_attribute = Transformer.get_option(dsl_state, [:search], :name_attribute) || :name
+
+    sanitized_name_attribute =
+      Transformer.get_option(dsl_state, [:search], :sanitized_name_attribute) ||
+        :"sanitized_#{name_attribute}"
 
     config = %{
-      resource: resource,
       name_attribute: name_attribute,
-      doc_attribute: AshHq.Docs.Extensions.Search.doc_attribute(resource),
-      library_version_attribute: AshHq.Docs.Extensions.Search.library_version_attribute(resource),
-      table: AshPostgres.table(resource),
-      sanitized_name_attribute: AshHq.Docs.Extensions.Search.sanitized_name_attribute(resource),
-      show_docs_on: AshHq.Docs.Extensions.Search.show_docs_on(resource)
+      doc_attribute: Transformer.get_option(dsl_state, [:search], :doc_attribute),
+      library_version_attribute:
+        Transformer.get_option(dsl_state, [:search], :library_version_attribute) ||
+          :library_version_id,
+      table: Transformer.get_option(dsl_state, [:postgres], :table),
+      sanitized_name_attribute: sanitized_name_attribute,
+      show_docs_on:
+        Transformer.get_option(dsl_state, [:search], :show_docs_on) || sanitized_name_attribute
     }
 
     {:ok,
@@ -70,7 +76,10 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
 
   defp add_sanitized_name(dsl_state, config) do
     dsl_state =
-      if Ash.Resource.Info.attribute(config.resource, config.sanitized_name_attribute) do
+      if Enum.find(
+           Transformer.get_entities(dsl_state, [:attributes]),
+           &(&1.name == config.sanitized_name_attribute)
+         ) do
         dsl_state
       else
         Transformer.add_entity(
@@ -87,7 +96,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
         )
       end
 
-    if AshHq.Docs.Extensions.Search.auto_sanitize_name_attribute?(config.resource) do
+    if Transformer.get_option(dsl_state, [:search], :auto_sanitize_name_attribute?, true) do
       Transformer.add_entity(
         dsl_state,
         [:changes],
@@ -96,7 +105,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
             {AshHq.Docs.Extensions.Search.Changes.SanitizeName,
              source: config.name_attribute,
              destination: config.sanitized_name_attribute,
-             use_path_for_name?: AshHq.Docs.Extensions.Search.use_path_for_name?(config.resource)}
+             use_path_for_name?: Transformer.get_option(dsl_state, [:search], :use_path_for_name?)}
         )
       )
     else

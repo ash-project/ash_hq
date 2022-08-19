@@ -4,10 +4,8 @@ defmodule AshHq.Docs.Extensions.Search.Types do
   """
 
   @search_types AshHq.Docs.Registry
-                |> Ash.Registry.entries()
-                |> Enum.filter(
-                  &(AshHq.Docs.Extensions.Search in Ash.Resource.Info.extensions(&1))
-                )
+                |> Ash.Registry.Info.entries()
+                |> Enum.filter(&(AshHq.Docs.Extensions.Search in Spark.extensions(&1)))
                 |> Enum.map(&AshHq.Docs.Extensions.Search.type/1)
                 |> Enum.uniq()
 
