@@ -70,16 +70,10 @@ defmodule AshHqWeb.AppViewLive do
           {/if}
           <div class="flex flex-row align-middle items-center space-x-2">
             <a
-              href="/docs/guides/ash/latest/tutorials/getting-started.md"
+              href="/docs/guides/ash/latest/tutorials/get-started.md"
               target="_blank"
               class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600"
             >Get Started</a>
-            <div>|</div>
-            <a
-              href="/docs/guides/ash/latest/topics/overview.md"
-              target="_blank"
-              class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600"
-            >Docs</a>
             <div>|</div>
             <a href="https://github.com/ash-project" target="_blank">
               <svg
@@ -601,14 +595,14 @@ defmodule AshHqWeb.AppViewLive do
     cond do
       socket.assigns.module ->
         assign(socket,
-          docs: RenderMarkdown.as_html!(socket.assigns.module.html_for),
+          docs: socket.assigns.module.html_for,
           doc_path: [socket.assigns.library.name, socket.assigns.module.name],
           options: []
         )
 
       socket.assigns.dsl ->
         assign(socket,
-          docs: RenderMarkdown.as_html!(socket.assigns.dsl.html_for),
+          docs: socket.assigns.dsl.html_for,
           doc_path:
             [
               socket.assigns.library.name,
@@ -623,14 +617,14 @@ defmodule AshHqWeb.AppViewLive do
 
       socket.assigns.extension ->
         assign(socket,
-          docs: RenderMarkdown.as_html!(socket.assigns.extension.html_for),
+          docs: socket.assigns.extension.html_for,
           doc_path: [socket.assigns.library.name, socket.assigns.extension.name],
           options: []
         )
 
       socket.assigns.guide ->
         assign(socket,
-          docs: RenderMarkdown.as_html!(socket.assigns.guide.html_for),
+          docs: socket.assigns.guide.html_for,
           doc_path: [socket.assigns.library.name, socket.assigns.guide.name],
           options: []
         )

@@ -75,21 +75,23 @@ defmodule AshHqWeb.Components.DocSidebar do
             Reference
           </div>
           <div class="ml-2 space-y-2">
-            <div class="text-gray-500">
-              {#if @sidebar_state["extensions"] == "open" || @extension}
-                <button
-                  :on-click={@collapse_sidebar}
-                  phx-value-id="extensions"
-                  class="flex flex-row items-center"
-                >
-                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />Extensions
-                </button>
-              {#else}
-                <button :on-click={@expand_sidebar} phx-value-id="extensions" class="flex flex-row items-center">
-                  <Heroicons.Outline.ChevronRightIcon class="w-3 h-3 mr-1" />Extensions
-                </button>
-              {/if}
-            </div>
+            {#if !Enum.empty?(get_extensions(@libraries))}
+              <div class="text-gray-500">
+                {#if @sidebar_state["extensions"] == "open" || @extension}
+                  <button
+                    :on-click={@collapse_sidebar}
+                    phx-value-id="extensions"
+                    class="flex flex-row items-center"
+                  >
+                    <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />Extensions
+                  </button>
+                {#else}
+                  <button :on-click={@expand_sidebar} phx-value-id="extensions" class="flex flex-row items-center">
+                    <Heroicons.Outline.ChevronRightIcon class="w-3 h-3 mr-1" />Extensions
+                  </button>
+                {/if}
+              </div>
+            {/if}
             {#if @sidebar_state["extensions"] == "open" || @extension}
               {#for extension <- get_extensions(@libraries)}
                 <li class="ml-3">

@@ -1,22 +1,14 @@
 require Logger
-[name, version, file, branch] = System.argv()
+[name, version, file] = System.argv()
 
 Application.put_env(:dsl, :name, name)
 
-if branch == "true" do
-  Mix.install([
-    {String.to_atom(name), github: "ash-project/#{name}", ref: version}
-  ], force: true,
-    system_env: [
-      {"MIX_QUIET", "true"}
-    ])
-else
-  Mix.install([
-    {String.to_atom(name), "== #{version}"}
-  ], system_env: [
-    {"MIX_QUIET", "true"}
-  ])
-end
+Mix.install([
+  {String.to_atom(name), "== #{version}"}
+], system_env: [
+  {"MIX_QUIET", "true"}
+])
+
 
 defmodule Utils do
   def try_apply(func, default \\ nil) do
@@ -48,7 +40,7 @@ defmodule Utils do
         name: section.name,
         options: schema(section.schema, path ++ [section.name]),
         doc: section.describe || "No documentation",
-        links: Map.new(section.links),
+        links: Map.new(section.links || []),
         imports: Enum.map(section.imports, &inspect/1),
         type: :section,
         order: index,
@@ -71,7 +63,7 @@ defmodule Utils do
         order: index,
         doc: entity.describe || "No documentation",
         imports: [],
-        links: Map.new(entity.links),
+        links: Map.new(entity.links || []),
         args: entity.args,
         type: :entity,
         path: path,
@@ -228,7 +220,7 @@ defmodule Utils do
   defp type({:spark_type, type, _, _}), do: inspect(type)
 
   def doc_index?(module) do
-    Ash.Helpers.implements_behaviour?(module, Spark.DocIndex) && module.for_library() == Application.get_env(:dsl, :name)
+    Spark.implements_behaviour?(module, Spark.DocIndex) && module.for_library() == Application.get_env(:dsl, :name)
   end
 end
 

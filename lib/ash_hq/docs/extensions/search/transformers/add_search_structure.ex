@@ -52,6 +52,16 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
 
   defp add_html_for_calculation(dsl_state, config) do
     if config.doc_attribute do
+      html_for_attribute =
+        if dest =
+             Transformer.get_option(dsl_state, [:render_markdown], :render_attributes)[
+               config.doc_attribute
+             ] do
+          dest
+        else
+          config.doc_attribute
+        end
+
       dsl_state
       |> Transformer.add_entity(
         [:calculations],
@@ -62,7 +72,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
           calculation:
             Ash.Query.expr(
               if ^ref(config.show_docs_on) == ^arg(:for) do
-                ^ref(config.doc_attribute)
+                ^ref(html_for_attribute)
               else
                 nil
               end

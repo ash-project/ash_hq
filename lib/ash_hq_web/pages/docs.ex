@@ -189,7 +189,7 @@ defmodule AshHqWeb.Pages.Docs do
                         {option.type}
                       </td>
                       <td>
-                        {raw(render_replacements(assigns, RenderMarkdown.as_html!(option.html_for)))}
+                        {raw(render_replacements(assigns, option.html_for))}
                       </td>
                       <td>
                         {raw(
@@ -231,7 +231,7 @@ defmodule AshHqWeb.Pages.Docs do
                       {option.type}
                     </td>
                     <td>
-                      {raw(render_replacements(assigns, RenderMarkdown.as_html!(option.html_for)))}
+                      {raw(render_replacements(assigns, option.html_for))}
                     </td>
                     <td>
                       {raw(
@@ -347,7 +347,7 @@ defmodule AshHqWeb.Pages.Docs do
               {#for head <- function.heads}
                 <code class="makeup elixir">{head}</code>
               {/for}
-              {raw(render_replacements(assigns, RenderMarkdown.as_html!(function.html_for, false)))}
+              {raw(render_replacements(assigns, function.html_for))}
             </p>
           </div>
         {/for}

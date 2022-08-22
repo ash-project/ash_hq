@@ -7,10 +7,11 @@ defmodule AshHq.Docs.Importer do
   require Logger
   require Ash.Query
 
+  @app_version Mix.Project.config()[:version]
+
   # sobelow_skip ["Misc.BinToTerm", "Traversal.FileModule"]
   def import(opts \\ []) do
     only = opts[:only] || nil
-    only_branches? = opts[:only_branches?] || false
 
     query =
       if only do
@@ -47,22 +48,11 @@ defmodule AshHq.Docs.Importer do
           versions
         )
 
-      if only_branches? do
-        []
-      else
-        versions
-        |> Enum.reject(fn version ->
-          Enum.find(already_defined_versions, &(&1.version == version))
-        end)
-      end
-      |> Enum.concat(Enum.map(library.track_branches, &{&1, true}))
+      versions
+      |> Enum.reject(fn version ->
+        Enum.find(already_defined_versions, &(&1.version == version))
+      end)
       |> Enum.each(fn version ->
-        {version, branch?} =
-          case version do
-            {version, true} -> {version, true}
-            _ -> {version, false}
-          end
-
         file = Path.expand("./#{Ash.UUID.generate()}.json")
 
         result =
@@ -70,11 +60,23 @@ defmodule AshHq.Docs.Importer do
             with_retry(fn ->
               {_, 0} =
                 System.cmd("elixir", [
-                  Path.join(:code.priv_dir(:ash_hq), "scripts/build_dsl_docs.exs"),
+                  # "--boot-var",
+                  # "RELEASE_LIB",
+                  # Path.join(["_build", "prod", "rel", "ash_hq", "lib"]),
+                  # "--boot",
+                  # Path.join([
+                  #   "_build",
+                  #   "prod",
+                  #   "rel",
+                  #   "ash_hq",
+                  #   "releases",
+                  #   @app_version,
+                  #   "start_clean"
+                  # ]),
+                  Path.join([:code.priv_dir(:ash_hq), "scripts", "build_dsl_docs.exs"]),
                   name,
                   version,
-                  file,
-                  to_string(branch?)
+                  file
                 ])
 
               output = File.read!(file)
@@ -101,18 +103,81 @@ defmodule AshHq.Docs.Importer do
               version,
               %{
                 timeout: :infinity,
-                branch: branch?,
                 id: id,
                 default_guide: result[:default_guide],
                 extensions: result[:extensions],
                 doc: result[:doc],
-                guides: result[:guides],
+                guides: add_text(result[:guides], library.name, version),
                 modules: result[:modules]
               }
             )
           end)
         end
       end)
+    end
+  end
+
+  defp add_text([], _, _), do: []
+
+  defp add_text(guides, name, version) do
+    path = Path.expand("tmp")
+    tarball_path = Path.expand(Path.join(["tmp", "tarballs"]))
+    tar_path = Path.join(tarball_path, "#{name}-#{version}.tar")
+    untar_path = Path.join(path, "#{name}-#{version}")
+    contents_untar_path = Path.join(path, "#{name}-#{version}/contents")
+    contents_tar_path = Path.join([path, "#{name}-#{version}", "contents.tar.gz"])
+
+    try do
+      File.rm_rf!(tar_path)
+      File.rm_rf!(contents_untar_path)
+      File.mkdir_p!(untar_path)
+      File.mkdir_p!(contents_untar_path)
+
+      {_, 0} =
+        System.cmd(
+          "curl",
+          [
+            "-L",
+            "--create-dirs",
+            "-o",
+            "#{tar_path}",
+            "https://repo.hex.pm/tarballs/#{name}-#{version}.tar"
+          ]
+        )
+
+      {_, 0} =
+        System.cmd(
+          "tar",
+          [
+            "-xf",
+            tar_path,
+            "-C",
+            untar_path
+          ],
+          cd: "tmp"
+        )
+
+      {_, 0} =
+        System.cmd(
+          "tar",
+          [
+            "-xzf",
+            contents_tar_path
+          ],
+          cd: contents_untar_path
+        )
+
+      Enum.map(guides, fn %{path: path} = guide ->
+        contents =
+          contents_untar_path
+          |> Path.join(path)
+          |> File.read!()
+
+        Map.put(guide, :text, contents)
+      end)
+    after
+      File.rm_rf!(tar_path)
+      File.rm_rf!(untar_path)
     end
   end
 

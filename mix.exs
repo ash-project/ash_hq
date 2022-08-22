@@ -41,7 +41,8 @@ defmodule AshHq.MixProject do
       # {:ash_postgres, path: "../ash_postgres"},
       {:ash_phoenix, github: "ash-project/ash_phoenix", branch: "ash-2.0", override: true},
       # {:ash_livebook, path: "../ash_livebook", only: [:dev]},
-      {:spark, path: "../spark", override: true},
+      {:spark, "~> 0.1.15"},
+      # {:spark, path: "../spark", override: true},
       {:earmark, "~> 1.5.0-pre1", override: true},
       {:surface, "~> 0.7.3"},
       {:surface_heroicons, "~> 0.6.0"},
@@ -107,7 +108,7 @@ defmodule AshHq.MixProject do
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       sobelow: ["sobelow --skip -i Config.Headers,Config.CSRFRoute"],
       "assets.deploy": [
-        "cmd --cd assets npm run deploy",
+        "cmd --cd assets npm install && npm run deploy",
         "esbuild default --minify",
         "phx.digest"
       ]
