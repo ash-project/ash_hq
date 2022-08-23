@@ -80,7 +80,7 @@ defmodule AshHq.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       # Dependencies
-      {:elixir_sense, github: "elixir-lsp/elixir_sense"},
+      {:elixir_sense, github: "elixir-lsp/elixir_sense", only: [:dev, :test]},
       # Build/Check dependencies
       {:git_ops, "~> 2.4.4", only: :dev},
       {:ex_doc, "~> 0.23", only: :dev, runtime: false},

@@ -127,61 +127,6 @@ defmodule AshHqWeb.AppViewLive do
                   <Heroicons.Solid.MoonIcon class="w-6 h-6 fill-gray-400 hover:fill-gray-200 hover:text-gray-200" />
               {/case}
             </button>
-            {#if @current_user}
-              <div class="relative inline-block text-left">
-                <div>
-                  <button
-                    phx-click={toggle_account_dropdown()}
-                    type="button"
-                    class="inline-flex items-center justify-center w-full rounded-md shadow-sm font-medium dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600"
-                    id="menu-button"
-                    aria-expanded="true"
-                    aria-haspopup="true"
-                  >
-                    Account
-                    <Heroicons.Solid.ChevronDownIcon class="-mr-1 ml-2 h-5 w-5" />
-                  </button>
-                </div>
-
-                <div
-                  id="account-dropdown"
-                  style="display: none;"
-                  class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:text-white dark:bg-primary-black ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="menu-button"
-                  tabindex="-1"
-                  phx-click-away={toggle_account_dropdown()}
-                >
-                  <div class="py-1" role="none">
-                    <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-                    <LiveRedirect
-                      to={Routes.app_view_path(AshHqWeb.Endpoint, :user_settings)}
-                      class="dark:text-white group flex items-center px-4 py-2 text-sm"
-                    >
-                      <Heroicons.Solid.PencilAltIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" />
-                      Settings
-                    </LiveRedirect>
-                  </div>
-                  <div class="py-1" role="none">
-                    <Link
-                      label="logout"
-                      to={Routes.user_session_path(AshHqWeb.Endpoint, :delete)}
-                      class="dark:text-white group flex items-center px-4 py-2 text-sm"
-                      method={:delete}
-                      id="logout-link"
-                    >
-                      <Heroicons.Outline.LogoutIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" />
-                      Logout
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            {#else}
-              <LiveRedirect to={Routes.app_view_path(AshHqWeb.Endpoint, :log_in)}>
-                Sign In
-              </LiveRedirect>
-            {/if}
           </div>
         </div>
         {#for flash <- List.wrap(live_flash(@flash, :error))}
@@ -243,6 +188,62 @@ defmodule AshHqWeb.AppViewLive do
       }
     )
   end
+
+  # {#if @current_user}
+  #   <div class="relative inline-block text-left">
+  #     <div>
+  #       <button
+  #         phx-click={toggle_account_dropdown()}
+  #         type="button"
+  #         class="inline-flex items-center justify-center w-full rounded-md shadow-sm font-medium dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600"
+  #         id="menu-button"
+  #         aria-expanded="true"
+  #         aria-haspopup="true"
+  #       >
+  #         Account
+  #         <Heroicons.Solid.ChevronDownIcon class="-mr-1 ml-2 h-5 w-5" />
+  #       </button>
+  #     </div>
+
+  #     <div
+  #       id="account-dropdown"
+  #       style="display: none;"
+  #       class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:text-white dark:bg-primary-black ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+  #       role="menu"
+  #       aria-orientation="vertical"
+  #       aria-labelledby="menu-button"
+  #       tabindex="-1"
+  #       phx-click-away={toggle_account_dropdown()}
+  #     >
+  #       <div class="py-1" role="none">
+  #         <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+  #         <LiveRedirect
+  #           to={Routes.app_view_path(AshHqWeb.Endpoint, :user_settings)}
+  #           class="dark:text-white group flex items-center px-4 py-2 text-sm"
+  #         >
+  #           <Heroicons.Solid.PencilAltIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" />
+  #           Settings
+  #         </LiveRedirect>
+  #       </div>
+  #       <div class="py-1" role="none">
+  #         <Link
+  #           label="logout"
+  #           to={Routes.user_session_path(AshHqWeb.Endpoint, :delete)}
+  #           class="dark:text-white group flex items-center px-4 py-2 text-sm"
+  #           method={:delete}
+  #           id="logout-link"
+  #         >
+  #           <Heroicons.Outline.LogoutIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" />
+  #           Logout
+  #         </Link>
+  #       </div>
+  #     </div>
+  #   </div>
+  # {#else}
+  #   <LiveRedirect to={Routes.app_view_path(AshHqWeb.Endpoint, :log_in)}>
+  #     Sign In
+  #   </LiveRedirect>
+  # {/if}
 
   def handle_params(params, uri, socket) do
     {:noreply,
