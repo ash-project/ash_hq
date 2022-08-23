@@ -1,7 +1,7 @@
 %{
-  "ash": {:git, "https://github.com/ash-project/ash.git", "f91c26f093bb3a9561ef93e84cc24b2dad0e231b", [branch: "2.0"]},
-  "ash_phoenix": {:git, "https://github.com/ash-project/ash_phoenix.git", "72988a991a5ae00eb695f88e81448f1478cee79a", [branch: "ash-2.0"]},
-  "ash_postgres": {:git, "https://github.com/ash-project/ash_postgres.git", "763638757c92c64dbb424e34d0ba459644bb6726", [branch: "ash-2.0"]},
+  "ash": {:git, "https://github.com/ash-project/ash.git", "01aa9e8ff49a72448deee54e009d742383da8a66", [branch: "2.0"]},
+  "ash_phoenix": {:git, "https://github.com/ash-project/ash_phoenix.git", "4104a071b75feb63c338639279db3b246b0f3115", [branch: "ash-2.0"]},
+  "ash_postgres": {:git, "https://github.com/ash-project/ash_postgres.git", "355550f0407e7eeec672f3d982b82be0a12ce246", [branch: "ash-2.0"]},
   "bcrypt_elixir": {:hex, :bcrypt_elixir, "3.0.1", "9be815469e6bfefec40fa74658ecbbe6897acfb57614df1416eeccd4903f602c", [:make, :mix], [{:comeonin, "~> 5.3", [hex: :comeonin, repo: "hexpm", optional: false]}, {:elixir_make, "~> 0.6", [hex: :elixir_make, repo: "hexpm", optional: false]}], "hexpm", "486bb95efb645d1efc6794c1ddd776a186a9a713abf06f45708a6ce324fb96cf"},
   "bunt": {:hex, :bunt, "0.2.0", "951c6e801e8b1d2cbe58ebbd3e616a869061ddadcc4863d0a2182541acae9a38", [:mix], [], "hexpm", "7af5c7e09fe1d40f76c8e4f9dd2be7cebd83909f31fee7cd0e9eadc567da8353"},
   "castore": {:hex, :castore, "0.1.17", "ba672681de4e51ed8ec1f74ed624d104c0db72742ea1a5e74edbc770c815182f", [:mix], [], "hexpm", "d9844227ed52d26e7519224525cb6868650c272d4a3d327ce3ca5570c12163f9"},
