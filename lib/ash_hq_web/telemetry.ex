@@ -30,7 +30,55 @@ defmodule AshHqWeb.Telemetry do
         tags: [:route],
         unit: {:native, :millisecond}
       ),
-
+      # Ash Metrics
+      summary("ash.flow.stop.duration",
+        unit: {:native, :millisecond},
+        tags: [:flow_short_name]
+      ),
+      summary("ash.docs.read.stop.duration",
+        tags: [:resource_short_name, :action],
+        unit: {:native, :millisecond}
+      ),
+      summary("ash.docs.create.stop.duration",
+        tags: [:resource_short_name, :action],
+        unit: {:native, :millisecond}
+      ),
+      summary("ash.docs.update.stop.duration",
+        tags: [:resource_short_name, :action],
+        unit: {:native, :millisecond}
+      ),
+      summary("ash.docs.destroy.stop.duration",
+        tags: [:resource_short_name, :action],
+        unit: {:native, :millisecond}
+      ),
+      summary("ash.changeset.stop.duration",
+        tags: [:resource_short_name, :action],
+        unit: {:native, :millisecond}
+      ),
+      summary("ash.query.stop.duration",
+        tags: [:resource_short_name, :action],
+        unit: {:native, :millisecond}
+      ),
+      summary("ash.validation.stop.duration",
+        tags: [:resource_short_name, :validation],
+        unit: {:native, :millisecond}
+      ),
+      summary("ash.change.stop.duration",
+        tags: [:resource_short_name, :change],
+        unit: {:native, :millisecond}
+      ),
+      summary("ash.preparation.stop.duration",
+        tags: [:resource_short_name, :preparation],
+        unit: {:native, :millisecond}
+      ),
+      summary("ash.request_step.stop.duration",
+        tags: [:name],
+        unit: {:native, :millisecond}
+      ),
+      summary("ash.flow.custom_step.stop.duration",
+        tags: [:flow_short_name, :name],
+        unit: {:native, :millisecond}
+      ),
       # Database Metrics
       summary("ash_hq.repo.query.total_time",
         unit: {:native, :millisecond},

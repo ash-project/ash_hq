@@ -3,6 +3,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
   Writes a markdown text attribute to its corresponding html attribute.
   """
 
+  require Logger
   use Ash.Resource.Change
 
   def change(changeset, opts, _) do
@@ -22,14 +23,22 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
                text,
                AshHq.Docs.Extensions.RenderMarkdown.header_ids?(changeset.resource)
              ) do
-          {:error, _, error_messages} ->
-            Ash.Changeset.add_error(
-              changeset,
-              Ash.Error.Changes.InvalidAttribute.exception(
-                field: :source,
-                message: "Could not be transformed into html: #{inspect(error_messages)}"
-              )
-            )
+          {:error, html_doc, error_messages} ->
+            Logger.warn("""
+            Error while transforming to HTML: #{inspect(error_messages)}
+
+            Transforming:
+
+            #{inspect(text)}
+
+            Result:
+
+            #{inspect(html_doc)}
+            """)
+
+            html_doc = AshHq.Docs.Extensions.RenderMarkdown.Highlighter.highlight(html_doc)
+
+            Ash.Changeset.force_change_attribute(changeset, opts[:destination], html_doc)
 
           {:ok, html_doc, _} ->
             html_doc = AshHq.Docs.Extensions.RenderMarkdown.Highlighter.highlight(html_doc)
@@ -46,7 +55,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
 
   defp remove_ash_hq_hidden_content(string) do
     string
-    |> String.split("<!--- ash-hq-hide-start -->")
+    |> String.split(~r/\<\!---.*ash-hq-hide-start.*--\>/)
     |> case do
       [string] ->
         string
@@ -54,7 +63,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
       strings ->
         Enum.map_join(strings, "", fn string ->
           string
-          |> String.split("<!--- ash-hq-hide-stop -->")
+          |> String.split(~r/\<\!---.*ash-hq-hide-stop.*--\>/)
           |> case do
             [string] ->
               string

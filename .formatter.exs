@@ -10,6 +10,7 @@
     doc_attribute: 1,
     render_attributes: 1,
     use_path_for_name?: 1,
+    add_name_to_path?: 1,
     sanitized_name_attribute: 1,
     show_docs_on: 1,
     header_ids?: 1

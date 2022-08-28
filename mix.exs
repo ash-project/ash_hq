@@ -20,7 +20,7 @@ defmodule AshHq.MixProject do
   def application do
     [
       mod: {AshHq.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :os_mon]
     ]
   end
 
@@ -41,7 +41,7 @@ defmodule AshHq.MixProject do
       # {:ash_postgres, path: "../ash_postgres"},
       {:ash_phoenix, github: "ash-project/ash_phoenix", branch: "ash-2.0", override: true},
       # {:ash_livebook, path: "../ash_livebook", only: [:dev]},
-      {:spark, "~> 0.1.15"},
+      {:spark, "~> 0.1"},
       # {:spark, path: "../spark", override: true},
       {:earmark, "~> 1.5.0-pre1", override: true},
       {:surface, "~> 0.7.3"},
@@ -73,6 +73,7 @@ defmodule AshHq.MixProject do
       {:finch, "~> 0.10.2"},
       {:floki, ">= 0.30.0"},
       {:phoenix_live_dashboard, "~> 0.6"},
+      {:ecto_psql_extras, "~> 0.6"},
       {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},

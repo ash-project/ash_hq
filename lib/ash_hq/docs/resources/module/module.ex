@@ -46,11 +46,6 @@ defmodule AshHq.Docs.Module do
       default "Misc"
     end
 
-    attribute :category_index, :integer do
-      allow_nil? false
-      default 0
-    end
-
     attribute :file, :string
 
     attribute :doc, :string do

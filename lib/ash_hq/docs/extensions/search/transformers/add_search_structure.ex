@@ -115,6 +115,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
             {AshHq.Docs.Extensions.Search.Changes.SanitizeName,
              source: config.name_attribute,
              destination: config.sanitized_name_attribute,
+             add_name_to_path?: Transformer.get_option(dsl_state, [:search], :add_name_to_path?),
              use_path_for_name?: Transformer.get_option(dsl_state, [:search], :use_path_for_name?)}
         )
       )

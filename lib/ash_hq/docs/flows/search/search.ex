@@ -1,7 +1,7 @@
 defmodule AshHq.Docs.Search do
   @moduledoc false
 
-  use Ash.Flow
+  use Ash.Flow, otp_app: :ash_hq
 
   flow do
     api AshHq.Docs

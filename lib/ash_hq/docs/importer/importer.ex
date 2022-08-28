@@ -104,7 +104,6 @@ defmodule AshHq.Docs.Importer do
               %{
                 timeout: :infinity,
                 id: id,
-                default_guide: result[:default_guide],
                 extensions: result[:extensions],
                 doc: result[:doc],
                 guides: add_text(result[:guides], library.name, version),

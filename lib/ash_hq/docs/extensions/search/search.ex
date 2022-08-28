@@ -47,6 +47,11 @@ defmodule AshHq.Docs.Extensions.Search do
         doc:
           "Whether or not to write to the sanitized name attribute automatically by stripping the name of special characters"
       ],
+      add_name_to_path?: [
+        type: :boolean,
+        default: true,
+        doc: "Whether or not to add the name to the path when using use_path_for_name?"
+      ],
       doc_attribute: [
         type: :atom,
         doc: "The text field to be used in the search"

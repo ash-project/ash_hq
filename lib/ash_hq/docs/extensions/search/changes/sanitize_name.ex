@@ -7,6 +7,7 @@ defmodule AshHq.Docs.Extensions.Search.Changes.SanitizeName do
 
   def change(changeset, opts, _) do
     use_path_for_name? = !!opts[:use_path_for_name?]
+    add_name_to_path? = !!opts[:add_name_to_path?]
     source = opts[:source]
     destination = opts[:destination]
 
@@ -16,7 +17,12 @@ defmodule AshHq.Docs.Extensions.Search.Changes.SanitizeName do
         path = List.wrap(Ash.Changeset.get_attribute(changeset, :path))
         name = Ash.Changeset.get_attribute(changeset, source)
 
-        value = Enum.map_join(path ++ [name], "/", &sanitize/1)
+        value =
+          if add_name_to_path? do
+            Enum.map_join(path ++ [name], "/", &sanitize/1)
+          else
+            Enum.map_join(path, "/", &sanitize/1)
+          end
 
         Ash.Changeset.change_attribute(changeset, destination, value)
       else

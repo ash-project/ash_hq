@@ -27,6 +27,7 @@ defmodule AshHq.Docs.Option do
 
     sanitized_name_attribute :sanitized_path
     use_path_for_name? true
+    add_name_to_path? false
     show_docs_on :dsl_sanitized_path
   end
 

@@ -7,6 +7,10 @@ defmodule AshHq.Docs.Library do
     description "Represents a library that will be imported into AshHq"
   end
 
+  identities do
+    identity :unique_order, [:order]
+  end
+
   postgres do
     table "libraries"
     repo AshHq.Repo
@@ -40,6 +44,10 @@ defmodule AshHq.Docs.Library do
     end
 
     attribute :display_name, :string do
+      allow_nil? false
+    end
+
+    attribute :order, :integer do
       allow_nil? false
     end
   end

@@ -1,5 +1,8 @@
-[
-  "pg_trgm",
-  "uuid-ossp",
-  "citext"
-]
+{
+  "installed": [
+    "pg_trgm",
+    "uuid-ossp",
+    "citext",
+    "pgstatstatements"
+  ]
+}

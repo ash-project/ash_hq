@@ -45,6 +45,7 @@ defmodule AshHqWeb.Components.Search do
                   id="search-input"
                   name="search"
                   value={@search}
+                  phx-debounce={300}
                   class="text-lg dark:bg-primary-black grow ring-0 outline-none w-full"
                 />
               </Form>

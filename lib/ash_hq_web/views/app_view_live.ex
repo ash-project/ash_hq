@@ -10,24 +10,24 @@ defmodule AshHqWeb.AppViewLive do
   alias Surface.Components.{Link, LiveRedirect}
   require Ash.Query
 
-  data(configured_theme, :string, default: :system)
-  data(searching, :boolean, default: false)
-  data(selected_versions, :map, default: %{})
-  data(libraries, :list, default: [])
-  data(selected_types, :map, default: %{})
-  data(sidebar_state, :map, default: %{})
-  data(current_user, :map)
+  data configured_theme, :string, default: :system
+  data searching, :boolean, default: false
+  data selected_versions, :map, default: %{}
+  data libraries, :list, default: []
+  data selected_types, :map, default: %{}
+  data sidebar_state, :map, default: %{}
+  data current_user, :map
 
-  data(library, :any, default: nil)
-  data(extension, :any, default: nil)
-  data(docs, :any, default: nil)
-  data(library_version, :any, default: nil)
-  data(guide, :any, default: nil)
-  data(doc_path, :list, default: [])
-  data(dsls, :list, default: [])
-  data(dsl, :any, default: nil)
-  data(options, :list, default: [])
-  data(module, :any, default: nil)
+  data library, :any, default: nil
+  data extension, :any, default: nil
+  data docs, :any, default: nil
+  data library_version, :any, default: nil
+  data guide, :any, default: nil
+  data doc_path, :list, default: []
+  data dsls, :list, default: []
+  data dsl, :any, default: nil
+  data options, :list, default: []
+  data module, :any, default: nil
 
   def render(assigns) do
     ~F"""
@@ -140,6 +140,7 @@ defmodule AshHqWeb.AppViewLive do
             <Home id="home" />
           {#match :docs_dsl}
             <Docs
+              id="docs"
               uri={@uri}
               collapse_sidebar="collapse_sidebar"
               expand_sidebar="expand_sidebar"
@@ -531,13 +532,6 @@ defmodule AshHqWeb.AppViewLive do
             guide.route == Enum.join(socket.assigns[:params]["guide"], "/")
           end)
 
-        socket.assigns.library_version && socket.assigns.library_version.default_guide &&
-          !socket.assigns[:params]["dsl_path"] && !socket.assigns[:params]["module"] &&
-            !socket.assigns[:params]["extension"] ->
-          Enum.find(socket.assigns.library_version.guides, fn guide ->
-            guide.name == socket.assigns.library_version.default_guide
-          end)
-
         true ->
           nil
       end
@@ -556,9 +550,7 @@ defmodule AshHqWeb.AppViewLive do
         dsl =
           Enum.find(
             socket.assigns.extension.dsls,
-            fn dsl ->
-              dsl.sanitized_path == path
-            end
+            &(&1.sanitized_path == path)
           )
 
         new_state = Map.put(socket.assigns.sidebar_state, dsl.id, "open")
@@ -631,7 +623,7 @@ defmodule AshHqWeb.AppViewLive do
         )
 
       true ->
-        assign(socket, docs: "", doc_path: [], dsls: [])
+        assign(socket, docs: "", doc_path: [], dsls: [], options: [])
     end
   end
 

@@ -27,6 +27,8 @@ defmodule AshHqWeb.Pages.Docs do
   prop options, :list, default: []
   prop module, :any
 
+  data positional_options, :list
+
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~F"""
@@ -176,7 +178,7 @@ defmodule AshHqWeb.Pages.Docs do
                     <tr id={option.sanitized_path}>
                       <td>
                         <div class="flex flex-row items-baseline">
-                          <a href={"##{option.sanitized_path}"}>
+                          <a href={"##{DocRoutes.sanitize_name(option.name)}"}>
                             <Heroicons.Outline.LinkIcon class="h-3 m-3" />
                           </a>
                           <div class="flex flex-row space-x-2">
@@ -220,7 +222,7 @@ defmodule AshHqWeb.Pages.Docs do
                   <tr id={option.sanitized_path}>
                     <td>
                       <div class="flex flex-row items-baseline">
-                        <a href={"##{option.sanitized_path}"}>
+                        <a href={"##{DocRoutes.sanitize_name(option.name)}"}>
                           <Heroicons.Outline.LinkIcon class="h-3 m-3" />
                         </a>
                         <CalloutText>{option.name}</CalloutText>
@@ -407,14 +409,17 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   defp render_mix_deps(docs, assigns) do
-    String.replace(docs, ~r/{{mix_dep:.*}}/, fn text ->
+    String.replace(docs, ~r/(?!<code>){{mix_dep:.*}}(?!<\/code>)/, fn text ->
       try do
         "{{mix_dep:" <> library = String.trim_trailing(text, "}}")
 
         "<pre><code>#{render_mix_dep(assigns, library, text)}</code></pre>"
       rescue
         e ->
-          Logger.error("Invalid link #{inspect(e)}")
+          Logger.error(
+            "Invalid link #{inspect(e)}\n#{Exception.format_stacktrace(__STACKTRACE__)}"
+          )
+
           text
       end
     end)
@@ -450,14 +455,17 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   defp render_links(docs, assigns) do
-    String.replace(docs, ~r/(?!<code>){{link:.*}}(?!<\/code>)/, fn text ->
+    String.replace(docs, ~r/(?!<code>){{link:[^}]*}}(?!<\/code>)/, fn text ->
       try do
         "{{link:" <> rest = String.trim_trailing(text, "}}")
         [library, type, item | rest] = String.split(rest, ":")
         render_link(assigns, library, type, item, text, rest)
       rescue
         e ->
-          Logger.error("Invalid link #{inspect(e)}")
+          Logger.error(
+            "Invalid link #{inspect(e)}\n#{Exception.format_stacktrace(__STACKTRACE__)}"
+          )
+
           text
       end
     end)
@@ -500,13 +508,32 @@ defmodule AshHqWeb.Pages.Docs do
           """
 
         "dsl" ->
-          name =
+          path =
             item
-            |> String.split("/")
+            |> String.split(~r/[\/\.]/)
+
+          name =
+            path
             |> Enum.join(".")
 
+          route = Enum.map_join(path, "/", &DocRoutes.sanitize_name/1)
+
           """
-          <a href="/docs/dsl/#{library.name}/#{version.version}/#{item}">#{name}</a>
+          <a href="/docs/dsl/#{library.name}/#{version.version}/#{route}">#{name}</a>
+          """
+
+        "option" ->
+          path =
+            item
+            |> String.split(~r/[\/\.]/)
+
+          name = Enum.join(path, ".")
+
+          dsl_path = path |> :lists.droplast() |> Enum.map_join("/", &DocRoutes.sanitize_name/1)
+          anchor = path |> Enum.map_join("/", &DocRoutes.sanitize_name/1)
+
+          """
+          <a href="/docs/dsl/#{library.name}/#{version.version}/#{dsl_path}##{anchor}">#{name}</a>
           """
 
         "module" ->

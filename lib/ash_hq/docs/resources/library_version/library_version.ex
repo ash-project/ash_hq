@@ -106,8 +106,6 @@ defmodule AshHq.Docs.LibraryVersion do
     attribute :version, :string do
       allow_nil? false
     end
-
-    attribute :default_guide, :string
   end
 
   calculations do
