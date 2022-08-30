@@ -363,9 +363,9 @@ defmodule AshHqWeb.Pages.Docs do
 
   defp source_link(%AshHq.Docs.Function{file: file, line: line}, library, library_version) do
     if line do
-      "https://github.com/ash-project/#{library.name}/tree/#{library_version.version}/#{file}#L#{line}"
+      "https://github.com/ash-project/#{library.name}/tree/v#{library_version.version}/#{file}#L#{line}"
     else
-      "https://github.com/ash-project/#{library.name}/tree/#{library_version.version}/#{file}"
+      "https://github.com/ash-project/#{library.name}/tree/v#{library_version.version}/#{file}"
     end
   end
 
