@@ -33,22 +33,75 @@ defmodule AshHqWeb.Pages.Home do
           <SearchBar />
         </div>
 
-        <div class="pt-6 pb-6 mt-36 bg-gray-800 bg-opacity-80">
-          Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!
-          - Frank Dugan III
-          System Specialist, SunnyCor Inc.
+        <div class="flex flex-row items-center mt-16 space-x-4">
+          {#if @signed_up}
+            Thank you for joining our mailing list!
+          {#else}
+            <Form for={@email_form} change="validate_email_form" submit="submit_email_form">
+              <Field name={:email}>
+                <TextInput class="text-black" opts={placeholder: "Join our mailing list for (tastefully paced) updates!"} />
+              </Field>
+              <Submit>Join</Submit>
+            </Form>
+          {/if}
         </div>
 
-        <div class="pt-6 pb-6 mt-36 bg-gray-800 bg-opacity-80">
-          What stood out to me was how incredibly easy Ash made it for me to go from a proof of concept, to a working prototype using ETS, to a live app using Postgres.
-          - Brett Kolodny
-          Full stack engineer, MEW
+      <div id="testimonials" class="flex flex-col space-y-4">
+        <div class="min-w-fit max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-800 bg-white drop-shadow-md">
+          <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
+
+              <p class="text-lg font-light text-gray-700 dark:text-gray-100">
+                "Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!"
+              </p>
+
+            <p class="font-bold">
+              <div class="text-orange-500 dark:text-orange-400">
+                Frank Dugan III
+              </div>
+              <div class="text-gray-700 dark:text-gray-300">
+                System Specialist, SunnyCor Inc.
+              </div>
+            </p>
+          </div>
         </div>
 
-        <div class="pt-6 pb-6 mt-36 bg-gray-800 bg-opacity-80">
-          Ash is such powerful idea and it gives Alembic such a massive competitive advantage that I’d be really stupid to tell anyone about it.
-          - Josh Price, Technical Director, Alembic
+        <div class="min-w-fit max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-800 bg-white drop-shadow-md">
+          <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
+
+              <p class="text-lg font-light text-gray-700 dark:text-gray-100">
+                "What stood out to me was how incredibly easy Ash made it for me to go from a proof of concept, to a working prototype using ETS, to a live app using Postgres."
+              </p>
+
+            <p class="font-bold">
+              <div class="text-orange-500 dark:text-orange-400">
+                Brett Kolodny
+              </div>
+              <div class="text-gray-700 dark:text-gray-300">
+                Full stack engineer, MEW
+              </div>
+            </p>
+          </div>
         </div>
+
+        <div class="min-w-fit max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-800 bg-white drop-shadow-md">
+          <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
+
+              <p class="text-lg font-light text-gray-700 dark:text-gray-100">
+                "Ash is such powerful idea and it gives Alembic such a massive competitive advantage that I’d be really stupid to tell anyone about it."
+              </p>
+
+            <p class="font-bold">
+              <div class="text-orange-500 dark:text-orange-400">
+                Josh Price
+              </div>
+              <div class="text-gray-700 dark:text-gray-300">
+                Technical Director, Alembic
+              </div>
+            </p>
+          </div>
+        </div>
+        </div>
+
 
         <div class="flex flex-col items-center mt-16 space-y-4">
           {#if @signed_up}
