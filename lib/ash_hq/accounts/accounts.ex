@@ -7,4 +7,8 @@ defmodule AshHq.Accounts do
   authorization do
     authorize :by_default
   end
+
+  resources do
+    registry AshHq.Accounts.Registry
+  end
 end

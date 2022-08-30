@@ -1,14 +1,10 @@
-defmodule AshHq.Docs do
+defmodule AshHq.MailingList do
   @moduledoc """
   Handles documentation data.
   """
   use Ash.Api, otp_app: :ash_hq
 
-  execution do
-    timeout 30_000
-  end
-
   resources do
-    registry AshHq.Docs.Registry
+    registry AshHq.MailingList.Registry
   end
 end

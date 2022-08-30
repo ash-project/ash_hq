@@ -43,6 +43,8 @@ defmodule AshHqWeb.Router do
       live "/docs/dsl/:library/:version/:extension", AppViewLive, :docs_dsl
       live "/docs/dsl/:library/:version/:extension/*dsl_path", AppViewLive, :docs_dsl
       live "/docs/module/:library/:version/:module", AppViewLive, :docs_dsl
+
+      get "/unsubscribe", MailingListController, :unsubscribe
     end
 
     live_session :unauthenticated_only,

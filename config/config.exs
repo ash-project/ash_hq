@@ -12,17 +12,7 @@ config :ash_hq,
 
 config :ash, allow_flow: true
 
-config :ash_hq, ash_apis: [AshHq.Docs, AshHq.Accounts]
-
-config :ash_hq, AshHq.Docs,
-  resources: [
-    registry: AshHq.Docs.Registry
-  ]
-
-config :ash_hq, AshHq.Accounts,
-  resources: [
-    registry: AshHq.Accounts.Registry
-  ]
+config :ash_hq, ash_apis: [AshHq.Docs, AshHq.Accounts, AshHq.MailingList]
 
 config :ash_hq, AshHq.Repo,
   timeout: :timer.minutes(10),

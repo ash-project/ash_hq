@@ -4,7 +4,12 @@ defmodule AshHqWeb.Pages.Home do
   use Surface.LiveComponent
 
   alias AshHqWeb.Components.{CalloutText, CodeExample, SearchBar}
+  alias Surface.Components.Form
+  alias Surface.Components.Form.{Field, ErrorTag, TextInput, Submit}
   import AshHqWeb.Components.CodeExample, only: [to_code: 1]
+
+  data signed_up, :boolean, default: false
+  data email_form, :any
 
   def render(assigns) do
     ~F"""
@@ -26,6 +31,19 @@ defmodule AshHqWeb.Pages.Home do
               target="_blank">Get Started</a>
          </div>
           <SearchBar />
+        </div>
+
+        <div class="flex flex-row items-center mt-16 space-x-4">
+          {#if @signed_up}
+            Thank you for joining our mailing list!
+          {#else}
+            <Form for={@email_form} change="validate_email_form" submit="submit_email_form">
+              <Field name={:email}>
+                <TextInput class="text-black" opts={placeholder: "Join our mailing list for (tastefully paced) updates!"} />
+              </Field>
+              <Submit>Join</Submit>
+            </Form>
+          {/if}
         </div>
 
         <div class="pt-6 pb-6 mt-36 bg-gray-800 bg-opacity-80">
@@ -120,6 +138,35 @@ defmodule AshHqWeb.Pages.Home do
       </div>
     </div>
     """
+  end
+
+  def mount(socket) do
+    {:ok,
+     assign(
+       socket,
+       signed_up: false,
+       email_form:
+         AshPhoenix.Form.for_create(AshHq.MailingList.Email, :create,
+           api: AshHq.MailingList,
+           upsert?: true,
+           upsert_identity: :unique_email
+         )
+     )}
+  end
+
+  def handle_event("validate_email_form", %{"form" => form}, socket) do
+    {:noreply,
+     assign(socket, email_form: AshPhoenix.Form.validate(socket.assigns.email_form, form))}
+  end
+
+  def handle_event("submit_email_form", _, socket) do
+    case AshPhoenix.Form.submit(socket.assigns.email_form) do
+      {:ok, _} ->
+        {:noreply, assign(socket, :signed_up, true)}
+
+      {:error, form} ->
+        {:noreply, assign(socket, email_form: form)}
+    end
   end
 
   @changeset_example """
