@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <%= csrf_meta_tag() %>
     <%= live_title_tag assigns[:page_title] || "Ash Framework" %>
+    <%= if Application.get_env(:ash_hq, :analytics?) do %>
+      <script defer data-domain="ash-hq.org" src="https://plausible.io/js/plausible.js"></script>
+    <% end %>
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/assets/app.css") %>"/>
     <script>
     const configuredThemeRow = document.cookie

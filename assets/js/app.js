@@ -264,7 +264,6 @@ window.addEventListener("phx:close-search", (event) => {
 // connect if there are any LiveViews on the page
 liveSocket.connect()
 
-
 // expose liveSocket on window for web console debug logs and latency simulation:
 liveSocket.disableDebug()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
