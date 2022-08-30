@@ -5,19 +5,19 @@ defmodule AshHqWeb.Components.DocSidebar do
   alias AshHqWeb.DocRoutes
   alias Surface.Components.LiveRedirect
 
-  prop class, :css_class, default: ""
-  prop libraries, :list, required: true
-  prop extension, :any, default: nil
-  prop guide, :any, default: nil
-  prop library, :any, default: nil
-  prop library_version, :any, default: nil
-  prop selected_versions, :map, default: %{}
-  prop id, :string, required: true
-  prop dsl, :any, required: true
-  prop module, :any, required: true
-  prop sidebar_state, :map, required: true
-  prop collapse_sidebar, :event, required: true
-  prop expand_sidebar, :event, required: true
+  prop(class, :css_class, default: "")
+  prop(libraries, :list, required: true)
+  prop(extension, :any, default: nil)
+  prop(guide, :any, default: nil)
+  prop(library, :any, default: nil)
+  prop(library_version, :any, default: nil)
+  prop(selected_versions, :map, default: %{})
+  prop(id, :string, required: true)
+  prop(dsl, :any, required: true)
+  prop(module, :any, required: true)
+  prop(sidebar_state, :map, required: true)
+  prop(collapse_sidebar, :event, required: true)
+  prop(expand_sidebar, :event, required: true)
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -147,12 +147,12 @@ defmodule AshHqWeb.Components.DocSidebar do
                     <LiveRedirect
                       to={DocRoutes.doc_link(module, @selected_versions)}
                       class={
-                        "flex items-center pt-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
+                        "flex items-center space-x-2 pt-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
                         "dark:bg-gray-600": @module && @module.id == module.id
                       }
                     >
                       <Heroicons.Outline.CodeIcon class="h-4 w-4" />
-                      <span class="ml-3 mr-2">{module.name}</span>
+                      <span class="">{module.name}</span>
                     </LiveRedirect>
                   </li>
                 {/for}
