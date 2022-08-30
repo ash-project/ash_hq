@@ -25,25 +25,12 @@ defmodule AshHqWeb.Pages.Home do
           A declarative foundation for ambitious applications. Model your domain, derive the rest.
         </div>
         <div class="flex flex-row items-center mt-16 space-x-4">
-          <div class="flex items-center h-12 px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 hover:text-gray-600">
+          <div class="flex items-center h-12 px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 hover:text-white">
               <a
               href="/docs/guides/ash/latest/tutorials/get-started.md"
               target="_blank">Get Started</a>
          </div>
           <SearchBar />
-        </div>
-
-        <div class="flex flex-row items-center mt-16 space-x-4">
-          {#if @signed_up}
-            Thank you for joining our mailing list!
-          {#else}
-            <Form for={@email_form} change="validate_email_form" submit="submit_email_form">
-              <Field name={:email}>
-                <TextInput class="text-black" opts={placeholder: "Join our mailing list for (tastefully paced) updates!"} />
-              </Field>
-              <Submit>Join</Submit>
-            </Form>
-          {/if}
         </div>
 
         <div class="pt-6 pb-6 mt-36 bg-gray-800 bg-opacity-80">
@@ -61,6 +48,20 @@ defmodule AshHqWeb.Pages.Home do
         <div class="pt-6 pb-6 mt-36 bg-gray-800 bg-opacity-80">
           Ash is such powerful idea and it gives Alembic such a massive competitive advantage that I’d be really stupid to tell anyone about it.
           - Josh Price, Technical Director, Alembic
+        </div>
+
+        <div class="flex flex-col items-center mt-16 space-y-4">
+          {#if @signed_up}
+            Thank you for joining our mailing list!
+          {#else}
+            <p class="text-2xl font-medium text-gray-700 dark:text-gray-200 max-w-4xl mx-auto mt-4 text-center">Join our mailing list for (tastefully paced) updates!</p>
+            <Form for={@email_form} change="validate_email_form" submit="submit_email_form" class="flex flex-row space-x-4">
+              <Field name={:email}>
+                <TextInput class="w-96 button border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600" opts={placeholder: "user@email.com"} />
+              </Field>
+              <Submit class="flex items-center px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 hover:text-white">Join</Submit>
+            </Form>
+          {/if}
         </div>
 
         <div class="pt-6 pb-6 w-full mt-36 bg-gray-800 bg-opacity-80">
@@ -134,6 +135,20 @@ defmodule AshHqWeb.Pages.Home do
               />
             </div>
           </div>
+        </div>
+
+        <div class="flex flex-col items-center mt-16 space-y-4 mb-10">
+          {#if @signed_up}
+            Thank you for joining our mailing list!
+          {#else}
+            <p class="text-2xl font-medium text-gray-700 dark:text-gray-200 max-w-4xl mx-auto mt-4 text-center">Join our mailing list for (tastefully paced) updates!</p>
+            <Form for={@email_form} change="validate_email_form" submit="submit_email_form" class="flex flex-row space-x-4">
+              <Field name={:email}>
+                <TextInput class="w-96 button border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600" opts={placeholder: "user@email.com"} />
+              </Field>
+              <Submit class="flex items-center px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 hover:text-white">Join</Submit>
+            </Form>
+          {/if}
         </div>
       </div>
     </div>
