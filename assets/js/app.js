@@ -42,19 +42,25 @@ if (!configuredThemeRow) {
 }
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-  console.log("here")
   const configuredThemeRow = document.cookie
     .split('; ')
     .find(row => row.startsWith('theme='))
 
-    console.log(configuredThemeRow)
-
   if(!configuredThemeRow || configuredThemeRow === "theme=system") {
     setTheme("system")
+  } else {
+    if(configuredThemeRow === "theme=dark") {
+      setTheme("dark")
+    } else if (configuredThemeRow === "theme=light") {
+      setTheme("light")
+    } else {
+      setTheme("system")
+    }
   }
 });
 
 function setTheme(theme) {
+  console.log(theme)
   let setTheme;
   if(theme == "system") {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -62,8 +68,12 @@ function setTheme(theme) {
     } else {
       setTheme = "light";
     }
+  } else {
+    setTheme = theme;
   }
+
   document.documentElement.classList.add(setTheme);
+
   if(setTheme === "dark") {
     document.documentElement.classList.remove("light");
   } else {
