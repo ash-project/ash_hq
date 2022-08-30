@@ -91,7 +91,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
       id = String.downcase(String.replace(contents, ~r/[^A-Za-z0-9_]/, "-"))
       new_attrs = [{"id", id} | new_attrs]
 
-      {"div", [{"class", "flex flex-row items-center"}],
+      {"div", [{"class", "flex flex-row items-baseline"}],
        [
          {"a", [{"href", "##{id}"}],
           [

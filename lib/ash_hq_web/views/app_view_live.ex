@@ -61,8 +61,8 @@ defmodule AshHqWeb.AppViewLive do
         }>
           <div class="flex flex-row align-baseline">
             <a href="/">
-              <img class="h-10 hidden dark:block" src="/images/ash-framework-dark.png">
-              <img class="h-10 dark:hidden" src="/images/ash-framework-light.png">
+              <img class="h-6 md:h-10 hidden dark:block" src="/images/ash-framework-dark.png">
+              <img class="h-6 md:h-10 dark:hidden" src="/images/ash-framework-light.png">
             </a>
           </div>
           {#if @live_action == :docs_dsl}

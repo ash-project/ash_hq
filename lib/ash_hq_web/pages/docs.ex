@@ -58,10 +58,10 @@ defmodule AshHqWeb.Pages.Docs do
           </div>
         {/if}
       </div>
-      <span class="grid overflow-hidden xl:hidden">
+      <span class="grid overflow-hidden xl:hidden z-50">
         <div
           id="mobile-sidebar-container"
-          class="overflow-hidden hidden fixed w-min h-full transition bg-white dark:bg-primary-black"
+          class="overflow-hidden hidden fixed w-min h-full transition"
         >
           <DocSidebar
             id="mobile-sidebar"
@@ -105,7 +105,7 @@ defmodule AshHqWeb.Pages.Docs do
               <h2>{@module.name}{render_source_code_link(assigns, @module, @library, @library_version)}</h2>
             {/if}
             {#if @library_version}
-              <div class="absolute right-2 top-2 border rounded-lg flex flex-row">
+              <div class="static mb-6 md:absolute right-2 top-2 border rounded-lg flex flex-row w-fit">
                 <div class="border-r pl-2 pr-2 dark:text-black bg-orange-600 dark:bg-orange-600 rounded-l-lg">
                   {@library.name}
                 </div>
