@@ -12,15 +12,52 @@ defmodule AshHqWeb.Pages.Home do
       <div class="w-full bg-orange-600 text-center py-2 text-lg font-semibold">
         This site is still under construction and is live for preview purposes only.
       </div>
-      <div class="my-2 dark:bg-primary-black dark:bg-dark-grid bg-light-grid px-12 flex flex-col items-center pt-36">
-        <div class="text-5xl font-bold max-w-5xl mx-auto mt-2 text-center">
-          Build <CalloutText>powerful</CalloutText> and <CalloutText>extensible</CalloutText> Elixir applications with a next generation tool-chain.
+      <div class="my-2 dark:bg-primary-black dark:bg-dark-grid bg-light-grid flex flex-col items-center pt-36">
+        <div class="text-5xl px-12 font-bold max-w-5xl mx-auto mt-2 text-center">
+          Build <CalloutText>powerful</CalloutText> and <CalloutText>composable</CalloutText> applications with a <CalloutText>flexible</CalloutText> tool-chain.
         </div>
         <div class="text-xl font-light text-gray-700 dark:text-gray-400 max-w-4xl mx-auto mt-4 text-center">
-          A declarative foundation for modern applications. Use extensions like <CalloutText>Ash GraphQL</CalloutText> and <CalloutText>Ash Json Api</CalloutText> to add APIs in minutes,
-          or build your own extensions. Plug-and-play with other excellent tools like <CalloutText>Phoenix</CalloutText> and <CalloutText>Absinthe</CalloutText>.
+          A declarative foundation for ambitious applications. Model your domain, derive the rest.
         </div>
-        <SearchBar class="hidden sm:block mt-16" />
+        <div class="flex flex-row items-center mt-16 space-x-4">
+          <div class="flex items-center h-12 px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 hover:text-gray-600">
+              <a
+              href="/docs/guides/ash/latest/tutorials/get-started.md"
+              target="_blank">Get Started</a>
+         </div>
+          <SearchBar />
+        </div>
+
+        <div class="pt-6 pb-6 mt-36 bg-gray-800 bg-opacity-80">
+          Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!
+          - Frank Dugan III
+          System Specialist, SunnyCor Inc.
+        </div>
+
+        <div class="pt-6 pb-6 mt-36 bg-gray-800 bg-opacity-80">
+          What stood out to me was how incredibly easy Ash made it for me to go from a proof of concept, to a working prototype using ETS, to a live app using Postgres.
+          - Brett Kolodny
+          Full stack engineer, MEW
+        </div>
+
+        <div class="pt-6 pb-6 mt-36 bg-gray-800 bg-opacity-80">
+          Ash is such powerful idea and it gives Alembic such a massive competitive advantage that I’d be really stupid to tell anyone about it.
+          - Josh Price, Technical Director, Alembic
+        </div>
+
+        <div class="pt-6 pb-6 w-full mt-36 bg-gray-800 bg-opacity-80">
+          <div class="text-5xl px-12 font-bold max-w-5xl mx-auto mt-2 text-center">
+            Why do we keep reinventing the wheel?
+          </div>
+        </div>
+
+        <div class="pt-6 pb-6 w-full hidden sm:block mt-36">
+          <h1>Stop painting yourself into corners</h1>
+        </div>
+
+        <div class="pt-6 pb-6 w-full hidden sm:block mt-36">
+          <h1>No Lock In</h1>
+        </div>
 
         <div class="pt-6 pb-6 w-full hidden sm:block mt-36">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">

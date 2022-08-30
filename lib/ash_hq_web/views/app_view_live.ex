@@ -69,12 +69,6 @@ defmodule AshHqWeb.AppViewLive do
             <SearchBar class="hidden lg:block" />
           {/if}
           <div class="flex flex-row align-middle items-center space-x-2">
-            <a
-              href="/docs/guides/ash/latest/tutorials/get-started.md"
-              target="_blank"
-              class="dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600"
-            >Get Started</a>
-            <div>|</div>
             <a href="https://github.com/ash-project" target="_blank">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
