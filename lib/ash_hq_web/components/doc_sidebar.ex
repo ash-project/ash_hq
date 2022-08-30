@@ -22,7 +22,7 @@ defmodule AshHqWeb.Components.DocSidebar do
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~F"""
-    <aside id={@id} class={"grid h-full overflow-y-auto pb-36 w-2/12", @class} aria-label="Sidebar">
+    <aside id={@id} class={"grid h-full overflow-y-auto pb-36 w-fit z-50 bg-white dark:bg-primary-black", @class} aria-label="Sidebar">
       <div class="py-3 px-3">
         <ul class="space-y-2">
           <div>

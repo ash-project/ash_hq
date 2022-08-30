@@ -58,10 +58,10 @@ defmodule AshHqWeb.Pages.Docs do
           </div>
         {/if}
       </div>
-      <span class="grid overflow-hidden xl:hidden">
+      <span class="grid overflow-hidden xl:hidden z-50">
         <div
           id="mobile-sidebar-container"
-          class="overflow-hidden hidden fixed w-min h-full transition bg-white dark:bg-primary-black"
+          class="overflow-hidden hidden fixed w-min h-full transition"
         >
           <DocSidebar
             id="mobile-sidebar"
