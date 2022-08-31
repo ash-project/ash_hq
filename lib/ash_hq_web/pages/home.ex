@@ -8,8 +8,8 @@ defmodule AshHqWeb.Pages.Home do
   alias Surface.Components.Form.{Field, ErrorTag, TextInput, Submit}
   import AshHqWeb.Components.CodeExample, only: [to_code: 1]
 
-  data signed_up, :boolean, default: false
-  data email_form, :any
+  data(signed_up, :boolean, default: false)
+  data(email_form, :any)
 
   def render(assigns) do
     ~F"""
@@ -24,7 +24,7 @@ defmodule AshHqWeb.Pages.Home do
         <div class="text-xl font-light text-gray-700 dark:text-gray-400 max-w-4xl mx-auto mt-4 text-center">
           A declarative foundation for ambitious applications. Model your domain, derive the rest.
         </div>
-        <div class="flex flex-row items-center mt-16 space-x-4">
+        <div class="flex flex-row items-center mt-16 space-x-4 mb-10">
           <div class="flex items-center h-12 px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 hover:text-white">
               <a
               href="/docs/guides/ash/latest/tutorials/get-started.md"
@@ -33,22 +33,80 @@ defmodule AshHqWeb.Pages.Home do
           <SearchBar />
         </div>
 
-        <div class="pt-6 pb-6 mt-36 bg-gray-800 bg-opacity-80">
-          Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!
-          - Frank Dugan III
-          System Specialist, SunnyCor Inc.
+      <div id="testimonials" class="flex flex-col space-y-4">
+        <div class="min-w-fit max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 drop-shadow-xl lg:relative lg:top-16 lg:-left-52">
+          <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
+
+              <p class="text-lg font-light text-gray-700 dark:text-gray-100">
+                "Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!"
+              </p>
+
+            <p class="font-bold">
+              <div class="text-orange-500 dark:text-orange-400">
+                Frank Dugan III
+              </div>
+              <div class="text-gray-700 dark:text-gray-300">
+                System Specialist, SunnyCor Inc.
+              </div>
+            </p>
+          </div>
         </div>
 
-        <div class="pt-6 pb-6 mt-36 bg-gray-800 bg-opacity-80">
-          What stood out to me was how incredibly easy Ash made it for me to go from a proof of concept, to a working prototype using ETS, to a live app using Postgres.
-          - Brett Kolodny
-          Full stack engineer, MEW
+        <div class="min-w-fit max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-700 bg-white drop-shadow-xl lg:relative lg:-top-16 lg:-right-52">
+          <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
+
+              <p class="text-lg font-light text-gray-700 dark:text-gray-100">
+                "What stood out to me was how incredibly easy Ash made it for me to go from a proof of concept, to a working prototype using ETS, to a live app using Postgres."
+              </p>
+
+            <p class="font-bold">
+              <div class="text-orange-500 dark:text-orange-400">
+                Brett Kolodny
+              </div>
+              <div class="text-gray-700 dark:text-gray-300">
+                Full stack engineer, MEW
+              </div>
+            </p>
+          </div>
         </div>
 
-        <div class="pt-6 pb-6 mt-36 bg-gray-800 bg-opacity-80">
-          Ash is such powerful idea and it gives Alembic such a massive competitive advantage that I’d be really stupid to tell anyone about it.
-          - Josh Price, Technical Director, Alembic
+        <div class="min-w-fit max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 bg-white drop-shadow-xl lg:relative lg:-top-32 lg:-left-64">
+          <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
+
+              <p class="text-lg font-light text-gray-700 dark:text-gray-100">
+                "Ash is such powerful idea and it gives Alembic such a massive competitive advantage that I’d be really stupid to tell anyone about it."
+              </p>
+
+            <p class="font-bold">
+              <div class="text-orange-500 dark:text-orange-400">
+                Josh Price
+              </div>
+              <div class="text-gray-700 dark:text-gray-300">
+                Technical Director, Alembic
+              </div>
+            </p>
+          </div>
         </div>
+
+        <div class="min-w-fit max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-700 drop-shadow-xl lg:relative lg:-top-64 lg:-right-32">
+          <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
+
+              <p class="text-lg font-light text-gray-700 dark:text-gray-100">
+                "Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!"
+              </p>
+
+            <p class="font-bold">
+              <div class="text-orange-500 dark:text-orange-400">
+                Frank Dugan III
+              </div>
+              <div class="text-gray-700 dark:text-gray-300">
+                System Specialist, SunnyCor Inc.
+              </div>
+            </p>
+          </div>
+        </div>
+        </div>
+
 
         <div class="flex flex-col items-center mt-16 space-y-4">
           {#if @signed_up}
