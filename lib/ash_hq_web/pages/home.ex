@@ -152,7 +152,7 @@ defmodule AshHqWeb.Pages.Home do
           </div>
         </div>
 
-        <div class="flex flex-col items-center my-10 space-y-4">
+        <div class="flex flex-col items-center my-10 space-y-4 hidden sm:block">
           {#if @signed_up}
             Thank you for joining our mailing list!
           {#else}
@@ -174,7 +174,7 @@ defmodule AshHqWeb.Pages.Home do
           {/if}
         </div>
 
-        <div class="max-w-7xl px-4 sm:px-6 md:px-8 my-8">
+        <div class="max-w-7xl px-4 sm:px-6 md:px-8 my-8 hidden sm:block">
           <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
             Simple declarative DSL
           </h2>
