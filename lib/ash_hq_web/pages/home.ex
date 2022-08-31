@@ -13,7 +13,7 @@ defmodule AshHqWeb.Pages.Home do
 
   def render(assigns) do
     ~F"""
-    <div>
+    <div class="antialiased">
       <div class="w-full bg-orange-600 text-center py-2 text-lg font-semibold">
         This site is still under construction and is live for preview purposes only.
       </div>
@@ -29,9 +29,63 @@ defmodule AshHqWeb.Pages.Home do
               <a
               href="/docs/guides/ash/latest/tutorials/get-started.md"
               target="_blank">Get Started</a>
-         </div>
-          <SearchBar />
         </div>
+        <SearchBar />
+      </div>
+
+      <div class="max-w-7xl px-4 sm:px-6 md:px-8">
+        <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
+          Write it once
+        </h2>
+        <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50 ">
+          Why do we keep reinventing the wheel?
+        </p>
+        <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
+          Every time you start a new app, are you rebuilding features that you've already built many times?
+          Wouldn't it be great if you could just focus on the important parts of an app without reinventing ways to authenticate, add permissions, etc.
+          Ash allows you to not only use patterns in existing extensions, it lets you extract your own patterns into custom extensions.
+          So when you need to do it again in a new application, it's already done just wire it up.
+        </p>
+      </div>
+
+      <div class="max-w-7xl px-4 sm:px-6 md:px-8">
+        <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
+          Consistency
+        </h2>
+        <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50 ">
+          Build large applications without making a mess
+        </p>
+        <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
+          Over time and over larger teams of different experience levels,
+          patterns can change and drift away from each in different parts of a large application.
+          Some parts of the app are done one way, other parts are done another way,
+          there are also the scary parts of any app that dragons lay in wait for the unwary adventurer.
+        </p>
+        <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
+          Spaghetti belongs in the kitchen, not in your codebase.
+          Ash provides the ability to keep all similar parts of your application consistent,
+          making it easy to share an architectural vision while allowing escape hatches to do something different if needed.
+        </p>
+      </div>
+
+      <div class="max-w-7xl px-4 sm:px-6 md:px-8">
+        <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
+          Incredibly Powerful
+        </h2>
+        <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50 ">
+          Ash is more than it appears
+        </p>
+        <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
+          Ash is more than just auto-generated API or an Admin UI.
+          It’s a fully extensible DSL to model your domain, which creates a declarative,
+          highly introspectable representation. This in turn can be used to derive anything you want.
+        </p>
+        <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
+          Ash has built in extensions that allow you to generate Admin UIs or Phoenix LiveView Form helpers,
+          saving a ton of boilerplate. Hopefully you never need to swap data layers,
+          but Ash lets you do something really hard, quite easily.
+        </p>
+      </div>
 
       <div id="testimonials" class="flex flex-col space-y-4">
         <div class="min-w-fit max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 drop-shadow-xl lg:relative lg:top-16 lg:-left-52">
@@ -107,12 +161,11 @@ defmodule AshHqWeb.Pages.Home do
         </div>
         </div>
 
-
-        <div class="flex flex-col items-center mt-16 space-y-4">
+        <div class="flex flex-col items-center mb-4 space-y-4">
           {#if @signed_up}
             Thank you for joining our mailing list!
           {#else}
-            <p class="text-2xl font-medium text-gray-700 dark:text-gray-200 max-w-4xl mx-auto mt-4 text-center">Join our mailing list for (tastefully paced) updates!</p>
+            <p class="text-2xl font-medium text-gray-700 dark:text-gray-200 max-w-4xl mx-auto text-center">Join our mailing list for (tastefully paced) updates!</p>
             <Form for={@email_form} change="validate_email_form" submit="submit_email_form" class="flex flex-row space-x-4">
               <Field name={:email}>
                 <TextInput class="w-96 button border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600" opts={placeholder: "user@email.com"} />
@@ -122,18 +175,18 @@ defmodule AshHqWeb.Pages.Home do
           {/if}
         </div>
 
-        <div class="pt-6 pb-6 w-full mt-36 bg-gray-800 bg-opacity-80">
-          <div class="text-5xl px-12 font-bold max-w-5xl mx-auto mt-2 text-center">
-            Why do we keep reinventing the wheel?
-          </div>
-        </div>
-
-        <div class="pt-6 pb-6 w-full hidden sm:block mt-36">
-          <h1>Stop painting yourself into corners</h1>
-        </div>
-
-        <div class="pt-6 pb-6 w-full hidden sm:block mt-36">
-          <h1>No Lock In</h1>
+        <div class="max-w-7xl px-4 sm:px-6 md:px-8">
+          <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
+            Simple declarative DSL
+          </h2>
+          <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50 ">
+            A taste of how to configure Ash
+          </p>
+          <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
+            Below is some examples of the way you can model your resources with actions, attributes and relationships.
+            You can easily swap data layers between Postgres or ETS for example, or add your own data layer extension.
+            Once you've modelled your resources, you can derive GraphQL or JSON API external APIs from them.
+          </p>
         </div>
 
         <div class="pt-6 pb-6 w-full hidden sm:block mt-36">
