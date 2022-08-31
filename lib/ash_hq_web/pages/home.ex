@@ -8,8 +8,8 @@ defmodule AshHqWeb.Pages.Home do
   alias Surface.Components.Form.{Field, ErrorTag, TextInput, Submit}
   import AshHqWeb.Components.CodeExample, only: [to_code: 1]
 
-  data signed_up, :boolean, default: false
-  data email_form, :any
+  data(signed_up, :boolean, default: false)
+  data(email_form, :any)
 
   def render(assigns) do
     ~F"""
@@ -47,7 +47,7 @@ defmodule AshHqWeb.Pages.Home do
         </div>
 
       <div id="testimonials" class="flex flex-col space-y-4">
-        <div class="min-w-fit max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-800 bg-white drop-shadow-md">
+        <div class="min-w-fit max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 drop-shadow-xl lg:relative lg:top-16 lg:-left-52">
           <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
 
               <p class="text-lg font-light text-gray-700 dark:text-gray-100">
@@ -65,7 +65,7 @@ defmodule AshHqWeb.Pages.Home do
           </div>
         </div>
 
-        <div class="min-w-fit max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-800 bg-white drop-shadow-md">
+        <div class="min-w-fit max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-700 bg-white drop-shadow-xl lg:relative lg:-top-16 lg:-right-52">
           <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
 
               <p class="text-lg font-light text-gray-700 dark:text-gray-100">
@@ -83,7 +83,7 @@ defmodule AshHqWeb.Pages.Home do
           </div>
         </div>
 
-        <div class="min-w-fit max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-800 bg-white drop-shadow-md">
+        <div class="min-w-fit max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 bg-white drop-shadow-xl lg:relative lg:-top-32 lg:-left-64">
           <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
 
               <p class="text-lg font-light text-gray-700 dark:text-gray-100">
@@ -96,6 +96,24 @@ defmodule AshHqWeb.Pages.Home do
               </div>
               <div class="text-gray-700 dark:text-gray-300">
                 Technical Director, Alembic
+              </div>
+            </p>
+          </div>
+        </div>
+
+        <div class="min-w-fit max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-700 drop-shadow-xl lg:relative lg:-top-64 lg:-right-32">
+          <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
+
+              <p class="text-lg font-light text-gray-700 dark:text-gray-100">
+                "Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!"
+              </p>
+
+            <p class="font-bold">
+              <div class="text-orange-500 dark:text-orange-400">
+                Frank Dugan III
+              </div>
+              <div class="text-gray-700 dark:text-gray-300">
+                System Specialist, SunnyCor Inc.
               </div>
             </p>
           </div>
