@@ -24,16 +24,16 @@ defmodule AshHqWeb.Pages.Home do
         <div class="text-xl font-light text-gray-700 dark:text-gray-400 max-w-4xl mx-auto mt-4 text-center">
           A declarative foundation for ambitious applications. Model your domain, derive the rest.
         </div>
-        <div class="flex flex-row items-center mt-16 space-x-4 mb-10">
+        <div class="flex flex-col space-y-4 md:space-x-4 md:space-y-0 md:flex-row items-center mt-16  mb-10">
           <div class="flex items-center h-12 px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 hover:text-white">
               <a
               href="/docs/guides/ash/latest/tutorials/get-started.md"
               target="_blank">Get Started</a>
         </div>
-        <SearchBar />
+        <SearchBar class="w-80 md:w-96"/>
       </div>
 
-      <div class="max-w-7xl px-4 sm:px-6 md:px-8">
+      <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
         <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
           Write it once
         </h2>
@@ -48,7 +48,7 @@ defmodule AshHqWeb.Pages.Home do
         </p>
       </div>
 
-      <div class="max-w-7xl px-4 sm:px-6 md:px-8">
+      <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
         <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
           Consistency
         </h2>
@@ -68,7 +68,7 @@ defmodule AshHqWeb.Pages.Home do
         </p>
       </div>
 
-      <div class="max-w-7xl px-4 sm:px-6 md:px-8">
+      <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
         <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
           Incredibly Powerful
         </h2>
@@ -87,11 +87,11 @@ defmodule AshHqWeb.Pages.Home do
         </p>
       </div>
 
-      <div id="testimonials" class="flex flex-col space-y-4">
-        <div class="min-w-fit max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 drop-shadow-xl lg:relative lg:top-16 lg:-left-52">
+      <div id="testimonials" class="flex flex-col items-center content-center space-y-8">
+        <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 drop-shadow-xl lg:relative lg:top-16 lg:-left-52">
           <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
 
-              <p class="text-lg font-light text-gray-700 dark:text-gray-100">
+              <p class="text-lg font-light text-gray-700 dark:text-gray-100 break-words">
                 "Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!"
               </p>
 
@@ -106,10 +106,10 @@ defmodule AshHqWeb.Pages.Home do
           </div>
         </div>
 
-        <div class="min-w-fit max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-700 bg-white drop-shadow-xl lg:relative lg:-top-16 lg:-right-52">
+        <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-700 bg-white drop-shadow-xl lg:relative lg:-top-16 lg:-right-52">
           <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
 
-              <p class="text-lg font-light text-gray-700 dark:text-gray-100">
+              <p class="text-lg font-light text-gray-700 dark:text-gray-100 break-words">
                 "What stood out to me was how incredibly easy Ash made it for me to go from a proof of concept, to a working prototype using ETS, to a live app using Postgres."
               </p>
 
@@ -124,10 +124,10 @@ defmodule AshHqWeb.Pages.Home do
           </div>
         </div>
 
-        <div class="min-w-fit max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 bg-white drop-shadow-xl lg:relative lg:-top-32 lg:-left-64">
+        <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 bg-white drop-shadow-xl lg:relative lg:-top-32 lg:-left-64">
           <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
 
-              <p class="text-lg font-light text-gray-700 dark:text-gray-100">
+              <p class="text-lg font-light text-gray-700 dark:text-gray-100 break-words">
                 "Ash is such powerful idea and it gives Alembic such a massive competitive advantage that I’d be really stupid to tell anyone about it."
               </p>
 
@@ -142,10 +142,10 @@ defmodule AshHqWeb.Pages.Home do
           </div>
         </div>
 
-        <div class="min-w-fit max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-700 drop-shadow-xl lg:relative lg:-top-64 lg:-right-32">
+        <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-700 drop-shadow-xl lg:relative lg:-top-64 lg:-right-32">
           <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
 
-              <p class="text-lg font-light text-gray-700 dark:text-gray-100">
+              <p class="text-lg font-light text-gray-700 dark:text-gray-100 break-words">
                 "Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!"
               </p>
 
@@ -161,21 +161,21 @@ defmodule AshHqWeb.Pages.Home do
         </div>
         </div>
 
-        <div class="flex flex-col items-center mb-4 space-y-4">
+        <div class="flex flex-col items-center my-10 space-y-4">
           {#if @signed_up}
             Thank you for joining our mailing list!
           {#else}
             <p class="text-2xl font-medium text-gray-700 dark:text-gray-200 max-w-4xl mx-auto text-center">Join our mailing list for (tastefully paced) updates!</p>
-            <Form for={@email_form} change="validate_email_form" submit="submit_email_form" class="flex flex-row space-x-4">
+            <Form for={@email_form} change="validate_email_form" submit="submit_email_form" class="flex flex-col md:flex-row space-x-4 space-y-4 items-center">
               <Field name={:email}>
-                <TextInput class="w-96 button border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600" opts={placeholder: "user@email.com"} />
+                <TextInput class=" w-80 md:w-96 button border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600" opts={placeholder: "user@email.com"} />
               </Field>
-              <Submit class="flex items-center px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 hover:text-white">Join</Submit>
+              <Submit class="w-fit flex items-center px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 hover:text-white h-10">Join</Submit>
             </Form>
           {/if}
         </div>
 
-        <div class="max-w-7xl px-4 sm:px-6 md:px-8">
+        <div class="max-w-7xl px-4 sm:px-6 md:px-8 my-8">
           <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
             Simple declarative DSL
           </h2>
@@ -248,16 +248,16 @@ defmodule AshHqWeb.Pages.Home do
           </div>
         </div>
 
-        <div class="flex flex-col items-center mt-16 space-y-4 mb-10">
+        <div class="flex flex-col items-center my-10 space-y-4">
           {#if @signed_up}
             Thank you for joining our mailing list!
           {#else}
-            <p class="text-2xl font-medium text-gray-700 dark:text-gray-200 max-w-4xl mx-auto mt-4 text-center">Join our mailing list for (tastefully paced) updates!</p>
-            <Form for={@email_form} change="validate_email_form" submit="submit_email_form" class="flex flex-row space-x-4">
+            <p class="text-2xl font-medium text-gray-700 dark:text-gray-200 max-w-4xl mx-auto text-center">Join our mailing list for (tastefully paced) updates!</p>
+            <Form for={@email_form} change="validate_email_form" submit="submit_email_form" class="flex flex-col md:flex-row space-x-4 space-y-4 items-center">
               <Field name={:email}>
-                <TextInput class="w-96 button border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600" opts={placeholder: "user@email.com"} />
+                <TextInput class=" w-80 md:w-96 button border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600" opts={placeholder: "user@email.com"} />
               </Field>
-              <Submit class="flex items-center px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 hover:text-white">Join</Submit>
+              <Submit class="w-fit flex items-center px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 hover:text-white h-10">Join</Submit>
             </Form>
           {/if}
         </div>
