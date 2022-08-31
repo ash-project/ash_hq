@@ -24,26 +24,13 @@ defmodule AshHqWeb.Pages.Home do
         <div class="text-xl font-light text-gray-700 dark:text-gray-400 max-w-4xl mx-auto mt-4 text-center">
           A declarative foundation for ambitious applications. Model your domain, derive the rest.
         </div>
-        <div class="flex flex-row items-center mt-16 space-x-4">
+        <div class="flex flex-row items-center mt-16 space-x-4 mb-10">
           <div class="flex items-center h-12 px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 hover:text-white">
               <a
               href="/docs/guides/ash/latest/tutorials/get-started.md"
               target="_blank">Get Started</a>
          </div>
           <SearchBar />
-        </div>
-
-        <div class="flex flex-row items-center mt-16 space-x-4">
-          {#if @signed_up}
-            Thank you for joining our mailing list!
-          {#else}
-            <Form for={@email_form} change="validate_email_form" submit="submit_email_form">
-              <Field name={:email}>
-                <TextInput class="text-black" opts={placeholder: "Join our mailing list for (tastefully paced) updates!"} />
-              </Field>
-              <Submit>Join</Submit>
-            </Form>
-          {/if}
         </div>
 
       <div id="testimonials" class="flex flex-col space-y-4">
