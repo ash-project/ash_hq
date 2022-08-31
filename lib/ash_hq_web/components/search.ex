@@ -9,26 +9,26 @@ defmodule AshHqWeb.Components.Search do
   alias Surface.Components.{Form, LiveRedirect}
   alias Surface.Components.Form.{Checkbox, Label, Select}
 
-  prop open, :boolean, default: false
-  prop close, :event, required: true
-  prop libraries, :list, required: true
-  prop selected_versions, :map, required: true
-  prop change_versions, :event, required: true
-  prop selected_types, :list, required: true
-  prop change_types, :event, required: true
-  prop uri, :string, required: true
+  prop(open, :boolean, default: false)
+  prop(close, :event, required: true)
+  prop(libraries, :list, required: true)
+  prop(selected_versions, :map, required: true)
+  prop(change_versions, :event, required: true)
+  prop(selected_types, :list, required: true)
+  prop(change_types, :event, required: true)
+  prop(uri, :string, required: true)
 
-  data versions, :map, default: %{}
-  data search, :string, default: ""
-  data item_list, :list, default: []
-  data selected_item, :string
+  data(versions, :map, default: %{})
+  data(search, :string, default: "")
+  data(item_list, :list, default: [])
+  data(selected_item, :string)
 
   def render(assigns) do
     ~F"""
     <div
       id={@id}
       style="display: none;"
-      class="absolute flex justify-center align-middle w-screen h-full backdrop-blur-sm pb-8 bg-white bg-opacity-10 z-50"
+      class="absolute flex justify-center align-middle w-screen h-full backdrop-blur-sm bg-white bg-opacity-10 z-50"
     >
       <div
         :on-click-away={AshHqWeb.AppViewLive.toggle_search()}
@@ -54,51 +54,42 @@ defmodule AshHqWeb.Components.Search do
               </button>
             </div>
           </div>
-          <div class="grid grid-cols-9 h-[85%] mt-3">
-            <div class="col-span-3 md:col-span-2 xl:col-span-1 border-r border-gray-600">
-              <Form for={:types} change={@change_types}>
-                <div class="flex flex-col border-b">
-                  <div>Search for:</div>
-                  {#for type <- AshHq.Docs.Extensions.Search.Types.types()}
-                    <div class="flex flex-row items-center">
-                      <Checkbox
-                        class="mr-4"
-                        id={"#{type}-selected"}
-                        value={type in @selected_types}
-                        name={"types[#{type}]"}
-                      />
-                      <Label field={type}>
-                        {type}
-                      </Label>
-                    </div>
-                  {/for}
-                </div>
-              </Form>
-              <Form for={:versions} change={@change_versions}>
-                <div class="flex flex-col space-y-2">
-                  Project versions:
-                  {#for library <- @libraries}
-                    <div class="flex flex-col">
-                      <Label field={library.id}>
-                        {library.display_name}
-                      </Label>
-                      <div class="pb-2">
-                        <Select
-                          id={"versions-select-#{library.id}"}
-                          class="text-black form-select rounded-md pt-1 py-2 w-3/4 border dark:border-0 bg-gray-100 dark:bg-white"
-                          name={"versions[#{library.id}]"}
-                          selected={Map.get(@selected_versions, library.id)}
-                          options={[{"None", nil}, {"latest", "latest"}] ++ Enum.map(library.versions, &{&1.version, &1.id})}
-                        />
-                      </div>
-                    </div>
-                  {/for}
-                </div>
-              </Form>
-            </div>
+          <div class="grid grid-cols-9 h-[80%] mt-3">
             <div class="pl-4 overflow-auto col-span-6 md:col-span-7 xl:col-span-8">
               {render_items(assigns, @item_list)}
             </div>
+            <div class="col-span-3 md:col-span-2 xl:col-span-1 ml-2">
+            <Form for={:types} change={@change_types}>
+              <div class="flex flex-col border-b">
+                <div>Search for:</div>
+                {#for type <- AshHq.Docs.Extensions.Search.Types.types()}
+                  <div class="flex flex-row items-center">
+                    <Checkbox
+                      class="mr-4"
+                      id={"#{type}-selected"}
+                      value={type in @selected_types}
+                      name={"types[#{type}]"}
+                    />
+                    <Label field={type}>
+                      {type}
+                    </Label>
+                  </div>
+                {/for}
+              </div>
+            </Form>
+            </div>
+
+          </div>
+          <div class="flex flex-row justify-start relative bottom-0 mt-2">
+            <div class="flex text-black dark:text-white font-light px-2">
+              Packages:
+            </div>
+            <AshHqWeb.Components.VersionPills
+              id="search-version-pills"
+              editable={false}
+              selected_versions={@selected_versions}
+              libraries={@libraries}
+            />
           </div>
         </div>
       </div>
@@ -115,7 +106,10 @@ defmodule AshHqWeb.Components.Search do
           "bg-gray-400 dark:bg-gray-600": @selected_item.id == item.id,
           "bg-gray-200 dark:bg-gray-800": @selected_item.id != item.id
         }>
-          <div class="flex justify-between pb-2">
+          <div class="flex justify-start items-center space-x-2 pb-2">
+            <div>
+              {render_item_type(assigns, item)}
+            </div>
             <div class="flex flex-row">
               {#for path_item <- item_path(item)}
                 <Heroicons.Solid.ChevronRightIcon class="h-6 w-6" />
@@ -132,9 +126,6 @@ defmodule AshHqWeb.Components.Search do
                 {/if}
               </div>
             </div>
-            <div>
-              {item_type(item)}
-            </div>
           </div>
           <div class="text-gray-700 dark:text-gray-400">
             {raw(item.search_headline)}
@@ -143,6 +134,28 @@ defmodule AshHqWeb.Components.Search do
       </LiveRedirect>
     {/for}
     """
+  end
+
+  defp render_item_type(assigns, item) do
+    case item_type(item) do
+      type when type in ["Module", "Function"] ->
+        ~F"""
+        <Heroicons.Outline.CodeIcon class="h-4 w-4" />
+        """
+
+      type when type in ["Dsl", "Option"] ->
+        AshHqWeb.Components.DocSidebar.render_icon(assigns, item.extension_type)
+
+      "Guide" ->
+        ~F"""
+        <Heroicons.Outline.BookOpenIcon class="h-4 w-4"/>
+        """
+
+      _ ->
+        ~F"""
+        <Heroicons.Outline.PuzzleIcon class="h-4 w-4" />
+        """
+    end
   end
 
   defp item_name(%{name: name}), do: name

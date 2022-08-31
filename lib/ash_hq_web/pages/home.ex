@@ -14,10 +14,7 @@ defmodule AshHqWeb.Pages.Home do
   def render(assigns) do
     ~F"""
     <div class="antialiased">
-      <div class="w-full bg-orange-600 text-center py-2 text-lg font-semibold">
-        This site is still under construction and is live for preview purposes only.
-      </div>
-      <div class="my-2 dark:bg-primary-black dark:bg-dark-grid bg-light-grid flex flex-col items-center pt-36">
+      <div class="my-2 dark:bg-primary-black dark:bg-dark-grid bg-light-grid flex flex-col items-center pt-24">
         <div class="text-5xl px-12 font-bold max-w-5xl mx-auto mt-2 text-center">
           Build <CalloutText>powerful</CalloutText> and <CalloutText>composable</CalloutText> applications with a <CalloutText>flexible</CalloutText> tool-chain.
         </div>
@@ -26,139 +23,133 @@ defmodule AshHqWeb.Pages.Home do
         </div>
         <div class="flex flex-col space-y-4 md:space-x-4 md:space-y-0 md:flex-row items-center mt-16  mb-10">
           <div class="flex items-center h-12 px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 hover:text-white">
-              <a
-              href="/docs/guides/ash/latest/tutorials/get-started.md"
-              target="_blank">Get Started</a>
+            <a href="/docs/guides/ash/latest/tutorials/get-started.md" target="_blank">Get Started</a>
+          </div>
+          <SearchBar class="w-80 md:w-96" />
         </div>
-        <SearchBar class="w-80 md:w-96"/>
-      </div>
 
-      <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
-        <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
-          Write it once
-        </h2>
-        <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50 ">
-          Why do we keep reinventing the wheel?
-        </p>
-        <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
-          Every time you start a new app, are you rebuilding features that you've already built many times?
-          Wouldn't it be great if you could just focus on the important parts of an app without reinventing ways to authenticate, add permissions, etc.
-          Ash allows you to not only use patterns in existing extensions, it lets you extract your own patterns into custom extensions.
-          So when you need to do it again in a new application, it's already done. Just wire it up!
-        </p>
-      </div>
+        <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
+          <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
+            Write it once
+          </h2>
+          <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50">
+            Why do we keep reinventing the wheel?
+          </p>
+          <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
+            Every time you start a new app, are you rebuilding features that you've already built many times?
+            Wouldn't it be great if you could just focus on the important parts of an app without reinventing ways to authenticate, add permissions, etc.
+            Ash allows you to not only use patterns in existing extensions, it lets you extract your own patterns into custom extensions.
+            So when you need to do it again in a new application, it's already done. Just wire it up!
+          </p>
+        </div>
 
-      <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
-        <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
-          Consistency
-        </h2>
-        <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50 ">
-          Build large applications without making a mess
-        </p>
-        <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
-          Over time and over larger teams of different experience levels,
-          patterns can change and drift away from each in different parts of a large application.
-          Some parts of the app are done one way, other parts are done another way,
-          there are also the scary parts of any app that dragons lay in wait for the unwary adventurer.
-        </p>
-        <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
-          Spaghetti belongs in the kitchen, not in your codebase.
-          Ash provides the ability to keep all similar parts of your application consistent,
-          making it easy to share an architectural vision while allowing escape hatches to do something different if needed.
-        </p>
-      </div>
+        <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
+          <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
+            Consistency
+          </h2>
+          <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50">
+            Build large applications without making a mess
+          </p>
+          <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
+            Over time and over larger teams of different experience levels,
+            patterns can change and drift away from each in different parts of a large application.
+            Some parts of the app are done one way, other parts are done another way,
+            there are also the scary parts of any app that dragons lay in wait for the unwary adventurer.
+          </p>
+          <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
+            Spaghetti belongs in the kitchen, not in your codebase.
+            Ash provides the ability to keep all similar parts of your application consistent,
+            making it easy to share an architectural vision while allowing escape hatches to do something different if needed.
+          </p>
+        </div>
 
-      <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
-        <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
-          Incredibly Powerful
-        </h2>
-        <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50 ">
-          Ash is more than it appears
-        </p>
-        <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
-          Ash is more than just auto-generated API or an Admin UI.
-          It’s a fully extensible DSL to model your domain, which creates a declarative,
-          highly introspectable representation. This in turn can be used to derive anything you want.
-        </p>
-        <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
-          Ash has built in extensions that allow you to generate Admin UIs or Phoenix LiveView Form helpers,
-          saving a ton of boilerplate. Even going as far as fully swapping data layers, Ash lets you do
-          something traditionally extremely difficult with ease.
-        </p>
-      </div>
+        <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
+          <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
+            Incredibly Powerful
+          </h2>
+          <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50">
+            Ash is more than it appears
+          </p>
+          <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
+            Ash is more than just auto-generated API or an Admin UI.
+            It’s a fully extensible DSL to model your domain, which creates a declarative,
+            highly introspectable representation. This in turn can be used to derive anything you want.
+          </p>
+          <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
+            Ash has built in extensions that allow you to generate Admin UIs or Phoenix LiveView Form helpers,
+            saving a ton of boilerplate. Even going as far as fully swapping data layers, Ash lets you do
+            something traditionally extremely difficult with ease.
+          </p>
+        </div>
 
-      <div id="testimonials" class="flex flex-col items-center content-center space-y-8">
-        <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 drop-shadow-xl lg:relative lg:top-16 lg:-left-52">
-          <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-
+        <div id="testimonials" class="flex flex-col items-center content-center space-y-8">
+          <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 drop-shadow-xl lg:relative lg:top-16 lg:-left-52">
+            <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-gray-700 dark:text-gray-100 break-words">
                 "Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!"
               </p>
 
-            <p class="font-bold">
-              <div class="text-orange-500 dark:text-orange-400">
-                Frank Dugan III
-              </div>
-              <div class="text-gray-700 dark:text-gray-300">
-                System Specialist, SunnyCor Inc.
-              </div>
-            </p>
+              <p class="font-bold">
+                <div class="text-orange-500 dark:text-orange-400">
+                  Frank Dugan III
+                </div>
+                <div class="text-gray-700 dark:text-gray-300">
+                  System Specialist, SunnyCor Inc.
+                </div>
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-700 bg-white drop-shadow-xl lg:relative lg:-top-16 lg:-right-52">
-          <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-
+          <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-700 bg-white drop-shadow-xl lg:relative lg:-top-16 lg:-right-52">
+            <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-gray-700 dark:text-gray-100 break-words">
                 "What stood out to me was how incredibly easy Ash made it for me to go from a proof of concept, to a working prototype using ETS, to a live app using Postgres."
               </p>
 
-            <p class="font-bold">
-              <div class="text-orange-500 dark:text-orange-400">
-                Brett Kolodny
-              </div>
-              <div class="text-gray-700 dark:text-gray-300">
-                Full stack engineer, MEW
-              </div>
-            </p>
+              <p class="font-bold">
+                <div class="text-orange-500 dark:text-orange-400">
+                  Brett Kolodny
+                </div>
+                <div class="text-gray-700 dark:text-gray-300">
+                  Full stack engineer, MEW
+                </div>
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 bg-white drop-shadow-xl lg:relative lg:-top-32 lg:-left-64">
-          <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-
+          <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 bg-white drop-shadow-xl lg:relative lg:-top-32 lg:-left-64">
+            <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-gray-700 dark:text-gray-100 break-words">
                 "Ash is such powerful idea and it gives Alembic such a massive competitive advantage that I’d be really stupid to tell anyone about it."
               </p>
 
-            <p class="font-bold">
-              <div class="text-orange-500 dark:text-orange-400">
-                Josh Price
-              </div>
-              <div class="text-gray-700 dark:text-gray-300">
-                Technical Director, Alembic
-              </div>
-            </p>
+              <p class="font-bold">
+                <div class="text-orange-500 dark:text-orange-400">
+                  Josh Price
+                </div>
+                <div class="text-gray-700 dark:text-gray-300">
+                  Technical Director, Alembic
+                </div>
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-700 drop-shadow-xl lg:relative lg:-top-64 lg:-right-32">
-          <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-
+          <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-700 drop-shadow-xl lg:relative lg:-top-64 lg:-right-32">
+            <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-gray-700 dark:text-gray-100 break-words">
-                "Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!"
+                "Ash Framework enabled us to build a robust platform for delivering financial services using bitcoin. Ash proved itself to our team by handling innovative use cases with ease and it continues to evolve ahead of our growing list of needs."
               </p>
 
-            <p class="font-bold">
-              <div class="text-orange-500 dark:text-orange-400">
-                Yousef Janajri
-              </div>
-              <div class="text-gray-700 dark:text-gray-300">
-                CTO & Co-Founder, Coinbits
-              </div>
-            </p>
+              <p class="font-bold">
+                <div class="text-orange-500 dark:text-orange-400">
+                  Yousef Janajri
+                </div>
+                <div class="text-gray-700 dark:text-gray-300">
+                  CTO & Co-Founder, Coinbits
+                </div>
+              </p>
+            </div>
           </div>
-        </div>
         </div>
 
         <div class="flex flex-col items-center my-10 space-y-4">
@@ -166,9 +157,17 @@ defmodule AshHqWeb.Pages.Home do
             Thank you for joining our mailing list!
           {#else}
             <p class="text-2xl font-medium text-gray-700 dark:text-gray-200 max-w-4xl mx-auto text-center">Join our mailing list for (tastefully paced) updates!</p>
-            <Form for={@email_form} change="validate_email_form" submit="submit_email_form" class="flex flex-col md:flex-row space-x-4 space-y-4 items-center">
+            <Form
+              for={@email_form}
+              change="validate_email_form"
+              submit="submit_email_form"
+              class="flex flex-col md:flex-row space-x-4 space-y-4 items-center"
+            >
               <Field name={:email}>
-                <TextInput class=" w-80 md:w-96 button border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600" opts={placeholder: "user@email.com"} />
+                <TextInput
+                  class="w-80 md:w-96 button border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+                  opts={placeholder: "user@email.com"}
+                />
               </Field>
               <Submit class="w-fit flex items-center px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 hover:text-white h-10">Join</Submit>
             </Form>
@@ -179,11 +178,11 @@ defmodule AshHqWeb.Pages.Home do
           <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
             Simple declarative DSL
           </h2>
-          <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50 ">
+          <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50">
             A taste of how to configure Ash
           </p>
           <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
-            Below is some examples of the way you can model your resources with actions, attributes and relationships.
+            Below are some examples of the way you can model your resources with actions, attributes and relationships.
             You can easily swap data layers between Postgres or ETS for example, or add your own data layer extension.
             Once you've modelled your resources, you can derive GraphQL or JSON API external APIs from them.
           </p>
@@ -253,9 +252,17 @@ defmodule AshHqWeb.Pages.Home do
             Thank you for joining our mailing list!
           {#else}
             <p class="text-2xl font-medium text-gray-700 dark:text-gray-200 max-w-4xl mx-auto text-center">Join our mailing list for (tastefully paced) updates!</p>
-            <Form for={@email_form} change="validate_email_form" submit="submit_email_form" class="flex flex-col md:flex-row space-x-4 space-y-4 items-center">
+            <Form
+              for={@email_form}
+              change="validate_email_form"
+              submit="submit_email_form"
+              class="flex flex-col md:flex-row space-x-4 space-y-4 items-center"
+            >
               <Field name={:email}>
-                <TextInput class=" w-80 md:w-96 button border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600" opts={placeholder: "user@email.com"} />
+                <TextInput
+                  class="w-80 md:w-96 button border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+                  opts={placeholder: "user@email.com"}
+                />
               </Field>
               <Submit class="w-fit flex items-center px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 hover:text-white h-10">Join</Submit>
             </Form>

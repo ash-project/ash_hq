@@ -2,12 +2,9 @@ defmodule AshHqWeb.AppViewLive do
   use Surface.LiveView,
     container: {:div, class: "h-full"}
 
-  alias AshHq.Docs.Extensions.RenderMarkdown
   alias AshHqWeb.Components.{Search, SearchBar}
   alias AshHqWeb.Pages.{Docs, Home, LogIn, Register, ResetPassword, UserSettings}
-  alias AshHqWeb.Router.Helpers, as: Routes
   alias Phoenix.LiveView.JS
-  alias Surface.Components.LiveRedirect
   require Ash.Query
 
   data(configured_theme, :string, default: :system)
@@ -69,6 +66,9 @@ defmodule AshHqWeb.AppViewLive do
             <SearchBar class="hidden lg:block" />
           {/if}
           <div class="flex flex-row align-middle items-center space-x-2">
+            <a href="/docs/guides/ash/latest/tutorials/get-started.md" target="_blank">
+              <Heroicons.Solid.BookOpenIcon class="w-8 h-8 dark:fill-gray-400 dark:hover:fill-gray-200 hover:fill-gray-600" />
+            </a>
             <a href="https://github.com/ash-project" target="_blank">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -135,6 +135,9 @@ defmodule AshHqWeb.AppViewLive do
           {#match :docs_dsl}
             <Docs
               uri={@uri}
+              change_version="change_version"
+              remove_version="remove_version"
+              add_version="add_version"
               collapse_sidebar="collapse_sidebar"
               expand_sidebar="expand_sidebar"
               sidebar_state={@sidebar_state}
@@ -243,6 +246,36 @@ defmodule AshHqWeb.AppViewLive do
     {:noreply,
      socket
      |> assign(params: params, uri: uri)
+     |> load_docs()}
+  end
+
+  def handle_event("remove_version", %{"library" => library}, socket) do
+    new_selected_versions = Map.put(socket.assigns.selected_versions, library, "")
+
+    {:noreply,
+     socket
+     |> assign(:selected_versions, new_selected_versions)
+     |> push_event("selected-versions", new_selected_versions)
+     |> load_docs()}
+  end
+
+  def handle_event("add_version", %{"library" => library}, socket) do
+    new_selected_versions = Map.put(socket.assigns.selected_versions, library, "latest")
+
+    send_update(AshHqWeb.Components.VersionPills,
+      id: "mobile-sidebar-version-pills",
+      action: :close_add_version
+    )
+
+    send_update(AshHqWeb.Components.VersionPills,
+      id: "sidebar-version-pills",
+      action: :close_add_version
+    )
+
+    {:noreply,
+     socket
+     |> assign(:selected_versions, new_selected_versions)
+     |> push_event("selected-versions", new_selected_versions)
      |> load_docs()}
   end
 
@@ -434,7 +467,11 @@ defmodule AshHqWeb.AppViewLive do
 
     selected_versions =
       Enum.reduce(libraries, configured_library_versions, fn library, acc ->
-        Map.put_new(acc, library.id, "latest")
+        if library.name == "ash" do
+          Map.put_new(acc, library.id, "latest")
+        else
+          Map.put_new(acc, library.id, "")
+        end
       end)
 
     {:ok,
@@ -641,7 +678,9 @@ defmodule AshHqWeb.AppViewLive do
            &(&1.name == socket.assigns.params["library"])
          ) do
       nil ->
-        assign(socket, library: nil, library_version: nil)
+        socket
+        |> assign(:library, nil)
+        |> assign(:library_version, nil)
 
       library ->
         socket =

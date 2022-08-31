@@ -7,26 +7,29 @@ defmodule AshHqWeb.Pages.Docs do
   alias Phoenix.LiveView.JS
   require Logger
 
-  prop change_versions, :event, required: true
-  prop selected_versions, :map, required: true
-  prop libraries, :list, default: []
-  prop uri, :string
-  prop sidebar_state, :map, required: true
-  prop collapse_sidebar, :event, required: true
-  prop expand_sidebar, :event, required: true
+  prop(change_versions, :event, required: true)
+  prop(selected_versions, :map, required: true)
+  prop(libraries, :list, default: [])
+  prop(uri, :string)
+  prop(sidebar_state, :map, required: true)
+  prop(collapse_sidebar, :event, required: true)
+  prop(expand_sidebar, :event, required: true)
 
-  prop library, :any
-  prop extension, :any
-  prop docs, :any
-  prop library_version, :any
-  prop guide, :any
-  prop doc_path, :list, default: []
-  prop dsls, :list, default: []
-  prop dsl, :any
-  prop options, :list, default: []
-  prop module, :any
+  prop(library, :any)
+  prop(extension, :any)
+  prop(docs, :any)
+  prop(library_version, :any)
+  prop(guide, :any)
+  prop(doc_path, :list, default: [])
+  prop(dsls, :list, default: [])
+  prop(dsl, :any)
+  prop(options, :list, default: [])
+  prop(module, :any)
+  prop(remove_version, :event)
+  prop(add_version, :event)
+  prop(change_version, :event)
 
-  data positional_options, :list
+  data(positional_options, :list)
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -57,13 +60,13 @@ defmodule AshHqWeb.Pages.Docs do
           </div>
         {/if}
       </div>
-      <span class="grid overflow-hidden xl:hidden z-50">
-        <div
-          id="mobile-sidebar-container"
-          class="overflow-hidden hidden fixed w-min h-full transition"
-        >
+      <span class="grid overflow-hidden xl:hidden z-40">
+        <div id="mobile-sidebar-container" class="overflow-hidden hidden fixed w-min h-full transition">
           <DocSidebar
             id="mobile-sidebar"
+            change_version={@change_version}
+            add_version={@add_version}
+            remove_version={@remove_version}
             libraries={@libraries}
             extension={@extension}
             sidebar_state={@sidebar_state}
@@ -82,6 +85,9 @@ defmodule AshHqWeb.Pages.Docs do
         <DocSidebar
           id="sidebar"
           class="hidden xl:block mt-10"
+          change_version={@change_version}
+          add_version={@add_version}
+          remove_version={@remove_version}
           module={@module}
           libraries={@libraries}
           extension={@extension}
@@ -445,7 +451,7 @@ defmodule AshHqWeb.Pages.Docs do
       end
 
     case Version.parse(version.version) do
-      {:ok, %Version{major: major, minor: minor, patch: 0, pre: pre, build: build}}
+      {:ok, %Version{pre: pre, build: build}}
       when not is_nil(pre) or not is_nil(build) ->
         ~s({:#{library.name}, "~> #{version}"})
 

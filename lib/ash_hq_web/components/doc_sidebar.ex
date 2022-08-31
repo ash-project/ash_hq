@@ -18,11 +18,32 @@ defmodule AshHqWeb.Components.DocSidebar do
   prop(sidebar_state, :map, required: true)
   prop(collapse_sidebar, :event, required: true)
   prop(expand_sidebar, :event, required: true)
+  prop(add_version, :event, required: true)
+  prop(remove_version, :event, required: true)
+  prop(change_version, :event, required: true)
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~F"""
-    <aside id={@id} class={"grid h-full overflow-y-auto pb-36 w-fit z-50 bg-white dark:bg-primary-black", @class} aria-label="Sidebar">
+    <aside
+      id={@id}
+      class={"grid h-full overflow-y-auto pb-36 w-fit z-40 bg-white dark:bg-primary-black", @class}
+      aria-label="Sidebar"
+    >
+      <div class="flex flex-col">
+        <div class="text-black dark:text-white font-light w-full px-2 mb-2">
+          Including Packages:
+        </div>
+        <AshHqWeb.Components.VersionPills
+          id={"#{@id}-version-pills"}
+          libraries={@libraries}
+          add_version={@add_version}
+          remove_version={@remove_version}
+          change_version={@change_version}
+          selected_versions={@selected_versions}
+          add_version={@add_version}
+        />
+      </div>
       <div class="py-3 px-3">
         <ul class="space-y-2">
           <div>
@@ -102,27 +123,27 @@ defmodule AshHqWeb.Components.DocSidebar do
             {#if @sidebar_state["extensions"] == "open" || @extension}
               {#for {library, extensions} <- get_extensions(@libraries, @selected_versions)}
                 <li class="ml-3 text-gray-400 p-1">
-                {library}
-                <ul>
-                  {#for extension <- extensions}
-                    <li class="ml-1">
-                      <LiveRedirect
-                        to={DocRoutes.doc_link(extension, @selected_versions)}
-                        class={
-                          "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
-                          "dark:bg-gray-600": @extension && @extension.id == extension.id
-                        }
-                      >
-                        {render_icon(assigns, extension.type)}
-                        <span class="ml-3 mr-2">{extension.name}</span>
-                      </LiveRedirect>
-                      {#if @extension && @extension.id == extension.id && !Enum.empty?(extension.dsls)}
-                        {render_dsls(assigns, extension.dsls, [])}
-                      {/if}
-                    </li>
-                  {/for}
-                </ul>
-              </li>
+                  {library}
+                  <ul>
+                    {#for extension <- extensions}
+                      <li class="ml-1">
+                        <LiveRedirect
+                          to={DocRoutes.doc_link(extension, @selected_versions)}
+                          class={
+                            "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
+                            "dark:bg-gray-600": @extension && @extension.id == extension.id
+                          }
+                        >
+                          {render_icon(assigns, extension.type)}
+                          <span class="ml-3 mr-2">{extension.name}</span>
+                        </LiveRedirect>
+                        {#if @extension && @extension.id == extension.id && !Enum.empty?(extension.dsls)}
+                          {render_dsls(assigns, extension.dsls, [])}
+                        {/if}
+                      </li>
+                    {/for}
+                  </ul>
+                </li>
               {/for}
             {/if}
 
@@ -332,11 +353,6 @@ defmodule AshHqWeb.Components.DocSidebar do
       Enum.filter(libraries, fn library ->
         selected_versions[library.id] && selected_versions[library.id] != ""
       end)
-
-    library_name_to_order =
-      libraries
-      |> Enum.sort_by(& &1.order)
-      |> Enum.map(& &1.display_name)
 
     libraries
     |> Enum.flat_map(fn library ->

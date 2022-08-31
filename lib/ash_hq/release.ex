@@ -26,8 +26,8 @@ defmodule AshHq.Release do
     apis()
     |> Enum.flat_map(fn api ->
       api
-      |> Ash.Api.resources()
-      |> Enum.map(&AshPostgres.repo/1)
+      |> Ash.Api.Info.resources()
+      |> Enum.map(&AshPostgres.DataLayer.Info.repo/1)
     end)
     |> Enum.uniq()
   end
