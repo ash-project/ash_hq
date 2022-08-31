@@ -7,8 +7,6 @@ defmodule AshHq.Docs.Importer do
   require Logger
   require Ash.Query
 
-  @app_version Mix.Project.config()[:version]
-
   # sobelow_skip ["Misc.BinToTerm", "Traversal.FileModule"]
   def import(opts \\ []) do
     only = opts[:only] || nil
@@ -60,19 +58,6 @@ defmodule AshHq.Docs.Importer do
             with_retry(fn ->
               {_, 0} =
                 System.cmd("elixir", [
-                  # "--boot-var",
-                  # "RELEASE_LIB",
-                  # Path.join(["_build", "prod", "rel", "ash_hq", "lib"]),
-                  # "--boot",
-                  # Path.join([
-                  #   "_build",
-                  #   "prod",
-                  #   "rel",
-                  #   "ash_hq",
-                  #   "releases",
-                  #   @app_version,
-                  #   "start_clean"
-                  # ]),
                   Path.join([:code.priv_dir(:ash_hq), "scripts", "build_dsl_docs.exs"]),
                   name,
                   version,

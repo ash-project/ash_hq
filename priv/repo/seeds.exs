@@ -13,6 +13,12 @@ AshHq.Docs.Library.create!(%{
 })
 
 AshHq.Docs.Library.create!(%{
+  name: "ash_graphql",
+  display_name: "AshGraphql",
+  order: 40
+})
+
+AshHq.Docs.Library.create!(%{
   name: "ash_archival",
   display_name: "AshArchival",
   order: 85

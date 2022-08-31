@@ -5,7 +5,7 @@ Application.put_env(:dsl, :name, name)
 
 Mix.install([
   {String.to_atom(name), "== #{version}"}
-], system_env: [
+], force: true, system_env: [
   {"MIX_QUIET", "true"}
 ])
 
