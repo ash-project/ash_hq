@@ -19,6 +19,18 @@ AshHq.Docs.Library.create!(%{
 })
 
 AshHq.Docs.Library.create!(%{
+  name: "ash_json_api",
+  display_name: "AshJsonApi",
+  order: 50
+})
+
+AshHq.Docs.Library.create!(%{
+  name: "ash_csv",
+  display_name: "AshCSV",
+  order: 70
+})
+
+AshHq.Docs.Library.create!(%{
   name: "ash_archival",
   display_name: "AshArchival",
   order: 85

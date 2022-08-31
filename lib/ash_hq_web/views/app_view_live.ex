@@ -7,27 +7,27 @@ defmodule AshHqWeb.AppViewLive do
   alias AshHqWeb.Pages.{Docs, Home, LogIn, Register, ResetPassword, UserSettings}
   alias AshHqWeb.Router.Helpers, as: Routes
   alias Phoenix.LiveView.JS
-  alias Surface.Components.{Link, LiveRedirect}
+  alias Surface.Components.LiveRedirect
   require Ash.Query
 
-  data configured_theme, :string, default: :system
-  data searching, :boolean, default: false
-  data selected_versions, :map, default: %{}
-  data libraries, :list, default: []
-  data selected_types, :map, default: %{}
-  data sidebar_state, :map, default: %{}
-  data current_user, :map
+  data(configured_theme, :string, default: :system)
+  data(searching, :boolean, default: false)
+  data(selected_versions, :map, default: %{})
+  data(libraries, :list, default: [])
+  data(selected_types, :map, default: %{})
+  data(sidebar_state, :map, default: %{})
+  data(current_user, :map)
 
-  data library, :any, default: nil
-  data extension, :any, default: nil
-  data docs, :any, default: nil
-  data library_version, :any, default: nil
-  data guide, :any, default: nil
-  data doc_path, :list, default: []
-  data dsls, :list, default: []
-  data dsl, :any, default: nil
-  data options, :list, default: []
-  data module, :any, default: nil
+  data(library, :any, default: nil)
+  data(extension, :any, default: nil)
+  data(docs, :any, default: nil)
+  data(library_version, :any, default: nil)
+  data(guide, :any, default: nil)
+  data(doc_path, :list, default: [])
+  data(dsls, :list, default: [])
+  data(dsl, :any, default: nil)
+  data(options, :list, default: [])
+  data(module, :any, default: nil)
 
   def render(assigns) do
     ~F"""
@@ -134,7 +134,6 @@ defmodule AshHqWeb.AppViewLive do
             <Home id="home" />
           {#match :docs_dsl}
             <Docs
-              id="docs"
               uri={@uri}
               collapse_sidebar="collapse_sidebar"
               expand_sidebar="expand_sidebar"
@@ -167,22 +166,22 @@ defmodule AshHqWeb.AppViewLive do
     """
   end
 
-  defp toggle_account_dropdown(js \\ %JS{}) do
-    js
-    |> JS.toggle(
-      to: "#account-dropdown",
-      in: {
-        "transition ease-out duration-100",
-        "opacity-0 scale-95",
-        "opacity-100 scale-100"
-      },
-      out: {
-        "transition ease-in duration-75",
-        "opacity-100 scale-100",
-        "opacity-0 scale-05"
-      }
-    )
-  end
+  # defp toggle_account_dropdown(js \\ %JS{}) do
+  #   js
+  #   |> JS.toggle(
+  #     to: "#account-dropdown",
+  #     in: {
+  #       "transition ease-out duration-100",
+  #       "opacity-0 scale-95",
+  #       "opacity-100 scale-100"
+  #     },
+  #     out: {
+  #       "transition ease-in duration-75",
+  #       "opacity-100 scale-100",
+  #       "opacity-0 scale-05"
+  #     }
+  #   )
+  # end
 
   # {#if @current_user}
   #   <div class="relative inline-block text-left">

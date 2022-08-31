@@ -5,7 +5,7 @@ defmodule AshHqWeb.Pages.Home do
 
   alias AshHqWeb.Components.{CalloutText, CodeExample, SearchBar}
   alias Surface.Components.Form
-  alias Surface.Components.Form.{Field, ErrorTag, TextInput, Submit}
+  alias Surface.Components.Form.{Field, TextInput, Submit}
   import AshHqWeb.Components.CodeExample, only: [to_code: 1]
 
   data(signed_up, :boolean, default: false)
@@ -44,7 +44,7 @@ defmodule AshHqWeb.Pages.Home do
           Every time you start a new app, are you rebuilding features that you've already built many times?
           Wouldn't it be great if you could just focus on the important parts of an app without reinventing ways to authenticate, add permissions, etc.
           Ash allows you to not only use patterns in existing extensions, it lets you extract your own patterns into custom extensions.
-          So when you need to do it again in a new application, it's already done just wire it up.
+          So when you need to do it again in a new application, it's already done. Just wire it up!
         </p>
       </div>
 
@@ -82,8 +82,8 @@ defmodule AshHqWeb.Pages.Home do
         </p>
         <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
           Ash has built in extensions that allow you to generate Admin UIs or Phoenix LiveView Form helpers,
-          saving a ton of boilerplate. Hopefully you never need to swap data layers,
-          but Ash lets you do something really hard, quite easily.
+          saving a ton of boilerplate. Even going as far as fully swapping data layers, Ash lets you do
+          something traditionally extremely difficult with ease.
         </p>
       </div>
 
@@ -151,10 +151,10 @@ defmodule AshHqWeb.Pages.Home do
 
             <p class="font-bold">
               <div class="text-orange-500 dark:text-orange-400">
-                Frank Dugan III
+                Yousef Janajri
               </div>
               <div class="text-gray-700 dark:text-gray-300">
-                System Specialist, SunnyCor Inc.
+                CTO & Co-Founder, Coinbits
               </div>
             </p>
           </div>

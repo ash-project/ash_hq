@@ -2,7 +2,6 @@ defmodule AshHqWeb.Pages.Docs do
   @moduledoc "The page for showing documentation"
   use Surface.Component
 
-  alias AshHq.Docs.Extensions.RenderMarkdown
   alias AshHqWeb.Components.{CalloutText, DocSidebar, RightNav, Tag}
   alias AshHqWeb.DocRoutes
   alias Phoenix.LiveView.JS
@@ -446,7 +445,11 @@ defmodule AshHqWeb.Pages.Docs do
       end
 
     case Version.parse(version.version) do
-      {:ok, %{major: major, minor: minor, patch: 0}} ->
+      {:ok, %Version{major: major, minor: minor, patch: 0, pre: pre, build: build}}
+      when not is_nil(pre) or not is_nil(build) ->
+        ~s({:#{library.name}, "~> #{version}"})
+
+      {:ok, %Version{major: major, minor: minor, patch: 0}} ->
         ~s({:#{library.name}, "~> #{major}.#{minor}"})
 
       {:ok, version} ->
