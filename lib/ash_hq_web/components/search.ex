@@ -37,31 +37,27 @@ defmodule AshHqWeb.Components.Search do
         phx-key="ArrowUp"
       >
         <div class="h-full px-6 my-6" :on-window-keydown="select-next" phx-key="ArrowDown">
-          <div class="w-full flex flex-row justify-start sticky top-0 pb-3 border-b border-gray-600">
-            <Heroicons.Outline.SearchIcon class="h-6 w-6 mr-4 ml-4" />
-            <div class="flex flex-row justify-between w-full">
-              <Form for={:search} change="search" submit="go-to-doc" class="w-full">
-                <input
-                  id="search-input"
-                  name="search"
-                  value={@search}
-                  phx-debounce={300}
-                  class="text-lg dark:bg-primary-black grow ring-0 outline-none w-full"
-                />
-              </Form>
-              <button id="close-search" class="mr-4 ml-4 h-6 w-6 hover:text-gray-400" :on-click={@close}>
-                <Heroicons.Outline.XIcon class="h-6 w-6" />
-              </button>
+          <div class="flex flex-col w-full sticky">
+            <div class="w-full flex flex-row justify-start top-0">
+              <Heroicons.Outline.SearchIcon class="h-6 w-6 mr-4 ml-4" />
+              <div class="flex flex-row justify-between w-full  pb-3 border-b border-gray-600">
+                <Form for={:search} change="search" submit="go-to-doc" class="w-full">
+                  <input
+                    id="search-input"
+                    name="search"
+                    value={@search}
+                    phx-debounce={300}
+                    class="text-lg dark:bg-primary-black grow ring-0 outline-none w-full"
+                  />
+                </Form>
+                <button id="close-search" class="mr-4 ml-4 h-6 w-6 hover:text-gray-400" :on-click={@close}>
+                  <Heroicons.Outline.XIcon class="h-6 w-6" />
+                </button>
+              </div>
             </div>
-          </div>
-          <div class="grid grid-cols-9 h-[80%] mt-3">
-            <div class="pl-4 overflow-auto col-span-6 md:col-span-7 xl:col-span-8">
-              {render_items(assigns, @item_list)}
-            </div>
-            <div class="col-span-3 md:col-span-2 xl:col-span-1 ml-2">
+            <div class="ml-2 pl-4">
             <Form for={:types} change={@change_types}>
-              <div class="flex flex-col border-b">
-                <div>Search for:</div>
+              <div class="flex flex-row space-x-2 flex-wrap">
                 {#for type <- AshHq.Docs.Extensions.Search.Types.types()}
                   <div class="flex flex-row items-center">
                     <Checkbox
@@ -77,8 +73,12 @@ defmodule AshHqWeb.Components.Search do
                 {/for}
               </div>
             </Form>
+          </div>
+          </div>
+          <div class="grid h-[80%] mt-3">
+            <div class="pl-4 overflow-auto">
+              {render_items(assigns, @item_list)}
             </div>
-
           </div>
           <div class="flex flex-row justify-start relative bottom-0 mt-2">
             <div class="flex text-black dark:text-white font-light px-2">
@@ -110,9 +110,11 @@ defmodule AshHqWeb.Components.Search do
             <div>
               {render_item_type(assigns, item)}
             </div>
-            <div class="flex flex-row">
-              {#for path_item <- item_path(item)}
-                <Heroicons.Solid.ChevronRightIcon class="h-6 w-6" />
+            <div class="flex flex-row flex-wrap">
+              {#for {path_item, index} <- Enum.with_index(item_path(item))}
+                {#if index != 0}
+                  <Heroicons.Solid.ChevronRightIcon class="h-6 w-6" />
+                {/if}
                 <div>
                   {path_item}
                 </div>
@@ -148,7 +150,7 @@ defmodule AshHqWeb.Components.Search do
 
       "Guide" ->
         ~F"""
-        <Heroicons.Outline.BookOpenIcon class="h-4 w-4"/>
+        <Heroicons.Outline.BookOpenIcon class="h-4 w-4" />
         """
 
       _ ->

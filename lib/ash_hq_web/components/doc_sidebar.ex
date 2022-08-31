@@ -37,7 +37,6 @@ defmodule AshHqWeb.Components.DocSidebar do
         <AshHqWeb.Components.VersionPills
           id={"#{@id}-version-pills"}
           libraries={@libraries}
-          add_version={@add_version}
           remove_version={@remove_version}
           change_version={@change_version}
           selected_versions={@selected_versions}
