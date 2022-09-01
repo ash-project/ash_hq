@@ -52,7 +52,7 @@ defmodule AshHqWeb.Pages.Home do
           </p>
           <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
             Over time and over larger teams of different experience levels,
-            patterns can change and drift away from each in different parts of a large application.
+            patterns can change and drift away from each-other in different parts of a large application.
             Some parts of the app are done one way, other parts are done another way,
             there are also the scary parts of any app that dragons lay in wait for the unwary adventurer.
           </p>
@@ -82,7 +82,7 @@ defmodule AshHqWeb.Pages.Home do
           </p>
         </div>
 
-        <div id="testimonials" class="flex flex-col items-center content-center space-y-8">
+        <div id="testimonials" class="flex flex-col items-center content-center space-y-8 w-[28rem]">
           <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 drop-shadow-xl lg:relative lg:top-16 lg:-left-52">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-gray-700 dark:text-gray-100 break-words">
