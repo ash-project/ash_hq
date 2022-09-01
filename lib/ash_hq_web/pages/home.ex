@@ -33,7 +33,7 @@ defmodule AshHqWeb.Pages.Home do
             Write it once
           </h2>
           <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50">
-            Why do we keep reinventing the wheel?
+            Why do developers keep reinventing the wheel?
           </p>
           <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
             Every time you start a new app, are you rebuilding features that you've already built many times?
