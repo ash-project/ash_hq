@@ -3,13 +3,15 @@ defmodule AshHqWeb.MailingListController do
 
   import Ecto.Query, only: [from: 2]
 
-  def import(conn, %{"email" => email}) do
+  def unsubscribe(conn, %{"email" => email}) do
     query =
       from row in AshHq.MailingList.Email,
         where: row.email == ^email
 
     AshHq.Repo.delete_all(query)
 
-    redirect(conn, to: "/")
+    conn
+    |> put_flash(:info, "You have been unsubscribed!")
+    |> redirect(to: "/")
   end
 end
