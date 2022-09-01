@@ -7,8 +7,6 @@ defmodule AshHq.MailingList.Emails do
 
   def deliver_welcome_email(email) do
     deliver(email.email, "Thank you!", """
-    ==============================
-
     Hi,
 
     Thank you so much for subscribing to the Ash Framework mailing list!
@@ -20,7 +18,6 @@ defmodule AshHq.MailingList.Emails do
 
     Thanks again,
     The Ash Framework Team
-    ==============================
     """)
   end
 
