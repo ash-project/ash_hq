@@ -48,13 +48,14 @@ defmodule AshHqWeb.Pages.Home do
             Consistency
           </h2>
           <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50">
-            Build large applications without making a mess
+            A place for everything and everything in it's place
           </p>
           <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
-            Over time and over larger teams of different experience levels,
-            patterns can change and drift away from each-other in different parts of a large application.
-            Some parts of the app are done one way, other parts are done another way,
-            there are also the scary parts of any app that dragons lay in wait for the unwary adventurer.
+            Ash helps keep things neat and organized by providing good patterns for structuring your application.
+            Over time and with larger teams of different experience levels,
+            patterns change and drift away from each-other across our applications.
+            With that said, nothing in Ash depends on what folders or files you put things in, so you are
+            free to experiment or make the choices that make sense to you.
           </p>
           <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
             Spaghetti belongs in the kitchen, not in your codebase.
