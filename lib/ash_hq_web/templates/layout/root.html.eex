@@ -9,6 +9,8 @@
     <%= if Application.get_env(:ash_hq, :analytics?) do %>
       <script defer data-domain="ash-hq.org" src="https://plausible.io/js/plausible.js"></script>
     <% end %>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/assets/app.css") %>"/>
     <script>
     const configuredThemeRow = document.cookie

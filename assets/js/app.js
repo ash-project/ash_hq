@@ -27,24 +27,33 @@ mermaid.init(".mermaid")
 
 const Hooks = {};
 
-const configuredThemeRow = document.cookie
-  .split('; ')
-  .find(row => row.startsWith('theme='))
+let configuredThemeRow;
+if(window.cookieconsent.status === "allow") {
+  configuredThemeRow =
+    document.cookie
+      .split('; ')
+      .find(row => row.startsWith('theme='))
+}
 
 
 if (!configuredThemeRow) {
   let theme;
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    theme = "dark";
+    setTheme("dark");
   } else {
-    theme = "light";
+    setTheme("light");
   }
 }
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-  const configuredThemeRow = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('theme='))
+  let configuredThemeRow;
+  if(window.cookieconsent.status === "allow") {
+    configuredThemeRow =
+      document.cookie
+        .split('; ')
+        .find(row => row.startsWith('theme='))
+  }
+
 
   if(!configuredThemeRow || configuredThemeRow === "theme=system") {
     setTheme("system")
@@ -59,8 +68,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', eve
   }
 });
 
-function setTheme(theme) {
-  console.log(theme)
+function setTheme(theme, set) {
   let setTheme;
   if(theme == "system") {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -80,13 +88,15 @@ function setTheme(theme) {
     document.documentElement.classList.remove("dark");
   };
 
-  document.cookie = 'theme' + '=' + theme + ';path=/';
+  if(set && window.cookieconsent.status === "allow") {
+    document.cookie = 'theme' + '=' + theme + ';path=/';
+  }
 }
 
 Hooks.ColorTheme = {
   mounted() {
     this.handleEvent('set_theme', (payload) => {
-      setTheme(payload.theme)
+      setTheme(payload.theme, true)
     })
   }
 }
@@ -214,7 +224,9 @@ window.addEventListener("phx:js:scroll-to", (e) => {
 
 window.addEventListener("phx:sidebar-state", (e) => {
   const cookie = Object.keys(e.detail).map((key) => `${key}:${e.detail[key]}`).join(',');
-  document.cookie = 'sidebar_state' + '=' + cookie + ';path=/';
+  if(window.cookieconsent.status === "allow") {
+    document.cookie = 'sidebar_state' + '=' + cookie + ';path=/';
+  }
 })
 
 
@@ -235,13 +247,17 @@ window.addEventListener("phx:page-loading-stop", ({detail}) => {
 })
 
 window.addEventListener("phx:selected-versions", (e) => {
-  const cookie = Object.keys(e.detail).map((key) => `${key}:${e.detail[key]}`).join(',');
-  document.cookie = 'selected_versions' + '=' + cookie + ';path=/';
+  if(window.cookieconsent.status === "allow") {
+    const cookie = Object.keys(e.detail).map((key) => `${key}:${e.detail[key]}`).join(',');
+    document.cookie = 'selected_versions' + '=' + cookie + ';path=/';
+  }
 });
 
 window.addEventListener("phx:selected-types", (e) => {
-  const cookie = e.detail.types.join(',');
-  document.cookie = 'selected_types' + '=' + cookie + ';path=/';
+  if(window.cookieconsent.status === "allow") {
+    const cookie = e.detail.types.join(',');
+    document.cookie = 'selected_types' + '=' + cookie + ';path=/';
+  }
 });
 
 window.addEventListener("keydown", (event) => {
@@ -269,4 +285,21 @@ liveSocket.disableDebug()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
+
+window.addEventListener("load", function(){
+  window.cookieconsent.initialise({
+    "content": {
+      "message": "Hi, this website uses essential cookies for remembering your explicitly set preferences. We do not use google analytics, but we do use plausible.io, an ethical google analytics alternative which does not use any cookies and collects no personal data.",
+      "link": null
+    },
+    "palette": {
+      "popup": {
+        "background": "#000"
+      },
+      "button": {
+        "background": "#f1d600"
+      }
+    }
+  })
+});
 
