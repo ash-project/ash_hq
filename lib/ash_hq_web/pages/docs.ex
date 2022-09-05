@@ -35,7 +35,7 @@ defmodule AshHqWeb.Pages.Docs do
   def render(assigns) do
     ~F"""
     <div class="grid content-start overflow-hidden h-screen pb-12">
-      <div class="xl:hidden flex flex-row justify-start space-x-12 items-center border-b border-t border-gray-600 py-3 mb-12">
+      <div class="xl:hidden flex flex-row justify-start space-x-12 items-center border-b border-t border-gray-600 py-3">
         <button class="dark:hover:text-gray-600" phx-click={show_sidebar()}>
           <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
         </button>
@@ -81,7 +81,7 @@ defmodule AshHqWeb.Pages.Docs do
           />
         </div>
       </span>
-      <div class="grow w-full overflow-hidden flex flex-row h-full justify-center space-x-12 bg-white dark:bg-primary-black">
+      <div class="grow w-full overflow-hidden flex flex-row h-full justify-center md:space-x-12 bg-white dark:bg-primary-black">
         <DocSidebar
           id="sidebar"
           class="hidden xl:block mt-10"
@@ -102,10 +102,10 @@ defmodule AshHqWeb.Pages.Docs do
         />
         <div
           id="docs-window"
-          class="w-full prose prose-xl max-w-6xl dark:bg-primary-black dark:prose-invert overflow-y-auto overflow-x-visible pr-8 mt-14"
+          class="w-full prose prose-xl max-w-6xl dark:bg-primary-black dark:prose-invert overflow-y-auto overflow-x-visible md:pr-8 md:mt-14 px-4 md:px-auto"
           phx-hook="Docs"
         >
-          <div id="module-docs" class="w-full nav-anchor text-black dark:text-white relative">
+          <div id="module-docs" class="w-full nav-anchor text-black dark:text-white relative py-4 md:py-auto">
             {#if @module}
               <h2>{@module.name}{render_source_code_link(assigns, @module, @library, @library_version)}</h2>
             {/if}
