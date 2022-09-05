@@ -257,7 +257,6 @@ window.addEventListener("phx:page-loading-stop", ({detail}) => {
 
 window.addEventListener("phx:selected-versions", (e) => {
   console.log(e.detail)
-  console.log(window.cookieconsent.status)
   if(cookiesAreAllowed()) {
     const cookie = Object.keys(e.detail).map((key) => `${key}:${e.detail[key]}`).join(',');
     document.cookie = 'selected_versions' + '=' + cookie + ';path=/';
