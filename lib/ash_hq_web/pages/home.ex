@@ -28,63 +28,65 @@ defmodule AshHqWeb.Pages.Home do
           <SearchBar class="w-80 md:w-96" />
         </div>
 
-        <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
-          <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
-            Write it once
-          </h2>
-          <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50">
-            Why do developers keep reinventing the wheel?
-          </p>
-          <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
-            Every time you start a new app, are you rebuilding features that you've already built many times?
-            Wouldn't it be great if you could just focus on the important parts of an app without reinventing ways to authenticate, add permissions, etc.
-            Ash allows you to not only use patterns in existing extensions, it lets you extract your own patterns into custom extensions.
-            So when you need to do it again in a new application, it's already done. Just wire it up!
-          </p>
+        <div class="flex flex-col">
+          <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
+            <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
+              Write it once
+            </h2>
+            <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50">
+              Why do developers keep reinventing the wheel?
+            </p>
+            <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
+              Every time you start a new app, are you rebuilding features that you've already built many times?
+              Wouldn't it be great if you could just focus on the important parts of an app without reinventing ways to authenticate, add permissions, etc.
+              Ash allows you to not only use patterns in existing extensions, it lets you extract your own patterns into custom extensions.
+              So when you need to do it again in a new application, it's already done. Just wire it up!
+            </p>
+          </div>
+
+          <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
+            <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
+              Consistency
+            </h2>
+            <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50">
+              A place for everything and everything in it's place
+            </p>
+            <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
+              Ash helps keep things neat and organized by providing good patterns for structuring your application.
+              Over time and with larger teams of different experience levels,
+              patterns change and drift away from each-other across our applications.
+              With that said, nothing in Ash depends on what folders or files you put things in, so you are
+              free to experiment or make the choices that make sense to you.
+            </p>
+            <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
+              Spaghetti belongs in the kitchen, not in your codebase.
+              Ash provides the ability to keep all similar parts of your application consistent,
+              making it easy to share an architectural vision while allowing escape hatches to do something different if needed.
+            </p>
+          </div>
+
+          <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
+            <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
+              Incredibly Powerful
+            </h2>
+            <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50">
+              Ash is more than it appears
+            </p>
+            <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
+              Ash is more than just auto-generated API or an Admin UI.
+              It’s a fully extensible DSL to model your domain, which creates a declarative,
+              highly introspectable representation. This in turn can be used to derive anything you want.
+            </p>
+            <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
+              Ash has built in extensions that allow you to generate Admin UIs or Phoenix LiveView Form helpers,
+              saving a ton of boilerplate. Even going as far as fully swapping data layers, Ash lets you do
+              something traditionally extremely difficult with ease.
+            </p>
+          </div>
         </div>
 
-        <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
-          <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
-            Consistency
-          </h2>
-          <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50">
-            A place for everything and everything in it's place
-          </p>
-          <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
-            Ash helps keep things neat and organized by providing good patterns for structuring your application.
-            Over time and with larger teams of different experience levels,
-            patterns change and drift away from each-other across our applications.
-            With that said, nothing in Ash depends on what folders or files you put things in, so you are
-            free to experiment or make the choices that make sense to you.
-          </p>
-          <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
-            Spaghetti belongs in the kitchen, not in your codebase.
-            Ash provides the ability to keep all similar parts of your application consistent,
-            making it easy to share an architectural vision while allowing escape hatches to do something different if needed.
-          </p>
-        </div>
-
-        <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
-          <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
-            Incredibly Powerful
-          </h2>
-          <p class="mt-4 text-3xl sm:text-4xl text-slate-900 font-extrabold tracking-tight dark:text-slate-50">
-            Ash is more than it appears
-          </p>
-          <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
-            Ash is more than just auto-generated API or an Admin UI.
-            It’s a fully extensible DSL to model your domain, which creates a declarative,
-            highly introspectable representation. This in turn can be used to derive anything you want.
-          </p>
-          <p class="text-slate-500 dark:text-slate-400 mt-4 max-w-3xl space-y-6">
-            Ash has built in extensions that allow you to generate Admin UIs or Phoenix LiveView Form helpers,
-            saving a ton of boilerplate. Even going as far as fully swapping data layers, Ash lets you do
-            something traditionally extremely difficult with ease.
-          </p>
-        </div>
-
-        <div id="testimonials" class="flex flex-col items-center content-center space-y-8 w-[28rem]">
-          <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 drop-shadow-xl lg:relative lg:top-16 lg:-left-52">
+        <div id="testimonials" class="flex flex-col items-center content-center space-y-8 w-[28rem] h-[68rem]">
+          <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 drop-shadow-xl lg:relative lg:top-16 lg:-left-[10rem]">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-gray-700 dark:text-gray-100 break-words">
                 "Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!"
@@ -101,7 +103,7 @@ defmodule AshHqWeb.Pages.Home do
             </div>
           </div>
 
-          <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-700 bg-white drop-shadow-xl lg:relative lg:-top-16 lg:-right-52">
+          <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-700 bg-white drop-shadow-xl lg:relative lg:-top-16 lg:-right-[10rem]">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-gray-700 dark:text-gray-100 break-words">
                 "What stood out to me was how incredibly easy Ash made it for me to go from a proof of concept, to a working prototype using ETS, to a live app using Postgres."
@@ -118,7 +120,7 @@ defmodule AshHqWeb.Pages.Home do
             </div>
           </div>
 
-          <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 bg-white drop-shadow-xl lg:relative lg:-top-32 lg:-left-64">
+          <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-200 rounded-xl p-8 md:p-0 dark:bg-gray-800 bg-white drop-shadow-xl lg:relative lg:-top-32 lg:-left-[11rem]">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-gray-700 dark:text-gray-100 break-words">
                 "Ash is such powerful idea and it gives Alembic such a massive competitive advantage that I’d be really stupid to tell anyone about it."
@@ -135,7 +137,7 @@ defmodule AshHqWeb.Pages.Home do
             </div>
           </div>
 
-          <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-700 drop-shadow-xl lg:relative lg:-top-64 lg:-right-32">
+          <div class="w-96 lg:min-w-fit lg:max-w-min bg-gray-100 rounded-xl p-8 md:p-0 dark:bg-gray-700 drop-shadow-xl lg:relative lg:-top-64 lg:-right-44">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-gray-700 dark:text-gray-100 break-words">
                 "Ash Framework enabled us to build a robust platform for delivering financial services using bitcoin. Ash proved itself to our team by handling innovative use cases with ease and it continues to evolve ahead of our growing list of needs."
@@ -189,61 +191,63 @@ defmodule AshHqWeb.Pages.Home do
           </p>
         </div>
 
-        <div class="pt-6 pb-6 w-full hidden sm:block mt-36">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div class="pt-6 pb-6 w-full max-w-6xl hidden sm:block">
+          <div class="flex flex-row gap-10">
             <CodeExample
               id="define-a-resource"
-              class="grow min-w-fit max-w-[1000px]"
+              class="grow w-min max-w-[1000px]"
               code={post_example()}
               title="Define a resource"
             />
-            <div class="flex flex-col space-y-8">
-              <CodeExample
-                class="w-auto"
-                collapsible
-                id="use-it-programmatically"
-                code={changeset_example()}
-                title="Use it programmatically"
-              />
-              <CodeExample
-                class="w-auto"
-                collapsible
-                id="graphql-interface"
-                code={graphql_example()}
-                title="Add a GraphQL interface"
-              />
-              <CodeExample
-                class="w-auto"
-                collapsible
-                start_collapsed
-                id="authorization-policies"
-                code={policies_example()}
-                title="Add authorization policies"
-              />
-              <CodeExample
-                class="w-auto"
-                collapsible
-                start_collapsed
-                id="aggregates"
-                code={aggregate_example()}
-                title="Define aggregates and calculations"
-              />
-              <CodeExample
-                class="w-auto"
-                collapsible
-                start_collapsed
-                id="pubsub"
-                code={notifier_example()}
-                title="Broadcast changes over Phoenix PubSub"
-              />
-              <CodeExample
-                class="w-auto"
-                collapsible
-                start_collapsed
-                id="live-view"
-                code={live_view_example()}
-                title="Use it with Phoenix LiveView"
-              />
+            <div class="flex flex-col gap-10 w-full">
+              <div class="flex flex-col space-y-8">
+                <CodeExample
+                  class="w-full"
+                  collapsible
+                  id="use-it-programmatically"
+                  code={changeset_example()}
+                  title="Use it programmatically"
+                />
+                <CodeExample
+                  class="w-auto"
+                  collapsible
+                  id="graphql-interface"
+                  code={graphql_example()}
+                  title="Add a GraphQL interface"
+                />
+                <CodeExample
+                  class="w-auto"
+                  collapsible
+                  start_collapsed
+                  id="authorization-policies"
+                  code={policies_example()}
+                  title="Add authorization policies"
+                />
+                <CodeExample
+                  class="w-auto"
+                  collapsible
+                  start_collapsed
+                  id="aggregates"
+                  code={aggregate_example()}
+                  title="Define aggregates and calculations"
+                />
+                <CodeExample
+                  class="w-auto"
+                  collapsible
+                  start_collapsed
+                  id="pubsub"
+                  code={notifier_example()}
+                  title="Broadcast changes over Phoenix PubSub"
+                />
+                <CodeExample
+                  class="w-atuo"
+                  collapsible
+                  start_collapsed
+                  id="live-view"
+                  code={live_view_example()}
+                  title="Use it with Phoenix LiveView"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -325,7 +329,7 @@ defmodule AshHqWeb.Pages.Home do
                      def mount(_params, _session, socket) do
                        form = AshPhoenix.Form.for_create(Example.Post, :create)
 
-                       {:ok, assign(socket, :form, form}}
+                       {:ok, assign(socket, :form, form)}
                      end
 
                      def handle_event("validate", %{"form" => input}, socket) do
