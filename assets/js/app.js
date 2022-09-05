@@ -25,10 +25,19 @@ import topbar from "../vendor/topbar"
 import mermaid from "mermaid"
 mermaid.init(".mermaid")
 
+function cookiesAreAllowed() {
+  const consentStatus =
+    document.cookie
+      .split('; ')
+      .find(row => row.startsWith('cookieconsent_status='))
+
+  return consentStatus === "cookieconsent_status=allow";
+}
+
 const Hooks = {};
 
 let configuredThemeRow;
-if(window.cookieconsent.status === "allow") {
+if(cookiesAreAllowed()) {
   configuredThemeRow =
     document.cookie
       .split('; ')
@@ -47,7 +56,7 @@ if (!configuredThemeRow) {
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
   let configuredThemeRow;
-  if(window.cookieconsent.status === "allow") {
+  if(cookiesAreAllowed()) {
     configuredThemeRow =
       document.cookie
         .split('; ')
@@ -88,7 +97,7 @@ function setTheme(theme, set) {
     document.documentElement.classList.remove("dark");
   };
 
-  if(set && window.cookieconsent.status === "allow") {
+  if(set && cookiesAreAllowed()) {
     document.cookie = 'theme' + '=' + theme + ';path=/';
   }
 }
@@ -224,7 +233,7 @@ window.addEventListener("phx:js:scroll-to", (e) => {
 
 window.addEventListener("phx:sidebar-state", (e) => {
   const cookie = Object.keys(e.detail).map((key) => `${key}:${e.detail[key]}`).join(',');
-  if(window.cookieconsent.status === "allow") {
+  if(cookiesAreAllowed()) {
     document.cookie = 'sidebar_state' + '=' + cookie + ';path=/';
   }
 })
@@ -247,14 +256,16 @@ window.addEventListener("phx:page-loading-stop", ({detail}) => {
 })
 
 window.addEventListener("phx:selected-versions", (e) => {
-  if(window.cookieconsent.status === "allow") {
+  console.log(e.detail)
+  console.log(window.cookieconsent.status)
+  if(cookiesAreAllowed()) {
     const cookie = Object.keys(e.detail).map((key) => `${key}:${e.detail[key]}`).join(',');
     document.cookie = 'selected_versions' + '=' + cookie + ';path=/';
   }
 });
 
 window.addEventListener("phx:selected-types", (e) => {
-  if(window.cookieconsent.status === "allow") {
+  if(cookiesAreAllowed()) {
     const cookie = e.detail.types.join(',');
     document.cookie = 'selected_types' + '=' + cookie + ';path=/';
   }
@@ -289,9 +300,10 @@ window.liveSocket = liveSocket
 window.addEventListener("load", function(){
   window.cookieconsent.initialise({
     "content": {
-      "message": "Hi, this website uses essential cookies for remembering your explicitly set preferences. We do not use google analytics, but we do use plausible.io, an ethical google analytics alternative which does not use any cookies and collects no personal data.",
+      "message": "Hi, this website uses essential cookies for remembering your explicitly set preferences, if you opt-in. We do not use google analytics, but we do use plausible.io, an ethical google analytics alternative which does not use any cookies and collects no personal data.",
       "link": null
     },
+    "type": "opt-in",
     "palette": {
       "popup": {
         "background": "#000"
