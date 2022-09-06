@@ -100,7 +100,7 @@ defmodule AshHq.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      seed: ["run priv/repo/seeds.exs"],
+      seed: ["run priv/repo/seeds.exs", "import"],
       setup: ["ash_postgres.create", "ash_postgres.migrate", "seed"],
       reset: ["drop", "setup"],
       credo: "credo --strict",
