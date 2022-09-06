@@ -40,7 +40,7 @@ defmodule AshHqWeb.Components.CodeExample do
           </div>
         {/if}
       </div>
-      <div class={"pl-1 pt-2", "h-0": @collapsed}>
+      <div class={"pl-1 py-2", hidden: @collapsed}>
         <div class="flex flex-row">
           <div class="flex flex-col border-r text-gray-500 dark:text-white border-gray-400 dark:border-gray-700 pr-1">
             {#if !@collapsed}
