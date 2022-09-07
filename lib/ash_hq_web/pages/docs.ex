@@ -82,27 +82,29 @@ defmodule AshHqWeb.Pages.Docs do
         </div>
       </span>
       <div class="grow w-screen overflow-hidden flex flex-row h-full justify-between md:space-x-12 bg-white dark:bg-primary-black">
-        <DocSidebar
-          id="sidebar"
-          class="hidden xl:block pt-10 w-80 overflow-x-hidden border-r"
-          change_version={@change_version}
-          add_version={@add_version}
-          remove_version={@remove_version}
-          module={@module}
-          libraries={@libraries}
-          extension={@extension}
-          sidebar_state={@sidebar_state}
-          collapse_sidebar={@collapse_sidebar}
-          expand_sidebar={@expand_sidebar}
-          guide={@guide}
-          library={@library}
-          library_version={@library_version}
-          selected_versions={@selected_versions}
-          dsl={@dsl}
-        />
+        <div class="lg:border-r lg:pr-2 lg:pt-14">
+          <DocSidebar
+            id="sidebar"
+            class="hidden xl:block w-80 overflow-x-hidden custom-scrollbar"
+            change_version={@change_version}
+            add_version={@add_version}
+            remove_version={@remove_version}
+            module={@module}
+            libraries={@libraries}
+            extension={@extension}
+            sidebar_state={@sidebar_state}
+            collapse_sidebar={@collapse_sidebar}
+            expand_sidebar={@expand_sidebar}
+            guide={@guide}
+            library={@library}
+            library_version={@library_version}
+            selected_versions={@selected_versions}
+            dsl={@dsl}
+          />
+        </div>
         <div
           id="docs-window"
-          class="w-full prose prose-xl max-w-4xl dark:bg-primary-black dark:prose-invert overflow-y-auto overflow-x-visible md:pr-8 md:mt-14 px-4 md:px-auto"
+          class="w-full prose prose-xl max-w-4xl dark:bg-primary-black dark:prose-invert overflow-y-auto overflow-x-visible md:pr-8 md:mt-14 px-4 md:px-auto custom-scrollbar"
           phx-hook="Docs"
         >
           <div id="module-docs" class="w-full nav-anchor text-black dark:text-white relative py-4 md:py-auto">
