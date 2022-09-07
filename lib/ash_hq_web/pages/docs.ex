@@ -258,7 +258,7 @@ defmodule AshHqWeb.Pages.Docs do
           </div>
         </div>
         {#if @module}
-          <div class="lg:w-64 overflow-y-auto overflow-x-hidden dark:bg-primary-black bg-opacity-70">
+          <div class="lg:w-full lg:max-w-sm overflow-y-auto overflow-x-hidden dark:bg-primary-black bg-opacity-70">
             <RightNav functions={@module.functions} module={@module.name} />
           </div>
         {#else}
