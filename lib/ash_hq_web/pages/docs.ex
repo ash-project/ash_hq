@@ -81,10 +81,10 @@ defmodule AshHqWeb.Pages.Docs do
           />
         </div>
       </span>
-      <div class="grow w-full overflow-hidden flex flex-row h-full justify-center md:space-x-12 bg-white dark:bg-primary-black">
+      <div class="grow w-screen overflow-hidden flex flex-row h-full justify-between md:space-x-12 bg-white dark:bg-primary-black">
         <DocSidebar
           id="sidebar"
-          class="hidden xl:block mt-10"
+          class="hidden xl:block pt-10 w-80 overflow-x-hidden border-r"
           change_version={@change_version}
           add_version={@add_version}
           remove_version={@remove_version}
@@ -102,7 +102,7 @@ defmodule AshHqWeb.Pages.Docs do
         />
         <div
           id="docs-window"
-          class="w-full prose prose-xl max-w-6xl dark:bg-primary-black dark:prose-invert overflow-y-auto overflow-x-visible md:pr-8 md:mt-14 px-4 md:px-auto"
+          class="w-full prose prose-xl max-w-5xl dark:bg-primary-black dark:prose-invert overflow-y-auto overflow-x-visible md:pr-8 md:mt-14 px-4 md:px-auto"
           phx-hook="Docs"
         >
           <div id="module-docs" class="w-full nav-anchor text-black dark:text-white relative py-4 md:py-auto">
@@ -256,7 +256,7 @@ defmodule AshHqWeb.Pages.Docs do
           </div>
         </div>
         {#if @module}
-          <div class="w-min overflow-y-auto overflow-x-visible mt-14 dark:bg-primary-black bg-opacity-70">
+          <div class="lg:w-64 overflow-y-auto overflow-x-visible mt-14 dark:bg-primary-black bg-opacity-70">
             <RightNav functions={@module.functions} module={@module.name} />
           </div>
         {#else}
