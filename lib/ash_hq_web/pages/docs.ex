@@ -82,7 +82,7 @@ defmodule AshHqWeb.Pages.Docs do
         </div>
       </span>
       <div class="grow w-screen overflow-hidden flex flex-row h-full justify-between md:space-x-12 bg-white dark:bg-primary-black">
-        <div class="lg:border-r lg:pr-2 lg:pt-14">
+        <div class="lg:border-r lg:pr-2 lg:pt-14 bg-gray-100 dark:bg-gray-900">
           <DocSidebar
             id="sidebar"
             class="hidden xl:block w-80 overflow-x-hidden custom-scrollbar"
