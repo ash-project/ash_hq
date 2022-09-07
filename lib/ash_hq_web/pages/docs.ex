@@ -365,7 +365,7 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   defp source_link(%AshHq.Docs.Module{file: file}, library, library_version) do
-    "https://github.com/ash-project/#{library.name}/tree/#{library_version.version}/#{file}"
+    "https://github.com/ash-project/#{library.name}/tree/v#{library_version.version}/#{file}"
   end
 
   defp source_link(%AshHq.Docs.Function{file: file, line: line}, library, library_version) do
