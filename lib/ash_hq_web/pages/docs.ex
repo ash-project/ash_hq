@@ -34,8 +34,8 @@ defmodule AshHqWeb.Pages.Docs do
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~F"""
-    <div class="grid content-start overflow-hidden h-screen pb-12">
-      <div class="xl:hidden flex flex-row justify-start space-x-12 items-center border-b border-t border-gray-600 py-3">
+    <div class="flex flex-col xl:flex-row justify-center overflow-hidden w-screen h-screen pb-12">
+      <div class="xl:hidden flex flex-row justify-start w-full space-x-12 items-center border-b border-t border-gray-600 py-3">
         <button class="dark:hover:text-gray-600" phx-click={show_sidebar()}>
           <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
         </button>
@@ -81,8 +81,8 @@ defmodule AshHqWeb.Pages.Docs do
           />
         </div>
       </span>
-      <div class="grow w-screen overflow-hidden flex flex-row h-full justify-between md:space-x-12 bg-white dark:bg-primary-black">
-        <div class="lg:border-r lg:pr-2 lg:pt-14">
+      <div class="grow w-screen overflow-hidden flex flex-row max-w-[1800px] h-full justify-between md:space-x-12 bg-white dark:bg-primary-black">
+        <div class="xl:border-r lg:pr-2 lg:pt-14">
           <DocSidebar
             id="sidebar"
             class="hidden xl:block w-80 overflow-x-hidden custom-scrollbar"
@@ -258,7 +258,7 @@ defmodule AshHqWeb.Pages.Docs do
           </div>
         </div>
         {#if @module}
-          <div class="lg:w-64 overflow-y-auto overflow-x-hidden dark:bg-primary-black bg-opacity-70">
+          <div class="lg:w-72 overflow-y-auto overflow-x-hidden dark:bg-primary-black bg-opacity-70 mt-14 custom-scrollbar">
             <RightNav functions={@module.functions} module={@module.name} />
           </div>
         {#else}
