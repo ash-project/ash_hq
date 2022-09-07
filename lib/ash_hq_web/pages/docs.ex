@@ -102,7 +102,7 @@ defmodule AshHqWeb.Pages.Docs do
         />
         <div
           id="docs-window"
-          class="w-full prose prose-xl max-w-5xl dark:bg-primary-black dark:prose-invert overflow-y-auto overflow-x-visible md:pr-8 md:mt-14 px-4 md:px-auto"
+          class="w-full prose prose-xl max-w-4xl dark:bg-primary-black dark:prose-invert overflow-y-auto overflow-x-visible md:pr-8 md:mt-14 px-4 md:px-auto"
           phx-hook="Docs"
         >
           <div id="module-docs" class="w-full nav-anchor text-black dark:text-white relative py-4 md:py-auto">
