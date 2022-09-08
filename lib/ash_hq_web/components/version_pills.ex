@@ -40,7 +40,7 @@ defmodule AshHqWeb.Components.VersionPills do
       {#if @adding_version}
         <Form for={:add_version} change={@add_version}>
           <Select
-            class="rounded-lg"
+            class="rounded-lg text-gray-900"
             name={:library}
             options={packages_to_add(@libraries, @selected_versions)}
           />
