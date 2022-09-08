@@ -88,7 +88,7 @@ defmodule AshHqWeb.Pages.Home do
         <div id="testimonials" class="flex flex-col items-center content-center space-y-8 w-full lg:w-[28rem] max-w-4xl md:h-[74rem] lg:h-[68rem] mb-8 lg:mb-0 px-4 md:px-8 lg:px-0">
           <div class="w-full md:w-96 lg:min-w-fit lg:max-w-min bg-base-light-200 rounded-xl p-8 md:p-0 dark:bg-base-dark-800 drop-shadow-xl md:relative lg:top-16 md:-left-[8rem] lg:-left-[10rem]">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-              <p class="text-lg font-light text-base-light-700 dark:text-base-dark-100 break-words">
+              <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
                 "Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!"
               </p>
 
@@ -96,7 +96,7 @@ defmodule AshHqWeb.Pages.Home do
                 <div class="text-primary-light-500 dark:text-primary-light-400">
                   Frank Dugan III
                 </div>
-                <div class="text-base-light-700 dark:text-base-dark-300">
+                <div class="text-base-light-700 dark:text-base-dark-200">
                   System Specialist, SunnyCor Inc.
                 </div>
               </p>
@@ -105,15 +105,15 @@ defmodule AshHqWeb.Pages.Home do
 
           <div class="w-full md:w-96 lg:min-w-fit lg:max-w-min bg-base-light-100 rounded-xl p-8 md:p-0 dark:bg-base-light-700 bg-white drop-shadow-xl md:relative md:-top-16 md:-right-[10rem]">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-              <p class="text-lg font-light text-base-light-700 dark:text-base-dark-100 break-words">
+              <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
                 "What stood out to me was how incredibly easy Ash made it for me to go from a proof of concept, to a working prototype using ETS, to a live app using Postgres."
               </p>
 
               <p class="font-bold">
-                <div class="text-pimary-light-500 dark:text-pimary-dark-400">
+                <div class="text-pimary-light-500 dark:text-primary-dark-400">
                   Brett Kolodny
                 </div>
-                <div class="text-base-light-700 dark:text-base-dark-300">
+                <div class="text-base-light-700 dark:text-base-dark-200">
                   Full stack engineer, MEW
                 </div>
               </p>
@@ -122,7 +122,7 @@ defmodule AshHqWeb.Pages.Home do
 
           <div class="w-full md:w-96 lg:min-w-fit lg:max-w-min bg-base-light-200 rounded-xl p-8 md:p-0 dark:bg-base-dark-800 bg-white drop-shadow-xl md:relative md:-top-32 md:-left-[11rem]">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-              <p class="text-lg font-light text-base-light-700 dark:text-base-dark-100 break-words">
+              <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
                 "Ash is such powerful idea and it gives Alembic such a massive competitive advantage that I’d be really stupid to tell anyone about it."
               </p>
 
@@ -130,7 +130,7 @@ defmodule AshHqWeb.Pages.Home do
                 <div class="text-primary-light-500 dark:text-primary-dark-400">
                   Josh Price
                 </div>
-                <div class="text-base-light-700 dark:text-base-dark-300">
+                <div class="text-base-light-700 dark:text-base-dark-100">
                   Technical Director, Alembic
                 </div>
               </p>
@@ -139,7 +139,7 @@ defmodule AshHqWeb.Pages.Home do
 
           <div class="w-full md:w-96 lg:min-w-fit lg:max-w-min bg-base-light-100 rounded-xl p-8 md:p-0 dark:bg-base-dark-700 drop-shadow-xl md:relative md:-top-[4rem] md:-top-64 md:-right-44">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-              <p class="text-lg font-light text-base-light-700 dark:text-base-dark-100 break-words">
+              <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
                 "Ash Framework enabled us to build a robust platform for delivering financial services using bitcoin. Ash proved itself to our team by handling innovative use cases with ease and it continues to evolve ahead of our growing list of needs."
               </p>
 
@@ -147,7 +147,7 @@ defmodule AshHqWeb.Pages.Home do
                 <div class="text-primary-light-500 dark:text-primary-dark-400">
                   Yousef Janajri
                 </div>
-                <div class="text-base-light-700 dark:text-base-dark-300">
+                <div class="text-base-light-700 dark:text-base-dark-100">
                   CTO & Co-Founder, Coinbits
                 </div>
               </p>
@@ -159,7 +159,7 @@ defmodule AshHqWeb.Pages.Home do
           {#if @signed_up}
             Thank you for joining our mailing list!
           {#else}
-            <p class="text-2xl font-medium text-base-light-700 dark:text-base-dark-200 max-w-4xl mx-auto text-center">Join our mailing list for (tastefully paced) updates!</p>
+            <p class="text-2xl font-medium text-base-light-700 dark:text-base-dark-50 max-w-4xl mx-auto text-center">Join our mailing list for (tastefully paced) updates!</p>
             <Form
               for={@email_form}
               change="validate_email_form"
@@ -256,7 +256,7 @@ defmodule AshHqWeb.Pages.Home do
           {#if @signed_up}
             Thank you for joining our mailing list!
           {#else}
-            <p class="text-2xl font-medium text-base-light-700 dark:text-base-dark-200 max-w-4xl mx-auto text-center">Join our mailing list for (tastefully paced) updates!</p>
+            <p class="text-2xl font-medium text-base-light-700 dark:text-base-dark-50 max-w-4xl mx-auto text-center">Join our mailing list for (tastefully paced) updates!</p>
             <Form
               for={@email_form}
               change="validate_email_form"
