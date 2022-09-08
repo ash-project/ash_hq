@@ -39,7 +39,7 @@ defmodule AshHqWeb.Pages.UserSettings do
                   <div class="mt-1 sm:mt-0 sm:col-span-2">
                     <div class="max-w-lg flex rounded-md shadow-sm">
                       <TextInput
-                        class="flex-1 text-black block w-full focus:ring-orange-600 focus:border-orange-600 min-w-0 rounded-md sm:text-sm border-gray-300"
+                        class="flex-1 text-black block w-full focus:ring-primary-light-600 focus:primary-light-primary-light-600 min-w-0 rounded-md sm:text-sm border-gray-300"
                         opts={autocomplete: "email"}
                       />
                     </div>
@@ -57,7 +57,7 @@ defmodule AshHqWeb.Pages.UserSettings do
                     <div class="max-w-lg flex rounded-md shadow-sm">
                       <PasswordInput
                         value={AshPhoenix.Form.value(@email_form, :current_password)}
-                        class="flex-1 text-black block w-full focus:ring--500 focus:border-orange-600 min-w-0 rounded-md sm:text-sm border-gray-300"
+                        class="flex-1 text-black block w-full focus:ring--500 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-gray-300"
                       />
                     </div>
                     {#if @email_form.submitted_once?}
@@ -71,7 +71,7 @@ defmodule AshHqWeb.Pages.UserSettings do
 
           <div class="pt-5">
             <div class="flex justify-end">
-              <Submit class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md  bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-600 text-white">Update Email</Submit>
+              <Submit class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md  bg-primary-light-600 hover:bg-primary-light-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-light-600 text-white">Update Email</Submit>
             </div>
           </div>
         </Form>
@@ -100,7 +100,7 @@ defmodule AshHqWeb.Pages.UserSettings do
                     <div class="max-w-lg flex rounded-md shadow-sm">
                       <PasswordInput
                         value={AshPhoenix.Form.value(@password_form, :password)}
-                        class="flex-1 text-black block w-full focus:ring--500 focus:border-orange-600 min-w-0 rounded-md sm:text-sm border-gray-300"
+                        class="flex-1 text-black block w-full focus:ring--500 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-gray-300"
                       />
                     </div>
                     {#if @password_form.submitted_once?}
@@ -119,7 +119,7 @@ defmodule AshHqWeb.Pages.UserSettings do
                     <div class="max-w-lg flex rounded-md shadow-sm">
                       <PasswordInput
                         value={AshPhoenix.Form.value(@password_form, :password_confirmation)}
-                        class="flex-1 text-black block w-full focus:ring--500 focus:border-orange-600 min-w-0 rounded-md sm:text-sm border-gray-300"
+                        class="flex-1 text-black block w-full focus:ring--500 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-gray-300"
                       />
                     </div>
                     {#if @password_form.submitted_once?}
@@ -138,7 +138,7 @@ defmodule AshHqWeb.Pages.UserSettings do
                     <div class="max-w-lg flex rounded-md shadow-sm">
                       <PasswordInput
                         value={AshPhoenix.Form.value(@password_form, :current_password)}
-                        class="flex-1 text-black block w-full focus:ring--500 focus:border-orange-600 min-w-0 rounded-md sm:text-sm border-gray-300"
+                        class="flex-1 text-black block w-full focus:ring--500 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-gray-300"
                       />
                     </div>
                     {#if @password_form.submitted_once?}
@@ -152,7 +152,7 @@ defmodule AshHqWeb.Pages.UserSettings do
 
           <div class="pt-5">
             <div class="flex justify-end">
-              <Submit class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md  bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-600 text-white">Change Password</Submit>
+              <Submit class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md  bg-primary-light-600 hover:bg-primary-light-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-light-600 text-white">Change Password</Submit>
             </div>
           </div>
         </Form>
@@ -161,7 +161,7 @@ defmodule AshHqWeb.Pages.UserSettings do
           <div class="mt-5 pt-5 border-t">
             <button
               type="button"
-              class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md  bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-600 text-white"
+              class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md  bg-primary-light-600 hover:bg-primary-light-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-light-600 text-white"
               :on-click="resend_confirmation_instructions"
             >Resend Email Confirmation Instructions</button>
           </div>

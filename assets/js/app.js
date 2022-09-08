@@ -145,7 +145,7 @@ function onScrollChange() {
       });
       if (newTarget) {
         newTarget.classList.add("dark:text-primary-dark-400");
-        newTarget.classList.add("text-pimary-light-600");
+        newTarget.classList.add("text-primary-light-600");
         newTarget.classList.add("currently-active-nav");
 
         scrollIntoView(newTarget, { behavior: "smooth", block: "center" });
