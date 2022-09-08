@@ -22,7 +22,7 @@ defmodule AshHqWeb.Components.VersionPills do
         {#if selected_version not in [nil, ""]}
           {version_name = selected_version(library, selected_version)
           nil}
-          <div class="flex flex-row flex-wrap contents-center px-2 py-1 bg-orange-500 dark:bg-orange-400 hover:bg-orange-600 text-black text-xs font-medium rounded-full">
+          <div class="flex flex-row flex-wrap contents-center px-2 py-1 bg-primary-light-500 dark:bg-primary-light-400 hover:bg-primary-light-600 text-black text-xs font-medium rounded-full">
             {library.name}{#if version_name != "latest"}
               | {version_name}
             {/if}

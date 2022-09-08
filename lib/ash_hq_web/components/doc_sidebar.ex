@@ -27,7 +27,7 @@ defmodule AshHqWeb.Components.DocSidebar do
     ~F"""
     <aside
       id={@id}
-      class={"grid h-full overflow-y-auto pb-36 w-fit z-40 bg-white dark:bg-primary-black", @class}
+      class={"grid h-full overflow-y-auto pb-36 w-fit z-40 bg-white dark:bg-base-dark-900", @class}
       aria-label="Sidebar"
     >
       <div class="flex flex-col">
@@ -195,7 +195,7 @@ defmodule AshHqWeb.Components.DocSidebar do
     ~F"""
     <ul class="ml-1 flex flex-col">
       {#for dsl <- Enum.filter(dsls, &(&1.path == path))}
-        <li class="border-l pl-1 border-orange-600 border-opacity-30">
+        <li class="border-l pl-1 border-primary-light-600 border-opacity-30">
           <div class="flex flex-row items-center">
             {#if Enum.any?(dsls, &List.starts_with?(&1.path, dsl.path ++ [dsl.name]))}
               {#if !(@dsl && List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name]))}
@@ -213,8 +213,8 @@ defmodule AshHqWeb.Components.DocSidebar do
             <Link
               to={DocRoutes.doc_link(dsl, @selected_versions)}
               class={
-                "flex items-center p-1 text-base font-normal rounded-lg hover:text-orange-300",
-                "text-orange-600 dark:text-orange-400 font-bold": @dsl && @dsl.id == dsl.id
+                "flex items-center p-1 text-base font-normal rounded-lg hover:text-primary-light-300",
+                "text-primary-600 dark:text-primary-dark-400 font-bold": @dsl && @dsl.id == dsl.id
               }
             >
               {dsl.name}

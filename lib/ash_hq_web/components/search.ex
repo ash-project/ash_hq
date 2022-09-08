@@ -32,7 +32,7 @@ defmodule AshHqWeb.Components.Search do
     >
       <div
         :on-click-away={AshHqWeb.AppViewLive.toggle_search()}
-        class="dark:text-white absolute rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white dark:bg-primary-black border-2 dark:border-gray-900"
+        class="dark:text-white absolute rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white dark:bg-base-dark-900 border-2 dark:border-gray-900"
         :on-window-keydown="select-previous"
         phx-key="ArrowUp"
       >
@@ -47,7 +47,7 @@ defmodule AshHqWeb.Components.Search do
                     name="search"
                     value={@search}
                     phx-debounce={300}
-                    class="text-lg dark:bg-primary-black grow ring-0 outline-none w-full"
+                    class="text-lg dark:bg-base-dark-900 grow ring-0 outline-none w-full"
                   />
                 </Form>
                 <button id="close-search" class="mr-4 ml-4 h-6 w-6 hover:text-gray-400" :on-click={@close}>

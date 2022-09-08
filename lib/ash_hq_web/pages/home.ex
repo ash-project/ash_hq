@@ -14,7 +14,7 @@ defmodule AshHqWeb.Pages.Home do
   def render(assigns) do
     ~F"""
     <div class="antialiased">
-      <div class="my-2 dark:bg-primary-black dark:bg-dark-grid bg-light-grid flex flex-col items-center pt-4 md:pt-12 lg:pt-24">
+      <div class="my-2 dark:bg-base-dark-900 dark:bg-dark-grid bg-light-grid flex flex-col items-center pt-4 md:pt-12 lg:pt-24">
         <div class="text-3xl md:text-5xl px-4 md:px-12 font-bold max-w-5xl mx-auto mt-2 md:text-center">
           Build <CalloutText>powerful</CalloutText> and <CalloutText>composable</CalloutText> applications with a <CalloutText>flexible</CalloutText> tool-chain.
         </div>
@@ -22,7 +22,7 @@ defmodule AshHqWeb.Pages.Home do
           A declarative foundation for ambitious applications. Model your domain, derive the rest.
         </div>
         <div class="flex flex-col space-y-4 md:space-x-4 md:space-y-0 md:flex-row items-center mt-8 md:mt-16 mb-6 md:mb-10">
-          <div class="flex justify-center items-center w-full md:w-auto h-12 px-4 rounded-lg bg-orange-500 font-semibold dark:text-white dark:hover:text-gray-200 hover:text-white">
+          <div class="flex justify-center items-center w-full md:w-auto h-12 px-4 rounded-lg bg-primary-light-500 font-semibold dark:text-white dark:hover:text-gray-200 hover:text-white">
             <a href="/docs/guides/ash/latest/tutorials/get-started.md" target="_blank">Get Started</a>
           </div>
           <SearchBar class="w-80 md:w-96" />
@@ -93,7 +93,7 @@ defmodule AshHqWeb.Pages.Home do
               </p>
 
               <p class="font-bold">
-                <div class="text-orange-500 dark:text-orange-400">
+                <div class="text-primary-light-500 dark:text-primary-light-400">
                   Frank Dugan III
                 </div>
                 <div class="text-gray-700 dark:text-gray-300">
@@ -110,7 +110,7 @@ defmodule AshHqWeb.Pages.Home do
               </p>
 
               <p class="font-bold">
-                <div class="text-orange-500 dark:text-orange-400">
+                <div class="text-pimary-light-500 dark:text-pimary-dark-400">
                   Brett Kolodny
                 </div>
                 <div class="text-gray-700 dark:text-gray-300">
@@ -127,7 +127,7 @@ defmodule AshHqWeb.Pages.Home do
               </p>
 
               <p class="font-bold">
-                <div class="text-orange-500 dark:text-orange-400">
+                <div class="text-primary-light-500 dark:text-primary-dark-400">
                   Josh Price
                 </div>
                 <div class="text-gray-700 dark:text-gray-300">
@@ -144,7 +144,7 @@ defmodule AshHqWeb.Pages.Home do
               </p>
 
               <p class="font-bold">
-                <div class="text-orange-500 dark:text-orange-400">
+                <div class="text-primary-light-500 dark:text-primary-dark-400">
                   Yousef Janajri
                 </div>
                 <div class="text-gray-700 dark:text-gray-300">
@@ -172,7 +172,7 @@ defmodule AshHqWeb.Pages.Home do
                   opts={placeholder: "user@email.com"}
                 />
               </Field>
-              <Submit class="w-fit flex items-center px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 hover:text-white h-10">Join</Submit>
+              <Submit class="w-fit flex items-center px-4 rounded-lg bg-primary-light-500 dark:text-white dark:hover:text-gray-200 hover:text-white h-10">Join</Submit>
             </Form>
           {/if}
         </div>
@@ -269,7 +269,7 @@ defmodule AshHqWeb.Pages.Home do
                   opts={placeholder: "user@email.com"}
                 />
               </Field>
-              <Submit class="w-full md:w-fit flex justify-center items-center px-4 rounded-lg bg-orange-500 dark:text-white dark:hover:text-gray-200 text-center hover:text-white h-10">Join</Submit>
+              <Submit class="w-full md:w-fit flex justify-center items-center px-4 rounded-lg bg-primary-light-500 dark:text-white dark:hover:text-gray-200 text-center hover:text-white h-10">Join</Submit>
             </Form>
           {/if}
         </div>

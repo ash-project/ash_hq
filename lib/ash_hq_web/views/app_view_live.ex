@@ -47,14 +47,14 @@ defmodule AshHqWeb.AppViewLive do
       <div
         id="main-container"
         class={
-          "h-screen w-screen bg-white dark:bg-primary-black dark:text-white",
+          "h-screen w-screen bg-white dark:bg-base-dark-900 dark:text-white",
           "overflow-y-auto overflow-x-hidden": @live_action == :home,
           "overflow-hidden": @live_action == :docs_dsl
         }
       >
         <div class={
           "flex justify-between items-center py-4 px-4 h-min",
-          "border-b bg-white dark:bg-primary-black": @live_action == :docs_dsl
+          "border-b bg-white dark:bg-base-dark-900": @live_action == :docs_dsl
         }>
           <div class="flex flex-row align-baseline">
             <a href="/">
@@ -205,7 +205,7 @@ defmodule AshHqWeb.AppViewLive do
   #     <div
   #       id="account-dropdown"
   #       style="display: none;"
-  #       class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:text-white dark:bg-primary-black ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+  #       class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:text-white dark:bg-base-dark-900 ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
   #       role="menu"
   #       aria-orientation="vertical"
   #       aria-labelledby="menu-button"
