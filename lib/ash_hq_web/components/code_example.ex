@@ -13,23 +13,23 @@ defmodule AshHqWeb.Components.CodeExample do
   def render(assigns) do
     ~F"""
     <div class={
-      "rounded-xl bg-silver-phoenix dark:bg-slate-800 border border-gray-400 dark:border-gray-700 text-sm border-b",
+      "rounded-xl bg-silver-phoenix dark:bg-slate-800 border border-base-light-400 dark:border-base-dark-700 text-sm border-b",
       @class
     }>
       <div class={
         "flex flex-row justify-between py-2 pl-2 pr-8",
-        "border-gray-400 dark:border-gray-700 border-b": !@collapsed
+        "border-base-light-400 dark:border-base-dark-700 border-b": !@collapsed
       }>
         <div class="flex flex-row justify-start space-x-1">
-          <div class="w-3 h-3 bg-gray-600 rounded-full" />
-          <div class="w-3 h-3 bg-gray-600 rounded-full" />
-          <div class="w-3 h-3 bg-gray-600 rounded-full" />
+          <div class="w-3 h-3 bg-base-light-600 rounded-full" />
+          <div class="w-3 h-3 bg-base-light-600 rounded-full" />
+          <div class="w-3 h-3 bg-base-light-600 rounded-full" />
         </div>
         {#if @title}
-          <div class="justify-self-end text-gray-700 dark:text-white">{@title}</div>
+          <div class="justify-self-end text-base-light-700 dark:text-white">{@title}</div>
           <div>
             {#if @collapsible}
-              <button class="hover:bg-gray-400 dark:hover:bg-gray-700" :on-click="fold">
+              <button class="hover:bg-base-light-400 dark:hover:bg-base-dark-700" :on-click="fold">
                 {#if @collapsed}
                   <Heroicons.Solid.ChevronDoubleDownIcon class="w-4 h-4" />
                 {#else}
@@ -42,7 +42,7 @@ defmodule AshHqWeb.Components.CodeExample do
       </div>
       <div class={"pl-1 py-2", hidden: @collapsed}>
         <div class="flex flex-row">
-          <div class="flex flex-col border-r text-gray-500 dark:text-white border-gray-400 dark:border-gray-700 pr-1">
+          <div class="flex flex-col border-r text-base-light-500 dark:text-white border-base-light-400 dark:border-base-dark-700 pr-1">
             {#if !@collapsed}
               {#for {_line, no} <- @code}
                 <pre>{no}</pre>
@@ -54,7 +54,7 @@ defmodule AshHqWeb.Components.CodeExample do
           <div>
             {#for {line, _no} <- @code}
               <div class={"flex flex-row mr-4", "invisible h-0": @collapsed}>
-                <div class="sm:hidden md:block mr-8 text-gray-600 font-mono" />{Phoenix.HTML.raw(line)}
+                <div class="sm:hidden md:block mr-8 text-base-light-600 font-mono" />{Phoenix.HTML.raw(line)}
               </div>
             {/for}
           </div>

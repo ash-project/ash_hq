@@ -8,7 +8,7 @@ defmodule AshHqWeb.Components.SearchBar do
     ~F"""
     <button
       class={
-        "w-96 button border border-gray-400 bg-gray-200 dark:border-gray-700 rounded-lg dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600",
+        "w-96 button border border-base-light-400 bg-base-light-200 dark:border-base-dark-700 rounded-lg dark:bg-base-dark-700 hover:bg-base-light-300 dark:hover:bg-base-dark-600",
         @class
       }
       phx-click={AshHqWeb.AppViewLive.toggle_search()}

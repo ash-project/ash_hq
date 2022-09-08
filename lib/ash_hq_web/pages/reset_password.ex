@@ -42,7 +42,7 @@ defmodule AshHqWeb.Pages.ResetPassword do
                     <Label class="block text-sm font-medium sm:mt-px sm:pt-2">Password</Label>
                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                       <div class="max-w-lg flex rounded-md shadow-sm">
-                        <PasswordInput class="flex-1 text-black block w-full focus:ring-orange-600 focus:border-orange-600 min-w-0 rounded-md sm:text-sm border-gray-300" />
+                        <PasswordInput class="flex-1 text-black block w-full focus:ring-primary-light-600 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300" />
                       </div>
                       <ErrorTag />
                     </div>
@@ -56,7 +56,7 @@ defmodule AshHqWeb.Pages.ResetPassword do
                     <Label class="block text-sm font-medium sm:mt-px sm:pt-2">Password Confirmation</Label>
                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                       <div class="max-w-lg flex rounded-md shadow-sm">
-                        <PasswordInput class="flex-1 text-black block w-full focus:ring-orange-600 focus:border-orange-600 min-w-0 rounded-md sm:text-sm border-gray-300" />
+                        <PasswordInput class="flex-1 text-black block w-full focus:ring-primary-light-600 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300" />
                       </div>
                       <ErrorTag />
                     </div>
@@ -67,7 +67,7 @@ defmodule AshHqWeb.Pages.ResetPassword do
 
             <div class="pt-5">
               <div class="flex justify-end">
-                <Submit class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md  bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-600 text-white">Reset Password</Submit>
+                <Submit class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md  bg-primary-light-600 hover:bg-primary-light-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-light-600 text-white">Reset Password</Submit>
               </div>
             </div>
           </Form>
@@ -90,7 +90,7 @@ defmodule AshHqWeb.Pages.ResetPassword do
                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                       <div class="max-w-lg flex rounded-md shadow-sm">
                         <TextInput
-                          class="flex-1 text-black block w-full focus:ring-orange-600 focus:border-orange-600 min-w-0 rounded-md sm:text-sm border-gray-300"
+                          class="flex-1 text-black block w-full focus:ring-primary-light-600 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300"
                           opts={autocomplete: "email"}
                         />
                       </div>
@@ -103,7 +103,7 @@ defmodule AshHqWeb.Pages.ResetPassword do
 
             <div class="pt-5">
               <div class="flex justify-end">
-                <Submit class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md  bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-600 text-white">Send Password Reset Email</Submit>
+                <Submit class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md  bg-primary-light-600 hover:bg-primary-light-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-light-600 text-white">Send Password Reset Email</Submit>
               </div>
             </div>
           </Form>

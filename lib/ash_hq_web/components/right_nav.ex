@@ -8,13 +8,13 @@ defmodule AshHqWeb.Components.RightNav do
   def render(assigns) do
     ~F"""
     <div id="right-nav" class="w-min hidden lg:flex flex-col overflow-y-auto" phx-hook="RightNav">
-      <a id="right-nav-module-docs" class="hover:text-orange-300 right-nav" href="#module-docs">
+      <a id="right-nav-module-docs" class="hover:text-primary-light-300 right-nav" href="#module-docs">
         {@module}
       </a>
       {#for %{type: :callback} = function <- @functions}
         <a
           id={"right-nav-callback-#{function.sanitized_name}-#{function.arity}"}
-          class="hover:text-orange-300 right-nav"
+          class="hover:text-primary-light-300 right-nav"
           href={"#function-#{function.sanitized_name}-#{function.arity}"}
         >
           {"#{function.name}/#{function.arity}"}
@@ -24,7 +24,7 @@ defmodule AshHqWeb.Components.RightNav do
       {#for %{type: :function} = function <- @functions}
         <a
           id={"right-nav-function-#{function.sanitized_name}-#{function.arity}"}
-          class="hover:text-orange-300 right-nav"
+          class="hover:text-primary-light-300 right-nav"
           href={"#function-#{function.sanitized_name}-#{function.arity}"}
         >
           {"#{function.name}/#{function.arity}"}
@@ -34,7 +34,7 @@ defmodule AshHqWeb.Components.RightNav do
       {#for %{type: :macro} = function <- @functions}
         <a
           id={"right-nav-macro-#{function.sanitized_name}-#{function.arity}"}
-          class="hover:text-orange-300 right-nav"
+          class="hover:text-primary-light-300 right-nav"
           href={"#macro-#{function.sanitized_name}-#{function.arity}"}
         >
           {"#{function.name}/#{function.arity}"}

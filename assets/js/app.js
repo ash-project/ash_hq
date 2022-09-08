@@ -140,12 +140,12 @@ function onScrollChange() {
         document.getElementsByClassName("currently-active-nav")
       ).forEach((el) => {
         el.classList.remove("currently-active-nav");
-        el.classList.remove("text-orange-600");
-        el.classList.remove("dark:text-orange-400");
+        el.classList.remove("text-primary-light-600");
+        el.classList.remove("dark:text-primary-dark-400");
       });
       if (newTarget) {
-        newTarget.classList.add("dark:text-orange-400");
-        newTarget.classList.add("text-orange-600");
+        newTarget.classList.add("dark:text-primary-dark-400");
+        newTarget.classList.add("text-primary-light-600");
         newTarget.classList.add("currently-active-nav");
 
         scrollIntoView(newTarget, { behavior: "smooth", block: "center" });
@@ -165,12 +165,12 @@ function handleHashChange(clear) {
           document.getElementsByClassName("currently-active-nav")
         ).forEach((el) => {
           el.classList.remove("currently-active-nav");
-          el.classList.remove("text-orange-600");
-          el.classList.remove("dark:text-orange-400");
+          el.classList.remove("text-primary-light-600");
+          el.classList.remove("dark:text-primary-dark-400");
         });
       }
-      el.classList.add("dark:text-orange-400");
-      el.classList.add("text-orange-600");
+      el.classList.add("dark:text-primary-dark-400");
+      el.classList.add("text-primary-light-600");
       el.classList.add("currently-active-nav");
 
       scrollIntoView(el, {

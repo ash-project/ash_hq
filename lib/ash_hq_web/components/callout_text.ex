@@ -6,7 +6,7 @@ defmodule AshHqWeb.Components.CalloutText do
 
   def render(assigns) do
     ~F"""
-    <span class="text-orange-600 dark:text-orange-400 font-bold">
+    <span class="text-primary-light-600 dark:text-primary-dark-400 font-bold">
       <#slot />
     </span>
     """
