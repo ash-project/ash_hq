@@ -32,7 +32,7 @@ defmodule AshHqWeb.Components.Search do
     >
       <div
         :on-click-away={AshHqWeb.AppViewLive.toggle_search()}
-        class="dark:text-white absolute rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white dark:bg-base-dark-900 border-2 dark:border-gray-900"
+        class="dark:text-white absolute rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white dark:bg-base-dark-900 border-2 dark:border-base-dark-900"
         :on-window-keydown="select-previous"
         phx-key="ArrowUp"
       >
@@ -40,7 +40,7 @@ defmodule AshHqWeb.Components.Search do
           <div class="flex flex-col w-full sticky">
             <div class="w-full flex flex-row justify-start top-0">
               <Heroicons.Outline.SearchIcon class="h-6 w-6 mr-4 ml-4" />
-              <div class="flex flex-row justify-between w-full  pb-3 border-b border-gray-600">
+              <div class="flex flex-row justify-between w-full  pb-3 border-b border-base-light-600">
                 <Form for={:search} change="search" submit="go-to-doc" class="w-full">
                   <input
                     id="search-input"
@@ -50,7 +50,7 @@ defmodule AshHqWeb.Components.Search do
                     class="text-lg dark:bg-base-dark-900 grow ring-0 outline-none w-full"
                   />
                 </Form>
-                <button id="close-search" class="mr-4 ml-4 h-6 w-6 hover:text-gray-400" :on-click={@close}>
+                <button id="close-search" class="mr-4 ml-4 h-6 w-6 hover:text-base-light-400" :on-click={@close}>
                   <Heroicons.Outline.XIcon class="h-6 w-6" />
                 </button>
               </div>
@@ -102,9 +102,9 @@ defmodule AshHqWeb.Components.Search do
     {#for item <- items}
       <LiveRedirect to={DocRoutes.doc_link(item, @selected_versions)} opts={id: item.id}>
         <div class={
-          "rounded-lg mb-4 py-2 px-2 hover:bg-gray-300 dark:hover:bg-gray-700",
-          "bg-gray-400 dark:bg-gray-600": @selected_item.id == item.id,
-          "bg-gray-200 dark:bg-gray-800": @selected_item.id != item.id
+          "rounded-lg mb-4 py-2 px-2 hover:bg-base-dark-300 dark:hover:bg-base-dark-700",
+          "bg-base-light-400 dark:bg-base-dark-600": @selected_item.id == item.id,
+          "bg-base-light-200 dark:bg-base-dark-800": @selected_item.id != item.id
         }>
           <div class="flex justify-start items-center space-x-2 pb-2">
             <div>
@@ -129,7 +129,7 @@ defmodule AshHqWeb.Components.Search do
               </div>
             </div>
           </div>
-          <div class="text-gray-700 dark:text-gray-400">
+          <div class="text-base-light-700 dark:text-base-dark-400">
             {raw(item.search_headline)}
           </div>
         </div>

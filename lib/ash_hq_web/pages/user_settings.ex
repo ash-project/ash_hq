@@ -39,7 +39,7 @@ defmodule AshHqWeb.Pages.UserSettings do
                   <div class="mt-1 sm:mt-0 sm:col-span-2">
                     <div class="max-w-lg flex rounded-md shadow-sm">
                       <TextInput
-                        class="flex-1 text-black block w-full focus:ring-primary-light-600 focus:primary-light-primary-light-600 min-w-0 rounded-md sm:text-sm border-gray-300"
+                        class="flex-1 text-black block w-full focus:ring-primary-light-600 focus:primary-light-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300"
                         opts={autocomplete: "email"}
                       />
                     </div>
@@ -50,14 +50,14 @@ defmodule AshHqWeb.Pages.UserSettings do
                 </Field>
               </div>
 
-              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 dark:sm:border-gray-700 sm:pt-5">
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-base-light-200 dark:sm:border-base-dark-700 sm:pt-5">
                 <Field name={:current_password}>
                   <Label class="block text-sm font-medium sm:mt-px sm:pt-2">Current Password</Label>
                   <div class="mt-1 sm:mt-0 sm:col-span-2">
                     <div class="max-w-lg flex rounded-md shadow-sm">
                       <PasswordInput
                         value={AshPhoenix.Form.value(@email_form, :current_password)}
-                        class="flex-1 text-black block w-full focus:ring--500 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-gray-300"
+                        class="flex-1 text-black block w-full focus:ring--500 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300"
                       />
                     </div>
                     {#if @email_form.submitted_once?}
@@ -93,14 +93,14 @@ defmodule AshHqWeb.Pages.UserSettings do
             </div>
 
             <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
-              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 dark:sm:border-gray-700 sm:pt-5">
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-base-light-200 dark:sm:border-base-dark-700 sm:pt-5">
                 <Field name={:password}>
                   <Label class="block text-sm font-medium sm:mt-px sm:pt-2">New Password</Label>
                   <div class="mt-1 sm:mt-0 sm:col-span-2">
                     <div class="max-w-lg flex rounded-md shadow-sm">
                       <PasswordInput
                         value={AshPhoenix.Form.value(@password_form, :password)}
-                        class="flex-1 text-black block w-full focus:ring--500 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-gray-300"
+                        class="flex-1 text-black block w-full focus:ring--500 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300"
                       />
                     </div>
                     {#if @password_form.submitted_once?}
@@ -112,14 +112,14 @@ defmodule AshHqWeb.Pages.UserSettings do
             </div>
 
             <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
-              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 dark:sm:border-gray-700 sm:pt-5">
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-base-light-200 dark:sm:border-base-dark-700 sm:pt-5">
                 <Field name={:password_confirmation}>
                   <Label class="block text-sm font-medium sm:mt-px sm:pt-2">Confirm New Password</Label>
                   <div class="mt-1 sm:mt-0 sm:col-span-2">
                     <div class="max-w-lg flex rounded-md shadow-sm">
                       <PasswordInput
                         value={AshPhoenix.Form.value(@password_form, :password_confirmation)}
-                        class="flex-1 text-black block w-full focus:ring--500 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-gray-300"
+                        class="flex-1 text-black block w-full focus:ring--500 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300"
                       />
                     </div>
                     {#if @password_form.submitted_once?}
@@ -131,14 +131,14 @@ defmodule AshHqWeb.Pages.UserSettings do
             </div>
 
             <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
-              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 dark:sm:border-gray-700 sm:pt-5">
+              <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-base-light-200 dark:sm:border-base-dark-700 sm:pt-5">
                 <Field name={:current_password}>
                   <Label class="block text-sm font-medium sm:mt-px sm:pt-2">Current Password</Label>
                   <div class="mt-1 sm:mt-0 sm:col-span-2">
                     <div class="max-w-lg flex rounded-md shadow-sm">
                       <PasswordInput
                         value={AshPhoenix.Form.value(@password_form, :current_password)}
-                        class="flex-1 text-black block w-full focus:ring--500 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-gray-300"
+                        class="flex-1 text-black block w-full focus:ring--500 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300"
                       />
                     </div>
                     {#if @password_form.submitted_once?}

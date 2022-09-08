@@ -49,7 +49,7 @@ defmodule AshHqWeb.Components.DocSidebar do
             Guides
           </div>
           {#for {category, guides_by_library} <- guides_by_category_and_library(@libraries, @selected_versions)}
-            <div class="text-gray-500">
+            <div class="text-base-light-500">
               {#if @sidebar_state["guides-#{DocRoutes.sanitize_name(category)}"] == "open" ||
                   (@guide && has_selected_guide?(guides_by_library, @guide.id)) ||
                   (@sidebar_state["guides-#{DocRoutes.sanitize_name(category)}"] != "closed" &&
@@ -76,7 +76,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                 (@sidebar_state["guides-#{DocRoutes.sanitize_name(category)}"] != "closed" &&
                    category == "Tutorials")}
               {#for {library, guides} <- guides_by_library}
-                <li class="ml-3 text-gray-400 p-1">
+                <li class="ml-3 text-base-light-400 p-1">
                   {library}
                   <ul>
                     {#for guide <- guides}
@@ -84,8 +84,8 @@ defmodule AshHqWeb.Components.DocSidebar do
                         <Link
                           to={DocRoutes.doc_link(guide, @selected_versions)}
                           class={
-                            "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
-                            "bg-gray-300 dark:bg-gray-600": @guide && @guide.id == guide.id
+                            "flex items-center p-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-200 hover:bg-base-light-100 dark:hover:bg-base-dark-700",
+                            "bg-base-light-300 dark:bg-base-dark-600": @guide && @guide.id == guide.id
                           }
                         >
                           <Heroicons.Outline.BookOpenIcon class="h-4 w-4" />
@@ -103,7 +103,7 @@ defmodule AshHqWeb.Components.DocSidebar do
           </div>
           <div class="ml-2 space-y-2">
             {#if !Enum.empty?(get_extensions(@libraries, @selected_versions))}
-              <div class="text-gray-500">
+              <div class="text-base-light-500">
                 {#if @sidebar_state["extensions"] == "open" || @extension}
                   <button
                     :on-click={@collapse_sidebar}
@@ -121,7 +121,7 @@ defmodule AshHqWeb.Components.DocSidebar do
             {/if}
             {#if @sidebar_state["extensions"] == "open" || @extension}
               {#for {library, extensions} <- get_extensions(@libraries, @selected_versions)}
-                <li class="ml-3 text-gray-400 p-1">
+                <li class="ml-3 text-base-light-200 p-1">
                   {library}
                   <ul>
                     {#for extension <- extensions}
@@ -129,8 +129,8 @@ defmodule AshHqWeb.Components.DocSidebar do
                         <Link
                           to={DocRoutes.doc_link(extension, @selected_versions)}
                           class={
-                            "flex items-center p-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
-                            "dark:bg-gray-600": @extension && @extension.id == extension.id
+                            "flex items-center p-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-200 hover:bg-base-light-100 dark:hover:bg-base-dark-700",
+                            "dark:bg-base-dark-600": @extension && @extension.id == extension.id
                           }
                         >
                           {render_icon(assigns, extension.type)}
@@ -146,7 +146,7 @@ defmodule AshHqWeb.Components.DocSidebar do
               {/for}
             {/if}
 
-            <div class="text-gray-500">
+            <div class="text-base-light-500">
               {#if @sidebar_state["modules"] == "open" || @module}
                 <button :on-click={@collapse_sidebar} phx-value-id="modules" class="flex flex-row items-center">
                   <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />Modules
@@ -160,15 +160,15 @@ defmodule AshHqWeb.Components.DocSidebar do
             {#if @sidebar_state["modules"] == "open" || @module}
               {#for {category, modules} <- modules_by_category(@libraries, @selected_versions)}
                 <div class="ml-4">
-                  <span class="text-sm text-gray-900 dark:text-gray-500">{category}</span>
+                  <span class="text-sm text-base-light-900 dark:text-base-dark-100">{category}</span>
                 </div>
                 {#for module <- modules}
                   <li class="ml-4">
                     <Link
                       to={DocRoutes.doc_link(module, @selected_versions)}
                       class={
-                        "flex items-center space-x-2 pt-1 text-base font-normal text-gray-900 rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
-                        "dark:bg-gray-600": @module && @module.id == module.id
+                        "flex items-center space-x-2 pt-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-100 hover:bg-base-light-100 dark:hover:bg-base-light-700",
+                        "dark:bg-base-dark-600": @module && @module.id == module.id
                       }
                     >
                       <Heroicons.Outline.CodeIcon class="h-4 w-4" />

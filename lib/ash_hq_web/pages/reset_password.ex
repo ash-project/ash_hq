@@ -42,7 +42,7 @@ defmodule AshHqWeb.Pages.ResetPassword do
                     <Label class="block text-sm font-medium sm:mt-px sm:pt-2">Password</Label>
                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                       <div class="max-w-lg flex rounded-md shadow-sm">
-                        <PasswordInput class="flex-1 text-black block w-full focus:ring-primary-light-600 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-gray-300" />
+                        <PasswordInput class="flex-1 text-black block w-full focus:ring-primary-light-600 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300" />
                       </div>
                       <ErrorTag />
                     </div>
@@ -56,7 +56,7 @@ defmodule AshHqWeb.Pages.ResetPassword do
                     <Label class="block text-sm font-medium sm:mt-px sm:pt-2">Password Confirmation</Label>
                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                       <div class="max-w-lg flex rounded-md shadow-sm">
-                        <PasswordInput class="flex-1 text-black block w-full focus:ring-primary-light-600 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-gray-300" />
+                        <PasswordInput class="flex-1 text-black block w-full focus:ring-primary-light-600 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300" />
                       </div>
                       <ErrorTag />
                     </div>
@@ -90,7 +90,7 @@ defmodule AshHqWeb.Pages.ResetPassword do
                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                       <div class="max-w-lg flex rounded-md shadow-sm">
                         <TextInput
-                          class="flex-1 text-black block w-full focus:ring-primary-light-600 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-gray-300"
+                          class="flex-1 text-black block w-full focus:ring-primary-light-600 focus:border-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300"
                           opts={autocomplete: "email"}
                         />
                       </div>

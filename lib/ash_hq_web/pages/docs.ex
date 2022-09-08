@@ -35,8 +35,8 @@ defmodule AshHqWeb.Pages.Docs do
   def render(assigns) do
     ~F"""
     <div class="flex flex-col xl:flex-row justify-center overflow-hidden w-screen h-screen pb-12">
-      <div class="xl:hidden flex flex-row justify-start w-full space-x-12 items-center border-b border-t border-gray-600 py-3">
-        <button class="dark:hover:text-gray-600" phx-click={show_sidebar()}>
+      <div class="xl:hidden flex flex-row justify-start w-full space-x-12 items-center border-b border-t border-base-light-600 py-3">
+        <button class="dark:hover:text-base-dark-600" phx-click={show_sidebar()}>
           <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
         </button>
         {#if @doc_path && @doc_path != []}
@@ -48,7 +48,7 @@ defmodule AshHqWeb.Pages.Docs do
                 </div>
               {#match path}
                 {#for item <- :lists.droplast(path)}
-                  <span class="text-gray-400">
+                  <span class="text-base-light-400">
                     {item}
                   </span>
                   <Heroicons.Outline.ChevronRightIcon class="w-3 h-3" />
@@ -116,7 +116,7 @@ defmodule AshHqWeb.Pages.Docs do
                 <div class="border-r pl-2 pr-2 dark:text-black bg-primary-light-600 dark:bg-primary-dark-600 rounded-l-lg">
                   {@library.name}
                 </div>
-                <div class="pl-2 pr-2 rounded-r-lg bg-gray-300 dark:bg-inherit">
+                <div class="pl-2 pr-2 rounded-r-lg bg-base-light-300 dark:bg-inherit">
                   {@library_version.version}
                 </div>
               </div>

@@ -67,18 +67,18 @@ defmodule AshHqWeb.AppViewLive do
           {/if}
           <div class="flex flex-row align-middle items-center space-x-2">
             <a href="/docs/guides/ash/latest/tutorials/get-started.md" target="_blank">
-              <Heroicons.Solid.BookOpenIcon class="w-8 h-8 dark:fill-gray-400 dark:hover:fill-gray-200 hover:fill-gray-600" />
+              <Heroicons.Solid.BookOpenIcon class="w-8 h-8 dark:fill-base-dark-400 dark:hover:fill-base-dark-200 hover:fill-base-light-600" />
             </a>
             <a href="https://github.com/ash-project" target="_blank">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="w-6 h-6 dark:fill-gray-400 dark:hover:fill-gray-200 hover:fill-gray-600"
+                class="w-6 h-6 dark:fill-base-dark-400 dark:hover:fill-base-dark-200 hover:fill-base-light-600"
                 viewBox="0 0 24 24"
               ><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg>
             </a>
             <a href="https://discord.gg/D7FNG2q" target="_blank">
               <svg
-                class="w-6 h-6 fill-black dark:fill-gray-400 dark:hover:fill-gray-200 hover:fill-gray-600"
+                class="w-6 h-6 fill-black dark:fill-base-dark-400 dark:hover:fill-base-dark-200 hover:fill-base-light-600"
                 viewBox="0 0 71 55"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -95,7 +95,7 @@ defmodule AshHqWeb.AppViewLive do
             </a>
             <a href="https://twitter.com/ashframework" target="_blank">
               <svg
-                class="w-6 h-6 dark:fill-gray-400 dark:hover:fill-gray-200 hover:fill-gray-600"
+                class="w-6 h-6 dark:fill-base-dark-400 dark:hover:fill-base-dark-200 hover:fill-base-light-600"
                 version="1.1"
                 viewBox="0 0 248 204"
                 style="enable-background:new 0 0 248 204;"
@@ -114,11 +114,11 @@ defmodule AshHqWeb.AppViewLive do
             <button phx-click="toggle_theme">
               {#case @configured_theme}
                 {#match "light"}
-                  <Heroicons.Solid.SunIcon class="w-6 h-6 hover:text-gray-600" />
+                  <Heroicons.Solid.SunIcon class="w-6 h-6 hover:text-base-light-600" />
                 {#match "system"}
-                  <Heroicons.Solid.DesktopComputerIcon class="w-6 h-6 fill-gray-400 dark:text-black dark:hover:text-gray-600 hover:text-gray-600" />
+                  <Heroicons.Solid.DesktopComputerIcon class="w-6 h-6 fill-base-light-400 dark:text-black dark:hover:text-base-dark-600 hover:text-base-light-600" />
                 {#match _}
-                  <Heroicons.Solid.MoonIcon class="w-6 h-6 fill-gray-400 hover:fill-gray-200 hover:text-gray-200" />
+                  <Heroicons.Solid.MoonIcon class="w-6 h-6 fill-base-light-400 hover:fill-base-light-200 hover:text-base-light-200" />
               {/case}
             </button>
           </div>
@@ -192,7 +192,7 @@ defmodule AshHqWeb.AppViewLive do
   #       <button
   #         phx-click={toggle_account_dropdown()}
   #         type="button"
-  #         class="inline-flex items-center justify-center w-full rounded-md shadow-sm font-medium dark:text-gray-400 dark:hover:text-gray-200 hover:text-gray-600"
+  #         class="inline-flex items-center justify-center w-full rounded-md shadow-sm font-medium dark:text-base-dark-400 dark:hover:text-base-dark-200 hover:text-base-dark-600"
   #         id="menu-button"
   #         aria-expanded="true"
   #         aria-haspopup="true"
@@ -205,7 +205,7 @@ defmodule AshHqWeb.AppViewLive do
   #     <div
   #       id="account-dropdown"
   #       style="display: none;"
-  #       class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:text-white dark:bg-base-dark-900 ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+  #       class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:text-white dark:bg-base-dark-900 ring-1 ring-black ring-opacity-5 divide-y divide-base-light-100 focus:outline-none"
   #       role="menu"
   #       aria-orientation="vertical"
   #       aria-labelledby="menu-button"
@@ -213,12 +213,12 @@ defmodule AshHqWeb.AppViewLive do
   #       phx-click-away={toggle_account_dropdown()}
   #     >
   #       <div class="py-1" role="none">
-  #         <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+  #         <!-- Active: "bg-base-light-100 text-base-light-900", Not Active: "text-base-light-700" -->
   #         <LiveRedirect
   #           to={Routes.app_view_path(AshHqWeb.Endpoint, :user_settings)}
   #           class="dark:text-white group flex items-center px-4 py-2 text-sm"
   #         >
-  #           <Heroicons.Solid.PencilAltIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" />
+  #           <Heroicons.Solid.PencilAltIcon class="mr-3 h-5 w-5 text-base-light-400 group-hover:text-base-light-500" />
   #           Settings
   #         </LiveRedirect>
   #       </div>
@@ -230,7 +230,7 @@ defmodule AshHqWeb.AppViewLive do
   #           method={:delete}
   #           id="logout-link"
   #         >
-  #           <Heroicons.Outline.LogoutIcon class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" />
+  #           <Heroicons.Outline.LogoutIcon class="mr-3 h-5 w-5 text-base-light-400 group-hover:text-base-light-500" />
   #           Logout
   #         </Link>
   #       </div>
