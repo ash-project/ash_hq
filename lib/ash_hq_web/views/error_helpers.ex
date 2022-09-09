@@ -18,20 +18,20 @@ defmodule AshHqWeb.ErrorHelpers do
   end
 
   @doc """
-  Translates an error message using gettext.
+  Tranbase-darks an error message using gettext.
   """
   def translate_error({msg, opts}) do
     # When using gettext, we typically pass the strings we want
-    # to translate as a static argument:
+    # to tranbase-dark as a static argument:
     #
-    #     # Translate "is invalid" in the "errors" domain
+    #     # Tranbase-dark "is invalid" in the "errors" domain
     #     dgettext("errors", "is invalid")
     #
-    #     # Translate the number of files with plural rules
+    #     # Tranbase-dark the number of files with plural rules
     #     dngettext("errors", "1 file", "%{count} files", count)
     #
     # Because the error messages we show in our forms and APIs
-    # are defined inside Ecto, we need to translate them dynamically.
+    # are defined inside Ecto, we need to tranbase-dark them dynamically.
     # This requires us to call the Gettext module passing our gettext
     # backend as first argument.
     #

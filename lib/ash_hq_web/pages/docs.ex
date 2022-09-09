@@ -107,7 +107,10 @@ defmodule AshHqWeb.Pages.Docs do
           class="w-full prose prose-xl max-w-4xl dark:bg-base-dark-900 dark:prose-invert overflow-y-auto overflow-x-visible md:pr-8 md:mt-14 px-4 md:px-auto custom-scrollbar"
           phx-hook="Docs"
         >
-          <div id="module-docs" class="w-full nav-anchor text-black dark:text-white relative py-4 md:py-auto">
+          <div
+            id="module-docs"
+            class="w-full nav-anchor text-black dark:text-white relative py-4 md:py-auto"
+          >
             {#if @module}
               <h2>{@module.name}{render_source_code_link(assigns, @module, @library, @library_version)}</h2>
             {/if}
@@ -340,7 +343,7 @@ defmodule AshHqWeb.Pages.Docs do
       {#match functions}
         <h1>{header}</h1>
         {#for function <- functions}
-          <div class="rounded-lg bg-slate-400 dark:bg-slate-700 bg-opacity-50 px-2">
+          <div class="rounded-lg bg-base-dark-400 dark:bg-base-dark-700 bg-opacity-50 px-2">
             <p class="">
               <div class="">
                 <div class="flex flex-row items-baseline">
