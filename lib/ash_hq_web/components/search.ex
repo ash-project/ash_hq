@@ -32,7 +32,7 @@ defmodule AshHqWeb.Components.Search do
     >
       <div
         :on-click-away={AshHqWeb.AppViewLive.toggle_search()}
-        class="dark:text-white absolute rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white dark:bg-base-dark-900 border-2 dark:border-base-dark-900"
+        class="dark:text-white absolute rounded-xl left-1/2 top-1/2 transform -tranbase-dark-x-1/2 -tranbase-dark-y-1/2 w-3/4 h-3/4 bg-white dark:bg-base-dark-900 border-2 dark:border-base-dark-900"
         :on-window-keydown="select-previous"
         phx-key="ArrowUp"
       >
@@ -56,24 +56,24 @@ defmodule AshHqWeb.Components.Search do
               </div>
             </div>
             <div class="ml-2 pl-4">
-            <Form for={:types} change={@change_types}>
-              <div class="flex flex-row space-x-2 flex-wrap">
-                {#for type <- AshHq.Docs.Extensions.Search.Types.types()}
-                  <div class="flex flex-row items-center">
-                    <Checkbox
-                      class="mr-4"
-                      id={"#{type}-selected"}
-                      value={type in @selected_types}
-                      name={"types[#{type}]"}
-                    />
-                    <Label field={type}>
-                      {type}
-                    </Label>
-                  </div>
-                {/for}
-              </div>
-            </Form>
-          </div>
+              <Form for={:types} change={@change_types}>
+                <div class="flex flex-row space-x-2 flex-wrap">
+                  {#for type <- AshHq.Docs.Extensions.Search.Types.types()}
+                    <div class="flex flex-row items-center">
+                      <Checkbox
+                        class="mr-4"
+                        id={"#{type}-selected"}
+                        value={type in @selected_types}
+                        name={"types[#{type}]"}
+                      />
+                      <Label field={type}>
+                        {type}
+                      </Label>
+                    </div>
+                  {/for}
+                </div>
+              </Form>
+            </div>
           </div>
           <div class="grid h-[80%] mt-3">
             <div class="pl-4 overflow-auto">

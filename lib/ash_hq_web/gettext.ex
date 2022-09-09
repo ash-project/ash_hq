@@ -8,15 +8,15 @@ defmodule AshHqWeb.Gettext do
       import AshHqWeb.Gettext
 
       # Simple translation
-      gettext("Here is the string to translate")
+      gettext("Here is the string to tranbase-dark")
 
       # Plural translation
-      ngettext("Here is the string to translate",
-               "Here are the strings to translate",
+      ngettext("Here is the string to tranbase-dark",
+               "Here are the strings to tranbase-dark",
                3)
 
       # Domain-based translation
-      dgettext("errors", "Here is the error message to translate")
+      dgettext("errors", "Here is the error message to tranbase-dark")
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
