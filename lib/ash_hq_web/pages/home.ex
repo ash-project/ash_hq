@@ -5,18 +5,37 @@ defmodule AshHqWeb.Pages.Home do
 
   alias AshHqWeb.Components.{CalloutText, CodeExample, SearchBar}
   alias Surface.Components.Form
-  alias Surface.Components.Form.{Field, TextInput, Submit}
+  alias Surface.Components.Form.{Field, Submit, TextInput}
   import AshHqWeb.Components.CodeExample, only: [to_code: 1]
 
-  data(signed_up, :boolean, default: false)
-  data(email_form, :any)
+  data signed_up, :boolean, default: false
+  data email_form, :any
+
+  def render(%{__context__: %{platform: :ios}} = assigns) do
+    ~F"""
+    <vstack>
+      <hstack>
+        <text>Build</text> <CalloutText text="powerful"/><text> and </text> <CalloutText text="composable"/> <text> applications</text>
+      </hstack>
+      <hstack>
+        <text>with a </text> <CalloutText text="flexible" /> <text> tool-chain. </text>
+      </hstack>
+      <hstack>
+        <text font="callout">A declarative foundation for ambitious applications.</text>
+      </hstack>
+      <hstack>
+        <text font="callout">Model your domain, derive the rest.</text>
+      </hstack>
+    </vstack>
+    """
+  end
 
   def render(assigns) do
     ~F"""
     <div class="antialiased">
       <div class="my-2 dark:bg-base-dark-900 dark:bg-dark-grid bg-light-grid flex flex-col items-center pt-4 md:pt-12 lg:pt-24">
         <div class="text-3xl md:text-5xl px-4 md:px-12 font-bold max-w-5xl mx-auto mt-2 md:text-center">
-          Build <CalloutText>powerful</CalloutText> and <CalloutText>composable</CalloutText> applications with a <CalloutText>flexible</CalloutText> tool-chain.
+          Build <CalloutText text="powerful" /> and <CalloutText text="composable" /> applications with a <CalloutText text="flexible" /> tool-chain.
         </div>
         <div class="text-xl font-light text-base-dark-700 dark:text-base-light-100 max-w-4xl mx-auto px-4 md:px-0 mt-4 md:text-center">
           A declarative foundation for ambitious applications. Model your domain, derive the rest.

@@ -61,7 +61,8 @@ defmodule AshHqWeb do
 
   def component do
     quote do
-      use Phoenix.Component
+      use Surface.Component
+      import AshHq.Colors
 
       unquote(view_helpers())
     end

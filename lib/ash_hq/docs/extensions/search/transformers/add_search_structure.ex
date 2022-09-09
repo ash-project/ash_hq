@@ -18,6 +18,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
   require Ash.Query
   alias Spark.Dsl.Transformer
 
+  # sobelow_skip ["DOS.BinToAtom"]
   def transform(dsl_state) do
     name_attribute = Transformer.get_option(dsl_state, [:search], :name_attribute) || :name
 

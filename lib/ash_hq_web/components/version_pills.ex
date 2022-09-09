@@ -1,4 +1,5 @@
 defmodule AshHqWeb.Components.VersionPills do
+  @moduledoc "Renders pills for selected versions"
   use Surface.LiveComponent
 
   alias Surface.Components.Form

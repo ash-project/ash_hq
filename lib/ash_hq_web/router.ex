@@ -33,7 +33,7 @@ defmodule AshHqWeb.Router do
     pipe_through :browser
 
     live_session :main,
-      on_mount: {AshHqWeb.LiveUserAuth, :live_user},
+      on_mount: [{AshHqWeb.InitAssigns, :default}, {AshHqWeb.LiveUserAuth, :live_user}],
       root_layout: {AshHqWeb.LayoutView, "root.html"} do
       live "/", AppViewLive, :home
       live "/docs/", AppViewLive, :docs_dsl
@@ -48,7 +48,10 @@ defmodule AshHqWeb.Router do
     end
 
     live_session :unauthenticated_only,
-      on_mount: {AshHqWeb.LiveUserAuth, :live_user_not_allowed},
+      on_mount: [
+        {AshHqWeb.InitAssigns, :default},
+        {AshHqWeb.LiveUserAuth, :live_user_not_allowed}
+      ],
       root_layout: {AshHqWeb.LayoutView, "root.html"} do
       live "/users/log_in", AppViewLive, :log_in
       live "/users/register", AppViewLive, :register
@@ -57,7 +60,7 @@ defmodule AshHqWeb.Router do
     end
 
     live_session :authenticated_only,
-      on_mount: {AshHqWeb.LiveUserAuth, :live_user_required},
+      on_mount: [{AshHqWeb.InitAssigns, :default}, {AshHqWeb.LiveUserAuth, :live_user_required}],
       root_layout: {AshHqWeb.LayoutView, "root.html"} do
       live "/users/settings", AppViewLive, :user_settings
     end
@@ -90,11 +93,6 @@ defmodule AshHqWeb.Router do
     post "/users/confirm", UserConfirmationController, :create
     get "/users/confirm/:token", UserConfirmationController, :confirm
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", AshHqWeb do
-  #   pipe_through :api
-  # end
 
   # Enables LiveDashboard only for development
   #

@@ -1,7 +1,13 @@
 defmodule AshHq.MailingList.Email do
+  @moduledoc false
+
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     notifiers: AshHq.MailingList.EmailNotifier
+
+  resource do
+    description "An email for the mailing list"
+  end
 
   postgres do
     repo AshHq.Repo

@@ -7,7 +7,7 @@ defmodule AshHqWeb.Components.Search do
   alias AshHqWeb.Components.CalloutText
   alias AshHqWeb.DocRoutes
   alias Surface.Components.{Form, LiveRedirect}
-  alias Surface.Components.Form.{Checkbox, Label, Select}
+  alias Surface.Components.Form.{Checkbox, Label}
 
   prop(open, :boolean, default: false)
   prop(close, :event, required: true)
@@ -122,7 +122,7 @@ defmodule AshHqWeb.Components.Search do
               <Heroicons.Solid.ChevronRightIcon class="h-6 w-6" />
               <div class="font-bold text-lg">
                 {#if item.name_matches}
-                  <CalloutText>{item_name(item)}</CalloutText>
+                  <CalloutText text={item_name(item)} />
                 {#else}
                   {item_name(item)}
                 {/if}

@@ -35,6 +35,5 @@ defmodule AshHq.MailingList.Emails do
     |> html_body(body)
     |> text_body(body)
     |> AshHq.Mailer.deliver!()
-    |> IO.inspect()
   end
 end

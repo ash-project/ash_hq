@@ -1,4 +1,5 @@
 defmodule AshHq.MailingList.EmailNotifier do
+  @moduledoc "Sends emails from events in the MailingList api"
   use Ash.Notifier
 
   def notify(%Ash.Notifier.Notification{

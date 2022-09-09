@@ -54,7 +54,7 @@ defmodule AshHqWeb.Pages.Docs do
                   <Heroicons.Outline.ChevronRightIcon class="w-3 h-3" />
                 {/for}
                 <span class="dark:text-white">
-                  <CalloutText>{List.last(path)}</CalloutText>
+                  <CalloutText text={List.last(path)} />
                 </span>
             {/case}
           </div>
@@ -192,7 +192,7 @@ defmodule AshHqWeb.Pages.Docs do
                             <Heroicons.Outline.LinkIcon class="h-3 m-3" />
                           </a>
                           <div class="flex flex-row space-x-2">
-                            <CalloutText>{option.name}</CalloutText>
+                            <CalloutText text={option.name}/>
                             {render_tags(assigns, option)}
                           </div>
                         </div>
@@ -235,7 +235,7 @@ defmodule AshHqWeb.Pages.Docs do
                         <a href={"##{DocRoutes.sanitize_name(option.name)}"}>
                           <Heroicons.Outline.LinkIcon class="h-3 m-3" />
                         </a>
-                        <CalloutText>{option.name}</CalloutText>
+                        <CalloutText text={option.name}/>
                         {render_tags(assigns, option)}
                       </div>
                     </td>

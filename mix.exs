@@ -43,7 +43,7 @@ defmodule AshHq.MixProject do
       {:spark, "~> 0.1"},
       # {:spark, path: "../spark", override: true},
       {:earmark, "~> 1.5.0-pre1", override: true},
-      {:surface, "~> 0.7.3"},
+      {:surface, "~> 0.8.1"},
       {:surface_heroicons, "~> 0.6.0"},
       # Syntax Highlighting
       {:makeup, "~> 1.1"},

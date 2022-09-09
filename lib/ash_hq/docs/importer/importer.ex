@@ -101,8 +101,10 @@ defmodule AshHq.Docs.Importer do
     end
   end
 
+  # sobelow_skip ["Misc.BinToTerm", "Traversal.FileModule"]
   defp add_text([], _, _), do: []
 
+  # sobelow_skip ["Misc.BinToTerm", "Traversal.FileModule"]
   defp add_text(guides, name, version) do
     path = Path.expand("tmp")
     tarball_path = Path.expand(Path.join(["tmp", "tarballs"]))

@@ -1,30 +1,41 @@
 defmodule AshHqWeb.AppViewLive do
+  # credo:disable-for-this-file Credo.Check.Readability.MaxLineLength
   use Surface.LiveView,
     container: {:div, class: "h-full"}
 
   alias AshHqWeb.Components.{Search, SearchBar}
   alias AshHqWeb.Pages.{Docs, Home, LogIn, Register, ResetPassword, UserSettings}
   alias Phoenix.LiveView.JS
+  alias Surface.Components.Context
   require Ash.Query
 
-  data(configured_theme, :string, default: :system)
-  data(searching, :boolean, default: false)
-  data(selected_versions, :map, default: %{})
-  data(libraries, :list, default: [])
-  data(selected_types, :map, default: %{})
-  data(sidebar_state, :map, default: %{})
-  data(current_user, :map)
+  data configured_theme, :string, default: :system
+  data searching, :boolean, default: false
+  data selected_versions, :map, default: %{}
+  data libraries, :list, default: []
+  data selected_types, :map, default: %{}
+  data sidebar_state, :map, default: %{}
+  data current_user, :map
 
-  data(library, :any, default: nil)
-  data(extension, :any, default: nil)
-  data(docs, :any, default: nil)
-  data(library_version, :any, default: nil)
-  data(guide, :any, default: nil)
-  data(doc_path, :list, default: [])
-  data(dsls, :list, default: [])
-  data(dsl, :any, default: nil)
-  data(options, :list, default: [])
-  data(module, :any, default: nil)
+  data library, :any, default: nil
+  data extension, :any, default: nil
+  data docs, :any, default: nil
+  data library_version, :any, default: nil
+  data guide, :any, default: nil
+  data doc_path, :list, default: []
+  data dsls, :list, default: []
+  data dsl, :any, default: nil
+  data options, :list, default: []
+  data module, :any, default: nil
+
+  def render(%{platform: :ios} = assigns) do
+    ~F"""
+    {#case @live_action}
+      {#match :home}
+        <Home id="home" />
+    {/case}
+    """
+  end
 
   def render(assigns) do
     ~F"""
@@ -411,6 +422,7 @@ defmodule AshHqWeb.AppViewLive do
   defp load_docs(socket), do: socket
 
   def mount(_params, session, socket) do
+    socket = Context.put(socket, platform: socket.assigns.platform)
     configured_theme = session["theme"] || "system"
 
     configured_library_versions =
@@ -556,14 +568,12 @@ defmodule AshHqWeb.AppViewLive do
 
   defp assign_guide(socket) do
     guide =
-      cond do
-        socket.assigns[:params]["guide"] && socket.assigns.library_version ->
-          Enum.find(socket.assigns.library_version.guides, fn guide ->
-            guide.route == Enum.join(socket.assigns[:params]["guide"], "/")
-          end)
-
-        true ->
-          nil
+      if socket.assigns[:params]["guide"] && socket.assigns.library_version do
+        Enum.find(socket.assigns.library_version.guides, fn guide ->
+          guide.route == Enum.join(socket.assigns[:params]["guide"], "/")
+        end)
+      else
+        nil
       end
 
     assign(socket, :guide, guide)
