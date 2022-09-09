@@ -32,7 +32,7 @@ defmodule AshHqWeb.Components.Search do
     >
       <div
         :on-click-away={AshHqWeb.AppViewLive.toggle_search()}
-        class="dark:text-white absolute rounded-xl left-1/2 top-1/2 transform -tranbase-dark-x-1/2 -tranbase-dark-y-1/2 w-3/4 h-3/4 bg-white dark:bg-base-dark-900 border-2 dark:border-base-dark-900"
+        class="dark:text-white absolute rounded-xl left-1/2 top-1/2 transform -translate-dark-x-1/2 -translate-dark-y-1/2 w-3/4 h-3/4 bg-white dark:bg-base-dark-900 border-2 dark:border-base-dark-900"
         :on-window-keydown="select-previous"
         phx-key="ArrowUp"
       >
