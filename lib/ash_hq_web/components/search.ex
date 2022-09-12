@@ -290,6 +290,6 @@ defmodule AshHqWeb.Components.Search do
   defp set_selected_item(socket, selected_item) do
     socket
     |> assign(:selected_item, selected_item)
-    |> push_event("js:scroll-to", %{id: selected_item.id, boundary_id: socket.assigns[:id]})
+    |> push_event("js:scroll-to", %{id: selected_item.id})
   end
 end

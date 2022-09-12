@@ -58,13 +58,13 @@ defmodule AshHqWeb.AppViewLive do
       <div
         id="main-container"
         class={
-          "h-screen w-screen bg-white dark:bg-base-dark-900 dark:text-white",
+          "h-screen w-screen bg-white dark:bg-base-dark-900 dark:text-white flex flex-col items-stretch",
           "overflow-y-auto overflow-x-hidden": @live_action == :home,
           "overflow-hidden": @live_action == :docs_dsl
         }
       >
-        <div class={
-          "flex justify-between items-center py-4 px-4 h-min",
+        <div id="top-bar" class={
+          "flex justify-between items-center py-4 px-4 h-min sticky",
           "border-b bg-white dark:bg-base-dark-900": @live_action == :docs_dsl
         }>
           <div class="flex flex-row align-baseline">
@@ -140,41 +140,41 @@ defmodule AshHqWeb.AppViewLive do
         {#for flash <- List.wrap(live_flash(@flash, :info))}
           <p class="alert alert-info max-h-min" role="alert">{flash}</p>
         {/for}
-        {#case @live_action}
-          {#match :home}
-            <Home id="home" />
-          {#match :docs_dsl}
-            <Docs
-              uri={@uri}
-              change_version="change_version"
-              remove_version="remove_version"
-              add_version="add_version"
-              collapse_sidebar="collapse_sidebar"
-              expand_sidebar="expand_sidebar"
-              sidebar_state={@sidebar_state}
-              change_versions="change-versions"
-              selected_versions={@selected_versions}
-              libraries={@libraries}
-              library={@library}
-              extension={@extension}
-              docs={@docs}
-              library_version={@library_version}
-              guide={@guide}
-              doc_path={@doc_path}
-              dsls={@dsls}
-              dsl={@dsl}
-              options={@options}
-              module={@module}
-            />
-          {#match :user_settings}
-            <UserSettings id="user_settings" current_user={@current_user} />
-          {#match :log_in}
-            <LogIn id="log_in" />
-          {#match :register}
-            <Register id="register" />
-          {#match :reset_password}
-            <ResetPassword id="reset_password" params={@params} />
-        {/case}
+          {#case @live_action}
+            {#match :home}
+              <Home id="home" />
+            {#match :docs_dsl}
+              <Docs
+                uri={@uri}
+                change_version="change_version"
+                remove_version="remove_version"
+                add_version="add_version"
+                collapse_sidebar="collapse_sidebar"
+                expand_sidebar="expand_sidebar"
+                sidebar_state={@sidebar_state}
+                change_versions="change-versions"
+                selected_versions={@selected_versions}
+                libraries={@libraries}
+                library={@library}
+                extension={@extension}
+                docs={@docs}
+                library_version={@library_version}
+                guide={@guide}
+                doc_path={@doc_path}
+                dsls={@dsls}
+                dsl={@dsl}
+                options={@options}
+                module={@module}
+              />
+            {#match :user_settings}
+              <UserSettings id="user_settings" current_user={@current_user} />
+            {#match :log_in}
+              <LogIn id="log_in" />
+            {#match :register}
+              <Register id="register" />
+            {#match :reset_password}
+              <ResetPassword id="reset_password" params={@params} />
+          {/case}
       </div>
     </div>
     """

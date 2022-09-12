@@ -121,8 +121,12 @@ Hooks.Docs = {
 
 function onScrollChange() {
   const docs = document.getElementById("docs-window");
+  const topBar = document.getElementById("top-bar");
   if (docs) {
-    const scrollTop = docs.scrollTop;
+    let scrollTop = docs.scrollTop;
+    if (topBar) {
+      scrollTop += topBar.scrollHeight;
+    }
     const topEl = Array.from(
       document.getElementsByClassName("nav-anchor")
     ).filter((el) => {
@@ -221,13 +225,27 @@ topbar.config({ barColors: { 0: "#29d" }, shadowColor: "rgba(0, 0, 0, .3)" });
 
 let topBarScheduled = undefined;
 window.addEventListener("phx:page-loading-start", () => {
+  scrolled = false;
   if (!topBarScheduled) {
     topBarScheduled = setTimeout(() => topbar.show(), 120);
   }
 });
-window.addEventListener("phx:page-loading-stop", () => {
+
+window.addEventListener("phx:page-loading-stop", ({detail}) => {
   clearTimeout(topBarScheduled);
   topBarScheduled = undefined;
+  if (detail.kind === "initial" && window.location.hash && !scrolled) {
+      let hashEl = document.getElementById(window.location.hash.substring(1));
+      if(hashEl) {
+        const boundary = hashEl.closest(".scroll-parent")
+        scrollIntoView(hashEl, {
+          boundary: boundary,
+          behavior: "smooth",
+          block: "start",
+        })
+      }
+      scrolled = true;
+  }
   topbar.hide();
 });
 
@@ -235,10 +253,10 @@ window.addEventListener("js:focus", (e) => e.target.focus());
 
 window.addEventListener("phx:js:scroll-to", (e) => {
   const target = document.getElementById(e.detail.id);
-  const boundary = document.getElementById(e.detail.boundary_id);
+  const boundary = target.closest(".scroll-parent")
   scrollIntoView(target, {
     behavior: "smooth",
-    block: "center",
+    block: "start",
     boundary: boundary,
   });
 });
@@ -254,22 +272,7 @@ window.addEventListener("phx:sidebar-state", (e) => {
 
 let scrolled = false;
 
-window.addEventListener("phx:page-loading-start", () => {
-  scrolled = false;
-});
-
-window.addEventListener("phx:page-loading-stop", ({ detail }) => {
-  if (detail.kind === "initial" && window.location.hash && !scrolled) {
-    let hashEl = document.getElementById(window.location.hash.substring(1));
-    console.log(hashEl);
-    hashEl && hashEl.scrollIntoView();
-    scrolled = true;
-  }
-  topbar.hide();
-});
-
 window.addEventListener("phx:selected-versions", (e) => {
-  console.log(e.detail);
   if (cookiesAreAllowed()) {
     const cookie = Object.keys(e.detail)
       .map((key) => `${key}:${e.detail[key]}`)

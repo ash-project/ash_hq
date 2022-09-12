@@ -34,7 +34,7 @@ defmodule AshHqWeb.Pages.Docs do
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~F"""
-    <div class="flex flex-col xl:flex-row justify-center overflow-hidden w-screen h-screen pb-12">
+    <div class="flex flex-col xl:flex-row justify-center overflow-hidden w-screen h-screen">
       <div class="xl:hidden flex flex-row justify-start w-full space-x-12 items-center border-b border-t border-base-light-600 py-3">
         <button class="dark:hover:text-base-dark-600" phx-click={show_sidebar()}>
           <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
@@ -61,7 +61,7 @@ defmodule AshHqWeb.Pages.Docs do
         {/if}
       </div>
       <span class="grid overflow-hidden xl:hidden z-40">
-        <div id="mobile-sidebar-container" class="overflow-hidden hidden fixed w-min h-full transition">
+        <div id="mobile-sidebar-container" class="overflow-hidden hidden fixed w-min transition">
           <DocSidebar
             id="mobile-sidebar"
             change_version={@change_version}
@@ -82,7 +82,7 @@ defmodule AshHqWeb.Pages.Docs do
         </div>
       </span>
       <div class="grow w-screen overflow-hidden flex flex-row max-w-[1800px] h-full justify-between md:space-x-12 bg-white dark:bg-base-dark-900">
-        <div class="xl:border-r lg:pr-2 lg:pt-14">
+        <div class="xl:border-r lg:pr-2 lg:pt-4">
           <DocSidebar
             id="sidebar"
             class="hidden xl:block w-80 overflow-x-hidden custom-scrollbar"
@@ -104,7 +104,7 @@ defmodule AshHqWeb.Pages.Docs do
         </div>
         <div
           id="docs-window"
-          class="w-full prose prose-xl max-w-4xl dark:bg-base-dark-900 dark:prose-invert overflow-y-auto overflow-x-visible md:pr-8 md:mt-14 px-4 md:px-auto custom-scrollbar"
+          class="scroll-parent w-full prose prose-xl max-w-4xl dark:bg-base-dark-900 dark:prose-invert overflow-y-auto overflow-x-visible md:pr-8 md:mt-4 px-4 md:px-auto custom-scrollbar"
           phx-hook="Docs"
         >
           <div
@@ -230,7 +230,7 @@ defmodule AshHqWeb.Pages.Docs do
                 </tr>
                 {#for %{argument_index: nil} = option <- @options}
                   <tr id={option.sanitized_path}>
-                    <td>
+                    <td id={DocRoutes.sanitize_name(option.name)}>
                       <div class="flex flex-row items-baseline">
                         <a href={"##{DocRoutes.sanitize_name(option.name)}"}>
                           <Heroicons.Outline.LinkIcon class="h-3 m-3" />
@@ -261,7 +261,7 @@ defmodule AshHqWeb.Pages.Docs do
           </div>
         </div>
         {#if @module}
-          <div class="lg:w-72 overflow-y-auto overflow-x-hidden dark:bg-base-dark-900 bg-opacity-70 mt-14 custom-scrollbar">
+          <div class="lg:w-72 overflow-y-auto overflow-x-hidden dark:bg-base-dark-900 bg-opacity-70 mt-4 custom-scrollbar">
             <RightNav functions={@module.functions} module={@module.name} />
           </div>
         {#else}
@@ -343,17 +343,14 @@ defmodule AshHqWeb.Pages.Docs do
       {#match functions}
         <h1>{header}</h1>
         {#for function <- functions}
-          <div class="rounded-lg bg-base-dark-400 dark:bg-base-dark-700 bg-opacity-50 px-2">
+          <div id={"#{type}-#{function.sanitized_name}-#{function.arity}"} class="nav-anchor rounded-lg bg-base-dark-400 dark:bg-base-dark-700 bg-opacity-50 px-2">
             <p class="">
               <div class="">
                 <div class="flex flex-row items-baseline">
                   <a href={"##{type}-#{function.sanitized_name}-#{function.arity}"}>
                     <Heroicons.Outline.LinkIcon class="h-3 m-3" />
                   </a>
-                  <div
-                    class="nav-anchor text-xl font-semibold mb-2"
-                    id={"#{type}-#{function.sanitized_name}-#{function.arity}"}
-                  >{function.name}/{function.arity} {render_source_code_link(assigns, function, @library, @library_version)}</div>
+                  <div class="text-xl font-semibold mb-2">{function.name}/{function.arity} {render_source_code_link(assigns, function, @library, @library_version)}</div>
                 </div>
               </div>
               {#for head <- function.heads}
