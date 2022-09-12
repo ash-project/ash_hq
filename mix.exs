@@ -33,9 +33,9 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:ash, "~> 2.0.0-rc.3"},
+      {:ash, "~> 2.0.0-rc.4"},
       # {:ash, path: "../ash", override: true},
-      {:ash_postgres, "~> 1.0.0-rc.2"},
+      {:ash_postgres, "~> 1.0.0-rc.3"},
       # {:ash_postgres, path: "../ash_postgres"},
       {:ash_phoenix, "~> 1.0.0-rc.0"},
       # {:ash_phoenix, github: "ash-project/ash_phoenix", branch: "ash-2.0", override: true},
