@@ -5,27 +5,23 @@ defmodule AshHqWeb.Components.VersionPills do
   alias Surface.Components.Form
   alias Surface.Components.Form.Select
 
-  prop(selected_versions, :map, default: %{})
-  prop(libraries, :list, default: [])
-  prop(add_version, :event)
-  prop(remove_version, :event)
-  prop(change_version, :event)
-  prop(editable, :boolean, default: true)
+  prop selected_versions, :map, default: %{}
+  prop libraries, :list, default: []
+  prop add_version, :event
+  prop remove_version, :event
+  prop change_version, :event
+  prop editable, :boolean, default: true
 
-  data(adding_version, :boolean, default: false)
+  data adding_version, :boolean, default: false
 
   def render(assigns) do
     ~F"""
     <div class="flex flex-row flex-wrap align-center items-center ml-2 justify-star gap-2 flex-grow">
       {#for library <- @libraries}
-        {selected_version = @selected_versions[library.id]
-        nil}
-        {#if selected_version not in [nil, ""]}
-          {version_name = selected_version(library, selected_version)
-          nil}
+        {#if @selected_versions[library.id] not in [nil, ""]}
           <div class="flex flex-row flex-wrap contents-center px-2 py-1 bg-primary-light-500 dark:bg-primary-light-400 hover:bg-primary-light-600 text-black text-xs font-medium rounded-full">
-            {library.name}{#if version_name != "latest"}
-              | {version_name}
+            {library.name}{#if selected_version(library, @selected_versions[library.id]) != "latest"}
+              | {selected_version(library, @selected_versions[library.id])}
             {/if}
             {#if @editable}
               <button :on-click={@remove_version} phx-value-library={library.id}><Heroicons.Outline.XIcon class="h-3 w-3 ml-1" /></button>

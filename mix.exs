@@ -60,6 +60,10 @@ defmodule AshHq.MixProject do
       {:bcrypt_elixir, "~> 3.0"},
       # CSP
       {:plug_content_security_policy, "~> 0.2.1"},
+      # Live Dashboard
+      {:flame_on, "~> 0.5.0"},
+      {:phoenix_live_dashboard, "~> 0.6"},
+      {:ecto_psql_extras, "~> 0.6"},
       # Phoenix/Core dependencies
       {:phoenix, "~> 1.6.6"},
       {:phoenix_ecto, "~> 4.4"},
@@ -71,8 +75,6 @@ defmodule AshHq.MixProject do
       {:nimble_options, "~> 0.4.0", override: true},
       {:finch, "~> 0.10.2"},
       {:floki, ">= 0.30.0"},
-      {:phoenix_live_dashboard, "~> 0.6"},
-      {:ecto_psql_extras, "~> 0.6"},
       {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},

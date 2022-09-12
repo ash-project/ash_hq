@@ -2,7 +2,10 @@ defmodule AshHqWeb.Pages.Docs do
   @moduledoc "The page for showing documentation"
   use Surface.LiveComponent
 
+  import AshHqWeb.Helpers
+
   alias AshHqWeb.Components.{CalloutText, DocSidebar, RightNav, Tag}
+  alias AshHqWeb.Components.Docs.{DocPath, Functions, SourceLink}
   alias AshHqWeb.DocRoutes
   alias Phoenix.LiveView.JS
   require Logger
@@ -40,24 +43,7 @@ defmodule AshHqWeb.Pages.Docs do
           <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
         </button>
         {#if @doc_path && @doc_path != []}
-          <div class="flex flex-row space-x-1 items-center">
-            {#case @doc_path}
-              {#match [item]}
-                <div class="dark:text-white">
-                  {item}
-                </div>
-              {#match path}
-                {#for item <- :lists.droplast(path)}
-                  <span class="text-base-light-400">
-                    {item}
-                  </span>
-                  <Heroicons.Outline.ChevronRightIcon class="w-3 h-3" />
-                {/for}
-                <span class="dark:text-white">
-                  <CalloutText text={List.last(path)} />
-                </span>
-            {/case}
-          </div>
+          <DocPath doc_path={@doc_path}/>
         {/if}
       </div>
       <span class="grid overflow-hidden xl:hidden z-40">
@@ -112,7 +98,7 @@ defmodule AshHqWeb.Pages.Docs do
             class="w-full nav-anchor text-black dark:text-white relative py-4 md:py-auto"
           >
             {#if @module}
-              <h2>{@module.name}{render_source_code_link(assigns, @module, @library, @library_version)}</h2>
+              <h2>{@module.name} <SourceLink module_or_function={@module} library={@library} library_version={@library_version}/></h2>
             {/if}
             {#if @library_version}
               <div class="static mb-6 md:absolute right-2 top-2 border rounded-lg flex flex-row w-fit">
@@ -124,14 +110,14 @@ defmodule AshHqWeb.Pages.Docs do
                 </div>
               </div>
             {/if}
-            {raw(render_replacements(assigns, @docs))}
+            {raw(render_replacements(@libraries, @selected_versions, @docs))}
             {#if @dsl}
               {#for {category, links} <- @dsl.links || %{}}
                 <h3>{String.capitalize(category)}</h3>
                 <ul>
                   {#for link <- links}
                     <li>
-                      {raw(render_links("{{link:#{link}}}", assigns))}
+                      {raw(render_links("{{link:#{link}}}", @libraries, @selected_versions))}
                     </li>
                   {/for}
                 </ul>
@@ -139,9 +125,9 @@ defmodule AshHqWeb.Pages.Docs do
             {/if}
           </div>
           {#if @module}
-            {render_functions(assigns, @module.functions, :callback, "Callbacks")}
-            {render_functions(assigns, @module.functions, :function, "Functions")}
-            {render_functions(assigns, @module.functions, :macro, "Macros")}
+            <Functions header="Callbacks" type={:callback} functions={@module.functions} library={@library} library_version={@library_version} libraries={@libraries} selected_versions={@selected_versions} />
+            <Functions header="Functions" type={:function} functions={@module.functions} library={@library} library_version={@library_version} libraries={@libraries} selected_versions={@selected_versions} />
+            <Functions header="Macros" type={:macro} functions={@module.functions} library={@library} library_version={@library_version} libraries={@libraries} selected_versions={@selected_versions} />
           {/if}
           {#case modules_in_scope(@dsl, @extension, @libraries, @selected_versions)}
             {#match []}
@@ -201,14 +187,14 @@ defmodule AshHqWeb.Pages.Docs do
                         {option.type}
                       </td>
                       <td>
-                        {raw(render_replacements(assigns, option.html_for))}
+                        {raw(render_replacements(@libraries, @selected_versions, option.html_for))}
                       </td>
                       <td>
                         {raw(
                           Enum.map_join(
                             List.flatten(Map.values(option.links || %{})),
                             ", ",
-                            &render_links("{{link:#{&1}}}", assigns)
+                            &render_links("{{link:#{&1}}}", @libraries, @selected_versions)
                           )
                         )}
                       </td>
@@ -243,14 +229,14 @@ defmodule AshHqWeb.Pages.Docs do
                       {option.type}
                     </td>
                     <td>
-                      {raw(render_replacements(assigns, option.html_for))}
+                      {raw(render_replacements(@libraries, @selected_versions, option.html_for))}
                     </td>
                     <td>
                       {raw(
                         Enum.map_join(
                           List.flatten(Map.values(option.links || %{})),
                           ", ",
-                          &render_links("{{link:#{&1}}}", assigns)
+                          &render_links("{{link:#{&1}}}", @libraries, @selected_versions)
                         )
                       )}
                     </td>
@@ -274,14 +260,6 @@ defmodule AshHqWeb.Pages.Docs do
 
   def update(assigns, socket) do
     {:ok, socket |> assign(assigns) |> load_docs()}
-  end
-
-  defp render_source_code_link(assigns, module_or_function, library, library_version) do
-    ~F"""
-    {#if module_or_function.file}
-      <a target="_blank" href={source_link(module_or_function, library, library_version)}>{"</>"}</a>
-    {/if}
-    """
   end
 
   defp modules_in_scope(nil, _, _, _), do: []
@@ -340,46 +318,6 @@ defmodule AshHqWeb.Pages.Docs do
     |> Enum.sort_by(& &1.argument_index)
   end
 
-  defp render_functions(assigns, functions, type, header) do
-    ~F"""
-    {#case Enum.filter(functions, &(&1.type == type))}
-      {#match []}
-      {#match functions}
-        <h1>{header}</h1>
-        {#for function <- functions}
-          <div id={"#{type}-#{function.sanitized_name}-#{function.arity}"} class="nav-anchor rounded-lg bg-base-dark-400 dark:bg-base-dark-700 bg-opacity-50 px-2">
-            <p class="">
-              <div class="">
-                <div class="flex flex-row items-baseline">
-                  <a href={"##{type}-#{function.sanitized_name}-#{function.arity}"}>
-                    <Heroicons.Outline.LinkIcon class="h-3 m-3" />
-                  </a>
-                  <div class="text-xl font-semibold mb-2">{function.name}/{function.arity} {render_source_code_link(assigns, function, @library, @library_version)}</div>
-                </div>
-              </div>
-              {#for head <- function.heads}
-                <code class="makeup elixir">{head}</code>
-              {/for}
-              {raw(render_replacements(assigns, function.html_for))}
-            </p>
-          </div>
-        {/for}
-    {/case}
-    """
-  end
-
-  defp source_link(%AshHq.Docs.Module{file: file}, library, library_version) do
-    "https://github.com/ash-project/#{library.name}/tree/v#{library_version.version}/#{file}"
-  end
-
-  defp source_link(%AshHq.Docs.Function{file: file, line: line}, library, library_version) do
-    if line do
-      "https://github.com/ash-project/#{library.name}/tree/v#{library_version.version}/#{file}#L#{line}"
-    else
-      "https://github.com/ash-project/#{library.name}/tree/v#{library_version.version}/#{file}"
-    end
-  end
-
   def path_to_name(path, name) do
     Enum.map_join(path ++ [name], "-", &DocRoutes.sanitize_name/1)
   end
@@ -411,163 +349,9 @@ defmodule AshHqWeb.Pages.Docs do
     )
   end
 
-  defp render_replacements(_assigns, nil), do: ""
+  def load_docs(socket) do
+    start = IO.inspect(System.monotonic_time())
 
-  defp render_replacements(assigns, docs) do
-    docs
-    |> render_links(assigns)
-    |> render_mix_deps(assigns)
-  end
-
-  defp render_mix_deps(docs, assigns) do
-    String.replace(docs, ~r/(?!<code>){{mix_dep:.*}}(?!<\/code>)/, fn text ->
-      try do
-        "{{mix_dep:" <> library = String.trim_trailing(text, "}}")
-
-        "<pre><code>#{render_mix_dep(assigns, library, text)}</code></pre>"
-      rescue
-        e ->
-          Logger.error(
-            "Invalid link #{inspect(e)}\n#{Exception.format_stacktrace(__STACKTRACE__)}"
-          )
-
-          text
-      end
-    end)
-  end
-
-  defp render_mix_dep(assigns, library, source) do
-    library =
-      Enum.find(assigns[:libraries], &(&1.name == library)) ||
-        raise "No such library in link: #{source}"
-
-    selected_versions = assigns[:selected_versions]
-
-    version =
-      if selected_versions[library.id] == "latest" do
-        AshHqWeb.Helpers.latest_version(library)
-      else
-        case Enum.find(library.versions, &(&1.id == selected_versions[library.id])) do
-          nil ->
-            nil
-
-          version ->
-            version
-        end
-      end
-
-    case Version.parse(version.version) do
-      {:ok, %Version{pre: pre, build: build}}
-      when not is_nil(pre) or not is_nil(build) ->
-        ~s({:#{library.name}, "~> #{version}"})
-
-      {:ok, %Version{major: major, minor: minor, patch: 0}} ->
-        ~s({:#{library.name}, "~> #{major}.#{minor}"})
-
-      {:ok, version} ->
-        ~s({:#{library.name}, "~> #{version}"})
-    end
-  end
-
-  defp render_links(docs, assigns) do
-    String.replace(docs, ~r/(?!<code>){{link:[^}]*}}(?!<\/code>)/, fn text ->
-      try do
-        "{{link:" <> rest = String.trim_trailing(text, "}}")
-        [library, type, item | rest] = String.split(rest, ":")
-        render_link(assigns, library, type, item, text, rest)
-      rescue
-        e ->
-          Logger.error(
-            "Invalid link #{inspect(e)}\n#{Exception.format_stacktrace(__STACKTRACE__)}"
-          )
-
-          text
-      end
-    end)
-  end
-
-  defp render_link(assigns, library, type, item, source, rest) do
-    library =
-      Enum.find(assigns[:libraries], &(&1.name == library)) ||
-        raise "No such library in link: #{source}"
-
-    selected_versions = assigns[:selected_versions]
-
-    version =
-      if selected_versions[library.id] in ["latest", nil, ""] do
-        Enum.find(library.versions, &String.contains?(&1.version, ".")) ||
-          AshHqWeb.Helpers.latest_version(library)
-      else
-        case Enum.find(library.versions, &(&1.id == selected_versions[library.id])) do
-          nil ->
-            nil
-
-          version ->
-            version
-        end
-      end
-
-    if is_nil(version) do
-      raise "no version for library"
-    else
-      case type do
-        "guide" ->
-          guide =
-            Enum.find(version.guides, &(&1.name == item)) ||
-              raise "No such guide in link: #{source}"
-
-          text = Enum.at(rest, 0) || item
-
-          """
-          <a href="#{DocRoutes.doc_link(guide, assigns[:selected_versions])}">#{text}</a>
-          """
-
-        "dsl" ->
-          path =
-            item
-            |> String.split(~r/[\/\.]/)
-
-          name =
-            path
-            |> Enum.join(".")
-
-          route = Enum.map_join(path, "/", &DocRoutes.sanitize_name/1)
-
-          """
-          <a href="/docs/dsl/#{library.name}/#{version.version}/#{route}">#{name}</a>
-          """
-
-        "option" ->
-          path =
-            item
-            |> String.split(~r/[\/\.]/)
-
-          name = Enum.join(path, ".")
-
-          dsl_path = path |> :lists.droplast() |> Enum.map_join("/", &DocRoutes.sanitize_name/1)
-          anchor = path |> Enum.map_join("/", &DocRoutes.sanitize_name/1)
-
-          """
-          <a href="/docs/dsl/#{library.name}/#{version.version}/#{dsl_path}##{anchor}">#{name}</a>
-          """
-
-        "module" ->
-          """
-          <a href="/docs/module/#{library.name}/#{version.version}/#{DocRoutes.sanitize_name(item)}">#{item}</a>
-          """
-
-        "extension" ->
-          """
-          <a href="/docs/dsl/#{library.name}/#{version.version}/#{DocRoutes.sanitize_name(item)}">#{item}</a>
-          """
-
-        type ->
-          raise "unimplemented link type #{inspect(type)} in #{source}"
-      end
-    end
-  end
-
-  defp load_docs(socket) do
     new_libraries =
       socket.assigns.libraries
       |> Enum.map(fn library ->
@@ -575,8 +359,7 @@ defmodule AshHqWeb.Pages.Docs do
 
         Map.update!(library, :versions, fn versions ->
           Enum.map(versions, fn version ->
-            if (socket.assigns[:selected_versions][library.id] in ["latest", nil, ""] &&
-                  latest_version &&
+            if (latest_version &&
                   version.id == latest_version.id) ||
                  version.id == socket.assigns[:selected_versions][library.id] do
               dsls_query =
@@ -631,6 +414,10 @@ defmodule AshHqWeb.Pages.Docs do
     |> assign_module()
     |> assign_dsl()
     |> assign_docs()
+    |> tap(fn stuff ->
+      IO.inspect(System.convert_time_unit(System.monotonic_time() - start, :native, :millisecond))
+      stuff
+    end)
   end
 
   defp load_for_search(query, docs_for) do

@@ -227,7 +227,7 @@ let topBarScheduled = undefined;
 window.addEventListener("phx:page-loading-start", () => {
   scrolled = false;
   if (!topBarScheduled) {
-    topBarScheduled = setTimeout(() => topbar.show(), 120);
+    topBarScheduled = setTimeout(() => topbar.show(), 250);
   }
 });
 

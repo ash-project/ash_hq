@@ -15,7 +15,7 @@ defmodule AshHqWeb.Components.RightNav do
         <a
           id={"right-nav-callback-#{function.sanitized_name}-#{function.arity}"}
           class="hover:text-primary-light-300 right-nav"
-          href={"#function-#{function.sanitized_name}-#{function.arity}"}
+          href={"#callback-#{function.sanitized_name}-#{function.arity}"}
         >
           {"#{function.name}/#{function.arity}"}
         </a>
