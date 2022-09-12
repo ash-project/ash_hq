@@ -33,6 +33,6 @@ defmodule AshHq.MailingList.Email do
   end
 
   validations do
-    validate match(:email, ~r/^[^\s]+@[^\s]+$/, "must have the @ sign and no spaces")
+    validate match(:email, ~r/^[^\s]+@[^\s]+$/), message: "must have the @ sign and no spaces"
   end
 end

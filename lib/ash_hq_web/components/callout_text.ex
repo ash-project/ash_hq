@@ -2,7 +2,7 @@ defmodule AshHqWeb.Components.CalloutText do
   @moduledoc "Highlights some text on the page"
   use Surface.Component
 
-  import AshHq.Colors
+  import AshHq.Classes
 
   prop text, :string, required: true
 

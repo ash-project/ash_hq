@@ -3,24 +3,24 @@ defmodule AshHqWeb.Components.DocSidebar do
   use Surface.Component
 
   alias AshHqWeb.DocRoutes
-  alias Surface.Components.Link
+  alias Surface.Components.LivePatch
 
-  prop(class, :css_class, default: "")
-  prop(libraries, :list, required: true)
-  prop(extension, :any, default: nil)
-  prop(guide, :any, default: nil)
-  prop(library, :any, default: nil)
-  prop(library_version, :any, default: nil)
-  prop(selected_versions, :map, default: %{})
-  prop(id, :string, required: true)
-  prop(dsl, :any, required: true)
-  prop(module, :any, required: true)
-  prop(sidebar_state, :map, required: true)
-  prop(collapse_sidebar, :event, required: true)
-  prop(expand_sidebar, :event, required: true)
-  prop(add_version, :event, required: true)
-  prop(remove_version, :event, required: true)
-  prop(change_version, :event, required: true)
+  prop class, :css_class, default: ""
+  prop libraries, :list, required: true
+  prop extension, :any, default: nil
+  prop guide, :any, default: nil
+  prop library, :any, default: nil
+  prop library_version, :any, default: nil
+  prop selected_versions, :map, default: %{}
+  prop id, :string, required: true
+  prop dsl, :any, required: true
+  prop module, :any, required: true
+  prop sidebar_state, :map, required: true
+  prop collapse_sidebar, :event, required: true
+  prop expand_sidebar, :event, required: true
+  prop add_version, :event, required: true
+  prop remove_version, :event, required: true
+  prop change_version, :event, required: true
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -81,7 +81,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                   <ul>
                     {#for guide <- guides}
                       <li class="ml-1">
-                        <Link
+                        <LivePatch
                           to={DocRoutes.doc_link(guide, @selected_versions)}
                           class={
                             "flex items-center p-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-200 hover:bg-base-light-100 dark:hover:bg-base-dark-700",
@@ -90,7 +90,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                         >
                           <Heroicons.Outline.BookOpenIcon class="h-4 w-4" />
                           <span class="ml-3 mr-2">{guide.name}</span>
-                        </Link>
+                        </LivePatch>
                       </li>
                     {/for}
                   </ul>
@@ -126,7 +126,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                   <ul>
                     {#for extension <- extensions}
                       <li class="ml-1">
-                        <Link
+                        <LivePatch
                           to={DocRoutes.doc_link(extension, @selected_versions)}
                           class={
                             "flex items-center p-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-200 hover:bg-base-light-100 dark:hover:bg-base-dark-700",
@@ -135,7 +135,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                         >
                           {render_icon(assigns, extension.type)}
                           <span class="ml-3 mr-2">{extension.name}</span>
-                        </Link>
+                        </LivePatch>
                         {#if @extension && @extension.id == extension.id && !Enum.empty?(extension.dsls)}
                           {render_dsls(assigns, extension.dsls, [])}
                         {/if}
@@ -164,7 +164,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                 </div>
                 {#for module <- modules}
                   <li class="ml-4">
-                    <Link
+                    <LivePatch
                       to={DocRoutes.doc_link(module, @selected_versions)}
                       class={
                         "flex items-center space-x-2 pt-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-100 hover:bg-base-light-100 dark:hover:bg-base-light-700",
@@ -173,7 +173,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                     >
                       <Heroicons.Outline.CodeIcon class="h-4 w-4" />
                       <span class="">{module.name}</span>
-                    </Link>
+                    </LivePatch>
                   </li>
                 {/for}
               {/for}
@@ -210,7 +210,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                 {/if}
               {/if}
             {/if}
-            <Link
+            <LivePatch
               to={DocRoutes.doc_link(dsl, @selected_versions)}
               class={
                 "flex items-center p-1 text-base font-normal rounded-lg hover:text-primary-light-300",
@@ -218,7 +218,7 @@ defmodule AshHqWeb.Components.DocSidebar do
               }
             >
               {dsl.name}
-            </Link>
+            </LivePatch>
           </div>
           {#if @sidebar_state[dsl.id] == "open" ||
               (@dsl && List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name]))}

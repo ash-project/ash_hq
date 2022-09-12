@@ -6,22 +6,22 @@ defmodule AshHqWeb.Components.Search do
 
   alias AshHqWeb.Components.CalloutText
   alias AshHqWeb.DocRoutes
-  alias Surface.Components.{Form, LiveRedirect}
+  alias Surface.Components.{Form, LivePatch}
   alias Surface.Components.Form.{Checkbox, Label}
 
-  prop(open, :boolean, default: false)
-  prop(close, :event, required: true)
-  prop(libraries, :list, required: true)
-  prop(selected_versions, :map, required: true)
-  prop(change_versions, :event, required: true)
-  prop(selected_types, :list, required: true)
-  prop(change_types, :event, required: true)
-  prop(uri, :string, required: true)
+  prop open, :boolean, default: false
+  prop close, :event, required: true
+  prop libraries, :list, required: true
+  prop selected_versions, :map, required: true
+  prop change_versions, :event, required: true
+  prop selected_types, :list, required: true
+  prop change_types, :event, required: true
+  prop uri, :string, required: true
 
-  data(versions, :map, default: %{})
-  data(search, :string, default: "")
-  data(item_list, :list, default: [])
-  data(selected_item, :string)
+  data versions, :map, default: %{}
+  data search, :string, default: ""
+  data item_list, :list, default: []
+  data selected_item, :string
 
   def render(assigns) do
     ~F"""
@@ -100,7 +100,7 @@ defmodule AshHqWeb.Components.Search do
   defp render_items(assigns, items) do
     ~F"""
     {#for item <- items}
-      <LiveRedirect to={DocRoutes.doc_link(item, @selected_versions)} opts={id: item.id}>
+      <LivePatch to={DocRoutes.doc_link(item, @selected_versions)} opts={id: item.id}>
         <div class={
           "rounded-lg mb-4 py-2 px-2 hover:bg-base-dark-300 dark:hover:bg-base-dark-700",
           "bg-base-light-400 dark:bg-base-dark-600": @selected_item.id == item.id,
@@ -133,7 +133,7 @@ defmodule AshHqWeb.Components.Search do
             {raw(item.search_headline)}
           </div>
         </div>
-      </LiveRedirect>
+      </LivePatch>
     {/for}
     """
   end

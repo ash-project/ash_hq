@@ -1,9 +1,33 @@
-defmodule AshHq.Colors do
+defmodule AshHq.Classes do
   @moduledoc "Static values for tailwind colors"
 
   @colors "assets/tailwind.colors.json"
           |> File.read!()
           |> Jason.decode!()
+
+  def classes(classes) when is_list(classes) do
+    classes
+    |> Enum.filter(fn
+      {_classes, condition} ->
+        condition
+
+      _ ->
+        true
+    end)
+    |> Enum.join(" ")
+  end
+
+  def classes(classes) when is_binary(classes) do
+    classes
+  end
+
+  def classes(base, classes) do
+    merge(classes(base), classes(classes))
+  end
+
+  def merge(base, extension) do
+    AshHq.Tailwind.merge(base, extension)
+  end
 
   for {key, value} when is_binary(value) <- @colors do
     # sobelow_skip ["DOS.BinToAtom"]
