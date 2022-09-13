@@ -261,15 +261,6 @@ window.addEventListener("phx:js:scroll-to", (e) => {
   });
 });
 
-window.addEventListener("phx:sidebar-state", (e) => {
-  const cookie = Object.keys(e.detail)
-    .map((key) => `${key}:${e.detail[key]}`)
-    .join(",");
-  if (cookiesAreAllowed()) {
-    document.cookie = "sidebar_state" + "=" + cookie + ";path=/";
-  }
-});
-
 let scrolled = false;
 
 window.addEventListener("phx:selected-versions", (e) => {

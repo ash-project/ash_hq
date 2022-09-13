@@ -15,7 +15,6 @@ defmodule AshHqWeb.AppViewLive do
   data selected_versions, :map, default: %{}
   data libraries, :list, default: []
   data selected_types, :map, default: %{}
-  data sidebar_state, :map, default: %{}
   data current_user, :map
 
   data library, :any, default: nil
@@ -86,7 +85,6 @@ defmodule AshHqWeb.AppViewLive do
               change_version="change_version"
               remove_version="remove_version"
               add_version="add_version"
-              sidebar_state={@sidebar_state}
               change_versions="change-versions"
               selected_versions={@selected_versions}
               libraries={@libraries}
@@ -255,11 +253,6 @@ defmodule AshHqWeb.AppViewLive do
      |> push_event("set_theme", %{theme: theme})}
   end
 
-  def handle_info({:new_sidebar_state, new_state}, socket) do
-    {:noreply,
-     socket |> assign(:sidebar_state, new_state) |> push_event("sidebar-state", new_state)}
-  end
-
   def mount(_params, session, socket) do
     socket = Context.put(socket, platform: socket.assigns.platform)
     configured_theme = session["theme"] || "system"
@@ -295,21 +288,6 @@ defmodule AshHqWeb.AppViewLive do
           |> Enum.filter(&(&1 in all_types))
       end
 
-    sidebar_state =
-      case session["sidebar_state"] do
-        nil ->
-          %{}
-
-        value ->
-          value
-          |> String.split(",")
-          |> Map.new(fn str ->
-            str
-            |> String.split(":")
-            |> List.to_tuple()
-          end)
-      end
-
     versions_query =
       AshHq.Docs.LibraryVersion
       |> Ash.Query.sort(version: :desc)
@@ -337,7 +315,7 @@ defmodule AshHqWeb.AppViewLive do
        selected_types
      )
      |> assign(:selected_versions, selected_versions)
-     |> assign(configured_theme: configured_theme, sidebar_state: sidebar_state)
+     |> assign(configured_theme: configured_theme)
      |> push_event("selected-versions", selected_versions)
      |> push_event("selected_types", %{types: selected_types})}
   end

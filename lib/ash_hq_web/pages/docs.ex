@@ -14,7 +14,6 @@ defmodule AshHqWeb.Pages.Docs do
   prop selected_versions, :map, required: true
   prop libraries, :list, default: []
   prop uri, :string
-  prop sidebar_state, :map, required: true
   prop remove_version, :event
   prop add_version, :event
   prop change_version, :event
@@ -53,7 +52,6 @@ defmodule AshHqWeb.Pages.Docs do
             remove_version={@remove_version}
             libraries={@libraries}
             extension={@extension}
-            sidebar_state={@sidebar_state}
             module={@module}
             guide={@guide}
             library={@library}
@@ -74,7 +72,6 @@ defmodule AshHqWeb.Pages.Docs do
             module={@module}
             libraries={@libraries}
             extension={@extension}
-            sidebar_state={@sidebar_state}
             guide={@guide}
             library={@library}
             library_version={@library_version}
@@ -566,12 +563,6 @@ defmodule AshHqWeb.Pages.Docs do
             socket.assigns.extension.dsls,
             &(&1.sanitized_path == path)
           )
-
-        new_state = Map.put(socket.assigns.sidebar_state, dsl.id, "open")
-
-        unless socket.assigns.sidebar_state[dsl.id] == "open" do
-          send(self(), {:new_sidebar_state, new_state})
-        end
 
         socket
         |> assign(

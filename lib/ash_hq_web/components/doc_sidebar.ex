@@ -15,7 +15,6 @@ defmodule AshHqWeb.Components.DocSidebar do
   prop id, :string, required: true
   prop dsl, :any, required: true
   prop module, :any, required: true
-  prop sidebar_state, :map, required: true
   prop add_version, :event, required: true
   prop remove_version, :event, required: true
   prop change_version, :event, required: true
@@ -80,18 +79,11 @@ defmodule AshHqWeb.Components.DocSidebar do
           <div class="ml-2 space-y-2">
             {#if !Enum.empty?(get_extensions(@libraries, @selected_versions))}
               <div class="text-base-light-500">
-                {#if @sidebar_state["extensions"] == "open" || @extension}
-                  <button class="flex flex-row items-center" >
-                    <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />Extensions
-                  </button>
-                {#else}
-                  <button class="flex flex-row items-center">
-                    <Heroicons.Outline.ChevronRightIcon class="w-3 h-3 mr-1" />Extensions
-                  </button>
-                {/if}
+                <button class="flex flex-row items-center" >
+                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />Extensions
+                </button>
               </div>
             {/if}
-            {#if @sidebar_state["extensions"] == "open" || @extension}
               {#for {library, extensions} <- get_extensions(@libraries, @selected_versions)}
                 <li class="ml-3 text-base-light-200 p-1">
                   {library}
@@ -116,20 +108,12 @@ defmodule AshHqWeb.Components.DocSidebar do
                   </ul>
                 </li>
               {/for}
-            {/if}
 
             <div class="text-base-light-500">
-              {#if @sidebar_state["modules"] == "open" || @module}
                 <button phx-value-id="modules" class="flex flex-row items-center">
                   <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />Modules
                 </button>
-              {#else}
-                <button phx-value-id="modules" class="flex flex-row items-center">
-                  <Heroicons.Outline.ChevronRightIcon class="w-3 h-3 mr-1" />Modules
-                </button>
-              {/if}
             </div>
-            {#if @sidebar_state["modules"] == "open" || @module}
               {#for {category, modules} <- modules_by_category(@libraries, @selected_versions)}
                 <div class="ml-4">
                   <span class="text-sm text-base-light-900 dark:text-base-dark-100">{category}</span>
@@ -149,7 +133,6 @@ defmodule AshHqWeb.Components.DocSidebar do
                   </li>
                 {/for}
               {/for}
-            {/if}
           </div>
         </ul>
       </div>
@@ -171,15 +154,9 @@ defmodule AshHqWeb.Components.DocSidebar do
           <div class="flex flex-row items-center">
             {#if Enum.any?(dsls, &List.starts_with?(&1.path, dsl.path ++ [dsl.name]))}
               {#if !(@dsl && List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name]))}
-                {#if @sidebar_state[dsl.id] == "open"}
-                  <button>
-                    <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
-                  </button>
-                {#else}
-                  <button>
-                    <Heroicons.Outline.ChevronRightIcon class="w-3 h-3" />
-                  </button>
-                {/if}
+                <button>
+                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
+                </button>
               {/if}
             {/if}
             <LivePatch
@@ -192,10 +169,7 @@ defmodule AshHqWeb.Components.DocSidebar do
               {dsl.name}
             </LivePatch>
           </div>
-          {#if @sidebar_state[dsl.id] == "open" ||
-              (@dsl && List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name]))}
-            {render_dsls(assigns, dsls, path ++ [dsl.name])}
-          {/if}
+          {render_dsls(assigns, dsls, path ++ [dsl.name])}
         </li>
       {/for}
     </ul>
