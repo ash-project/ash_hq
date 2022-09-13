@@ -15,10 +15,18 @@ defmodule AshHqWeb.Pages.Home do
     ~F"""
     <vstack>
       <hstack>
-        <text>Build</text> <CalloutText text="powerful"/><text> and </text> <CalloutText text="composable"/> <text> applications</text>
+        <text>Build</text> <CalloutText text="powerful" /><text>
+          and
+        </text>
+        <CalloutText text="composable" /> <text>
+          applications</text>
       </hstack>
       <hstack>
-        <text>with a </text> <CalloutText text="flexible" /> <text> tool-chain. </text>
+        <text>with a
+        </text>
+        <CalloutText text="flexible" /> <text>
+          tool-chain.
+        </text>
       </hstack>
       <hstack>
         <text font="callout">A declarative foundation for ambitious applications.</text>

@@ -15,8 +15,6 @@ defmodule AshHqWeb.Pages.Docs do
   prop libraries, :list, default: []
   prop uri, :string
   prop sidebar_state, :map, required: true
-  prop collapse_sidebar, :event, required: true
-  prop expand_sidebar, :event, required: true
   prop remove_version, :event
   prop add_version, :event
   prop change_version, :event
@@ -43,7 +41,7 @@ defmodule AshHqWeb.Pages.Docs do
           <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
         </button>
         {#if @doc_path && @doc_path != []}
-          <DocPath doc_path={@doc_path}/>
+          <DocPath doc_path={@doc_path} />
         {/if}
       </div>
       <span class="grid overflow-hidden xl:hidden z-40">
@@ -56,8 +54,6 @@ defmodule AshHqWeb.Pages.Docs do
             libraries={@libraries}
             extension={@extension}
             sidebar_state={@sidebar_state}
-            collapse_sidebar={@collapse_sidebar}
-            expand_sidebar={@expand_sidebar}
             module={@module}
             guide={@guide}
             library={@library}
@@ -79,8 +75,6 @@ defmodule AshHqWeb.Pages.Docs do
             libraries={@libraries}
             extension={@extension}
             sidebar_state={@sidebar_state}
-            collapse_sidebar={@collapse_sidebar}
-            expand_sidebar={@expand_sidebar}
             guide={@guide}
             library={@library}
             library_version={@library_version}
@@ -98,7 +92,7 @@ defmodule AshHqWeb.Pages.Docs do
             class="w-full nav-anchor text-black dark:text-white relative py-4 md:py-auto"
           >
             {#if @module}
-              <h2>{@module.name} <SourceLink module_or_function={@module} library={@library} library_version={@library_version}/></h2>
+              <h2>{@module.name} <SourceLink module_or_function={@module} library={@library} library_version={@library_version} /></h2>
             {/if}
             {#if @library_version}
               <div class="static mb-6 md:absolute right-2 top-2 border rounded-lg flex flex-row w-fit">
@@ -125,9 +119,33 @@ defmodule AshHqWeb.Pages.Docs do
             {/if}
           </div>
           {#if @module}
-            <Functions header="Callbacks" type={:callback} functions={@module.functions} library={@library} library_version={@library_version} libraries={@libraries} selected_versions={@selected_versions} />
-            <Functions header="Functions" type={:function} functions={@module.functions} library={@library} library_version={@library_version} libraries={@libraries} selected_versions={@selected_versions} />
-            <Functions header="Macros" type={:macro} functions={@module.functions} library={@library} library_version={@library_version} libraries={@libraries} selected_versions={@selected_versions} />
+            <Functions
+              header="Callbacks"
+              type={:callback}
+              functions={@module.functions}
+              library={@library}
+              library_version={@library_version}
+              libraries={@libraries}
+              selected_versions={@selected_versions}
+            />
+            <Functions
+              header="Functions"
+              type={:function}
+              functions={@module.functions}
+              library={@library}
+              library_version={@library_version}
+              libraries={@libraries}
+              selected_versions={@selected_versions}
+            />
+            <Functions
+              header="Macros"
+              type={:macro}
+              functions={@module.functions}
+              library={@library}
+              library_version={@library_version}
+              libraries={@libraries}
+              selected_versions={@selected_versions}
+            />
           {/if}
           {#case modules_in_scope(@dsl, @extension, @libraries, @selected_versions)}
             {#match []}
@@ -178,7 +196,7 @@ defmodule AshHqWeb.Pages.Docs do
                             <Heroicons.Outline.LinkIcon class="h-3 m-3" />
                           </a>
                           <div class="flex flex-row space-x-2">
-                            <CalloutText text={option.name}/>
+                            <CalloutText text={option.name} />
                             {render_tags(assigns, option)}
                           </div>
                         </div>
@@ -221,7 +239,7 @@ defmodule AshHqWeb.Pages.Docs do
                         <a href={"##{DocRoutes.sanitize_name(option.name)}"}>
                           <Heroicons.Outline.LinkIcon class="h-3 m-3" />
                         </a>
-                        <CalloutText text={option.name}/>
+                        <CalloutText text={option.name} />
                         {render_tags(assigns, option)}
                       </div>
                     </td>
@@ -350,18 +368,19 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   def load_docs(socket) do
-    start = IO.inspect(System.monotonic_time())
+    socket = assign_library(socket)
 
     new_libraries =
       socket.assigns.libraries
       |> Enum.map(fn library ->
-        latest_version = AshHqWeb.Helpers.latest_version(library)
-
         Map.update!(library, :versions, fn versions ->
+          latest_version = AshHqWeb.Helpers.latest_version(library)
+
           Enum.map(versions, fn version ->
-            if (latest_version &&
-                  version.id == latest_version.id) ||
-                 version.id == socket.assigns[:selected_versions][library.id] do
+            if (latest_version && version.id == latest_version.id) ||
+                 version.id == socket.assigns[:selected_versions][library.id] ||
+                 (socket.assigns[:library_version] &&
+                    socket.assigns[:library_version].id == version.id) do
               dsls_query =
                 AshHq.Docs.Dsl
                 |> Ash.Query.sort(order: :asc)
@@ -414,10 +433,6 @@ defmodule AshHqWeb.Pages.Docs do
     |> assign_module()
     |> assign_dsl()
     |> assign_docs()
-    |> tap(fn stuff ->
-      IO.inspect(System.convert_time_unit(System.monotonic_time() - start, :native, :millisecond))
-      stuff
-    end)
   end
 
   defp load_for_search(query, docs_for) do

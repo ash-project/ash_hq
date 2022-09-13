@@ -9,10 +9,13 @@ defmodule AshHqWeb.Components.AppView.TopBar do
 
   def render(assigns) do
     ~F"""
-    <div id="top-bar" class={
-      "flex justify-between items-center py-4 px-4 h-min sticky",
-      "border-b bg-white dark:bg-base-dark-900": @live_action == :docs_dsl
-    }>
+    <div
+      id="top-bar"
+      class={
+        "flex justify-between items-center py-4 px-4 h-min sticky",
+        "border-b bg-white dark:bg-base-dark-900": @live_action == :docs_dsl
+      }
+    >
       <div class="flex flex-row align-baseline">
         <a href="/">
           <img class="h-6 md:h-10 hidden dark:block" src="/images/ash-framework-dark.png">

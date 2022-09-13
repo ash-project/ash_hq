@@ -64,40 +64,42 @@ defmodule AshHqWeb.AppViewLive do
           "overflow-hidden": @live_action == :docs_dsl
         }
       >
-        <TopBar live_action={@live_action} toggle_theme="toggle_theme" configured_theme={@configured_theme}/>
+        <TopBar
+          live_action={@live_action}
+          toggle_theme="toggle_theme"
+          configured_theme={@configured_theme}
+        />
         {#for flash <- List.wrap(live_flash(@flash, :error))}
           <p class="alert alert-warning" role="alert">{flash}</p>
         {/for}
         {#for flash <- List.wrap(live_flash(@flash, :info))}
           <p class="alert alert-info max-h-min" role="alert">{flash}</p>
         {/for}
-          {#case @live_action}
-            {#match :home}
-              <Home id="home" />
-            {#match :docs_dsl}
-              <Docs
-                id="docs"
-                uri={@uri}
-                params={@params}
-                change_version="change_version"
-                remove_version="remove_version"
-                add_version="add_version"
-                collapse_sidebar="collapse_sidebar"
-                expand_sidebar="expand_sidebar"
-                sidebar_state={@sidebar_state}
-                change_versions="change-versions"
-                selected_versions={@selected_versions}
-                libraries={@libraries}
-              />
-            {#match :user_settings}
-              <UserSettings id="user_settings" current_user={@current_user} />
-            {#match :log_in}
-              <LogIn id="log_in" />
-            {#match :register}
-              <Register id="register" />
-            {#match :reset_password}
-              <ResetPassword id="reset_password" params={@params} />
-          {/case}
+        {#case @live_action}
+          {#match :home}
+            <Home id="home" />
+          {#match :docs_dsl}
+            <Docs
+              id="docs"
+              uri={@uri}
+              params={@params}
+              change_version="change_version"
+              remove_version="remove_version"
+              add_version="add_version"
+              sidebar_state={@sidebar_state}
+              change_versions="change-versions"
+              selected_versions={@selected_versions}
+              libraries={@libraries}
+            />
+          {#match :user_settings}
+            <UserSettings id="user_settings" current_user={@current_user} />
+          {#match :log_in}
+            <LogIn id="log_in" />
+          {#match :register}
+            <Register id="register" />
+          {#match :reset_password}
+            <ResetPassword id="reset_password" params={@params} />
+        {/case}
       </div>
     </div>
     """
@@ -208,20 +210,6 @@ defmodule AshHqWeb.AppViewLive do
      socket
      |> assign(:selected_versions, new_selected_versions)
      |> push_event("selected-versions", new_selected_versions)}
-  end
-
-  def handle_event("collapse_sidebar", %{"id" => id}, socket) do
-    new_state = Map.put(socket.assigns.sidebar_state, id, "closed")
-
-    {:noreply,
-     socket |> assign(:sidebar_state, new_state) |> push_event("sidebar-state", new_state)}
-  end
-
-  def handle_event("expand_sidebar", %{"id" => id}, socket) do
-    new_state = Map.put(socket.assigns.sidebar_state, id, "open")
-
-    {:noreply,
-     socket |> assign(:sidebar_state, new_state) |> push_event("sidebar-state", new_state)}
   end
 
   def handle_event("change-versions", %{"versions" => versions}, socket) do
