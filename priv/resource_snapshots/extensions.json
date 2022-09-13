@@ -3,6 +3,7 @@
     "pg_trgm",
     "uuid-ossp",
     "citext",
-    "pgstatstatements"
+    "pg_stat_statements",
+    "sslinfo"
   ]
 }
