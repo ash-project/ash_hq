@@ -90,7 +90,7 @@ defmodule AshHq.Docs.Module do
 
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
-      required? true
+      allow_nil? true
     end
 
     has_many :functions, AshHq.Docs.Function

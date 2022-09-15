@@ -6,6 +6,10 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
   @doc """
   Highlights all code block in an already generated HTML document.
   """
+  def highlight(html) when is_list(html) do
+    Enum.map(html, &highlight/1)
+  end
+
   def highlight(html) do
     Regex.replace(
       ~r/<pre><code(?:\s+class="(\w*)")?>([^<]*)<\/code><\/pre>/,
@@ -16,7 +20,6 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
 
   defp highlight_code_block(full_block, lang, code) do
     case pick_language_and_lexer(lang) do
-      {_language, nil, _opts} -> full_block
       {language, lexer, opts} -> render_code(language, lexer, opts, code)
     end
   end
@@ -31,17 +34,21 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
   end
 
   defp render_code(lang, lexer, lexer_opts, code) do
-    highlighted =
-      code
-      |> unescape_html()
-      |> IO.iodata_to_binary()
-      |> Makeup.highlight_inner_html(
-        lexer: lexer,
-        lexer_options: lexer_opts,
-        formatter_options: [highlight_tag: "span"]
-      )
+    if lexer do
+      highlighted =
+        code
+        |> unescape_html()
+        |> IO.iodata_to_binary()
+        |> Makeup.highlight_inner_html(
+          lexer: lexer,
+          lexer_options: lexer_opts,
+          formatter_options: [highlight_tag: "span"]
+        )
 
-    ~s(<pre class="code-pre"><code class="makeup #{lang} highlight">#{highlighted}</code></pre>)
+      ~s(<pre class="code-pre"><code class="makeup #{lang} highlight">#{highlighted}</code></pre>)
+    else
+      ~s(<pre class="code-pre"><code class="makeup #{lang} text-black dark:text-white">#{code}</code></pre>)
+    end
   end
 
   entities = [{"&amp;", ?&}, {"&lt;", ?<}, {"&gt;", ?>}, {"&quot;", ?"}, {"&#39;", ?'}]

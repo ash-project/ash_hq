@@ -112,11 +112,11 @@ defmodule AshHq.Docs.Dsl do
 
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
-      required? true
+      allow_nil? true
     end
 
     belongs_to :extension, AshHq.Docs.Extension do
-      required? true
+      allow_nil? true
     end
 
     belongs_to :dsl, __MODULE__

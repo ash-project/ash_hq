@@ -117,6 +117,15 @@ defmodule AshHqWeb.Pages.Docs do
           </div>
           {#if @module}
             <Functions
+              header="Types"
+              type={:type}
+              functions={@module.functions}
+              library={@library}
+              library_version={@library_version}
+              libraries={@libraries}
+              selected_versions={@selected_versions}
+            />
+            <Functions
               header="Callbacks"
               type={:callback}
               functions={@module.functions}
@@ -442,20 +451,34 @@ defmodule AshHqWeb.Pages.Docs do
   defp load_docs_for(query, nil), do: query
   defp load_docs_for(query, []), do: query
 
-  defp load_docs_for(query, true) do
-    query.resource
-    |> AshHq.Docs.Extensions.RenderMarkdown.render_attributes()
-    |> Enum.reduce(query, fn {source, target}, query ->
-      Ash.Query.select(query, [source, target])
-    end)
+  defp load_docs_for(_query, true) do
+    raise "unreachable"
   end
 
   defp load_docs_for(query, name) when is_list(name) do
-    Ash.Query.load(query, html_for: %{for: Enum.join(name, "/")})
+    name = Enum.join(name, "/")
+    load_docs_for(query, name)
   end
 
   defp load_docs_for(query, name) do
-    Ash.Query.load(query, html_for: %{for: name})
+    query
+    |> Ash.Query.load(html_for: %{for: name})
+    |> load_additional_docs(name)
+  end
+
+  defp load_additional_docs(query, name) do
+    query.resource
+    |> AshHq.Docs.Extensions.RenderMarkdown.render_attributes()
+    |> Enum.reduce(query, fn {source, dest}, query ->
+      doc_source = AshHq.Docs.Extensions.Search.doc_attribute(query.resource)
+
+      if doc_source && source == doc_source do
+        query
+      else
+        load = String.to_existing_atom("#{dest}_for")
+        Ash.Query.load(query, [{load, %{for: name}}])
+      end
+    end)
   end
 
   defp deselect_doc_attributes(query) do

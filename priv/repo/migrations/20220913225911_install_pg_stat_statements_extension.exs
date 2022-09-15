@@ -12,8 +12,6 @@ defmodule AshHq.Repo.Migrations.InstallPgStatStatements do
   end
 
   def down do
-    # Uncomment this if you actually want to uninstall the extensions
-    # when this migration is rolled back:
-    # execute("DROP EXTENSION IF EXISTS \"pg_stat_statements\"")
+    execute("DROP EXTENSION IF EXISTS \"pg_stat_statements\"")
   end
 end

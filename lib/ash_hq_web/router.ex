@@ -66,6 +66,16 @@ defmodule AshHqWeb.Router do
     end
   end
 
+  ## Api routes
+  scope "/" do
+    forward "/gql", Absinthe.Plug, schema: AshHqWeb.Schema
+
+    forward "/playground",
+            Absinthe.Plug.GraphiQL,
+            schema: AshHqWeb.Schema,
+            interface: :playground
+  end
+
   ## Authentication routes
 
   scope "/", AshHqWeb do

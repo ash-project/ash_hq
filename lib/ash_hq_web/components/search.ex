@@ -140,7 +140,25 @@ defmodule AshHqWeb.Components.Search do
 
   defp render_item_type(assigns, item) do
     case item_type(item) do
-      type when type in ["Module", "Function"] ->
+      "Function" ->
+        case item.type do
+          type when type in [:function, :macro] ->
+            ~F"""
+            <Heroicons.Outline.CodeIcon class="h-4 w-4" />
+            """
+
+          :callback ->
+            ~F"""
+            <Heroicons.Outline.AtSymbolIcon class="h-4 w-4" />
+            """
+
+          :type ->
+            ~F"""
+            <Heroicons.Outline.InformationCircleIcon class="h-4 w-4" />
+            """
+        end
+
+      "Module" ->
         ~F"""
         <Heroicons.Outline.CodeIcon class="h-4 w-4" />
         """

@@ -48,7 +48,39 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
      |> add_matches_calculation(config)
      |> add_indexes(config)
      |> add_html_for_calculation(config)
+     |> add_additional_html_calculations(config)
      |> add_match_rank_calculation(config)}
+  end
+
+  defp add_additional_html_calculations(dsl_state, config) do
+    dsl_state
+    |> Transformer.get_option([:render_markdown], :render_attributes)
+    |> List.wrap()
+    |> Enum.reject(fn {source, _} ->
+      config.doc_attribute == source
+    end)
+    |> Enum.reduce(dsl_state, fn {_, dest}, dsl_state ->
+      name = :"#{dest}_for"
+      type = Ash.Resource.Info.attribute(dsl_state, dest).type
+
+      dsl_state
+      |> Transformer.add_entity(
+        [:calculations],
+        Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
+          name: name,
+          type: type,
+          arguments: [html_for_argument()],
+          calculation:
+            Ash.Query.expr(
+              if ^ref(config.show_docs_on) == ^arg(:for) do
+                ^ref(dest)
+              else
+                nil
+              end
+            )
+        )
+      )
+    end)
   end
 
   defp add_html_for_calculation(dsl_state, config) do

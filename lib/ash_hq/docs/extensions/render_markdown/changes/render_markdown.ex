@@ -12,6 +12,8 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
         source = Ash.Changeset.get_attribute(changeset, opts[:source])
         text = remove_ash_hq_hidden_content(source)
 
+        attribute = Ash.Resource.Info.attribute(changeset.resource, opts[:destination])
+
         changeset =
           if text != source do
             Ash.Changeset.force_change_attribute(changeset, opts[:source], text)
@@ -38,10 +40,28 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
 
             html_doc = AshHq.Docs.Extensions.RenderMarkdown.Highlighter.highlight(html_doc)
 
+            html_doc =
+              case attribute.type do
+                {:array, _} ->
+                  List.wrap(html_doc)
+
+                _ ->
+                  html_doc
+              end
+
             Ash.Changeset.force_change_attribute(changeset, opts[:destination], html_doc)
 
           {:ok, html_doc, _} ->
             html_doc = AshHq.Docs.Extensions.RenderMarkdown.Highlighter.highlight(html_doc)
+
+            html_doc =
+              case attribute.type do
+                {:array, _} ->
+                  List.wrap(html_doc)
+
+                _ ->
+                  html_doc
+              end
 
             Ash.Changeset.force_change_attribute(changeset, opts[:destination], html_doc)
         end
@@ -52,6 +72,10 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
   end
 
   defp remove_ash_hq_hidden_content(nil), do: nil
+
+  defp remove_ash_hq_hidden_content(strings) when is_list(strings) do
+    Enum.map(strings, &remove_ash_hq_hidden_content/1)
+  end
 
   defp remove_ash_hq_hidden_content(string) do
     string

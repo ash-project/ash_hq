@@ -3,12 +3,75 @@ require Logger
 
 Application.put_env(:dsl, :name, name)
 
-Mix.install([
-  {String.to_atom(name), "== #{version}"}
-], force: true, system_env: [
-  {"MIX_QUIET", "true"}
-])
+Mix.install(
+  [
+    {String.to_atom(name), "== #{version}"}
+  ],
+  force: true,
+  system_env: [
+    {"MIX_QUIET", "true"}
+  ]
+)
 
+defmodule Types do
+  def for_module(module) do
+    {:ok, types} = Code.Typespec.fetch_types(module)
+    types
+  rescue
+    _ ->
+      []
+  end
+
+  def callbacks_for_module(module) do
+    {:ok, callbacks} = Code.Typespec.fetch_callbacks(module)
+    callbacks
+  rescue
+    _ ->
+      []
+  end
+
+  def specs_for_module(module) do
+    {:ok, specs} = Code.Typespec.fetch_specs(module)
+    specs
+  rescue
+    _ ->
+      []
+  end
+
+  def additional_heads_for(specs, name, arity) do
+    specs
+    |> Enum.flat_map(fn
+      {{^name, ^arity}, contents} ->
+        contents
+
+      _ ->
+        []
+    end)
+    |> Enum.map(fn body ->
+      name
+      |> Code.Typespec.spec_to_quoted(body)
+      |> Macro.to_string()
+    end)
+  end
+
+  def code_for(types, name, arity) do
+    case Enum.find_value(types, fn
+           {:type, {^name, _, args} = type} ->
+             if Enum.count(args) == arity do
+               type
+             end
+
+           _other ->
+             false
+         end) do
+      nil ->
+        ""
+
+      type ->
+        type |> Code.Typespec.type_to_quoted() |> Macro.to_string()
+    end
+  end
+end
 
 defmodule Utils do
   def try_apply(func, default \\ nil) do
@@ -36,19 +99,21 @@ defmodule Utils do
     sections
     |> Enum.with_index()
     |> Enum.flat_map(fn {section, index} ->
-      [%{
-        name: section.name,
-        options: schema(section.schema, path ++ [section.name]),
-        doc: section.describe || "No documentation",
-        links: Map.new(section.links || []),
-        imports: Enum.map(section.imports, &inspect/1),
-        type: :section,
-        order: index,
-        examples: examples(section.examples),
-        path: path
-      }] ++
-      build_entities(section.entities, path ++ [section.name]) ++
-      build_sections(section.sections, path ++ [section.name])
+      [
+        %{
+          name: section.name,
+          options: schema(section.schema, path ++ [section.name]),
+          doc: section.describe || "No documentation",
+          links: Map.new(section.links || []),
+          imports: Enum.map(section.imports, &inspect/1),
+          type: :section,
+          order: index,
+          examples: examples(section.examples),
+          path: path
+        }
+      ] ++
+        build_entities(section.entities, path ++ [section.name]) ++
+        build_sections(section.sections, path ++ [section.name])
     end)
   end
 
@@ -56,19 +121,21 @@ defmodule Utils do
     entities
     |> Enum.with_index()
     |> Enum.flat_map(fn {entity, index} ->
-      [%{
-        name: entity.name,
-        recursive_as: Map.get(entity, :recursive_as),
-        examples: examples(entity.examples),
-        order: index,
-        doc: entity.describe || "No documentation",
-        imports: [],
-        links: Map.new(entity.links || []),
-        args: entity.args,
-        type: :entity,
-        path: path,
-        options: add_argument_indices(schema(entity.schema, path ++ [entity.name]), entity.args),
-      }] ++ build_entities(List.flatten(Keyword.values(entity.entities)), path ++ [entity.name])
+      [
+        %{
+          name: entity.name,
+          recursive_as: Map.get(entity, :recursive_as),
+          examples: examples(entity.examples),
+          order: index,
+          doc: entity.describe || "No documentation",
+          imports: [],
+          links: Map.new(entity.links || []),
+          args: entity.args,
+          type: :entity,
+          path: path,
+          options: add_argument_indices(schema(entity.schema, path ++ [entity.name]), entity.args)
+        }
+      ] ++ build_entities(List.flatten(Keyword.values(entity.entities)), path ++ [entity.name])
     end)
   end
 
@@ -89,8 +156,9 @@ defmodule Utils do
   end
 
   defp examples(examples) do
-    Enum.map(examples, fn {title, example} ->
-      "#{title}<>\n<>#{example}"
+    Enum.map(examples, fn
+      {title, example} ->
+        "#{title}<>\n<>#{example}"
 
       example ->
         example
@@ -118,28 +186,106 @@ defmodule Utils do
     {:docs_v1, _, :elixir, _, %{"en" => docs}, _, _} = Code.fetch_docs(module)
     docs
   rescue
-    _ -> "No Documentation"
+    _ -> ""
   end
 
-  def build_function({{type, name, arity}, line, heads, %{"en" => docs}, _}, file, order) when not(is_nil(type)) and not(is_nil(name)) and not(is_nil(arity)) do
-    [%{
-      name: to_string(name),
-      type: type,
-      file: file,
-      line: line,
-      arity: arity,
-      order: order,
-      heads: heads,
-      doc: docs || "No documentation"
-    }]
+  def build_function({_, _, _, :hidden, _}, _, _, _, _, _), do: []
+
+  def build_function(
+        {{type, name, arity}, line, heads, docs, _},
+        file,
+        types,
+        callbacks,
+        specs,
+        order
+      )
+      when not is_nil(type) and not is_nil(name) and not is_nil(arity) do
+    docs =
+      case docs do
+        %{"en" => en} ->
+          en
+
+        _ ->
+          ""
+      end
+
+    heads = List.wrap(heads)
+
+    heads =
+      case type do
+        :type ->
+          case Types.code_for(types, name, arity) do
+            "" ->
+              heads
+
+            head ->
+              [head | heads]
+          end
+
+        :callback ->
+          heads ++ Types.additional_heads_for(callbacks, name, arity)
+
+        :function ->
+          heads ++ Types.additional_heads_for(specs, name, arity)
+
+        :macro ->
+          heads ++ Types.additional_heads_for(specs, name, arity)
+
+        _ ->
+          heads
+      end
+
+    heads =
+      heads
+      |> Enum.map(fn head ->
+        head
+        |> Code.format_string!(line_length: 68)
+        |> IO.iodata_to_binary()
+      end)
+      |> case do
+        [] ->
+          ["#{name}/#{arity}"]
+
+        heads ->
+          heads
+      end
+
+    docs = """
+    ```elixir
+    #{Enum.join(heads, "\n")}
+    ```
+
+    <!--- heads-end -->
+
+    #{docs}
+    """
+
+    [
+      %{
+        name: to_string(name),
+        type: type,
+        file: file,
+        line: line,
+        arity: arity,
+        order: order,
+        doc: docs || "No documentation"
+      }
+    ]
   end
 
-  def build_function(_, _, _), do: []
+  def build_function(_, _, _, _, _, _), do: []
 
   def build_module(module, category, order) do
-    {:docs_v1, _, :elixir, _, %{
-      "en" => module_doc
-    }, _, defs} = Code.fetch_docs(module)
+    {:docs_v1, _, :elixir, _, docs, _, defs} = Code.fetch_docs(module)
+
+    module_doc =
+      case docs do
+        %{"en" => en} ->
+          en
+
+        _ ->
+          ""
+      end
 
     module_info =
       try do
@@ -151,19 +297,27 @@ defmodule Utils do
 
     file = file(module_info[:source])
 
+    types = Types.for_module(module)
+    callbacks = Types.callbacks_for_module(module)
+    typespecs = Types.specs_for_module(module)
+
     %{
       name: inspect(module),
       doc: module_doc,
       file: file,
       order: order,
       category: category,
-      functions: defs |> Enum.with_index() |> Enum.flat_map(fn {definition, i} ->
-        build_function(definition, file, i)
-      end)
+      functions:
+        defs
+        |> Enum.with_index()
+        |> Enum.flat_map(fn {definition, i} ->
+          build_function(definition, file, types, callbacks, typespecs, i)
+        end)
     }
   end
 
   defp file(nil), do: nil
+
   defp file(path) do
     this_path = Path.split(__ENV__.file)
     compile_path = Path.split(path)
@@ -219,7 +373,8 @@ defmodule Utils do
   defp type({:spark_type, type, _, _}), do: inspect(type)
 
   def doc_index?(module) do
-    Spark.implements_behaviour?(module, Spark.DocIndex) && module.for_library() == Application.get_env(:dsl, :name)
+    Spark.implements_behaviour?(module, Spark.DocIndex) &&
+      module.for_library() == Application.get_env(:dsl, :name)
   end
 end
 
@@ -247,7 +402,7 @@ case Enum.at(dsls, 0) do
       Utils.try_apply(fn -> dsl.guides() end, [])
       |> Enum.with_index()
       |> Enum.reduce(acc, fn {guide, order}, acc ->
-         Map.update!(acc, :guides, fn guides ->
+        Map.update!(acc, :guides, fn guides ->
           [Map.put(guide, :order, order) | guides]
         end)
       end)
@@ -274,7 +429,6 @@ case Enum.at(dsls, 0) do
           [Utils.build(extension, i) | extensions]
         end)
       end)
-
 
     File.write!(file, Base.encode64(:erlang.term_to_binary(data)))
 end

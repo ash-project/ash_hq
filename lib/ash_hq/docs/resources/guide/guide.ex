@@ -2,7 +2,10 @@ defmodule AshHq.Docs.Guide do
   @moduledoc false
   use AshHq.Resource,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
+    extensions: [
+      AshHq.Docs.Extensions.Search,
+      AshHq.Docs.Extensions.RenderMarkdown
+    ]
 
   resource do
     description "Represents a markdown guide exposed by a library"
@@ -18,7 +21,7 @@ defmodule AshHq.Docs.Guide do
     load_for_search library_version: [:library_name, :library_display_name]
     show_docs_on :route
     sanitized_name_attribute :route
-    auto_sanitize_name_attribute?(false)
+    auto_sanitize_name_attribute? false
   end
 
   code_interface do
@@ -27,6 +30,13 @@ defmodule AshHq.Docs.Guide do
 
   actions do
     defaults [:create, :read, :update, :destroy]
+
+    read :paginate do
+      pagination do
+        countable true
+        keyset? true
+      end
+    end
   end
 
   changes do
@@ -76,7 +86,7 @@ defmodule AshHq.Docs.Guide do
 
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
-      required? true
+      allow_nil? true
     end
   end
 end

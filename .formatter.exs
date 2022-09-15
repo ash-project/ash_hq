@@ -1,9 +1,15 @@
 [
-  import_deps: [:ecto, :phoenix, :ash, :ash_postgres, :surface],
-  inputs: ["*.{ex,exs}", "priv/*/seeds.exs", "{config,lib,test}/**/*.{ex,exs}"],
+  import_deps: [:ecto, :phoenix, :ash, :ash_postgres, :ash_graphql, :surface],
+  inputs: [
+    "*.{ex,exs}",
+    "priv/*/seeds.exs",
+    "priv/scripts/**/*.{ex,exs}",
+    "{config,lib,test}/**/*.{ex,exs}"
+  ],
   subdirectories: ["priv/*/migrations"],
-  plugins: [Spark.Formatter],
+  plugins: [Spark.Formatter, Surface.Formatter.Plugin],
   locals_without_parens: [
+    auto_sanitize_name_attribute?: 1,
     name_attribute: 1,
     library_version_attribute: 1,
     load_for_search: 1,

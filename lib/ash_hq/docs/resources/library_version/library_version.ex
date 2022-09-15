@@ -120,7 +120,7 @@ defmodule AshHq.Docs.LibraryVersion do
 
   relationships do
     belongs_to :library, AshHq.Docs.Library do
-      required? true
+      allow_nil? true
     end
 
     has_many :extensions, AshHq.Docs.Extension

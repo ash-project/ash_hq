@@ -53,16 +53,40 @@ defmodule AshHq.Docs.Importer do
       |> Enum.each(fn version ->
         file = Path.expand("./#{Ash.UUID.generate()}.json")
 
+        # Just throwing in a bunch of things here to see if it fixes the issue
+        # don't actually think they matter, but might as well try
+        env_to_unset = [
+          "RELEASE_BOOT_SCRIPT",
+          "RELEASE_MODE",
+          "RELEASE_COMMAND",
+          "BINDIR",
+          "RELEASE_REMOTE_VM_ARGS",
+          "RELEASE_ROOT",
+          "ROOTDIR",
+          "RELEASE_NODE",
+          "RELEASE_VSN",
+          "RELEASE_PROG",
+          "RELEASE_TMP",
+          "RELEASE_SYS_CONFIG",
+          "RELEASE_NAME",
+          "RELEASE_RELEASE_VM_ARGS",
+          "RELEASE_COOKIE"
+        ]
+
         result =
           try do
             with_retry(fn ->
               {_, 0} =
-                System.cmd("elixir", [
-                  Path.join([:code.priv_dir(:ash_hq), "scripts", "build_dsl_docs.exs"]),
-                  name,
-                  version,
-                  file
-                ])
+                System.cmd(
+                  "elixir",
+                  [
+                    Path.join([:code.priv_dir(:ash_hq), "scripts", "build_dsl_docs.exs"]),
+                    name,
+                    version,
+                    file
+                  ],
+                  env: Map.new(env_to_unset, &{&1, nil})
+                )
 
               output = File.read!(file)
               :erlang.binary_to_term(Base.decode64!(String.trim(output)))

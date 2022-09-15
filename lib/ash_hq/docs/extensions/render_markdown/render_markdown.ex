@@ -38,7 +38,15 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
         Map.get(record, render_attributes(resource)[key])
 
       on_demand? ->
-        as_html!(Map.get(record, key) || "", header_ids?(resource))
+        case Map.get(record, key) do
+          value when is_list(value) ->
+            Enum.map(value, fn value ->
+              as_html!(value || "", header_ids?(resource))
+            end)
+
+          value ->
+            as_html!(value || "", header_ids?(resource))
+        end
 
       true ->
         raise "#{resource} dos not render #{key} as markdown. Pass the `on_demand?` argument as `true` to render it dynamically."
@@ -55,10 +63,33 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
     ""
   end
 
+  def as_html!(text, add_ids?) when is_list(text) do
+    Enum.map(text, &as_html!(&1, add_ids?))
+  end
+
   def as_html!(text, add_ids?) do
     text
     |> Earmark.as_html!(opts(add_ids?))
     |> AshHq.Docs.Extensions.RenderMarkdown.Highlighter.highlight()
+  end
+
+  def as_html(text, add_ids?) when is_list(text) do
+    Enum.reduce_while(text, {:ok, [], []}, fn text, {:ok, list, errors} ->
+      case as_html(text, add_ids?) do
+        {:ok, text, new_errors} ->
+          {:cont, {:ok, [text | list], errors ++ new_errors}}
+
+        other ->
+          {:halt, other}
+      end
+    end)
+    |> case do
+      {:ok, list, errors} ->
+        {:ok, Enum.reverse(list), errors}
+
+      other ->
+        other
+    end
   end
 
   def as_html(text, add_ids?) do

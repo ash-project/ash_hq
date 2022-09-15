@@ -33,11 +33,15 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:ash, "~> 2.0.0-rc.4"},
-      # {:ash, path: "../ash", override: true},
-      {:ash_postgres, "~> 1.0.0-rc.3"},
+      # {:ash, "~> 2.0.0-rc.5"},
+      {:ash, path: "../ash", override: true},
+      # {:ash_postgres, "~> 1.0.0-rc.3"},
+      {:ash_postgres, github: "ash-project/ash_postgres"},
       # {:ash_postgres, path: "../ash_postgres"},
-      {:ash_phoenix, "~> 1.0.0-rc.0"},
+      # {:ash_phoenix, "~> 1.0.0-rc.0"},
+      {:ash_phoenix, github: "ash-project/ash_phoenix"},
+      {:ash_graphql, github: "ash-project/ash_graphql"},
+      {:absinthe_plug, "~> 1.5"},
       # {:ash_phoenix, github: "ash-project/ash_phoenix", branch: "ash-2.0", override: true},
       # {:ash_livebook, path: "../ash_livebook", only: [:dev]},
       {:spark, "~> 0.1"},
@@ -102,7 +106,7 @@ defmodule AshHq.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      seed: ["run priv/repo/seeds.exs", "import"],
+      seed: ["run priv/repo/seeds.exs"],
       setup: ["ash_postgres.create", "ash_postgres.migrate", "seed"],
       reset: ["drop", "setup"],
       credo: "credo --strict",

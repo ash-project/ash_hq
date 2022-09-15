@@ -491,7 +491,7 @@ defmodule AshHqWeb.Pages.Home do
 
                   relationships do
                     belongs_to :author, Example.User do
-                      required? true
+                      allow_nil? true
                     end
 
                     has_many :reactions, Example.Reaction

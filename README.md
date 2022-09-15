@@ -3,10 +3,11 @@
 ## Getting Started
 
 1. Fork and clone this repository.
-2. Set up the project by running `mix do deps.get, deps.compile, setup` (the import may take a while).
-3. Install the frontend assets by running `npm i --prefix assets`.
-4. Run the server with `iex -S mix phx.server`
-5. Open [http://localhost:4000](http://localhost:4000)
+2. Set up the project by running `mix do deps.get, deps.compile, setup`
+3. Run `mix import` to import the latest dependencies from hex (this may take a while)
+4. Install the frontend assets by running `npm i --prefix assets`.
+5. Run the server with `iex -S mix phx.server`
+6. Open [http://localhost:4000](http://localhost:4000)
 
 ## A Bit of History
 

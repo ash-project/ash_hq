@@ -2,7 +2,10 @@ defmodule AshHq.Docs do
   @moduledoc """
   Handles documentation data.
   """
-  use Ash.Api, otp_app: :ash_hq
+  use Ash.Api,
+    extensions: [
+      AshGraphql.Api
+    ]
 
   execution do
     timeout 30_000

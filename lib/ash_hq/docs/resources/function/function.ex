@@ -10,7 +10,7 @@ defmodule AshHq.Docs.Function do
   end
 
   render_markdown do
-    render_attributes doc: :doc_html
+    render_attributes doc: :doc_html, heads: :heads_html
     header_ids? false
   end
 
@@ -53,11 +53,15 @@ defmodule AshHq.Docs.Function do
     end
 
     attribute :type, :atom do
-      constraints one_of: [:function, :macro, :callback]
+      constraints one_of: [:function, :macro, :callback, :type]
       allow_nil? false
     end
 
     attribute :heads, {:array, :string} do
+      default []
+    end
+
+    attribute :heads_html, {:array, :string} do
       default []
     end
 
@@ -102,11 +106,11 @@ defmodule AshHq.Docs.Function do
 
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
-      required? true
+      allow_nil? true
     end
 
     belongs_to :module, AshHq.Docs.Module do
-      required? true
+      allow_nil? true
     end
   end
 end

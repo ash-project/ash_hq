@@ -93,7 +93,7 @@ defmodule AshHq.Docs.Extension do
 
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
-      required? true
+      allow_nil? true
     end
 
     has_many :dsls, AshHq.Docs.Dsl
