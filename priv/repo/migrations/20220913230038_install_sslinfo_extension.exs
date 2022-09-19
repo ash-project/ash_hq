@@ -8,10 +8,11 @@ defmodule AshHq.Repo.Migrations.InstallSslinfo do
   use Ecto.Migration
 
   def up do
-    execute("CREATE EXTENSION IF NOT EXISTS \"sslinfo\"")
+    # Removed because fly does not support this
+    # execute("CREATE EXTENSION IF NOT EXISTS \"sslinfo\"")
   end
 
   def down do
-    execute("DROP EXTENSION IF EXISTS \"sslinfo\"")
+    # execute("DROP EXTENSION IF EXISTS \"sslinfo\"")
   end
 end

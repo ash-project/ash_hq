@@ -6,7 +6,7 @@ defmodule AshHqWeb.Components.Search do
 
   alias AshHqWeb.Components.CalloutText
   alias AshHqWeb.DocRoutes
-  alias Surface.Components.{Form, LivePatch}
+  alias Surface.Components.Form
   alias Surface.Components.Form.{Checkbox, Label}
 
   prop open, :boolean, default: false
@@ -100,7 +100,13 @@ defmodule AshHqWeb.Components.Search do
   defp render_items(assigns, items) do
     ~F"""
     {#for item <- items}
-      <LivePatch to={DocRoutes.doc_link(item, @selected_versions)} opts={id: item.id}>
+      <button
+        class="block w-full text-left"
+        :on-click="go-to-doc"
+        phx-value-link={DocRoutes.doc_link(item, @selected_versions)}
+        phx-target={@myself}
+        id={item.id}
+      >
         <div class={
           "rounded-lg mb-4 py-2 px-2 hover:bg-base-dark-300 dark:hover:bg-base-dark-700",
           "bg-base-light-400 dark:bg-base-dark-600": @selected_item.id == item.id,
@@ -133,7 +139,7 @@ defmodule AshHqWeb.Components.Search do
             {raw(item.search_headline)}
           </div>
         </div>
-      </LivePatch>
+      </button>
     {/for}
     """
   end
@@ -245,6 +251,10 @@ defmodule AshHqWeb.Components.Search do
     else
       {:noreply, socket}
     end
+  end
+
+  def handle_event("go-to-doc", %{"link" => doc_link}, socket) do
+    {:noreply, push_redirect(socket, to: doc_link)}
   end
 
   def handle_event("go-to-doc", _, socket) do

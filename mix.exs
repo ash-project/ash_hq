@@ -33,8 +33,8 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      # {:ash, "~> 2.0.0-rc.5"},
-      {:ash, path: "../ash", override: true},
+      {:ash, "~> 2.0.0-rc.7"},
+      # {:ash, path: "../ash", override: true},
       # {:ash_postgres, "~> 1.0.0-rc.3"},
       {:ash_postgres, github: "ash-project/ash_postgres"},
       # {:ash_postgres, path: "../ash_postgres"},
@@ -70,7 +70,6 @@ defmodule AshHq.MixProject do
       {:ecto_psql_extras, "~> 0.6"},
       # Phoenix/Core dependencies
       {:phoenix, "~> 1.6.6"},
-      {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.0"},
