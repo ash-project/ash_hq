@@ -20,7 +20,7 @@ defmodule AshHq.Docs.Importer do
 
   defp import_periodically() do
     __MODULE__.import()
-    Process.send_after(self(), :import, :timer.minutes(5))
+    Process.send_after(self(), :import, :timer.minutes(30))
   end
 
   def handle_info(:import, state) do
