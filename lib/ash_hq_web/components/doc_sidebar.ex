@@ -6,19 +6,19 @@ defmodule AshHqWeb.Components.DocSidebar do
   alias Surface.Components.LivePatch
   alias Phoenix.LiveView.JS
 
-  prop class, :css_class, default: ""
-  prop libraries, :list, required: true
-  prop extension, :any, default: nil
-  prop guide, :any, default: nil
-  prop library, :any, default: nil
-  prop library_version, :any, default: nil
-  prop selected_versions, :map, default: %{}
-  prop id, :string, required: true
-  prop dsl, :any, required: true
-  prop module, :any, required: true
-  prop add_version, :event, required: true
-  prop remove_version, :event, required: true
-  prop change_version, :event, required: true
+  prop(class, :css_class, default: "")
+  prop(libraries, :list, required: true)
+  prop(extension, :any, default: nil)
+  prop(guide, :any, default: nil)
+  prop(library, :any, default: nil)
+  prop(library_version, :any, default: nil)
+  prop(selected_versions, :map, default: %{})
+  prop(id, :string, required: true)
+  prop(dsl, :any, required: true)
+  prop(module, :any, required: true)
+  prop(add_version, :event, required: true)
+  prop(remove_version, :event, required: true)
+  prop(change_version, :event, required: true)
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -161,12 +161,6 @@ defmodule AshHqWeb.Components.DocSidebar do
       </div>
     </aside>
     """
-  end
-
-  defp has_selected_guide?(guides_by_library, guide_id) do
-    Enum.any?(guides_by_library, fn {_, guides} ->
-      Enum.any?(guides, &(&1.id == guide_id))
-    end)
   end
 
   defp render_dsls(assigns, dsls, path) do

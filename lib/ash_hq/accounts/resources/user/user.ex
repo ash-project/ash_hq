@@ -4,6 +4,8 @@ defmodule AshHq.Accounts.User do
   use AshHq.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer]
+    
+  alias AshHq.Accounts.Preparations
 
   actions do
     defaults [:read]
@@ -20,7 +22,7 @@ defmodule AshHq.Accounts.User do
     read :by_token do
       argument :token, :url_encoded_binary, allow_nil?: false
       argument :context, :string, allow_nil?: false
-      prepare AshHq.Accounts.Preparations.DetermineDaysForToken
+      prepare Preparations.DetermineDaysForToken
 
       filter expr(
                token.token == ^arg(:token) and token.context == ^arg(:context) and
