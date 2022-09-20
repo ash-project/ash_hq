@@ -7,20 +7,30 @@ defmodule AshHq.Application do
 
   @impl true
   def start(_type, _args) do
-    children = [
-      Supervisor.child_spec({Finch, name: AshHq.Finch}, id: AshHq.Finch),
-      Supervisor.child_spec({Finch, name: Swoosh.Finch}, id: Swoosh.Finch),
-      # Start the Ecto repository
-      AshHq.Repo,
-      # Start the Telemetry supervisor
-      AshHqWeb.Telemetry,
-      # Start the PubSub system
-      {Phoenix.PubSub, name: AshHq.PubSub},
-      # Start the Endpoint (http/https)
-      AshHqWeb.Endpoint
-      # Start a worker by calling: AshHq.Worker.start_link(arg)
-      # {AshHq.Worker, arg}
-    ]
+    importer =
+      if Application.get_env(:ash_hq, :periodic_imports) do
+        [
+          AshHq.Docs.Importer
+        ]
+      else
+        []
+      end
+
+    children =
+      [
+        Supervisor.child_spec({Finch, name: AshHq.Finch}, id: AshHq.Finch),
+        Supervisor.child_spec({Finch, name: Swoosh.Finch}, id: Swoosh.Finch),
+        # Start the Ecto repository
+        AshHq.Repo,
+        # Start the Telemetry supervisor
+        AshHqWeb.Telemetry,
+        # Start the PubSub system
+        {Phoenix.PubSub, name: AshHq.PubSub},
+        # Start the Endpoint (http/https)
+        AshHqWeb.Endpoint
+        # Start a worker by calling: AshHq.Worker.start_link(arg)
+        # {AshHq.Worker, arg}
+      ] ++ importer
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

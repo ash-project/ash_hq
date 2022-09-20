@@ -17,6 +17,7 @@ config :ash_hq, AshHqWeb.Endpoint,
 config :logger, level: :info
 
 config :ash_hq, :analytics?, true
+config :ash_hq, :periodic_imports, true
 
 # ## SSL Support
 #

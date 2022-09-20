@@ -3,9 +3,30 @@ defmodule AshHq.Docs.Importer do
   Builds the documentation into term files in the `priv/docs` directory.
   """
 
+  use GenServer
+
   alias AshHq.Docs.LibraryVersion
   require Logger
   require Ash.Query
+
+  def start_link(_) do
+    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
+  end
+
+  def init(_) do
+    send(self(), :import)
+    {:ok, %{}}
+  end
+
+  defp import_periodically() do
+    __MODULE__.import()
+    Process.send_after(self(), :import, :timer.minutes(5))
+  end
+
+  def handle_info(:import, state) do
+    import_periodically()
+    {:noreply, state}
+  end
 
   # sobelow_skip ["Misc.BinToTerm", "Traversal.FileModule"]
   def import(opts \\ []) do
@@ -17,6 +38,13 @@ defmodule AshHq.Docs.Importer do
       else
         AshHq.Docs.Library
       end
+
+    path_var =
+      "PATH"
+      |> System.get_env()
+      |> String.split(":")
+      |> Enum.reject(&String.starts_with?(&1, "/_build"))
+      |> Enum.join(":")
 
     for %{name: name, latest_version: latest_version} = library <-
           AshHq.Docs.Library.read!(load: :latest_version, query: query) do
@@ -53,26 +81,6 @@ defmodule AshHq.Docs.Importer do
       |> Enum.each(fn version ->
         file = Path.expand("./#{Ash.UUID.generate()}.json")
 
-        # Just throwing in a bunch of things here to see if it fixes the issue
-        # don't actually think they matter, but might as well try
-        env_to_unset = [
-          "RELEASE_BOOT_SCRIPT",
-          "RELEASE_MODE",
-          "RELEASE_COMMAND",
-          "BINDIR",
-          "RELEASE_REMOTE_VM_ARGS",
-          "RELEASE_ROOT",
-          "ROOTDIR",
-          "RELEASE_NODE",
-          "RELEASE_VSN",
-          "RELEASE_PROG",
-          "RELEASE_TMP",
-          "RELEASE_SYS_CONFIG",
-          "RELEASE_NAME",
-          "RELEASE_RELEASE_VM_ARGS",
-          "RELEASE_COOKIE"
-        ]
-
         result =
           try do
             with_retry(fn ->
@@ -85,7 +93,7 @@ defmodule AshHq.Docs.Importer do
                     version,
                     file
                   ],
-                  env: Map.new(env_to_unset, &{&1, nil})
+                  env: %{"PATH" => path_var}
                 )
 
               output = File.read!(file)
