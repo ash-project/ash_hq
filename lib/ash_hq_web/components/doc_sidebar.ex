@@ -4,6 +4,7 @@ defmodule AshHqWeb.Components.DocSidebar do
 
   alias AshHqWeb.DocRoutes
   alias Surface.Components.LivePatch
+  alias Phoenix.LiveView.JS
 
   prop class, :css_class, default: ""
   prop libraries, :list, required: true
@@ -47,31 +48,39 @@ defmodule AshHqWeb.Components.DocSidebar do
           </div>
           {#for {category, guides_by_library} <- guides_by_category_and_library(@libraries, @selected_versions)}
             <div class="text-base-light-500">
-              <button class="flex flex-row items-center">
-                <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" /><div>{category}</div>
+              <button phx-click={collapse("#{@id}-#{String.replace(category, " ", "-")}")} class="flex flex-row items-center">
+                <div id={"#{@id}-#{String.replace(category, " ", "-")}-chevron-down"}>
+                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
+                </div>
+                <div id={"#{@id}-#{String.replace(category, " ", "-")}-chevron-right"} class="-rotate-90" style="display: none;">
+                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
+                </div>
+                <div>{category}</div>
               </button>
             </div>
-            {#for {library, guides} <- guides_by_library}
-              <li class="ml-3 text-base-light-400 p-1">
-                {library}
-                <ul>
-                  {#for guide <- guides}
-                    <li class="ml-1">
-                      <LivePatch
-                        to={DocRoutes.doc_link(guide, @selected_versions)}
-                        class={
-                          "flex items-center p-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-200 hover:bg-base-light-100 dark:hover:bg-base-dark-700",
-                          "bg-base-light-300 dark:bg-base-dark-600": @guide && @guide.id == guide.id
-                        }
-                      >
-                        <Heroicons.Outline.BookOpenIcon class="h-4 w-4" />
-                        <span class="ml-3 mr-2">{guide.name}</span>
-                      </LivePatch>
-                    </li>
-                  {/for}
-                </ul>
-              </li>
-            {/for}
+            <div id={"#{@id}-#{String.replace(category, " ", "-")}"}>
+              {#for {library, guides} <- guides_by_library}
+                <li class="ml-3 text-base-light-400 p-1">
+                  {library}
+                  <ul>
+                    {#for guide <- guides}
+                      <li class="ml-1">
+                        <LivePatch
+                          to={DocRoutes.doc_link(guide, @selected_versions)}
+                          class={
+                            "flex items-center p-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-200 hover:bg-base-light-100 dark:hover:bg-base-dark-700",
+                            "bg-base-light-300 dark:bg-base-dark-600": @guide && @guide.id == guide.id
+                          }
+                        >
+                          <Heroicons.Outline.BookOpenIcon class="h-4 w-4" />
+                          <span class="ml-3 mr-2">{guide.name}</span>
+                        </LivePatch>
+                      </li>
+                    {/for}
+                  </ul>
+                </li>
+              {/for}
+            </div>
           {/for}
           <div class="mt-4">
             Reference
@@ -79,41 +88,55 @@ defmodule AshHqWeb.Components.DocSidebar do
           <div class="ml-2 space-y-2">
             {#if !Enum.empty?(get_extensions(@libraries, @selected_versions))}
               <div class="text-base-light-500">
-                <button class="flex flex-row items-center" >
-                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />Extensions
+              <button phx-click={collapse("#{@id}-extension")} class="flex flex-row items-center" >
+                  <div id={"#{@id}-extension-chevron-down"}>
+                    <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
+                  </div>
+                  <div id={"#{@id}-extension-chevron-right"} class="-rotate-90" style="display: none;">
+                    <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
+                  </div>
+                  Extensions
                 </button>
               </div>
             {/if}
-              {#for {library, extensions} <- get_extensions(@libraries, @selected_versions)}
-                <li class="ml-3 text-base-light-200 p-1">
-                  {library}
-                  <ul>
-                    {#for extension <- extensions}
-                      <li class="ml-1">
-                        <LivePatch
-                          to={DocRoutes.doc_link(extension, @selected_versions)}
-                          class={
-                            "flex items-center p-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-200 hover:bg-base-light-100 dark:hover:bg-base-dark-700",
-                            "dark:bg-base-dark-600": @extension && @extension.id == extension.id
-                          }
-                        >
-                          {render_icon(assigns, extension.type)}
-                          <span class="ml-3 mr-2">{extension.name}</span>
-                        </LivePatch>
-                        {#if @extension && @extension.id == extension.id && !Enum.empty?(extension.dsls)}
-                          {render_dsls(assigns, extension.dsls, [])}
-                        {/if}
-                      </li>
-                    {/for}
-                  </ul>
-                </li>
-              {/for}
+              <div id={"#{@id}-extension"}>
+                {#for {library, extensions} <- get_extensions(@libraries, @selected_versions)}
+                  <li class="ml-3 text-base-light-200 p-1">
+                    {library}
+                    <ul>
+                      {#for extension <- extensions}
+                        <li class="ml-1">
+                          <LivePatch
+                            to={DocRoutes.doc_link(extension, @selected_versions)}
+                            class={
+                              "flex items-center p-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-200 hover:bg-base-light-100 dark:hover:bg-base-dark-700"
+                            }
+                          >
+                            {render_icon(assigns, extension.type)}
+                            <span class="ml-3 mr-2">{extension.name}</span>
+                          </LivePatch>
+                          {#if @extension && @extension.id == extension.id && !Enum.empty?(extension.dsls)}
+                            {render_dsls(assigns, extension.dsls, [])}
+                          {/if}
+                        </li>
+                      {/for}
+                    </ul>
+                  </li>
+                {/for}
+              </div>
 
             <div class="text-base-light-500">
-                <button phx-value-id="modules" class="flex flex-row items-center">
-                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />Modules
+                <button phx-click={collapse("#{@id}-modules")} class="flex flex-row items-center">
+                  <div id={"#{@id}-modules-chevron-down"}>
+                    <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
+                  </div>
+                  <div id={"#{@id}-modules-chevron-right"} class="-rotate-90" style="display: none;">
+                    <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
+                  </div>
+                  Modules
                 </button>
             </div>
+            <div id={"#{@id}-modules"}>
               {#for {category, modules} <- modules_by_category(@libraries, @selected_versions)}
                 <div class="ml-4">
                   <span class="text-sm text-base-light-900 dark:text-base-dark-100">{category}</span>
@@ -123,8 +146,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                     <LivePatch
                       to={DocRoutes.doc_link(module, @selected_versions)}
                       class={
-                        "flex items-center space-x-2 pt-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-100 hover:bg-base-light-100 dark:hover:bg-base-light-700",
-                        "dark:bg-base-dark-600": @module && @module.id == module.id
+                        "flex items-center space-x-2 pt-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-100 hover:bg-base-light-100 dark:hover:bg-base-light-700"
                       }
                     >
                       <Heroicons.Outline.CodeIcon class="h-4 w-4" />
@@ -133,6 +155,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                   </li>
                 {/for}
               {/for}
+            </div>
           </div>
         </ul>
       </div>
@@ -342,5 +365,12 @@ defmodule AshHqWeb.Components.DocSidebar do
         Enum.find_index(last, &(&1 == key))
       end)
     )
+  end
+
+  defp collapse(id, js \\ %JS{}) do
+    js
+    |> JS.toggle(to: "##{id}", time: 0)
+    |> JS.toggle(to: "##{id}-chevron-down", time: 0)
+    |> JS.toggle(to: "##{id}-chevron-right", time: 0)
   end
 end
