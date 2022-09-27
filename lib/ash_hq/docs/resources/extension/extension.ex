@@ -48,7 +48,7 @@ defmodule AshHq.Docs.Extension do
       end
 
       argument :dsls, {:array, :map}
-      change manage_relationship(:library_version, type: :replace)
+      change manage_relationship(:library_version, type: :append_and_remove)
       change {AshHq.Docs.Changes.AddArgToRelationship, arg: :library_version, rel: :dsls}
 
       change {AshHq.Docs.Changes.AddArgToRelationship,

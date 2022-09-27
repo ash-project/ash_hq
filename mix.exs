@@ -33,8 +33,10 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:ash, "~> 2.0.0-rc.7"},
+      {:ash, github: "ash-project/ash", override: true},
+      # {:ash, "~> 2.0.0-rc.8"},
       # {:ash, path: "../ash", override: true},
+
       # {:ash_postgres, "~> 1.0.0-rc.3"},
       {:ash_postgres, github: "ash-project/ash_postgres"},
       # {:ash_postgres, path: "../ash_postgres"},
@@ -44,10 +46,10 @@ defmodule AshHq.MixProject do
       {:absinthe_plug, "~> 1.5"},
       # {:ash_phoenix, github: "ash-project/ash_phoenix", branch: "ash-2.0", override: true},
       # {:ash_livebook, path: "../ash_livebook", only: [:dev]},
-      # {:spark, "~> 0.1"},
-      {:spark, path: "../spark", override: true},
+      {:spark, "~> 0.1"},
+      # {:spark, path: "../spark", override: true},
       {:earmark, "~> 1.5.0-pre1", override: true},
-      {:surface, "~> 0.8.1"},
+      {:surface, "== 0.8.1"},
       {:surface_heroicons, "~> 0.6.0"},
       # Syntax Highlighting
       {:makeup, "~> 1.1"},

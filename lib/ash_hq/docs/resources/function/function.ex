@@ -92,7 +92,7 @@ defmodule AshHq.Docs.Function do
       primary? true
       argument :library_version, :uuid
 
-      change manage_relationship(:library_version, type: :replace)
+      change manage_relationship(:library_version, type: :append_and_remove)
     end
   end
 

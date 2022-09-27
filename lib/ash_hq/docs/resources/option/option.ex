@@ -94,8 +94,8 @@ defmodule AshHq.Docs.Option do
         allow_nil? false
       end
 
-      change manage_relationship(:extension_id, :extension, type: :replace)
-      change manage_relationship(:library_version, type: :replace)
+      change manage_relationship(:extension_id, :extension, type: :append_and_remove)
+      change manage_relationship(:library_version, type: :append_and_remove)
     end
   end
 

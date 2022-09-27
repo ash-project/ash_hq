@@ -7,7 +7,6 @@
     "{config,lib,test}/**/*.{ex,exs}"
   ],
   subdirectories: ["priv/*/migrations"],
-  plugins: [Spark.Formatter, Surface.Formatter.Plugin],
   locals_without_parens: [
     auto_sanitize_name_attribute?: 1,
     name_attribute: 1,

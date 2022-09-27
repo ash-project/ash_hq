@@ -26,7 +26,7 @@ defmodule AshHq.Accounts.UserToken do
 
       argument :user, :map
 
-      change manage_relationship(:user, type: :replace)
+      change manage_relationship(:user, type: :append_and_remove)
       change set_attribute(:context, "session")
       change AshHq.Accounts.UserToken.Changes.BuildSessionToken
     end
@@ -36,7 +36,7 @@ defmodule AshHq.Accounts.UserToken do
 
       argument :user, :map
 
-      change manage_relationship(:user, type: :replace)
+      change manage_relationship(:user, type: :append_and_remove)
       change AshHq.Accounts.UserToken.Changes.BuildHashedToken
     end
   end
