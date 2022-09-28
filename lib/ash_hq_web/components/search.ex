@@ -4,24 +4,24 @@ defmodule AshHqWeb.Components.Search do
 
   require Ash.Query
 
-  alias AshHqWeb.Components.CalloutText
+  alias AshHqWeb.Components.{CalloutText, Catalogue}
   alias AshHqWeb.DocRoutes
+  alias Phoenix.LiveView.JS
   alias Surface.Components.Form
   alias Surface.Components.Form.{Checkbox, Label}
 
-  prop open, :boolean, default: false
   prop close, :event, required: true
   prop libraries, :list, required: true
   prop selected_versions, :map, required: true
-  prop change_versions, :event, required: true
   prop selected_types, :list, required: true
   prop change_types, :event, required: true
-  prop uri, :string, required: true
+  prop change_versions, :event, required: true
+  prop remove_version, :event, required: true
 
-  data versions, :map, default: %{}
   data search, :string, default: ""
   data item_list, :list, default: []
   data selected_item, :string
+  data selecting_packages, :boolean, default: false
 
   def render(assigns) do
     ~F"""
@@ -36,7 +36,21 @@ defmodule AshHqWeb.Components.Search do
         :on-window-keydown="select-previous"
         phx-key="ArrowUp"
       >
-        <div class="h-full px-6 my-6" :on-window-keydown="select-next" phx-key="ArrowDown">
+        <div class="h-full w-full" id="search-versions" style="display: none;">
+          <Catalogue
+            id="search-versions-contents"
+            toggle={toggle_libraries()}
+            libraries={@libraries}
+            selected_versions={@selected_versions}
+            change_versions={@change_versions}
+          />
+        </div>
+        <div
+          id="search-body"
+          class="h-full px-6 my-6"
+          :on-window-keydown="select-next"
+          phx-key="ArrowDown"
+        >
           <div class="flex flex-col w-full sticky">
             <div class="w-full flex flex-row justify-start top-0">
               <Heroicons.Outline.SearchIcon class="h-6 w-6 mr-4 ml-4" />
@@ -86,9 +100,10 @@ defmodule AshHqWeb.Components.Search do
             </div>
             <AshHqWeb.Components.VersionPills
               id="search-version-pills"
-              editable={false}
               selected_versions={@selected_versions}
+              remove_version={@remove_version}
               libraries={@libraries}
+              toggle={toggle_libraries()}
             />
           </div>
         </div>
@@ -184,6 +199,12 @@ defmodule AshHqWeb.Components.Search do
     end
   end
 
+  defp toggle_libraries(js \\ %JS{}) do
+    js
+    |> JS.toggle(to: "#search-body")
+    |> JS.toggle(to: "#search-versions")
+  end
+
   defp item_name(%{name: name}), do: name
   defp item_name(%{version: version}), do: version
 
@@ -220,6 +241,10 @@ defmodule AshHqWeb.Components.Search do
 
   def update(assigns, socket) do
     {:ok, socket |> assign(assigns) |> search()}
+  end
+
+  def handle_event("toggle_versions", _, socket) do
+    {:noreply, socket |> assign(:selecting_packages, !socket.assigns.selecting_packages)}
   end
 
   def handle_event("search", %{"search" => search}, socket) do

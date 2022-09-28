@@ -4,7 +4,7 @@ defmodule AshHq.Accounts.User do
   use AshHq.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer]
-    
+
   alias AshHq.Accounts.Preparations
 
   actions do

@@ -9,6 +9,7 @@ defmodule AshHq.Docs.Library do
 
   identities do
     identity :unique_order, [:order]
+    identity :unique_name, [:name]
   end
 
   postgres do
@@ -50,6 +51,8 @@ defmodule AshHq.Docs.Library do
     attribute :order, :integer do
       allow_nil? false
     end
+
+    attribute :description, :string
   end
 
   aggregates do

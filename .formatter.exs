@@ -3,9 +3,11 @@
   inputs: [
     "*.{ex,exs}",
     "priv/*/seeds.exs",
+    "priv/repo/**/*.{ex,exs}",
     "priv/scripts/**/*.{ex,exs}",
     "{config,lib,test}/**/*.{ex,exs}"
   ],
+  plugins: [Surface.Formatter.Plugin],
   subdirectories: ["priv/*/migrations"],
   locals_without_parens: [
     auto_sanitize_name_attribute?: 1,

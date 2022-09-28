@@ -11,6 +11,7 @@ defmodule AshHqWeb.Components.VersionPills do
   prop remove_version, :event
   prop change_version, :event
   prop editable, :boolean, default: true
+  prop toggle, :event
 
   data adding_version, :boolean, default: false
 
@@ -29,19 +30,16 @@ defmodule AshHqWeb.Components.VersionPills do
           </div>
         {/if}
       {/for}
-      {#if @editable && can_be_added?(@selected_versions) && !@adding_version}
-        <button :on-click="add-version">
-          <Heroicons.Solid.PlusIcon class="h-4 w-4" />
-        </button>
-      {/if}
-      {#if @adding_version}
-        <Form for={:add_version} change={@add_version}>
-          <Select
-            class="rounded-lg text-primary-dark-900"
-            name={:library}
-            options={packages_to_add(@libraries, @selected_versions)}
-          />
-        </Form>
+      {#if @editable && can_be_added?(@selected_versions)}
+        {#if @toggle}
+          <button :on-click={@toggle}>
+            <Heroicons.Solid.PlusIcon class="h-4 w-4" />
+          </button>
+        {#else}
+          <button phx-click={AshHqWeb.AppViewLive.toggle_catalogue()}>
+            <Heroicons.Solid.PlusIcon class="h-4 w-4" />
+          </button>
+        {/if}
       {/if}
     </div>
     """

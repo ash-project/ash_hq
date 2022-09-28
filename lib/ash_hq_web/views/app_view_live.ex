@@ -3,7 +3,7 @@ defmodule AshHqWeb.AppViewLive do
   use Surface.LiveView,
     container: {:div, class: "h-full"}
 
-  alias AshHqWeb.Components.Search
+  alias AshHqWeb.Components.{CatalogueModal, Search}
   alias AshHqWeb.Components.AppView.TopBar
   alias AshHqWeb.Pages.{Docs, Home, LogIn, Register, ResetPassword, UserSettings}
   alias Phoenix.LiveView.JS
@@ -46,13 +46,20 @@ defmodule AshHqWeb.AppViewLive do
     >
       <Search
         id="search-box"
-        uri={@uri}
         close={close_search()}
         libraries={@libraries}
         selected_types={@selected_types}
         change_types="change-types"
-        change_versions="change-versions"
         selected_versions={@selected_versions}
+        change_versions="change-versions"
+        remove_version="remove_version"
+      />
+      <CatalogueModal
+        id="catalogue-box"
+        close={close_catalogue()}
+        libraries={@libraries}
+        selected_versions={@selected_versions}
+        change_versions="change-versions"
       />
       <button id="search-button" class="hidden" phx-click={AshHqWeb.AppViewLive.toggle_search()} />
       <div
@@ -82,9 +89,7 @@ defmodule AshHqWeb.AppViewLive do
               id="docs"
               uri={@uri}
               params={@params}
-              change_version="change_version"
               remove_version="remove_version"
-              add_version="add_version"
               change_versions="change-versions"
               selected_versions={@selected_versions}
               libraries={@libraries}
@@ -322,7 +327,6 @@ defmodule AshHqWeb.AppViewLive do
 
   def toggle_search(js \\ %JS{}) do
     js
-    |> JS.dispatch("js:noscroll-main", to: "#search-box")
     |> JS.toggle(
       to: "#search-box",
       in: {
@@ -339,13 +343,38 @@ defmodule AshHqWeb.AppViewLive do
     |> JS.dispatch("js:focus", to: "#search-input")
   end
 
+  def toggle_catalogue(js \\ %JS{}) do
+    js
+    |> JS.toggle(
+      to: "#catalogue-box",
+      in: {
+        "transition ease-in duration-100",
+        "opacity-0",
+        "opacity-100"
+      },
+      out: {
+        "transition ease-out duration-75",
+        "opacity-100",
+        "opacity-0"
+      }
+    )
+  end
+
   def close_search(js \\ %JS{}) do
     js
-    |> JS.dispatch("js:noscroll-main", to: "#search-box")
     |> JS.hide(
       transition: "fade-out",
       to: "#search-box"
     )
-    |> JS.dispatch("js:focus", to: "#search-input")
+    |> JS.hide(transition: "fade-out", to: "#search-versions")
+    |> JS.show(transition: "fade-in", to: "#search-body")
+  end
+
+  def close_catalogue(js \\ %JS{}) do
+    js
+    |> JS.hide(
+      transition: "fade-out",
+      to: "#catalogue-box"
+    )
   end
 end

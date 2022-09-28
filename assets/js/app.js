@@ -287,7 +287,12 @@ window.addEventListener("keydown", (event) => {
 });
 window.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
-    document.getElementById("close-search").click();
+    const closeSearchVersions = document.getElementById("close-search-versions");
+    if(closeSearchVersions && closeSearchVersions.offsetParent !== null) {
+      closeSearchVersions.click()
+    } else {
+      document.getElementById("close-search").click();
+    }
     event.preventDefault();
   }
 });

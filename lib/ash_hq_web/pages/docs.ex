@@ -47,8 +47,6 @@ defmodule AshHqWeb.Pages.Docs do
         <div id="mobile-sidebar-container" class="overflow-hidden hidden fixed w-min transition">
           <DocSidebar
             id="mobile-sidebar"
-            change_version={@change_version}
-            add_version={@add_version}
             remove_version={@remove_version}
             libraries={@libraries}
             extension={@extension}
@@ -66,8 +64,6 @@ defmodule AshHqWeb.Pages.Docs do
           <DocSidebar
             id="sidebar"
             class="hidden xl:block w-80 overflow-x-hidden custom-scrollbar"
-            change_version={@change_version}
-            add_version={@add_version}
             remove_version={@remove_version}
             module={@module}
             libraries={@libraries}
@@ -283,7 +279,11 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   def update(assigns, socket) do
-    {:ok, socket |> assign(assigns) |> load_docs()}
+    {:ok,
+     socket
+     |> assign(assigns)
+     |> assign(loaded_once: true)
+     |> load_docs(assigns[:loaded_once] || false)}
   end
 
   defp modules_in_scope(nil, _, _, _), do: []
@@ -373,7 +373,7 @@ defmodule AshHqWeb.Pages.Docs do
     )
   end
 
-  def load_docs(socket) do
+  def load_docs(socket, _loaded_once?) do
     socket = assign_library(socket)
 
     new_libraries =
@@ -419,10 +419,10 @@ defmodule AshHqWeb.Pages.Docs do
                 |> Ash.Query.load(options: options_query, dsls: dsls_query)
                 |> load_for_search(socket.assigns[:params]["extension"])
 
-              AshHq.Docs.load!(version,
-                extensions: extensions_query,
-                guides: guides_query,
-                modules: modules_query
+              AshHq.Docs.load!(
+                version,
+                [extensions: extensions_query, guides: guides_query, modules: modules_query],
+                lazy?: true
               )
             else
               version
