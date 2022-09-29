@@ -9,18 +9,18 @@ defmodule AshHq.Repo.Migrations.MigrateResources24 do
 
   def up do
     create table(:emails, primary_key: false) do
-      add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
-      add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
-      add :id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true
-      add :email, :citext, null: false
+      add(:updated_at, :utc_datetime_usec, null: false, default: fragment("now()"))
+      add(:inserted_at, :utc_datetime_usec, null: false, default: fragment("now()"))
+      add(:id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true)
+      add(:email, :citext, null: false)
     end
 
     create unique_index(:emails, [:email], name: "emails_unique_email_index")
   end
 
   def down do
-    drop_if_exists unique_index(:emails, [:email], name: "emails_unique_email_index")
+    drop_if_exists(unique_index(:emails, [:email], name: "emails_unique_email_index"))
 
-    drop table(:emails)
+    drop(table(:emails))
   end
 end

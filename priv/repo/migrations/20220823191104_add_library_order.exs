@@ -9,7 +9,7 @@ defmodule AshHq.Repo.Migrations.AddLibraryOrder do
 
   def up do
     alter table(:libraries) do
-      add :order, :bigint, null: true
+      add(:order, :bigint, null: true)
     end
 
     execute("""
@@ -18,13 +18,13 @@ defmodule AshHq.Repo.Migrations.AddLibraryOrder do
     """)
 
     alter table(:libraries) do
-      modify :order, :bigint, null: false
+      modify(:order, :bigint, null: false)
     end
   end
 
   def down do
     alter table(:libraries) do
-      remove :order
+      remove(:order)
     end
   end
 end

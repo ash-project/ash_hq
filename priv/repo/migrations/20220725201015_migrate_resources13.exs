@@ -9,7 +9,7 @@ defmodule AshHq.Repo.Migrations.MigrateResources13 do
 
   def up do
     alter table(:options) do
-      add :links, :map
+      add(:links, :map)
     end
 
     execute("""
@@ -203,7 +203,7 @@ defmodule AshHq.Repo.Migrations.MigrateResources13 do
     """)
 
     alter table(:options) do
-      remove :links
+      remove(:links)
     end
   end
 end

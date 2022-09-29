@@ -316,6 +316,37 @@ defmodule Utils do
     }
   end
 
+  def build_mix_task(mix_task, category, order) do
+    {:docs_v1, _, :elixir, _, docs, _, _} = Code.fetch_docs(mix_task)
+
+    module_doc =
+      case docs do
+        %{"en" => en} ->
+          en
+
+        _ ->
+          ""
+      end
+
+    module_info =
+      try do
+        mix_task.module_info(:compile)
+      rescue
+        _ ->
+          nil
+      end
+
+    file = file(module_info[:source])
+
+    %{
+      name: Mix.Task.task_name(mix_task),
+      doc: module_doc,
+      file: file,
+      order: order,
+      category: category
+    }
+  end
+
   defp file(nil), do: nil
 
   defp file(path) do
@@ -395,7 +426,8 @@ case Enum.at(dsls, 0) do
     acc = %{
       doc: Utils.module_docs(dsl),
       guides: [],
-      modules: []
+      modules: [],
+      mix_tasks: []
     }
 
     acc =
@@ -415,6 +447,19 @@ case Enum.at(dsls, 0) do
         |> Enum.reduce(acc, fn {module, order}, acc ->
           Map.update!(acc, :modules, fn modules ->
             [Utils.build_module(module, category, order) | modules]
+          end)
+        end)
+      end)
+
+    acc =
+      Utils.try_apply(fn -> dsl.mix_tasks() end, [])
+      |> List.wrap()
+      |> Enum.reduce(acc, fn {category, mix_tasks}, acc ->
+        mix_tasks
+        |> Enum.with_index()
+        |> Enum.reduce(acc, fn {mix_task, order}, acc ->
+          Map.update!(acc, :mix_tasks, fn mix_tasks ->
+            [Utils.build_mix_task(mix_task, category, order) | mix_tasks]
           end)
         end)
       end)

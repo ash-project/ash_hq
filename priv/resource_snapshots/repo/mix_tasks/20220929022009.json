@@ -1,0 +1,142 @@
+{
+  "attributes": [
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "sanitized_name",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"uuid_generate_v4()\")",
+      "generated?": false,
+      "primary_key?": true,
+      "references": null,
+      "size": null,
+      "source": "id",
+      "type": "uuid"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "name",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "\"Misc\"",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "category",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "file",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "\"\"",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "doc",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "doc_html",
+      "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "order",
+      "type": "bigint"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": {
+        "destination_attribute": "id",
+        "destination_attribute_default": null,
+        "destination_attribute_generated": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "mix_tasks_library_version_id_fkey",
+        "on_delete": "delete",
+        "on_update": null,
+        "schema": "public",
+        "table": "library_versions"
+      },
+      "size": null,
+      "source": "library_version_id",
+      "type": "uuid"
+    }
+  ],
+  "base_filter": null,
+  "check_constraints": [],
+  "custom_indexes": [],
+  "custom_statements": [
+    {
+      "code?": false,
+      "down": "DROP INDEX mix_tasks_name_lower_index;",
+      "name": "name_index",
+      "up": "CREATE INDEX mix_tasks_name_lower_index ON mix_tasks(lower(name));\n"
+    },
+    {
+      "code?": false,
+      "down": "DROP INDEX mix_tasks_name_trigram_index;",
+      "name": "trigram_index",
+      "up": "CREATE INDEX mix_tasks_name_trigram_index ON mix_tasks USING GIST (name gist_trgm_ops);\n"
+    },
+    {
+      "code?": false,
+      "down": "DROP INDEX mix_tasks_search_index;",
+      "name": "search_index",
+      "up": "CREATE INDEX mix_tasks_search_index ON mix_tasks USING GIN((\n  setweight(to_tsvector('english', name), 'A') ||\n  setweight(to_tsvector('english', doc), 'D')\n));\n"
+    }
+  ],
+  "has_create_action": true,
+  "hash": "F388F84B5CBCF451EC7BF4FFE450D0C3716BDA729376CF2566FF2B92911EC459",
+  "identities": [],
+  "multitenancy": {
+    "attribute": null,
+    "global": null,
+    "strategy": null
+  },
+  "repo": "Elixir.AshHq.Repo",
+  "schema": null,
+  "table": "mix_tasks"
+}

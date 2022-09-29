@@ -9,13 +9,13 @@ defmodule AshHq.Repo.Migrations.MigrateResources20 do
 
   def up do
     alter table(:library_versions) do
-      add :branch, :boolean, null: false, default: false
+      add(:branch, :boolean, null: false, default: false)
     end
   end
 
   def down do
     alter table(:library_versions) do
-      remove :branch
+      remove(:branch)
     end
   end
 end

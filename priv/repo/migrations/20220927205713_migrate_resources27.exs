@@ -12,6 +12,6 @@ defmodule AshHq.Repo.Migrations.MigrateResources27 do
   end
 
   def down do
-    drop_if_exists unique_index(:libraries, [:name], name: "libraries_unique_name_index")
+    drop_if_exists(unique_index(:libraries, [:name], name: "libraries_unique_name_index"))
   end
 end

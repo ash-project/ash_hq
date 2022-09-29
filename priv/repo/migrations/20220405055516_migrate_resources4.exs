@@ -9,15 +9,15 @@ defmodule AshHq.Repo.Migrations.MigrateResources4 do
 
   def up do
     alter table(:guides) do
-      add :category, :text, default: "Guides"
-      add :route, :text, null: false
+      add(:category, :text, default: "Guides")
+      add(:route, :text, null: false)
     end
   end
 
   def down do
     alter table(:guides) do
-      remove :route
-      remove :category
+      remove(:route)
+      remove(:category)
     end
   end
 end

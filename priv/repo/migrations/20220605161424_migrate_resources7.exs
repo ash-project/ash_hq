@@ -9,13 +9,13 @@ defmodule AshHq.Repo.Migrations.MigrateResources7 do
 
   def up do
     alter table(:modules) do
-      add :category, :text, null: false, default: "Misc"
+      add(:category, :text, null: false, default: "Misc")
     end
   end
 
   def down do
     alter table(:modules) do
-      remove :category
+      remove(:category)
     end
   end
 end

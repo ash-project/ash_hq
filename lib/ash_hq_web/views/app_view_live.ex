@@ -56,7 +56,6 @@ defmodule AshHqWeb.AppViewLive do
       />
       <CatalogueModal
         id="catalogue-box"
-        close={close_catalogue()}
         libraries={@libraries}
         selected_versions={@selected_versions}
         change_versions="change-versions"

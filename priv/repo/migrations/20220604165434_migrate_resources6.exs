@@ -9,34 +9,34 @@ defmodule AshHq.Repo.Migrations.MigrateResources6 do
 
   def up do
     alter table(:library_versions) do
-      remove :processed
-      remove :data
+      remove(:processed)
+      remove(:data)
     end
 
     alter table(:libraries) do
-      remove :description
+      remove(:description)
 
-      modify :track_branches, {:array, :text}, default: nil
+      modify(:track_branches, {:array, :text}, default: nil)
     end
 
     alter table(:functions) do
-      modify :heads, {:array, :text}, default: nil
+      modify(:heads, {:array, :text}, default: nil)
     end
   end
 
   def down do
     alter table(:functions) do
-      modify :heads, {:array, :text}, default: []
+      modify(:heads, {:array, :text}, default: [])
     end
 
     alter table(:libraries) do
-      modify :track_branches, {:array, :text}, default: []
-      add :description, :text
+      modify(:track_branches, {:array, :text}, default: [])
+      add(:description, :text)
     end
 
     alter table(:library_versions) do
-      add :data, :map
-      add :processed, :boolean, default: false
+      add(:data, :map)
+      add(:processed, :boolean, default: false)
     end
   end
 end

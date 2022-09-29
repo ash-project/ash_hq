@@ -10,6 +10,7 @@ defmodule AshHq.Docs.Registry do
     entry AshHq.Docs.Guide
     entry AshHq.Docs.Library
     entry AshHq.Docs.LibraryVersion
+    entry AshHq.Docs.MixTask
     entry AshHq.Docs.Module
     entry AshHq.Docs.Option
   end

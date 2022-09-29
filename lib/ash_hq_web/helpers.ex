@@ -6,10 +6,15 @@ defmodule AshHqWeb.Helpers do
   alias AshHqWeb.DocRoutes
 
   def latest_version(library) do
-    Enum.at(library.versions, 0)
+    library.versions
+    |> Enum.min(&(Version.compare(&1.version, &2.version) != :lt))
   end
 
   def source_link(%AshHq.Docs.Module{file: file}, library, library_version) do
+    "https://github.com/ash-project/#{library.name}/tree/v#{library_version.version}/#{file}"
+  end
+
+  def source_link(%AshHq.Docs.MixTask{file: file}, library, library_version) do
     "https://github.com/ash-project/#{library.name}/tree/v#{library_version.version}/#{file}"
   end
 
@@ -37,8 +42,6 @@ defmodule AshHqWeb.Helpers do
         "<pre><code>#{render_mix_dep(libraries, library, selected_versions, text)}</code></pre>"
       rescue
         e ->
-          IO.inspect(__STACKTRACE__)
-
           Logger.error(
             "Invalid link #{Exception.format(:error, e)}\n#{Exception.format_stacktrace(__STACKTRACE__)}"
           )
@@ -87,8 +90,6 @@ defmodule AshHqWeb.Helpers do
         render_link(libraries, selected_versions, library, type, item, text, rest)
       rescue
         e ->
-          IO.inspect(__STACKTRACE__)
-
           Logger.error(
             "Invalid link #{Exception.format(:error, e)}\n#{Exception.format_stacktrace(__STACKTRACE__)}"
           )

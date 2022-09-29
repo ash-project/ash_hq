@@ -29,6 +29,7 @@ defmodule AshHqWeb.Pages.Docs do
   data dsl, :any
   data options, :list, default: []
   data module, :any
+  data mix_task, :any
   data positional_options, :list
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
@@ -51,6 +52,7 @@ defmodule AshHqWeb.Pages.Docs do
             libraries={@libraries}
             extension={@extension}
             module={@module}
+            mix_task={@mix_task}
             guide={@guide}
             library={@library}
             library_version={@library_version}
@@ -66,6 +68,7 @@ defmodule AshHqWeb.Pages.Docs do
             class="hidden xl:block w-80 overflow-x-hidden custom-scrollbar"
             remove_version={@remove_version}
             module={@module}
+            mix_task={@mix_task}
             libraries={@libraries}
             extension={@extension}
             guide={@guide}
@@ -86,6 +89,13 @@ defmodule AshHqWeb.Pages.Docs do
           >
             {#if @module}
               <h2>{@module.name} <SourceLink module_or_function={@module} library={@library} library_version={@library_version} /></h2>
+            {/if}
+            {#if @mix_task}
+              <h2>{@mix_task.name} <SourceLink
+                  module_or_function={@mix_task}
+                  library={@library}
+                  library_version={@library_version}
+                /></h2>
             {/if}
             {#if @library_version}
               <div class="static mb-6 md:absolute right-2 top-2 border rounded-lg flex flex-row w-fit">
@@ -279,11 +289,19 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   def update(assigns, socket) do
-    {:ok,
-     socket
-     |> assign(assigns)
-     |> assign(loaded_once: true)
-     |> load_docs(assigns[:loaded_once] || false)}
+    if (assigns[:selected_versions] == socket.assigns[:selected_versions] &&
+          Map.get(socket.assigns.library_version || %{}, :id) ==
+            Map.get(assigns[:library_version] || %{}, :id)) || !socket.assigns[:loaded_once?] do
+      {:ok,
+       socket
+       |> assign(assigns)
+       |> assign(:loaded_once?, false)
+       |> load_docs()}
+    else
+      {:ok,
+       socket
+       |> assign(assigns)}
+    end
   end
 
   defp modules_in_scope(nil, _, _, _), do: []
@@ -373,61 +391,79 @@ defmodule AshHqWeb.Pages.Docs do
     )
   end
 
-  def load_docs(socket, _loaded_once?) do
+  def load_docs(socket) do
     socket = assign_library(socket)
+
+    dsls_query =
+      AshHq.Docs.Dsl
+      |> Ash.Query.sort(order: :asc)
+      |> load_for_search(socket.assigns[:params]["dsl_path"])
+
+    options_query =
+      AshHq.Docs.Option
+      |> Ash.Query.sort(order: :asc)
+      |> load_for_search(socket.assigns[:params]["dsl_path"])
+
+    guides_query =
+      AshHq.Docs.Guide
+      |> Ash.Query.new()
+      |> load_for_search(socket.assigns[:params]["guide"])
+
+    modules_query =
+      AshHq.Docs.Module
+      |> Ash.Query.sort(order: :asc)
+      |> load_for_search(socket.assigns[:params]["module"])
+
+    mix_tasks_query =
+      AshHq.Docs.MixTask
+      |> Ash.Query.sort(order: :asc)
+      |> load_for_search(socket.assigns[:params]["mix_task"])
+
+    extensions_query =
+      AshHq.Docs.Extension
+      |> Ash.Query.sort(order: :asc)
+      |> Ash.Query.load(options: options_query, dsls: dsls_query)
+      |> load_for_search(socket.assigns[:params]["extension"])
 
     new_libraries =
       socket.assigns.libraries
-      |> Enum.map(fn library ->
-        Map.update!(library, :versions, fn versions ->
-          latest_version = AshHqWeb.Helpers.latest_version(library)
+      |> Enum.flat_map(fn library ->
+        latest_version = AshHqWeb.Helpers.latest_version(library)
 
-          Enum.map(versions, fn version ->
-            if (latest_version && version.id == latest_version.id) ||
-                 version.id == socket.assigns[:selected_versions][library.id] ||
-                 (socket.assigns[:library_version] &&
-                    socket.assigns[:library_version].id == version.id) do
-              dsls_query =
-                AshHq.Docs.Dsl
-                |> Ash.Query.sort(order: :asc)
-                |> load_for_search(socket.assigns[:params]["dsl_path"])
-
-              options_query =
-                AshHq.Docs.Option
-                |> Ash.Query.sort(order: :asc)
-                |> load_for_search(socket.assigns[:params]["dsl_path"])
-
-              functions_query =
-                AshHq.Docs.Function
-                |> Ash.Query.sort(name: :asc, arity: :asc)
-                |> load_for_search(socket.assigns[:params]["module"])
-
-              guides_query =
-                AshHq.Docs.Guide
-                |> Ash.Query.new()
-                |> load_for_search(socket.assigns[:params]["guide"])
-
-              modules_query =
-                AshHq.Docs.Module
-                |> Ash.Query.sort(order: :asc)
-                |> Ash.Query.load(functions: functions_query)
-                |> load_for_search(socket.assigns[:params]["module"])
-
-              extensions_query =
-                AshHq.Docs.Extension
-                |> Ash.Query.sort(order: :asc)
-                |> Ash.Query.load(options: options_query, dsls: dsls_query)
-                |> load_for_search(socket.assigns[:params]["extension"])
-
-              AshHq.Docs.load!(
-                version,
-                [extensions: extensions_query, guides: guides_query, modules: modules_query],
-                lazy?: true
-              )
-            else
-              version
-            end
-          end)
+        Enum.filter(library.versions, fn version ->
+          (latest_version && version.id == latest_version.id) ||
+            version.id == socket.assigns[:selected_versions][library.id] ||
+            (socket.assigns[:library_version] &&
+               socket.assigns[:library_version].id == version.id) ||
+            (socket.assigns.params["version"] &&
+               socket.assigns.params["version"] ==
+                 version.version)
+        end)
+      end)
+      |> AshHq.Docs.load!(
+        [
+          extensions: extensions_query,
+          guides: guides_query,
+          modules: modules_query,
+          mix_tasks: mix_tasks_query
+        ],
+        lazy?: true
+      )
+      |> Enum.reduce(socket.assigns.libraries, fn library_version, libraries ->
+        Enum.map(libraries, fn library ->
+          if library.id == library_version.library_id do
+            Map.update!(library, :versions, fn versions ->
+              Enum.map(versions, fn current_version ->
+                if current_version.id == library_version.id do
+                  library_version
+                else
+                  current_version
+                end
+              end)
+            end)
+          else
+            library
+          end
         end)
       end)
 
@@ -437,6 +473,7 @@ defmodule AshHqWeb.Pages.Docs do
     |> assign_extension()
     |> assign_guide()
     |> assign_module()
+    |> assign_mix_task()
     |> assign_dsl()
     |> assign_docs()
   end
@@ -604,11 +641,33 @@ defmodule AshHqWeb.Pages.Docs do
           &(&1.sanitized_name == socket.assigns[:params]["module"])
         )
 
+      functions_query =
+        AshHq.Docs.Function
+        |> Ash.Query.sort(name: :asc, arity: :asc)
+        |> load_for_search(socket.assigns[:params]["module"])
+
       assign(socket,
-        module: module
+        module: AshHq.Docs.load!(module, [functions: functions_query], lazy?: true)
       )
     else
       assign(socket, :module, nil)
+    end
+  end
+
+  defp assign_mix_task(socket) do
+    if socket.assigns.library && socket.assigns.library_version &&
+         socket.assigns[:params]["mix_task"] do
+      mix_task =
+        Enum.find(
+          socket.assigns.library_version.mix_tasks,
+          &(&1.sanitized_name == socket.assigns[:params]["mix_task"])
+        )
+
+      assign(socket,
+        mix_task: mix_task
+      )
+    else
+      assign(socket, :mix_task, nil)
     end
   end
 
@@ -618,6 +677,13 @@ defmodule AshHqWeb.Pages.Docs do
         assign(socket,
           docs: socket.assigns.module.html_for,
           doc_path: [socket.assigns.library.name, socket.assigns.module.name],
+          options: []
+        )
+
+      socket.assigns.mix_task ->
+        assign(socket,
+          docs: socket.assigns.mix_task.html_for,
+          doc_path: [socket.assigns.library.name, socket.assigns.mix_task.name],
           options: []
         )
 

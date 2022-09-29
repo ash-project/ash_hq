@@ -9,13 +9,13 @@ defmodule AshHq.Repo.Migrations.MigrateResources11 do
 
   def up do
     alter table(:library_versions) do
-      add :default_guide, :text, null: false
+      add(:default_guide, :text, null: false)
     end
   end
 
   def down do
     alter table(:library_versions) do
-      remove :default_guide
+      remove(:default_guide)
     end
   end
 end

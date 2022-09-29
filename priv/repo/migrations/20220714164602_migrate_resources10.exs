@@ -9,15 +9,15 @@ defmodule AshHq.Repo.Migrations.MigrateResources10 do
 
   def up do
     alter table(:library_versions) do
-      remove :doc_html
-      remove :doc
+      remove(:doc_html)
+      remove(:doc)
     end
   end
 
   def down do
     alter table(:library_versions) do
-      add :doc, :text, null: false, default: ""
-      add :doc_html, :text
+      add(:doc, :text, null: false, default: "")
+      add(:doc_html, :text)
     end
   end
 end

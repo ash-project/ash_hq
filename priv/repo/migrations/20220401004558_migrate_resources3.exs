@@ -8,144 +8,168 @@ defmodule AshHq.Repo.Migrations.MigrateResources3 do
   use Ecto.Migration
 
   def up do
-    drop constraint(:options, "options_library_version_id_fkey")
+    drop(constraint(:options, "options_library_version_id_fkey"))
 
     alter table(:options) do
-      modify :library_version_id,
-             references(:library_versions,
-               column: :id,
-               name: "options_library_version_id_fkey",
-               type: :uuid,
-               on_delete: :delete_all
-             )
+      modify(
+        :library_version_id,
+        references(:library_versions,
+          column: :id,
+          name: "options_library_version_id_fkey",
+          type: :uuid,
+          on_delete: :delete_all
+        )
+      )
     end
 
-    drop constraint(:modules, "modules_library_version_id_fkey")
+    drop(constraint(:modules, "modules_library_version_id_fkey"))
 
     alter table(:modules) do
-      modify :library_version_id,
-             references(:library_versions,
-               column: :id,
-               name: "modules_library_version_id_fkey",
-               type: :uuid,
-               on_delete: :delete_all
-             )
+      modify(
+        :library_version_id,
+        references(:library_versions,
+          column: :id,
+          name: "modules_library_version_id_fkey",
+          type: :uuid,
+          on_delete: :delete_all
+        )
+      )
     end
 
-    drop constraint(:guides, "guides_library_version_id_fkey")
+    drop(constraint(:guides, "guides_library_version_id_fkey"))
 
     alter table(:guides) do
-      modify :library_version_id,
-             references(:library_versions,
-               column: :id,
-               name: "guides_library_version_id_fkey",
-               type: :uuid,
-               on_delete: :delete_all
-             )
+      modify(
+        :library_version_id,
+        references(:library_versions,
+          column: :id,
+          name: "guides_library_version_id_fkey",
+          type: :uuid,
+          on_delete: :delete_all
+        )
+      )
     end
 
-    drop constraint(:functions, "functions_library_version_id_fkey")
+    drop(constraint(:functions, "functions_library_version_id_fkey"))
 
     alter table(:functions) do
-      modify :library_version_id,
-             references(:library_versions,
-               column: :id,
-               name: "functions_library_version_id_fkey",
-               type: :uuid,
-               on_delete: :delete_all
-             )
+      modify(
+        :library_version_id,
+        references(:library_versions,
+          column: :id,
+          name: "functions_library_version_id_fkey",
+          type: :uuid,
+          on_delete: :delete_all
+        )
+      )
     end
 
-    drop constraint(:extensions, "extensions_library_version_id_fkey")
+    drop(constraint(:extensions, "extensions_library_version_id_fkey"))
 
     alter table(:extensions) do
-      modify :library_version_id,
-             references(:library_versions,
-               column: :id,
-               name: "extensions_library_version_id_fkey",
-               type: :uuid,
-               on_delete: :delete_all
-             )
+      modify(
+        :library_version_id,
+        references(:library_versions,
+          column: :id,
+          name: "extensions_library_version_id_fkey",
+          type: :uuid,
+          on_delete: :delete_all
+        )
+      )
     end
 
-    drop constraint(:dsls, "dsls_library_version_id_fkey")
+    drop(constraint(:dsls, "dsls_library_version_id_fkey"))
 
     alter table(:dsls) do
-      modify :library_version_id,
-             references(:library_versions,
-               column: :id,
-               name: "dsls_library_version_id_fkey",
-               type: :uuid,
-               on_delete: :delete_all
-             )
+      modify(
+        :library_version_id,
+        references(:library_versions,
+          column: :id,
+          name: "dsls_library_version_id_fkey",
+          type: :uuid,
+          on_delete: :delete_all
+        )
+      )
     end
   end
 
   def down do
-    drop constraint(:dsls, "dsls_library_version_id_fkey")
+    drop(constraint(:dsls, "dsls_library_version_id_fkey"))
 
     alter table(:dsls) do
-      modify :library_version_id,
-             references(:library_versions,
-               column: :id,
-               name: "dsls_library_version_id_fkey",
-               type: :uuid
-             )
+      modify(
+        :library_version_id,
+        references(:library_versions,
+          column: :id,
+          name: "dsls_library_version_id_fkey",
+          type: :uuid
+        )
+      )
     end
 
-    drop constraint(:extensions, "extensions_library_version_id_fkey")
+    drop(constraint(:extensions, "extensions_library_version_id_fkey"))
 
     alter table(:extensions) do
-      modify :library_version_id,
-             references(:library_versions,
-               column: :id,
-               name: "extensions_library_version_id_fkey",
-               type: :uuid
-             )
+      modify(
+        :library_version_id,
+        references(:library_versions,
+          column: :id,
+          name: "extensions_library_version_id_fkey",
+          type: :uuid
+        )
+      )
     end
 
-    drop constraint(:functions, "functions_library_version_id_fkey")
+    drop(constraint(:functions, "functions_library_version_id_fkey"))
 
     alter table(:functions) do
-      modify :library_version_id,
-             references(:library_versions,
-               column: :id,
-               name: "functions_library_version_id_fkey",
-               type: :uuid
-             )
+      modify(
+        :library_version_id,
+        references(:library_versions,
+          column: :id,
+          name: "functions_library_version_id_fkey",
+          type: :uuid
+        )
+      )
     end
 
-    drop constraint(:guides, "guides_library_version_id_fkey")
+    drop(constraint(:guides, "guides_library_version_id_fkey"))
 
     alter table(:guides) do
-      modify :library_version_id,
-             references(:library_versions,
-               column: :id,
-               name: "guides_library_version_id_fkey",
-               type: :uuid
-             )
+      modify(
+        :library_version_id,
+        references(:library_versions,
+          column: :id,
+          name: "guides_library_version_id_fkey",
+          type: :uuid
+        )
+      )
     end
 
-    drop constraint(:modules, "modules_library_version_id_fkey")
+    drop(constraint(:modules, "modules_library_version_id_fkey"))
 
     alter table(:modules) do
-      modify :library_version_id,
-             references(:library_versions,
-               column: :id,
-               name: "modules_library_version_id_fkey",
-               type: :uuid
-             )
+      modify(
+        :library_version_id,
+        references(:library_versions,
+          column: :id,
+          name: "modules_library_version_id_fkey",
+          type: :uuid
+        )
+      )
     end
 
-    drop constraint(:options, "options_library_version_id_fkey")
+    drop(constraint(:options, "options_library_version_id_fkey"))
 
     alter table(:options) do
-      modify :library_version_id,
-             references(:library_versions,
-               column: :id,
-               name: "options_library_version_id_fkey",
-               type: :uuid
-             )
+      modify(
+        :library_version_id,
+        references(:library_versions,
+          column: :id,
+          name: "options_library_version_id_fkey",
+          type: :uuid
+        )
+      )
     end
   end
 end

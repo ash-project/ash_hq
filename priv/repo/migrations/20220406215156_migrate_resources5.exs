@@ -9,21 +9,21 @@ defmodule AshHq.Repo.Migrations.MigrateResources5 do
 
   def up do
     alter table(:libraries) do
-      add :description, :text
+      add(:description, :text)
     end
 
     alter table(:guides) do
-      modify :category, :text, null: false
+      modify(:category, :text, null: false)
     end
   end
 
   def down do
     alter table(:guides) do
-      modify :category, :text, null: true
+      modify(:category, :text, null: true)
     end
 
     alter table(:libraries) do
-      remove :description
+      remove(:description)
     end
   end
 end

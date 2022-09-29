@@ -11,6 +11,18 @@ defmodule AshHqWeb.DocRoutes do
   end
 
   def doc_link(
+        %AshHq.Docs.MixTask{
+          sanitized_name: sanitized_name,
+          library_name: library_name,
+          version_name: version_name,
+          library_id: library_id
+        },
+        selected_versions
+      ) do
+    "/docs/mix_task/#{library_name}/#{version(version_name, library_id, selected_versions)}/#{sanitized_name}"
+  end
+
+  def doc_link(
         %AshHq.Docs.Module{
           sanitized_name: sanitized_name,
           library_name: library_name,

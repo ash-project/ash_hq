@@ -88,6 +88,15 @@ defmodule AshHq.Docs.Search do
       }
     end
 
+    custom :mix_tasks, AshHq.Docs.Search.Steps.SearchResource do
+      input %{
+        query: arg(:query),
+        library_versions: arg(:library_versions),
+        types: arg(:types),
+        resource: AshHq.Docs.MixTask
+      }
+    end
+
     custom :build_results, AshHq.Docs.Search.Steps.BuildResults do
       input %{
         dsls: result(:dsls),
@@ -96,7 +105,8 @@ defmodule AshHq.Docs.Search do
         library_versions: result(:library_versions),
         extensions: result(:extensions),
         functions: result(:functions),
-        modules: result(:modules)
+        modules: result(:modules),
+        mix_tasks: result(:mix_tasks)
       }
     end
   end

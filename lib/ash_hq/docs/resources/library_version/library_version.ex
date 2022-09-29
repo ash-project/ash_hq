@@ -64,6 +64,10 @@ defmodule AshHq.Docs.LibraryVersion do
         allow_nil? false
       end
 
+      argument :mix_tasks, {:array, :map} do
+        allow_nil? false
+      end
+
       argument :extensions, {:array, :map} do
         allow_nil? false
       end
@@ -74,11 +78,15 @@ defmodule AshHq.Docs.LibraryVersion do
               attr: :id, arg: :library_version, rel: :modules, generate: &Ash.UUID.generate/0}
 
       change {AshHq.Docs.Changes.AddArgToRelationship,
+              attr: :id, arg: :library_version, rel: :mix_tasks, generate: &Ash.UUID.generate/0}
+
+      change {AshHq.Docs.Changes.AddArgToRelationship,
               attr: :id, arg: :library_version, rel: :extensions, generate: &Ash.UUID.generate/0}
 
       change manage_relationship(:guides, type: :create)
       change manage_relationship(:library, type: :append_and_remove)
       change manage_relationship(:modules, type: :create)
+      change manage_relationship(:mix_tasks, type: :create)
       change manage_relationship(:extensions, type: :create)
     end
 
@@ -126,5 +134,6 @@ defmodule AshHq.Docs.LibraryVersion do
     has_many :extensions, AshHq.Docs.Extension
     has_many :guides, AshHq.Docs.Guide
     has_many :modules, AshHq.Docs.Module
+    has_many :mix_tasks, AshHq.Docs.MixTask
   end
 end

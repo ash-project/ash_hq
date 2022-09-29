@@ -8,32 +8,36 @@ defmodule AshHq.Repo.Migrations.MigrateResources18 do
   use Ecto.Migration
 
   def up do
-    drop constraint(:user_tokens, "user_tokens_user_id_fkey")
+    drop(constraint(:user_tokens, "user_tokens_user_id_fkey"))
 
     alter table(:user_tokens) do
-      modify :user_id,
-             references(:users,
-               column: :id,
-               prefix: "public",
-               name: "user_tokens_user_id_fkey",
-               type: :uuid,
-               on_delete: :delete_all,
-               on_update: :update_all
-             )
+      modify(
+        :user_id,
+        references(:users,
+          column: :id,
+          prefix: "public",
+          name: "user_tokens_user_id_fkey",
+          type: :uuid,
+          on_delete: :delete_all,
+          on_update: :update_all
+        )
+      )
     end
   end
 
   def down do
-    drop constraint(:user_tokens, "user_tokens_user_id_fkey")
+    drop(constraint(:user_tokens, "user_tokens_user_id_fkey"))
 
     alter table(:user_tokens) do
-      modify :user_id,
-             references(:users,
-               column: :id,
-               prefix: "public",
-               name: "user_tokens_user_id_fkey",
-               type: :uuid
-             )
+      modify(
+        :user_id,
+        references(:users,
+          column: :id,
+          prefix: "public",
+          name: "user_tokens_user_id_fkey",
+          type: :uuid
+        )
+      )
     end
   end
 end

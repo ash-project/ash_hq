@@ -9,23 +9,23 @@ defmodule AshHq.Repo.Migrations.MigrateResources21 do
 
   def up do
     alter table(:library_versions) do
-      remove :default_guide
-      remove :branch
+      remove(:default_guide)
+      remove(:branch)
     end
 
     alter table(:libraries) do
-      remove :track_branches
+      remove(:track_branches)
     end
   end
 
   def down do
     alter table(:libraries) do
-      add :track_branches, {:array, :text}
+      add(:track_branches, {:array, :text})
     end
 
     alter table(:library_versions) do
-      add :branch, :boolean, null: false, default: false
-      add :default_guide, :text
+      add(:branch, :boolean, null: false, default: false)
+      add(:default_guide, :text)
     end
   end
 end

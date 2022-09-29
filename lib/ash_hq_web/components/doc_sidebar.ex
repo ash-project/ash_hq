@@ -6,22 +6,57 @@ defmodule AshHqWeb.Components.DocSidebar do
   alias Surface.Components.LivePatch
   alias Phoenix.LiveView.JS
 
-  prop(class, :css_class, default: "")
-  prop(libraries, :list, required: true)
-  prop(extension, :any, default: nil)
-  prop(guide, :any, default: nil)
-  prop(library, :any, default: nil)
-  prop(library_version, :any, default: nil)
-  prop(selected_versions, :map, default: %{})
-  prop(id, :string, required: true)
-  prop(dsl, :any, required: true)
-  prop(module, :any, required: true)
-  prop(add_version, :event, required: true)
-  prop(remove_version, :event, required: true)
-  prop(change_version, :event, required: true)
+  prop class, :css_class, default: ""
+  prop libraries, :list, required: true
+  prop extension, :any, default: nil
+  prop guide, :any, default: nil
+  prop library, :any, default: nil
+  prop library_version, :any, default: nil
+  prop selected_versions, :map, default: %{}
+  prop id, :string, required: true
+  prop dsl, :any, required: true
+  prop module, :any, required: true
+  prop mix_task, :any, required: true
+  prop add_version, :event, required: true
+  prop remove_version, :event, required: true
+  prop change_version, :event, required: true
+
+  data guides_by_category_and_library, :any
+  data extensions, :any
+  data modules_by_category, :any
+  data mix_tasks_by_category, :any
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
+    assigns =
+      assign(
+        assigns,
+        guides_by_category_and_library:
+          guides_by_category_and_library(
+            assigns[:libraries],
+            assigns[:library_version],
+            assigns[:selected_versions]
+          ),
+        extensions:
+          get_extensions(
+            assigns[:libraries],
+            assigns[:library_versions],
+            assigns[:selected_versions]
+          ),
+        modules_by_category:
+          modules_by_category(
+            assigns[:libraries],
+            assigns[:library_version],
+            assigns[:selected_versions]
+          ),
+        mix_tasks_by_category:
+          mix_tasks_by_category(
+            assigns[:libraries],
+            assigns[:library_version],
+            assigns[:selected_versions]
+          )
+      )
+
     ~F"""
     <aside
       id={@id}
@@ -44,7 +79,7 @@ defmodule AshHqWeb.Components.DocSidebar do
           <div>
             Guides
           </div>
-          {#for {category, guides_by_library} <- guides_by_category_and_library(@libraries, @selected_versions)}
+          {#for {category, guides_by_library} <- @guides_by_category_and_library}
             <div class="text-base-light-500">
               <button
                 phx-click={collapse("#{@id}-#{String.replace(category, " ", "-")}")}
@@ -91,7 +126,7 @@ defmodule AshHqWeb.Components.DocSidebar do
             Reference
           </div>
           <div class="ml-2 space-y-2">
-            {#if !Enum.empty?(get_extensions(@libraries, @selected_versions))}
+            {#if !Enum.empty?(@extensions)}
               <div class="text-base-light-500">
                 <button phx-click={collapse("#{@id}-extension")} class="flex flex-row items-center">
                   <div id={"#{@id}-extension-chevron-down"}>
@@ -105,7 +140,7 @@ defmodule AshHqWeb.Components.DocSidebar do
               </div>
             {/if}
             <div id={"#{@id}-extension"}>
-              {#for {library, extensions} <- get_extensions(@libraries, @selected_versions)}
+              {#for {library, extensions} <- @extensions}
                 <li class="ml-3 text-base-light-200 p-1">
                   {library}
                   <ul>
@@ -128,6 +163,51 @@ defmodule AshHqWeb.Components.DocSidebar do
               {/for}
             </div>
 
+            {#if !Enum.empty?(@mix_tasks_by_category)}
+              <div class="text-base-light-500">
+                <button phx-click={collapse("#{@id}-mix-tasks")} class="flex flex-row items-center">
+                  <div id={"#{@id}-mix-tasks-chevron-down"}>
+                    <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
+                  </div>
+                  <div id={"#{@id}-mix-tasks-chevron-right"} class="-rotate-90" style="display: none;">
+                    <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
+                  </div>
+                  Mix Tasks
+                </button>
+              </div>
+            {/if}
+            <div id={"#{@id}-mix-tasks"}>
+              {#for {category, mix_tasks} <- @mix_tasks_by_category}
+                <div class="ml-4">
+                  <span class="text-sm text-base-light-900 dark:text-base-dark-100">{category}</span>
+                </div>
+                {#for mix_task <- mix_tasks}
+                  <li class="ml-4">
+                    <LivePatch
+                      to={DocRoutes.doc_link(mix_task, @selected_versions)}
+                      class="flex items-center space-x-2 pt-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-100 hover:bg-base-light-100 dark:hover:bg-base-light-700"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-4 h-4"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"
+                        />
+                      </svg>
+                      <span class="">{mix_task.name}</span>
+                    </LivePatch>
+                  </li>
+                {/for}
+              {/for}
+            </div>
+
             <div class="text-base-light-500">
               <button phx-click={collapse("#{@id}-modules")} class="flex flex-row items-center">
                 <div id={"#{@id}-modules-chevron-down"}>
@@ -140,7 +220,37 @@ defmodule AshHqWeb.Components.DocSidebar do
               </button>
             </div>
             <div id={"#{@id}-modules"}>
-              {#for {category, modules} <- modules_by_category(@libraries, @selected_versions)}
+              {#for {category, modules} <- @modules_by_category}
+                <div class="ml-4">
+                  <span class="text-sm text-base-light-900 dark:text-base-dark-100">{category}</span>
+                </div>
+                {#for module <- modules}
+                  <li class="ml-4">
+                    <LivePatch
+                      to={DocRoutes.doc_link(module, @selected_versions)}
+                      class="flex items-center space-x-2 pt-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-100 hover:bg-base-light-100 dark:hover:bg-base-light-700"
+                    >
+                      <Heroicons.Outline.CodeIcon class="h-4 w-4" />
+                      <span class="">{module.name}</span>
+                    </LivePatch>
+                  </li>
+                {/for}
+              {/for}
+            </div>
+
+            <div class="text-base-light-500">
+              <button phx-click={collapse("#{@id}-modules")} class="flex flex-row items-center">
+                <div id={"#{@id}-modules-chevron-down"}>
+                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
+                </div>
+                <div id={"#{@id}-modules-chevron-right"} class="-rotate-90" style="display: none;">
+                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
+                </div>
+                Modules
+              </button>
+            </div>
+            <div id={"#{@id}-modules"}>
+              {#for {category, modules} <- @modules_by_category}
                 <div class="ml-4">
                   <span class="text-sm text-base-light-900 dark:text-base-dark-100">{category}</span>
                 </div>
@@ -236,9 +346,25 @@ defmodule AshHqWeb.Components.DocSidebar do
     """
   end
 
+  defp selected_version(library, library_version, selected_versions) do
+    selected_version = selected_versions[library.id]
+
+    if library_version && library_version.library_id == library.id do
+      library_version
+    else
+      if selected_version == "latest" do
+        AshHqWeb.Helpers.latest_version(library)
+      else
+        if selected_version not in [nil, ""] do
+          Enum.find(library.versions, &(&1.id == selected_version))
+        end
+      end
+    end
+  end
+
   @start_guides ["Tutorials", "Topics", "How To", "Misc"]
 
-  defp guides_by_category_and_library(libraries, selected_versions) do
+  defp guides_by_category_and_library(libraries, library_version, selected_versions) do
     libraries =
       Enum.filter(libraries, fn library ->
         selected_versions[library.id] && selected_versions[library.id] != ""
@@ -251,8 +377,8 @@ defmodule AshHqWeb.Components.DocSidebar do
 
     libraries
     |> Enum.flat_map(fn library ->
-      library.versions
-      |> Enum.find(&Ash.Resource.loaded?(&1, :guides))
+      library
+      |> selected_version(library_version, selected_versions)
       |> case do
         nil ->
           []
@@ -286,55 +412,53 @@ defmodule AshHqWeb.Components.DocSidebar do
     |> partially_alphabetically_sort(@start_guides, [])
   end
 
-  defp get_extensions(libraries, selected_versions) do
+  defp get_extensions(libraries, library_version, selected_versions) do
     libraries
-    |> Enum.filter(fn library ->
-      selected_versions[library.id] && selected_versions[library.id] != ""
-    end)
     |> Enum.sort_by(& &1.order)
-    |> Enum.flat_map(fn library ->
-      case Enum.find(library.versions, &Ash.Resource.loaded?(&1, :extensions)) do
-        nil ->
+    |> Enum.map(&{&1.display_name, selected_version(&1, library_version, selected_versions)})
+    |> Enum.filter(&elem(&1, 1))
+    |> Enum.flat_map(fn {name, version} ->
+      case version.extensions do
+        [] ->
           []
 
-        version ->
-          case version.extensions do
-            [] ->
-              []
+        %Ash.NotLoaded{} ->
+          raise "extensions not selected for #{version.version} | #{version.id} of #{name}"
 
-            extensions ->
-              [{library.display_name, extensions}]
-          end
+        extensions ->
+          [{name, extensions}]
       end
     end)
   end
 
   @last_categories ["Errors"]
 
-  defp modules_by_category(libraries, selected_versions) do
-    libraries =
-      Enum.filter(libraries, fn library ->
-        selected_versions[library.id] && selected_versions[library.id] != ""
-      end)
-
+  defp modules_by_category(libraries, library_version, selected_versions) do
     libraries
-    |> Enum.flat_map(fn library ->
-      library.versions
-      |> Enum.find(&Ash.Resource.loaded?(&1, :modules))
-      |> case do
-        nil ->
-          []
-
-        %{modules: modules} ->
-          modules
-      end
-    end)
+    |> Enum.map(&selected_version(&1, library_version, selected_versions))
+    |> Enum.filter(& &1)
+    |> Enum.flat_map(& &1.modules)
     |> Enum.group_by(fn module ->
       module.category
     end)
     |> Enum.sort_by(fn {category, _} -> category end)
     |> Enum.map(fn {category, modules} ->
       {category, Enum.sort_by(modules, & &1.name)}
+    end)
+    |> partially_alphabetically_sort([], [])
+  end
+
+  defp mix_tasks_by_category(libraries, library_version, selected_versions) do
+    libraries
+    |> Enum.map(&selected_version(&1, library_version, selected_versions))
+    |> Enum.filter(& &1)
+    |> Enum.flat_map(& &1.mix_tasks)
+    |> Enum.group_by(fn mix_task ->
+      mix_task.category
+    end)
+    |> Enum.sort_by(fn {category, _} -> category end)
+    |> Enum.map(fn {category, mix_tasks} ->
+      {category, Enum.sort_by(mix_tasks, & &1.name)}
     end)
     |> partially_alphabetically_sort([], @last_categories)
   end

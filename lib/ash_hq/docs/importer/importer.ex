@@ -124,7 +124,8 @@ defmodule AshHq.Docs.Importer do
                 extensions: result[:extensions],
                 doc: result[:doc],
                 guides: add_text(result[:guides], library.name, version),
-                modules: result[:modules]
+                modules: result[:modules],
+                mix_tasks: result[:mix_tasks]
               }
             )
           end)
