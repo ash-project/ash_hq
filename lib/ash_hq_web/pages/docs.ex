@@ -44,7 +44,7 @@ defmodule AshHqWeb.Pages.Docs do
           <DocPath doc_path={@doc_path} />
         {/if}
       </div>
-      <span class="grid overflow-hidden xl:hidden z-40">
+      <span class="grid overflow-hidden xl:hidden z-30">
         <div id="mobile-sidebar-container" class="overflow-hidden hidden fixed w-min transition">
           <DocSidebar
             id="mobile-sidebar"

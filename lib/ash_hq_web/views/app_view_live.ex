@@ -198,16 +198,6 @@ defmodule AshHqWeb.AppViewLive do
   def handle_event("add_version", %{"library" => library}, socket) do
     new_selected_versions = Map.put(socket.assigns.selected_versions, library, "latest")
 
-    send_update(AshHqWeb.Components.VersionPills,
-      id: "mobile-sidebar-version-pills",
-      action: :close_add_version
-    )
-
-    send_update(AshHqWeb.Components.VersionPills,
-      id: "sidebar-version-pills",
-      action: :close_add_version
-    )
-
     {:noreply,
      socket
      |> assign(:selected_versions, new_selected_versions)

@@ -106,8 +106,7 @@ defmodule AshHqWeb.Helpers do
 
     version =
       if selected_versions[library.id] in ["latest", nil, ""] do
-        Enum.find(library.versions, &String.contains?(&1.version, ".")) ||
-          AshHqWeb.Helpers.latest_version(library)
+        AshHqWeb.Helpers.latest_version(library)
       else
         case Enum.find(library.versions, &(&1.id == selected_versions[library.id])) do
           nil ->
