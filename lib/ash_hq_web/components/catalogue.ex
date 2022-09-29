@@ -39,9 +39,11 @@ defmodule AshHqWeb.Components.Catalogue do
                   id={"#{@id}-selected_versions-#{library.id}"}
                   selected={value(@selected_versions, library.id)}
                   options={[{"Hidden", nil}, {"Latest", "latest"}] ++
-                    Enum.map(library.versions, fn version ->
-                      {version.version, version.id}
-                    end)}
+                    (library.versions
+                     |> Enum.sort(&(Version.compare(&1.version, &2.version) != :lt))
+                     |> Enum.map(fn version ->
+                       {version.version, version.id}
+                     end))}
                 /></div>
             </div>
             <div class="max-w-xs">
