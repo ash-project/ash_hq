@@ -60,7 +60,7 @@ defmodule AshHqWeb.Components.DocSidebar do
     ~F"""
     <aside
       id={@id}
-      class={"grid h-full overflow-y-auto pb-36 w-fit z-40 bg-white dark:bg-base-dark-900", @class}
+      class={"grid h-screen overflow-y-auto pb-36 w-fit z-40 bg-white dark:bg-base-dark-900", @class}
       aria-label="Sidebar"
     >
       <div class="flex flex-col">
