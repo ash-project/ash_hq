@@ -5,6 +5,7 @@ defmodule AshHqWeb.Components.CalloutText do
   import AshHq.Classes
 
   prop text, :string, required: true
+  prop class, :css_class
 
   def render(%{__context__: %{platform: :ios}} = assigns) do
     ~F"""
@@ -14,7 +15,7 @@ defmodule AshHqWeb.Components.CalloutText do
 
   def render(assigns) do
     ~F"""
-    <span class="text-primary-light-600 dark:text-primary-dark-400 font-bold">
+    <span class={classes("text-primary-light-600 dark:text-primary-dark-400 font-bold", @class)}>
       {@text}
     </span>
     """

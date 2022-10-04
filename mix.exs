@@ -49,7 +49,7 @@ defmodule AshHq.MixProject do
       {:spark, "~> 0.1"},
       # {:spark, path: "../spark", override: true},
       {:earmark, "~> 1.5.0-pre1", override: true},
-      {:surface, "== 0.8.1"},
+      {:surface, "~> 0.9.1"},
       {:surface_heroicons, "~> 0.6.0"},
       # Syntax Highlighting
       {:makeup, "~> 1.1"},
@@ -67,7 +67,6 @@ defmodule AshHq.MixProject do
       # CSP
       {:plug_content_security_policy, "~> 0.2.1"},
       # Live Dashboard
-      {:flame_on, "~> 0.5.0"},
       {:phoenix_live_dashboard, "~> 0.6"},
       {:ecto_psql_extras, "~> 0.6"},
       # Phoenix/Core dependencies
@@ -76,7 +75,7 @@ defmodule AshHq.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.17.5"},
+      {:phoenix_live_view, "~> 0.18"},
       {:nimble_options, "~> 0.4.0", override: true},
       {:finch, "~> 0.10.2"},
       {:floki, ">= 0.30.0"},

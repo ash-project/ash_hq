@@ -10,7 +10,7 @@ defmodule AshHqWeb.LiveUserAuth do
   """
   def on_mount(:live_user, _params, session, socket) do
     {:cont,
-     Phoenix.LiveView.assign(
+     Phoenix.Component.assign(
        socket,
        :current_user,
        AshHqWeb.UserAuth.user_for_session_token(session["user_token"])
@@ -24,7 +24,7 @@ defmodule AshHqWeb.LiveUserAuth do
 
       user ->
         {:cont,
-         Phoenix.LiveView.assign(
+         Phoenix.Component.assign(
            socket,
            :current_user,
            user
@@ -36,7 +36,7 @@ defmodule AshHqWeb.LiveUserAuth do
     case AshHqWeb.UserAuth.user_for_session_token(session["user_token"]) do
       nil ->
         {:cont,
-         Phoenix.LiveView.assign(
+         Phoenix.Component.assign(
            socket,
            :current_user,
            nil

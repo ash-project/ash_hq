@@ -55,6 +55,25 @@ defmodule AshHqWeb.Pages.Home do
           <SearchBar class="w-80 md:w-96" />
         </div>
 
+        <div class="flex flex-col w-full dark:bg-none dark:bg-opacity-0 py-6">
+          <div class="flex flex-col w-full">
+            <div class="flex flex-row text-center justify-center w-full text-2xl text-black dark:text-white">
+              Brought to you by
+            </div>
+            <div class="flex flex-row mt-6 justify-center">
+              <a href="https://alembic.com.au">
+                <img class="h-20" src="/images/alembic-logo.png">
+              </a>
+            </div>
+          </div>
+
+          <div class="flex flex-row justify-center mt-12">
+            <a href="https://coinbits.app/">
+              <img class="h-10" src="/images/coinbits-logo.png">
+            </a>
+          </div>
+        </div>
+
         <div class="flex flex-col">
           <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
             <h2 class="mt-8 font-semibold text-primary-light-500 dark:text-primary-dark-400">
@@ -183,6 +202,20 @@ defmodule AshHqWeb.Pages.Home do
               </p>
             </div>
           </div>
+        </div>
+
+        <div class="flex flex-col text-center items-center">
+          <p class="mt-4 text-3xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50 mb-8">
+            It wouldn't be possible without our amazing community!
+          </p>
+
+          <a href="https://github.com/ash-project/ash/graphs/contributors">
+            <img src="https://contrib.rocks/image?repo=ash-project/ash">
+          </a>
+
+          <a href="docs/guides/ash/latest/how_to/contribute.md">
+            Become a contributor
+          </a>
         </div>
 
         <div class="flex flex-col items-center my-10 space-y-4 hidden sm:block">

@@ -5,6 +5,8 @@ defmodule AshHq.Classes do
           |> File.read!()
           |> Jason.decode!()
 
+  def classes(nil), do: nil
+
   def classes(classes) when is_list(classes) do
     classes
     |> Enum.filter(fn
@@ -22,8 +24,11 @@ defmodule AshHq.Classes do
   end
 
   def classes(base, classes) do
-    merge(classes(base), classes(classes))
+    merge(classes(base), classes(classes)) |> to_string()
   end
+
+  def merge(nil, extension), do: extension |> to_string()
+  def merge(base, nil), do: base |> to_string()
 
   def merge(base, extension) do
     AshHq.Tailwind.merge(base, extension)

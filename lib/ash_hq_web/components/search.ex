@@ -341,7 +341,7 @@ defmodule AshHqWeb.Components.Search do
         end)
         |> Enum.reject(&(&1 == "" || is_nil(&1)))
 
-      item_list =
+      %{result: item_list} =
         AshHq.Docs.Search.run!(
           socket.assigns.search,
           versions,

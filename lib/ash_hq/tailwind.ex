@@ -1,5 +1,5 @@
 defmodule AshHq.Tailwind do
-  defstruct [:p, :m, :w, classes: MapSet.new()]
+  defstruct [:p, :m, :w, :font_weight, :font_style, classes: MapSet.new()]
 
   defmodule Directions do
     defstruct [:l, :r, :t, :b, :x, :y, :all]
@@ -37,6 +37,8 @@ defmodule AshHq.Tailwind do
       "p-4"
       iex> merge("p-4", "px-2") |> to_string()
       "px-2 py-4"
+      iex> merge("font-bold", "font-thin") |> to_string()
+      "font-thin"
   """
   def merge(tailwind, classes) when is_binary(tailwind) do
     merge(new(tailwind), classes)
@@ -57,6 +59,8 @@ defmodule AshHq.Tailwind do
   end
 
   @directional ~w(p m)a
+  @font_weights ~w(thin extralight light normal medium semibold bold extrabold black)
+  @font_styles ~w(thin extralight light normal medium semibold bold extrabold black)
 
   for class <- @directional do
     string_class = to_string(class)
@@ -98,6 +102,14 @@ defmodule AshHq.Tailwind do
     end
   end
 
+  def merge_class(tailwind, "font-" <> other_weight) when other_weight in @font_weights do
+    %{tailwind | font_weight: other_weight}
+  end
+
+  def merge_class(tailwind, "font-" <> other_family) when other_family in @font_styles do
+    %{tailwind | font_style: other_family}
+  end
+
   def merge_class(tailwind, class) do
     %{tailwind | classes: MapSet.put(tailwind.classes, class)}
   end
@@ -105,35 +117,44 @@ defmodule AshHq.Tailwind do
   defimpl String.Chars do
     def to_string(tailwind) do
       [
-        directional(tailwind.p, :p),
-        directional(tailwind.m, :m),
-        Enum.join(tailwind.classes, " ")
+        directional(tailwind.p, "p"),
+        directional(tailwind.m, "m"),
+        prefix("font", tailwind.font_weight),
+        prefix("font", tailwind.font_style),
+        Enum.intersperse(tailwind.classes, " ")
       ]
-      |> Enum.filter(& &1)
-      |> Enum.join(" ")
+      |> IO.iodata_to_binary()
+      |> case do
+        " " <> rest -> rest
+        value -> value
+      end
     end
 
-    defp directional(nil, _key), do: nil
+    defp prefix(_prefix, nil), do: ""
+    defp prefix(prefix, value), do: [" ", prefix, "-", value]
+
+    defp directional(nil, _key), do: ""
 
     defp directional(value, key) when is_binary(value) do
-      "#{key}-#{value}"
+      [" ", key, "-", value]
     end
 
     defp directional(%Directions{l: l, r: r, t: t, b: b, x: x, y: y}, key) do
       [
-        direction(t, :t, key),
-        direction(b, :b, key),
-        direction(l, :l, key),
-        direction(r, :r, key),
-        direction(x, :x, key),
-        direction(y, :y, key)
+        direction(t, "t", key),
+        direction(b, "b", key),
+        direction(l, "l", key),
+        direction(r, "r", key),
+        direction(x, "x", key),
+        direction(y, "y", key)
       ]
       |> Enum.filter(& &1)
-      |> Enum.join(" ")
     end
 
-    defp direction(nil, _, _), do: nil
-    defp direction(value, suffix, prefix), do: "#{prefix}#{suffix}-#{value}"
+    defp direction(nil, _, _), do: ""
+
+    defp direction(value, suffix, prefix),
+      do: [" ", prefix, suffix, "-", value]
   end
 
   defimpl Inspect do
