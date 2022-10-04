@@ -213,7 +213,10 @@ defmodule AshHqWeb.Pages.Home do
             <img src="https://contrib.rocks/image?repo=ash-project/ash">
           </a>
 
-          <a href="docs/guides/ash/latest/how_to/contribute.md">
+          <a
+            href="docs/guides/ash/latest/how_to/contribute.md"
+            class="flex justify-center items-center w-full md:w-auto h-10 px-4 rounded-lg bg-primary-light-500 dark:bg-primary-dark-500 font-semibold dark:text-white dark:hover:bg-primary-dark-700 hover:bg-primary-light-700"
+          >
             Become a contributor
           </a>
         </div>
