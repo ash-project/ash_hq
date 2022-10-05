@@ -29,7 +29,7 @@ defmodule AshHqWeb.Pages.Home do
         </text>
       </hstack>
       <hstack>
-        <text font="callout">A declarative foundation for ambitious applications.</text>
+        <text font="callout">A declarative foundation for ambitious Elixir applications.</text>
       </hstack>
       <hstack>
         <text font="callout">Model your domain, derive the rest.</text>
@@ -41,37 +41,21 @@ defmodule AshHqWeb.Pages.Home do
   def render(assigns) do
     ~F"""
     <div class="antialiased">
-      <div class="my-2 dark:bg-base-dark-900 dark:bg-dark-grid bg-light-grid flex flex-col items-center pt-4 md:pt-12 lg:pt-24">
-        <div class="text-3xl md:text-5xl px-4 md:px-12 font-bold max-w-5xl mx-auto mt-2 md:text-center">
+      <div class="my-2 dark:bg-base-dark-900 dark:bg-dark-grid bg-light-grid flex flex-col items-center pt-4 md:pt-12">
+        <div class="flex flex-col">
+          <img class="h-64" src="/images/ash-logo-side.svg">
+        </div>
+        <div class="text-3xl md:text-5xl px-4 md:px-12 font-bold max-w-5xl mx-auto mt-8 md:text-center">
           Build <CalloutText text="powerful" /> and <CalloutText text="composable" /> applications with a <CalloutText text="flexible" /> tool-chain.
         </div>
         <div class="text-xl font-light text-base-dark-700 dark:text-base-light-100 max-w-4xl mx-auto px-4 md:px-0 mt-4 md:text-center">
-          A declarative foundation for ambitious applications. Model your domain, derive the rest.
+          A declarative foundation for ambitious Elixir applications. Model your domain, derive the rest.
         </div>
         <div class="flex flex-col space-y-4 md:space-x-4 md:space-y-0 md:flex-row items-center mt-8 md:mt-16 mb-6 md:mb-10">
           <div class="flex justify-center items-center w-full md:w-auto h-12 px-4 rounded-lg bg-primary-light-500 dark:bg-primary-dark-500 font-semibold dark:text-white dark:hover:bg-primary-dark-700 hover:bg-primary-light-700">
             <a href="/docs/guides/ash/latest/tutorials/get-started.md" target="_blank">Get Started</a>
           </div>
           <SearchBar class="w-80 md:w-96" />
-        </div>
-
-        <div class="flex flex-col w-full dark:bg-none dark:bg-opacity-0 py-6">
-          <div class="flex flex-col w-full">
-            <div class="flex flex-row text-center justify-center w-full text-2xl text-black dark:text-white">
-              Brought to you by
-            </div>
-            <div class="flex flex-row mt-6 justify-center">
-              <a href="https://alembic.com.au">
-                <img class="h-16" src="/images/alembic.svg">
-              </a>
-            </div>
-          </div>
-
-          <div class="flex flex-row justify-center mt-12">
-            <a href="https://coinbits.app/">
-              <img class="h-6" src="/images/coinbits-logo.png">
-            </a>
-          </div>
         </div>
 
         <div class="flex flex-col">
@@ -128,6 +112,25 @@ defmodule AshHqWeb.Pages.Home do
               saving a ton of boilerplate. Even going as far as fully swapping data layers, Ash lets you do
               something traditionally extremely difficult with ease.
             </p>
+          </div>
+        </div>
+
+        <div class="flex flex-col w-full dark:bg-none dark:bg-opacity-0 py-6">
+          <div class="flex flex-col w-full">
+            <div class="flex flex-row text-center justify-center w-full text-2xl text-black dark:text-white">
+              Brought to you by
+            </div>
+            <div class="flex flex-row mt-6 justify-center">
+              <a href="https://alembic.com.au">
+                <img class="h-16" src="/images/alembic.svg">
+              </a>
+            </div>
+          </div>
+
+          <div class="flex flex-row justify-center mt-12">
+            <a href="https://coinbits.app/">
+              <img class="h-6" src="/images/coinbits-logo.png">
+            </a>
           </div>
         </div>
 
