@@ -69,6 +69,7 @@ defmodule AshHq.MixProject do
       # Live Dashboard
       {:phoenix_live_dashboard, "~> 0.6"},
       {:ecto_psql_extras, "~> 0.6"},
+      {:phoenix_ecto, "~> 4.4"},
       # Phoenix/Core dependencies
       {:phoenix, "~> 1.6.6"},
       {:ecto_sql, "~> 3.6"},

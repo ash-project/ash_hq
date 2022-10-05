@@ -62,14 +62,14 @@ defmodule AshHqWeb.Pages.Home do
             </div>
             <div class="flex flex-row mt-6 justify-center">
               <a href="https://alembic.com.au">
-                <img class="h-20" src="/images/alembic-logo.png">
+                <img class="h-16" src="/images/alembic.svg">
               </a>
             </div>
           </div>
 
           <div class="flex flex-row justify-center mt-12">
             <a href="https://coinbits.app/">
-              <img class="h-10" src="/images/coinbits-logo.png">
+              <img class="h-6" src="/images/coinbits-logo.png">
             </a>
           </div>
         </div>
