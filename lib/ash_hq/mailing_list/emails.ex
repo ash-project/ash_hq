@@ -7,17 +7,29 @@ defmodule AshHq.MailingList.Emails do
 
   def deliver_welcome_email(email) do
     deliver(email.email, "Thank you!", """
-    Hi,
+    <html>
+      <p>
+        Hi,
+      </p>
 
-    Thank you so much for subscribing to the Ash Framework mailing list!
+      <p>
+        Thank you so much for subscribing to the Ash Framework mailing list!
+      </p>
+      <p>
+        We're excited to have you and we promise to use your email responsibly.
+      </p>
 
-    We're excited to have you and we promise to use your email responsibly.
 
-    To unsubscribe visit the following link
-    https://ash-hq.org/unsubscribe?email=#{URI.encode_www_form(to_string(email.email))}
-
-    Thanks again,
-    The Ash Framework Team
+      <p>
+        Thanks again,
+      </p>
+      <p>
+        The Ash Framework Team
+      </p>
+      <p>
+        <a href="https://ash-hq.org/unsubscribe?email=#{URI.encode_www_form(to_string(email.email))}">unsubscribe</a>
+      </p>
+    </html>
     """)
   end
 
@@ -33,7 +45,6 @@ defmodule AshHq.MailingList.Emails do
     |> to(to_string(to))
     |> subject(subject)
     |> html_body(body)
-    |> text_body(body)
     |> AshHq.Mailer.deliver!()
   end
 end
