@@ -19,6 +19,7 @@ defmodule AshHq.Accounts.User.Preparations.ValidatePassword do
         end
 
       _, _ ->
+        Bcrypt.no_user_verify()
         {:ok, []}
     end)
   end
