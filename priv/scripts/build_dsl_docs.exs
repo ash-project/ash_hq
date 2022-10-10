@@ -103,18 +103,39 @@ defmodule Utils do
         %{
           name: section.name,
           options: schema(section.schema, path ++ [section.name]),
-          doc: section.describe || "No documentation",
           links: Map.new(section.links || []),
           imports: Enum.map(section.imports, &inspect/1),
           type: :section,
           order: index,
-          examples: examples(section.examples),
+          doc: docs_with_examples(section.describe || "", examples(section.examples)),
           path: path
         }
       ] ++
         build_entities(section.entities, path ++ [section.name]) ++
         build_sections(section.sections, path ++ [section.name])
     end)
+  end
+
+  defp wrap_code(text) do
+    """
+    ```elixir
+    #{text}
+    ```
+    """
+  end
+
+  defp docs_with_examples(doc, examples) do
+    case doc do
+      nil ->
+        "### Examples\n#{Enum.map_join(examples, "\n\n", &wrap_code/1)}"
+
+      doc ->
+        """
+        #{doc}
+        # Examples
+        #{Enum.map_join(examples, "\n\n", &wrap_code/1)}
+        """
+    end
   end
 
   defp build_entities(entities, path) do
@@ -125,9 +146,8 @@ defmodule Utils do
         %{
           name: entity.name,
           recursive_as: Map.get(entity, :recursive_as),
-          examples: examples(entity.examples),
           order: index,
-          doc: entity.describe || "No documentation",
+          doc: docs_with_examples(entity.describe || "", examples(entity.examples)),
           imports: [],
           links: Map.new(entity.links || []),
           args: entity.args,
@@ -397,6 +417,7 @@ defmodule Utils do
   defp type({:in, choices}), do: Enum.map_join(choices, " | ", &inspect/1)
   defp type({:or, subtypes}), do: Enum.map_join(subtypes, " | ", &type/1)
   defp type({:list, subtype}), do: type(subtype) <> "[]"
+  defp type({:list_of, subtype}), do: type({:list, subtype})
   defp type({:mfa_or_fun, arity}), do: "MFA | function/#{arity}"
   defp type(:literal), do: "any literal"
   defp type({:tagged_tuple, tag, type}), do: "{:#{tag}, #{type(type)}}"
