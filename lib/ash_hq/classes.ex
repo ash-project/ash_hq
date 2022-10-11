@@ -16,7 +16,20 @@ defmodule AshHq.Classes do
       _ ->
         true
     end)
-    |> Enum.join(" ")
+    |> Enum.map(fn
+      {classes, _} ->
+        to_string(classes)
+
+      classes ->
+        to_string(classes)
+    end)
+    |> case do
+      [classes] ->
+        classes(classes)
+
+      [classes | rest] ->
+        Enum.reduce(rest, classes, &classes(&2, &1))
+    end
   end
 
   def classes(classes) when is_binary(classes) do

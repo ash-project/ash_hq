@@ -6,6 +6,8 @@ defmodule AshHqWeb.Components.DocSidebar do
   alias Surface.Components.LivePatch
   alias Phoenix.LiveView.JS
 
+  import AshHq.Classes
+
   prop class, :css_class, default: ""
   prop libraries, :list, required: true
   prop extension, :any, default: nil
@@ -237,36 +239,6 @@ defmodule AshHqWeb.Components.DocSidebar do
                 {/for}
               {/for}
             </div>
-
-            <div class="text-base-light-500">
-              <button phx-click={collapse("#{@id}-modules")} class="flex flex-row items-center">
-                <div id={"#{@id}-modules-chevron-down"}>
-                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
-                </div>
-                <div id={"#{@id}-modules-chevron-right"} class="-rotate-90" style="display: none;">
-                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
-                </div>
-                Modules
-              </button>
-            </div>
-            <div id={"#{@id}-modules"}>
-              {#for {category, modules} <- @modules_by_category}
-                <div class="ml-4">
-                  <span class="text-sm text-base-light-900 dark:text-base-dark-100">{category}</span>
-                </div>
-                {#for module <- modules}
-                  <li class="ml-4">
-                    <LivePatch
-                      to={DocRoutes.doc_link(module, @selected_versions)}
-                      class="flex items-center space-x-2 pt-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-100 hover:bg-base-light-100 dark:hover:bg-base-light-700"
-                    >
-                      <Heroicons.Outline.CodeIcon class="h-4 w-4" />
-                      <span class="">{module.name}</span>
-                    </LivePatch>
-                  </li>
-                {/for}
-              {/for}
-            </div>
           </div>
         </ul>
       </div>
@@ -280,19 +252,14 @@ defmodule AshHqWeb.Components.DocSidebar do
       {#for dsl <- Enum.filter(dsls, &(&1.path == path))}
         <li class="border-l pl-1 border-primary-light-600 border-opacity-30">
           <div class="flex flex-row items-center">
-            {#if Enum.any?(dsls, &List.starts_with?(&1.path, dsl.path ++ [dsl.name]))}
-              {#if !(@dsl && List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name]))}
-                <button>
-                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
-                </button>
-              {/if}
-            {/if}
             <LivePatch
               to={DocRoutes.doc_link(dsl, @selected_versions)}
-              class={
-                "flex items-center p-1 text-base font-normal rounded-lg hover:text-primary-light-300",
-                "text-primary-600 dark:text-primary-dark-400 font-bold": @dsl && @dsl.id == dsl.id
-              }
+              class={classes([
+                "flex items-center p-1 font-normal rounded-lg text-black dark:text-white hover:text-primary-light-300",
+                "text-primary-light-600 dark:text-primary-dark-400 font-bold":
+                  @dsl &&
+                    List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name])
+              ])}
             >
               {dsl.name}
             </LivePatch>

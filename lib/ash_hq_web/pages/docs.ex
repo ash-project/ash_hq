@@ -201,7 +201,7 @@ defmodule AshHqWeb.Pages.Docs do
                     <th>Links</th>
                   </tr>
                   {#for option <- positional_options(@options)}
-                    <tr id={option.sanitized_path}>
+                    <tr id={"#{option.sanitized_path}/#{option.name}"}>
                       <td>
                         <div class="flex flex-row items-baseline">
                           <a href={"##{DocRoutes.sanitize_name(option.name)}"}>
@@ -245,7 +245,7 @@ defmodule AshHqWeb.Pages.Docs do
                   <th>Links</th>
                 </tr>
                 {#for %{argument_index: nil} = option <- @options}
-                  <tr id={option.sanitized_path}>
+                  <tr id={"#{option.sanitized_path}/#{option.name}"}>
                     <td id={DocRoutes.sanitize_name(option.name)}>
                       <div class="flex flex-row items-baseline">
                         <a href={"##{DocRoutes.sanitize_name(option.name)}"}>
