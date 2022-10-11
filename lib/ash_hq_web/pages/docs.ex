@@ -331,12 +331,20 @@ defmodule AshHqWeb.Pages.Docs do
 
   defp find_module(libraries, selected_versions, mod_name) do
     Enum.find_value(libraries, fn library ->
-      Enum.find_value(library.versions, fn version ->
-        if version.id == selected_versions[library.id] do
-          Enum.find(version.modules, &(&1.name == mod_name))
-        end
-      end)
+      version = selected_version(library, selected_versions[library.id])
+
+      if version do
+        Enum.find(version.modules, &(&1.name == mod_name))
+      end
     end)
+  end
+
+  defp selected_version(library, selected_version) do
+    if selected_version == "latest" do
+      latest_version(library)
+    else
+      Enum.find(library.versions, &(&1.id == selected_version))
+    end
   end
 
   defp child_dsls(_, nil), do: []
