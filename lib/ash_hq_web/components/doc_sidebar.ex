@@ -6,7 +6,7 @@ defmodule AshHqWeb.Components.DocSidebar do
   alias Surface.Components.LivePatch
   alias Phoenix.LiveView.JS
 
-  import AshHq.Classes
+  import Tails
 
   prop class, :css_class, default: ""
   prop libraries, :list, required: true

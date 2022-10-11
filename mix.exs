@@ -48,6 +48,7 @@ defmodule AshHq.MixProject do
       # {:ash_livebook, path: "../ash_livebook", only: [:dev]},
       {:spark, "~> 0.1"},
       # {:spark, path: "../spark", override: true},
+      {:tails, github: "zachdaniel/tails"},
       {:earmark, "~> 1.5.0-pre1", override: true},
       {:surface, "~> 0.9.1"},
       {:surface_heroicons, "~> 0.6.0"},
