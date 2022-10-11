@@ -27,7 +27,7 @@ defmodule AshHqWeb.Components.Catalogue do
       </div>
       <Form for={:selected_versions} change={@change_versions} class="flex flex-wrap gap-4 m-4">
         {#for library <- Enum.sort_by(@libraries, & &1.order)}
-          <div class="bg-base-light-800 dark:bg-base-dark-700 p-2 rounded-lg flex-grow">
+          <div class="bg-base-light-200 dark:bg-base-dark-700 p-2 rounded-lg flex-grow">
             <div class="flex justify-between items-center my-1">
               <div class="font-bold text-xl">
                 <CalloutText text={library.display_name} />
