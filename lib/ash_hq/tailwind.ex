@@ -184,7 +184,7 @@ defmodule AshHq.Tailwind do
         prefix("text", tailwind.text, tailwind.variant)
       ]
       |> add_variants(tailwind)
-      |> add_classes(tailwind)
+      |> add_classes(tailwind, tailwind.variant)
     end
 
     defp add_variants(iodata, tailwind) do
@@ -199,7 +199,7 @@ defmodule AshHq.Tailwind do
       ]
     end
 
-    defp add_classes(iodata, tailwind) do
+    defp add_classes(iodata, tailwind, variant) do
       Enum.concat(
         iodata,
         case tailwind.classes do
@@ -213,7 +213,11 @@ defmodule AshHq.Tailwind do
             if Enum.empty?(classes) do
               []
             else
-              [" " | Enum.intersperse(tailwind.classes, " ")]
+              if variant do
+                [" " | Enum.intersperse(Enum.map(tailwind.classes, &[variant, ":", &1]), " ")]
+              else
+                [" " | Enum.intersperse(tailwind.classes, " ")]
+              end
             end
         end
       )
