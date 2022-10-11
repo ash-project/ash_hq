@@ -54,6 +54,7 @@ config :ash_hq, :periodic_imports, true
 # Check `Plug.SSL` for all available options in `force_ssl`.
 
 config :ash_hq, AshHq.Mailer, adapter: Swoosh.Adapters.Postmark
+config :ash_hq, AshHq.MailingList.Mailer, adapter: Swoosh.Adapters.Postmark
 config :swoosh, :api_client, Swoosh.ApiClient.Finch
 
 # config :plug_content_security_policy,

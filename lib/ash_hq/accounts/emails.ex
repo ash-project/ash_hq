@@ -6,53 +6,68 @@ defmodule AshHq.Accounts.Emails do
   import Swoosh.Email
 
   def deliver_confirmation_instructions(user, url) do
+    if !url do
+      raise "Cannot deliver confirmation instructions without a url"
+    end
+
     deliver(user.email, "Confirm Your Email", """
+    <html>
+      <p>
+        Hi #{user.email},
+      </p>
 
-    ==============================
+      <p>
+        <a href="#{url}">Click here</a> to confirm your account
+      </p>
 
-    Hi #{user.email},
-
-    You can confirm your account by visiting the URL below:
-
-    #{url}
-
-    If you didn't create an account with us, please ignore this.
-
-    ==============================
+      <p>
+        If you didn't create an account with us, please ignore this.
+      </p>
+    </html>
     """)
   end
 
   def deliver_reset_password_instructions(user, url) do
+    if !url do
+      raise "Cannot deliver reset instructions without a url"
+    end
+
     deliver(user.email, "Reset Your Password", """
+    <html>
+      <p>
+        Hi #{user.email},
+      </p>
 
-    ==============================
+      <p>
+        <a href="#{url}">Click here</a> to reset your password.
+      </p>
 
-    Hi #{user.email},
-
-    You can reset your password by visiting the URL below:
-
-    #{url}
-
-    If you didn't request this change, please ignore this.
-
-    ==============================
+      <p>
+        If you didn't request this change, please ignore this.
+      </p>
+    <html>
     """)
   end
 
   def deliver_update_email_instructions(user, url) do
+    if !url do
+      raise "Cannot deliver update email instructions without a url"
+    end
+
     deliver(user.email, "Confirm Your Email Change", """
+    <html>
+      <p>
+        Hi #{user.email},
+      </p>
 
-    ==============================
+      <p>
+        <a href="#{url}">Click here</a> to confirm your new email.
+      </p>
 
-    Hi #{user.email},
-
-    You can confirm your email change by visiting the URL below:
-
-    #{url}
-
-    If you didn't request this change, please ignore this.
-
-    ==============================
+      <p>
+        If you haven't created an account with us, please ignore this.
+      </p>
+    </html>
     """)
   end
 
@@ -67,8 +82,8 @@ defmodule AshHq.Accounts.Emails do
     |> from({"Zach", "zach@ash-hq.org"})
     |> to(to_string(to))
     |> subject(subject)
+    |> put_provider_option(:track_links, "None")
     |> html_body(body)
-    |> text_body(body)
     |> AshHq.Mailer.deliver!()
   end
 end

@@ -3,6 +3,8 @@ defmodule AshHq.Resource do
   defmacro __using__(opts) do
     quote do
       use Ash.Resource, unquote(opts)
+
+      import AshHq.Calculations.Decrypt, only: [decrypt: 1]
     end
   end
 end

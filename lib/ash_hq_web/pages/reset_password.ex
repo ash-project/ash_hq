@@ -139,7 +139,8 @@ defmodule AshHqWeb.Pages.ResetPassword do
             :password_reset_form,
             AshPhoenix.Form.for_update(user, :reset_password,
               as: "reset_password",
-              api: AshHq.Accounts
+              api: AshHq.Accounts,
+              authorize?: false
             )
           )
         else

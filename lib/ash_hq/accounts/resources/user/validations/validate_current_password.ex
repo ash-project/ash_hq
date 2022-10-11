@@ -14,7 +14,7 @@ defmodule AshHq.Accounts.User.Validations.ValidateCurrentPassword do
     if AshHq.Accounts.User.Helpers.valid_password?(changeset.data, password) do
       :ok
     else
-      {:error, "invalid"}
+      {:error, [field: :password, message: "is incorrect"]}
     end
   end
 end

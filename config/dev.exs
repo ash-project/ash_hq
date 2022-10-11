@@ -84,6 +84,8 @@ config :phoenix, :plug_init_mode, :runtime
 
 config :ash_hq, AshHq.Mailer, adapter: Swoosh.Adapters.Local
 
+config :ash_hq, cloak_key: "J6ED3yBWjlaOW/5byrukZTEryKa++yXWblJuhP91Qq8="
+
 config :ash,
   policies: [
     show_policy_breakdowns?: true,

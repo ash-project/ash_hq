@@ -2,9 +2,6 @@ defmodule AshHqWeb.Components.VersionPills do
   @moduledoc "Renders pills for selected versions"
   use Surface.LiveComponent
 
-  alias Surface.Components.Form
-  alias Surface.Components.Form.Select
-
   prop selected_versions, :map, default: %{}
   prop libraries, :list, default: []
   prop add_version, :event
@@ -57,15 +54,6 @@ defmodule AshHqWeb.Components.VersionPills do
 
   defp can_be_added?(selected_versions) do
     Enum.any?(selected_versions, fn {_, val} -> val in [nil, ""] end)
-  end
-
-  defp packages_to_add(libraries, selected_versions) do
-    Enum.concat(
-      [{"", ""}],
-      libraries
-      |> Enum.filter(&(selected_versions[&1.id] in [nil, ""]))
-      |> Enum.map(&{&1.name, &1.id})
-    )
   end
 
   defp selected_version(library, selected_version) do

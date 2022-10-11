@@ -5,7 +5,7 @@ defmodule AshHq.Accounts.User do
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer]
 
-  alias AshHq.Accounts.Preparations
+  alias AshHq.Accounts.Preparations, warn: false
 
   actions do
     defaults [:read]
@@ -50,14 +50,13 @@ defmodule AshHq.Accounts.User do
       argument :password, :string,
         allow_nil?: false,
         constraints: [
-          max_length: 80,
-          min_length: 12
+          min_length: 6
         ]
 
       argument :confirm, :boolean, default: true
 
       argument :confirmation_url_fun, :function do
-        constraints arity: 2
+        constraints arity: 1
       end
 
       change AshHq.Accounts.User.Changes.HashPassword
@@ -115,14 +114,22 @@ defmodule AshHq.Accounts.User do
       change AshHq.Accounts.User.Changes.DeleteEmailChangeTokens
     end
 
+    update :update_merch_settings do
+      argument :address, :string
+      argument :name, :string
+
+      accept [:shirt_size]
+      change set_attribute(:encrypted_address, arg(:address))
+      change set_attribute(:encrypted_name, arg(:name))
+    end
+
     update :change_password do
       accept []
 
       argument :password, :string,
         allow_nil?: false,
         constraints: [
-          max_length: 80,
-          min_length: 12
+          min_length: 6
         ]
 
       argument :password_confirmation, :string, allow_nil?: false
@@ -141,8 +148,7 @@ defmodule AshHq.Accounts.User do
       argument :password, :string,
         allow_nil?: false,
         constraints: [
-          max_length: 80,
-          min_length: 12
+          min_length: 6
         ]
 
       argument :password_confirmation, :string, allow_nil?: false
@@ -174,8 +180,18 @@ defmodule AshHq.Accounts.User do
     attribute :confirmed_at, :utc_datetime_usec
 
     attribute :hashed_password, :string, private?: true
+
+    attribute :encrypted_name, AshHq.Types.EncryptedString
+    attribute :encrypted_address, AshHq.Types.EncryptedString
+    attribute :shirt_size, :string
+
     create_timestamp :created_at
     update_timestamp :updated_at
+  end
+
+  calculations do
+    calculate :address, :string, decrypt(:encrypted_address)
+    calculate :name, :string, decrypt(:encrypted_name)
   end
 
   identities do
@@ -188,6 +204,10 @@ defmodule AshHq.Accounts.User do
   end
 
   policies do
+    policy action(:read) do
+      authorize_if expr(id == ^actor(:id))
+    end
+
     policy action(:change_password) do
       description "Allow the user to change their own password"
       authorize_if expr(id == ^actor(:id))
@@ -206,6 +226,11 @@ defmodule AshHq.Accounts.User do
 
     policy action(:deliver_user_confirmation_instructions) do
       description "A logged in user can request email confirmation for themselves to be sent again"
+      authorize_if expr(id == ^actor(:id))
+    end
+
+    policy action(:update_merch_settings) do
+      description "A logged in user can update their merch settings"
       authorize_if expr(id == ^actor(:id))
     end
 

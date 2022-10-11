@@ -20,6 +20,7 @@ defmodule AshHq.Application do
       [
         Supervisor.child_spec({Finch, name: AshHq.Finch}, id: AshHq.Finch),
         Supervisor.child_spec({Finch, name: Swoosh.Finch}, id: Swoosh.Finch),
+        AshHq.Vault,
         # Start the Ecto repository
         AshHq.Repo,
         # Start the Telemetry supervisor

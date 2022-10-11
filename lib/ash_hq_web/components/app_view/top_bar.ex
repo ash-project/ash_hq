@@ -4,8 +4,13 @@ defmodule AshHqWeb.Components.AppView.TopBar do
   prop live_action, :atom, required: true
   prop toggle_theme, :event, required: true
   prop configured_theme, :string, required: true
+  prop current_user, :any
 
   alias AshHqWeb.Components.SearchBar
+  alias Surface.Components.LiveRedirect
+  alias Phoenix.LiveView.JS
+  alias AshHqWeb.Router.Helpers, as: Routes
+  alias Surface.Components.Form
 
   def render(assigns) do
     ~F"""
@@ -81,8 +86,91 @@ defmodule AshHqWeb.Components.AppView.TopBar do
               <Heroicons.Solid.MoonIcon class="w-6 h-6 fill-base-light-400 hover:fill-base-light-200 hover:text-base-light-200" />
           {/case}
         </button>
+        <div>|</div>
+
+        <div class="relative inline-block text-left">
+          <div>
+            <button
+              phx-click={toggle_account_dropdown()}
+              type="button"
+              class="inline-flex items-center justify-center w-full rounded-md shadow-sm font-medium dark:text-base-dark-400 dark:hover:text-base-dark-200 hover:text-base-dark-600"
+              id="menu-button"
+              aria-expanded="true"
+              aria-haspopup="true"
+            >
+              <Heroicons.Solid.UserIcon class="h-6 w-6" />
+            </button>
+          </div>
+
+          <div
+            id="account-dropdown"
+            style="display: none;"
+            class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:text-white dark:bg-base-dark-900 ring-1 ring-black ring-opacity-5 divide-y divide-base-light-100 focus:outline-none"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="menu-button"
+            tabindex="-1"
+            phx-click-away={toggle_account_dropdown()}
+          >
+            {#if @current_user}
+              <div class="py-1" role="none">
+                <!-- Active: "bg-base-light-100 text-base-light-900", Not Active: "text-base-light-700" -->
+                <LiveRedirect
+                  to={Routes.app_view_path(AshHqWeb.Endpoint, :user_settings)}
+                  class="dark:text-white group flex items-center px-4 py-2 text-sm"
+                >
+                  <Heroicons.Solid.PencilAltIcon class="mr-3 h-5 w-5 text-base-light-400 group-hover:text-base-light-500" />
+                  Settings
+                </LiveRedirect>
+              </div>
+              <div class="py-1" role="none">
+                <Form for={:sign_out} action={Routes.user_session_path(AshHqWeb.Endpoint, :delete)} method="post">
+                  <button
+                    label="logout"
+                    type="submit"
+                    class="dark:text-white group flex items-center px-4 py-2 text-sm"
+                    method={:delete}
+                    id="logout-link"
+                  >
+                    <Heroicons.Outline.LogoutIcon class="mr-3 h-5 w-5 text-base-light-400 group-hover:text-base-light-500" />
+                    Logout
+                  </button>
+                </Form>
+              </div>
+            {#else}
+              <div class="py-1" role="none">
+                <LiveRedirect
+                  to={Routes.app_view_path(AshHqWeb.Endpoint, :log_in)}
+                  class="dark:text-white group flex items-center px-4 py-2 text-sm"
+                >
+                  <div class="flex items-center">
+                    <Heroicons.Outline.UserAddIcon class="mr-3 h-5 w-5 text-base-light-400 group-hover:text-base-light-500" />
+                    Sign In
+                  </div>
+                </LiveRedirect>
+              </div>
+            {/if}
+          </div>
+        </div>
       </div>
     </div>
     """
+  end
+
+  defp toggle_account_dropdown(js \\ %JS{}) do
+    js
+    |> JS.toggle(
+      to: "#account-dropdown",
+      in: {
+        "transition ease-out duration-100",
+        "opacity-0 scale-95",
+        "opacity-100 scale-100"
+      },
+      out: {
+        "transition ease-in duration-75",
+        "opacity-100 scale-100",
+        "opacity-0 scale-05"
+      }
+    )
   end
 end

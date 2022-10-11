@@ -218,13 +218,13 @@ defmodule AshHqWeb.Pages.Home do
 
           <a
             href="docs/guides/ash/latest/how_to/contribute.md"
-            class="flex justify-center items-center w-full md:w-auto h-10 px-4 rounded-lg bg-primary-light-500 dark:bg-primary-dark-500 font-semibold dark:text-white dark:hover:bg-primary-dark-700 hover:bg-primary-light-700"
+            class="flex justify-center items-center w-full md:w-auto h-10 px-4 rounded-lg bg-primary-light-500 dark:bg-primary-dark-500 font-semibold dark:text-white dark:hover:bg-primary-dark-700 hover:bg-primary-light-700 mt-6"
           >
             Become a contributor
           </a>
         </div>
 
-        <div class="flex flex-col items-center my-10 space-y-4 hidden sm:block">
+        <div class="flex flex-col items-center my-10 space-y-4">
           {#if @signed_up}
             Thank you for joining our mailing list!
           {#else}
@@ -245,6 +245,8 @@ defmodule AshHqWeb.Pages.Home do
             </Form>
           {/if}
         </div>
+
+        <div class="block md:hidden my-8" />
 
         <div class="max-w-7xl px-4 sm:px-6 md:px-8 my-8 hidden sm:block">
           <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
@@ -319,28 +321,6 @@ defmodule AshHqWeb.Pages.Home do
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="flex flex-col items-center my-10 space-y-4 hidden sm:block">
-          {#if @signed_up}
-            Thank you for joining our mailing list!
-          {#else}
-            <p class="text-2xl font-medium text-base-light-700 dark:text-base-light-50 max-w-4xl mx-auto text-center">Join our mailing list for (tastefully paced) updates!</p>
-            <Form
-              for={@email_form}
-              change="validate_email_form"
-              submit="submit_email_form"
-              class="flex flex-col md:flex-row space-x-4 space-y-4 items-center"
-            >
-              <Field name={:email}>
-                <TextInput
-                  class="w-80 md:w-96 button border border-base-light-400 bg-base-light-200 dark:border-base-dark-700 rounded-lg dark:bg-base-dark-700 hover:bg-base-light-300 dark:hover:bg-base-dark-600"
-                  opts={placeholder: "user@email.com"}
-                />
-              </Field>
-              <Submit class="flex justify-center items-center w-full md:w-auto h-10 px-4 rounded-lg bg-primary-light-500 dark:bg-primary-dark-500 font-semibold dark:text-white dark:hover:bg-primary-dark-700 hover:bg-primary-light-700">Join</Submit>
-            </Form>
-          {/if}
         </div>
       </div>
     </div>

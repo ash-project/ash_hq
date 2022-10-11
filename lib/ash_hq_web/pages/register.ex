@@ -83,7 +83,7 @@ defmodule AshHqWeb.Pages.Register do
 
           <div class="pt-5">
             <div class="flex justify-end">
-              <Submit class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md  bg-primary-light-600 hover:bg-primary-light-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-light-600 text-white">Log In</Submit>
+              <Submit class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md  bg-primary-light-600 hover:bg-primary-light-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-light-600 text-white">Sign Up</Submit>
             </div>
           </div>
         </Form>
@@ -120,6 +120,13 @@ defmodule AshHqWeb.Pages.Register do
 
   @impl true
   def handle_event("register", %{"register" => params}, socket) do
+    params =
+      Map.put(
+        params,
+        "confirmation_url_fun",
+        &Routes.user_confirmation_url(AshHqWeb.Endpoint, :confirm, &1)
+      )
+
     case AshPhoenix.Form.submit(socket.assigns.register_form, params: params) do
       {:ok, user} ->
         token = AshHqWeb.UserAuth.create_token_for_user(user)
@@ -136,7 +143,7 @@ defmodule AshHqWeb.Pages.Register do
          )}
 
       {:error, form} ->
-        {:noreply, assign(socket, log_in_form: form)}
+        {:noreply, assign(socket, register_form: form)}
     end
   end
 end

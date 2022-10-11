@@ -95,7 +95,7 @@ defmodule AshHqWeb.Router do
   scope "/", AshHqWeb do
     pipe_through [:browser, :dead_view_authentication]
 
-    delete "/users/log_out", UserSessionController, :delete
+    post "/users/log_out", UserSessionController, :delete
     post "/users/confirm", UserConfirmationController, :create
     get "/users/confirm/:token", UserConfirmationController, :confirm
   end

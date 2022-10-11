@@ -20,6 +20,8 @@ config :ash_hq, AshHqWeb.Endpoint,
   secret_key_base: "766JP3UO+dTbVfydE4RafFKbfUoudccDz1zS7x1N75WSiEJTq6dDR4r04+McH41m",
   server: false
 
+config :ash_hq, cloak_key: "J6ED3yBWjlaOW/5byrukZTEryKa++yXWblJuhP91Qq8="
+
 # In test we don't send emails.
 config :ash_hq, AshHq.Mailer, adapter: Swoosh.Adapters.Test
 

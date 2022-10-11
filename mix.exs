@@ -64,6 +64,8 @@ defmodule AshHq.MixProject do
       {:premailex, "~> 0.3.0"},
       # Authentication
       {:bcrypt_elixir, "~> 3.0"},
+      # Encryption
+      {:cloak, "~> 1.1"},
       # CSP
       {:plug_content_security_policy, "~> 0.2.1"},
       # Live Dashboard

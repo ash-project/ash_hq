@@ -89,4 +89,7 @@ if config_env() == :prod do
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
 
   config :ash_hq, AshHq.Mailer, api_key: System.get_env("POSTMARK_API_KEY")
+
+  config :ash_hq, AshHq.MailingList.Mailer,
+    api_key: System.get_env("POSTMARK_MAILING_LIST_API_KEY")
 end

@@ -22,6 +22,12 @@ defmodule AshHq.MailingList.Email do
     defaults [:create, :read]
   end
 
+  code_interface do
+    define_for AshHq.MailingList
+
+    define :all, action: :read
+  end
+
   attributes do
     uuid_primary_key :id
 
