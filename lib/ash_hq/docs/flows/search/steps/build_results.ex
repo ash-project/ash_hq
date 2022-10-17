@@ -5,10 +5,9 @@ defmodule AshHq.Docs.Search.Steps.BuildResults do
   use Ash.Flow.Step
 
   def run(input, _opts, _context) do
-    # search_results =
     {:ok,
-     input
-     |> Map.values()
+     input[:results]
+     |> Kernel.||([])
      |> List.flatten()
      |> Enum.sort_by(
        # false comes first, and we want all things where the name matches to go first

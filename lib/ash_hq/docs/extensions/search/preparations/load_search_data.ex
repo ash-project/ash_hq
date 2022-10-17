@@ -8,15 +8,15 @@ defmodule AshHq.Extensions.Search.Preparations.LoadSearchData do
     query_string = Ash.Query.get_argument(query, :query)
     to_load = AshHq.Docs.Extensions.Search.load_for_search(query.resource)
 
-    if query_string do
-      query
-      |> Ash.Query.load(search_headline: [query: query_string])
-      |> Ash.Query.load(match_rank: [query: query_string])
-      |> Ash.Query.load(name_matches: [query: query_string, similarity: 0.7])
-      |> Ash.Query.load(to_load)
-      |> Ash.Query.sort(match_rank: {:asc, %{query: query_string}})
-    else
-      query
-    end
+    query.resource
+    |> AshHq.Docs.Extensions.RenderMarkdown.render_attributes()
+    |> Enum.reduce(query, fn {source, target}, query ->
+      Ash.Query.deselect(query, [source, target])
+    end)
+    |> Ash.Query.load(search_headline: [query: query_string])
+    |> Ash.Query.load(match_rank: [query: query_string])
+    |> Ash.Query.load(name_matches: [query: query_string, similarity: 0.7])
+    |> Ash.Query.load(to_load)
+    |> Ash.Query.sort(match_rank: {:asc, %{query: query_string}})
   end
 end
