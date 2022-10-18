@@ -61,6 +61,28 @@ defmodule AshHqWeb.Pages.Home do
         <div class="flex flex-col">
           <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
             <h2 class="mt-8 font-semibold text-primary-light-500 dark:text-primary-dark-400">
+              Framework
+            </h2>
+            <p class="mt-4 text-3xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50">
+              What is Ash?
+            </p>
+            <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6">
+              Ash Framework is a declarative, resource-oriented application
+              development framework for Elixir. A resource can model anything,
+              like a database table, an external API, or even custom code. Ash
+              provides a rich, and extensive set of tools for interacting with
+              and building on top of these resources. By modeling your
+              application as a set of resources, other tools know exactly how to
+              use them, allowing extensions like AshGraphql and AshJsonApi to
+              provide top tier APIs with minimal configuration. With
+              filtering/sorting/pagination/calculations/aggregations, pub/sub,
+              policy authorization, rich introspection, and much more built-in,
+              and a comprehensive suite of tools to allow you to build your own
+              extensions, the possibilities are endless.
+            </p>
+          </div>
+          <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
+            <h2 class="mt-8 font-semibold text-primary-light-500 dark:text-primary-dark-400">
               Write it once
             </h2>
             <p class="mt-4 text-3xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50">
