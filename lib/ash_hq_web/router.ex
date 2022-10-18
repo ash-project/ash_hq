@@ -118,9 +118,6 @@ defmodule AshHqWeb.Router do
 
     live_dashboard "/dashboard",
       metrics: AshHqWeb.Telemetry,
-      additional_pages: [
-        flame_on: FlameOn.DashboardPage
-      ],
       ecto_repos: [AshHq.Repo],
       ecto_psql_extras_options: [long_running_queries: [threshold: "200 milliseconds"]]
   end
