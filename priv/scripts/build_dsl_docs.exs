@@ -142,6 +142,10 @@ defmodule Utils do
     entities
     |> Enum.with_index()
     |> Enum.flat_map(fn {entity, index} ->
+      keys_to_remove =
+        Enum.map(entity.auto_set_fields || [], &elem(&1, 0))
+
+      option_schema = Keyword.drop(entity.schema || [], keys_to_remove)
       [
         %{
           name: entity.name,
@@ -153,7 +157,7 @@ defmodule Utils do
           args: entity.args,
           type: :entity,
           path: path,
-          options: add_argument_indices(schema(entity.schema, path ++ [entity.name]), entity.args)
+          options: add_argument_indices(schema(option_schema, path ++ [entity.name]), entity.args)
         }
       ] ++ build_entities(List.flatten(Keyword.values(entity.entities)), path ++ [entity.name])
     end)

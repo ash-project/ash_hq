@@ -284,7 +284,7 @@ defmodule AshHqWeb.Pages.Home do
           </p>
         </div>
 
-        <div class="pt-6 pb-6 w-full max-w-6xl hidden sm:block">
+        <div class="pt-6 pb-6 w-full max-w-6xl">
           <div class="flex flex-col lg:flex-row gap-10 mx-8 lg:mx-0">
             <CodeExample
               id="define-a-resource"

@@ -24,6 +24,7 @@ COPY ./mix.exs .
 COPY ./mix.lock .
 COPY ./config/config.exs config/config.exs
 COPY ./config/prod.exs config/prod.exs
+COPY ./assets/tailwind.colors.json ./assets/tailwind.colors.json
 RUN mix deps.get && \
   mix deps.compile
 COPY ./lib ./lib
