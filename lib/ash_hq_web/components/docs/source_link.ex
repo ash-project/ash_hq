@@ -9,7 +9,7 @@ defmodule AshHqWeb.Components.Docs.SourceLink do
   def render(assigns) do
     ~F"""
     {#if @module_or_function.file}
-      <a target="_blank" href={source_link(@module_or_function, @library, @library_version)}>{"</>"}</a>
+      <a href={source_link(@module_or_function, @library, @library_version)}>{"</>"}</a>
     {/if}
     """
   end

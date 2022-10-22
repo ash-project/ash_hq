@@ -7,6 +7,7 @@ defmodule AshHqWeb.Pages.Home do
   alias Surface.Components.Form
   alias Surface.Components.Form.{Field, Submit, TextInput}
   import AshHqWeb.Components.CodeExample, only: [to_code: 1]
+  import Tails
 
   data signed_up, :boolean, default: false
   data email_form, :any
@@ -52,9 +53,12 @@ defmodule AshHqWeb.Pages.Home do
           A declarative foundation for ambitious Elixir applications. Model your domain, derive the rest.
         </div>
         <div class="flex flex-col space-y-4 md:space-x-4 md:space-y-0 md:flex-row items-center mt-8 md:mt-16 mb-6 md:mb-10">
-          <div class="flex justify-center items-center w-full md:w-auto h-12 px-4 rounded-lg bg-primary-light-500 dark:bg-primary-dark-500 font-semibold dark:text-white dark:hover:bg-primary-dark-700 hover:bg-primary-light-700">
-            <a href="/docs/guides/ash/latest/tutorials/get-started.md" target="_blank">Get Started</a>
-          </div>
+          <a
+            href="/docs/guides/ash/latest/tutorials/get-started.md"
+            class="flex justify-center items-center w-full md:w-auto h-12 px-4 rounded-lg bg-primary-light-500 dark:bg-primary-dark-500 font-semibold dark:text-white dark:hover:bg-primary-dark-700 hover:bg-primary-light-700"
+          >
+            Get Started
+          </a>
           <SearchBar class="w-80 md:w-96" />
         </div>
 
@@ -180,7 +184,7 @@ defmodule AshHqWeb.Pages.Home do
           <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-100 rounded-xl p-8 md:p-0 dark:bg-base-dark-600 drop-shadow-xl md:relative md:-top-16 md:-right-[10rem]">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
-                "What stood out to me was how incredibly easy Ash made it for me to go from a proof of concept, to a working prototype using ETS, to a live app using Postgres."
+                "I’m constantly blown away with the quality of work and support the Ash community has put into this project. It’s gotten to the point that I can’t imagine starting a new Elixir project that doesn’t use Ash."
               </p>
 
               <p>
@@ -280,7 +284,10 @@ defmodule AshHqWeb.Pages.Home do
                   opts={placeholder: "user@email.com"}
                 />
               </Field>
-              <Submit class="flex justify-center items-center w-full md:w-auto h-10 px-4 rounded-lg bg-primary-light-500 dark:bg-primary-dark-500 font-semibold dark:text-white dark:hover:bg-primary-dark-700 hover:bg-primary-light-700">Join</Submit>
+              <Submit class={classes([
+                "flex justify-center items-center w-full md:w-auto h-10 px-4 rounded-lg bg-primary-light-500 dark:bg-primary-dark-500 font-semibold dark:text-white dark:hover:bg-primary-dark-700 hover:bg-primary-light-700",
+                "disabled bg-gray-400": !@email_form.valid?
+              ])}>Join</Submit>
             </Form>
           {/if}
         </div>

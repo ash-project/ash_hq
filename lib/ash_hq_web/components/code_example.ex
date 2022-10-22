@@ -16,30 +16,57 @@ defmodule AshHqWeb.Components.CodeExample do
       "rounded-xl bg-silver-phoenix dark:bg-base-dark-800 border border-base-light-400 dark:border-base-dark-700 text-sm border-b",
       @class
     }>
-      <div class={
-        "flex flex-row justify-between py-2 pl-2 pr-8",
-        "border-base-light-400 dark:border-base-dark-700 border-b": !@collapsed
-      }>
-        <div class="flex flex-row justify-start space-x-1">
-          <div class="w-3 h-3 bg-base-light-600 rounded-full" />
-          <div class="w-3 h-3 bg-base-light-600 rounded-full" />
-          <div class="w-3 h-3 bg-base-light-600 rounded-full" />
-        </div>
-        {#if @title}
-          <div class="justify-self-end text-base-light-700 dark:text-white">{@title}</div>
-          <div>
-            {#if @collapsible}
-              <button class="hover:bg-base-light-400 dark:hover:bg-base-dark-700" :on-click="fold">
+      {#if @collapsible}
+        <button
+          type="button"
+          :on-click="fold"
+          class={
+            "flex flex-row rounded-t-xl w-full justify-between py-2 pl-2 pr-8 hover:bg-base-light-500 dark:hover:border-base-dark-600",
+            "border-base-light-400 dark:border-base-dark-700 border-b": !@collapsed
+          }
+        >
+          <div class="flex flex-row justify-start space-x-1">
+            <div class="w-3 h-3 bg-base-light-600 rounded-full" />
+            <div class="w-3 h-3 bg-base-light-600 rounded-full" />
+            <div class="w-3 h-3 bg-base-light-600 rounded-full" />
+          </div>
+          {#if @title}
+            <h3 class="justify-self-end text-base-light-700 dark:text-white">{@title}</h3>
+            <div>
+              {#if @collapsible}
                 {#if @collapsed}
                   <Heroicons.Solid.ChevronDoubleDownIcon class="w-4 h-4" />
                 {#else}
                   <Heroicons.Solid.ChevronDoubleUpIcon class="w-4 h-4" />
                 {/if}
-              </button>
-            {/if}
+              {/if}
+            </div>
+          {/if}
+        </button>
+      {#else}
+        <div class={
+          "flex flex-row justify-between py-2 pl-2 pr-8",
+          "border-base-light-400 dark:border-base-dark-700 border-b": !@collapsed
+        }>
+          <div class="flex flex-row justify-start space-x-1">
+            <div class="w-3 h-3 bg-base-light-600 rounded-full" />
+            <div class="w-3 h-3 bg-base-light-600 rounded-full" />
+            <div class="w-3 h-3 bg-base-light-600 rounded-full" />
           </div>
-        {/if}
-      </div>
+          {#if @title}
+            <h3 class="justify-self-end text-base-light-700 dark:text-white">{@title}</h3>
+            <div>
+              {#if @collapsible}
+                {#if @collapsed}
+                  <Heroicons.Solid.ChevronDoubleDownIcon class="w-4 h-4" />
+                {#else}
+                  <Heroicons.Solid.ChevronDoubleUpIcon class="w-4 h-4" />
+                {/if}
+              {/if}
+            </div>
+          {/if}
+        </div>
+      {/if}
       <div class={"pl-1 py-2", hidden: @collapsed}>
         <div class="flex flex-row overflow-auto">
           <div class="flex flex-col border-r text-base-light-500 dark:text-white border-base-light-400 dark:border-base-dark-700 pr-1">

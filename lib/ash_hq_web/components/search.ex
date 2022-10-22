@@ -71,18 +71,19 @@ defmodule AshHqWeb.Components.Search do
             </div>
             <div class="ml-2 pl-4">
               <Form for={:types} change={@change_types}>
-                <div class="flex flex-row space-x-2 flex-wrap">
+                <div class="flex flex-row space-x-8 flex-wrap mt-4">
+                  <div>Search For:</div>
                   {#for type <- AshHq.Docs.Extensions.Search.Types.types()}
                     <div class="flex flex-row items-center">
                       <Checkbox
-                        class="mr-4"
+                        class="mr-2"
                         id={"#{type}-selected"}
                         value={type in @selected_types}
                         name={"types[#{type}]"}
                       />
-                      <Label field={type}>
+                      <label for={"#{type}-selected"}>
                         {type}
-                      </Label>
+                      </label>
                     </div>
                   {/for}
                 </div>
@@ -94,7 +95,7 @@ defmodule AshHqWeb.Components.Search do
               {render_items(assigns, @item_list)}
             </div>
           </div>
-          <div class="flex flex-row justify-start relative bottom-0 mt-2">
+          <div class="flex flex-row justify-start items-center relative bottom-0 mt-2">
             <div class="flex text-black dark:text-white font-light px-2">
               Packages:
             </div>
