@@ -103,6 +103,52 @@ defmodule AshHqWeb.AppViewLive do
           {#match :reset_password}
             <ResetPassword id="reset_password" params={@params} />
         {/case}
+        {#if @live_action != :docs_dsl}
+          <footer class="relative p-8 sm:p-6 bg-base-light-200 dark:bg-base-dark-800 sm:justify-center">
+            <div class="md:flex md:justify-around">
+              <div class="flex justify-center mb-6 md:mb-0">
+                <a href="/" class="flex items-center">
+                  <img src="/images/ash-logo-side.svg" class="mr-3 h-32" alt="Ash Framework Logo">
+                </a>
+              </div>
+              <div class="grid grid-cols-3 gap-8 sm:gap-6">
+                <div>
+                  <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Resources</h2>
+                  <ul class="text-gray-600 dark:text-gray-400">
+                    <li class="mb-4">
+                      <a href="https://github.com/ash-project" class="hover:underline">Source</a>
+                    </li>
+                    <li>
+                      <a href="/docs/guides/ash/latest/tutorials/get-started.md" class="hover:underline">Get Started</a>
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Community</h2>
+                  <ul class="text-gray-600 dark:text-gray-400">
+                    <li class="mb-4">
+                      <a href="https://twitter.com/AshFramework" class="hover:underline">Twitter</a>
+                    </li>
+                    <li>
+                      <a href="https://discord.gg/D7FNG2q" class="hover:underline">Discord</a>
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Help Us</h2>
+                  <ul class="text-gray-600 dark:text-gray-400">
+                    <li class="mb-4">
+                      <a href="https://github.com/ash-project/ash_hq/issues/new/choose" class="hover:underline">Report an issue</a>
+                    </li>
+                    <li>
+                      <a href="/docs/guides/ash/latest/how_to/contribute.md" class="hover:underline">Contribute</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </footer>
+        {/if}
       </div>
     </div>
     """

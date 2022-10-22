@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="<%= "h-full #{@configured_theme}" %>">
+<html lang="en" class="<%= "#{@configured_theme}" %>">
   <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -38,8 +38,10 @@
   </head>
   <body class="h-full">
     <%= @inner_content %>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-    <script>mermaid.init(".mermaid")</script>
+    <%= if @live_action == :docs do %>
+      <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+      <script>mermaid.init(".mermaid")</script>
+    <% end %>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/assets/app.js") %>"></script>
   </body>
 </html>

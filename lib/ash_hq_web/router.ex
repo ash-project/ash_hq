@@ -2,6 +2,7 @@ defmodule AshHqWeb.Router do
   use AshHqWeb, :router
 
   import AshHqWeb.UserAuth
+  import AshAdmin.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -115,6 +116,8 @@ defmodule AshHqWeb.Router do
     else
       pipe_through [:browser, :admin_basic_auth]
     end
+
+    ash_admin("/admin")
 
     live_dashboard "/dashboard",
       metrics: AshHqWeb.Telemetry,

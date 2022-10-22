@@ -33,16 +33,18 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:ash, github: "ash-project/ash", override: true},
-      # {:ash, "~> 2.0.0-rc.8"},
+      # {:ash, github: "ash-project/ash", override: true},
+      {:ash, "~> 2.2", override: true},
       # {:ash, path: "../ash", override: true},
-
-      # {:ash_postgres, "~> 1.0.0-rc.3"},
-      {:ash_postgres, github: "ash-project/ash_postgres"},
+      {:ash_postgres, "~> 1.1"},
+      {:ash_admin, "~> 0.6.2"},
+      # {:ash_admin, path: "../ash_admin"},
+      # {:ash_postgres, github: "ash-project/ash_postgres"},
       # {:ash_postgres, path: "../ash_postgres"},
-      # {:ash_phoenix, "~> 1.0.0-rc.0"},
-      {:ash_phoenix, github: "ash-project/ash_phoenix"},
-      {:ash_graphql, github: "ash-project/ash_graphql"},
+      {:ash_phoenix, "~> 1.1"},
+      # {:ash_phoenix, github: "ash-project/ash_phoenix"},
+      # {:ash_graphql, github: "ash-project/ash_graphql"},
+      {:ash_graphql, "~> 0.20.1"},
       {:absinthe_plug, "~> 1.5"},
       # {:ash_phoenix, github: "ash-project/ash_phoenix", branch: "ash-2.0", override: true},
       # {:ash_livebook, path: "../ash_livebook", only: [:dev]},
@@ -74,7 +76,7 @@ defmodule AshHq.MixProject do
       {:ecto_psql_extras, "~> 0.6"},
       {:phoenix_ecto, "~> 4.4"},
       # Phoenix/Core dependencies
-      {:phoenix, "~> 1.6.6"},
+      {:phoenix, "~> 1.6.14"},
       {:ecto_sql, "~> 3.6"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.0"},

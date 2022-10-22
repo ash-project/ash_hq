@@ -41,7 +41,7 @@ defmodule AshHqWeb.Components.CodeExample do
         {/if}
       </div>
       <div class={"pl-1 py-2", hidden: @collapsed}>
-        <div class="flex flex-row">
+        <div class="flex flex-row overflow-auto">
           <div class="flex flex-col border-r text-base-light-500 dark:text-white border-base-light-400 dark:border-base-dark-700 pr-1">
             {#if !@collapsed}
               {#for {_line, no} <- @code}

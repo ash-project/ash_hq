@@ -38,7 +38,12 @@ defmodule AshHq.Docs.Extension do
   end
 
   actions do
-    defaults [:read, :update, :destroy]
+    defaults [:update, :destroy]
+
+    read :read do
+      primary? true
+      pagination offset?: true, countable: true, default_limit: 25, required?: false
+    end
 
     create :create do
       primary? true

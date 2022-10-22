@@ -29,13 +29,11 @@ defmodule AshHq.Docs.Guide do
   end
 
   actions do
-    defaults [:create, :read, :update, :destroy]
+    defaults [:create, :update, :destroy]
 
-    read :paginate do
-      pagination do
-        countable true
-        keyset? true
-      end
+    read :read do
+      primary? true
+      pagination offset?: true, countable: true, default_limit: 25, required?: false
     end
   end
 

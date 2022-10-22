@@ -35,7 +35,7 @@ defmodule AshHqWeb.Pages.Docs do
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~F"""
-    <div class="flex flex-col xl:flex-row justify-center overflow-hidden w-screen h-screen">
+    <div class="flex flex-col xl:flex-row justify-center overflow-hidden">
       <div class="xl:hidden flex flex-row justify-start w-full space-x-12 items-center border-b border-t border-base-light-600 py-3">
         <button class="dark:hover:text-base-dark-600" phx-click={show_sidebar()}>
           <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
@@ -275,6 +275,17 @@ defmodule AshHqWeb.Pages.Docs do
               {/if}
             </table>
           </div>
+
+          <footer class="relative p-2 sm:justify-center">
+            <div class="md:flex md:justify-around items-center">
+              <a href="/">
+                <img class="h-6 md:h-10 hidden dark:block" src="/images/ash-framework-dark.png">
+                <img class="h-6 md:h-10 dark:hidden" src="/images/ash-framework-light.png">
+              </a>
+              <a href="https://github.com/ash-project" class="hover:underline">Source</a>
+              <a href="https://github.com/ash-project/ash_hq/issues/new/choose" class="hover:underline">Report an issue</a>
+            </div>
+          </footer>
         </div>
         {#if @module}
           <div class="lg:w-72 overflow-y-auto overflow-x-hidden dark:bg-base-dark-900 bg-opacity-70 mt-4 custom-scrollbar">

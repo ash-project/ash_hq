@@ -41,7 +41,7 @@ defmodule AshHqWeb.Pages.Home do
   def render(assigns) do
     ~F"""
     <div class="antialiased">
-      <div class="my-2 dark:bg-base-dark-900 dark:bg-dark-grid bg-light-grid flex flex-col items-center pt-4 md:pt-12">
+      <div class="my-2 dark:bg-base-dark-900 flex flex-col items-center pt-4 md:pt-12">
         <div class="flex flex-col">
           <img class="h-64" src="/images/ash-logo-side.svg">
         </div>
@@ -158,9 +158,9 @@ defmodule AshHqWeb.Pages.Home do
 
         <div
           id="testimonials"
-          class="flex flex-col items-center content-center space-y-8 w-full lg:w-[28rem] max-w-4xl md:h-[74rem] lg:h-[68rem] mb-8 lg:mb-0 px-4 md:px-8 lg:px-0"
+          class="flex flex-col items-center content-center space-y-8 w-full lg:w-[28rem] max-w-7xl md:h-[74rem] lg:h-[86rem] mb-8 lg:mb-0 px-4 md:px-8 lg:px-0"
         >
-          <div class="w-full md:w-96 lg:min-w-fit lg:max-w-min bg-base-light-200 rounded-xl p-8 md:p-0 dark:bg-base-dark-700 drop-shadow-xl md:relative lg:top-16 md:-left-[8rem] lg:-left-[10rem]">
+          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-200 rounded-xl p-8 md:p-0 dark:bg-base-dark-700 drop-shadow-xl md:relative lg:top-16 md:-left-[8rem] lg:-left-[10rem]">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
                 "Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!"
@@ -177,7 +177,7 @@ defmodule AshHqWeb.Pages.Home do
             </div>
           </div>
 
-          <div class="w-full md:w-96 lg:min-w-fit lg:max-w-min bg-base-light-100 rounded-xl p-8 md:p-0 dark:bg-base-dark-600 bg-white drop-shadow-xl md:relative md:-top-16 md:-right-[10rem]">
+          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-100 rounded-xl p-8 md:p-0 dark:bg-base-dark-600 drop-shadow-xl md:relative md:-top-16 md:-right-[10rem]">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
                 "What stood out to me was how incredibly easy Ash made it for me to go from a proof of concept, to a working prototype using ETS, to a live app using Postgres."
@@ -194,10 +194,10 @@ defmodule AshHqWeb.Pages.Home do
             </div>
           </div>
 
-          <div class="w-full md:w-96 lg:min-w-fit lg:max-w-min bg-base-light-200 rounded-xl p-8 md:p-0 dark:bg-base-dark-700 bg-white drop-shadow-xl md:relative md:-top-32 md:-left-[11rem]">
+          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-200 rounded-xl p-8 md:p-0 dark:bg-base-dark-700 drop-shadow-xl md:relative md:-top-32 md:-left-[11rem]">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
-                "Ash is such powerful idea and it gives Alembic such a massive competitive advantage that I’d be really stupid to tell anyone about it."
+                "Ash is an incredibly powerful idea that gives Alembic a massive competitive advantage. It empowers us to build wildly ambitious applications for our clients with tiny teams, while consistently delivering the high level of quality that our customers have come to expect."
               </p>
 
               <p>
@@ -211,7 +211,7 @@ defmodule AshHqWeb.Pages.Home do
             </div>
           </div>
 
-          <div class="w-full md:w-96 lg:min-w-fit lg:max-w-min bg-base-light-100 rounded-xl p-8 md:p-0 dark:bg-base-dark-600 drop-shadow-xl md:relative md:-top-[4rem] md:-top-64 md:-right-44">
+          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-100 rounded-xl p-8 md:p-0 dark:bg-base-dark-600 drop-shadow-xl md:relative md:-top-[4rem] md:-top-64 md:-right-44">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
                 "Ash Framework enabled us to build a robust platform for delivering financial services using bitcoin. Ash proved itself to our team by handling innovative use cases with ease and it continues to evolve ahead of our growing list of needs."
@@ -227,10 +227,27 @@ defmodule AshHqWeb.Pages.Home do
               </p>
             </div>
           </div>
+
+          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-200 rounded-xl p-8 md:p-0 dark:bg-base-dark-700 drop-shadow-xl md:relative md:-top-[20rem] md:-left-[11rem]">
+            <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
+              <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
+                "The more I’ve used Ash, the more blown away I am by how much I get out of it – and how little boilerplate I have to write. I’m yet to encounter a situation where I would need to fight the “Ash way” of doing things, but the framework still allows me to choose how I build my software."
+              </p>
+
+              <p>
+                <div class="font-bold text-primary-light-500 dark:text-primary-dark-400">
+                  Juha Lehtonen
+                </div>
+                <div class="text-base-light-700 dark:text-base-dark-100">
+                  Senior Software Developer
+                </div>
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div class="flex flex-col text-center items-center">
-          <p class="mt-4 text-3xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50 mb-8">
+        <div class="flex flex-col text-center items-center mt-24">
+          <p class="mt-4 text-3xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50 mb-16">
             It wouldn't be possible without our amazing community!
           </p>
 
@@ -499,6 +516,10 @@ defmodule AshHqWeb.Pages.Home do
                   use AshHq.Resource,
                     data_layer: AshPostgres.DataLayer
 
+                  resource do
+                    description "A post is the primary sharable entity in our system"
+                  end
+
                   postgres do
                     table "posts"
                     repo Example.Repo
@@ -507,12 +528,14 @@ defmodule AshHqWeb.Pages.Home do
                   attributes do
                     attribute :text, :string do
                       allow_nil? false
+                      description "The body of the text"
                     end
 
                     attribute :visibility, :atom do
                       constraints [
                         one_of: [:friends, :everyone]
                       ]
+                      description "Which set of users this post should be visible to"
                     end
                   end
 

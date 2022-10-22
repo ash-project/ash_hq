@@ -33,7 +33,12 @@ defmodule AshHq.Docs.LibraryVersion do
   end
 
   actions do
-    defaults [:read, :update, :destroy]
+    defaults [:update, :destroy]
+
+    read :read do
+      primary? true
+      pagination offset?: true, countable: true, default_limit: 25, required?: false
+    end
 
     read :by_version do
       get? true
