@@ -62,7 +62,7 @@ defmodule AshHqWeb.Helpers do
       else
         case Enum.find(library.versions, &(&1.id == selected_versions[library.id])) do
           nil ->
-            nil
+            AshHqWeb.Helpers.latest_version(library)
 
           version ->
             version

@@ -30,6 +30,19 @@ defmodule AshHqWeb.Components.DocSidebar do
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
+    selected_versions =
+      if assigns[:library_version] do
+        Map.put(
+          assigns[:selected_versions] || %{},
+          assigns[:library_version].library_id,
+          assigns[:library_version].id
+        )
+      else
+        assigns[:selected_versions]
+      end
+
+    assigns = assign(assigns, :selected_versions, selected_versions)
+
     assigns =
       assign(
         assigns,
