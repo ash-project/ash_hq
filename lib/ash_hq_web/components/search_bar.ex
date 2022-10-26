@@ -3,6 +3,7 @@ defmodule AshHqWeb.Components.SearchBar do
   use Surface.Component
 
   prop class, :css_class, default: ""
+  prop device_brand, :string
 
   def render(assigns) do
     ~F"""
@@ -18,7 +19,11 @@ defmodule AshHqWeb.Components.SearchBar do
           <Heroicons.Outline.SearchIcon class="w-4 h-4" />
           <div>Search Documentation</div>
         </div>
-        <div>⌘ K</div>
+        {#if @device_brand == "Apple"}
+          <div>⌘ + K</div>
+        {#else}
+          <div>Ctrl + K</div>
+        {/if}
       </div>
     </button>
     """

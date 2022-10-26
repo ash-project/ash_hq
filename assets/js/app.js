@@ -33,6 +33,26 @@ function cookiesAreAllowed() {
   return consentStatus === "cookieconsent_status=allow";
 }
 
+function get_platform() {
+    // 2022 way of detecting. Note : this userAgentData feature is available only in secure contexts (HTTPS)
+    if (typeof navigator.userAgentData !== 'undefined' && navigator.userAgentData != null) {
+        return navigator.userAgentData.platform;
+    }
+    // Deprecated but still works for most of the browser
+    if (typeof navigator.platform !== 'undefined') {
+        if (typeof navigator.userAgent !== 'undefined' && /android/.test(navigator.userAgent.toLowerCase())) {
+            // android device's navigator.platform is often set as 'linux', so let's use userAgent for them
+            return 'android';
+        }
+        return navigator.platform;
+    }
+    return 'unknown';
+}
+
+let platform = get_platform();
+
+let isOSX = /mac/.test(platform.toLowerCase()); // Mac desktop
+
 const Hooks = {};
 
 let configuredThemeRow;
@@ -207,7 +227,7 @@ let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
 let liveSocket = new LiveSocket("/live", Socket, {
-  params: { _csrf_token: csrfToken },
+  params: { _csrf_token: csrfToken, user_agent:  window.navigator.userAgent },
   hooks: Hooks,
   metadata: {
     keydown: (e) => {

@@ -9,6 +9,8 @@ defmodule AshHqWeb.Pages.Home do
   import AshHqWeb.Components.CodeExample, only: [to_code: 1]
   import Tails
 
+  prop device_brand, :string
+
   data signed_up, :boolean, default: false
   data email_form, :any
 
@@ -59,7 +61,7 @@ defmodule AshHqWeb.Pages.Home do
           >
             Get Started
           </a>
-          <SearchBar class="w-80 md:w-96" />
+          <SearchBar class="w-80 md:w-96" device_brand={@device_brand} />
         </div>
 
         <div class="flex flex-col">

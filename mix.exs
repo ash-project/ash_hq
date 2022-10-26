@@ -54,6 +54,7 @@ defmodule AshHq.MixProject do
       {:earmark, "~> 1.5.0-pre1", override: true},
       {:surface, "~> 0.9.1"},
       {:surface_heroicons, "~> 0.6.0"},
+      {:ua_inspector, "~> 3.0"},
       # Syntax Highlighting
       {:makeup, "~> 1.1"},
       {:makeup_elixir, "~> 0.16.0"},

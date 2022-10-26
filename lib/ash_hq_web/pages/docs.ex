@@ -40,7 +40,7 @@ defmodule AshHqWeb.Pages.Docs do
         <button class="dark:hover:text-base-dark-600" phx-click={show_sidebar()}>
           <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
         </button>
-        <button id={"#{@id}-hide"} class="hidden" phx-click={hide_sidebar()}/>
+        <button id={"#{@id}-hide"} class="hidden" phx-click={hide_sidebar()} />
         {#if @doc_path && @doc_path != []}
           <DocPath doc_path={@doc_path} />
         {/if}
@@ -112,11 +112,15 @@ defmodule AshHqWeb.Pages.Docs do
             {#if @extension && !@dsl && !@guide}
               {#case Enum.count_until(Stream.filter(@extension.dsls, &(&1.type == :section)), 2)}
                 {#match 0}
-                  <div/>
+                  <div />
                 {#match 1}
-                  <h3> DSL </h3>
+                  <h3>
+                    DSL
+                  </h3>
                 {#match 2}
-                  <h3> DSL Sections </h3>
+                  <h3>
+                    DSL Sections
+                  </h3>
               {/case}
               <ul>
                 {#for section <- Enum.filter(@extension.dsls, &(&1.type == :section))}

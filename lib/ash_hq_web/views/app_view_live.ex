@@ -83,7 +83,7 @@ defmodule AshHqWeb.AppViewLive do
         {/for}
         {#case @live_action}
           {#match :home}
-            <Home id="home" />
+            <Home id="home" device_brand={@device_brand} />
           {#match :docs_dsl}
             <Docs
               id="docs"
@@ -221,7 +221,21 @@ defmodule AshHqWeb.AppViewLive do
      |> push_event("set_theme", %{theme: theme})}
   end
 
-  def mount(_params, session, socket) do
+  def mount(params, session, socket) do
+    socket =
+      assign_new(socket, :user_agent, fn _assigns ->
+        get_connect_params(socket)["user_agent"]
+      end)
+
+    socket =
+      case socket.assigns[:user_agent] do
+        empty when empty in [nil, ""] ->
+          assign(socket, :device_brand, :unknown)
+
+        ua ->
+          assign(socket, :device_brand, UAInspector.parse(ua).device.brand)
+      end
+
     socket = Context.put(socket, platform: socket.assigns.platform)
     configured_theme = session["theme"] || "system"
 

@@ -142,10 +142,10 @@ defmodule Utils do
     entities
     |> Enum.with_index()
     |> Enum.flat_map(fn {entity, index} ->
-      keys_to_remove =
-        Enum.map(entity.auto_set_fields || [], &elem(&1, 0))
+      keys_to_remove = Enum.map(entity.auto_set_fields || [], &elem(&1, 0))
 
       option_schema = Keyword.drop(entity.schema || [], keys_to_remove)
+
       [
         %{
           name: entity.name,

@@ -9,17 +9,17 @@ defmodule AshHq.Repo.Migrations.MigrateResources29 do
 
   def up do
     alter table(:users) do
-      add :encrypted_name, :binary
-      add :encrypted_address, :binary
-      add :shirt_size, :text
+      add(:encrypted_name, :binary)
+      add(:encrypted_address, :binary)
+      add(:shirt_size, :text)
     end
   end
 
   def down do
     alter table(:users) do
-      remove :shirt_size
-      remove :encrypted_address
-      remove :encrypted_name
+      remove(:shirt_size)
+      remove(:encrypted_address)
+      remove(:encrypted_name)
     end
   end
 end
