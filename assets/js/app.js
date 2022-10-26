@@ -226,6 +226,13 @@ topbar.config({ barColors: { 0: "#29d" }, shadowColor: "rgba(0, 0, 0, .3)" });
 let topBarScheduled = undefined;
 window.addEventListener("phx:page-loading-start", () => {
   scrolled = false;
+
+  // close mobile sidebar on navigation
+  mobileSideBar = document.getElementById("mobile-sidebar-hide") 
+  if(mobileSideBar) {
+    mobileSideBar.click()
+  }
+
   if (!topBarScheduled) {
     topBarScheduled = setTimeout(() => topbar.show(), 250);
   }
@@ -234,6 +241,7 @@ window.addEventListener("phx:page-loading-start", () => {
 window.addEventListener("phx:page-loading-stop", ({detail}) => {
   clearTimeout(topBarScheduled);
   topBarScheduled = undefined;
+
   if (detail.kind === "initial" && window.location.hash && !scrolled) {
       let hashEl = document.getElementById(window.location.hash.substring(1));
       if(hashEl) {
