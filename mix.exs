@@ -115,7 +115,7 @@ defmodule AshHq.MixProject do
   defp aliases do
     [
       seed: ["run priv/repo/seeds.exs"],
-      setup: ["ash_postgres.create", "ash_postgres.migrate", "seed"],
+      setup: ["ash_postgres.create", "ash_postgres.migrate", "seed", "ua_inspector.download --force"],
       reset: ["drop", "setup"],
       credo: "credo --strict",
       drop: ["ash_postgres.drop"],
