@@ -6,8 +6,13 @@ defmodule AshHqWeb.Helpers do
   alias AshHqWeb.DocRoutes
 
   def latest_version(library) do
-    library.versions
-    |> Enum.min(&(Version.compare(&1.version, &2.version) != :lt))
+    case library.versions do
+      [] ->
+        nil
+
+      versions ->
+        Enum.min(versions, &(Version.compare(&1.version, &2.version) != :lt))
+    end
   end
 
   def source_link(%AshHq.Docs.Module{file: file}, library, library_version) do
@@ -35,7 +40,27 @@ defmodule AshHqWeb.Helpers do
   end
 
   defp render_mix_deps(docs, libraries, selected_versions) do
-    String.replace(docs, ~r/(?!<code>){{mix_dep:.*}}(?!<\/code>)/, fn text ->
+    docs
+    |> String.replace(
+      ~r/<code class="makeup elixir highlight">[\s\S]*?(?=<\/code>)/,
+      fn text ->
+        String.replace(text, ~r/{{mix_dep:.*}}/, fn text ->
+          try do
+            "{{mix_dep:" <> library = String.trim_trailing(text, "}}")
+
+            "#{render_mix_dep(libraries, library, selected_versions, text)}"
+          rescue
+            e ->
+              Logger.error(
+                "Invalid link #{Exception.format(:error, e)}\n#{Exception.format_stacktrace(__STACKTRACE__)}"
+              )
+
+              text
+          end
+        end)
+      end
+    )
+    |> String.replace(~r/{{mix_dep:.*}}/, fn text ->
       try do
         "{{mix_dep:" <> library = String.trim_trailing(text, "}}")
 
@@ -83,7 +108,7 @@ defmodule AshHqWeb.Helpers do
   end
 
   def render_links(docs, libraries, selected_versions) do
-    String.replace(docs, ~r/(?!<code>){{link:[^}]*}}(?!<\/code>)/, fn text ->
+    String.replace(docs, ~r/{{link:[^}]*}}/, fn text ->
       try do
         "{{link:" <> rest = String.trim_trailing(text, "}}")
         [library, type, item | rest] = String.split(rest, ":")
@@ -118,7 +143,7 @@ defmodule AshHqWeb.Helpers do
       end
 
     if is_nil(version) do
-      raise "no version for library"
+      raise "no version for library: #{library.name}"
     else
       case type do
         "guide" ->
