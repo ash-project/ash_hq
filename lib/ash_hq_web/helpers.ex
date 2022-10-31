@@ -182,7 +182,7 @@ defmodule AshHqWeb.Helpers do
           name = Enum.join(path, ".")
 
           dsl_path = path |> :lists.droplast() |> Enum.map_join("/", &DocRoutes.sanitize_name/1)
-          anchor = path |> Enum.map_join("/", &DocRoutes.sanitize_name/1)
+          anchor = dsl_path |> List.last() |> (DocRoutes.sanitize_name() / 1)
 
           """
           <a href="/docs/dsl/#{library.name}/#{version.version}/#{dsl_path}##{anchor}">#{name}</a>
