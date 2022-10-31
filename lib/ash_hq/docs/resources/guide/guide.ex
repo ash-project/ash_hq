@@ -4,8 +4,17 @@ defmodule AshHq.Docs.Guide do
     data_layer: AshPostgres.DataLayer,
     extensions: [
       AshHq.Docs.Extensions.Search,
-      AshHq.Docs.Extensions.RenderMarkdown
+      AshHq.Docs.Extensions.RenderMarkdown,
+      AshGraphql.Resource
     ]
+
+  graphql do
+    type :guide
+
+    queries do
+      list :list_guides, :read_for_version
+    end
+  end
 
   resource do
     description "Represents a markdown guide exposed by a library"
@@ -34,6 +43,17 @@ defmodule AshHq.Docs.Guide do
     read :read do
       primary? true
       pagination offset?: true, countable: true, default_limit: 25, required?: false
+    end
+
+    read :read_for_version do
+      argument :library_versions, {:array, :uuid} do
+        allow_nil? false
+        constraints max_length: 20, min_length: 1
+      end
+
+      pagination offset?: true, countable: true, default_limit: 25, required?: false
+
+      filter expr(library_version.id in ^arg(:library_versions))
     end
   end
 

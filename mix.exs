@@ -33,8 +33,8 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      # {:ash, github: "ash-project/ash", override: true},
-      {:ash, "~> 2.2", override: true},
+      {:ash, github: "ash-project/ash", override: true},
+      # {:ash, "~> 2.4", override: true},
       # {:ash, path: "../ash", override: true},
       {:ash_postgres, "~> 1.1"},
       {:ash_admin, "~> 0.6.2"},
@@ -44,7 +44,8 @@ defmodule AshHq.MixProject do
       {:ash_phoenix, "~> 1.1"},
       # {:ash_phoenix, github: "ash-project/ash_phoenix"},
       # {:ash_graphql, github: "ash-project/ash_graphql"},
-      {:ash_graphql, "~> 0.20.1"},
+      {:ash_graphql, "~> 0.21"},
+      # {:ash_graphql, path: "../ash_graphql"},
       {:absinthe_plug, "~> 1.5"},
       # {:ash_phoenix, github: "ash-project/ash_phoenix", branch: "ash-2.0", override: true},
       # {:ash_livebook, path: "../ash_livebook", only: [:dev]},
@@ -115,7 +116,12 @@ defmodule AshHq.MixProject do
   defp aliases do
     [
       seed: ["run priv/repo/seeds.exs"],
-      setup: ["ash_postgres.create", "ash_postgres.migrate", "seed", "ua_inspector.download --force"],
+      setup: [
+        "ash_postgres.create",
+        "ash_postgres.migrate",
+        "seed",
+        "ua_inspector.download --force"
+      ],
       reset: ["drop", "setup"],
       credo: "credo --strict",
       drop: ["ash_postgres.drop"],
