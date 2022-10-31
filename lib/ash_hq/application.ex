@@ -16,6 +16,11 @@ defmodule AshHq.Application do
         []
       end
 
+    if Application.get_env(:ash_hq, :download_ua_on_start) do
+      UAInspector.Downloader.download()
+      UAInspector.reload()
+    end
+
     children =
       [
         Supervisor.child_spec({Finch, name: AshHq.Finch}, id: AshHq.Finch),

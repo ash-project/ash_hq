@@ -400,6 +400,37 @@ defmodule Utils do
   defp type({:spark, mod}), do: Module.split(mod) |> List.last()
   defp type({:spark_behaviour, mod}), do: Module.split(mod) |> List.last()
   defp type({:spark_behaviour, mod, _builtins}), do: Module.split(mod) |> List.last()
+
+  defp type({:spark_function_behaviour, mod, {_, arity}}) do
+    type({:or, [{:fun, arity}, {:spark_behaviour, mod}]})
+  end
+
+  defp type({:spark_function_behaviour, mod, _builtins, {_, arity}}) do
+    type({:or, [{:fun, arity}, {:spark_behaviour, mod}]})
+  end
+
+  create :create do
+    manual fn changeset, context ->
+      ...
+    end
+
+    change fn changeset, context ->
+      ...
+    end
+
+    validate fn changeset ->
+      ...
+    end
+  end
+
+  calculations do
+    calculate :full_name, fn records, context ->
+      Enum.map(records, &"#{&1.first_name} #{&1.last_name}")
+    end do
+      select [:first_name, :last_name]
+    end
+  end
+
   defp type({:custom, _, _, _}), do: "any"
   defp type(:any), do: "any"
   defp type(:keyword_list), do: "Keyword List"

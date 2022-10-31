@@ -160,6 +160,7 @@ defmodule AshHqWeb.Helpers do
         "dsl" ->
           path =
             item
+            |> String.trim_leading("/")
             |> String.split(~r/[\/\.]/)
 
           name =
@@ -175,6 +176,7 @@ defmodule AshHqWeb.Helpers do
         "option" ->
           path =
             item
+            |> String.trim_leading("/")
             |> String.split(~r/[\/\.]/)
 
           name = Enum.join(path, ".")

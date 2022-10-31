@@ -80,6 +80,8 @@ defmodule AshHq.Docs.Guide do
     attribute :route, :string do
       allow_nil? false
     end
+
+    timestamps()
   end
 
   relationships do

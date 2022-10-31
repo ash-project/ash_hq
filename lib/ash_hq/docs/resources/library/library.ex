@@ -53,6 +53,8 @@ defmodule AshHq.Docs.Library do
     end
 
     attribute :description, :string
+
+    timestamps()
   end
 
   aggregates do

@@ -19,6 +19,8 @@ config :logger, level: :info
 config :ash_hq, :analytics?, true
 config :ash_hq, :periodic_imports, true
 
+config :ash_hq, :download_ua_on_start, true
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

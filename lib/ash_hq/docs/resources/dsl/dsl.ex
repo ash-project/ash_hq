@@ -104,6 +104,8 @@ defmodule AshHq.Docs.Dsl do
       allow_nil? false
       constraints one_of: [:entity, :section]
     end
+
+    timestamps()
   end
 
   aggregates do

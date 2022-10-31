@@ -233,7 +233,16 @@ defmodule AshHqWeb.AppViewLive do
           assign(socket, :device_brand, :unknown)
 
         ua ->
-          assign(socket, :device_brand, UAInspector.parse(ua).device.brand)
+          brand =
+            case UAInspector.parse(ua) do
+              %{device: %{brand: brand}} ->
+                brand
+
+              _ ->
+                :unknown
+            end
+
+          assign(socket, :device_brand, brand)
       end
 
     socket = Context.put(socket, platform: socket.assigns.platform)

@@ -120,6 +120,8 @@ defmodule AshHq.Docs.LibraryVersion do
     attribute :version, :string do
       allow_nil? false
     end
+
+    timestamps()
   end
 
   calculations do

@@ -94,6 +94,8 @@ defmodule AshHq.Docs.Extension do
     attribute :order, :integer do
       allow_nil? false
     end
+
+    timestamps()
   end
 
   relationships do

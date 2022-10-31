@@ -79,6 +79,8 @@ defmodule AshHq.Docs.Function do
     attribute :order, :integer do
       allow_nil? false
     end
+
+    timestamps()
   end
 
   code_interface do

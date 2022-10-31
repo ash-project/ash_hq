@@ -81,6 +81,8 @@ defmodule AshHq.Docs.Option do
     attribute :default, :string
     attribute :path, {:array, :string}
     attribute :order, :integer, allow_nil?: false
+
+    timestamps()
   end
 
   actions do
