@@ -172,7 +172,8 @@ function onScrollChange() {
         newTarget.classList.add("text-primary-light-600");
         newTarget.classList.add("currently-active-nav");
 
-        scrollIntoView(newTarget, { behavior: "smooth", block: "center" });
+        // We don't scroll the sidebar into view anymore because it causes weird jumping around on firefox
+        // scrollIntoView(newTarget, { behavior: "smooth", block: "center" });
       }
     }
   }
