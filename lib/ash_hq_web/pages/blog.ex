@@ -16,9 +16,9 @@ defmodule AshHqWeb.Pages.Blog do
 
   def render(assigns) do
     ~F"""
-    <div class="container mx-auto">
-      <div class="flex flex-row pt-32 mx-32 min-h-screen">
-        <div class="w-9/12">
+    <div class="container sm:mx-auto">
+      <div class="flex flex-col sm:flex-row sm:pt-32 sm:mx-32 min-h-screen">
+        <div class="sm:w-9/12">
           {#if @post}
             <div class="border shadow-sm rounded-lg px-8 pb-6 mb-6 dark:border-gray-600" ">
               <div class="border-b">
@@ -63,7 +63,7 @@ defmodule AshHqWeb.Pages.Blog do
                     {/for}
                   </div>
                 </div>
-                <div class="flex flex-row items-center mt-2 py-2">
+                <div class="flex flex-col sm:flex-row items-center mt-2 py-2">
                   <div class="text-muted pb-4 flex flex-grow">
                     {post.tag_line}
                   </div>
@@ -80,7 +80,7 @@ defmodule AshHqWeb.Pages.Blog do
             {/for}
           {/if}
         </div>
-        <div class={classes(["flex flex-col pl-4 w-3/12 space-y-6", "mt-9": !@post])}>
+        <div class={classes(["flex flex-col px-4 sm:pr-0 sm:pl-4 sm:w-3/12 space-y-6", "mt-9": !@post])}>
           <div class="border rounded-lg p-4 flex flex-col w-full dark:border-gray-600">
             <h3 class="text-lg font-bold mb-1">All Tags:</h3>
             <div class="flex gap-2 flex-wrap w-full">
