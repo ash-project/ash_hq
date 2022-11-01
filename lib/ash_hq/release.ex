@@ -27,6 +27,7 @@ defmodule AshHq.Release do
     |> Enum.flat_map(fn api ->
       api
       |> Ash.Api.Info.resources()
+      |> Enum.filter(&(AshPostgres.DataLayer in Spark.extensions(&1)))
       |> Enum.map(&AshPostgres.DataLayer.Info.repo/1)
     end)
     |> Enum.uniq()
