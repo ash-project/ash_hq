@@ -21,7 +21,7 @@ defmodule AshHqWeb.Components.Docs.Functions do
         {#for function <- functions}
           <div id={"#{@type}-#{function.sanitized_name}-#{function.arity}"} class="nav-anchor mb-8">
             <div class="bg-base-light-200 dark:bg-base-dark-700 w-full rounded-lg">
-              <div class="flex flex-row items-center bg-opacity-50 py-1 rounded-t-lg bg-base-light-300 dark:bg-base-dark-800 w-full">
+              <div class="flex flex-row items-center bg-opacity-50 py-1 rounded-t-lg bg-base-light-300 dark:bg-base-dark-850 w-full">
                 <a href={"##{@type}-#{function.sanitized_name}-#{function.arity}"}>
                   <Heroicons.Outline.LinkIcon class="h-3 m-3" />
                 </a>

@@ -409,28 +409,6 @@ defmodule Utils do
     type({:or, [{:fun, arity}, {:spark_behaviour, mod}]})
   end
 
-  create :create do
-    manual fn changeset, context ->
-      ...
-    end
-
-    change fn changeset, context ->
-      ...
-    end
-
-    validate fn changeset ->
-      ...
-    end
-  end
-
-  calculations do
-    calculate :full_name, fn records, context ->
-      Enum.map(records, &"#{&1.first_name} #{&1.last_name}")
-    end do
-      select [:first_name, :last_name]
-    end
-  end
-
   defp type({:custom, _, _, _}), do: "any"
   defp type(:any), do: "any"
   defp type(:keyword_list), do: "Keyword List"

@@ -1,5 +1,14 @@
 [
-  import_deps: [:ecto, :phoenix, :ash, :ash_postgres, :ash_graphql, :surface, :ash_admin],
+  import_deps: [
+    :ecto,
+    :phoenix,
+    :ash,
+    :ash_postgres,
+    :ash_graphql,
+    :surface,
+    :ash_admin,
+    :ash_csv
+  ],
   inputs: [
     "*.{ex,exs}",
     "priv/*/seeds.exs",

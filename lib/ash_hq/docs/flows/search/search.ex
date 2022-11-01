@@ -58,7 +58,8 @@ defmodule AshHq.Docs.Search do
 
     custom :build_results, AshHq.Docs.Search.Steps.BuildResults do
       input %{
-        results: result(:search_results)
+        results: result(:search_results),
+        query: arg(:query)
       }
     end
   end

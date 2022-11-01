@@ -35,7 +35,7 @@ defmodule AshHqWeb.Pages.Docs do
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~F"""
-    <div class="flex flex-col xl:flex-row justify-center overflow-hidden">
+    <div class="flex flex-col xl:flex-row justify-center overflow-hidden h-screen">
       <div class="xl:hidden flex flex-row justify-start w-full space-x-12 items-center border-b border-t border-base-light-600 py-3">
         <button class="dark:hover:text-base-dark-600" phx-click={show_sidebar()}>
           <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
@@ -62,7 +62,7 @@ defmodule AshHqWeb.Pages.Docs do
           />
         </div>
       </span>
-      <div class="grow w-screen overflow-hidden flex flex-row max-w-[1800px] h-full justify-between md:space-x-12 bg-white dark:bg-base-dark-900">
+      <div class="grow w-screen overflow-hidden flex flex-row max-w-[1800px] h-full justify-between md:space-x-12 bg-white dark:bg-base-dark-850">
         <div class="xl:border-r lg:pr-2 lg:pt-4">
           <DocSidebar
             id="sidebar"
@@ -81,7 +81,7 @@ defmodule AshHqWeb.Pages.Docs do
         </div>
         <div
           id="docs-window"
-          class="scroll-parent w-full prose prose-xl max-w-4xl dark:bg-base-dark-900 dark:prose-invert overflow-y-auto overflow-x-visible md:pr-8 md:mt-4 px-4 md:px-auto custom-scrollbar"
+          class="scroll-parent w-full prose prose-xl max-w-4xl dark:bg-base-dark-850 dark:prose-invert overflow-y-auto overflow-x-visible md:pr-8 md:mt-4 px-4 md:px-auto custom-scrollbar"
           phx-hook="Docs"
         >
           <div
@@ -97,16 +97,6 @@ defmodule AshHqWeb.Pages.Docs do
                   library={@library}
                   library_version={@library_version}
                 /></h2>
-            {/if}
-            {#if @library_version}
-              <div class="static mb-6 md:absolute right-2 top-2 border rounded-lg flex flex-row w-fit">
-                <div class="border-r pl-2 pr-2 dark:text-black bg-primary-light-600 dark:bg-primary-dark-600 rounded-l-lg">
-                  {@library.name}
-                </div>
-                <div class="pl-2 pr-2 rounded-r-lg bg-base-light-300 dark:bg-inherit">
-                  {@library_version.version}
-                </div>
-              </div>
             {/if}
             {raw(render_replacements(@libraries, @selected_versions, @docs))}
             {#if @extension && !@dsl && !@guide}
@@ -298,7 +288,7 @@ defmodule AshHqWeb.Pages.Docs do
             </table>
           </div>
 
-          <footer class="relative p-2 sm:justify-center">
+          <footer class="p-2 sm:justify-center">
             <div class="md:flex md:justify-around items-center">
               <a href="/">
                 <img class="h-6 md:h-10 hidden dark:block" src="/images/ash-framework-dark.png">
@@ -310,7 +300,7 @@ defmodule AshHqWeb.Pages.Docs do
           </footer>
         </div>
         {#if @module}
-          <div class="lg:w-72 overflow-y-auto overflow-x-hidden dark:bg-base-dark-900 bg-opacity-70 mt-4 custom-scrollbar">
+          <div class="lg:w-72 overflow-y-auto overflow-x-hidden dark:bg-base-dark-850 bg-opacity-70 mt-4 custom-scrollbar">
             <RightNav functions={@module.functions} module={@module.name} />
           </div>
         {#else}

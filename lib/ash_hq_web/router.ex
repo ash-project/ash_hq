@@ -11,6 +11,7 @@ defmodule AshHqWeb.Router do
     plug :put_root_layout, {AshHqWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug AshHqWeb.SessionPlug
+    plug :assign_user_agent
   end
 
   pipeline :dead_view_authentication do
@@ -30,8 +31,10 @@ defmodule AshHqWeb.Router do
 
     live_session :main,
       on_mount: [{AshHqWeb.InitAssigns, :default}, {AshHqWeb.LiveUserAuth, :live_user}],
-      root_layout: {AshHqWeb.LayoutView, "root.html"} do
+      root_layout: {AshHqWeb.LayoutView, :root} do
       live "/", AppViewLive, :home
+      live "/blog", AppViewLive, :blog
+      live "/blog/:slug", AppViewLive, :blog
       live "/docs/", AppViewLive, :docs_dsl
       live "/docs/guides/:library/:version/*guide", AppViewLive, :docs_dsl
       live "/docs/dsl/:library", AppViewLive, :docs_dsl
@@ -49,7 +52,7 @@ defmodule AshHqWeb.Router do
         {AshHqWeb.InitAssigns, :default},
         {AshHqWeb.LiveUserAuth, :live_user_not_allowed}
       ],
-      root_layout: {AshHqWeb.LayoutView, "root.html"} do
+      root_layout: {AshHqWeb.LayoutView, :root} do
       live "/users/log_in", AppViewLive, :log_in
       live "/users/register", AppViewLive, :register
       live "/users/reset_password", AppViewLive, :reset_password
@@ -58,10 +61,12 @@ defmodule AshHqWeb.Router do
 
     live_session :authenticated_only,
       on_mount: [{AshHqWeb.InitAssigns, :default}, {AshHqWeb.LiveUserAuth, :live_user_required}],
-      root_layout: {AshHqWeb.LayoutView, "root.html"} do
+      root_layout: {AshHqWeb.LayoutView, :root} do
       live "/users/settings", AppViewLive, :user_settings
     end
   end
+
+  get "/rss", AshHqWeb.RssController, :rss
 
   ## Api routes
   scope "/" do
@@ -141,5 +146,17 @@ defmodule AshHqWeb.Router do
     username = System.fetch_env!("ADMIN_AUTH_USERNAME")
     password = System.fetch_env!("ADMIN_AUTH_PASSWORD")
     Plug.BasicAuth.basic_auth(conn, username: username, password: password)
+  end
+
+  def assign_user_agent(conn, _opts) do
+    ua = get_req_header(conn, "user-agent")
+
+    case ua do
+      [ua] ->
+        assign(conn, :user_agent, ua)
+
+      _ ->
+        assign(conn, :user_agent, "")
+    end
   end
 end

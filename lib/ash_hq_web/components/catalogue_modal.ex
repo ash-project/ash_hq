@@ -18,7 +18,7 @@ defmodule AshHqWeb.Components.CatalogueModal do
     >
       <div
         :on-click-away={AshHqWeb.AppViewLive.toggle_catalogue()}
-        class="dark:text-white absolute rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white dark:bg-base-dark-900 border-2 dark:border-base-dark-900"
+        class="dark:text-white absolute rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white dark:bg-base-dark-850 border-2 dark:border-base-dark-900"
       >
         <Catalogue
           id={"#{@id}-contents"}

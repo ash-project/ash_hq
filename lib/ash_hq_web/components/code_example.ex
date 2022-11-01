@@ -13,7 +13,7 @@ defmodule AshHqWeb.Components.CodeExample do
   def render(assigns) do
     ~F"""
     <div class={
-      "rounded-xl bg-silver-phoenix dark:bg-base-dark-800 border border-base-light-400 dark:border-base-dark-700 text-sm border-b",
+      "rounded-xl bg-silver-phoenix dark:bg-base-dark-850 border border-base-light-400 dark:border-base-dark-700 text-sm border-b",
       @class
     }>
       {#if @collapsible}

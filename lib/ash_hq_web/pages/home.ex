@@ -44,7 +44,7 @@ defmodule AshHqWeb.Pages.Home do
   def render(assigns) do
     ~F"""
     <div class="antialiased">
-      <div class="my-2 dark:bg-base-dark-900 flex flex-col items-center pt-4 md:pt-12">
+      <div class="my-2 dark:bg-base-dark-850 flex flex-col items-center pt-4 md:pt-12">
         <div class="flex flex-col">
           <img class="h-64" src="/images/ash-logo-side.svg">
         </div>

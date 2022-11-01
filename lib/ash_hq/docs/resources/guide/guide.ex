@@ -5,7 +5,8 @@ defmodule AshHq.Docs.Guide do
     extensions: [
       AshHq.Docs.Extensions.Search,
       AshHq.Docs.Extensions.RenderMarkdown,
-      AshGraphql.Resource
+      AshGraphql.Resource,
+      AshAdmin.Resource
     ]
 
   graphql do
@@ -13,6 +14,14 @@ defmodule AshHq.Docs.Guide do
 
     queries do
       list :list_guides, :read_for_version
+    end
+  end
+
+  admin do
+    form do
+      field :text do
+        type :markdown
+      end
     end
   end
 

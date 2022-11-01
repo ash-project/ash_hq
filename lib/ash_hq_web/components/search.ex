@@ -32,7 +32,7 @@ defmodule AshHqWeb.Components.Search do
     >
       <div
         :on-click-away={AshHqWeb.AppViewLive.toggle_search()}
-        class="dark:text-white absolute rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white dark:bg-base-dark-900 border-2 dark:border-base-dark-900"
+        class="dark:text-white absolute rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white dark:bg-base-dark-850 border-2 dark:border-base-dark-900"
         :on-window-keydown="select-previous"
         phx-key="ArrowUp"
       >
@@ -61,7 +61,7 @@ defmodule AshHqWeb.Components.Search do
                     name="search"
                     value={@search}
                     phx-debounce={300}
-                    class="text-lg dark:bg-base-dark-900 grow ring-0 outline-none w-full"
+                    class="text-lg dark:bg-base-dark-850 grow ring-0 outline-none w-full"
                   />
                 </Form>
                 <button id="close-search" class="mr-4 ml-4 h-6 w-6 hover:text-base-light-400" :on-click={@close}>
@@ -126,7 +126,7 @@ defmodule AshHqWeb.Components.Search do
         <div class={
           "rounded-lg mb-4 py-2 px-2 hover:bg-base-dark-300 dark:hover:bg-base-dark-700",
           "bg-base-light-400 dark:bg-base-dark-600": @selected_item.id == item.id,
-          "bg-base-light-200 dark:bg-base-dark-800": @selected_item.id != item.id
+          "bg-base-light-200 dark:bg-base-dark-850": @selected_item.id != item.id
         }>
           <div class="flex justify-start items-center space-x-2 pb-2">
             <div>

@@ -27,7 +27,11 @@ defmodule AshHq.Accounts.UserToken do
       argument :user, :map
 
       change manage_relationship(:user, type: :append_and_remove)
-      change set_attribute(:context, "session")
+
+      change fn changeset, _ ->
+        Ash.Changeset.change_attribute(changeset, :context, "session")
+      end
+
       change AshHq.Accounts.UserToken.Changes.BuildSessionToken
     end
 
@@ -57,10 +61,10 @@ defmodule AshHq.Accounts.UserToken do
 
   postgres do
     table "user_tokens"
-    repo AshHq.Repo
+    repo(AshHq.Repo)
 
     references do
-      reference :user, on_delete: :delete, on_update: :update
+      reference(:user, on_delete: :delete, on_update: :update)
     end
   end
 

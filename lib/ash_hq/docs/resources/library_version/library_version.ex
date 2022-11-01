@@ -77,7 +77,7 @@ defmodule AshHq.Docs.LibraryVersion do
         allow_nil? false
       end
 
-      change set_attribute(:id, {:arg, :id})
+      change set_attribute(:id, arg(:id))
 
       change {AshHq.Docs.Changes.AddArgToRelationship,
               attr: :id, arg: :library_version, rel: :modules, generate: &Ash.UUID.generate/0}

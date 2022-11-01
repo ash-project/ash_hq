@@ -127,6 +127,7 @@ defmodule AshHq.Docs.Importer do
                 modules: result[:modules],
                 mix_tasks: result[:mix_tasks]
               }
+              |> IO.inspect()
             )
           end)
         end

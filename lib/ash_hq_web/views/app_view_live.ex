@@ -5,28 +5,28 @@ defmodule AshHqWeb.AppViewLive do
 
   alias AshHqWeb.Components.{CatalogueModal, Search}
   alias AshHqWeb.Components.AppView.TopBar
-  alias AshHqWeb.Pages.{Docs, Home, LogIn, Register, ResetPassword, UserSettings}
+  alias AshHqWeb.Pages.{Blog, Docs, Home, LogIn, Register, ResetPassword, UserSettings}
   alias Phoenix.LiveView.JS
   alias Surface.Components.Context
   require Ash.Query
 
-  data configured_theme, :string, default: :system
-  data searching, :boolean, default: false
-  data selected_versions, :map, default: %{}
-  data libraries, :list, default: []
-  data selected_types, :map, default: %{}
-  data current_user, :map
+  data(configured_theme, :string, default: :system)
+  data(searching, :boolean, default: false)
+  data(selected_versions, :map, default: %{})
+  data(libraries, :list, default: [])
+  data(selected_types, :map, default: %{})
+  data(current_user, :map)
 
-  data library, :any, default: nil
-  data extension, :any, default: nil
-  data docs, :any, default: nil
-  data library_version, :any, default: nil
-  data guide, :any, default: nil
-  data doc_path, :list, default: []
-  data dsls, :list, default: []
-  data dsl, :any, default: nil
-  data options, :list, default: []
-  data module, :any, default: nil
+  data(library, :any, default: nil)
+  data(extension, :any, default: nil)
+  data(docs, :any, default: nil)
+  data(library_version, :any, default: nil)
+  data(guide, :any, default: nil)
+  data(doc_path, :list, default: [])
+  data(dsls, :list, default: [])
+  data(dsl, :any, default: nil)
+  data(options, :list, default: [])
+  data(module, :any, default: nil)
 
   def render(%{platform: :ios} = assigns) do
     ~F"""
@@ -64,8 +64,8 @@ defmodule AshHqWeb.AppViewLive do
       <div
         id="main-container"
         class={
-          "h-screen w-screen bg-white dark:bg-base-dark-900 dark:text-white flex flex-col items-stretch",
-          "overflow-y-auto overflow-x-hidden": @live_action == :home,
+          "h-screen w-screen min-g-screen bg-white dark:bg-base-dark-850 dark:text-white flex flex-col items-stretch",
+          "overflow-y-auto overflow-x-hidden": @live_action in [:home, :blog],
           "overflow-hidden": @live_action == :docs_dsl
         }
       >
@@ -84,6 +84,8 @@ defmodule AshHqWeb.AppViewLive do
         {#case @live_action}
           {#match :home}
             <Home id="home" device_brand={@device_brand} />
+          {#match :blog}
+            <Blog id="blog" params={@params} />
           {#match :docs_dsl}
             <Docs
               id="docs"
@@ -104,13 +106,14 @@ defmodule AshHqWeb.AppViewLive do
             <ResetPassword id="reset_password" params={@params} />
         {/case}
         {#if @live_action != :docs_dsl}
-          <footer class="relative p-8 sm:p-6 bg-base-light-200 dark:bg-base-dark-800 sm:justify-center">
+          <footer class="p-8 sm:p-6 bg-base-light-200 dark:bg-base-dark-850 sm:justify-center sticky">
             <div class="md:flex md:justify-around">
               <div class="flex justify-center mb-6 md:mb-0">
                 <a href="/" class="flex items-center">
                   <img src="/images/ash-logo-side.svg" class="mr-3 h-32" alt="Ash Framework Logo">
                 </a>
               </div>
+
               <div class="grid grid-cols-3 gap-8 sm:gap-6">
                 <div>
                   <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Resources</h2>
@@ -118,8 +121,11 @@ defmodule AshHqWeb.AppViewLive do
                     <li class="mb-4">
                       <a href="https://github.com/ash-project" class="hover:underline">Source</a>
                     </li>
-                    <li>
+                    <li class="mb-4">
                       <a href="/docs/guides/ash/latest/tutorials/get-started.md" class="hover:underline">Get Started</a>
+                    </li>
+                    <li>
+                      <a href="/blog" class="hover:underline">Blog</a>
                     </li>
                   </ul>
                 </div>

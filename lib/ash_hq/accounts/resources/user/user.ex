@@ -6,6 +6,7 @@ defmodule AshHq.Accounts.User do
     authorizers: [Ash.Policy.Authorizer]
 
   alias AshHq.Accounts.Preparations, warn: false
+  import Ash.Changeset
 
   actions do
     defaults [:read]
@@ -135,7 +136,15 @@ defmodule AshHq.Accounts.User do
       argument :password_confirmation, :string, allow_nil?: false
       argument :current_password, :string
 
-      validate confirm(:password, :password_confirmation)
+      validate fn changeset ->
+        if get_argument(changeset, :password) ==
+             get_argument(changeset, :password_confirmation) do
+          :ok
+        else
+          {:error, field: :password, message: "password does not match"}
+        end
+      end
+
       validate AshHq.Accounts.User.Validations.ValidateCurrentPassword
 
       change AshHq.Accounts.User.Changes.HashPassword
