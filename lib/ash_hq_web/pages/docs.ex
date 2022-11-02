@@ -98,7 +98,9 @@ defmodule AshHqWeb.Pages.Docs do
                   library_version={@library_version}
                 /></h2>
             {/if}
-            {raw(render_replacements(@libraries, @selected_versions, @docs))}
+            <div id={docs_container_id(@doc_path)}>
+              {raw(render_replacements(@libraries, @selected_versions, @docs))}
+            </div>
             {#if @extension && !@dsl && !@guide}
               {#case Enum.count_until(Stream.filter(@extension.dsls, &(&1.type == :section)), 2)}
                 {#match 0}
@@ -762,5 +764,15 @@ defmodule AshHqWeb.Pages.Docs do
       true ->
         assign(socket, docs: "", doc_path: [], dsls: [], options: [])
     end
+  end
+
+  # workaround for https://github.com/patrick-steele-idem/morphdom/pull/231
+  # Adding a unique ID on the container for the rendered docs prevents morphdom
+  # merging them incorrectly.
+  defp docs_container_id(doc_path) do
+    ["docs-container" | doc_path]
+    |> Enum.join("-")
+    |> String.replace(~r/[^A-Za-z0-9_]/, "-")
+    |> String.downcase()
   end
 end
