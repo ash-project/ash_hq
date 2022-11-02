@@ -74,6 +74,8 @@ defmodule AshHq.Blog.Post do
     attribute :body_html, :string do
       writable? false
     end
+
+    timestamps()
   end
 
   changes do

@@ -3,7 +3,7 @@
   "absinthe_plug": {:hex, :absinthe_plug, "1.5.8", "38d230641ba9dca8f72f1fed2dfc8abd53b3907d1996363da32434ab6ee5d6ab", [:mix], [{:absinthe, "~> 1.5", [hex: :absinthe, repo: "hexpm", optional: false]}, {:plug, "~> 1.4", [hex: :plug, repo: "hexpm", optional: false]}], "hexpm", "bbb04176647b735828861e7b2705465e53e2cf54ccf5a73ddd1ebd855f996e5a"},
   "ash": {:git, "https://github.com/ash-project/ash.git", "ef0407299b86063cd6bda0b2890851f0e0e81533", []},
   "ash_admin": {:git, "https://github.com/ash-project/ash_admin.git", "5dfb19785c587d56f6443e99b6f976cf6c2c92c8", []},
-  "ash_blog": {:git, "https://github.com/ash-project/ash_blog.git", "56ca4116c618e37bb539ec8b5d2fe03c6897a673", []},
+  "ash_blog": {:git, "https://github.com/ash-project/ash_blog.git", "79d1b9077b2712d4d4651eaa36c8e63119efd565", []},
   "ash_csv": {:git, "https://github.com/ash-project/ash_csv.git", "bad0f6961bf5d135450dacda687d9df0549e80ae", []},
   "ash_graphql": {:hex, :ash_graphql, "0.21.0", "b22b7786895552ef7bd4082815da5d895529dc9f81606a4a195f5790d163ebde", [:mix], [{:absinthe, "~> 1.7", [hex: :absinthe, repo: "hexpm", optional: false]}, {:absinthe_plug, "~> 1.4", [hex: :absinthe_plug, repo: "hexpm", optional: false]}, {:ash, "~> 2.4 and >= 2.4.1", [hex: :ash, repo: "hexpm", optional: false]}, {:dataloader, "~> 1.0", [hex: :dataloader, repo: "hexpm", optional: false]}, {:jason, "~> 1.2", [hex: :jason, repo: "hexpm", optional: false]}], "hexpm", "8b71047d86d7c279d4b6e185a33239a0a06486a0d574e9cc58628234e07aa5fc"},
   "ash_paper_trail": {:git, "https://github.com/ash-project/ash_paper_trail.git", "e6928944b51fd768d27cbb2ef80fb7864aaab46d", []},

@@ -37,7 +37,7 @@ defmodule AshHq.MixProject do
       {:ash_postgres, "~> 1.1"},
       {:ash_admin, github: "ash-project/ash_admin"},
       {:ash_phoenix, github: "ash-project/ash_phoenix", override: true},
-      {:ash_graphql, "~> 0.21"},
+      {:ash_graphql, github: "ash-project/ash_graphql"},
       {:absinthe_plug, "~> 1.5"},
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, github: "ash-project/ash_csv"},
