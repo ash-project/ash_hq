@@ -520,7 +520,28 @@ defmodule AshHqWeb.Pages.Docs do
     |> assign_module()
     |> assign_mix_task()
     |> assign_dsl()
+    |> assign_fallback_guide()
     |> assign_docs()
+  end
+
+  defp assign_fallback_guide(socket) do
+    if socket.assigns[:library_version] &&
+         !(socket.assigns[:dsl] || socket.assigns[:mix_task] || socket.assigns[:guide] ||
+             socket.assigns[:extension] || socket.assigns[:module]) do
+      guide =
+        Enum.find(socket.assigns.library_version.guides, fn guide ->
+          guide.default
+        end) ||
+          Enum.find(socket.assigns.library_version.guides, fn guide ->
+            String.contains?(guide.sanitized_name, "started")
+          end) || Enum.at(socket.assigns.library_version.guides, 0)
+
+      guide = AshHq.Docs.load!(guide, [html_for: %{for: guide.sanitized_name}], lazy?: true)
+
+      assign(socket, guide: guide)
+    else
+      socket
+    end
   end
 
   defp load_for_search(query, docs_for) do

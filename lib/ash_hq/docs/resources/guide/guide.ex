@@ -107,6 +107,11 @@ defmodule AshHq.Docs.Guide do
       allow_nil? false
     end
 
+    attribute :default, :boolean do
+      default false
+      allow_nil? false
+    end
+
     timestamps()
   end
 

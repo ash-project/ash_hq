@@ -83,6 +83,9 @@ defmodule AshHqWeb.Helpers do
         :link, %{type: "module", item: item, name_override: name, library: library}, _ ->
           ~s(<a href="/docs/module/#{library}/latest/#{sanitize_name(item)}">#{name || item}</a>)
 
+        :link, %{type: "library", name_override: name, library: library}, _ ->
+          ~s(<a href="/docs/#{library}">#{name || library}</a>)
+
         _, %{text: text}, _ ->
           raise "No link handler for: `#{text}`"
       end

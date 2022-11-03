@@ -464,6 +464,8 @@ case Enum.at(dsls, 0) do
       mix_tasks: []
     }
 
+    default_guide = Utils.try_apply(fn -> dsl.default_guide() end)
+
     acc =
       Utils.try_apply(fn -> dsl.guides() end, [])
       |> Enum.with_index()
@@ -473,6 +475,13 @@ case Enum.at(dsls, 0) do
             guide
             |> Map.put(:order, order)
             |> Map.update!(:route, &String.trim_trailing(&1, ".md"))
+
+          guide =
+            if guide.route == default_guide.route do
+              Map.put(guide, :default, true)
+            else
+              guide
+            end
 
           [guide | guides]
         end)
