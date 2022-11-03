@@ -37,9 +37,6 @@ defmodule AshHq.Docs.Guide do
     doc_attribute :text
     type "Guides"
     load_for_search library_version: [:library_name, :library_display_name]
-    show_docs_on :route
-    sanitized_name_attribute :route
-    auto_sanitize_name_attribute? false
   end
 
   code_interface do

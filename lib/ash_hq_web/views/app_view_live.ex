@@ -122,7 +122,7 @@ defmodule AshHqWeb.AppViewLive do
                       <a href="https://github.com/ash-project" class="hover:underline">Source</a>
                     </li>
                     <li class="mb-4">
-                      <a href="/docs/guides/ash/latest/tutorials/get-started.md" class="hover:underline">Get Started</a>
+                      <a href="/docs/guides/ash/latest/tutorials/get-started" class="hover:underline">Get Started</a>
                     </li>
                     <li>
                       <a href="/blog" class="hover:underline">Blog</a>
@@ -147,7 +147,7 @@ defmodule AshHqWeb.AppViewLive do
                       <a href="https://github.com/ash-project/ash_hq/issues/new/choose" class="hover:underline">Report an issue</a>
                     </li>
                     <li>
-                      <a href="/docs/guides/ash/latest/how_to/contribute.md" class="hover:underline">Contribute</a>
+                      <a href="/docs/guides/ash/latest/how_to/contribute" class="hover:underline">Contribute</a>
                     </li>
                   </ul>
                 </div>

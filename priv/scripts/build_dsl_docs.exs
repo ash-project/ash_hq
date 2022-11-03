@@ -469,7 +469,12 @@ case Enum.at(dsls, 0) do
       |> Enum.with_index()
       |> Enum.reduce(acc, fn {guide, order}, acc ->
         Map.update!(acc, :guides, fn guides ->
-          [Map.put(guide, :order, order) | guides]
+          guide =
+            guide
+            |> Map.put(:order, order)
+            |> Map.update!(:route, &String.trim_trailing(&1, ".md"))
+
+          [guide | guides]
         end)
       end)
 

@@ -31,49 +31,70 @@ defmodule AshHqWeb.Helpers do
     end
   end
 
-  def render_replacements(_, _, nil), do: ""
-
   def render_replacements(libraries, selected_versions, docs) do
-    docs
-    |> render_links(libraries, selected_versions)
-    |> render_mix_deps(libraries, selected_versions)
-  end
+    Spark.DocIndex.render_replacements(
+      docs,
+      %{
+        code_block: ~r/<code class="makeup elixir highlight">[\s\S]*?(?=<\/code>)/
+      },
+      fn
+        :mix_dep, %{text: text, library: library}, context ->
+          dep = render_mix_dep(libraries, library, selected_versions, text)
 
-  defp render_mix_deps(docs, libraries, selected_versions) do
-    docs
-    |> String.replace(
-      ~r/<code class="makeup elixir highlight">[\s\S]*?(?=<\/code>)/,
-      fn text ->
-        String.replace(text, ~r/{{mix_dep:.*}}/, fn text ->
-          try do
-            "{{mix_dep:" <> library = String.trim_trailing(text, "}}")
-
-            "#{render_mix_dep(libraries, library, selected_versions, text)}"
-          rescue
-            e ->
-              Logger.error(
-                "Invalid link #{Exception.format(:error, e)}\n#{Exception.format_stacktrace(__STACKTRACE__)}"
-              )
-
-              text
+          if context == :code_block do
+            dep
+          else
+            "<pre><code>#{dep}</code></pre>"
           end
-        end)
+
+        :link, %{type: "option", item: item, name_override: name, library: library}, _ ->
+          path =
+            item
+            |> String.trim_leading("/")
+            |> String.split(~r/[\/\.]/)
+            |> Enum.drop(1)
+
+          name = name || join_path(path)
+
+          dsl_path = path |> :lists.droplast() |> Enum.map_join("/", &sanitize_name/1)
+          anchor = path |> List.last() |> sanitize_name()
+
+          ~s(<a href="/docs/dsl/#{library}/latest/#{dsl_path}##{anchor}">#{name}</a>)
+
+        :link, %{type: "dsl", item: item, name_override: name, library: library}, _ ->
+          path =
+            item
+            |> String.trim_leading("/")
+            |> String.split(~r/[\/\.]/)
+            |> Enum.drop(1)
+
+          dsl_path = Enum.map_join(path, "/", &sanitize_name/1)
+
+          name = name || join_path(path)
+
+          ~s(<a href="/docs/dsl/#{library}/latest/#{dsl_path}">#{name}</a>)
+
+        :link, %{type: "extension", item: item, name_override: name, library: library}, _ ->
+          ~s(<a href="/docs/dsl/#{library}/latest/#{sanitize_name(item)}">#{name || item}</a>)
+
+        :link, %{type: "guide", item: item, name_override: name, library: library}, _ ->
+          ~s(<a href="/docs/dsl/#{library}/latest/#{sanitize_name(item)}">#{name || item}</a>)
+
+        :link, %{type: "module", item: item, name_override: name, library: library}, _ ->
+          ~s(<a href="/docs/module/#{library}/latest/#{sanitize_name(item)}">#{name || item}</a>)
+
+        _, %{text: text}, _ ->
+          raise "No link handler for: `#{text}`"
       end
     )
-    |> String.replace(~r/{{mix_dep:.*}}/, fn text ->
-      try do
-        "{{mix_dep:" <> library = String.trim_trailing(text, "}}")
+  end
 
-        "<pre><code>#{render_mix_dep(libraries, library, selected_versions, text)}</code></pre>"
-      rescue
-        e ->
-          Logger.error(
-            "Invalid link #{Exception.format(:error, e)}\n#{Exception.format_stacktrace(__STACKTRACE__)}"
-          )
+  defp join_path(path) do
+    Enum.join(path, " > ")
+  end
 
-          text
-      end
-    end)
+  defp sanitize_name(name) do
+    String.downcase(String.replace(name, ~r/[^A-Za-z0-9_]/, "-"))
   end
 
   defp render_mix_dep(libraries, library, selected_versions, source) do
@@ -96,111 +117,11 @@ defmodule AshHqWeb.Helpers do
 
     case Version.parse(version.version) do
       {:ok, %Version{pre: pre, build: build}}
-      when not is_nil(pre) or not is_nil(build) ->
+      when not pre == [] or not is_nil(build) ->
         ~s({:#{library.name}, "~> #{version.version}"})
 
-      {:ok, %Version{major: major, minor: minor, patch: 0}} ->
+      {:ok, %Version{major: major, minor: minor}} ->
         ~s({:#{library.name}, "~> #{major}.#{minor}"})
-
-      {:ok, version} ->
-        ~s({:#{library.name}, "~> #{version.version}"})
-    end
-  end
-
-  def render_links(docs, libraries, selected_versions) do
-    String.replace(docs, ~r/{{link:[^}]*}}/, fn text ->
-      try do
-        "{{link:" <> rest = String.trim_trailing(text, "}}")
-        [library, type, item | rest] = String.split(rest, ":")
-        render_link(libraries, selected_versions, library, type, item, text, rest)
-      rescue
-        e ->
-          Logger.error(
-            "Invalid link #{Exception.format(:error, e)}\n#{Exception.format_stacktrace(__STACKTRACE__)}"
-          )
-
-          text
-      end
-    end)
-  end
-
-  defp render_link(libraries, selected_versions, library, type, item, source, rest) do
-    library =
-      Enum.find(libraries, &(&1.name == library)) ||
-        raise "No such library in link: #{source}"
-
-    version =
-      if selected_versions[library.id] in ["latest", nil, ""] do
-        AshHqWeb.Helpers.latest_version(library)
-      else
-        case Enum.find(library.versions, &(&1.id == selected_versions[library.id])) do
-          nil ->
-            nil
-
-          version ->
-            version
-        end
-      end
-
-    if is_nil(version) do
-      raise "no version for library: #{library.name}"
-    else
-      case type do
-        "guide" ->
-          guide =
-            Enum.find(version.guides, &(&1.name == item)) ||
-              raise "No such guide in link: #{source}"
-
-          text = Enum.at(rest, 0) || item
-
-          """
-          <a href="#{DocRoutes.doc_link(guide, selected_versions)}">#{text}</a>
-          """
-
-        "dsl" ->
-          path =
-            item
-            |> String.trim_leading("/")
-            |> String.split(~r/[\/\.]/)
-
-          name =
-            path
-            |> Enum.join(".")
-
-          route = Enum.map_join(path, "/", &DocRoutes.sanitize_name/1)
-
-          """
-          <a href="/docs/dsl/#{library.name}/#{version.version}/#{route}">#{name}</a>
-          """
-
-        "option" ->
-          path =
-            item
-            |> String.trim_leading("/")
-            |> String.split(~r/[\/\.]/)
-
-          name = Enum.join(path, ".")
-
-          dsl_path = path |> :lists.droplast() |> Enum.map_join("/", &DocRoutes.sanitize_name/1)
-          anchor = dsl_path |> List.last() |> DocRoutes.sanitize_name()
-
-          """
-          <a href="/docs/dsl/#{library.name}/#{version.version}/#{dsl_path}##{anchor}">#{name}</a>
-          """
-
-        "module" ->
-          """
-          <a href="/docs/module/#{library.name}/#{version.version}/#{DocRoutes.sanitize_name(item)}">#{item}</a>
-          """
-
-        "extension" ->
-          """
-          <a href="/docs/dsl/#{library.name}/#{version.version}/#{DocRoutes.sanitize_name(item)}">#{item}</a>
-          """
-
-        type ->
-          raise "unimplemented link type #{inspect(type)} in #{source}"
-      end
     end
   end
 end

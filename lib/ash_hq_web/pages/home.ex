@@ -56,7 +56,7 @@ defmodule AshHqWeb.Pages.Home do
         </div>
         <div class="flex flex-col space-y-4 md:space-x-4 md:space-y-0 md:flex-row items-center mt-8 md:mt-16 mb-6 md:mb-10">
           <a
-            href="/docs/guides/ash/latest/tutorials/get-started.md"
+            href="/docs/guides/ash/latest/tutorials/get-started"
             class="flex justify-center items-center w-full md:w-auto h-12 px-4 rounded-lg bg-primary-light-500 dark:bg-primary-dark-500 font-semibold dark:text-white dark:hover:bg-primary-dark-700 hover:bg-primary-light-700"
           >
             Get Started
@@ -262,7 +262,7 @@ defmodule AshHqWeb.Pages.Home do
           </a>
 
           <a
-            href="docs/guides/ash/latest/how_to/contribute.md"
+            href="docs/guides/ash/latest/how_to/contribute"
             class="flex justify-center items-center w-full md:w-auto h-10 px-4 rounded-lg bg-primary-light-500 dark:bg-primary-dark-500 font-semibold dark:text-white dark:hover:bg-primary-dark-700 hover:bg-primary-light-700 mt-6"
           >
             Become a contributor

@@ -83,7 +83,7 @@ defmodule AshHq.Docs.Importer do
 
         result =
           try do
-            with_retry(fn ->
+            with_retry("#{name}: #{version}", fn ->
               {_, 0} =
                 System.cmd(
                   "elixir",
@@ -105,6 +105,8 @@ defmodule AshHq.Docs.Importer do
 
         if result do
           AshHq.Repo.transaction(fn ->
+            Logger.info("Starting import of #{name}: #{version}")
+
             id =
               case LibraryVersion.by_version(library.id, version) do
                 {:ok, version} ->
@@ -200,14 +202,14 @@ defmodule AshHq.Docs.Importer do
     end
   end
 
-  defp with_retry(func, retries \\ 3) do
+  defp with_retry(context, func, retries \\ 3) do
     func.()
   rescue
-    e ->
+    _e ->
       if retries == 1 do
-        reraise e, __STACKTRACE__
+        Logger.error("Failed to import: #{context}")
       else
-        with_retry(func, retries - 1)
+        with_retry(context, func, retries - 1)
       end
   end
 

@@ -38,7 +38,7 @@ defmodule AshHqWeb.Components.AppView.TopBar do
         {/if}
 
         <a
-          href="/docs/guides/ash/latest/tutorials/get-started.md"
+          href="/docs/guides/ash/latest/tutorials/get-started"
           title="Documentation"
           class="text-lg font-bold px-4 dark:hover:text-primary-light-500 hover:text-primary-light-700"
         >

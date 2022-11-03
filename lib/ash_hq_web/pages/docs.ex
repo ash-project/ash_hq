@@ -128,7 +128,7 @@ defmodule AshHqWeb.Pages.Docs do
                 <ul>
                   {#for link <- links}
                     <li>
-                      {raw(render_links("{{link:#{link}}}", @libraries, @selected_versions))}
+                      {raw(render_replacements("{{link:#{link}}}", @libraries, @selected_versions))}
                     </li>
                   {/for}
                 </ul>
@@ -238,7 +238,7 @@ defmodule AshHqWeb.Pages.Docs do
                           Enum.map_join(
                             List.flatten(Map.values(option.links || %{})),
                             ", ",
-                            &render_links("{{link:#{&1}}}", @libraries, @selected_versions)
+                            &render_replacements("{{link:#{&1}}}", @libraries, @selected_versions)
                           )
                         )}
                       </td>
@@ -280,7 +280,7 @@ defmodule AshHqWeb.Pages.Docs do
                         Enum.map_join(
                           List.flatten(Map.values(option.links || %{})),
                           ", ",
-                          &render_links("{{link:#{&1}}}", @libraries, @selected_versions)
+                          &render_replacements("{{link:#{&1}}}", @libraries, @selected_versions)
                         )
                       )}
                     </td>
@@ -452,7 +452,7 @@ defmodule AshHqWeb.Pages.Docs do
     guides_query =
       AshHq.Docs.Guide
       |> Ash.Query.new()
-      |> load_for_search(socket.assigns[:params]["guide"])
+      |> load_for_search(List.last(List.wrap(socket.assigns[:params]["guide"])))
 
     modules_query =
       AshHq.Docs.Module
@@ -643,17 +643,29 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   defp assign_guide(socket) do
+    guide_route = socket.assigns[:params]["guide"]
+
     guide =
-      if socket.assigns[:params]["guide"] && socket.assigns.library_version do
+      if guide_route && socket.assigns.library_version do
+        guide_route = Enum.map(List.wrap(guide_route), &String.trim_trailing(&1, ".md"))
+
         Enum.find(socket.assigns.library_version.guides, fn guide ->
-          guide.route == Enum.join(socket.assigns[:params]["guide"], "/")
+          matches_path?(guide, guide_route) || matches_name?(guide, guide_route)
         end)
-      else
-        nil
       end
 
     assign(socket, :guide, guide)
   end
+
+  defp matches_path?(guide, guide_route) do
+    guide.route == Enum.join(guide_route, "/")
+  end
+
+  defp matches_name?(guide, [guide_name]) do
+    DocRoutes.sanitize_name(guide.name) == guide_name
+  end
+
+  defp matches_name?(_, _), do: false
 
   defp assign_dsl(socket) do
     case socket.assigns[:params]["dsl_path"] do
