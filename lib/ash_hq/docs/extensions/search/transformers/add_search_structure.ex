@@ -69,6 +69,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
         Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
           name: name,
           type: type,
+          private?: true,
           arguments: [html_for_argument()],
           calculation:
             Ash.Query.expr(
@@ -101,6 +102,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
         Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
           name: :html_for,
           type: :string,
+          private?: true,
           arguments: [html_for_argument()],
           calculation:
             Ash.Query.expr(
@@ -132,6 +134,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
             Ash.Resource.Dsl,
             [:attributes],
             :attribute,
+            private?: true,
             name: config.sanitized_name_attribute,
             type: :string,
             allow_nil?: false
@@ -245,6 +248,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
         Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
           name: :match_rank,
           type: :float,
+          private?: true,
           arguments: [query_argument()],
           calculation:
             Ash.Query.expr(
@@ -264,6 +268,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
         Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
           name: :match_rank,
           type: :float,
+          private?: true,
           arguments: [query_argument()],
           calculation:
             Ash.Query.expr(
@@ -286,6 +291,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
         Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
           name: :matches,
           type: :boolean,
+          private?: true,
           arguments: [query_argument()],
           calculation:
             Ash.Query.expr(
@@ -307,6 +313,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
           name: :matches,
           type: :boolean,
           arguments: [query_argument()],
+          private?: true,
           calculation:
             Ash.Query.expr(
               name_matches(query: arg(:query), similarity: 0.8) or
@@ -329,6 +336,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
         name: :name_matches,
         type: :boolean,
         arguments: [query_argument(), similarity_argument()],
+        private?: true,
         calculation:
           Ash.Query.expr(
             contains(
@@ -349,6 +357,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
         Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
           name: :search_headline,
           type: :string,
+          private?: true,
           arguments: [query_argument()],
           calculation:
             Ash.Query.expr(
@@ -369,6 +378,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
           name: :search_headline,
           type: :string,
           arguments: [query_argument()],
+          private?: true,
           calculation: Ash.Query.expr("")
         )
       )

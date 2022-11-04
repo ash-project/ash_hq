@@ -34,11 +34,11 @@ defmodule AshHq.MixProject do
   defp deps do
     [
       {:ash, github: "ash-project/ash", override: true},
-      # {:ash, path: "../ash", override: true},
       {:ash_postgres, "~> 1.1"},
       {:ash_admin, github: "ash-project/ash_admin"},
       {:ash_phoenix, github: "ash-project/ash_phoenix", override: true},
       {:ash_graphql, github: "ash-project/ash_graphql"},
+      {:ash_json_api, github: "ash-project/ash_json_api"},
       {:absinthe_plug, "~> 1.5"},
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, github: "ash-project/ash_csv"},
