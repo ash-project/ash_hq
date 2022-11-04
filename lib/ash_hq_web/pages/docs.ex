@@ -10,27 +10,27 @@ defmodule AshHqWeb.Pages.Docs do
   alias Phoenix.LiveView.JS
   require Logger
 
-  prop change_versions, :event, required: true
-  prop selected_versions, :map, required: true
-  prop libraries, :list, default: []
-  prop uri, :string
-  prop remove_version, :event
-  prop add_version, :event
-  prop change_version, :event
-  prop params, :map, required: true
+  prop(change_versions, :event, required: true)
+  prop(selected_versions, :map, required: true)
+  prop(libraries, :list, default: [])
+  prop(uri, :string)
+  prop(remove_version, :event)
+  prop(add_version, :event)
+  prop(change_version, :event)
+  prop(params, :map, required: true)
 
-  data library, :any
-  data extension, :any
-  data docs, :any
-  data library_version, :any
-  data guide, :any
-  data doc_path, :list, default: []
-  data dsls, :list, default: []
-  data dsl, :any
-  data options, :list, default: []
-  data module, :any
-  data mix_task, :any
-  data positional_options, :list
+  data(library, :any)
+  data(extension, :any)
+  data(docs, :any)
+  data(library_version, :any)
+  data(guide, :any)
+  data(doc_path, :list, default: [])
+  data(dsls, :list, default: [])
+  data(dsl, :any)
+  data(options, :list, default: [])
+  data(module, :any)
+  data(mix_task, :any)
+  data(positional_options, :list)
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -128,7 +128,7 @@ defmodule AshHqWeb.Pages.Docs do
                 <ul>
                   {#for link <- links}
                     <li>
-                      {raw(render_replacements("{{link:#{link}}}", @libraries, @selected_versions))}
+                      {raw(render_replacements(@libraries, @selected_versions, "{{link:#{link}}}"))}
                     </li>
                   {/for}
                 </ul>
@@ -238,7 +238,7 @@ defmodule AshHqWeb.Pages.Docs do
                           Enum.map_join(
                             List.flatten(Map.values(option.links || %{})),
                             ", ",
-                            &render_replacements("{{link:#{&1}}}", @libraries, @selected_versions)
+                            &render_replacements(@libraries, @selected_versions, "{{link:#{&1}}}")
                           )
                         )}
                       </td>
@@ -280,7 +280,7 @@ defmodule AshHqWeb.Pages.Docs do
                         Enum.map_join(
                           List.flatten(Map.values(option.links || %{})),
                           ", ",
-                          &render_replacements("{{link:#{&1}}}", @libraries, @selected_versions)
+                          &render_replacements(@libraries, @selected_versions, "{{link:#{&1}}}")
                         )
                       )}
                     </td>
