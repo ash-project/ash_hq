@@ -107,7 +107,7 @@ defmodule AshHqWeb.Pages.Home do
               Consistency
             </h2>
             <p class="mt-4 text-3xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50">
-              A place for everything and everything in it's place
+              A place for everything and everything in its place
             </p>
             <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6">
               Ash helps keep things neat and organized by providing good patterns for structuring your application.
