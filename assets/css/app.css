@@ -5,6 +5,9 @@
 
 @import "syntax.css";
 
+/* Import scoped CSS rules for components */
+@import "./_components.css";
+
 .search-hit {
   color: #fb923c;
 }
