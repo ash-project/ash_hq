@@ -3,10 +3,8 @@ defmodule AshHqWeb.Components.DocSidebar do
   use Surface.Component
 
   alias AshHqWeb.DocRoutes
-  alias Surface.Components.LivePatch
+  alias AshHqWeb.Components.TreeView
   alias Phoenix.LiveView.JS
-
-  import Tails
 
   prop class, :css_class, default: ""
   prop libraries, :list, required: true
@@ -90,240 +88,50 @@ defmodule AshHqWeb.Components.DocSidebar do
           selected_versions={@selected_versions}
         />
       </div>
-      <div class="py-3 px-3">
-        <ul class="space-y-2">
-          <div>
-            Guides
-          </div>
-          {#for {category, guides_by_library} <- @guides_by_category_and_library}
-            <div class="text-base-light-500">
-              <button
-                phx-click={collapse("#{@id}-#{String.replace(category, " ", "-")}")}
-                class="flex flex-row items-center"
-              >
-                <div id={"#{@id}-#{String.replace(category, " ", "-")}-chevron-down"}>
-                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
-                </div>
-                <div
-                  id={"#{@id}-#{String.replace(category, " ", "-")}-chevron-right"}
-                  class="-rotate-90"
-                  style="display: none;"
-                >
-                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
-                </div>
-                <div>{category}</div>
-              </button>
-            </div>
-            <div id={"#{@id}-#{String.replace(category, " ", "-")}"}>
-              {#for {library, guides} <- guides_by_library}
-                <li class="ml-3 text-base-light-400 p-1">
-                  {library}
-                  <ul>
-                    {#for guide <- guides}
-                      <li class="ml-1">
-                        <LivePatch
-                          to={DocRoutes.doc_link(guide, @selected_versions)}
-                          class={
-                            "flex items-center p-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-200 hover:bg-base-light-100 dark:hover:bg-base-dark-700",
-                            "bg-base-light-300 dark:bg-base-dark-600": @guide && @guide.id == guide.id
-                          }
-                        >
-                          <Heroicons.Outline.BookOpenIcon class="h-4 w-4" />
-                          <span class="ml-3 mr-2">{guide.name}</span>
-                        </LivePatch>
-                      </li>
-                    {/for}
-                  </ul>
-                </li>
-              {/for}
-            </div>
-          {/for}
-          <div class="mt-4">
-            Reference
-          </div>
-          <div class="ml-2 space-y-2">
-            {#if !Enum.empty?(@extensions)}
-              <div class="text-base-light-500">
-                <button phx-click={collapse("#{@id}-extension")} class="flex flex-row items-center">
-                  <div id={"#{@id}-extension-chevron-down"}>
-                    <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
-                  </div>
-                  <div id={"#{@id}-extension-chevron-right"} class="-rotate-90" style="display: none;">
-                    <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
-                  </div>
-                  Extensions
-                </button>
-              </div>
-            {/if}
-            <div id={"#{@id}-extension"}>
-              {#for {library, extensions} <- @extensions}
-                <li class="ml-3 text-base-light-200 p-1">
-                  {library}
-                  <ul>
-                    {#for extension <- extensions}
-                      <li class="ml-1">
-                        <LivePatch
-                          to={DocRoutes.doc_link(extension, @selected_versions)}
-                          class="flex items-center p-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-200 hover:bg-base-light-100 dark:hover:bg-base-dark-700"
-                        >
-                          {render_icon(assigns, extension.type)}
-                          <span class="ml-3 mr-2">{extension.name}</span>
-                        </LivePatch>
-                        {#if @extension && @extension.id == extension.id && !Enum.empty?(extension.dsls)}
-                          {render_dsls(assigns, extension.dsls, [])}
-                        {/if}
-                      </li>
-                    {/for}
-                  </ul>
-                </li>
-              {/for}
-            </div>
-
-            {#if !Enum.empty?(@mix_tasks_by_category)}
-              <div class="text-base-light-500">
-                <button phx-click={collapse("#{@id}-mix-tasks")} class="flex flex-row items-center">
-                  <div id={"#{@id}-mix-tasks-chevron-down"}>
-                    <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
-                  </div>
-                  <div id={"#{@id}-mix-tasks-chevron-right"} class="-rotate-90" style="display: none;">
-                    <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
-                  </div>
-                  Mix Tasks
-                </button>
-              </div>
-            {/if}
-            <div id={"#{@id}-mix-tasks"}>
-              {#for {category, mix_tasks} <- @mix_tasks_by_category}
-                <div class="ml-4">
-                  <span class="text-sm text-base-light-900 dark:text-base-dark-100">{category}</span>
-                </div>
-                {#for mix_task <- mix_tasks}
-                  <li class="ml-4">
-                    <LivePatch
-                      to={DocRoutes.doc_link(mix_task, @selected_versions)}
-                      class="flex items-center space-x-2 pt-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-100 hover:bg-base-light-100 dark:hover:bg-base-light-700"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-4 h-4"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"
-                        />
-                      </svg>
-                      <span class="">{mix_task.name}</span>
-                    </LivePatch>
-                  </li>
-                {/for}
-              {/for}
-            </div>
-
-            <div class="text-base-light-500">
-              <button phx-click={collapse("#{@id}-modules")} class="flex flex-row items-center">
-                <div id={"#{@id}-modules-chevron-down"}>
-                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
-                </div>
-                <div id={"#{@id}-modules-chevron-right"} class="-rotate-90" style="display: none;">
-                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
-                </div>
-                Modules
-              </button>
-            </div>
-            <div id={"#{@id}-modules"}>
-              {#for {category, modules} <- @modules_by_category}
-                <div class="ml-4">
-                  <span class="text-sm text-base-light-900 dark:text-base-dark-100">{category}</span>
-                </div>
-                {#for module <- modules}
-                  <li class="ml-4">
-                    <LivePatch
-                      to={DocRoutes.doc_link(module, @selected_versions)}
-                      class="flex items-center space-x-2 pt-1 text-base font-normal text-base-light-900 rounded-lg dark:text-base-dark-100 hover:bg-base-light-100 dark:hover:bg-base-light-700"
-                    >
-                      <Heroicons.Outline.CodeIcon class="h-4 w-4" />
-                      <span class="">{module.name}</span>
-                    </LivePatch>
-                  </li>
-                {/for}
-              {/for}
-            </div>
-          </div>
-        </ul>
-      </div>
+      <TreeView
+        id={"#{@id}-sidebar-treeview"}
+        render_icon={&icon/1}
+        items={treeview_items(
+          @selected_versions,
+          @guide,
+          @extension,
+          @dsl,
+          @mix_task,
+          @module,
+          @guides_by_category_and_library,
+          @extensions,
+          @mix_tasks_by_category,
+          @modules_by_category
+        )}
+      />
     </aside>
     """
   end
 
-  defp render_dsls(assigns, dsls, path) do
+  def icon(assigns) do
     ~F"""
-    <ul class="ml-1 flex flex-col">
-      {#for dsl <- Enum.filter(dsls, &(&1.path == path))}
-        <li class="border-l pl-1 border-primary-light-600 border-opacity-30">
-          <div class="flex flex-row items-center">
-            <LivePatch
-              to={DocRoutes.doc_link(dsl, @selected_versions)}
-              class={classes([
-                "flex items-center p-1 font-normal rounded-lg text-black dark:text-white hover:text-primary-light-300",
-                "text-primary-light-600 dark:text-primary-dark-400 font-bold":
-                  @dsl &&
-                    List.starts_with?(@dsl.path ++ [@dsl.name], path ++ [dsl.name])
-              ])}
-            >
-              {dsl.name}
-            </LivePatch>
-          </div>
-          {render_dsls(assigns, dsls, path ++ [dsl.name])}
-        </li>
-      {/for}
-    </ul>
-    """
-  end
-
-  def render_icon(assigns, "Resource") do
-    ~F"""
-    <Heroicons.Outline.ServerIcon class="h-4 w-4" />
-    """
-  end
-
-  def render_icon(assigns, "Api") do
-    ~F"""
-    <Heroicons.Outline.SwitchHorizontalIcon class="h-4 w-4" />
-    """
-  end
-
-  def render_icon(assigns, "DataLayer") do
-    ~F"""
-    <Heroicons.Outline.DatabaseIcon class="h-4 w-4" />
-    """
-  end
-
-  def render_icon(assigns, "Flow") do
-    ~F"""
-    <Heroicons.Outline.MapIcon class="h-4 w-4" />
-    """
-  end
-
-  def render_icon(assigns, "Notifier") do
-    ~F"""
-    <Heroicons.Outline.MailIcon class="h-4 w-4" />
-    """
-  end
-
-  def render_icon(assigns, "Registry") do
-    ~F"""
-    <Heroicons.Outline.ViewListIcon class="h-4 w-4" />
-    """
-  end
-
-  def render_icon(assigns, _) do
-    ~F"""
-    <Heroicons.Outline.PuzzleIcon class="h-4 w-4" />
+    {#case @name}
+      {#match "Guide"}
+        <Heroicons.Outline.BookOpenIcon class={@class} />
+      {#match "Resource"}
+        <Heroicons.Outline.ServerIcon class={@class} />
+      {#match "Api"}
+        <Heroicons.Outline.SwitchHorizontalIcon class={@class} />
+      {#match "DataLayer"}
+        <Heroicons.Outline.DatabaseIcon class={@class} />
+      {#match "Flow"}
+        <Heroicons.Outline.MapIcon class={@class} />
+      {#match "Notifier"}
+        <Heroicons.Outline.MailIcon class={@class} />
+      {#match "Registry"}
+        <Heroicons.Outline.ViewListIcon class={@class} />
+      {#match "Code"}
+        <Heroicons.Outline.CodeIcon class={@class} />
+      {#match "Mix Task"}
+        <Heroicons.Outline.TerminalIcon class={@class} />
+      {#match _}
+        <Heroicons.Outline.PuzzleIcon class={@class} />
+    {/case}
     """
   end
 
@@ -479,10 +287,184 @@ defmodule AshHqWeb.Components.DocSidebar do
     )
   end
 
-  defp collapse(id, js \\ %JS{}) do
-    js
-    |> JS.toggle(to: "##{id}", time: 0)
-    |> JS.toggle(to: "##{id}-chevron-down", time: 0)
-    |> JS.toggle(to: "##{id}-chevron-right", time: 0)
+  defp treeview_items(
+         selected_versions,
+         selected_guide,
+         selected_extension,
+         selected_dsl,
+         selected_mix_task,
+         selected_module,
+         guides_by_category_and_library,
+         extensions,
+         mix_tasks_by_category,
+         modules_by_category
+       ) do
+    text_styles = "text-base-light-900 dark:text-base-dark-200"
+
+    guides = %TreeView.Item{
+      name: "guides",
+      label: "Guides",
+      collapsable: false,
+      items:
+        Enum.map(guides_by_category_and_library, fn {category, by_library} ->
+          %TreeView.Item{
+            name: slug(category),
+            label: category,
+            collapsable: true,
+            class: "text-base-light-500",
+            items:
+              Enum.map(by_library, fn {library, guides} ->
+                %TreeView.Item{
+                  name: slug(library),
+                  label: library,
+                  collapsable: true,
+                  class: "text-base-light-400",
+                  items:
+                    Enum.map(guides, fn guide ->
+                      %TreeView.Item{
+                        name: slug(guide.name),
+                        label: guide.name,
+                        icon: "Guide",
+                        selected: selected_guide && selected_guide.id == guide.id,
+                        link: [patch: DocRoutes.doc_link(guide, selected_versions)],
+                        class: text_styles
+                      }
+                    end)
+                }
+              end)
+          }
+        end)
+    }
+
+    extensions = %TreeView.Item{
+      name: "extensions",
+      label: "Extensions",
+      collapsable: true,
+      collapsed: !selected_extension,
+      class: "text-base-light-500",
+      items:
+        Enum.map(extensions, fn {library, extensions} ->
+          %TreeView.Item{
+            name: slug(library),
+            label: library,
+            collapsable: true,
+            class: "text-base-light-400",
+            items:
+              Enum.map(extensions, fn extension ->
+                items = dsl_tree_view_items(selected_versions, extension.dsls, selected_dsl, [])
+
+                %TreeView.Item{
+                  name: slug(extension.name),
+                  label: extension.name,
+                  icon: extension.type,
+                  collapsable: items != [],
+                  collapsed: !(selected_extension && selected_extension.id == extension.id),
+                  link: [patch: DocRoutes.doc_link(extension, selected_versions)],
+                  selected: (selected_extension && !selected_dsl) && selected_extension.id == extension.id,
+                  items: items,
+                  indent_guide: true,
+                  class: text_styles
+                }
+              end)
+          }
+        end)
+    }
+
+    mix_tasks = %TreeView.Item{
+      name: "mix-tasks",
+      label: "Mix Tasks",
+      collapsable: true,
+      collapsed: !selected_mix_task,
+      class: "text-base-light-500",
+      items:
+        Enum.map(mix_tasks_by_category, fn {category, mix_tasks} ->
+          %TreeView.Item{
+            name: slug(category),
+            label: category,
+            collapsable: true,
+            class: "text-base-light-400",
+            items:
+              Enum.map(mix_tasks, fn mix_task ->
+                %TreeView.Item{
+                  name: slug(mix_task.name),
+                  label: mix_task.name,
+                  icon: "Mix Task",
+                  link: [patch: DocRoutes.doc_link(mix_task, selected_versions)],
+                  selected: selected_mix_task && selected_mix_task.id == mix_task.id,
+                  class: text_styles
+                }
+              end)
+          }
+        end)
+    }
+
+    modules = %TreeView.Item{
+      name: "modules",
+      label: "Modules",
+      collapsable: true,
+      collapsed: !selected_module,
+      class: "text-base-light-500",
+      items:
+        Enum.map(modules_by_category, fn {category, modules} ->
+          %TreeView.Item{
+            name: slug(category),
+            label: category,
+            collapsable: true,
+            class: "text-base-light-400",
+            items:
+              Enum.map(modules, fn module ->
+                %TreeView.Item{
+                  name: slug(module.name),
+                  label: module.name,
+                  icon: "Code",
+                  link: [patch: DocRoutes.doc_link(module, selected_versions)],
+                  selected: selected_module && selected_module.id == module.id,
+                  class: text_styles
+                }
+              end)
+          }
+        end)
+    }
+
+    reference = %TreeView.Item{
+      name: "reference",
+      label: "Reference",
+      collapsable: false,
+      items: [
+        extensions,
+        mix_tasks,
+        modules
+      ]
+    }
+
+    [
+      guides,
+      reference
+    ]
+  end
+
+  defp dsl_tree_view_items(selected_versions, dsls, selected_dsl, path) do
+    dsls
+    |> Enum.filter(&(&1.path == path))
+    |> Enum.map(fn dsl ->
+      items = dsl_tree_view_items(selected_versions, dsls, selected_dsl, path ++ [dsl.name])
+
+      %TreeView.Item{
+        name: slug(dsl.name),
+        label: dsl.name,
+        collapsable: false,
+        selected: selected_dsl && selected_dsl.id == dsl.id,
+        link: [patch: DocRoutes.doc_link(dsl, selected_versions)],
+        items: items,
+        indent_guide: true
+      }
+    end)
+  end
+
+  def slug(string) do
+    string
+    |> String.downcase()
+    |> String.replace(" ", "_")
+    |> String.replace(~r/[^a-z0-9-_]/, "-")
   end
 end

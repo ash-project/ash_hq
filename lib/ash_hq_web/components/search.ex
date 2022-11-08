@@ -204,7 +204,9 @@ defmodule AshHqWeb.Components.Search do
         """
 
       type when type in ["Dsl", "Option"] ->
-        AshHqWeb.Components.DocSidebar.render_icon(assigns, item.extension_type)
+        ~F"""
+        <AshHqWeb.Components.DocSidebar.icon name={item.extension_type}, class="h-4 w-4" />
+        """
 
       "Guide" ->
         ~F"""
