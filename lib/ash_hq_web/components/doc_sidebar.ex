@@ -358,50 +358,17 @@ defmodule AshHqWeb.Components.DocSidebar do
   @start_guides ["Tutorials", "Topics", "How To", "Misc"]
 
   defp guides_by_category_and_library(libraries, library_version, selected_versions) do
-    libraries =
-      Enum.filter(libraries, fn library ->
-        selected_versions[library.id] && selected_versions[library.id] != ""
-      end)
-
-    library_name_to_order =
-      libraries
-      |> Enum.sort_by(& &1.order)
-      |> Enum.map(& &1.display_name)
-
     libraries
-    |> Enum.flat_map(fn library ->
-      library
-      |> selected_version(library_version, selected_versions)
-      |> case do
-        nil ->
-          []
-
-        %{guides: guides} ->
-          Enum.map(guides, &{&1, library.display_name})
-      end
+    |> Enum.map(&{&1, selected_version(&1, library_version, selected_versions)})
+    |> Enum.filter(fn {_library, version} -> version != nil end)
+    |> Enum.sort_by(fn {library, _version} -> library.order end)
+    |> Enum.flat_map(fn {library, %{guides: guides}} ->
+      guides
+      |> Enum.sort_by(& &1.order)
+      |> Enum.group_by(& &1.category)
+      |> Enum.map(fn {category, guides} -> {category, {library.display_name, guides}} end)
     end)
-    |> Enum.group_by(fn {guide, _} ->
-      guide.category
-    end)
-    |> Enum.map(fn {category, guides} ->
-      guides_by_library =
-        library_name_to_order
-        |> Enum.map(fn name ->
-          {name,
-           Enum.flat_map(guides, fn {guide, guide_lib_name} ->
-             if name == guide_lib_name do
-               [guide]
-             else
-               []
-             end
-           end)}
-        end)
-        |> Enum.reject(fn {_, guides} ->
-          Enum.empty?(guides)
-        end)
-
-      {category, guides_by_library}
-    end)
+    |> Enum.group_by(fn {category, _} -> category end, fn {_, lib_guides} -> lib_guides end)
     |> partially_alphabetically_sort(@start_guides, [])
   end
 
