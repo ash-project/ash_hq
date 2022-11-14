@@ -6,12 +6,15 @@ labels:  bug, needs review
 assignees: ''
 ---
 
-** Brief Description **
+**Brief Description**
+
 A brief description of the issue
 
-** Steps to reproduce the bug **
-High level purpose of the extension.
+**Steps to reproduce the bug**
 
-** Context **
+A step-by-step guide on how to reproduce the bug
+
+**Context**
+
 Pictures or videos of the issue occurring
 
