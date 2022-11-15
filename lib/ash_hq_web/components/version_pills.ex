@@ -14,7 +14,7 @@ defmodule AshHqWeb.Components.VersionPills do
 
   def render(assigns) do
     ~F"""
-    <div class="flex flex-row flex-wrap align-center items-center ml-2 justify-star gap-2 flex-grow">
+    <div class="flex flex-row flex-wrap align-center items-center ml-2 justify-start gap-2 flex-grow">
       {#for library <- @libraries}
         {#if @selected_versions[library.id] not in [nil, ""]}
           <div class="flex flex-row flex-wrap contents-center px-2 py-1 bg-primary-light-500 dark:bg-primary-light-400 hover:bg-primary-light-600 text-black text-xs font-medium rounded-full">
