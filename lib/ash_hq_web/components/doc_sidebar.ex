@@ -74,7 +74,7 @@ defmodule AshHqWeb.Components.DocSidebar do
     ~F"""
     <aside
       id={@id}
-      class={"grid h-screen overflow-y-auto pb-36 w-fit z-40 bg-white dark:bg-base-dark-850", @class}
+      class={"grid pb-36 z-40 bg-white dark:bg-base-dark-850", @class}
       aria-label="Sidebar"
     >
       <button class="hidden" id={"#{@id}-hide"} phx-click={hide_sidebar()} />
