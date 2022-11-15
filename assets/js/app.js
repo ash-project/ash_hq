@@ -139,96 +139,64 @@ Hooks.Docs = {
   },
 };
 
-function onScrollChange() {
-  const docs = document.getElementById("docs-window");
-  const topBar = document.getElementById("top-bar");
-  if (docs) {
-    let scrollTop = docs.scrollTop;
-    if (topBar) {
-      scrollTop += topBar.scrollHeight;
-    }
-    const topEl = Array.from(
-      document.getElementsByClassName("nav-anchor")
-    ).filter((el) => {
-      return el.offsetTop + el.clientHeight >= scrollTop;
-    })[0];
-    let hash;
-    if (window.location.hash) {
-      hash = window.location.hash.substring(1);
-    }
-    if (topEl && topEl.id !== hash) {
-      history.replaceState(null, null, `#${topEl.id}`);
-      window.location.hash = topEl.id;
-      const newTarget = document.getElementById(`right-nav-${topEl.id}`);
-      Array.from(
-        document.getElementsByClassName("currently-active-nav")
-      ).forEach((el) => {
-        el.classList.remove("currently-active-nav");
-        el.classList.remove("text-primary-light-600");
-        el.classList.remove("dark:text-primary-dark-400");
-      });
-      if (newTarget) {
-        newTarget.classList.add("dark:text-primary-dark-400");
-        newTarget.classList.add("text-primary-light-600");
-        newTarget.classList.add("currently-active-nav");
-
-        // We don't scroll the sidebar into view anymore because it causes weird jumping around on firefox
-        // scrollIntoView(newTarget, { behavior: "smooth", block: "center" });
-      }
-    }
-  }
-}
-
-function handleHashChange(clear) {
-  if (window.location.hash) {
-    const el = document.getElementById(
-      "right-nav-" + window.location.hash.substring(1)
-    );
-    if (el) {
-      if (clear) {
-        Array.from(
-          document.getElementsByClassName("currently-active-nav")
-        ).forEach((el) => {
-          el.classList.remove("currently-active-nav");
-          el.classList.remove("text-primary-light-600");
-          el.classList.remove("dark:text-primary-dark-400");
-        });
-      }
-      el.classList.add("dark:text-primary-dark-400");
-      el.classList.add("text-primary-light-600");
-      el.classList.add("currently-active-nav");
-
-      scrollIntoView(el, {
-        behavior: "smooth",
-        block: "center",
-      });
-    }
-  }
-}
+let scrolled = false;
 
 Hooks.RightNav = {
   mounted() {
-    handleHashChange(false);
-    const docs = document.getElementById("docs-window");
-    if (docs) {
-      docs.addEventListener("scroll", () => onScrollChange());
-      if (this.interval) {
-        clearInterval(this.interval);
+    this.intersectionObserver =
+      new IntersectionObserver((entries) =>
+        this.onScrollChange(entries), { rootMargin: "-10% 0px -89% 0px" }
+      );
+
+    this.observeElements()
+    window.addEventListener("hashchange", (event) => { this.handleHashChange(); });
+  },
+  updated() {
+    this.intersectionObserver.disconnect();
+    this.observeElements();
+  },
+  observeElements() {
+    for (el of document.querySelectorAll("#docs-window .nav-anchor")) {
+      this.intersectionObserver.observe(el);
+    }
+  },
+  onScrollChange(entries) {
+    // Wait for scrolling from initial page load to complete
+    if (!scrolled) { return; }
+
+    for (entry of entries) {
+      if (entry.isIntersecting) {
+        this.setAriaCurrent(entry.target.id);
+        history.pushState(null, null, `#${entry.target.id}`);
       }
     }
   },
-  destroyed() {
-    if (this.interval) {
-      clearInterval(this.interval);
+  handleHashChange() {
+    if (window.location.hash) {
+      this.setAriaCurrent(window.location.hash.substring(1))
+
+      // Disable the insersection observer for 1s while the browser
+      // scrolls the selected element to the top.
+      scrolled = false;
+      setTimeout(() => { scrolled = true }, 1000);
     }
   },
-};
+  setAriaCurrent(id) {
+    const el = document.getElementById("right-nav-" + id);
+    if (el) {
+      for (elem of document.querySelectorAll('#right-nav a[aria-current]')) {
+        elem.removeAttribute('aria-current');
+      }
+      el.setAttribute("aria-current", "true");
+    }
+  }
+}
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
 let liveSocket = new LiveSocket("/live", Socket, {
-  params: { _csrf_token: csrfToken, user_agent:  window.navigator.userAgent },
+  params: { _csrf_token: csrfToken, user_agent: window.navigator.userAgent },
   hooks: Hooks,
   metadata: {
     keydown: (e) => {
@@ -249,8 +217,8 @@ window.addEventListener("phx:page-loading-start", () => {
   scrolled = false;
 
   // close mobile sidebar on navigation
-  mobileSideBar = document.getElementById("mobile-sidebar-hide") 
-  if(mobileSideBar) {
+  mobileSideBar = document.getElementById("mobile-sidebar-hide")
+  if (mobileSideBar) {
     mobileSideBar.click()
   }
 
@@ -259,21 +227,24 @@ window.addEventListener("phx:page-loading-start", () => {
   }
 });
 
-window.addEventListener("phx:page-loading-stop", ({detail}) => {
+window.addEventListener("phx:page-loading-stop", ({ detail }) => {
   clearTimeout(topBarScheduled);
   topBarScheduled = undefined;
 
-  if (detail.kind === "initial" && window.location.hash && !scrolled) {
-      let hashEl = document.getElementById(window.location.hash.substring(1));
-      if(hashEl) {
-        const boundary = hashEl.closest(".scroll-parent")
-        scrollIntoView(hashEl, {
-          boundary: boundary,
-          behavior: "smooth",
-          block: "start",
-        })
-      }
-      scrolled = true;
+  if (detail.kind === "initial" && window.location.hash){
+    let hashEl = document.getElementById(window.location.hash.substring(1));
+    if (hashEl) {
+      Hooks.RightNav.setAriaCurrent(hashEl.id)
+      scrollIntoView(hashEl, {
+        behavior: "smooth",
+        block: "start",
+      }).then(() => {
+        // Allow time for scrolling to complete before setting the scrolled flag
+        setTimeout(() => { scrolled = true; }, 1000);
+      })
+    }
+  } else {
+    scrolled = true;
   }
   topbar.hide();
 });
@@ -282,15 +253,13 @@ window.addEventListener("js:focus", (e) => e.target.focus());
 
 window.addEventListener("phx:js:scroll-to", (e) => {
   const target = document.getElementById(e.detail.id);
-  const boundary = target.closest(".scroll-parent")
+  const boundary = target.closest(".scroll-parent");
   scrollIntoView(target, {
     behavior: "smooth",
     block: "start",
     boundary: boundary,
   });
 });
-
-let scrolled = false;
 
 window.addEventListener("phx:selected-versions", (e) => {
   if (cookiesAreAllowed()) {
@@ -317,7 +286,7 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     const closeSearchVersions = document.getElementById("close-search-versions");
-    if(closeSearchVersions && closeSearchVersions.offsetParent !== null) {
+    if (closeSearchVersions && closeSearchVersions.offsetParent !== null) {
       closeSearchVersions.click()
     } else {
       document.getElementById("close-search").click();
@@ -356,8 +325,4 @@ window.addEventListener("load", function () {
       },
     },
   });
-});
-
-window.addEventListener("hashchange", (event) => {
-  handleHashChange(true);
 });
