@@ -101,21 +101,17 @@
   cursor: pointer;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
-  padding: 0px 4px 0px 4px;
-  margin-right: 12px;
+
+/* Prevent scrolling beneath Topbar due to URL fragment */
+:target {
+  scroll-margin-top: 5rem
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #888888;
-  border-radius: 12px;
+html {
+  scroll-behavior: smooth;
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-.custom-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: 8px; /* Firefox */
-  scrollbar-color: #888888 transparent;
+/* Constrain sidebar container size to screen height - Topbar height */
+.sidebar-container {
+  max-height: calc(100vh - 5rem);
 }
