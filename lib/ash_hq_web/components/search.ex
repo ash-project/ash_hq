@@ -8,7 +8,7 @@ defmodule AshHqWeb.Components.Search do
   alias AshHqWeb.DocRoutes
   alias Phoenix.LiveView.JS
   alias Surface.Components.Form
-  alias Surface.Components.Form.{Checkbox, Label}
+  alias Surface.Components.Form.Checkbox
 
   prop close, :event, required: true
   prop libraries, :list, required: true

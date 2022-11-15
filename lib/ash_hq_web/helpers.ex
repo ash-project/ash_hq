@@ -59,7 +59,7 @@ defmodule AshHqWeb.Helpers do
           dsl_path = path |> :lists.droplast() |> Enum.map_join("/", &sanitize_name/1)
           anchor = path |> List.last() |> sanitize_name()
 
-          ~s(<a href="/docs/dsl/#{library}/latest/#{dsl_path}##{anchor}">#{name}</a>)
+          ~s(<a href="/docs/dsl/#{library}/#{version(libraries, library, selected_versions)}/#{dsl_path}##{anchor}">#{name}</a>)
 
         :link, %{type: "dsl", item: item, name_override: name, library: library}, _ ->
           path =
@@ -72,24 +72,45 @@ defmodule AshHqWeb.Helpers do
 
           name = name || join_path(path)
 
-          ~s(<a href="/docs/dsl/#{library}/latest/#{dsl_path}">#{name}</a>)
+          ~s(<a href="/docs/dsl/#{library}/#{version(libraries, library, selected_versions)}/#{dsl_path}">#{name}</a>)
 
         :link, %{type: "extension", item: item, name_override: name, library: library}, _ ->
-          ~s(<a href="/docs/dsl/#{library}/latest/#{sanitize_name(item)}">#{name || item}</a>)
+          ~s(<a href="/docs/dsl/#{library}/#{version(libraries, library, selected_versions)}/#{sanitize_name(item)}">#{name || item}</a>)
 
         :link, %{type: "guide", item: item, name_override: name, library: library}, _ ->
-          ~s(<a href="/docs/dsl/#{library}/latest/#{sanitize_name(item)}">#{name || item}</a>)
+          ~s(<a href="/docs/guides/#{library}/#{version(libraries, library, selected_versions)}/#{sanitize_name(item)}">#{name || item}</a>)
 
         :link, %{type: "module", item: item, name_override: name, library: library}, _ ->
-          ~s(<a href="/docs/module/#{library}/latest/#{sanitize_name(item)}">#{name || item}</a>)
+          ~s(<a href="/docs/module/#{library}/#{version(libraries, library, selected_versions)}/#{sanitize_name(item)}">#{name || item}</a>)
 
         :link, %{type: "library", name_override: name, library: library}, _ ->
-          ~s(<a href="/docs/#{library}">#{name || library}</a>)
+          ~s(<a href="/docs/#{library}/#{version(libraries, library, selected_versions)}">#{name || library}</a>)
 
         _, %{text: text}, _ ->
           raise "No link handler for: `#{text}`"
       end
     )
+  end
+
+  defp version(libraries, library, selected_versions) do
+    libraries
+    |> Enum.find(&(&1.name == library))
+    |> case do
+      nil ->
+        "latest"
+
+      library ->
+        case selected_versions[library.id] do
+          empty when empty in [nil, ""] ->
+            "latest"
+
+          id ->
+            Enum.find(library.versions, &(&1.id == id)).version
+        end
+    end
+  rescue
+    _ ->
+      "latest"
   end
 
   defp join_path(path) do
