@@ -1,4 +1,5 @@
 defmodule AshHqWeb.Schema do
+  @moduledoc "The absinthe graphql schema"
   use Absinthe.Schema
 
   @apis [AshHq.Docs]
@@ -15,7 +16,7 @@ defmodule AshHqWeb.Schema do
     AshGraphql.add_context(ctx, @apis)
   end
 
-  def plugins() do
+  def plugins do
     [Absinthe.Middleware.Dataloader | Absinthe.Plugin.defaults()]
   end
 end

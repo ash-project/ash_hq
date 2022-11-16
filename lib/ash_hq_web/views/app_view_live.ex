@@ -3,30 +3,31 @@ defmodule AshHqWeb.AppViewLive do
   use Surface.LiveView,
     container: {:div, class: "h-full"}
 
-  alias AshHqWeb.Components.{CatalogueModal, Search}
   alias AshHqWeb.Components.AppView.TopBar
+  alias AshHqWeb.Components.{CatalogueModal, Search}
   alias AshHqWeb.Pages.{Blog, Docs, Home, LogIn, Register, ResetPassword, UserSettings}
   alias Phoenix.LiveView.JS
   alias Surface.Components.Context
   require Ash.Query
 
-  data(configured_theme, :string, default: :system)
-  data(searching, :boolean, default: false)
-  data(selected_versions, :map, default: %{})
-  data(libraries, :list, default: [])
-  data(selected_types, :map, default: %{})
-  data(current_user, :map)
+  import Tails
 
-  data(library, :any, default: nil)
-  data(extension, :any, default: nil)
-  data(docs, :any, default: nil)
-  data(library_version, :any, default: nil)
-  data(guide, :any, default: nil)
-  data(doc_path, :list, default: [])
-  data(dsls, :list, default: [])
-  data(dsl, :any, default: nil)
-  data(options, :list, default: [])
-  data(module, :any, default: nil)
+  data configured_theme, :string, default: :system
+  data selected_versions, :map, default: %{}
+  data libraries, :list, default: []
+  data selected_types, :map, default: %{}
+  data current_user, :map
+
+  data library, :any, default: nil
+  data extension, :any, default: nil
+  data docs, :any, default: nil
+  data library_version, :any, default: nil
+  data guide, :any, default: nil
+  data doc_path, :list, default: []
+  data dsls, :list, default: []
+  data dsl, :any, default: nil
+  data options, :list, default: []
+  data module, :any, default: nil
 
   def render(%{platform: :ios} = assigns) do
     ~F"""
@@ -41,7 +42,7 @@ defmodule AshHqWeb.AppViewLive do
     ~F"""
     <div
       id="app"
-      class={"h-full font-sans": true, "#{@configured_theme}": true}
+      class={classes([@configured_theme, "h-full font-sans": true])}
       phx-hook="ColorTheme"
     >
       <Search
@@ -226,7 +227,7 @@ defmodule AshHqWeb.AppViewLive do
      |> push_event("set_theme", %{theme: theme})}
   end
 
-  def mount(params, session, socket) do
+  def mount(_params, session, socket) do
     socket =
       assign_new(socket, :user_agent, fn _assigns ->
         get_connect_params(socket)["user_agent"]

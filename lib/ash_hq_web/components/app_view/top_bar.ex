@@ -1,4 +1,5 @@
 defmodule AshHqWeb.Components.AppView.TopBar do
+  @moduledoc "The global top navigation bar"
   use Surface.Component
 
   prop live_action, :atom, required: true
@@ -7,10 +8,9 @@ defmodule AshHqWeb.Components.AppView.TopBar do
   prop current_user, :any
 
   alias AshHqWeb.Components.SearchBar
-  alias Surface.Components.LiveRedirect
-  alias Phoenix.LiveView.JS
   alias AshHqWeb.Router.Helpers, as: Routes
-  alias Surface.Components.Form
+  alias Phoenix.LiveView.JS
+  alias Surface.Components.{Form, LivePatch}
 
   def render(assigns) do
     ~F"""
@@ -18,7 +18,8 @@ defmodule AshHqWeb.Components.AppView.TopBar do
       id="top-bar"
       class={
         "flex justify-between items-center py-4 px-4 h-20 sticky top-0 z-50",
-        "border-b border-base-light-300 dark:border-base-dark-700 bg-white dark:bg-base-dark-850": @live_action == :docs_dsl
+        "border-b border-base-light-300 dark:border-base-dark-700 bg-white dark:bg-base-dark-850":
+          @live_action == :docs_dsl
       }
     >
       <div class="flex flex-row align-baseline">
@@ -132,13 +133,13 @@ defmodule AshHqWeb.Components.AppView.TopBar do
             {#if @current_user}
               <div class="py-1" role="none">
                 <!-- Active: "bg-base-light-100 text-base-light-900", Not Active: "text-base-light-700" -->
-                <LiveRedirect
+                <LivePatch
                   to={Routes.app_view_path(AshHqWeb.Endpoint, :user_settings)}
                   class="dark:text-white group flex items-center px-4 py-2 text-sm"
                 >
                   <Heroicons.Solid.PencilAltIcon class="mr-3 h-5 w-5 text-base-light-400 group-hover:text-base-light-500" />
                   Settings
-                </LiveRedirect>
+                </LivePatch>
               </div>
               <div class="py-1" role="none">
                 <Form for={:sign_out} action={Routes.user_session_path(AshHqWeb.Endpoint, :delete)} method="post">
@@ -156,7 +157,7 @@ defmodule AshHqWeb.Components.AppView.TopBar do
               </div>
             {#else}
               <div class="py-1" role="none">
-                <LiveRedirect
+                <LivePatch
                   to={Routes.app_view_path(AshHqWeb.Endpoint, :log_in)}
                   class="dark:text-white group flex items-center px-4 py-2 text-sm"
                 >
@@ -164,7 +165,7 @@ defmodule AshHqWeb.Components.AppView.TopBar do
                     <Heroicons.Outline.UserAddIcon class="mr-3 h-5 w-5 text-base-light-400 group-hover:text-base-light-500" />
                     Sign In
                   </div>
-                </LiveRedirect>
+                </LivePatch>
               </div>
             {/if}
           </div>

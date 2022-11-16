@@ -14,7 +14,7 @@ defmodule AshHqWeb.Components.CatalogueModal do
     <div
       id={@id}
       style="display: none;"
-      class="absolute flex justify-center align-middle w-screen h-full backdrop-blur-sm bg-white bg-opacity-10 z-50"
+      class="fixed flex justify-center align-middle w-screen h-full backdrop-blur-sm bg-white bg-opacity-10 z-50"
     >
       <div
         :on-click-away={AshHqWeb.AppViewLive.toggle_catalogue()}

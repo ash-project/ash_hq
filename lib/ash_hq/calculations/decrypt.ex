@@ -1,4 +1,5 @@
 defmodule AshHq.Calculations.Decrypt do
+  @moduledoc "Decrypts a given value on demand"
   use Ash.Calculation
 
   def decrypt(field) do

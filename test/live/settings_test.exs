@@ -1,10 +1,8 @@
 defmodule AshHq.SettingsTest do
   use AshHqWeb.ConnCase
 
-  import Plug.Conn
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
-  import Swoosh.TestAssertions
 
   @endpoint AshHqWeb.Endpoint
 
@@ -58,7 +56,7 @@ defmodule AshHq.SettingsTest do
 
       assert_received {:email, email}
 
-      assert %{"url" => url} = Regex.named_captures(~r/(?<url>http[^\s]*)/, email.text_body)
+      assert %{"url" => url} = Regex.named_captures(~r/(?<url>http[^\s\"]*)/, email.html_body)
 
       path = URI.parse(url).path
 

@@ -6,9 +6,9 @@ defmodule AshHqWeb.Components.DocSidebarDslItems do
   alias Phoenix.LiveView.JS
 
   alias __MODULE__
-  alias AshHqWeb.DocRoutes
-  alias AshHqWeb.Components.TreeView
   alias AshHqWeb.Components.DocSidebar
+  alias AshHqWeb.Components.TreeView
+  alias AshHqWeb.DocRoutes
 
   @doc "List of DSLs for an extension"
   prop dsls, :list, required: true

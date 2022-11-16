@@ -11,7 +11,9 @@ defmodule AshHq.AccountsFixtures do
     params =
       Enum.into(attrs, %{
         email: unique_user_email(),
-        password: valid_user_password()
+        password: valid_user_password(),
+        confirmation_url_fun:
+          &AshHqWeb.Router.Helpers.user_confirmation_url(AshHqWeb.Endpoint, :confirm, &1)
       })
 
     user =

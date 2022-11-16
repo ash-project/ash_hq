@@ -16,7 +16,8 @@ defmodule AshHqWeb.UserSettingsControllerTest do
           :deliver_update_email_instructions,
           %{
             email: email,
-            current_password: valid_user_password()
+            current_password: valid_user_password(),
+            update_url_fun: &Routes.user_settings_url(AshHqWeb.Endpoint, :confirm_email, &1)
           },
           authorize?: false
         )

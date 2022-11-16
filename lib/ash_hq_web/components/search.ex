@@ -7,7 +7,7 @@ defmodule AshHqWeb.Components.Search do
   alias AshHqWeb.Components.{CalloutText, Catalogue}
   alias AshHqWeb.DocRoutes
   alias Phoenix.LiveView.JS
-  alias Surface.Components.Form
+  alias Surface.Components.{Form, LivePatch}
   alias Surface.Components.Form.Checkbox
 
   prop close, :event, required: true
@@ -28,7 +28,7 @@ defmodule AshHqWeb.Components.Search do
     <div
       id={@id}
       style="display: none;"
-      class="absolute flex justify-center align-middle w-screen h-full backdrop-blur-sm bg-white bg-opacity-10 z-50"
+      class="fixed flex justify-center align-middle w-screen h-full backdrop-blur-sm bg-white bg-opacity-10 z-50"
     >
       <div
         :on-click-away={AshHqWeb.AppViewLive.toggle_search()}
@@ -116,12 +116,10 @@ defmodule AshHqWeb.Components.Search do
   defp render_items(assigns, items) do
     ~F"""
     {#for item <- items}
-      <button
+      <LivePatch
         class="block w-full text-left"
-        :on-click="go-to-doc"
-        phx-value-link={DocRoutes.doc_link(item, @selected_versions)}
-        phx-target={@myself}
-        id={item.id}
+        to={DocRoutes.doc_link(item, @selected_versions)}
+        opts={id: "result-#{item.id}"}
       >
         <div class={
           "rounded-lg mb-4 py-2 px-2 hover:bg-base-dark-300 dark:hover:bg-base-dark-700",
@@ -155,7 +153,7 @@ defmodule AshHqWeb.Components.Search do
             {raw(item.search_headline)}
           </div>
         </div>
-      </button>
+      </LivePatch>
     {/for}
     """
   end
@@ -298,7 +296,7 @@ defmodule AshHqWeb.Components.Search do
   end
 
   def handle_event("go-to-doc", %{"link" => doc_link}, socket) do
-    {:noreply, push_redirect(socket, to: doc_link)}
+    {:noreply, push_patch(socket, to: doc_link)}
   end
 
   def handle_event("go-to-doc", _, socket) do
@@ -309,7 +307,7 @@ defmodule AshHqWeb.Components.Search do
         {:noreply, socket}
 
       item ->
-        {:noreply, push_redirect(socket, to: DocRoutes.doc_link(item))}
+        {:noreply, push_patch(socket, to: DocRoutes.doc_link(item))}
     end
   end
 
@@ -362,6 +360,6 @@ defmodule AshHqWeb.Components.Search do
   defp set_selected_item(socket, selected_item) do
     socket
     |> assign(:selected_item, selected_item)
-    |> push_event("js:scroll-to", %{id: selected_item.id})
+    |> push_event("js:scroll-to", %{id: "result-#{selected_item.id}"})
   end
 end

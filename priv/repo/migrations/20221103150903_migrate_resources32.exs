@@ -9,13 +9,13 @@ defmodule AshHq.Repo.Migrations.MigrateResources32 do
 
   def up do
     alter table(:guides) do
-      add :default, :boolean, null: false, default: false
+      add(:default, :boolean, null: false, default: false)
     end
   end
 
   def down do
     alter table(:guides) do
-      remove :default
+      remove(:default)
     end
   end
 end

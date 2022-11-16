@@ -8,29 +8,30 @@ defmodule AshHqWeb.Pages.Docs do
   alias AshHqWeb.Components.Docs.{DocPath, Functions, SourceLink}
   alias AshHqWeb.DocRoutes
   alias Phoenix.LiveView.JS
+  alias Surface.Components.LivePatch
   require Logger
 
-  prop(change_versions, :event, required: true)
-  prop(selected_versions, :map, required: true)
-  prop(libraries, :list, default: [])
-  prop(uri, :string)
-  prop(remove_version, :event)
-  prop(add_version, :event)
-  prop(change_version, :event)
-  prop(params, :map, required: true)
+  prop change_versions, :event, required: true
+  prop selected_versions, :map, required: true
+  prop libraries, :list, default: []
+  prop uri, :string
+  prop remove_version, :event
+  prop add_version, :event
+  prop change_version, :event
+  prop params, :map, required: true
 
-  data(library, :any)
-  data(extension, :any)
-  data(docs, :any)
-  data(library_version, :any)
-  data(guide, :any)
-  data(doc_path, :list, default: [])
-  data(dsls, :list, default: [])
-  data(dsl, :any)
-  data(options, :list, default: [])
-  data(module, :any)
-  data(mix_task, :any)
-  data(positional_options, :list)
+  data library, :any
+  data extension, :any
+  data docs, :any
+  data library_version, :any
+  data guide, :any
+  data doc_path, :list, default: []
+  data dsls, :list, default: []
+  data dsl, :any
+  data options, :list, default: []
+  data module, :any
+  data mix_task, :any
+  data positional_options, :list
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -121,7 +122,7 @@ defmodule AshHqWeb.Pages.Docs do
               <ul>
                 {#for section <- Enum.filter(@extension.dsls, &(&1.type == :section))}
                   <li>
-                    <a href={DocRoutes.doc_link(section, @selected_versions)}>{section.name}</a>
+                    <LivePatch to={DocRoutes.doc_link(section, @selected_versions)}>{section.name}</LivePatch>
                   </li>
                 {/for}
               </ul>
@@ -184,7 +185,7 @@ defmodule AshHqWeb.Pages.Docs do
               {#for mod <- imports}
                 <ul>
                   <li>
-                    <a href={DocRoutes.doc_link(mod, @selected_versions)}>{mod.name}</a>
+                    <LivePatch to={DocRoutes.doc_link(mod, @selected_versions)}>{mod.name}</LivePatch>
                   </li>
                 </ul>
               {/for}
@@ -198,7 +199,7 @@ defmodule AshHqWeb.Pages.Docs do
               <ul>
                 {#for child <- children}
                   <li>
-                    <a href={DocRoutes.doc_link(child, @selected_versions)}>{child.name}</a>
+                    <LivePatch to={DocRoutes.doc_link(child, @selected_versions)}>{child.name}</LivePatch>
                   </li>
                 {/for}
               </ul>
@@ -222,9 +223,9 @@ defmodule AshHqWeb.Pages.Docs do
                     <tr id={"#{option.sanitized_path}/#{option.name}"}>
                       <td>
                         <div class="flex flex-row items-baseline">
-                          <a href={"##{DocRoutes.sanitize_name(option.name)}"}>
+                          <LivePatch to={"##{DocRoutes.sanitize_name(option.name)}"}>
                             <Heroicons.Outline.LinkIcon class="h-3 m-3" />
-                          </a>
+                          </LivePatch>
                           <div class="flex flex-row space-x-2">
                             <CalloutText text={option.name} />
                             {render_tags(assigns, option)}
@@ -266,9 +267,9 @@ defmodule AshHqWeb.Pages.Docs do
                   <tr id={"#{option.sanitized_path}/#{option.name}"}>
                     <td id={DocRoutes.sanitize_name(option.name)}>
                       <div class="flex flex-row items-baseline">
-                        <a href={"##{DocRoutes.sanitize_name(option.name)}"}>
+                        <LivePatch to={"##{DocRoutes.sanitize_name(option.name)}"}>
                           <Heroicons.Outline.LinkIcon class="h-3 m-3" />
-                        </a>
+                        </LivePatch>
                         <CalloutText text={option.name} />
                         {render_tags(assigns, option)}
                       </div>
@@ -296,10 +297,10 @@ defmodule AshHqWeb.Pages.Docs do
 
           <footer class="p-2 sm:justify-center">
             <div class="md:flex md:justify-around items-center">
-              <a href="/">
+              <LivePatch to="/">
                 <img class="h-6 md:h-10 hidden dark:block" src="/images/ash-framework-dark.png">
                 <img class="h-6 md:h-10 dark:hidden" src="/images/ash-framework-light.png">
-              </a>
+              </LivePatch>
               <a href="https://github.com/ash-project" class="hover:underline">Source</a>
               <a href="https://github.com/ash-project/ash_hq/issues/new/choose" class="hover:underline">Report an issue</a>
             </div>

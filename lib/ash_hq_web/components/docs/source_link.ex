@@ -1,4 +1,5 @@
 defmodule AshHqWeb.Components.Docs.SourceLink do
+  @moduledoc "A link to the source code of a given module or function"
   use Surface.Component
   import AshHqWeb.Helpers
 

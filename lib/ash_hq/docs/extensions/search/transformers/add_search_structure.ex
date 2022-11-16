@@ -52,6 +52,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
      |> add_match_rank_calculation(config)}
   end
 
+  # sobelow_skip ["DOS.BinToAtom"]
   defp add_additional_html_calculations(dsl_state, config) do
     dsl_state
     |> Transformer.get_option([:render_markdown], :render_attributes)

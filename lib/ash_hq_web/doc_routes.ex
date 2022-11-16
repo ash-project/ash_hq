@@ -46,7 +46,7 @@ defmodule AshHqWeb.DocRoutes do
         },
         selected_versions
       ) do
-    "/docs/module/#{sanitize_name(library_name)}/#{version(version_name, library_id, selected_versions)}/#{sanitize_name(module_name)}/##{type}-#{sanitized_name}-#{arity}"
+    "/docs/module/#{sanitize_name(library_name)}/#{version(version_name, library_id, selected_versions)}/#{sanitize_name(module_name)}##{type}-#{sanitized_name}-#{arity}"
   end
 
   def doc_link(

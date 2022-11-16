@@ -1,4 +1,5 @@
 defmodule AshHq.Blog.Tag do
+  @moduledoc "A tag that can be applied to a post. Currently uses CSV data layer and therefore is static"
   use Ash.Resource,
     data_layer: AshCsv.DataLayer
 

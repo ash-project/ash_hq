@@ -7,8 +7,8 @@ defmodule AshHqWeb.Components.TreeView do
   """
 
   use Surface.Component
-  alias Phoenix.LiveView.JS
   alias AshHqWeb.Components.TreeView.Item
+  alias Phoenix.LiveView.JS
 
   @doc "DOM id for the outer div"
   prop id, :string, required: true
@@ -73,18 +73,18 @@ defmodule AshHqWeb.Components.TreeView do
       ~F"""
       <style>
         .collapsed+ul {
-          @apply hidden;
+        @apply hidden;
         }
         .collapsed .chevron {
-          @apply -rotate-90;
+        @apply -rotate-90;
         }
         @media (prefers-reduced-motion: no-preference) {
-          .chevron {
-            @apply transition-transform duration-200;
-          }
+        .chevron {
+        @apply transition-transform duration-200;
+        }
         }
         .indent-guide {
-          @apply border-l pl-1 border-primary-light-600 border-opacity-30;
+        @apply border-l pl-1 border-primary-light-600 border-opacity-30;
         }
       </style>
       <li class={@class, "pt-2": @collapsable, "indent-guide": @indent_guide}>

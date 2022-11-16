@@ -18,7 +18,7 @@ defmodule AshHq.Docs.Importer do
     {:ok, %{}}
   end
 
-  defp import_periodically() do
+  defp import_periodically do
     __MODULE__.import()
     Process.send_after(self(), :import, :timer.minutes(30))
   end

@@ -1,4 +1,5 @@
 defmodule AshHqWeb.Components.Docs.DocPath do
+  @moduledoc "Renders breadcrumbs to the path of the doc currently being viewed"
   use Surface.Component
 
   alias AshHqWeb.Components.CalloutText

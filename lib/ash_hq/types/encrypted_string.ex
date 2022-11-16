@@ -1,4 +1,5 @@
 defmodule AshHq.Types.EncryptedString do
+  @moduledoc "Represents a string that is encrypted when cast as input"
   use Ash.Type
 
   @impl true

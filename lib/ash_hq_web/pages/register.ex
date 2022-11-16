@@ -2,7 +2,7 @@ defmodule AshHqWeb.Pages.Register do
   @moduledoc "Log in page"
   use Surface.LiveComponent
 
-  alias Surface.Components.{Form, LiveRedirect}
+  alias Surface.Components.{Form, LivePatch}
 
   alias Surface.Components.Form.{
     Checkbox,
@@ -87,7 +87,7 @@ defmodule AshHqWeb.Pages.Register do
             </div>
           </div>
         </Form>
-        <LiveRedirect to={Routes.app_view_path(AshHqWeb.Endpoint, :log_in)}>Already Have an account?</LiveRedirect>
+        <LivePatch to={Routes.app_view_path(AshHqWeb.Endpoint, :log_in)}>Already Have an account?</LivePatch>
       </div>
     </div>
     """

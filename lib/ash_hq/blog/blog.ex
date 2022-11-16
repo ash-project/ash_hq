@@ -1,4 +1,5 @@
 defmodule AshHq.Blog do
+  @moduledoc "An api for interacting with the blog"
   use Ash.Api,
     extensions: [AshAdmin.Api]
 

@@ -2,9 +2,9 @@ defmodule AshHqWeb.Components.DocSidebar do
   @moduledoc "The left sidebar of the docs pages"
   use Surface.Component
 
-  alias AshHqWeb.DocRoutes
-  alias AshHqWeb.Components.TreeView
   alias AshHqWeb.Components.DocSidebarDslItems
+  alias AshHqWeb.Components.TreeView
+  alias AshHqWeb.DocRoutes
   alias Phoenix.LiveView.JS
 
   prop class, :css_class, default: ""
@@ -18,9 +18,7 @@ defmodule AshHqWeb.Components.DocSidebar do
   prop dsl, :any, required: true
   prop module, :any, required: true
   prop mix_task, :any, required: true
-  prop add_version, :event, required: true
   prop remove_version, :event, required: true
-  prop change_version, :event, required: true
 
   data guides_by_category_and_library, :any
   data extensions, :any

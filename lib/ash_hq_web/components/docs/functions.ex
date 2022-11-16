@@ -1,4 +1,5 @@
 defmodule AshHqWeb.Components.Docs.Functions do
+  @moduledoc "Lists all of the provided functions"
   use Surface.Component
 
   import AshHqWeb.Helpers

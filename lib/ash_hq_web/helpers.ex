@@ -3,8 +3,6 @@ defmodule AshHqWeb.Helpers do
 
   require Logger
 
-  alias AshHqWeb.DocRoutes
-
   def latest_version(library) do
     case library.versions do
       [] ->
@@ -141,7 +139,7 @@ defmodule AshHqWeb.Helpers do
 
     case Version.parse(version.version) do
       {:ok, %Version{pre: pre, build: build}}
-      when not pre == [] or not is_nil(build) ->
+      when pre != [] or not is_nil(build) ->
         ~s({:#{library.name}, "~> #{version.version}"})
 
       {:ok, %Version{major: major, minor: minor}} ->

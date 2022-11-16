@@ -1,4 +1,5 @@
 defmodule AshHqWeb.Components.Catalogue do
+  @moduledoc "Renders the catalogue of available packages"
   use Surface.Component
 
   alias AshHqWeb.Components.CalloutText

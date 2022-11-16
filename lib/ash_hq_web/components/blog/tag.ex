@@ -1,4 +1,5 @@
 defmodule AshHqWeb.Components.Blog.Tag do
+  @moduledoc "Renders a pill-style tag"
   use Surface.Component
 
   alias Surface.Components.LivePatch

@@ -1,4 +1,5 @@
 defmodule AshHq.Blog.Post do
+  @moduledoc "A blog post. Uses the AshBlog data layer and therefore is static"
   use Ash.Resource,
     otp_app: :ash_hq,
     data_layer: AshBlog.DataLayer,
@@ -24,10 +25,10 @@ defmodule AshHq.Blog.Post do
 
       filter expr(
                state == :published and
-                 if not is_nil(^arg(:tag)) do
-                   ^arg(:tag) in tag_names
-                 else
+                 if is_nil(^arg(:tag)) do
                    true
+                 else
+                   ^arg(:tag) in tag_names
                  end
              )
     end

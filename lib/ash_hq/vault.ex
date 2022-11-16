@@ -1,4 +1,5 @@
 defmodule AshHq.Vault do
+  @moduledoc "The encryptor/decryptor, backed by the `cloak` dependency"
   use Cloak.Vault, otp_app: :ash_hq
 
   @impl GenServer

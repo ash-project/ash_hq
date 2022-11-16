@@ -2,7 +2,7 @@ defmodule AshHqWeb.Pages.ResetPassword do
   @moduledoc "Log in page"
   use Surface.LiveComponent
 
-  alias Surface.Components.{Form, LiveRedirect}
+  alias Surface.Components.{Form, LivePatch}
 
   alias Surface.Components.Form.{
     ErrorTag,
@@ -107,7 +107,7 @@ defmodule AshHqWeb.Pages.ResetPassword do
               </div>
             </div>
           </Form>
-          <LiveRedirect to={Routes.app_view_path(AshHqWeb.Endpoint, :log_in)}>Remember your password?</LiveRedirect>
+          <LivePatch to={Routes.app_view_path(AshHqWeb.Endpoint, :log_in)}>Remember your password?</LivePatch>
         {/if}
       </div>
     </div>

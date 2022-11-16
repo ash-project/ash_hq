@@ -9,95 +9,95 @@ defmodule AshHq.Repo.Migrations.MigrateResources30 do
 
   def up do
     alter table(:options) do
-      add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
-      add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
+      add(:inserted_at, :utc_datetime_usec, null: false, default: fragment("now()"))
+      add(:updated_at, :utc_datetime_usec, null: false, default: fragment("now()"))
     end
 
     alter table(:modules) do
-      add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
-      add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
+      add(:inserted_at, :utc_datetime_usec, null: false, default: fragment("now()"))
+      add(:updated_at, :utc_datetime_usec, null: false, default: fragment("now()"))
     end
 
     alter table(:mix_tasks) do
-      add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
-      add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
+      add(:inserted_at, :utc_datetime_usec, null: false, default: fragment("now()"))
+      add(:updated_at, :utc_datetime_usec, null: false, default: fragment("now()"))
     end
 
     alter table(:library_versions) do
-      add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
-      add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
+      add(:inserted_at, :utc_datetime_usec, null: false, default: fragment("now()"))
+      add(:updated_at, :utc_datetime_usec, null: false, default: fragment("now()"))
     end
 
     alter table(:libraries) do
-      add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
-      add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
+      add(:inserted_at, :utc_datetime_usec, null: false, default: fragment("now()"))
+      add(:updated_at, :utc_datetime_usec, null: false, default: fragment("now()"))
     end
 
     alter table(:guides) do
-      add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
-      add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
+      add(:inserted_at, :utc_datetime_usec, null: false, default: fragment("now()"))
+      add(:updated_at, :utc_datetime_usec, null: false, default: fragment("now()"))
     end
 
     alter table(:functions) do
-      add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
-      add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
+      add(:inserted_at, :utc_datetime_usec, null: false, default: fragment("now()"))
+      add(:updated_at, :utc_datetime_usec, null: false, default: fragment("now()"))
     end
 
     alter table(:extensions) do
-      add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
-      add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
+      add(:inserted_at, :utc_datetime_usec, null: false, default: fragment("now()"))
+      add(:updated_at, :utc_datetime_usec, null: false, default: fragment("now()"))
     end
 
     alter table(:dsls) do
-      add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
-      add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
+      add(:inserted_at, :utc_datetime_usec, null: false, default: fragment("now()"))
+      add(:updated_at, :utc_datetime_usec, null: false, default: fragment("now()"))
     end
   end
 
   def down do
     alter table(:dsls) do
-      remove :updated_at
-      remove :inserted_at
+      remove(:updated_at)
+      remove(:inserted_at)
     end
 
     alter table(:extensions) do
-      remove :updated_at
-      remove :inserted_at
+      remove(:updated_at)
+      remove(:inserted_at)
     end
 
     alter table(:functions) do
-      remove :updated_at
-      remove :inserted_at
+      remove(:updated_at)
+      remove(:inserted_at)
     end
 
     alter table(:guides) do
-      remove :updated_at
-      remove :inserted_at
+      remove(:updated_at)
+      remove(:inserted_at)
     end
 
     alter table(:libraries) do
-      remove :updated_at
-      remove :inserted_at
+      remove(:updated_at)
+      remove(:inserted_at)
     end
 
     alter table(:library_versions) do
-      remove :updated_at
-      remove :inserted_at
+      remove(:updated_at)
+      remove(:inserted_at)
     end
 
     alter table(:mix_tasks) do
-      remove :updated_at
-      remove :inserted_at
+      remove(:updated_at)
+      remove(:inserted_at)
     end
 
     alter table(:modules) do
-      remove :updated_at
-      remove :inserted_at
+      remove(:updated_at)
+      remove(:inserted_at)
     end
 
     alter table(:options) do
-      remove :updated_at
-      remove :inserted_at
+      remove(:updated_at)
+      remove(:inserted_at)
     end
   end
 end
