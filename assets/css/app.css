@@ -116,6 +116,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Ensure dark-mode is applied to native elements, eg scrollbars */
+.dark {
+  color-scheme: dark;
+}
+
 /* Constrain sidebar container size to screen height - Topbar height - mobile button height*/
 .sidebar-container {
   max-height: calc(100vh - 8.5rem);
