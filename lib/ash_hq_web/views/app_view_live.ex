@@ -64,9 +64,8 @@ defmodule AshHqWeb.AppViewLive do
       <div
         id="main-container"
         class={
-          "h-screen w-screen min-g-screen bg-white dark:bg-base-dark-850 dark:text-white flex flex-col items-stretch",
-          "overflow-y-auto overflow-x-hidden": @live_action in [:home, :blog],
-          "overflow-hidden": @live_action == :docs_dsl
+          "w-full min-g-screen bg-white dark:bg-base-dark-850 dark:text-white flex flex-col items-stretch",
+          "h-screen overflow-y-auto": @live_action != :docs_dsl
         }
       >
         <TopBar
@@ -350,6 +349,7 @@ defmodule AshHqWeb.AppViewLive do
         "opacity-0"
       }
     )
+    |> JS.dispatch("phx:js:scroll-to", detail: %{id: "catalogue-box"})
   end
 
   def close_search(js \\ %JS{}) do

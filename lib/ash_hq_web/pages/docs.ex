@@ -35,8 +35,8 @@ defmodule AshHqWeb.Pages.Docs do
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~F"""
-    <div class="flex flex-col xl:flex-row justify-center overflow-hidden h-screen">
-      <div class="xl:hidden flex flex-row justify-start w-full space-x-12 items-center border-b border-t border-base-light-600 py-3">
+    <div class="flex flex-col xl:flex-row justify-center">
+      <div class="xl:hidden sticky top-20 z-40 h-14 bg-white dark:bg-base-dark-850 flex flex-row justify-start w-full space-x-12 items-center border-b border-t border-base-light-600 py-3">
         <button class="dark:hover:text-base-dark-600" phx-click={show_sidebar()}>
           <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
         </button>
@@ -45,10 +45,14 @@ defmodule AshHqWeb.Pages.Docs do
           <DocPath doc_path={@doc_path} />
         {/if}
       </div>
-      <span class="grid overflow-hidden xl:hidden z-30">
-        <div id="mobile-sidebar-container" class="overflow-hidden hidden fixed w-min transition">
+      <span class="grid xl:hidden z-40">
+        <div
+          id="mobile-sidebar-container"
+          class="hidden fixed transition sidebar-container overflow-y-auto z-40"
+        >
           <DocSidebar
             id="mobile-sidebar"
+            class="max-w-sm"
             remove_version={@remove_version}
             libraries={@libraries}
             extension={@extension}
@@ -62,11 +66,11 @@ defmodule AshHqWeb.Pages.Docs do
           />
         </div>
       </span>
-      <div class="grow w-screen overflow-hidden flex flex-row max-w-[1800px] h-full justify-between md:space-x-12 bg-white dark:bg-base-dark-850">
-        <div class="xl:border-r lg:pr-2 lg:pt-4">
+      <div class="grow w-full flex flex-row max-w-[1800px] justify-between md:space-x-12">
+        <div class="sidebar-container sticky overflow-y-auto overflow-x-hidden shrink-0 top-20 xl:border-r xl:border-b lg:pr-2 lg:pt-4">
           <DocSidebar
             id="sidebar"
-            class="hidden xl:block w-80 overflow-x-hidden custom-scrollbar"
+            class="hidden xl:block w-80"
             remove_version={@remove_version}
             module={@module}
             mix_task={@mix_task}
@@ -81,7 +85,7 @@ defmodule AshHqWeb.Pages.Docs do
         </div>
         <div
           id="docs-window"
-          class="scroll-parent w-full prose prose-xl max-w-4xl dark:bg-base-dark-850 dark:prose-invert overflow-y-auto overflow-x-visible md:pr-8 md:mt-4 px-4 md:px-auto custom-scrollbar"
+          class="w-full shrink prose prose-xl max-w-4xl bg-white dark:bg-base-dark-850 dark:prose-invert md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden"
           phx-hook="Docs"
         >
           <div
@@ -302,10 +306,11 @@ defmodule AshHqWeb.Pages.Docs do
           </footer>
         </div>
         {#if @module}
-          <div class="lg:w-72 overflow-y-auto overflow-x-hidden dark:bg-base-dark-850 bg-opacity-70 mt-4 custom-scrollbar">
+          <div class="sidebar-container hidden lg:block lg:w-80 sticky top-36 xl:top-20 shrink-0 overflow-y-auto overflow-x-hidden dark:bg-base-dark-850 bg-opacity-70 mt-4">
             <RightNav functions={@module.functions} module={@module.name} />
           </div>
         {#else}
+          <!-- empty div to preserve flex row spacing -->
           <div />
         {/if}
       </div>

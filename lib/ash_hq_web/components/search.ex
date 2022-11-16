@@ -91,7 +91,7 @@ defmodule AshHqWeb.Components.Search do
             </div>
           </div>
           <div class="grid h-[80%] mt-3">
-            <div class="pl-4 overflow-auto">
+            <div class="pl-4 overflow-auto scroll-parent">
               {render_items(assigns, @item_list)}
             </div>
           </div>
