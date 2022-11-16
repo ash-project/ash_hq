@@ -23,11 +23,7 @@ defmodule AshHqWeb.Components.TreeView do
     ~F"""
     <div id={@id} class={"py-3 px-3", @class}>
       <ul class="space-y-4">
-        <#slot
-          :for={item <- @default}
-          context_put={Item, path: @id}
-          {item}
-        />
+        <#slot :for={item <- @default} context_put={Item, path: @id} {item} />
       </ul>
     </div>
     """

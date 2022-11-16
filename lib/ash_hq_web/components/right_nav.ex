@@ -9,17 +9,13 @@ defmodule AshHqWeb.Components.RightNav do
     ~F"""
     <style>
       a[aria-current] {
-        @apply text-primary-light-600;
+      @apply text-primary-light-600;
       }
       :global(:dark):a[aria-current] {
-        @apply text-primary-dark-400;
+      @apply text-primary-dark-400;
       }
     </style>
-    <div
-      id="right-nav"
-      class="scroll-parent w-min hidden lg:flex flex-col pb-12"
-      phx-hook="RightNav"
-    >
+    <div id="right-nav" class="scroll-parent w-min hidden lg:flex flex-col pb-12" phx-hook="RightNav">
       <a id="right-nav-module-docs" class="hover:text-primary-light-300 right-nav" href="#module-docs">
         {@module}
       </a>

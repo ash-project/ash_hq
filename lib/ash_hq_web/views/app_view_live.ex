@@ -65,7 +65,7 @@ defmodule AshHqWeb.AppViewLive do
         id="main-container"
         class={
           "w-full min-g-screen bg-white dark:bg-base-dark-850 dark:text-white flex flex-col items-stretch",
-          "h-screen overflow-y-auto": (@live_action != :docs_dsl)
+          "h-screen overflow-y-auto": @live_action != :docs_dsl
         }
       >
         <TopBar

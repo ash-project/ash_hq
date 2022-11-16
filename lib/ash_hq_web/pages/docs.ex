@@ -46,7 +46,10 @@ defmodule AshHqWeb.Pages.Docs do
         {/if}
       </div>
       <span class="grid xl:hidden z-40">
-        <div id="mobile-sidebar-container" class="hidden fixed transition sidebar-container overflow-y-auto z-40">
+        <div
+          id="mobile-sidebar-container"
+          class="hidden fixed transition sidebar-container overflow-y-auto z-40"
+        >
           <DocSidebar
             id="mobile-sidebar"
             class="max-w-sm"
@@ -304,11 +307,11 @@ defmodule AshHqWeb.Pages.Docs do
         </div>
         {#if @module}
           <div class="sidebar-container hidden lg:block lg:w-80 sticky top-36 xl:top-20 shrink-0 overflow-y-auto overflow-x-hidden dark:bg-base-dark-850 bg-opacity-70 mt-4">
-            <RightNav  functions={@module.functions} module={@module.name} />
+            <RightNav functions={@module.functions} module={@module.name} />
           </div>
         {#else}
           <!-- empty div to preserve flex row spacing -->
-          <div/>
+          <div />
         {/if}
       </div>
     </div>
