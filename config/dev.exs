@@ -10,6 +10,18 @@ config :ash_hq, AshHq.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
+config :git_ops,
+  mix_project: AshHq.MixProject,
+  changelog_file: "CHANGELOG.md",
+  repository_url: "https://github.com/ash-project/ash_hq",
+  # Instructs the tool to manage your mix version in your `mix.exs` file
+  # See below for more information
+  manage_mix_version?: true,
+  # Instructs the tool to manage the version in your README.md
+  # Pass in `true` to use `"README.md"` or a string to customize
+  manage_readme_version: "README.md",
+  version_tag_prefix: "v"
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #

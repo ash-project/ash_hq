@@ -1,10 +1,12 @@
 defmodule AshHq.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [
       app: :ash_hq,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers() ++ [:surface],
@@ -90,7 +92,7 @@ defmodule AshHq.MixProject do
        ref: "85d4a87d216678dae30f348270eb90f9ed49ce20",
        only: [:dev, :test]},
       # Build/Check dependencies
-      {:git_ops, "~> 2.4.4", only: :dev},
+      {:git_ops, "~> 2.5", only: :dev},
       {:ex_doc, "~> 0.23", only: :dev, runtime: false},
       {:ex_check, "~> 0.14", only: :dev},
       {:credo, ">= 0.0.0", only: :dev, runtime: false},
