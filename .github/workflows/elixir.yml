@@ -17,7 +17,6 @@ jobs:
       matrix:
         otp: ["25"]
         elixir: ["1.14.0"]
-        ash: ["2.4.2"]
         pg_version: ["13"]
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -53,7 +52,7 @@ jobs:
       - run: mix deps.get
       - run: MIX_ENV=test mix ash_postgres.create
       - run: MIX_ENV=test mix ash_postgres.migrate
-      - run: MIX_ENV=test mix ash.migrate_tenants
+      - run: MIX_ENV=test mix ash_postgres.migrate_tenants
       - run: mix check --except dialyzer
         if: startsWith(github.ref, 'refs/tags/v')
       - run: mix check
