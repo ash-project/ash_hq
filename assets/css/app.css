@@ -103,13 +103,12 @@
 
 
 /* Prevent scrolling beneath Topbar due to URL fragment */
-:target {
-  scroll-margin-top: 8.5rem;
+html {
+  scroll-padding-top: 8.5rem;
 }
-
 @media (min-width: 1280px) {
-  :target {
-    scroll-margin-top: 5rem;
+  html {
+    scroll-padding-top: 5rem;
   }
 }
 
@@ -117,10 +116,9 @@ html {
   scroll-behavior: smooth;
 }
 
-
 /* Constrain sidebar container size to screen height - Topbar height - mobile button height*/
 .sidebar-container {
-  max-height: calc(100vh - 5rem - 3.5rem);
+  max-height: calc(100vh - 8.5rem);
 }
 
 @media (min-width: 1280px) {
