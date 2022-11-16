@@ -36,7 +36,7 @@ defmodule AshHqWeb.Pages.Docs do
   def render(assigns) do
     ~F"""
     <div class="flex flex-col xl:flex-row justify-center">
-      <div class="xl:hidden sticky top-20 z-40 h-14 bg-white dark:bg-base-dark-850 flex flex-row justify-start w-full space-x-12 items-center border-b border-t border-base-light-600 py-3">
+      <div class="xl:hidden sticky top-20 z-40 h-14 bg-white dark:bg-base-dark-850 flex flex-row justify-start w-full space-x-12 items-center border-b border-t border-base-light-300 dark:border-base-dark-700 py-3">
         <button class="dark:hover:text-base-dark-600" phx-click={show_sidebar()}>
           <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
         </button>
@@ -67,7 +67,7 @@ defmodule AshHqWeb.Pages.Docs do
         </div>
       </span>
       <div class="grow w-full flex flex-row max-w-[1800px] justify-between md:space-x-12">
-        <div class="sidebar-container sticky overflow-y-auto overflow-x-hidden shrink-0 top-20 xl:border-r xl:border-b lg:pr-2 lg:pt-4">
+        <div class="sidebar-container sticky overflow-y-auto overflow-x-hidden shrink-0 top-20 xl:border-r xl:border-b xl:border-base-light-300 xl:dark:border-base-dark-700 lg:pr-2 lg:pt-4">
           <DocSidebar
             id="sidebar"
             class="hidden xl:block w-80"
