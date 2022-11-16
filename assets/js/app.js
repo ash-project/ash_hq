@@ -230,19 +230,17 @@ window.addEventListener("phx:page-loading-start", () => {
 window.addEventListener("phx:page-loading-stop", ({ detail }) => {
   clearTimeout(topBarScheduled);
   topBarScheduled = undefined;
-
-  if (detail.kind === "initial" && window.location.hash){
-    let hashEl = document.getElementById(window.location.hash.substring(1));
-    if (hashEl) {
-      Hooks.RightNav.setAriaCurrent(hashEl.id)
-      scrollIntoView(hashEl, {
-        behavior: "smooth",
-        block: "start",
-      }).then(() => {
-        // Allow time for scrolling to complete before setting the scrolled flag
-        setTimeout(() => { scrolled = true; }, 1000);
-      })
-    }
+  let scrollEl;
+  if (detail.kind === "initial" && window.location.hash) {
+    scrollEl = document.getElementById(window.location.hash.substring(1));
+  } else if (detail.kind == "patch" && !window.location.hash) {
+    scrollEl = document.querySelector("#docs-window .nav-anchor") || document.querySelector("#docs-window h1");
+  }
+  if (scrollEl) {
+    Hooks.RightNav.setAriaCurrent(scrollEl.id);
+    // Not using scroll polyfill here - doesn't respect scroll-padding-top CSS
+    scrollEl.scrollIntoView({block: 'start'})
+    setTimeout(() => { scrolled = true; }, 1000);
   } else {
     scrolled = true;
   }
