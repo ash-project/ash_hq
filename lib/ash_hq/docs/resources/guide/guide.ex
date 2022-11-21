@@ -6,6 +6,7 @@ defmodule AshHq.Docs.Guide do
       AshHq.Docs.Extensions.Search,
       AshHq.Docs.Extensions.RenderMarkdown,
       AshGraphql.Resource,
+      AshJsonApi.Resource,
       AshAdmin.Resource
     ]
 
@@ -14,6 +15,22 @@ defmodule AshHq.Docs.Guide do
 
     queries do
       list :list_guides, :read_for_version
+    end
+  end
+
+  json_api do
+    type "guide"
+    includes [library_version: [:library]]
+
+    routes do
+      base "/guides"
+
+      get :read
+      index :read
+      index :read_for_version, route: "/for-version"
+      post :create
+      patch :update
+      # TODO: related / relationship
     end
   end
 
@@ -52,9 +69,12 @@ defmodule AshHq.Docs.Guide do
     end
 
     read :read_for_version do
+      description "Query for Guides given a list of library versions to allow"
+
       argument :library_versions, {:array, :uuid} do
         allow_nil? false
         constraints max_length: 20, min_length: 1
+        description "UUIDs of the library versions to allow in the query"
       end
 
       pagination offset?: true, countable: true, default_limit: 25, required?: false

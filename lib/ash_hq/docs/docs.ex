@@ -5,6 +5,7 @@ defmodule AshHq.Docs do
   use Ash.Api,
     extensions: [
       AshGraphql.Api,
+      AshJsonApi.Api,
       AshAdmin.Api
     ]
 
@@ -19,5 +20,12 @@ defmodule AshHq.Docs do
 
   resources do
     registry AshHq.Docs.Registry
+  end
+
+  json_api do
+    prefix "/json_api"
+    serve_schema? true
+    serve_open_api? true
+    log_errors? true
   end
 end

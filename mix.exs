@@ -40,7 +40,7 @@ defmodule AshHq.MixProject do
       {:ash_admin, github: "ash-project/ash_admin"},
       {:ash_phoenix, github: "ash-project/ash_phoenix", override: true},
       {:ash_graphql, github: "ash-project/ash_graphql"},
-      {:ash_json_api, github: "ash-project/ash_json_api"},
+      {:ash_json_api, github: "team-alembic/ash_json_api", branch: "feat/openapi-schema"},
       {:absinthe_plug, "~> 1.5"},
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, github: "ash-project/ash_csv"},
@@ -70,6 +70,9 @@ defmodule AshHq.MixProject do
       {:phoenix_live_dashboard, "~> 0.6"},
       {:ecto_psql_extras, "~> 0.6"},
       {:phoenix_ecto, "~> 4.4"},
+      # SwaggerUI / Redoc
+      {:redoc_ui_plug, github: "team-alembic/redoc_ui_plug"},
+      {:swagger_ui_plug, github: "team-alembic/swagger_ui_plug"},
       # Phoenix/Core dependencies
       {:phoenix, "~> 1.6.14"},
       {:ecto_sql, "~> 3.6"},

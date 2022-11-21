@@ -73,6 +73,14 @@ defmodule AshHqWeb.Router do
   scope "/" do
     forward "/gql", Absinthe.Plug, schema: AshHqWeb.Schema
 
+    get "/json_api/redoc", Redoc.Plug.RedocUI, spec_url: "/json_api/openapi"
+    get "/json_api/swaggerui", SwaggerUI.Plug,
+          path: "/json_api/openapi",
+          title: "AshHQ JSON-API - Swagger UI",
+          default_model_expand_depth: 4
+
+    forward "/json_api", AshHqWeb.DocsJsonApiRouter
+
     forward "/playground",
             Absinthe.Plug.GraphiQL,
             schema: AshHqWeb.Schema,
