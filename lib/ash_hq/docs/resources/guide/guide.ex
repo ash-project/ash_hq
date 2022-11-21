@@ -6,8 +6,22 @@ defmodule AshHq.Docs.Guide do
       AshHq.Docs.Extensions.Search,
       AshHq.Docs.Extensions.RenderMarkdown,
       AshGraphql.Resource,
+      AshJsonApi.Resource,
       AshAdmin.Resource
     ]
+
+  json_api do
+    type "guide"
+    includes [library_version: [:library]]
+
+    routes do
+      base "/guides"
+
+      get :read
+      index :read
+      index :read_for_version, route: "/for-version"
+    end
+  end
 
   attributes do
     uuid_primary_key :id
