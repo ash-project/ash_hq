@@ -11,11 +11,73 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
   end
 
   def highlight(html) do
-    Regex.replace(
-      ~r/<pre><code(?:\s+class="(\w*)")?>([^<]*)<\/code><\/pre>/,
-      html,
-      &highlight_code_block(&1, &2, &3)
+    html
+    |> replace_regex(
+      ~r/<pre><code(?:\s+class="(\w*)")?>(.*)<\/code><\/pre>/,
+      &highlight_code_block/3
     )
+    |> replace_regex(~r/<code class="inline">(.*)<\/code>/, &maybe_highlight_module/2)
+  end
+
+  defp replace_regex(string, regex, replacement) do
+    Regex.replace(regex, string, replacement)
+  end
+
+  defp maybe_highlight_module(_full_block, code) do
+    code_without_c =
+      case code do
+        "c:" <> rest ->
+          rest
+
+        _ ->
+          nil
+      end
+
+    code_without_type =
+      case code do
+        "t:" <> rest ->
+          rest
+
+        _ ->
+          nil
+      end
+
+    try_parse_multi([
+      {~s(data-fun-type="callback"), code_without_c},
+      {~s(data-fun-type="type"), code_without_type},
+      {nil, code}
+    ])
+  end
+
+  defp try_parse_multi([{_, nil} | rest]), do: try_parse_multi(rest)
+
+  defp try_parse_multi([{text, code} | rest]) do
+    case Code.string_to_quoted(code) do
+      {:ok, {fun, _, []}} when is_atom(fun) ->
+        ~s[<code #{text} class="inline maybe-local-call" data-fun="#{fun}">#{code}</code>]
+
+      {:ok,
+       {:/, _,
+        [
+          {{:., _, [{:__aliases__, _, parts}, fun]}, _, []},
+          arity
+        ]}}
+      when is_atom(fun) and is_integer(arity) ->
+        ~s[<code #{text} class="inline maybe-call" data-module="#{Enum.join(parts, ".")}" data-fun="#{fun}" data-arity="#{arity}">#{code}</code>]
+
+      {:ok, {:/, _, [{fun, _, nil}, arity]}} when is_atom(fun) and is_integer(arity) ->
+        ~s[<code #{text} class="inline maybe-local-call" data-fun="#{fun}" data-arity="#{arity}">#{code}</code>]
+
+      {:ok, {:__aliases__, _, parts}} ->
+        ~s[<code #{text} class="inline maybe-module" data-module="#{Enum.join(parts, ".")}">#{code}</code>]
+
+      _ ->
+        if rest == [] do
+          ~s[<code class="inline">#{code}</code>]
+        else
+          try_parse_multi(rest)
+        end
+    end
   end
 
   defp highlight_code_block(_full_block, lang, code) do

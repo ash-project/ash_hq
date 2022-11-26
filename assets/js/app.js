@@ -292,6 +292,13 @@ window.addEventListener("keydown", (event) => {
     event.preventDefault();
   }
 });
+
+window.addEventListener("phx:click-on-item", (event) => {
+  document.getElementById(event.detail.id).click();
+  document.getElementById("close-search").click();
+  event.preventDefault();
+});
+
 window.addEventListener("phx:close-search", (event) => {
   document.getElementById("close-search").click();
   event.preventDefault();

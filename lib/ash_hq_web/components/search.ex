@@ -295,11 +295,7 @@ defmodule AshHqWeb.Components.Search do
     end
   end
 
-  def handle_event("go-to-doc", %{"link" => doc_link}, socket) do
-    {:noreply, push_patch(socket, to: doc_link)}
-  end
-
-  def handle_event("go-to-doc", _, socket) do
+  def handle_event("go-to-doc", _data, socket) do
     case Enum.find(socket.assigns.item_list, fn item ->
            item.id == socket.assigns.selected_item.id
          end) do
@@ -307,7 +303,9 @@ defmodule AshHqWeb.Components.Search do
         {:noreply, socket}
 
       item ->
-        {:noreply, push_patch(socket, to: DocRoutes.doc_link(item))}
+        {:noreply,
+         socket
+         |> push_event("click-on-item", %{"id" => "result-#{item.id}"})}
     end
   end
 
