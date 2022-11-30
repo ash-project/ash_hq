@@ -86,7 +86,7 @@ defmodule AshHqWeb.Pages.Docs do
         </div>
         <div
           id="docs-window"
-          class="w-full shrink prose prose-xl max-w-4xl bg-white dark:bg-base-dark-850 dark:prose-invert md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden"
+          class="w-full shrink prose prose-xl max-w-6xl bg-white dark:bg-base-dark-850 dark:prose-invert md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden"
           phx-hook="Docs"
         >
           <div
@@ -260,6 +260,7 @@ defmodule AshHqWeb.Pages.Docs do
                 <tr>
                   <th>Name</th>
                   <th>Type</th>
+                  <th>Default</th>
                   <th>Doc</th>
                   <th>Links</th>
                 </tr>
@@ -276,6 +277,9 @@ defmodule AshHqWeb.Pages.Docs do
                     </td>
                     <td>
                       {option.type}
+                    </td>
+                    <td>
+                      {if option.default == "nil", do: nil, else: option.default}
                     </td>
                     <td>
                       {raw(render_replacements(@libraries, @selected_versions, option.html_for))}
