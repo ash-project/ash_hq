@@ -105,6 +105,9 @@ defmodule AshHqWeb.AppViewLive do
           {#match :reset_password}
             <ResetPassword id="reset_password" params={@params} />
         {/case}
+
+        Need Help?
+
         {#if @live_action != :docs_dsl}
           <footer class="p-8 sm:p-6 bg-base-light-200 dark:bg-base-dark-850 sm:justify-center sticky">
             <div class="md:flex md:justify-around">

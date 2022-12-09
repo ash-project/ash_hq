@@ -11,6 +11,7 @@ defmodule AshHq.Docs.Guide do
 
   graphql do
     type :guide
+    # foo
 
     queries do
       list :list_guides, :read_for_version

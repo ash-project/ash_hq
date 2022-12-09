@@ -294,6 +294,33 @@ defmodule AshHqWeb.Pages.Home do
           {/if}
         </div>
 
+        <div class="flex flex-col mt-12">
+          <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
+            Paid Support
+          </h2>
+          <div class="flex flex-row justify-between">
+            <p class="mt-4 text-3xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50">
+              <a href="https://alembic.com.au"><CalloutText
+                  text="Alembic"
+                  class="hover:text-primary-light-400 dark:hover:text-primary-dark-600"
+                /></a>
+              can help
+            </p>
+            <a href="https://alembic.com.au">
+              <img class="h-16" src="/images/alembic-a.svg">
+            </a>
+          </div>
+          <div class="flex flex-row">
+            <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6">
+              Alembic offers expert support to help you overcome any challenges and ensure the success of your
+              project. Our team has extensive knowledge and experience with Ash Framework, as well as the larger Elixir
+              ecosystem and can provide personalized assistance to help you build products, implement new features, or
+              improve your existing codebases.  Contact us to learn more about our support options and how we can help
+              your project succeed.
+            </p>
+          </div>
+        </div>
+
         <div class="block md:hidden my-8" />
 
         <div class="max-w-7xl px-4 sm:px-6 md:px-8 my-8 hidden sm:block">
