@@ -33,7 +33,8 @@ defmodule AshHq.Application do
         # Start the PubSub system
         {Phoenix.PubSub, name: AshHq.PubSub},
         # Start the Endpoint (http/https)
-        AshHqWeb.Endpoint
+        AshHqWeb.Endpoint,
+        {AshAuthentication.Supervisor, otp_app: :ash_hq}
         # Start a worker by calling: AshHq.Worker.start_link(arg)
         # {AshHq.Worker, arg}
       ] ++ importer

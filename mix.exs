@@ -61,6 +61,11 @@ defmodule AshHq.MixProject do
       {:swoosh, "~> 1.3"},
       {:premailex, "~> 0.3.0"},
       # Authentication
+      {:ash_authentication,
+       github: "team-alembic/ash_authentication",
+       branch: "improvement/use-secrets-for-jwt-config",
+       override: true},
+      {:ash_authentication_phoenix, github: "team-alembic/ash_authentication_phoenix"},
       {:bcrypt_elixir, "~> 3.0"},
       # Encryption
       {:cloak, "~> 1.1"},
@@ -77,7 +82,7 @@ defmodule AshHq.MixProject do
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.18"},
-      {:nimble_options, "~> 0.4.0", override: true},
+      {:nimble_options, "~> 0.5.0", override: true},
       {:finch, "~> 0.10.2"},
       {:floki, ">= 0.30.0"},
       {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},

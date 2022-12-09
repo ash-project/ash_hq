@@ -3,117 +3,11 @@ defmodule AshHq.Accounts.User do
 
   use AshHq.Resource,
     data_layer: AshPostgres.DataLayer,
-    authorizers: [Ash.Policy.Authorizer]
-
-  alias AshHq.Accounts.Preparations, warn: false
-  import Ash.Changeset
+    authorizers: [Ash.Policy.Authorizer],
+    extensions: [AshAuthentication]
 
   actions do
     defaults [:read]
-
-    read :by_email_and_password do
-      argument :email, :string, allow_nil?: false, sensitive?: true
-      argument :password, :string, allow_nil?: false, sensitive?: true
-
-      prepare AshHq.Accounts.User.Preparations.ValidatePassword
-
-      filter expr(email == ^arg(:email))
-    end
-
-    read :by_token do
-      argument :token, :url_encoded_binary, allow_nil?: false
-      argument :context, :string, allow_nil?: false
-      prepare Preparations.DetermineDaysForToken
-
-      filter expr(
-               token.token == ^arg(:token) and token.context == ^arg(:context) and
-                 token.created_at > ago(^context(:days_for_token), :day)
-             )
-    end
-
-    read :with_verified_email_token do
-      argument :token, :url_encoded_binary, allow_nil?: false
-      argument :context, :string, allow_nil?: false
-
-      prepare AshHq.Accounts.Preparations.SetHashedToken
-      prepare AshHq.Accounts.Preparations.DetermineDaysForToken
-
-      filter expr(
-               token.created_at > ago(^context(:days_for_token), :day) and
-                 token.token == ^context(:hashed_token) and token.context == ^arg(:context) and
-                 token.sent_to == email
-             )
-    end
-
-    create :register do
-      accept [:email]
-
-      argument :password, :string,
-        allow_nil?: false,
-        constraints: [
-          min_length: 6
-        ]
-
-      argument :confirm, :boolean, default: true
-
-      argument :confirmation_url_fun, :function do
-        constraints arity: 1
-      end
-
-      change AshHq.Accounts.User.Changes.HashPassword
-      change {AshHq.Accounts.User.Changes.CreateEmailConfirmationToken, on_argument: :confirm}
-    end
-
-    update :deliver_user_confirmation_instructions do
-      accept []
-
-      argument :confirmation_url_fun, :function do
-        constraints arity: 1
-      end
-
-      validate attribute_equals(:confirmed_at, nil), message: "already confirmed"
-      change AshHq.Accounts.User.Changes.CreateEmailConfirmationToken
-    end
-
-    update :deliver_update_email_instructions do
-      accept [:email]
-
-      argument :current_password, :string, allow_nil?: false
-
-      argument :update_url_fun, :function do
-        constraints arity: 1
-      end
-
-      validate AshHq.Accounts.User.Validations.ValidateCurrentPassword
-      validate changing(:email)
-
-      change prevent_change(:email)
-      change AshHq.Accounts.User.Changes.CreateEmailUpdateToken
-    end
-
-    update :deliver_user_reset_password_instructions do
-      accept []
-
-      argument :reset_password_url_fun, :function do
-        constraints arity: 1
-      end
-
-      change AshHq.Accounts.User.Changes.CreateResetPasswordToken
-    end
-
-    update :logout do
-      accept []
-
-      change AshHq.Accounts.User.Changes.RemoveAllTokens
-    end
-
-    update :change_email do
-      accept []
-      argument :token, :url_encoded_binary
-
-      change AshHq.Accounts.User.Changes.GetEmailFromToken
-      change AshHq.Accounts.User.Changes.DeleteEmailChangeTokens
-    end
 
     update :update_merch_settings do
       argument :address, :string
@@ -123,57 +17,21 @@ defmodule AshHq.Accounts.User do
       change set_attribute(:encrypted_address, arg(:address))
       change set_attribute(:encrypted_name, arg(:name))
     end
+  end
 
-    update :change_password do
-      accept []
+  authentication do
+    api AshHq.Accounts
 
-      argument :password, :string,
-        allow_nil?: false,
-        constraints: [
-          min_length: 6
-        ]
-
-      argument :password_confirmation, :string, allow_nil?: false
-      argument :current_password, :string
-
-      validate fn changeset ->
-        if get_argument(changeset, :password) ==
-             get_argument(changeset, :password_confirmation) do
-          :ok
-        else
-          {:error, field: :password, message: "password does not match"}
-        end
+    strategies do
+      password :password do
+        identity_field(:email)
       end
-
-      validate AshHq.Accounts.User.Validations.ValidateCurrentPassword
-
-      change AshHq.Accounts.User.Changes.HashPassword
-      change AshHq.Accounts.User.Changes.RemoveAllTokens
     end
 
-    update :reset_password do
-      accept []
-
-      argument :password, :string,
-        allow_nil?: false,
-        constraints: [
-          min_length: 6
-        ]
-
-      argument :password_confirmation, :string, allow_nil?: false
-
-      validate confirm(:password, :password_confirmation)
-
-      change AshHq.Accounts.User.Changes.HashPassword
-      change AshHq.Accounts.User.Changes.RemoveAllTokens
-    end
-
-    update :confirm do
-      accept []
-      argument :delete_confirm_tokens, :boolean, default: false
-
-      change set_attribute(:confirmed_at, &DateTime.utc_now/0)
-      change AshHq.Accounts.User.Changes.DeleteConfirmTokens
+    tokens do
+      enabled?(true)
+      token_resource(AshHq.Accounts.Token)
+      signing_secret(AshHq.Accounts.GetSecret)
     end
   end
 
@@ -188,7 +46,7 @@ defmodule AshHq.Accounts.User do
 
     attribute :confirmed_at, :utc_datetime_usec
 
-    attribute :hashed_password, :string, private?: true
+    attribute :hashed_password, :string, private?: true, sensitive?: true
 
     attribute :encrypted_name, AshHq.Types.EncryptedString
     attribute :encrypted_address, AshHq.Types.EncryptedString

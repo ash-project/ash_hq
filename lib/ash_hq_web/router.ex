@@ -1,5 +1,6 @@
 defmodule AshHqWeb.Router do
   use AshHqWeb, :router
+  use AshAuthentication.Phoenix.Router
 
   import AshHqWeb.UserAuth
   import AshAdmin.Router
@@ -12,6 +13,7 @@ defmodule AshHqWeb.Router do
     plug :protect_from_forgery
     plug AshHqWeb.SessionPlug
     plug :assign_user_agent
+    plug :load_from_session
   end
 
   pipeline :dead_view_authentication do
@@ -20,10 +22,18 @@ defmodule AshHqWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :load_from_bearer
   end
 
   pipeline :admin_basic_auth do
     plug :basic_auth
+  end
+
+  scope "/", AshHqWeb do
+    pipe_through :browser
+    sign_in_route()
+    sign_out_route(AuthController)
+    auth_routes_for(AshHq.Accounts.User, to: AuthController)
   end
 
   scope "/", AshHqWeb do

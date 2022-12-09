@@ -7,5 +7,6 @@ defmodule AshHq.Accounts.Registry do
   entries do
     entry AshHq.Accounts.User
     entry AshHq.Accounts.UserToken
+    entry AshHq.Accounts.Token
   end
 end
