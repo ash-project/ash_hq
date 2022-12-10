@@ -33,7 +33,7 @@ defmodule AshHqWeb.Helpers do
     Spark.DocIndex.render_replacements(
       docs,
       %{
-        code_block: ~r/<code class="makeup elixir highlight">[\s\S]*?(?=<\/code>)/
+        code_block: ~r/<code class=".*elixir.*">[\s\S]*?(?=<\/code>)/
       },
       fn
         :mix_dep, %{text: text, library: library}, context ->
