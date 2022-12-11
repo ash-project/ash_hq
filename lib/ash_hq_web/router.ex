@@ -71,8 +71,8 @@ defmodule AshHqWeb.Router do
 
   ## Api routes
   scope "/" do
+    forward "/json_api", AshHqWeb.DocsJsonApiRouter
     forward "/gql", Absinthe.Plug, schema: AshHqWeb.Schema
-
     forward "/playground",
             Absinthe.Plug.GraphiQL,
             schema: AshHqWeb.Schema,
