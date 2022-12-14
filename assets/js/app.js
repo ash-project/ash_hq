@@ -223,7 +223,7 @@ window.addEventListener("phx:page-loading-start", () => {
   }
 
   if (!topBarScheduled) {
-    topBarScheduled = setTimeout(() => topbar.show(), 250);
+    topBarScheduled = setTimeout(() => topbar.show(), 500);
   }
 });
 
