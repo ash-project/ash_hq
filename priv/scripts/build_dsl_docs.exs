@@ -400,6 +400,7 @@ defmodule Utils do
   defp type({:spark, mod}), do: Module.split(mod) |> List.last()
   defp type({:spark_behaviour, mod}), do: Module.split(mod) |> List.last()
   defp type({:spark_behaviour, mod, _builtins}), do: Module.split(mod) |> List.last()
+  defp type(:module), do: "Module"
 
   defp type({:spark_function_behaviour, mod, {_, arity}}) do
     type({:or, [{:fun, arity}, {:spark_behaviour, mod}]})
@@ -487,9 +488,36 @@ case Enum.at(dsls, 0) do
         end)
       end)
 
+    {:ok, all_modules} =
+      name
+      |> String.to_atom()
+      |> :application.get_key(:modules)
+
+    all_modules =
+      Enum.filter(all_modules, fn module ->
+        case Code.fetch_docs(module) do
+          {:docs_v1, _, _, _, type, _, _} when type != :hidden ->
+            true
+
+          _ ->
+            false
+        end
+      end)
+
     acc =
       Utils.try_apply(fn -> dsl.code_modules() end, [])
       |> Enum.reduce(acc, fn {category, modules}, acc ->
+        modules =
+          case modules do
+            %Regex{} = regex ->
+              Enum.filter(all_modules, fn module ->
+                Regex.match?(regex, inspect(module)) || Regex.match?(regex, to_string(module))
+              end)
+
+            other ->
+              List.wrap(other)
+          end
+
         modules
         |> Enum.with_index()
         |> Enum.reduce(acc, fn {module, order}, acc ->

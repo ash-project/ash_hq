@@ -37,7 +37,7 @@ defmodule AshHq.Docs.Extensions.Search do
           "Whether or not the name attribute will be sanitized by default. If not, you should have a change on the resource that sets it."
       ],
       show_docs_on: [
-        type: :atom,
+        type: {:or, [:atom, {:list, :atom}]},
         doc:
           "An attribute/calculation/aggregate that should map to a sanitized name that should match to signal that docs should be loaded"
       ],
@@ -124,6 +124,7 @@ defmodule AshHq.Docs.Extensions.Search do
       :show_docs_on,
       sanitized_name_attribute(resource)
     )
+    |> List.wrap()
   end
 
   def library_version_attribute(resource) do

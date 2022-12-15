@@ -35,7 +35,9 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
       table: Transformer.get_option(dsl_state, [:postgres], :table),
       sanitized_name_attribute: sanitized_name_attribute,
       show_docs_on:
-        Transformer.get_option(dsl_state, [:search], :show_docs_on) || sanitized_name_attribute
+        List.wrap(
+          Transformer.get_option(dsl_state, [:search], :show_docs_on) || sanitized_name_attribute
+        )
     }
 
     {:ok,
@@ -64,6 +66,15 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
       name = :"#{dest}_for"
       type = Ash.Resource.Info.attribute(dsl_state, dest).type
 
+      expr =
+        Enum.reduce(config.show_docs_on, nil, fn attr, expr ->
+          if expr do
+            expr(^expr or ^ref(attr) == ^arg(:for))
+          else
+            expr(^ref(attr) == ^arg(:for))
+          end
+        end)
+
       dsl_state
       |> Transformer.add_entity(
         [:calculations],
@@ -74,7 +85,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
           arguments: [html_for_argument()],
           calculation:
             Ash.Query.expr(
-              if ^ref(config.show_docs_on) == ^arg(:for) do
+              if ^expr do
                 ^ref(dest)
               else
                 nil
@@ -97,6 +108,15 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
           config.doc_attribute
         end
 
+      expr =
+        Enum.reduce(config.show_docs_on, nil, fn attr, expr ->
+          if expr do
+            expr(^expr or ^ref(attr) == ^arg(:for))
+          else
+            expr(^ref(attr) == ^arg(:for))
+          end
+        end)
+
       dsl_state
       |> Transformer.add_entity(
         [:calculations],
@@ -107,7 +127,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
           arguments: [html_for_argument()],
           calculation:
             Ash.Query.expr(
-              if ^ref(config.show_docs_on) == ^arg(:for) do
+              if ^expr do
                 ^ref(html_for_attribute)
               else
                 nil

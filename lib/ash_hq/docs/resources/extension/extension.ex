@@ -5,19 +5,6 @@ defmodule AshHq.Docs.Extension do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  resource do
-    description "An Ash DSL extension."
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html
-  end
-
-  search do
-    doc_attribute :doc
-    load_for_search library_version: [:library_display_name, :library_name]
-  end
-
   postgres do
     table "extensions"
     repo AshHq.Repo
@@ -27,40 +14,13 @@ defmodule AshHq.Docs.Extension do
     end
   end
 
-  identities do
-    identity :unique_name_by_library_version, [:name, :library_version_id]
+  search do
+    doc_attribute :doc
+    load_for_search library_version: [:library_display_name, :library_name]
   end
 
-  code_interface do
-    define_for AshHq.Docs
-
-    define :destroy
-  end
-
-  actions do
-    defaults [:update, :destroy]
-
-    read :read do
-      primary? true
-      pagination offset?: true, countable: true, default_limit: 25, required?: false
-    end
-
-    create :create do
-      primary? true
-
-      argument :library_version, :uuid do
-        allow_nil? false
-      end
-
-      argument :dsls, {:array, :map}
-      change manage_relationship(:library_version, type: :append_and_remove)
-      change {AshHq.Docs.Changes.AddArgToRelationship, arg: :library_version, rel: :dsls}
-
-      change {AshHq.Docs.Changes.AddArgToRelationship,
-              attr: :id, arg: :extension_id, rel: :dsls, generate: &Ash.UUID.generate/0}
-
-      change manage_relationship(:dsls, type: :create)
-    end
+  render_markdown do
+    render_attributes doc: :doc_html
   end
 
   attributes do
@@ -105,5 +65,45 @@ defmodule AshHq.Docs.Extension do
 
     has_many :dsls, AshHq.Docs.Dsl
     has_many :options, AshHq.Docs.Option
+  end
+
+  actions do
+    defaults [:update, :destroy]
+
+    read :read do
+      primary? true
+      pagination offset?: true, countable: true, default_limit: 25, required?: false
+    end
+
+    create :create do
+      primary? true
+
+      argument :library_version, :uuid do
+        allow_nil? false
+      end
+
+      argument :dsls, {:array, :map}
+      change manage_relationship(:library_version, type: :append_and_remove)
+      change {AshHq.Docs.Changes.AddArgToRelationship, arg: :library_version, rel: :dsls}
+
+      change {AshHq.Docs.Changes.AddArgToRelationship,
+              attr: :id, arg: :extension_id, rel: :dsls, generate: &Ash.UUID.generate/0}
+
+      change manage_relationship(:dsls, type: :create)
+    end
+  end
+
+  code_interface do
+    define_for AshHq.Docs
+
+    define :destroy
+  end
+
+  resource do
+    description "An Ash DSL extension."
+  end
+
+  identities do
+    identity :unique_name_by_library_version, [:name, :library_version_id]
   end
 end

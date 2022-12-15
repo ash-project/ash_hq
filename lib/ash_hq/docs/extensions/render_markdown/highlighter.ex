@@ -78,6 +78,9 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
           try_parse_multi(rest)
         end
     end
+  rescue
+    _ ->
+      ~s[<code class="inline">#{code}</code>]
   end
 
   defp highlight_code_block(_full_block, lang, code) do

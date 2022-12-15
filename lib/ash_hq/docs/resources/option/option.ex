@@ -5,12 +5,13 @@ defmodule AshHq.Docs.Option do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  resource do
-    description "Represents an option on a DSL section or entity"
-  end
+  postgres do
+    table "options"
+    repo AshHq.Repo
 
-  render_markdown do
-    render_attributes doc: :doc_html
+    references do
+      reference :library_version, on_delete: :delete
+    end
   end
 
   search do
@@ -31,18 +32,8 @@ defmodule AshHq.Docs.Option do
     show_docs_on :dsl_sanitized_path
   end
 
-  postgres do
-    table "options"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
-  end
-
-  code_interface do
-    define_for AshHq.Docs
-    define :read
+  render_markdown do
+    render_attributes doc: :doc_html
   end
 
   attributes do
@@ -85,6 +76,20 @@ defmodule AshHq.Docs.Option do
     timestamps()
   end
 
+  relationships do
+    belongs_to :dsl, AshHq.Docs.Dsl do
+      allow_nil? true
+    end
+
+    belongs_to :library_version, AshHq.Docs.LibraryVersion do
+      allow_nil? true
+    end
+
+    belongs_to :extension, AshHq.Docs.Extension do
+      allow_nil? true
+    end
+  end
+
   actions do
     defaults [:update, :destroy]
 
@@ -106,6 +111,15 @@ defmodule AshHq.Docs.Option do
     end
   end
 
+  code_interface do
+    define_for AshHq.Docs
+    define :read
+  end
+
+  resource do
+    description "Represents an option on a DSL section or entity"
+  end
+
   aggregates do
     first :extension_type, [:dsl, :extension], :type
     first :extension_name, [:dsl, :extension], :name
@@ -114,19 +128,5 @@ defmodule AshHq.Docs.Option do
     first :library_name, [:library_version, :library], :name
     first :library_id, [:library_version, :library], :id
     first :dsl_sanitized_path, :dsl, :sanitized_path
-  end
-
-  relationships do
-    belongs_to :dsl, AshHq.Docs.Dsl do
-      allow_nil? true
-    end
-
-    belongs_to :library_version, AshHq.Docs.LibraryVersion do
-      allow_nil? true
-    end
-
-    belongs_to :extension, AshHq.Docs.Extension do
-      allow_nil? true
-    end
   end
 end

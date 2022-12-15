@@ -10,19 +10,19 @@ defmodule AshHq.Blog.Tag do
     columns [:name]
   end
 
+  attributes do
+    attribute :name, :string do
+      allow_nil? false
+      primary_key? true
+    end
+  end
+
   actions do
     defaults [:create, :read, :update, :destroy]
 
     create :upsert do
       accept [:name]
       upsert? true
-    end
-  end
-
-  attributes do
-    attribute :name, :string do
-      allow_nil? false
-      primary_key? true
     end
   end
 

@@ -7,12 +7,60 @@ defmodule AshHq.Blog.Post do
 
   require Ash.Query
 
+  render_markdown do
+    render_attributes body: :body_html
+  end
+
   admin do
     table_columns [:slug, :title, :state, :created_at, :id]
 
     form do
       field :body do
         type :markdown
+      end
+    end
+  end
+
+  attributes do
+    uuid_primary_key :id
+
+    attribute :tag_line, :string do
+      allow_nil? false
+      constraints max_length: 250
+    end
+
+    attribute :tag_names, {:array, :string} do
+      constraints items: [
+                    match: ~r/^[a-zA-Z]*$/
+                  ]
+    end
+
+    attribute :author, :string do
+      allow_nil? false
+    end
+
+    attribute :body_html, :string do
+      writable? false
+    end
+
+    timestamps()
+  end
+
+  relationships do
+    has_many :tags, AshHq.Blog.Tag do
+      manual fn posts, %{query: query} ->
+        all_tags = Enum.flat_map(posts, & &1.tag_names)
+
+        tags =
+          query
+          |> Ash.Query.unset([:limit, :offset])
+          |> Ash.Query.filter(name in ^all_tags)
+          |> AshHq.Blog.read!()
+
+        {:ok,
+         Map.new(posts, fn post ->
+           {post.id, Enum.filter(tags, &(&1.name in post.tag_names))}
+         end)}
       end
     end
   end
@@ -50,35 +98,6 @@ defmodule AshHq.Blog.Post do
     define :by_slug, args: [:slug]
   end
 
-  render_markdown do
-    render_attributes body: :body_html
-  end
-
-  attributes do
-    uuid_primary_key :id
-
-    attribute :tag_line, :string do
-      allow_nil? false
-      constraints max_length: 250
-    end
-
-    attribute :tag_names, {:array, :string} do
-      constraints items: [
-                    match: ~r/^[a-zA-Z]*$/
-                  ]
-    end
-
-    attribute :author, :string do
-      allow_nil? false
-    end
-
-    attribute :body_html, :string do
-      writable? false
-    end
-
-    timestamps()
-  end
-
   changes do
     change fn changeset, _ ->
              Ash.Changeset.after_action(changeset, fn _, %{tag_names: tag_names} = record ->
@@ -106,24 +125,5 @@ defmodule AshHq.Blog.Post do
              end)
            end,
            on: [:create, :update]
-  end
-
-  relationships do
-    has_many :tags, AshHq.Blog.Tag do
-      manual fn posts, %{query: query} ->
-        all_tags = Enum.flat_map(posts, & &1.tag_names)
-
-        tags =
-          query
-          |> Ash.Query.unset([:limit, :offset])
-          |> Ash.Query.filter(name in ^all_tags)
-          |> AshHq.Blog.read!()
-
-        {:ok,
-         Map.new(posts, fn post ->
-           {post.id, Enum.filter(tags, &(&1.name in post.tag_names))}
-         end)}
-      end
-    end
   end
 end

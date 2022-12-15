@@ -5,8 +5,9 @@ defmodule AshHq.Docs.LibraryVersion do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  resource do
-    description "Represents a version of a library that has been imported."
+  postgres do
+    table "library_versions"
+    repo AshHq.Repo
   end
 
   search do
@@ -15,21 +16,25 @@ defmodule AshHq.Docs.LibraryVersion do
     load_for_search [:library_name, :library_display_name]
   end
 
-  postgres do
-    table "library_versions"
-    repo AshHq.Repo
+  attributes do
+    uuid_primary_key :id
+
+    attribute :version, :string do
+      allow_nil? false
+    end
+
+    timestamps()
   end
 
-  identities do
-    identity :unique_version_for_library, [:version, :library_id]
-  end
+  relationships do
+    belongs_to :library, AshHq.Docs.Library do
+      allow_nil? true
+    end
 
-  code_interface do
-    define_for AshHq.Docs
-    define :build, args: [:library, :version]
-    define :defined_for, args: [:library, :versions]
-    define :by_version, args: [:library, :version]
-    define :destroy
+    has_many :extensions, AshHq.Docs.Extension
+    has_many :guides, AshHq.Docs.Guide
+    has_many :modules, AshHq.Docs.Module
+    has_many :mix_tasks, AshHq.Docs.MixTask
   end
 
   actions do
@@ -109,39 +114,34 @@ defmodule AshHq.Docs.LibraryVersion do
     end
   end
 
-  aggregates do
-    first :library_name, :library, :name
-    first :library_display_name, :library, :display_name
+  code_interface do
+    define_for AshHq.Docs
+    define :build, args: [:library, :version]
+    define :defined_for, args: [:library, :versions]
+    define :by_version, args: [:library, :version]
+    define :destroy
   end
 
-  attributes do
-    uuid_primary_key :id
-
-    attribute :version, :string do
-      allow_nil? false
-    end
-
-    timestamps()
+  resource do
+    description "Represents a version of a library that has been imported."
   end
 
-  calculations do
-    calculate :sortable_version,
-              {:array, :string},
-              expr(fragment("string_to_array(?, '.')", version))
+  identities do
+    identity :unique_version_for_library, [:version, :library_id]
   end
 
   preparations do
     prepare AshHq.Docs.LibraryVersion.Preparations.SortBySortableVersionInstead
   end
 
-  relationships do
-    belongs_to :library, AshHq.Docs.Library do
-      allow_nil? true
-    end
+  aggregates do
+    first :library_name, :library, :name
+    first :library_display_name, :library, :display_name
+  end
 
-    has_many :extensions, AshHq.Docs.Extension
-    has_many :guides, AshHq.Docs.Guide
-    has_many :modules, AshHq.Docs.Module
-    has_many :mix_tasks, AshHq.Docs.MixTask
+  calculations do
+    calculate :sortable_version,
+              {:array, :string},
+              expr(fragment("string_to_array(?, '.')", version))
   end
 end

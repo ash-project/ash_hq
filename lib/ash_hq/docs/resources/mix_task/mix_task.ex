@@ -5,12 +5,13 @@ defmodule AshHq.Docs.MixTask do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  resource do
-    description "Represents a mix task that has been exposed by a library"
-  end
+  postgres do
+    table "mix_tasks"
+    repo AshHq.Repo
 
-  render_markdown do
-    render_attributes doc: :doc_html
+    references do
+      reference :library_version, on_delete: :delete
+    end
   end
 
   search do
@@ -27,13 +28,8 @@ defmodule AshHq.Docs.MixTask do
     type "Mix Tasks"
   end
 
-  postgres do
-    table "mix_tasks"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
+  render_markdown do
+    render_attributes doc: :doc_html
   end
 
   attributes do
@@ -68,6 +64,12 @@ defmodule AshHq.Docs.MixTask do
     timestamps()
   end
 
+  relationships do
+    belongs_to :library_version, AshHq.Docs.LibraryVersion do
+      allow_nil? true
+    end
+  end
+
   actions do
     defaults [:update, :destroy]
 
@@ -88,15 +90,13 @@ defmodule AshHq.Docs.MixTask do
     define_for AshHq.Docs
   end
 
+  resource do
+    description "Represents a mix task that has been exposed by a library"
+  end
+
   aggregates do
     first :version_name, :library_version, :version
     first :library_name, [:library_version, :library], :name
     first :library_id, [:library_version, :library], :id
-  end
-
-  relationships do
-    belongs_to :library_version, AshHq.Docs.LibraryVersion do
-      allow_nil? true
-    end
   end
 end

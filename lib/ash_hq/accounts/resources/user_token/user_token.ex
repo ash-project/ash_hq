@@ -6,6 +6,40 @@ defmodule AshHq.Accounts.UserToken do
     notifiers: [AshHq.Accounts.EmailNotifier],
     authorizers: [Ash.Policy.Authorizer]
 
+  postgres do
+    table "user_tokens"
+    repo AshHq.Repo
+
+    references do
+      reference :user, on_delete: :delete, on_update: :update
+    end
+  end
+
+  policies do
+    policy always() do
+      description """
+      There are currently no usages of user tokens resource that should be publicly
+      accessible, they should all be using authorize?: false.
+      """
+
+      forbid_if always()
+    end
+  end
+
+  attributes do
+    uuid_primary_key :id
+
+    attribute :token, :binary
+    attribute :context, :string
+    attribute :sent_to, :string
+
+    create_timestamp :created_at
+  end
+
+  relationships do
+    belongs_to :user, AshHq.Accounts.User
+  end
+
   actions do
     defaults [:read]
 
@@ -45,47 +79,13 @@ defmodule AshHq.Accounts.UserToken do
     end
   end
 
-  attributes do
-    uuid_primary_key :id
-
-    attribute :token, :binary
-    attribute :context, :string
-    attribute :sent_to, :string
-
-    create_timestamp :created_at
-  end
-
-  identities do
-    identity :token_context, [:context, :token]
-  end
-
-  postgres do
-    table "user_tokens"
-    repo(AshHq.Repo)
-
-    references do
-      reference(:user, on_delete: :delete, on_update: :update)
-    end
-  end
-
-  policies do
-    policy always() do
-      description """
-      There are currently no usages of user tokens resource that should be publicly
-      accessible, they should all be using authorize?: false.
-      """
-
-      forbid_if always()
-    end
-  end
-
-  relationships do
-    belongs_to :user, AshHq.Accounts.User
-  end
-
   resource do
     description """
     Represents a token allowing a user to log in, reset their password, or confirm their email.
     """
+  end
+
+  identities do
+    identity :token_context, [:context, :token]
   end
 end

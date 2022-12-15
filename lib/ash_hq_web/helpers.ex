@@ -14,18 +14,18 @@ defmodule AshHqWeb.Helpers do
   end
 
   def source_link(%AshHq.Docs.Module{file: file}, library, library_version) do
-    "https://github.com/ash-project/#{library.name}/tree/v#{library_version.version}/#{file}"
+    "https://github.com/#{library.repo_org}/#{library.name}/tree/v#{library_version.version}/#{file}"
   end
 
   def source_link(%AshHq.Docs.MixTask{file: file}, library, library_version) do
-    "https://github.com/ash-project/#{library.name}/tree/v#{library_version.version}/#{file}"
+    "https://github.com/#{library.repo_org}/#{library.name}/tree/v#{library_version.version}/#{file}"
   end
 
   def source_link(%AshHq.Docs.Function{file: file, line: line}, library, library_version) do
     if line do
-      "https://github.com/ash-project/#{library.name}/tree/v#{library_version.version}/#{file}#L#{line}"
+      "https://github.com/#{library.repo_org}/#{library.name}/tree/v#{library_version.version}/#{file}#L#{line}"
     else
-      "https://github.com/ash-project/#{library.name}/tree/v#{library_version.version}/#{file}"
+      "https://github.com/#{library.repo_org}/#{library.name}/tree/v#{library_version.version}/#{file}"
     end
   end
 
@@ -136,6 +136,10 @@ defmodule AshHqWeb.Helpers do
             version
         end
       end
+
+    if !version do
+      raise "No such library in link: #{source}"
+    end
 
     case Version.parse(version.version) do
       {:ok, %Version{pre: pre, build: build}}

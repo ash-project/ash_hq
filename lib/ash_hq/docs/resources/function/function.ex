@@ -5,13 +5,13 @@ defmodule AshHq.Docs.Function do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  resource do
-    description "A function in a module exposed by an Ash library"
-  end
+  postgres do
+    table "functions"
+    repo AshHq.Repo
 
-  render_markdown do
-    render_attributes doc: :doc_html, heads: :heads_html
-    header_ids? false
+    references do
+      reference :library_version, on_delete: :delete
+    end
   end
 
   search do
@@ -29,13 +29,9 @@ defmodule AshHq.Docs.Function do
     show_docs_on :module_sanitized_name
   end
 
-  postgres do
-    table "functions"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
+  render_markdown do
+    render_attributes doc: :doc_html, heads: :heads_html
+    header_ids? false
   end
 
   attributes do
@@ -83,8 +79,14 @@ defmodule AshHq.Docs.Function do
     timestamps()
   end
 
-  code_interface do
-    define_for AshHq.Docs
+  relationships do
+    belongs_to :library_version, AshHq.Docs.LibraryVersion do
+      allow_nil? true
+    end
+
+    belongs_to :module, AshHq.Docs.Module do
+      allow_nil? true
+    end
   end
 
   actions do
@@ -103,21 +105,19 @@ defmodule AshHq.Docs.Function do
     end
   end
 
+  code_interface do
+    define_for AshHq.Docs
+  end
+
+  resource do
+    description "A function in a module exposed by an Ash library"
+  end
+
   aggregates do
     first :version_name, :library_version, :version
     first :library_name, [:library_version, :library], :name
     first :library_id, [:library_version, :library], :id
     first :module_name, :module, :name
     first :module_sanitized_name, :module, :sanitized_name
-  end
-
-  relationships do
-    belongs_to :library_version, AshHq.Docs.LibraryVersion do
-      allow_nil? true
-    end
-
-    belongs_to :module, AshHq.Docs.Module do
-      allow_nil? true
-    end
   end
 end

@@ -65,6 +65,34 @@ AshHq.Docs.Library.create!(
 
 AshHq.Docs.Library.create!(
   %{
+    name: "ash_authentication",
+    display_name: "AshAuthentication",
+    order: 55,
+    repo_org: "alembic",
+    description: """
+    Provides drop-in support for user authentication with various strategies and tons of customizability.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "ash_authentication_phoenix",
+    display_name: "AshAuthenticationPhoenix",
+    order: 56,
+    repo_org: "alembic",
+    description: """
+    Phoenix helpers and UI components in support of AshAuthentication.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
     name: "ash_csv",
     display_name: "AshCSV",
     order: 70,

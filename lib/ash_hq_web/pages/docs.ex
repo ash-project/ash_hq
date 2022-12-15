@@ -462,7 +462,8 @@ defmodule AshHqWeb.Pages.Docs do
     guides_query =
       AshHq.Docs.Guide
       |> Ash.Query.new()
-      |> load_for_search(List.last(List.wrap(socket.assigns[:params]["guide"])))
+      |> load_for_search(Enum.join(List.wrap(socket.assigns[:params]["guide"]), "/"))
+      |> IO.inspect()
 
     modules_query =
       AshHq.Docs.Module
@@ -691,14 +692,13 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   defp matches_path?(guide, guide_route) do
-    guide.route == Enum.join(guide_route, "/")
+    guide.sanitized_route == DocRoutes.sanitize_name(Enum.join(guide_route, "/"), true)
   end
 
-  defp matches_name?(guide, [guide_name]) do
-    DocRoutes.sanitize_name(guide.name) == guide_name
+  defp matches_name?(guide, list) do
+    guide_name = List.last(list)
+    DocRoutes.sanitize_name(guide.name) == DocRoutes.sanitize_name(guide_name)
   end
-
-  defp matches_name?(_, _), do: false
 
   defp assign_dsl(socket) do
     case socket.assigns[:params]["dsl_path"] do

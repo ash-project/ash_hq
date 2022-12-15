@@ -18,6 +18,13 @@ config :ash_hq, AshHq.Repo,
   timeout: :timer.minutes(10),
   ownership_timeout: :timer.minutes(10)
 
+config :spark, :formatter,
+  remove_parens?: true,
+  "AshHq.Resource": [
+    type: Ash.Resource
+  ],
+  "Ash.Flow": []
+
 # Configures the endpoint
 config :ash_hq, AshHqWeb.Endpoint,
   url: [host: "localhost"],

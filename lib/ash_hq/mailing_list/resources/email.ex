@@ -5,17 +5,19 @@ defmodule AshHq.MailingList.Email do
     data_layer: AshPostgres.DataLayer,
     notifiers: AshHq.MailingList.EmailNotifier
 
-  resource do
-    description "An email for the mailing list"
-  end
-
   postgres do
     repo AshHq.Repo
     table "emails"
   end
 
-  identities do
-    identity :unique_email, [:email]
+  attributes do
+    uuid_primary_key :id
+
+    attribute :email, :ci_string do
+      allow_nil? false
+    end
+
+    timestamps()
   end
 
   actions do
@@ -28,14 +30,12 @@ defmodule AshHq.MailingList.Email do
     define :all, action: :read
   end
 
-  attributes do
-    uuid_primary_key :id
+  resource do
+    description "An email for the mailing list"
+  end
 
-    attribute :email, :ci_string do
-      allow_nil? false
-    end
-
-    timestamps()
+  identities do
+    identity :unique_email, [:email]
   end
 
   validations do
