@@ -463,7 +463,6 @@ defmodule AshHqWeb.Pages.Docs do
       AshHq.Docs.Guide
       |> Ash.Query.new()
       |> load_for_search(Enum.join(List.wrap(socket.assigns[:params]["guide"]), "/"))
-      |> IO.inspect()
 
     modules_query =
       AshHq.Docs.Module

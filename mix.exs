@@ -47,7 +47,7 @@ defmodule AshHq.MixProject do
       {:tails, github: "zachdaniel/tails"},
       {:earmark, "~> 1.5.0-pre1", override: true},
       {:nimble_options, "~> 0.5.1", override: true},
-      {:spark, "~> 0.3"},
+      {:spark, "~> 0.3", override: true},
       {:surface, "~> 0.9.1"},
       {:surface_heroicons, "~> 0.6.0"},
       {:ua_inspector, "~> 3.0"},
