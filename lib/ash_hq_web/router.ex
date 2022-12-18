@@ -33,6 +33,7 @@ defmodule AshHqWeb.Router do
       on_mount: [{AshHqWeb.InitAssigns, :default}, {AshHqWeb.LiveUserAuth, :live_user}],
       root_layout: {AshHqWeb.LayoutView, :root} do
       live "/", AppViewLive, :home
+      live "/media", AppViewLive, :media
       live "/blog", AppViewLive, :blog
       live "/blog/:slug", AppViewLive, :blog
       live "/docs/", AppViewLive, :docs_dsl

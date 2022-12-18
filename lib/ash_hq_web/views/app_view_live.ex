@@ -5,7 +5,7 @@ defmodule AshHqWeb.AppViewLive do
 
   alias AshHqWeb.Components.AppView.TopBar
   alias AshHqWeb.Components.{CatalogueModal, Search}
-  alias AshHqWeb.Pages.{Blog, Docs, Home, LogIn, Register, ResetPassword, UserSettings}
+  alias AshHqWeb.Pages.{Blog, Docs, Home, LogIn, Media, Register, ResetPassword, UserSettings}
   alias Phoenix.LiveView.JS
   alias Surface.Components.Context
   require Ash.Query
@@ -104,9 +104,9 @@ defmodule AshHqWeb.AppViewLive do
             <Register id="register" />
           {#match :reset_password}
             <ResetPassword id="reset_password" params={@params} />
+          {#match :media}
+            <Media id="media" />
         {/case}
-
-        Need Help?
 
         {#if @live_action != :docs_dsl}
           <footer class="p-8 sm:p-6 bg-base-light-200 dark:bg-base-dark-850 sm:justify-center sticky">
@@ -127,8 +127,11 @@ defmodule AshHqWeb.AppViewLive do
                     <li class="mb-4">
                       <a href="/docs/guides/ash/latest/tutorials/get-started" class="hover:underline">Get Started</a>
                     </li>
-                    <li>
+                    <li class="mb-4">
                       <a href="/blog" class="hover:underline">Blog</a>
+                    </li>
+                    <li>
+                      <a href="/media" class="hover:underline">Media</a>
                     </li>
                   </ul>
                 </div>
