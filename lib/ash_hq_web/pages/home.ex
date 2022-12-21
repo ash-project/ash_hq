@@ -82,9 +82,9 @@ defmodule AshHqWeb.Pages.Home do
               application as a set of resources, other tools know exactly how to
               use them, allowing extensions like AshGraphql and AshJsonApi to
               provide top tier APIs with minimal configuration. With
-              filtering/sorting/pagination/calculations/aggregations, pub/sub,
-              policy authorization, rich introspection, and much more built-in,
-              and a comprehensive suite of tools to allow you to build your own
+              filtering, sorting, pagination, calculations, aggregations, pub_sub,
+              policy authorization, rich introspection, and much more built-in.
+              Coupled with a comprehensive suite of tools to allow you to build your own
               extensions, the possibilities are endless.
             </p>
           </div>
