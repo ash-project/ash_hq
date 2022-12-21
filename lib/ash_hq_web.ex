@@ -62,7 +62,7 @@ defmodule AshHqWeb do
   def component do
     quote do
       use Surface.Component
-      import Tails
+      import AshHqWeb.Tails
 
       unquote(view_helpers())
     end

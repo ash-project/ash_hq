@@ -2,7 +2,7 @@ defmodule AshHqWeb.Pages.Blog do
   @moduledoc "Blog page"
   use Surface.LiveComponent
 
-  import Tails
+  import AshHqWeb.Tails
 
   alias AshHqWeb.Components.Blog.Tag
 
@@ -48,7 +48,7 @@ defmodule AshHqWeb.Pages.Blog do
               <h2 class="text-3xl font-semibold mb-1">Showing all posts</h2>
             {/if}
             {#for post <- @posts}
-              <div class="border shadow-sm rounded-lg px-8 pb-6 dark:border-gray-600" ">
+              <div class="border shadow-sm rounded-lg px-8 pb-6 dark:border-gray-600 mb-4" ">
                 <h1 class="mt-6 text-3xl font-semibold mb-4">{post.title}</h1>
                 <div class="border-b pb-2">
                   <div>

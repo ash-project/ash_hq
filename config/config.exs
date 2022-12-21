@@ -41,10 +41,11 @@ config :ash_hq, AshHqWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :ash_hq, AshHq.Mailer, adapter: Swoosh.Adapters.Local
 config :ash_hq, AshHq.MailingList.Mailer, adapter: Swoosh.Adapters.Local
-config :tails, colors_file: Path.join(File.cwd!(), "assets/tailwind.colors.json")
+config :ash_hq, AshHqWeb.Tails, colors_file: Path.join(File.cwd!(), "assets/tailwind.colors.json")
 
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
+config :sunflower_ui, :tails, AshHqWeb.Tails
 
 config :surface, :components, [
   {AshHqWeb.Components.TreeView.Item, propagate_context_to_slots: true},

@@ -2,7 +2,7 @@ defmodule AshHqWeb.Components.CalloutText do
   @moduledoc "Highlights some text on the page"
   use Surface.Component
 
-  import Tails
+  import AshHqWeb.Tails
 
   prop text, :string, required: true
   prop class, :css_class

@@ -38,6 +38,9 @@
     </script>
   </head>
   <body class="h-full">
+    <div id="snowflakeContainer">
+      <span class="snowflake"></span>
+    </div>
     <%= @inner_content %>
     <%= if @live_action == :docs do %>
       <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>

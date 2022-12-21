@@ -10,7 +10,7 @@ defmodule AshHqWeb.AppViewLive do
   alias Surface.Components.Context
   require Ash.Query
 
-  import Tails
+  import AshHqWeb.Tails
 
   data configured_theme, :string, default: :system
   data selected_versions, :map, default: %{}
