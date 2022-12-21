@@ -125,6 +125,13 @@ function setTheme(theme, set) {
   }
 }
 
+Hooks.Snowflakes = {
+  mounted() {
+    generateSnowflakes()
+    window.addEventListener("resize", setResetFlag, false);
+  }
+}
+
 Hooks.ColorTheme = {
   mounted() {
     this.handleEvent("set_theme", (payload) => {
@@ -357,21 +364,26 @@ window.addEventListener("load", function () {
     } else {
       enableAnimations = true;
     }
+
+    const isChristmas = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("christmas="));
+    if (isChristmas === "christmas=false") {
+      enableAnimations = false
+    }
   }
   setAccessibilityState();
 
   reduceMotionQuery.addListener(setAccessibilityState);
 
-  //
-  // It all starts here...
-  //
-  function setup() {
-    if (enableAnimations) {
-      window.addEventListener("DOMContentLoaded", generateSnowflakes, false);
-      window.addEventListener("resize", setResetFlag, false);
-    }
+window.addEventListener("phx:toggle-christmas", ((e) => {
+  if (cookiesAreAllowed()) {
+    const cookie = e.detail.christmas;
+    document.cookie = "christmas" + "=" + cookie + ";path=/";
   }
-  setup();
+
+  setAccessibilityState()
+}))
 
   //
   // Constructor for our Snowflake object

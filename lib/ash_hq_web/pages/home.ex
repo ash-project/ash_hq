@@ -418,7 +418,7 @@ defmodule AshHqWeb.Pages.Home do
   end
 
   def handle_event("toggle-theme", _, socket) do
-    if IO.inspect(socket.assigns.theme) == :default do
+    if socket.assigns.theme == :default do
       {:noreply, assign(socket, :theme, :dark)}
     else
       {:noreply, assign(socket, :theme, :default)}

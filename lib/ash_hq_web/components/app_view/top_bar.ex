@@ -38,6 +38,7 @@ defmodule AshHqWeb.Components.AppView.TopBar do
             <Heroicons.Solid.SearchIcon class="w-6 h-6 dark:fill-base-dark-400 dark:hover:fill-base-dark-200 hover:fill-base-light-600" />
           </button>
         {/if}
+        <button id="bah-humbug" phx-click="toggle-christmas">❄️</button>
 
         <a
           href="/docs/guides/ash/latest/tutorials/get-started"
