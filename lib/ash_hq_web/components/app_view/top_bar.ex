@@ -23,7 +23,7 @@ defmodule AshHqWeb.Components.AppView.TopBar do
           @live_action == :docs_dsl
       }
     >
-      <div class="flex flex-row align-baseline hidden md:block">
+      <div class="flex flex-row align-baseline">
         <a href="/">
           <img class="h-6 md:h-10 hidden dark:block" src="/images/ash-framework-dark.png">
           <img class="h-6 md:h-10 dark:hidden" src="/images/ash-framework-light.png">
@@ -42,21 +42,21 @@ defmodule AshHqWeb.Components.AppView.TopBar do
         <a
           href="/docs/guides/ash/latest/tutorials/get-started"
           title="Documentation"
-          class="text-lg font-bold px-4 dark:hover:text-primary-light-500 hover:text-primary-light-700 hidden md:block"
+          class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-light-500 hover:text-primary-light-700 hidden md:block"
         >
           Documentation
         </a>
         <a
           href="/blog"
           title="Blog"
-          class="text-lg font-bold px-4 dark:hover:text-primary-light-500 hover:text-primary-light-700"
+          class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-light-500 hover:text-primary-light-700"
         >
           Blog
         </a>
         <a
           href="/media"
           title="Media"
-          class="text-lg font-bold px-4 pr-8 dark:hover:text-primary-light-500 hover:text-primary-light-700"
+          class="text-lg font-bold px-2 md:px-4 pr-2 md:pr-8 dark:hover:text-primary-light-500 hover:text-primary-light-700"
         >
           Media
         </a>
