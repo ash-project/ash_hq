@@ -43,6 +43,8 @@ config :ash_hq, AshHq.Mailer, adapter: Swoosh.Adapters.Local
 config :ash_hq, AshHq.MailingList.Mailer, adapter: Swoosh.Adapters.Local
 config :ash_hq, AshHqWeb.Tails, colors_file: Path.join(File.cwd!(), "assets/tailwind.colors.json")
 
+config :ash, :use_all_identities_in_manage_relationship?, false
+
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
 config :sunflower_ui, :tails, AshHqWeb.Tails

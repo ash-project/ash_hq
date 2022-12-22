@@ -67,7 +67,7 @@ defmodule AshHqWeb.ConnCase do
   def log_in_user(conn, user) do
     token =
       AshHq.Accounts.UserToken
-      |> Ash.Changeset.for_create(:build_session_token, %{user: user}, authorize?: false)
+      |> Ash.Changeset.for_create(:build_session_token, %{user: user.id}, authorize?: false)
       |> AshHq.Accounts.create!()
       |> Map.get(:__metadata__)
       |> Map.get(:url_token)

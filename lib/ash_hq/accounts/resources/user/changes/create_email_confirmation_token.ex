@@ -13,7 +13,7 @@ defmodule AshHq.Accounts.User.Changes.CreateEmailConfirmationToken do
             email: user.email,
             context: "confirm",
             sent_to: user.email,
-            user: user
+            user: user.id
           },
           authorize?: false
         )

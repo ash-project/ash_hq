@@ -54,7 +54,7 @@ defmodule AshHqWeb.UserAuth do
   """
   def create_token_for_user(user) do
     Accounts.UserToken
-    |> Ash.Changeset.for_create(:build_session_token, %{user: user}, authorize?: false)
+    |> Ash.Changeset.for_create(:build_session_token, %{user: user.id}, authorize?: false)
     |> Accounts.create!()
     |> Map.get(:token)
   end

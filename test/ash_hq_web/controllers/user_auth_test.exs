@@ -54,7 +54,7 @@ defmodule AshHqWeb.UserAuthTest do
     test "erases session and cookies", %{conn: conn, user: user} do
       user_token =
         Accounts.UserToken
-        |> Ash.Changeset.for_create(:build_session_token, %{user: user}, authorize?: false)
+        |> Ash.Changeset.for_create(:build_session_token, %{user: user.id}, authorize?: false)
         |> Accounts.create!()
         |> Map.get(:token)
 
@@ -103,7 +103,7 @@ defmodule AshHqWeb.UserAuthTest do
     test "authenticates user from session", %{conn: conn, user: user} do
       user_token =
         Accounts.UserToken
-        |> Ash.Changeset.for_create(:build_session_token, %{user: user}, authorize?: false)
+        |> Ash.Changeset.for_create(:build_session_token, %{user: user.id}, authorize?: false)
         |> Accounts.create!()
         |> Map.get(:token)
 
@@ -130,7 +130,7 @@ defmodule AshHqWeb.UserAuthTest do
     test "does not authenticate if data is missing", %{conn: conn, user: user} do
       _ =
         Accounts.UserToken
-        |> Ash.Changeset.for_create(:build_session_token, %{user: user}, authorize?: false)
+        |> Ash.Changeset.for_create(:build_session_token, %{user: user.id}, authorize?: false)
         |> Accounts.create!()
         |> Map.get(:token)
 
@@ -159,7 +159,9 @@ defmodule AshHqWeb.UserAuthTest do
       conn = conn |> fetch_flash() |> UserAuth.require_authenticated_user([])
       assert conn.halted
       assert redirected_to(conn) == Routes.app_view_path(conn, :log_in)
-      assert get_flash(conn, :error) == "You must log in to access this page."
+
+      assert Phoenix.Flash.get(conn.assigns[:flash], :error) ==
+               "You must log in to access this page."
     end
 
     test "stores the path to redirect to on GET", %{conn: conn} do

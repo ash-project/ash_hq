@@ -26,7 +26,7 @@
 #         })
 
 #       assert redirected_to(conn) == "/"
-#       assert get_flash(conn, :info) =~ "If your email is in our system"
+#       assert Phoenix.Flash.get(conn.assigns[:flash], :info) =~ "If your email is in our system"
 #       assert Repo.get_by!(Accounts.UserToken, user_id: user.id).context == "reset_password"
 #     end
 
@@ -37,7 +37,7 @@
 #         })
 
 #       assert redirected_to(conn) == "/"
-#       assert get_flash(conn, :info) =~ "If your email is in our system"
+#       assert Phoenix.Flash.get(conn.assigns[:flash], :info) =~ "If your email is in our system"
 #       assert Repo.all(Accounts.UserToken) == []
 #     end
 #   end
@@ -62,7 +62,7 @@
 #     test "does not render reset password with invalid token", %{conn: conn} do
 #       conn = get(conn, Routes.user_reset_password_path(conn, :edit, "oops"))
 #       assert redirected_to(conn) == "/"
-#       assert get_flash(conn, :error) =~ "Reset password link is invalid or it has expired"
+#       assert Phoenix.Flash.get(conn.assigns[:flash], :error) =~ "Reset password link is invalid or it has expired"
 #     end
 #   end
 
@@ -90,7 +90,7 @@
 
 #       assert redirected_to(conn) == Routes.app_view_path(conn, :log_in)
 #       refute get_session(conn, :user_token)
-#       assert get_flash(conn, :info) =~ "Password reset successfully"
+#       assert Phoenix.Flash.get(conn.assigns[:flash], :info) =~ "Password reset successfully"
 
 #       assert Accounts.User
 #              |> Ash.Query.for_read(:by_email_and_password, %{
@@ -118,7 +118,7 @@
 #     test "does not reset password with invalid token", %{conn: conn} do
 #       conn = put(conn, Routes.user_reset_password_path(conn, :update, "oops"))
 #       assert redirected_to(conn) == "/"
-#       assert get_flash(conn, :error) =~ "Reset password link is invalid or it has expired"
+#       assert Phoenix.Flash.get(conn.assigns[:flash], :error) =~ "Reset password link is invalid or it has expired"
 #     end
 #   end
 # end

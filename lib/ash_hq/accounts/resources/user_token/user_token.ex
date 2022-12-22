@@ -8,10 +8,10 @@ defmodule AshHq.Accounts.UserToken do
 
   postgres do
     table "user_tokens"
-    repo AshHq.Repo
+    repo(AshHq.Repo)
 
     references do
-      reference :user, on_delete: :delete, on_update: :update
+      reference(:user, on_delete: :delete, on_update: :update)
     end
   end
 
@@ -58,7 +58,7 @@ defmodule AshHq.Accounts.UserToken do
     create :build_session_token do
       primary? true
 
-      argument :user, :map
+      argument :user, :uuid
 
       change manage_relationship(:user, type: :append_and_remove)
 
@@ -72,7 +72,7 @@ defmodule AshHq.Accounts.UserToken do
     create :build_email_token do
       accept [:sent_to, :context]
 
-      argument :user, :map
+      argument :user, :uuid
 
       change manage_relationship(:user, type: :append_and_remove)
       change AshHq.Accounts.UserToken.Changes.BuildHashedToken

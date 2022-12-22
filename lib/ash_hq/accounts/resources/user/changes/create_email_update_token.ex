@@ -12,7 +12,7 @@ defmodule AshHq.Accounts.User.Changes.CreateEmailUpdateToken do
           email: user.email,
           context: "change:#{user.email}",
           sent_to: original_changeset.attributes[:email],
-          user: user
+          user: user.id
         },
         authorize?: false
       )

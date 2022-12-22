@@ -31,7 +31,7 @@ defmodule AshHqWeb.UserSettingsControllerTest do
     test "updates the user email once", %{conn: conn, user: user, token: token, email: email} do
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
       assert redirected_to(conn) == Routes.app_view_path(conn, :user_settings)
-      assert get_flash(conn, :info) =~ "Email changed successfully"
+      assert Phoenix.Flash.get(conn.assigns[:flash], :info) =~ "Email changed successfully"
 
       refute Accounts.get!(Accounts.User, [email: user.email], authorize?: false, error?: false)
 
@@ -39,13 +39,17 @@ defmodule AshHqWeb.UserSettingsControllerTest do
 
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, token))
       assert redirected_to(conn) == Routes.app_view_path(conn, :user_settings)
-      assert get_flash(conn, :error) =~ "Email change link is invalid or it has expired"
+
+      assert Phoenix.Flash.get(conn.assigns[:flash], :error) =~
+               "Email change link is invalid or it has expired"
     end
 
     test "does not update email with invalid token", %{conn: conn, user: user} do
       conn = get(conn, Routes.user_settings_path(conn, :confirm_email, "oops"))
       assert redirected_to(conn) == Routes.app_view_path(conn, :user_settings)
-      assert get_flash(conn, :error) =~ "Email change link is invalid or it has expired"
+
+      assert Phoenix.Flash.get(conn.assigns[:flash], :error) =~
+               "Email change link is invalid or it has expired"
 
       assert Accounts.get!(Accounts.User, [email: user.email], authorize?: false)
     end

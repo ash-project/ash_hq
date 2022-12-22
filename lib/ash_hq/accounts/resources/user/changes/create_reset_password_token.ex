@@ -8,7 +8,7 @@ defmodule AshHq.Accounts.User.Changes.CreateResetPasswordToken do
       AshHq.Accounts.UserToken
       |> Ash.Changeset.for_create(
         :build_email_token,
-        %{email: user.email, context: "reset_password", sent_to: user.email, user: user},
+        %{email: user.email, context: "reset_password", sent_to: user.email, user: user.id},
         authorize?: false
       )
       |> AshHq.Accounts.create(return_notifications?: true)
