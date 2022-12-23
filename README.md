@@ -9,6 +9,8 @@
 5. Run the server with `iex -S mix phx.server`
 6. Open [http://localhost:4000](http://localhost:4000)
 
+Note to linux users: You will need the following packages (or their equivalents) to compile successfully: `erlang-dev erlang-parsetools erlang-os-mon erlang-xmerl erlang-tools`
+
 ## A Bit of History
 
 The liveview part is not very conventional, I was focused on speed when I first wrote it, and it (as things always do) evolved from something far more simple. The truly complicated part is that the docs are _not_ static content like you would typically see for documentation. They are all stored in a database, because they can all be full-text searched using postgres. Eventually it would make sense to serve the individual doc pages from a CDN or something like that. The interesting pages in that regard is the `Docs` page. We do quite a bit of work to make sure that we are only loading the html that will be served for the exact document we are seeing.
