@@ -12,18 +12,53 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
 
   def highlight(html) do
     html
-    |> replace_regex(
-      ~r/<pre><code(?:\s+class="(\w*)")?>(.*)<\/code><\/pre>/,
-      &highlight_code_block/3
-    )
-    |> replace_regex(~r/<code class="inline">(.*)<\/code>/, &maybe_highlight_module/2)
+    |> Floki.parse_document!()
+    |> Floki.traverse_and_update(fn
+      {"pre", _, [{"code", attrs, [body]}]} when is_binary(body) ->
+        lexer =
+          find_value_class(attrs, fn class ->
+            case Makeup.Registry.fetch_lexer_by_name(class) do
+              {:ok, {lexer, opts}} -> {class, lexer, opts}
+              :error -> nil
+            end
+          end)
+
+        case lexer do
+          {lang, lexer, opts} ->
+            {:keep, render_code(lang, lexer, opts, body)}
+
+          nil ->
+            if find_value_class(attrs, &(&1 == "inline")) do
+              {:keep, maybe_highlight_module(body)}
+            else
+              {:keep,
+               ~s(<pre class="code-pre"><code class="text-black dark:text-white">#{body}</code></pre>)}
+            end
+        end
+
+      other ->
+        other
+    end)
+    |> AshHq.Docs.Extensions.RenderMarkdown.RawHTML.raw_html(pretty: true)
+  end
+
+  defp find_value_class(attrs, func) do
+    Enum.find_value(attrs, fn
+      {"class", classes} ->
+        classes
+        |> String.split(" ")
+        |> Enum.find_value(func)
+
+      _ ->
+        nil
+    end)
   end
 
   defp replace_regex(string, regex, replacement) do
     Regex.replace(regex, string, replacement)
   end
 
-  defp maybe_highlight_module(_full_block, code) do
+  defp maybe_highlight_module(code) do
     code_without_c =
       case code do
         "c:" <> rest ->
@@ -54,7 +89,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
   defp try_parse_multi([{text, code} | rest]) do
     case Code.string_to_quoted(code) do
       {:ok, {fun, _, []}} when is_atom(fun) ->
-        ~s[<code #{text} class="inline maybe-local-call" data-fun="#{fun}">#{code}</code>]
+        ~s[<code #{text} class="inline maybe-local-call text-black dark:text-white" data-fun="#{fun}">#{code}</code>]
 
       {:ok,
        {:/, _,
@@ -63,17 +98,17 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
           arity
         ]}}
       when is_atom(fun) and is_integer(arity) ->
-        ~s[<code #{text} class="inline maybe-call" data-module="#{Enum.join(parts, ".")}" data-fun="#{fun}" data-arity="#{arity}">#{code}</code>]
+        ~s[<code #{text} class="inline maybe-call text-black dark:text-white" data-module="#{Enum.join(parts, ".")}" data-fun="#{fun}" data-arity="#{arity}">#{code}</code>]
 
       {:ok, {:/, _, [{fun, _, nil}, arity]}} when is_atom(fun) and is_integer(arity) ->
-        ~s[<code #{text} class="inline maybe-local-call" data-fun="#{fun}" data-arity="#{arity}">#{code}</code>]
+        ~s[<code #{text} class="inline maybe-local-call text-black dark:text-white" data-fun="#{fun}" data-arity="#{arity}">#{code}</code>]
 
       {:ok, {:__aliases__, _, parts}} ->
-        ~s[<code #{text} class="inline maybe-module" data-module="#{Enum.join(parts, ".")}">#{code}</code>]
+        ~s[<code #{text} class="inline maybe-module text-black dark:text-white" data-module="#{Enum.join(parts, ".")}">#{code}</code>]
 
       _ ->
         if rest == [] do
-          ~s[<code class="inline">#{code}</code>]
+          ~s[<code class="inline text-black dark:text-white">#{code}</code>]
         else
           try_parse_multi(rest)
         end
@@ -99,38 +134,34 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
   end
 
   defp render_code(lang, lexer, lexer_opts, code) do
-    if lexer do
-      highlighted =
-        code
-        |> unescape_html()
-        |> IO.iodata_to_binary()
-        |> String.replace(~r/{{mix_dep:.*}}/, fn value ->
-          try do
-            "{{mix_dep:" <> dep = String.trim_trailing(value, "}}")
-            "______#{dep}______"
-          rescue
-            _ ->
-              value
-          end
-        end)
-        |> Makeup.highlight_inner_html(
-          lexer: lexer,
-          lexer_options: lexer_opts,
-          formatter_options: [highlight_tag: "span"]
-        )
-        |> String.replace(~r/______.*______/, fn dep ->
-          value =
-            dep
-            |> String.trim_leading("_")
-            |> String.trim_trailing("_")
+    highlighted =
+      code
+      # |> unescape_html()
+      |> IO.iodata_to_binary()
+      |> String.replace(~r/{{mix_dep:.*}}/, fn value ->
+        try do
+          "{{mix_dep:" <> dep = String.trim_trailing(value, "}}")
+          "______#{dep}______"
+        rescue
+          _ ->
+            value
+        end
+      end)
+      |> Makeup.highlight_inner_html(
+        lexer: lexer,
+        lexer_options: lexer_opts,
+        formatter_options: [highlight_tag: "span"]
+      )
+      |> String.replace(~r/______.*______/, fn dep ->
+        value =
+          dep
+          |> String.trim_leading("_")
+          |> String.trim_trailing("_")
 
-          "{{mix_dep:#{value}}}"
-        end)
+        "{{mix_dep:#{value}}}"
+      end)
 
-      ~s(<pre class="code-pre"><code class="makeup #{lang} highlight">#{highlighted}</code></pre>)
-    else
-      ~s(<pre class="code-pre"><code class="makeup #{lang} text-black dark:text-white">#{code}</code></pre>)
-    end
+    ~s(<pre class="code-pre"><code class="makeup #{lang} highlight">#{highlighted}</code></pre>)
   end
 
   entities = [{"&amp;", ?&}, {"&lt;", ?<}, {"&gt;", ?>}, {"&quot;", ?"}, {"&#39;", ?'}]

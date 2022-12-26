@@ -29,9 +29,10 @@ defmodule AshHq.Blog.Post do
       constraints max_length: 250
     end
 
-    attribute :tag_names, {:array, :string} do
+    attribute :tag_names, {:array, :ci_string} do
       constraints items: [
-                    match: ~r/^[a-zA-Z]*$/
+                    match: ~r/^[a-zA-Z]*$/,
+                    casing: :lower
                   ]
     end
 
@@ -69,14 +70,14 @@ defmodule AshHq.Blog.Post do
     defaults [:create, :read, :update]
 
     read :published do
-      argument :tag, :string
+      argument :tag, :ci_string
 
       filter expr(
                state == :published and
                  if is_nil(^arg(:tag)) do
                    true
                  else
-                   ^arg(:tag) in tag_names
+                   ^arg(:tag) in type(tag_names, ^{:array, :ci_string})
                  end
              )
     end
@@ -114,7 +115,7 @@ defmodule AshHq.Blog.Post do
                destroy_notifications =
                  AshHq.Blog.Tag.read!()
                  |> Enum.flat_map(fn tag ->
-                   if tag.name in all_post_tags do
+                   if to_string(tag.name) in all_post_tags do
                      []
                    else
                      AshHq.Blog.Tag.destroy!(tag, return_notifications?: true)

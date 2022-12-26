@@ -11,9 +11,10 @@ defmodule AshHq.Blog.Tag do
   end
 
   attributes do
-    attribute :name, :string do
+    attribute :name, :ci_string do
       allow_nil? false
       primary_key? true
+      constraints casing: :lower
     end
   end
 

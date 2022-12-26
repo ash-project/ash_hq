@@ -38,8 +38,6 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
             #{inspect(html_doc)}
             """)
 
-            html_doc = AshHq.Docs.Extensions.RenderMarkdown.Highlighter.highlight(html_doc)
-
             html_doc =
               case attribute.type do
                 {:array, _} ->
@@ -52,8 +50,6 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
             Ash.Changeset.force_change_attribute(changeset, opts[:destination], html_doc)
 
           {:ok, html_doc, _} ->
-            html_doc = AshHq.Docs.Extensions.RenderMarkdown.Highlighter.highlight(html_doc)
-
             html_doc =
               case attribute.type do
                 {:array, _} ->

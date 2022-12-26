@@ -85,7 +85,7 @@ defmodule AshHqWeb.Pages.Blog do
             <h3 class="text-lg font-bold mb-1">All Tags:</h3>
             <div class="flex gap-2 flex-wrap w-full">
               {#for tag <- @tags}
-                <Tag tag={tag.name} />
+                <Tag tag={to_string(tag.name)} />
               {/for}
             </div>
           </div>
