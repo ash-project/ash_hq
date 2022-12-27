@@ -12,7 +12,11 @@ defmodule AshHq.MixProject do
       compilers: Mix.compilers() ++ [:surface],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      dialyzer: [
+        ignore_warnings: "dialyzer.ignore_warnings",
+        plt_add_apps: [:mix]
+      ]
     ]
   end
 

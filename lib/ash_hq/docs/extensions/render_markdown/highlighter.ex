@@ -54,10 +54,6 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
     end)
   end
 
-  defp replace_regex(string, regex, replacement) do
-    Regex.replace(regex, string, replacement)
-  end
-
   defp maybe_highlight_module(code) do
     code_without_c =
       case code do
@@ -118,25 +114,10 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
       ~s[<code class="inline">#{code}</code>]
   end
 
-  defp highlight_code_block(_full_block, lang, code) do
-    case pick_language_and_lexer(lang) do
-      {language, lexer, opts} -> render_code(language, lexer, opts, code)
-    end
-  end
-
-  defp pick_language_and_lexer(""), do: {"text", nil, []}
-
-  defp pick_language_and_lexer(lang) do
-    case Makeup.Registry.fetch_lexer_by_name(lang) do
-      {:ok, {lexer, opts}} -> {lang, lexer, opts}
-      :error -> {lang, nil, []}
-    end
-  end
-
   defp render_code(lang, lexer, lexer_opts, code) do
     highlighted =
       code
-      # |> unescape_html()
+      |> unescape_html()
       |> IO.iodata_to_binary()
       |> String.replace(~r/{{mix_dep:.*}}/, fn value ->
         try do

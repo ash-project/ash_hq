@@ -1,4 +1,5 @@
 defmodule AshHqWeb.Tails do
+  @moduledoc false
   @themes [
     dark: [
       bg: [

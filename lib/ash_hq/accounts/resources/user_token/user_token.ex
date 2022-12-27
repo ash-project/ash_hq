@@ -8,10 +8,10 @@ defmodule AshHq.Accounts.UserToken do
 
   postgres do
     table "user_tokens"
-    repo(AshHq.Repo)
+    repo AshHq.Repo
 
     references do
-      reference(:user, on_delete: :delete, on_update: :update)
+      reference :user, on_delete: :delete, on_update: :update
     end
   end
 

@@ -9,13 +9,13 @@ defmodule AshHq.Repo.Migrations.MigrateResources35 do
 
   def up do
     alter table(:guides) do
-      modify :sanitized_route, :text, null: false
+      modify(:sanitized_route, :text, null: false)
     end
   end
 
   def down do
     alter table(:guides) do
-      modify :sanitized_route, :text, null: true
+      modify(:sanitized_route, :text, null: true)
     end
   end
 end

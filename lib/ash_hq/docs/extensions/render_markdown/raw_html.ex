@@ -187,8 +187,6 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.RawHTML do
 
   # helpers
 
-  # TODO: Use Enum.map_intersperse/3 when we require Elixir v1.10+
-
   defp map_intersperse([], _, _),
     do: []
 
@@ -214,7 +212,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.RawHTML do
   end
 
   defp pad_increase(:noop), do: :noop
-  defp pad_increase(padder = %{depth: depth}), do: %{padder | depth: depth + 1}
+  defp pad_increase(%{depth: depth} = padder), do: %{padder | depth: depth + 1}
 
   defp line_ending(:noop), do: ""
   defp line_ending(%{line_ending: line_ending}), do: line_ending
