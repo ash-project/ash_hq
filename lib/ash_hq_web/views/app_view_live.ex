@@ -45,6 +45,25 @@ defmodule AshHqWeb.AppViewLive do
       class={classes([@configured_theme, "h-full font-sans": true])}
       phx-hook="ColorTheme"
     >
+      <head>
+        <meta property="og:type" content="text/html">
+        <meta property="og:image" content="https://ash-hq.org/images/ash-logo.png">
+        <meta property="og:url" content={to_string(@uri)}>
+        <meta property="og:site_name" content="Ash HQ">
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:domain" content="ash-hq.org">
+        <meta property="twitter:site" content="@AshFramework">
+        <!-- Need to adjust this for future blog writers -->
+        <meta property="twitter:creator" content="@ZachSDaniel1">
+
+        {#if @live_action not in [:docs_dsl, :blog]}
+          <meta property="og:title" content="Ash Framework">
+          <meta
+            property="og:description"
+            content="A declarative foundation for ambitious Elixir applications. Model your domain, derive the rest."
+          />
+        {/if}
+      </head>
       <div id="snowflakeContainer" phx-hook="Snowflakes">
         <span class="snowflake" />
       </div>

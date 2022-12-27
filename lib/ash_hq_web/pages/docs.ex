@@ -32,11 +32,17 @@ defmodule AshHqWeb.Pages.Docs do
   data module, :any
   data mix_task, :any
   data positional_options, :list
+  data description, :string
+  data title, :string
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
     ~F"""
     <div class="flex flex-col xl:flex-row justify-center">
+      <head>
+        <meta property="og:title" content={@title}>
+        <meta property="og:description" content={@description}>
+      </head>
       <div class="xl:hidden sticky top-20 z-40 h-14 bg-white dark:bg-base-dark-850 flex flex-row justify-start w-full space-x-12 items-center border-b border-t border-base-light-300 dark:border-base-dark-700 py-3">
         <button class="dark:hover:text-base-dark-600" phx-click={show_sidebar()}>
           <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
@@ -765,6 +771,8 @@ defmodule AshHqWeb.Pages.Docs do
       socket.assigns.module ->
         assign(socket,
           docs: socket.assigns.module.html_for,
+          title: "Module: #{socket.assigns.module.name}",
+          description: "View the documentation for #{socket.assigns.module.name} on Ash HQ.",
           doc_path: [socket.assigns.library.name, socket.assigns.module.name],
           options: []
         )
@@ -772,13 +780,28 @@ defmodule AshHqWeb.Pages.Docs do
       socket.assigns.mix_task ->
         assign(socket,
           docs: socket.assigns.mix_task.html_for,
+          title: "Mix Task: #{socket.assigns.mix_task.name}",
+          description: "View the documentation for #{socket.assigns.mix_task.name} on Ash HQ.",
           doc_path: [socket.assigns.library.name, socket.assigns.mix_task.name],
           options: []
         )
 
       socket.assigns.dsl ->
+        meta_name =
+          Enum.join(
+            [
+              socket.assigns.library.name,
+              socket.assigns.extension.name
+            ] ++ socket.assigns.dsl.path ++ [socket.assigns.dsl.name],
+            " > "
+          )
+
+        meta_type = String.capitalize(to_string(socket.assigns.dsl.type))
+
         assign(socket,
           docs: socket.assigns.dsl.html_for,
+          title: "DSL #{meta_type}: #{meta_name}",
+          description: "View the documentation for DSL #{meta_type}: #{meta_name} on Ash HQ.",
           doc_path:
             [
               socket.assigns.library.name,
@@ -794,20 +817,52 @@ defmodule AshHqWeb.Pages.Docs do
       socket.assigns.extension ->
         assign(socket,
           docs: socket.assigns.extension.html_for,
+          title: "Extension: #{socket.assigns.extension.name}",
+          description: "View the documentation for #{socket.assigns.extension.name} on Ash HQ.",
           doc_path: [socket.assigns.library.name, socket.assigns.extension.name],
           options: []
         )
 
       socket.assigns.guide ->
         assign(socket,
+          title: "Guide: #{socket.assigns.guide.name}",
           docs: socket.assigns.guide.html_for,
+          description: "Read the \"#{socket.assigns.guide.name}\" guide on Ash HQ",
           doc_path: [socket.assigns.library.name, socket.assigns.guide.name],
           options: []
         )
 
       true ->
-        assign(socket, docs: "", doc_path: [], dsls: [], options: [])
+        assign(socket,
+          docs: "",
+          title: "Ash Framework",
+          description: default_description(),
+          doc_path: [],
+          dsls: [],
+          options: []
+        )
     end
+  end
+
+  # defp description(html) do
+  # This isn't predictably good content to put in a snippet :(
+  # html
+  # |> Floki.parse_fragment()
+  # |> elem(1)
+  # |> Floki.text()
+  # |> String.split("\n", trim: true)
+  # |> Stream.map(&String.trim/1)
+  # |> Stream.map(&String.replace(&1, ~r/{{.*(?!}})$/, ""))
+  # |> Stream.reject(&(&1 == ""))
+  # |> Stream.take(4)
+  # |> Enum.join("\n")
+  # rescue
+  #   _ ->
+  #     default_description()
+  # end
+
+  defp default_description do
+    "A declarative foundation for ambitious Elixir applications. Model your domain, derive the rest."
   end
 
   # workaround for https://github.com/patrick-steele-idem/morphdom/pull/231

@@ -20,6 +20,10 @@ defmodule AshHqWeb.Pages.Blog do
       <div class="flex flex-col sm:flex-row sm:pt-32 sm:mx-32 min-h-screen">
         <div class="sm:w-9/12">
           {#if @post}
+            <head>
+              <meta property="og:title" content={"Ash Framework Blog: #{@post.title}"}>
+              <meta property="og:description" content={@post.tag_line}>
+            </head>
             <div class="border shadow-sm rounded-lg px-8 pb-6 mb-6 dark:border-gray-600" ">
               <div class="border-b">
                 <h1 class="mt-6 text-3xl font-semibold mb-4">{@post.title}</h1>
@@ -42,6 +46,13 @@ defmodule AshHqWeb.Pages.Blog do
               </div>
             </div>
           {#else}
+            <head>
+              <meta property="og:title" content="Ash Framework Blog">
+              <meta
+                property="og:description"
+                content="A declarative foundation for ambitious Elixir applications. Model your domain, derive the rest."
+              />
+            </head>
             {#if @tag}
               <h2 class="text-3xl font-semibold mb-1">Showing posts with tag: {@tag}</h2>
             {#else}
