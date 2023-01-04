@@ -174,7 +174,7 @@ Hooks.RightNav = {
     for (entry of entries) {
       if (entry.isIntersecting) {
         this.setAriaCurrent(entry.target.id);
-        history.pushState(null, null, `#${entry.target.id}`);
+        history.replaceState(null, null, `#${entry.target.id}`);
       }
     }
   },
