@@ -46,31 +46,33 @@ defmodule AshHqWeb.Helpers do
           end
 
         :link, %{type: "option", item: item, name_override: name, library: library}, _ ->
-          path =
+          [extension | path] =
             item
             |> String.trim_leading("/")
             |> String.split(~r/[\/\.]/)
-            |> Enum.drop(1)
 
           name = name || join_path(path)
 
           dsl_path = path |> :lists.droplast() |> Enum.map_join("/", &sanitize_name/1)
           anchor = path |> List.last() |> sanitize_name()
 
-          ~s(<a href="/docs/dsl/#{library}/#{version(libraries, library, selected_versions)}/#{dsl_path}##{anchor}">#{name}</a>)
+          extension = sanitize_name(extension)
+
+          ~s(<a href="/docs/dsl/#{library}/#{version(libraries, library, selected_versions)}/#{extension}/#{dsl_path}##{anchor}">#{name}</a>)
 
         :link, %{type: "dsl", item: item, name_override: name, library: library}, _ ->
-          path =
+          [extension | path] =
             item
             |> String.trim_leading("/")
             |> String.split(~r/[\/\.]/)
-            |> Enum.drop(1)
 
           dsl_path = Enum.map_join(path, "/", &sanitize_name/1)
 
           name = name || join_path(path)
 
-          ~s(<a href="/docs/dsl/#{library}/#{version(libraries, library, selected_versions)}/#{dsl_path}">#{name}</a>)
+          extension = sanitize_name(extension)
+
+          ~s(<a href="/docs/dsl/#{library}/#{version(libraries, library, selected_versions)}/#{extension}/#{dsl_path}">#{name}</a>)
 
         :link, %{type: "extension", item: item, name_override: name, library: library}, _ ->
           ~s(<a href="/docs/dsl/#{library}/#{version(libraries, library, selected_versions)}/#{sanitize_name(item)}">#{name || item}</a>)
