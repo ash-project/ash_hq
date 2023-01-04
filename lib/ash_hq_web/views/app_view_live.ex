@@ -64,11 +64,9 @@ defmodule AshHqWeb.AppViewLive do
           />
         {/if}
       </head>
-      <div id="snowflakeContainer" phx-hook="Snowflakes">
-        <span class="snowflake" />
-      </div>
       <Search
         id="search-box"
+        uri={@uri}
         close={close_search()}
         libraries={@libraries}
         selected_types={@selected_types}
@@ -194,15 +192,6 @@ defmodule AshHqWeb.AppViewLive do
      |> assign(params: params, uri: uri)}
   end
 
-  def handle_event("toggle-christmas", _, socket) do
-    {:noreply,
-     socket
-     |> assign(:christmas, !socket.assigns.christmas)
-     |> push_event("toggle-christmas", %{
-       "christmas" => to_string(!socket.assigns.christmas)
-     })}
-  end
-
   def handle_event("remove_version", %{"library" => library}, socket) do
     new_selected_versions = Map.put(socket.assigns.selected_versions, library, "")
 
@@ -265,14 +254,6 @@ defmodule AshHqWeb.AppViewLive do
   end
 
   def mount(_params, session, socket) do
-    christmas =
-      case session["christmas"] || "true" do
-        "true" -> true
-        "false" -> false
-      end
-
-    socket = assign(socket, :christmas, christmas)
-
     socket =
       assign_new(socket, :user_agent, fn _assigns ->
         get_connect_params(socket)["user_agent"]

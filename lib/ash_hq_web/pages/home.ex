@@ -47,7 +47,7 @@ defmodule AshHqWeb.Pages.Home do
     <div class="antialiased">
       <div class="my-2 dark:bg-base-dark-850 flex flex-col items-center pt-4 md:pt-12">
         <div class="flex flex-col">
-          <img class="h-64" src="/images/three-trees.svg">
+          <img class="h-64" src="/images/ash-logo-side.svg">
         </div>
         <div class="text-3xl md:text-5xl px-4 md:px-12 font-bold max-w-5xl mx-auto mt-8 md:text-center">
           Build <CalloutText text="powerful" /> and <CalloutText text="composable" /> applications with a <CalloutText text="flexible" /> tool-chain.

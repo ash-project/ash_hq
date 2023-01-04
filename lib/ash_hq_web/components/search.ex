@@ -17,6 +17,7 @@ defmodule AshHqWeb.Components.Search do
   prop change_types, :event, required: true
   prop change_versions, :event, required: true
   prop remove_version, :event, required: true
+  prop uri, :string, required: true
 
   data search, :string, default: ""
   data item_list, :list, default: []
@@ -257,7 +258,11 @@ defmodule AshHqWeb.Components.Search do
   end
 
   def update(assigns, socket) do
-    {:ok, socket |> assign(assigns) |> search()}
+    if assigns[:uri] != socket.assigns[:uri] do
+      {:ok, socket |> assign(:search, nil) |> assign(assigns) |> search()}
+    else
+      {:ok, socket |> assign(assigns) |> search()}
+    end
   end
 
   def handle_event("toggle_versions", _, socket) do
