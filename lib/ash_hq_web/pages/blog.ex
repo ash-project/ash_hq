@@ -41,7 +41,7 @@ defmodule AshHqWeb.Pages.Blog do
                   </div>
                 </div>
               </div>
-              <div class="prose prose-xl dark:prose-invert max-w-none mt-6">
+              <div class="prose prose-lg dark:prose-invert max-w-none mt-6">
                 {raw(@post.body_html)}
               </div>
             </div>

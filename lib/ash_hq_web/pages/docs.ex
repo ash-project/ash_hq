@@ -92,7 +92,7 @@ defmodule AshHqWeb.Pages.Docs do
         </div>
         <div
           id="docs-window"
-          class="w-full shrink prose prose-xl max-w-6xl bg-white dark:bg-base-dark-850 dark:prose-invert md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden"
+          class="w-full shrink prose max-w-6xl bg-white dark:bg-base-dark-850 dark:prose-invert md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden"
           phx-hook="Docs"
         >
           <div
