@@ -57,6 +57,7 @@ defmodule AshHq.MixProject do
       {:surface_heroicons, "~> 0.6.0"},
       {:ua_inspector, "~> 3.0"},
       # Syntax Highlighting
+      {:elixir_sense, github: "elixir-lsp/elixir_sense"},
       {:makeup, "~> 1.1"},
       {:makeup_elixir, "~> 0.16.0"},
       {:makeup_graphql, "~> 0.1.2"},

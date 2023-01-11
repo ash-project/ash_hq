@@ -93,7 +93,6 @@ defmodule AshHq.Docs.LibraryVersion do
       change {AshHq.Docs.Changes.AddArgToRelationship,
               attr: :id, arg: :library_version, rel: :extensions, generate: &Ash.UUID.generate/0}
 
-      # foo
       change manage_relationship(:guides, type: :create)
       change manage_relationship(:library, type: :append_and_remove)
       change manage_relationship(:modules, type: :create)
