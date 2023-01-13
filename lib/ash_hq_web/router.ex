@@ -1,7 +1,7 @@
 defmodule AshHqWeb.Router do
   use AshHqWeb, :router
+  use AshAuthentication.Phoenix.Router
 
-  import AshHqWeb.UserAuth
   import AshAdmin.Router
 
   pipeline :browser do
@@ -12,14 +12,12 @@ defmodule AshHqWeb.Router do
     plug :protect_from_forgery
     plug AshHqWeb.SessionPlug
     plug :assign_user_agent
-  end
-
-  pipeline :dead_view_authentication do
-    plug :fetch_current_user
+    plug :load_from_session
   end
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :load_from_bearer
   end
 
   pipeline :admin_basic_auth do
@@ -28,9 +26,24 @@ defmodule AshHqWeb.Router do
 
   scope "/", AshHqWeb do
     pipe_through :browser
+    reset_route []
+
+    sign_in_route overrides: [AshHqWeb.AuthOverrides, AshAuthentication.Phoenix.Overrides.Default]
+
+    sign_out_route AuthController
+    auth_routes_for(AshHq.Accounts.User, to: AuthController)
+  end
+
+  scope "/", AshHqWeb do
+    pipe_through :browser
 
     live_session :main,
-      on_mount: [{AshHqWeb.InitAssigns, :default}, {AshHqWeb.LiveUserAuth, :live_user}],
+      on_mount: [
+        AshAuthentication.Phoenix.LiveSession,
+        {AshHqWeb.LiveUserAuth, :live_user_optional},
+        {AshHqWeb.InitAssigns, :default}
+      ],
+      session: {AshAuthentication.Phoenix.LiveSession, :generate_session, []},
       root_layout: {AshHqWeb.LayoutView, :root} do
       live "/", AppViewLive, :home
       live "/media", AppViewLive, :media
@@ -49,20 +62,13 @@ defmodule AshHqWeb.Router do
       get "/unsubscribe", MailingListController, :unsubscribe
     end
 
-    live_session :unauthenticated_only,
-      on_mount: [
-        {AshHqWeb.InitAssigns, :default},
-        {AshHqWeb.LiveUserAuth, :live_user_not_allowed}
-      ],
-      root_layout: {AshHqWeb.LayoutView, :root} do
-      live "/users/log_in", AppViewLive, :log_in
-      live "/users/register", AppViewLive, :register
-      live "/users/reset_password", AppViewLive, :reset_password
-      live "/users/reset_password/:token", AppViewLive, :reset_password
-    end
-
     live_session :authenticated_only,
-      on_mount: [{AshHqWeb.InitAssigns, :default}, {AshHqWeb.LiveUserAuth, :live_user_required}],
+      on_mount: [
+        AshAuthentication.Phoenix.LiveSession,
+        {AshHqWeb.InitAssigns, :default},
+        {AshHqWeb.LiveUserAuth, :live_user_required}
+      ],
+      session: {AshAuthentication.Phoenix.LiveSession, :generate_session, []},
       root_layout: {AshHqWeb.LayoutView, :root} do
       live "/users/settings", AppViewLive, :user_settings
     end
@@ -80,34 +86,6 @@ defmodule AshHqWeb.Router do
             interface: :playground
   end
 
-  ## Authentication routes
-
-  scope "/", AshHqWeb do
-    pipe_through [
-      :browser,
-      :dead_view_authentication,
-      :redirect_if_user_is_authenticated,
-      :put_session_layout
-    ]
-
-    get "/users/new_session", UserSessionController, :log_in
-    post "/users/new_session", UserSessionController, :log_in
-  end
-
-  scope "/", AshHqWeb do
-    pipe_through [:browser, :dead_view_authentication, :require_authenticated_user]
-
-    get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
-  end
-
-  scope "/", AshHqWeb do
-    pipe_through [:browser, :dead_view_authentication]
-
-    post "/users/log_out", UserSessionController, :delete
-    post "/users/confirm", UserConfirmationController, :create
-    get "/users/confirm/:token", UserConfirmationController, :confirm
-  end
-
   # Enables LiveDashboard only for development
   #
   # If you want to use the LiveDashboard in production, you should put
@@ -119,7 +97,7 @@ defmodule AshHqWeb.Router do
 
   scope "/" do
     if Mix.env() in [:dev, :test] do
-      pipe_through [:browser, :dead_view_authentication]
+      pipe_through [:browser]
     else
       pipe_through [:browser, :admin_basic_auth]
     end
@@ -138,7 +116,7 @@ defmodule AshHqWeb.Router do
   # node running the Phoenix server.
   if Mix.env() == :dev do
     scope "/dev" do
-      pipe_through [:browser, :dead_view_authentication]
+      pipe_through [:browser]
 
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end

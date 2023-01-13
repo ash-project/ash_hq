@@ -3,51 +3,47 @@ defmodule AshHq.Accounts.User do
 
   use AshHq.Resource,
     data_layer: AshPostgres.DataLayer,
-    authorizers: [Ash.Policy.Authorizer]
+    authorizers: [Ash.Policy.Authorizer],
+    extensions: [AshAuthentication]
 
   alias AshHq.Accounts.Preparations, warn: false
-  import Ash.Changeset
 
-  postgres do
-    table "users"
-    repo AshHq.Repo
-  end
+  require Ash.Query
 
-  policies do
-    policy action(:read) do
-      authorize_if expr(id == ^actor(:id))
+  authentication do
+    api AshHq.Accounts
+
+    strategies do
+      password :password do
+        identity_field :email
+        hashed_password_field :hashed_password
+
+        resettable do
+          sender AshHq.Accounts.User.Senders.SendPasswordResetEmail
+        end
+      end
+
+      github do
+        client_id AshHq.Accounts.Secrets
+        client_secret AshHq.Accounts.Secrets
+        redirect_uri AshHq.Accounts.Secrets
+      end
     end
 
-    policy action(:change_password) do
-      description "Allow the user to change their own password"
-      authorize_if expr(id == ^actor(:id))
+    tokens do
+      enabled? true
+      token_resource AshHq.Accounts.UserToken
+      signing_secret AshHq.Accounts.Secrets
+      store_all_tokens? true
+      require_token_presence_for_authentication? true
     end
 
-    policy action(:deliver_update_email_instructions) do
-      description "Allow a user to request an update their own email"
-      authorize_if expr(id == ^actor(:id))
-    end
+    add_ons do
+      confirmation :confirm do
+        monitor_fields [:email]
 
-    policy action(:by_email_and_password) do
-      description "Allow looking up by email/password combo (logging in) for unauthenticated users only."
-      forbid_if actor_present()
-      authorize_if always()
-    end
-
-    policy action(:deliver_user_confirmation_instructions) do
-      description "A logged in user can request email confirmation for themselves to be sent again"
-      authorize_if expr(id == ^actor(:id))
-    end
-
-    policy action(:update_merch_settings) do
-      description "A logged in user can update their merch settings"
-      authorize_if expr(id == ^actor(:id))
-    end
-
-    policy action(:register) do
-      description "Allow looking up by email/password combo (logging in) for unauthenticated users only."
-      forbid_if actor_present()
-      authorize_if always()
+        sender AshHq.Accounts.User.Senders.SendConfirmationEmail
+      end
     end
   end
 
@@ -60,9 +56,7 @@ defmodule AshHq.Accounts.User do
         max_length: 160
       ]
 
-    attribute :confirmed_at, :utc_datetime_usec
-
-    attribute :hashed_password, :string, private?: true
+    attribute :hashed_password, :string, private?: true, sensitive?: true
 
     attribute :encrypted_name, AshHq.Types.EncryptedString
     attribute :encrypted_address, AshHq.Types.EncryptedString
@@ -79,111 +73,150 @@ defmodule AshHq.Accounts.User do
     end
   end
 
+  policies do
+    bypass AshAuthentication.Checks.AshAuthenticationInteraction do
+      authorize_if always()
+    end
+
+    policy action(:read) do
+      authorize_if expr(id == ^actor(:id))
+    end
+
+    policy action(:update_email) do
+      description "A logged in user can update their email"
+      authorize_if expr(id == ^actor(:id))
+    end
+
+    policy action(:resend_confirmation_instructions) do
+      description "A logged in user can request an email confirmation"
+      authorize_if expr(id == ^actor(:id))
+    end
+
+    policy action(:change_password) do
+      description "A logged in user can reset their password"
+      authorize_if expr(id == ^actor(:id))
+    end
+
+    policy action(:update_merch_settings) do
+      description "A logged in user can update their merch settings"
+      authorize_if expr(id == ^actor(:id))
+    end
+  end
+
+  postgres do
+    table "users"
+    repo AshHq.Repo
+  end
+
   actions do
     defaults [:read]
 
-    read :by_email_and_password do
-      argument :email, :string, allow_nil?: false, sensitive?: true
-      argument :password, :string, allow_nil?: false, sensitive?: true
+    create :register_with_github do
+      argument :user_info, :map do
+        allow_nil? false
+      end
 
-      prepare AshHq.Accounts.User.Preparations.ValidatePassword
+      argument :oauth_tokens, :map do
+        allow_nil? false
+      end
 
-      filter expr(email == ^arg(:email))
+      change fn changeset, _ ->
+        user_info = Ash.Changeset.get_argument(changeset, :user_info)
+
+        changeset =
+          if user_info["email_verified"] do
+            Ash.Changeset.change_new_attribute_lazy(changeset, :confirmed_at, fn ->
+              DateTime.utc_now()
+            end)
+          else
+            changeset
+          end
+
+        Ash.Changeset.change_attributes(changeset, Map.take(user_info, ["email"]))
+      end
+
+      change AshAuthentication.GenerateTokenChange
+      upsert? true
+      upsert_identity :unique_email
     end
 
-    read :by_token do
-      argument :token, :url_encoded_binary, allow_nil?: false
-      argument :context, :string, allow_nil?: false
-      prepare Preparations.DetermineDaysForToken
+    update :change_password do
+      accept []
 
-      filter expr(
-               token.token == ^arg(:token) and token.context == ^arg(:context) and
-                 token.created_at > ago(^context(:days_for_token), :day)
-             )
+      argument :current_password, :string do
+        sensitive? true
+        allow_nil? false
+      end
+
+      argument :password, :string do
+        sensitive? true
+        allow_nil? false
+      end
+
+      argument :password_confirmation, :string do
+        sensitive? true
+        allow_nil? false
+      end
+
+      validate confirm(:password, :password_confirmation)
+
+      validate {AshHq.Accounts.User.Validations.ValidateCurrentPassword,
+                argument: :current_password} do
+        only_when_valid? true
+        before_action? true
+      end
+
+      change set_context(%{strategy_name: :password})
+      change AshAuthentication.Strategy.Password.HashPasswordChange
     end
 
-    read :with_verified_email_token do
-      argument :token, :url_encoded_binary, allow_nil?: false
-      argument :context, :string, allow_nil?: false
-
-      prepare AshHq.Accounts.Preparations.SetHashedToken
-      prepare AshHq.Accounts.Preparations.DetermineDaysForToken
-
-      filter expr(
-               token.created_at > ago(^context(:days_for_token), :day) and
-                 token.token == ^context(:hashed_token) and token.context == ^arg(:context) and
-                 token.sent_to == email
-             )
-    end
-
-    create :register do
+    update :update_email do
       accept [:email]
 
-      argument :password, :string,
-        allow_nil?: false,
-        constraints: [
-          min_length: 6
-        ]
-
-      argument :confirm, :boolean, default: true
-
-      argument :confirmation_url_fun, :function do
-        constraints arity: 1
+      argument :current_password, :string do
+        sensitive? true
+        allow_nil? false
       end
 
-      change AshHq.Accounts.User.Changes.HashPassword
-      change {AshHq.Accounts.User.Changes.CreateEmailConfirmationToken, on_argument: :confirm}
-    end
-
-    update :deliver_user_confirmation_instructions do
-      accept []
-
-      argument :confirmation_url_fun, :function do
-        constraints arity: 1
+      validate {AshHq.Accounts.User.Validations.ValidateCurrentPassword,
+                argument: :current_password} do
+        only_when_valid? true
+        before_action? true
       end
-
-      validate attribute_equals(:confirmed_at, nil), message: "already confirmed"
-      change AshHq.Accounts.User.Changes.CreateEmailConfirmationToken
     end
 
-    update :deliver_update_email_instructions do
-      accept [:email]
+    update :resend_confirmation_instructions do
+      accept []
 
-      argument :current_password, :string, allow_nil?: false
+      change fn changeset, _context ->
+        Ash.Changeset.before_action(changeset, fn changeset ->
+          case AshHq.Accounts.UserToken.email_token_for_user(changeset.data.id,
+                 authorize?: false
+               ) do
+            {:ok, %{extra_data: %{"email" => changing_to}}} ->
+              temp_changeset = %{
+                changeset
+                | attributes: Map.put(changeset.attributes, :email, changing_to)
+              }
 
-      argument :update_url_fun, :function do
-        constraints arity: 1
+              strategy = AshAuthentication.Info.strategy!(changeset.resource, :confirm)
+
+              {:ok, token} =
+                AshAuthentication.AddOn.Confirmation.confirmation_token(
+                  strategy,
+                  temp_changeset,
+                  changeset.data
+                )
+
+              AshHq.Accounts.User.Senders.SendConfirmationEmail.send(changeset.data, token, [])
+
+              changeset
+
+            _ ->
+              Ash.Changeset.add_error(changeset, "Could not determine what email to use")
+          end
+        end)
       end
-
-      validate AshHq.Accounts.User.Validations.ValidateCurrentPassword
-      validate changing(:email)
-
-      change prevent_change(:email)
-      change AshHq.Accounts.User.Changes.CreateEmailUpdateToken
-    end
-
-    update :deliver_user_reset_password_instructions do
-      accept []
-
-      argument :reset_password_url_fun, :function do
-        constraints arity: 1
-      end
-
-      change AshHq.Accounts.User.Changes.CreateResetPasswordToken
-    end
-
-    update :logout do
-      accept []
-
-      change AshHq.Accounts.User.Changes.RemoveAllTokens
-    end
-
-    update :change_email do
-      accept []
-      argument :token, :url_encoded_binary
-
-      change AshHq.Accounts.User.Changes.GetEmailFromToken
-      change AshHq.Accounts.User.Changes.DeleteEmailChangeTokens
     end
 
     update :update_merch_settings do
@@ -194,58 +227,12 @@ defmodule AshHq.Accounts.User do
       change set_attribute(:encrypted_address, arg(:address))
       change set_attribute(:encrypted_name, arg(:name))
     end
+  end
 
-    update :change_password do
-      accept []
-
-      argument :password, :string,
-        allow_nil?: false,
-        constraints: [
-          min_length: 6
-        ]
-
-      argument :password_confirmation, :string, allow_nil?: false
-      argument :current_password, :string
-
-      validate fn changeset ->
-        if get_argument(changeset, :password) ==
-             get_argument(changeset, :password_confirmation) do
-          :ok
-        else
-          {:error, field: :password, message: "password does not match"}
-        end
-      end
-
-      validate AshHq.Accounts.User.Validations.ValidateCurrentPassword
-
-      change AshHq.Accounts.User.Changes.HashPassword
-      change AshHq.Accounts.User.Changes.RemoveAllTokens
-    end
-
-    update :reset_password do
-      accept []
-
-      argument :password, :string,
-        allow_nil?: false,
-        constraints: [
-          min_length: 6
-        ]
-
-      argument :password_confirmation, :string, allow_nil?: false
-
-      validate confirm(:password, :password_confirmation)
-
-      change AshHq.Accounts.User.Changes.HashPassword
-      change AshHq.Accounts.User.Changes.RemoveAllTokens
-    end
-
-    update :confirm do
-      accept []
-      argument :delete_confirm_tokens, :boolean, default: false
-
-      change set_attribute(:confirmed_at, &DateTime.utc_now/0)
-      change AshHq.Accounts.User.Changes.DeleteConfirmTokens
-    end
+  code_interface do
+    define_for AshHq.Accounts
+    define :resend_confirmation_instructions
+    define :register_with_password, args: [:email, :password, :password_confirmation]
   end
 
   resource do
@@ -255,7 +242,14 @@ defmodule AshHq.Accounts.User do
   end
 
   identities do
-    identity :unique_email, [:email]
+    identity :unique_email, [:email] do
+      eager_check_with AshHq.Accounts
+    end
+  end
+
+  changes do
+    change AshHq.Accounts.User.Changes.RemoveAllTokens,
+      where: [action_is(:password_reset_with_password)]
   end
 
   validations do

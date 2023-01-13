@@ -22,6 +22,10 @@ config :git_ops,
   manage_readme_version: "README.md",
   version_tag_prefix: "v"
 
+secret_key_base = "FxKFwVYhDFah3bLLXXqWdpdcLf5e5T1UyVM6XQp7kCt/Reg5yuAEI3upAVDRoP5e"
+
+config :ash_hq, token_signing_secret: secret_key_base
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #
@@ -35,7 +39,7 @@ config :ash_hq, AshHqWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "FxKFwVYhDFah3bLLXXqWdpdcLf5e5T1UyVM6XQp7kCt/Reg5yuAEI3upAVDRoP5e",
+  secret_key_base: secret_key_base,
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},

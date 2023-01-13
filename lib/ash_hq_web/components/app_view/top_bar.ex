@@ -1,11 +1,11 @@
 defmodule AshHqWeb.Components.AppView.TopBar do
   @moduledoc "The global top navigation bar"
-  use Surface.Component
+  use AshHqWeb, :component
 
-  prop live_action, :atom, required: true
-  prop toggle_theme, :event, required: true
-  prop configured_theme, :string, required: true
-  prop current_user, :any
+  prop(live_action, :atom, required: true)
+  prop(toggle_theme, :event, required: true)
+  prop(configured_theme, :string, required: true)
+  prop(current_user, :any)
 
   alias AshHqWeb.Components.SearchBar
   alias AshHqWeb.Router.Helpers, as: Routes
@@ -150,7 +150,7 @@ defmodule AshHqWeb.Components.AppView.TopBar do
                 </LivePatch>
               </div>
               <div class="py-1" role="none">
-                <Form for={:sign_out} action={Routes.user_session_path(AshHqWeb.Endpoint, :delete)} method="post">
+                <Form for={:sign_out} action={~p'/sign-out'} method="get">
                   <button
                     label="logout"
                     type="submit"
@@ -165,15 +165,12 @@ defmodule AshHqWeb.Components.AppView.TopBar do
               </div>
             {#else}
               <div class="py-1" role="none">
-                <LivePatch
-                  to={Routes.app_view_path(AshHqWeb.Endpoint, :log_in)}
-                  class="dark:text-white group flex items-center px-4 py-2 text-sm"
-                >
+                <a href={~p'/sign-in'} class="dark:text-white group flex items-center px-4 py-2 text-sm">
                   <div class="flex items-center">
                     <Heroicons.Outline.UserAddIcon class="mr-3 h-5 w-5 text-base-light-400 group-hover:text-base-light-500" />
                     Sign In
                   </div>
-                </LivePatch>
+                </a>
               </div>
             {/if}
           </div>

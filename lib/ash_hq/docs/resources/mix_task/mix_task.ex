@@ -5,33 +5,6 @@ defmodule AshHq.Docs.MixTask do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  postgres do
-    table "mix_tasks"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
-  end
-
-  search do
-    doc_attribute :doc
-
-    load_for_search [
-      :version_name,
-      :library_name,
-      :library_id
-    ]
-
-    item_type "Mix Task"
-
-    type "Mix Tasks"
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html
-  end
-
   attributes do
     uuid_primary_key :id
 
@@ -64,9 +37,36 @@ defmodule AshHq.Docs.MixTask do
     timestamps()
   end
 
+  search do
+    doc_attribute :doc
+
+    load_for_search [
+      :version_name,
+      :library_name,
+      :library_id
+    ]
+
+    item_type "Mix Task"
+
+    type "Mix Tasks"
+  end
+
+  render_markdown do
+    render_attributes doc: :doc_html
+  end
+
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
       allow_nil? true
+    end
+  end
+
+  postgres do
+    table "mix_tasks"
+    repo AshHq.Repo
+
+    references do
+      reference :library_version, on_delete: :delete
     end
   end
 

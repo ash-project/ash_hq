@@ -46,7 +46,8 @@ defmodule AshHqWeb.ConnCase do
   test context.
   """
   def register_and_log_in_user(%{conn: conn}) do
-    user = AshHq.AccountsFixtures.user_fixture()
+    user = test_user()
+
     %{conn: log_in_user(conn, user), user: user}
   end
 
@@ -55,8 +56,30 @@ defmodule AshHqWeb.ConnCase do
 
       setup :register_user
   """
-  def register_user(context) do
-    %{user: AshHq.AccountsFixtures.user_fixture()}
+  def register_user(_context) do
+    %{
+      user: test_user()
+    }
+  end
+
+  defp test_user do
+    user =
+      AshHq.Accounts.User.register_with_password!(
+        "test@example.com",
+        "password123",
+        "password123",
+        authorize?: false
+      )
+
+    receive do
+      {:email, _} ->
+        :ok
+    after
+      0 ->
+        :ok
+    end
+
+    user
   end
 
   @doc """
@@ -65,15 +88,8 @@ defmodule AshHqWeb.ConnCase do
   It returns an updated `conn`.
   """
   def log_in_user(conn, user) do
-    token =
-      AshHq.Accounts.UserToken
-      |> Ash.Changeset.for_create(:build_session_token, %{user: user.id}, authorize?: false)
-      |> AshHq.Accounts.create!()
-      |> Map.get(:__metadata__)
-      |> Map.get(:url_token)
-
     conn
     |> Phoenix.ConnTest.init_test_session(%{})
-    |> Plug.Conn.put_session(:user_token, token)
+    |> Plug.Conn.put_session(:user_token, user.__metadata__.token)
   end
 end

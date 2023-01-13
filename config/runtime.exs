@@ -12,6 +12,23 @@ if System.get_env("PHX_SERVER") && System.get_env("RELEASE_NAME") do
   config :ash_hq, AshHqWeb.Endpoint, server: true
 end
 
+config :ash_hq, :github,
+  client_id: System.fetch_env("GITHUB_CLIENT_ID"),
+  client_secret: System.fetch_env("GITHUB_CLIENT_SECRET"),
+  redirect_uri: System.fetch_env("GITHUB_REDIRECT_URI")
+
+host = System.get_env("PHX_HOST") || "localhost"
+port = String.to_integer(System.get_env("PORT") || "4000")
+
+ash_hq_url =
+  case port do
+    443 -> "https://#{host}"
+    80 -> "http://#{host}"
+    port -> "http://#{host}:#{port}"
+  end
+
+config :ash_hq, url: ash_hq_url
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||
@@ -38,8 +55,8 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
-  host = System.get_env("PHX_HOST") || "ash-hq.org"
-  port = String.to_integer(System.get_env("PORT") || "4000")
+  config :ash_hq,
+    token_signing_secret: secret_key_base
 
   config :ash_hq, AshHqWeb.Endpoint,
     server: true,

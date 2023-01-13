@@ -9,42 +9,6 @@ defmodule AshHq.Docs.Guide do
       AshAdmin.Resource
     ]
 
-  postgres do
-    repo AshHq.Repo
-    table "guides"
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
-  end
-
-  search do
-    doc_attribute :text
-    show_docs_on [:sanitized_name, :sanitized_route]
-    type "Guides"
-    load_for_search library_version: [:library_name, :library_display_name]
-  end
-
-  render_markdown do
-    render_attributes text: :text_html
-  end
-
-  graphql do
-    type :guide
-
-    queries do
-      list :list_guides, :read_for_version
-    end
-  end
-
-  admin do
-    form do
-      field :text do
-        type :markdown
-      end
-    end
-  end
-
   attributes do
     uuid_primary_key :id
 
@@ -89,9 +53,45 @@ defmodule AshHq.Docs.Guide do
     timestamps()
   end
 
+  search do
+    doc_attribute :text
+    show_docs_on [:sanitized_name, :sanitized_route]
+    type "Guides"
+    load_for_search library_version: [:library_name, :library_display_name]
+  end
+
+  render_markdown do
+    render_attributes text: :text_html
+  end
+
+  graphql do
+    type :guide
+
+    queries do
+      list :list_guides, :read_for_version
+    end
+  end
+
+  admin do
+    form do
+      field :text do
+        type :markdown
+      end
+    end
+  end
+
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
       allow_nil? true
+    end
+  end
+
+  postgres do
+    repo AshHq.Repo
+    table "guides"
+
+    references do
+      reference :library_version, on_delete: :delete
     end
   end
 

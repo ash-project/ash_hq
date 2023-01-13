@@ -5,7 +5,7 @@ defmodule AshHqWeb.AppViewLive do
 
   alias AshHqWeb.Components.AppView.TopBar
   alias AshHqWeb.Components.{CatalogueModal, Search}
-  alias AshHqWeb.Pages.{Blog, Docs, Home, LogIn, Media, Register, ResetPassword, UserSettings}
+  alias AshHqWeb.Pages.{Blog, Docs, Home, Media, UserSettings}
   alias Phoenix.LiveView.JS
   alias Surface.Components.Context
   require Ash.Query
@@ -118,12 +118,6 @@ defmodule AshHqWeb.AppViewLive do
             />
           {#match :user_settings}
             <UserSettings id="user_settings" current_user={@current_user} />
-          {#match :log_in}
-            <LogIn id="log_in" />
-          {#match :register}
-            <Register id="register" />
-          {#match :reset_password}
-            <ResetPassword id="reset_password" params={@params} />
           {#match :media}
             <Media id="media" />
         {/case}

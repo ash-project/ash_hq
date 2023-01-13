@@ -21,7 +21,15 @@ config :ash_hq, AshHq.Repo,
 config :spark, :formatter,
   remove_parens?: true,
   "AshHq.Resource": [
-    type: Ash.Resource
+    type: Ash.Resource,
+    section_order: [
+      :authentication,
+      :token,
+      :attributes,
+      :relationships,
+      :policies,
+      :postgres
+    ]
   ],
   "Ash.Flow": []
 

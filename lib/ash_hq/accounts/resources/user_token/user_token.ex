@@ -3,19 +3,22 @@ defmodule AshHq.Accounts.UserToken do
 
   use AshHq.Resource,
     data_layer: AshPostgres.DataLayer,
-    notifiers: [AshHq.Accounts.EmailNotifier],
-    authorizers: [Ash.Policy.Authorizer]
+    authorizers: [Ash.Policy.Authorizer],
+    extensions: [AshAuthentication.TokenResource]
 
-  postgres do
-    table "user_tokens"
-    repo AshHq.Repo
+  token do
+    api AshHq.Accounts
+  end
 
-    references do
-      reference :user, on_delete: :delete, on_update: :update
-    end
+  relationships do
+    belongs_to :user, AshHq.Accounts.User
   end
 
   policies do
+    bypass AshAuthentication.Checks.AshAuthenticationInteraction do
+      authorize_if always()
+    end
+
     policy always() do
       description """
       There are currently no usages of user tokens resource that should be publicly
@@ -26,57 +29,35 @@ defmodule AshHq.Accounts.UserToken do
     end
   end
 
-  attributes do
-    uuid_primary_key :id
+  postgres do
+    table "user_tokens"
+    repo AshHq.Repo
 
-    attribute :token, :binary
-    attribute :context, :string
-    attribute :sent_to, :string
-
-    create_timestamp :created_at
-  end
-
-  relationships do
-    belongs_to :user, AshHq.Accounts.User
+    references do
+      reference :user, on_delete: :delete, on_update: :update
+    end
   end
 
   actions do
-    defaults [:read]
+    defaults [:read, :destroy]
 
-    read :verify_email_token do
-      argument :token, :url_encoded_binary, allow_nil?: false
-      argument :context, :string, allow_nil?: false
-      prepare AshHq.Accounts.Preparations.SetHashedToken
-      prepare AshHq.Accounts.Preparations.DetermineDaysForToken
+    read :email_token_for_user do
+      get? true
 
-      filter expr(
-               token == ^context(:hashed_token) and context == ^arg(:context) and
-                 created_at > ago(^context(:days_for_token), :day)
-             )
-    end
-
-    create :build_session_token do
-      primary? true
-
-      argument :user, :uuid
-
-      change manage_relationship(:user, type: :append_and_remove)
-
-      change fn changeset, _ ->
-        Ash.Changeset.change_attribute(changeset, :context, "session")
+      argument :user_id, :uuid do
+        allow_nil? false
       end
 
-      change AshHq.Accounts.UserToken.Changes.BuildSessionToken
+      prepare build(sort: [updated_at: :desc], limit: 1)
+
+      filter expr(purpose == "confirm" and not is_nil(extra_data[:email]))
     end
+  end
 
-    create :build_email_token do
-      accept [:sent_to, :context]
-
-      argument :user, :uuid
-
-      change manage_relationship(:user, type: :append_and_remove)
-      change AshHq.Accounts.UserToken.Changes.BuildHashedToken
-    end
+  code_interface do
+    define_for AshHq.Accounts
+    define :destroy
+    define :email_token_for_user, args: [:user_id]
   end
 
   resource do
@@ -87,5 +68,20 @@ defmodule AshHq.Accounts.UserToken do
 
   identities do
     identity :token_context, [:context, :token]
+  end
+
+  changes do
+    change fn changeset, _ ->
+             case changeset.context[:ash_authentication][:user] do
+               nil ->
+                 changeset
+
+               user ->
+                 Ash.Changeset.manage_relationship(changeset, :user, user,
+                   type: :append_and_remove
+                 )
+             end
+           end,
+           on: [:create]
   end
 end

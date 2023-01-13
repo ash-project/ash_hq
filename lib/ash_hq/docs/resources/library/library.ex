@@ -3,11 +3,6 @@ defmodule AshHq.Docs.Library do
   use AshHq.Resource,
     data_layer: AshPostgres.DataLayer
 
-  postgres do
-    table "libraries"
-    repo AshHq.Repo
-  end
-
   attributes do
     uuid_primary_key :id
 
@@ -35,6 +30,11 @@ defmodule AshHq.Docs.Library do
 
   relationships do
     has_many :versions, AshHq.Docs.LibraryVersion
+  end
+
+  postgres do
+    table "libraries"
+    repo AshHq.Repo
   end
 
   actions do
