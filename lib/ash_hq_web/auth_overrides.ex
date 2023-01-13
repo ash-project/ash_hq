@@ -4,6 +4,6 @@ defmodule AshHqWeb.AuthOverrides do
   alias AshAuthentication.Phoenix.Components
 
   override Components.HorizontalRule do
-    set :root_class, "hidden"
+    set(:root_class, "hidden")
   end
 end

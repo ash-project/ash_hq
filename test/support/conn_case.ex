@@ -62,7 +62,7 @@ defmodule AshHqWeb.ConnCase do
     }
   end
 
-  defp test_user do
+  defp test_user() do
     user =
       AshHq.Accounts.User.register_with_password!(
         "test@example.com",
