@@ -59,9 +59,10 @@ defmodule AshHq.Accounts.User do
 
     attribute(:hashed_password, :string, private?: true, sensitive?: true)
 
-    attribute(:encrypted_name, AshHq.Types.EncryptedString)
-    attribute(:encrypted_address, AshHq.Types.EncryptedString)
-    attribute(:shirt_size, :string)
+    attribute :encrypted_name, AshHq.Types.EncryptedString
+    attribute :encrypted_address, AshHq.Types.EncryptedString
+    attribute :shirt_size, :string
+    attribute :github_info, :map
 
     create_timestamp(:created_at)
     update_timestamp(:updated_at)
@@ -126,15 +127,19 @@ defmodule AshHq.Accounts.User do
 
         changeset =
           if user_info["email_verified"] do
-            Ash.Changeset.change_new_attribute_lazy(changeset, :confirmed_at, fn ->
-              DateTime.utc_now()
-            end)
+            Ash.Changeset.force_change_attribute(
+              changeset,
+              :confirmed_at,
+              Ash.Changeset.get_attribute(changeset, :confirmed_at) || DateTime.utc_now()
+            )
           else
             changeset
           end
 
-        Ash.Changeset.change_attributes(changeset, Map.take(user_info, ["email"]))
-      end)
+        changeset
+        |> Ash.Changeset.change_attribute(:email, Map.get(user_info, "email"))
+        |> Ash.Changeset.change_attribute(:github_info, user_info)
+      end
 
       change(AshAuthentication.GenerateTokenChange)
       upsert?(true)

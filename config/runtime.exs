@@ -13,21 +13,14 @@ if System.get_env("PHX_SERVER") && System.get_env("RELEASE_NAME") do
 end
 
 config :ash_hq, :github,
-  client_id: System.fetch_env("GITHUB_CLIENT_ID"),
-  client_secret: System.fetch_env("GITHUB_CLIENT_SECRET"),
-  redirect_uri: System.fetch_env("GITHUB_REDIRECT_URI")
+  client_id: System.get_env("GITHUB_CLIENT_ID"),
+  client_secret: System.get_env("GITHUB_CLIENT_SECRET"),
+  redirect_uri: System.get_env("GITHUB_REDIRECT_URI")
 
 host = System.get_env("PHX_HOST") || "localhost"
 port = String.to_integer(System.get_env("PORT") || "4000")
 
-ash_hq_url =
-  case port do
-    443 -> "https://#{host}"
-    80 -> "http://#{host}"
-    port -> "http://#{host}:#{port}"
-  end
-
-config :ash_hq, url: ash_hq_url
+config :ash_hq, url: System.get_env("ASH_HQ_URL") || "http://localhost:4000"
 
 if config_env() == :prod do
   database_url =
