@@ -6,7 +6,11 @@ RUN apt-get install -y wget
 RUN wget https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb
 RUN dpkg -i erlang-solutions_2.0_all.deb
 RUN apt-get update
-RUN apt-get install -y git gcc g++ make curl 
+RUN apt-get install -y git 
+RUN apt-get install -y gcc 
+RUN apt-get install -y g++ 
+RUN apt-get install -y make
+RUN apt-get install -y curl 
 RUN apt-get install -y build-essential
 RUN apt-get install -y esl-erlang
 RUN curl -sL https://deb.nodesource.com/setup_16.x  | bash -

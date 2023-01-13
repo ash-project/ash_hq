@@ -11,12 +11,22 @@ defmodule AshHq.Accounts.User.Validations.ValidateCurrentPassword do
   def validate(changeset, opts) do
     strategy = AshAuthentication.Info.strategy!(changeset.resource, :password)
     plaintext_password = Ash.Changeset.get_argument(changeset, opts[:argument])
+
     hashed_password = Map.get(changeset.data, strategy.hashed_password_field)
 
-    if strategy.hash_provider.valid?(plaintext_password, hashed_password) do
-      :ok
+    if hashed_password do
+      if strategy.hash_provider.valid?(plaintext_password, hashed_password) do
+        :ok
+      else
+        {:error, [field: opts[:argument], message: "is incorrect"]}
+      end
     else
-      {:error, [field: opts[:argument], message: "is incorrect"]}
+      {:error,
+       [
+         field: opts[:argument],
+         message:
+           "has not been set. If you logged in with github and would like to set a password, please log out and use the forgot password flow."
+       ]}
     end
   end
 end

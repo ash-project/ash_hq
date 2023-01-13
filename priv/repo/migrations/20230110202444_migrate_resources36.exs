@@ -12,6 +12,10 @@ defmodule AshHq.Repo.Migrations.MigrateResources36 do
       modify(:hashed_password, :text, null: false)
     end
 
+    execute("""
+    DELETE FROM user_tokens
+    """)
+
     alter table(:user_tokens) do
       remove(:sent_to)
       remove(:context)
