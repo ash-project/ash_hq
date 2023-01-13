@@ -120,7 +120,7 @@ defmodule AshHqWeb do
     end
   end
 
-  def static_paths() do
+  def static_paths do
     ~w(assets fonts images favicon.ico robots.txt)
   end
 
