@@ -59,10 +59,10 @@ defmodule AshHq.Accounts.User do
 
     attribute(:hashed_password, :string, private?: true, sensitive?: true)
 
-    attribute :encrypted_name, AshHq.Types.EncryptedString
-    attribute :encrypted_address, AshHq.Types.EncryptedString
-    attribute :shirt_size, :string
-    attribute :github_info, :map
+    attribute(:encrypted_name, AshHq.Types.EncryptedString)
+    attribute(:encrypted_address, AshHq.Types.EncryptedString)
+    attribute(:shirt_size, :string)
+    attribute(:github_info, :map)
 
     create_timestamp(:created_at)
     update_timestamp(:updated_at)
@@ -139,7 +139,7 @@ defmodule AshHq.Accounts.User do
         changeset
         |> Ash.Changeset.change_attribute(:email, Map.get(user_info, "email"))
         |> Ash.Changeset.change_attribute(:github_info, user_info)
-      end
+      end)
 
       change(AshAuthentication.GenerateTokenChange)
       upsert?(true)
@@ -166,9 +166,10 @@ defmodule AshHq.Accounts.User do
 
       validate(confirm(:password, :password_confirmation))
 
-      validate {AshAuthentication.Strategy.Password.PasswordValidation, password_argument: :current_password} do
-        only_when_valid? true
-        before_action? true
+      validate {AshAuthentication.Strategy.Password.PasswordValidation,
+                password_argument: :current_password} do
+        only_when_valid?(true)
+        before_action?(true)
       end
 
       change(set_context(%{strategy_name: :password}))
@@ -183,9 +184,10 @@ defmodule AshHq.Accounts.User do
         allow_nil?(false)
       end
 
-      validate {AshAuthentication.Strategy.Password.PasswordValidation, password_argument: :current_password} do
-        only_when_valid? true
-        before_action? true
+      validate {AshAuthentication.Strategy.Password.PasswordValidation,
+                password_argument: :current_password} do
+        only_when_valid?(true)
+        before_action?(true)
       end
     end
 
