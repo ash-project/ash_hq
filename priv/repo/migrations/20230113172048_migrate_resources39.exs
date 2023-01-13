@@ -9,13 +9,13 @@ defmodule AshHq.Repo.Migrations.MigrateResources39 do
 
   def up do
     alter table(:users) do
-      add :github_info, :map
+      add(:github_info, :map)
     end
   end
 
   def down do
     alter table(:users) do
-      remove :github_info
+      remove(:github_info)
     end
   end
 end
