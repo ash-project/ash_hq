@@ -3,7 +3,8 @@ defmodule AshHqWeb.LiveUserAuth do
   Helpers for authenticating users in liveviews
   """
 
-  use AshHqWeb, :component
+  import Phoenix.Component
+  use AshHqWeb, :verified_routes
 
   def on_mount(:live_user_optional, _params, _session, socket) do
     if socket.assigns[:current_user] do

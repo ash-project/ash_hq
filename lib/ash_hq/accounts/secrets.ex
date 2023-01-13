@@ -1,4 +1,5 @@
 defmodule AshHq.Accounts.Secrets do
+  @moduledoc "Secrets adapter for AshHq authentication"
   use AshAuthentication.Secret
 
   @github_secret_keys ~w(client_id client_secret redirect_uri)a

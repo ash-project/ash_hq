@@ -1,4 +1,7 @@
 defmodule AshHq.Accounts.User.Senders.SendPasswordResetEmail do
+  @moduledoc """
+  Sends a password reset email
+  """
   use AshAuthentication.Sender
   use AshHqWeb, :verified_routes
 

@@ -212,7 +212,7 @@ defmodule AshHq.Accounts.User do
 
               changeset
 
-            response ->
+            _ ->
               Ash.Changeset.add_error(changeset, "Could not determine what email to use")
           end
         end)

@@ -1,4 +1,7 @@
 defmodule AshHq.Accounts.User.Senders.SendConfirmationEmail do
+  @moduledoc """
+  Sends a confirmation email for initial sign up or email change.
+  """
   use AshAuthentication.Sender
   use AshHqWeb, :verified_routes
 

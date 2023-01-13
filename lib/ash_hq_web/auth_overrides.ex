@@ -1,4 +1,5 @@
 defmodule AshHqWeb.AuthOverrides do
+  @moduledoc "UI overrides for authentication views"
   use AshAuthentication.Phoenix.Overrides
   alias AshAuthentication.Phoenix.Components
 
