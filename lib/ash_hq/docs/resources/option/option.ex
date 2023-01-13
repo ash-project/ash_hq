@@ -5,37 +5,6 @@ defmodule AshHq.Docs.Option do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  postgres do
-    table "options"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
-  end
-
-  search do
-    doc_attribute :doc
-
-    load_for_search [
-      :extension_order,
-      :extension_type,
-      :extension_name,
-      :version_name,
-      :library_name,
-      :library_id
-    ]
-
-    sanitized_name_attribute :sanitized_path
-    use_path_for_name? true
-    add_name_to_path? false
-    show_docs_on :dsl_sanitized_path
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html
-  end
-
   attributes do
     uuid_primary_key :id
 
@@ -76,6 +45,28 @@ defmodule AshHq.Docs.Option do
     timestamps()
   end
 
+  search do
+    doc_attribute :doc
+
+    load_for_search [
+      :extension_order,
+      :extension_type,
+      :extension_name,
+      :version_name,
+      :library_name,
+      :library_id
+    ]
+
+    sanitized_name_attribute :sanitized_path
+    use_path_for_name? true
+    add_name_to_path? false
+    show_docs_on :dsl_sanitized_path
+  end
+
+  render_markdown do
+    render_attributes doc: :doc_html
+  end
+
   relationships do
     belongs_to :dsl, AshHq.Docs.Dsl do
       allow_nil? true
@@ -87,6 +78,15 @@ defmodule AshHq.Docs.Option do
 
     belongs_to :extension, AshHq.Docs.Extension do
       allow_nil? true
+    end
+  end
+
+  postgres do
+    table "options"
+    repo AshHq.Repo
+
+    references do
+      reference :library_version, on_delete: :delete
     end
   end
 

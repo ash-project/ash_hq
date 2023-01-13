@@ -2,7 +2,6 @@ defmodule AshHqWeb.Pages.UserSettings do
   @moduledoc "User settings page"
   use Surface.LiveComponent
 
-  alias AshHqWeb.Router.Helpers, as: Routes
   alias Surface.Components.Form
 
   alias Surface.Components.Form.{
@@ -15,13 +14,13 @@ defmodule AshHqWeb.Pages.UserSettings do
     TextInput
   }
 
-  prop current_user, :map, required: true
+  prop(current_user, :map, required: true)
 
-  data email_form, :map
-  data password_form, :map
-  data merch_form, :map
-  data address, :string
-  data name, :string
+  data(email_form, :map)
+  data(password_form, :map)
+  data(merch_form, :map)
+  data(address, :string)
+  data(name, :string)
 
   def render(assigns) do
     ~F"""
@@ -255,7 +254,7 @@ defmodule AshHqWeb.Pages.UserSettings do
       email_form:
         AshPhoenix.Form.for_update(
           socket.assigns.current_user,
-          :deliver_update_email_instructions,
+          :update_email,
           as: "update_email",
           api: AshHq.Accounts,
           actor: socket.assigns.current_user
@@ -289,13 +288,6 @@ defmodule AshHqWeb.Pages.UserSettings do
 
   @impl true
   def handle_event("save_update_email", %{"update_email" => params}, socket) do
-    params =
-      Map.put(
-        params,
-        "update_url_fun",
-        &Routes.user_settings_url(AshHqWeb.Endpoint, :confirm_email, &1)
-      )
-
     case AshPhoenix.Form.submit(socket.assigns.email_form, params: params) do
       {:ok, _result} ->
         {:noreply,
@@ -359,15 +351,9 @@ defmodule AshHqWeb.Pages.UserSettings do
 
   @impl true
   def handle_event("resend_confirmation_instructions", _, socket) do
-    socket.assigns.current_user
-    |> Ash.Changeset.for_update(
-      :deliver_user_confirmation_instructions,
-      %{
-        confirmation_url_fun: &Routes.user_confirmation_url(AshHqWeb.Endpoint, :confirm, &1)
-      },
+    AshHq.Accounts.User.resend_confirmation_instructions!(socket.assigns.current_user,
       actor: socket.assigns.current_user
     )
-    |> AshHq.Accounts.update!()
 
     {:noreply, socket}
   end

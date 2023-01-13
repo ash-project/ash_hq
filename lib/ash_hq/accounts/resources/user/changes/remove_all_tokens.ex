@@ -8,15 +8,19 @@ defmodule AshHq.Accounts.User.Changes.RemoveAllTokens do
   require Ash.Query
 
   def change(changeset, _opts, _context) do
-    Ash.Changeset.after_action(changeset, fn _changeset, user ->
-      {:ok, query} =
-        AshHq.Accounts.UserToken
-        |> Ash.Query.filter(user_id == ^user.id)
-        |> Ash.Query.data_layer_query()
+    Ash.Changeset.after_action(
+      changeset,
+      fn _changeset, user ->
+        {:ok, query} =
+          AshHq.Accounts.UserToken
+          |> Ash.Query.filter(user_id == ^user.id)
+          |> Ash.Query.data_layer_query()
 
-      AshHq.Repo.delete_all(query)
+        AshHq.Repo.delete_all(query)
 
-      {:ok, user}
-    end)
+        {:ok, user}
+      end,
+      prepend?: true
+    )
   end
 end

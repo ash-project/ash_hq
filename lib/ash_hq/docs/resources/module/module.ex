@@ -5,31 +5,6 @@ defmodule AshHq.Docs.Module do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  postgres do
-    table "modules"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
-  end
-
-  search do
-    doc_attribute :doc
-
-    load_for_search [
-      :version_name,
-      :library_name,
-      :library_id
-    ]
-
-    type "Code"
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html
-  end
-
   attributes do
     uuid_primary_key :id
 
@@ -62,12 +37,37 @@ defmodule AshHq.Docs.Module do
     timestamps()
   end
 
+  search do
+    doc_attribute :doc
+
+    load_for_search [
+      :version_name,
+      :library_name,
+      :library_id
+    ]
+
+    type "Code"
+  end
+
+  render_markdown do
+    render_attributes doc: :doc_html
+  end
+
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
       allow_nil? true
     end
 
     has_many :functions, AshHq.Docs.Function
+  end
+
+  postgres do
+    table "modules"
+    repo AshHq.Repo
+
+    references do
+      reference :library_version, on_delete: :delete
+    end
   end
 
   actions do

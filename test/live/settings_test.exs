@@ -22,7 +22,7 @@ defmodule AshHq.SettingsTest do
                view
                |> element("form#update_email")
                |> render_submit(%{
-                 update_email: %{email: "new_email@example.com", current_password: "hello world!"}
+                 update_email: %{email: "new_email@example.com", current_password: "password123"}
                })
                |> follow_redirect(conn)
 
@@ -35,7 +35,7 @@ defmodule AshHq.SettingsTest do
       view
       |> element("form#update_email")
       |> render_submit(%{
-        update_email: %{email: "new_email@example.com", current_password: "hello world!"}
+        update_email: %{email: "new_email@example.com", current_password: "password123"}
       })
 
       assert_received {:email, email}
@@ -51,16 +51,18 @@ defmodule AshHq.SettingsTest do
       view
       |> element("form#update_email")
       |> render_submit(%{
-        update_email: %{email: "new_email@example.com", current_password: "hello world!"}
+        update_email: %{email: "new_email@example.com", current_password: "password123"}
       })
 
       assert_received {:email, email}
 
       assert %{"url" => url} = Regex.named_captures(~r/(?<url>http[^\s\"]*)/, email.html_body)
 
-      path = URI.parse(url).path
+      uri = URI.parse(url)
 
-      assert {:ok, _conn} = conn |> live(path) |> follow_redirect(conn, "/users/settings")
+      path = %{uri | authority: nil, host: nil, scheme: nil, port: nil} |> to_string()
+
+      assert {:ok, _conn} = conn |> live(path) |> follow_redirect(conn, "/")
 
       new_user = AshHq.Accounts.reload!(user, authorize?: false)
       assert to_string(new_user.email) == "new_email@example.com"
@@ -84,7 +86,7 @@ defmodule AshHq.SettingsTest do
                  change_password: %{
                    password: "hello world2!",
                    password_confirmation: "hello world2!",
-                   current_password: "hello world!"
+                   current_password: "password123"
                  }
                })
                |> follow_redirect(conn)
@@ -102,7 +104,7 @@ defmodule AshHq.SettingsTest do
                  change_password: %{
                    password: "hello world2!",
                    password_confirmation: "hello world2!",
-                   current_password: "hello world!"
+                   current_password: "password123"
                  }
                })
                |> follow_redirect(conn)
@@ -110,7 +112,7 @@ defmodule AshHq.SettingsTest do
       assert html =~ "Password has been successfully changed"
 
       assert AshHq.Accounts.User
-             |> Ash.Query.for_read(:by_email_and_password, %{
+             |> Ash.Query.for_read(:sign_in_with_password, %{
                email: user.email,
                password: "hello world2!"
              })

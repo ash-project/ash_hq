@@ -68,7 +68,7 @@ AshHq.Docs.Library.create!(
     name: "ash_authentication",
     display_name: "AshAuthentication",
     order: 55,
-    repo_org: "alembic",
+    repo_org: "team-alembic",
     description: """
     Provides drop-in support for user authentication with various strategies and tons of customizability.
     """
@@ -82,7 +82,7 @@ AshHq.Docs.Library.create!(
     name: "ash_authentication_phoenix",
     display_name: "AshAuthenticationPhoenix",
     order: 56,
-    repo_org: "alembic",
+    repo_org: "team-alembic",
     description: """
     Phoenix helpers and UI components in support of AshAuthentication.
     """

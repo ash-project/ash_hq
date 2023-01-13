@@ -20,7 +20,7 @@ defmodule AshHqWeb.Endpoint do
     at: "/",
     from: :ash_hq,
     gzip: false,
-    only: ~w(assets fonts images favicon.ico robots.txt)
+    only: AshHqWeb.static_paths()
 
   # Need to figure out CSP yet
   # plug PlugContentSecurityPolicy

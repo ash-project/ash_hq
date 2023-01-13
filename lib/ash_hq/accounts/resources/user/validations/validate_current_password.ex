@@ -8,13 +8,15 @@ defmodule AshHq.Accounts.User.Validations.ValidateCurrentPassword do
   use Ash.Resource.Validation
 
   @impl true
-  def validate(changeset, _) do
-    password = Ash.Changeset.get_argument(changeset, :current_password)
+  def validate(changeset, opts) do
+    strategy = AshAuthentication.Info.strategy!(changeset.resource, :password)
+    plaintext_password = Ash.Changeset.get_argument(changeset, opts[:argument])
+    hashed_password = Map.get(changeset.data, strategy.hashed_password_field)
 
-    if AshHq.Accounts.User.Helpers.valid_password?(changeset.data, password) do
+    if strategy.hash_provider.valid?(plaintext_password, hashed_password) do
       :ok
     else
-      {:error, [field: :password, message: "is incorrect"]}
+      {:error, [field: opts[:argument], message: "is incorrect"]}
     end
   end
 end

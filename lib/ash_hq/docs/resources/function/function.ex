@@ -5,35 +5,6 @@ defmodule AshHq.Docs.Function do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  postgres do
-    table "functions"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
-  end
-
-  search do
-    doc_attribute :doc
-
-    load_for_search [
-      :version_name,
-      :library_name,
-      :module_name,
-      :library_id
-    ]
-
-    type "Code"
-
-    show_docs_on :module_sanitized_name
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html, heads: :heads_html
-    header_ids? false
-  end
-
   attributes do
     uuid_primary_key :id
 
@@ -79,6 +50,26 @@ defmodule AshHq.Docs.Function do
     timestamps()
   end
 
+  search do
+    doc_attribute :doc
+
+    load_for_search [
+      :version_name,
+      :library_name,
+      :module_name,
+      :library_id
+    ]
+
+    type "Code"
+
+    show_docs_on :module_sanitized_name
+  end
+
+  render_markdown do
+    render_attributes doc: :doc_html, heads: :heads_html
+    header_ids? false
+  end
+
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
       allow_nil? true
@@ -86,6 +77,15 @@ defmodule AshHq.Docs.Function do
 
     belongs_to :module, AshHq.Docs.Module do
       allow_nil? true
+    end
+  end
+
+  postgres do
+    table "functions"
+    repo AshHq.Repo
+
+    references do
+      reference :library_version, on_delete: :delete
     end
   end
 

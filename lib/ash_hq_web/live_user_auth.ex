@@ -3,48 +3,21 @@ defmodule AshHqWeb.LiveUserAuth do
   Helpers for authenticating users in liveviews
   """
 
-  alias AshHqWeb.Router.Helpers, as: Routes
+  use AshHqWeb, :component
 
-  @doc """
-  Sets the current user on each mount of a liveview
-  """
-  def on_mount(:live_user, _params, session, socket) do
-    {:cont,
-     Phoenix.Component.assign(
-       socket,
-       :current_user,
-       AshHqWeb.UserAuth.user_for_session_token(session["user_token"])
-     )}
-  end
-
-  def on_mount(:live_user_required, _params, session, socket) do
-    case AshHqWeb.UserAuth.user_for_session_token(session["user_token"]) do
-      nil ->
-        {:halt, Phoenix.LiveView.redirect(socket, to: "/users/log_in")}
-
-      user ->
-        {:cont,
-         Phoenix.Component.assign(
-           socket,
-           :current_user,
-           user
-         )}
+  def on_mount(:live_user_optional, _params, _session, socket) do
+    if socket.assigns[:current_user] do
+      {:cont, socket}
+    else
+      {:cont, assign(socket, :current_user, nil)}
     end
   end
 
-  def on_mount(:live_user_not_allowed, _params, session, socket) do
-    case AshHqWeb.UserAuth.user_for_session_token(session["user_token"]) do
-      nil ->
-        {:cont,
-         Phoenix.Component.assign(
-           socket,
-           :current_user,
-           nil
-         )}
-
-      _user ->
-        {:halt,
-         Phoenix.LiveView.redirect(socket, to: Routes.app_view_path(AshHqWeb.Endpoint, :home))}
+  def on_mount(:live_user_required, _params, _session, socket) do
+    if socket.assigns[:current_user] do
+      {:cont, socket}
+    else
+      {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/sign-in")}
     end
   end
 end

@@ -5,35 +5,6 @@ defmodule AshHq.Docs.Dsl do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  postgres do
-    table "dsls"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
-  end
-
-  search do
-    doc_attribute :doc
-
-    load_for_search [
-      :extension_order,
-      :extension_type,
-      :extension_name,
-      :version_name,
-      :library_name,
-      :library_id
-    ]
-
-    sanitized_name_attribute :sanitized_path
-    use_path_for_name? true
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html
-  end
-
   attributes do
     uuid_primary_key :id
 
@@ -74,6 +45,26 @@ defmodule AshHq.Docs.Dsl do
     timestamps()
   end
 
+  search do
+    doc_attribute :doc
+
+    load_for_search [
+      :extension_order,
+      :extension_type,
+      :extension_name,
+      :version_name,
+      :library_name,
+      :library_id
+    ]
+
+    sanitized_name_attribute :sanitized_path
+    use_path_for_name? true
+  end
+
+  render_markdown do
+    render_attributes doc: :doc_html
+  end
+
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
       allow_nil? true
@@ -86,6 +77,15 @@ defmodule AshHq.Docs.Dsl do
     belongs_to :dsl, __MODULE__
     has_many :options, AshHq.Docs.Option
     has_many :dsls, __MODULE__
+  end
+
+  postgres do
+    table "dsls"
+    repo AshHq.Repo
+
+    references do
+      reference :library_version, on_delete: :delete
+    end
   end
 
   actions do

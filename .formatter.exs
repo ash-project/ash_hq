@@ -7,7 +7,9 @@
     :ash_graphql,
     :surface,
     :ash_admin,
-    :ash_csv
+    :ash_csv,
+    :ash_authentication,
+    :ash_authentication_phoenix
   ],
   inputs: [
     "*.{ex,exs}",

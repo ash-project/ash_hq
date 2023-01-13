@@ -45,6 +45,8 @@ defmodule AshHq.MixProject do
       {:ash_phoenix, github: "ash-project/ash_phoenix", override: true},
       {:ash_graphql, github: "ash-project/ash_graphql"},
       {:ash_json_api, github: "ash-project/ash_json_api"},
+      {:ash_authentication, github: "team-alembic/ash_authentication", override: true},
+      {:ash_authentication_phoenix, github: "team-alembic/ash_authentication_phoenix"},
       {:absinthe_plug, "~> 1.5"},
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, github: "ash-project/ash_csv"},
@@ -78,7 +80,7 @@ defmodule AshHq.MixProject do
       {:ecto_psql_extras, "~> 0.6"},
       {:phoenix_ecto, "~> 4.4"},
       # Phoenix/Core dependencies
-      {:phoenix, "~> 1.7.0-rc.0", override: true},
+      {:phoenix, "~> 1.7.0-rc.1", override: true},
       {:phoenix_view, "~> 2.0"},
       {:ecto_sql, "~> 3.6"},
       {:postgrex, ">= 0.0.0"},

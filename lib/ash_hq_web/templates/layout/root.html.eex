@@ -38,6 +38,21 @@
     </script>
   </head>
   <body class="h-full">
+    <%= case live_flash(@flash, :info) do %>
+      <% nil -> %>
+      <% flash -> %>
+        <p class="alert alert-info" role="alert" phx-click="lv:clear-flash" phx-value-key="info">
+          <%= flash %>
+        </p>
+    <% end %>
+    <%= case live_flash(@flash, :error) do %>
+      <% nil -> %>
+      <% flash -> %>
+        <p class="alert alert-danger" role="alert" phx-click="lv:clear-flash" phx-value-key="error">
+          <%= flash %>
+        </p>
+    <% end %>
+
     <%= @inner_content %>
     <%= if @live_action == :docs do %>
       <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
