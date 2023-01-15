@@ -154,7 +154,36 @@ defmodule Utils do
           doc: docs_with_examples(entity.describe || "", examples(entity.examples)),
           imports: [],
           links: Map.new(entity.links || []),
-          args: entity.args,
+          args:
+            Enum.map(entity.args, fn
+              {:optional, name, _} ->
+                name
+
+              {:optional, name} ->
+                name
+
+              name ->
+                name
+            end),
+          optional_args:
+            Enum.flat_map(entity.args, fn
+              {:optional, name, _} ->
+                [name]
+
+              {:optional, name} ->
+                [name]
+
+              _ ->
+                []
+            end),
+          arg_defaults:
+            Enum.reduce(entity.args, %{},
+            fn {:optional, name, default}, acc ->
+                Map.put(acc, name, inspect(default))
+
+              _, acc ->
+                acc
+            end),
           type: :entity,
           path: path,
           options: add_argument_indices(schema(option_schema, path ++ [entity.name]), entity.args)
@@ -169,7 +198,15 @@ defmodule Utils do
 
   defp add_argument_indices(values, arguments) do
     Enum.map(values, fn value ->
-      case Enum.find_index(arguments, &(&1 == value.name)) do
+      case Enum.find_index(arguments, fn {:optional, name, _} ->
+          name == value.name
+
+        {:optional, name} ->
+          name == value.name
+
+        name ->
+          name == value.name
+      end) do
         nil ->
           value
 

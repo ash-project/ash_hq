@@ -222,6 +222,9 @@ defmodule AshHqWeb.Pages.Docs do
                   <tr>
                     <th>Name</th>
                     <th>Type</th>
+                    {#if @dsl.arg_defaults not in [%{}, nil]}
+                      <th>Default</th>
+                    {/if}
                     <th>Doc</th>
                     <th>Links</th>
                   </tr>
@@ -234,13 +237,16 @@ defmodule AshHqWeb.Pages.Docs do
                           </LivePatch>
                           <div class="flex flex-row space-x-2">
                             <CalloutText text={option.name} />
-                            {render_tags(assigns, option)}
+                            {render_tags(assigns, %{option | required: option.required && !Map.has_key?(@dsl.arg_defaults, option.name)})}
                           </div>
                         </div>
                       </td>
                       <td>
                         {option.type}
                       </td>
+                      {#if @dsl.arg_defaults not in [%{}, nil]}
+                        <th>{Map.get(@dsl.arg_defaults, option.name)}</th>
+                      {/if}
                       <td>
                         {raw(render_replacements(@libraries, @selected_versions, option.html_for))}
                       </td>
