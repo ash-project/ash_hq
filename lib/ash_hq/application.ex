@@ -32,7 +32,6 @@ defmodule AshHq.Application do
         AshHqWeb.Telemetry,
         # Start the PubSub system
         {Phoenix.PubSub, name: AshHq.PubSub},
-        {AshHq.Docs.Cache, []},
         # Start the Endpoint (http/https)
         AshHqWeb.Endpoint,
         {AshHq.Docs.Library.Agent, nil}

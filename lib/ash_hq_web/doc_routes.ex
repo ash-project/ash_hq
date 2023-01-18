@@ -108,9 +108,9 @@ defmodule AshHqWeb.DocRoutes do
 
   def sanitize_name(name, allow_forward_slash? \\ false) do
     if allow_forward_slash? do
-      String.downcase(String.replace(name, ~r/[^A-Za-z0-9\/_]/, "-"))
+      String.downcase(String.replace(to_string(name), ~r/[^A-Za-z0-9\/_]/, "-"))
     else
-      String.downcase(String.replace(name, ~r/[^A-Za-z0-9_]/, "-"))
+      String.downcase(String.replace(to_string(name), ~r/[^A-Za-z0-9_]/, "-"))
     end
   end
 end

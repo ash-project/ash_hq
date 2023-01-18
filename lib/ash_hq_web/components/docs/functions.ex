@@ -2,7 +2,6 @@ defmodule AshHqWeb.Components.Docs.Functions do
   @moduledoc "Lists all of the provided functions"
   use Surface.Component
 
-  import AshHqWeb.Helpers
   alias AshHqWeb.Components.Docs.SourceLink
 
   prop type, :atom, required: true

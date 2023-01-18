@@ -83,18 +83,27 @@ defmodule AshHq.Docs.Importer do
 
         result =
           try do
-            {_, 0} =
-              System.cmd(
-                "elixir",
-                [
-                  Path.join([:code.priv_dir(:ash_hq), "scripts", "build_dsl_docs.exs"]),
-                  name,
-                  version,
-                  file,
-                  mix_project || Macro.camelize(name) <> ".MixProject"
-                ],
-                env: %{"PATH" => path_var}
-              )
+            case System.cmd(
+                   "elixir",
+                   [
+                     Path.join([:code.priv_dir(:ash_hq), "scripts", "build_dsl_docs.exs"]),
+                     name,
+                     version,
+                     file,
+                     mix_project || Macro.camelize(name) <> ".MixProject"
+                   ],
+                   env: %{"PATH" => path_var}
+                 ) do
+              {_, 0} ->
+                :ok
+
+              {output, error} ->
+                raise """
+                Error while importing #{name}: #{error}
+
+                #{output}
+                """
+            end
 
             output = File.read!(file)
             :erlang.binary_to_term(Base.decode64!(String.trim(output)))

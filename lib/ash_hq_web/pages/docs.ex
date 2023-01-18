@@ -110,7 +110,7 @@ defmodule AshHqWeb.Pages.Docs do
                 /></h2>
             {/if}
             <div id={docs_container_id(@doc_path)}>
-              {raw(render_replacements(@libraries, @selected_versions, @docs))}
+              {raw(@docs)}
             </div>
             {#if @extension && !@dsl && !@guide}
               {#case Enum.count_until(Stream.filter(@extension.dsls, &(&1.type == :section)), 2)}
@@ -238,7 +238,7 @@ defmodule AshHqWeb.Pages.Docs do
                         <th>{Map.get(@dsl.arg_defaults || %{}, option.name)}</th>
                       {/if}
                       <td>
-                        {raw(render_replacements(@libraries, @selected_versions, option.html_for))}
+                        {raw(option.html_for)}
                       </td>
                     </tr>
                   {/for}
@@ -274,7 +274,7 @@ defmodule AshHqWeb.Pages.Docs do
                       {if option.default == "nil", do: nil, else: option.default}
                     </td>
                     <td>
-                      {raw(render_replacements(@libraries, @selected_versions, option.html_for))}
+                      {raw(option.html_for)}
                     </td>
                   </tr>
                 {/for}
@@ -845,23 +845,6 @@ defmodule AshHqWeb.Pages.Docs do
         )
     end
   end
-
-  # defp description(html) do
-  # This isn't predictably good content to put in a snippet :(
-  # html
-  # |> Floki.parse_fragment()
-  # |> elem(1)
-  # |> Floki.text()
-  # |> String.split("\n", trim: true)
-  # |> Stream.map(&String.trim/1)
-  # |> Stream.map(&String.replace(&1, ~r/{{.*(?!}})$/, ""))
-  # |> Stream.reject(&(&1 == ""))
-  # |> Stream.take(4)
-  # |> Enum.join("\n")
-  # rescue
-  #   _ ->
-  #     default_description()
-  # end
 
   defp default_description do
     "A declarative foundation for ambitious Elixir applications. Model your domain, derive the rest."

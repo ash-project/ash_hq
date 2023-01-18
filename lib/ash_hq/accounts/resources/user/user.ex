@@ -163,15 +163,16 @@ defmodule AshHq.Accounts.User do
         allow_nil? false
       end
 
+      change set_context(%{strategy_name: :password})
+
       validate confirm(:password, :password_confirmation)
 
       validate {AshAuthentication.Strategy.Password.PasswordValidation,
-                password_argument: :current_password} do
+                strategy_name: :password, password_argument: :current_password} do
         only_when_valid? true
         before_action? true
       end
 
-      change set_context(%{strategy_name: :password})
       change AshAuthentication.Strategy.Password.HashPasswordChange
     end
 
@@ -182,6 +183,8 @@ defmodule AshHq.Accounts.User do
         sensitive? true
         allow_nil? false
       end
+
+      change set_context(%{strategy_name: :password})
 
       validate {AshAuthentication.Strategy.Password.PasswordValidation,
                 password_argument: :current_password} do
