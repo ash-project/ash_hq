@@ -25,6 +25,13 @@ defmodule AshHq.Docs.Library do
       default "ash-project"
     end
 
+    attribute :module_prefixes, {:array, :string} do
+      allow_nil? false
+      default []
+    end
+
+    attribute :mix_project, :string
+
     timestamps()
   end
 
@@ -35,6 +42,8 @@ defmodule AshHq.Docs.Library do
   postgres do
     table "libraries"
     repo AshHq.Repo
+
+    migration_defaults module_prefixes: "[]"
   end
 
   actions do

@@ -12,22 +12,22 @@ defmodule AshHqWeb.AppViewLive do
 
   import AshHqWeb.Tails
 
-  data configured_theme, :string, default: :system
-  data selected_versions, :map, default: %{}
-  data libraries, :list, default: []
-  data selected_types, :map, default: %{}
-  data current_user, :map
+  data(configured_theme, :string, default: :system)
+  data(selected_versions, :map, default: %{})
+  data(libraries, :list, default: [])
+  data(selected_types, :map, default: %{})
+  data(current_user, :map)
 
-  data library, :any, default: nil
-  data extension, :any, default: nil
-  data docs, :any, default: nil
-  data library_version, :any, default: nil
-  data guide, :any, default: nil
-  data doc_path, :list, default: []
-  data dsls, :list, default: []
-  data dsl, :any, default: nil
-  data options, :list, default: []
-  data module, :any, default: nil
+  data(library, :any, default: nil)
+  data(extension, :any, default: nil)
+  data(docs, :any, default: nil)
+  data(library_version, :any, default: nil)
+  data(guide, :any, default: nil)
+  data(doc_path, :list, default: [])
+  data(dsls, :list, default: [])
+  data(dsl, :any, default: nil)
+  data(options, :list, default: [])
+  data(module, :any, default: nil)
 
   def render(%{platform: :ios} = assigns) do
     ~F"""
@@ -85,7 +85,7 @@ defmodule AshHqWeb.AppViewLive do
       <div
         id="main-container"
         class={
-          "w-full min-g-screen bg-white dark:bg-base-dark-850 dark:text-white flex flex-col items-stretch",
+          "w-full min-h-screen bg-white dark:bg-base-dark-850 dark:text-white flex flex-col items-stretch",
           "h-screen overflow-y-auto": @live_action != :docs_dsl
         }
       >
@@ -186,6 +186,10 @@ defmodule AshHqWeb.AppViewLive do
      |> assign(params: params, uri: uri)}
   end
 
+  def handle_info({:page_title, title}, socket) do
+    assign(socket, :page_title, "Ash Framework - #{title}")
+  end
+
   def handle_event("remove_version", %{"library" => library}, socket) do
     new_selected_versions = Map.put(socket.assigns.selected_versions, library, "")
 
@@ -248,6 +252,8 @@ defmodule AshHqWeb.AppViewLive do
   end
 
   def mount(_params, session, socket) do
+    socket = assign(socket, :page_title, "Ash Framework")
+
     socket =
       assign_new(socket, :user_agent, fn _assigns ->
         get_connect_params(socket)["user_agent"]

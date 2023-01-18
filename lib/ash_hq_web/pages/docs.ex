@@ -11,29 +11,29 @@ defmodule AshHqWeb.Pages.Docs do
   alias Surface.Components.LivePatch
   require Logger
 
-  prop change_versions, :event, required: true
-  prop selected_versions, :map, required: true
-  prop libraries, :list, default: []
-  prop uri, :string
-  prop remove_version, :event
-  prop add_version, :event
-  prop change_version, :event
-  prop params, :map, required: true
+  prop(change_versions, :event, required: true)
+  prop(selected_versions, :map, required: true)
+  prop(libraries, :list, default: [])
+  prop(uri, :string)
+  prop(remove_version, :event)
+  prop(add_version, :event)
+  prop(change_version, :event)
+  prop(params, :map, required: true)
 
-  data library, :any
-  data extension, :any
-  data docs, :any
-  data library_version, :any
-  data guide, :any
-  data doc_path, :list, default: []
-  data dsls, :list, default: []
-  data dsl, :any
-  data options, :list, default: []
-  data module, :any
-  data mix_task, :any
-  data positional_options, :list
-  data description, :string
-  data title, :string
+  data(library, :any)
+  data(extension, :any)
+  data(docs, :any)
+  data(library_version, :any)
+  data(guide, :any)
+  data(doc_path, :list, default: [])
+  data(dsls, :list, default: [])
+  data(dsl, :any)
+  data(options, :list, default: [])
+  data(module, :any)
+  data(mix_task, :any)
+  data(positional_options, :list)
+  data(description, :string)
+  data(title, :string)
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -133,18 +133,6 @@ defmodule AshHqWeb.Pages.Docs do
                 {/for}
               </ul>
             {/if}
-            {#if @dsl}
-              {#for {category, links} <- @dsl.links || %{}}
-                <h3>{String.capitalize(category)}</h3>
-                <ul>
-                  {#for link <- links}
-                    <li>
-                      {raw(render_replacements(@libraries, @selected_versions, "{{link:#{link}}}"))}
-                    </li>
-                  {/for}
-                </ul>
-              {/for}
-            {/if}
           </div>
           {#if @module}
             <Functions
@@ -226,7 +214,6 @@ defmodule AshHqWeb.Pages.Docs do
                       <th>Default</th>
                     {/if}
                     <th>Doc</th>
-                    <th>Links</th>
                   </tr>
                   {#for option <- positional_options(@options)}
                     <tr id={"#{option.sanitized_path}/#{option.name}"}>
@@ -237,7 +224,10 @@ defmodule AshHqWeb.Pages.Docs do
                           </LivePatch>
                           <div class="flex flex-row space-x-2">
                             <CalloutText text={option.name} />
-                            {render_tags(assigns, %{option | required: option.required && !Map.has_key?(@dsl.arg_defaults, option.name)})}
+                            {render_tags(assigns, %{
+                              option
+                              | required: option.required && !Map.has_key?(@dsl.arg_defaults || %{}, option.name)
+                            })}
                           </div>
                         </div>
                       </td>
@@ -245,19 +235,10 @@ defmodule AshHqWeb.Pages.Docs do
                         {option.type}
                       </td>
                       {#if @dsl.arg_defaults not in [%{}, nil]}
-                        <th>{Map.get(@dsl.arg_defaults, option.name)}</th>
+                        <th>{Map.get(@dsl.arg_defaults || %{}, option.name)}</th>
                       {/if}
                       <td>
                         {raw(render_replacements(@libraries, @selected_versions, option.html_for))}
-                      </td>
-                      <td>
-                        {raw(
-                          Enum.map_join(
-                            List.flatten(Map.values(option.links || %{})),
-                            ", ",
-                            &render_replacements(@libraries, @selected_versions, "{{link:#{&1}}}")
-                          )
-                        )}
                       </td>
                     </tr>
                   {/for}
@@ -274,7 +255,6 @@ defmodule AshHqWeb.Pages.Docs do
                   <th>Type</th>
                   <th>Default</th>
                   <th>Doc</th>
-                  <th>Links</th>
                 </tr>
                 {#for %{argument_index: nil} = option <- @options}
                   <tr id={"#{option.sanitized_path}/#{option.name}"}>
@@ -295,15 +275,6 @@ defmodule AshHqWeb.Pages.Docs do
                     </td>
                     <td>
                       {raw(render_replacements(@libraries, @selected_versions, option.html_for))}
-                    </td>
-                    <td>
-                      {raw(
-                        Enum.map_join(
-                          List.flatten(Map.values(option.links || %{})),
-                          ", ",
-                          &render_replacements(@libraries, @selected_versions, "{{link:#{&1}}}")
-                        )
-                      )}
                     </td>
                   </tr>
                 {/for}
@@ -490,7 +461,9 @@ defmodule AshHqWeb.Pages.Docs do
       AshHq.Docs.Extension
       |> Ash.Query.sort(order: :asc)
       |> Ash.Query.load(options: options_query, dsls: dsls_query)
-      |> load_for_search(socket.assigns[:params]["extension"])
+      |> load_for_search(
+        socket.assigns[:params]["extension"] || socket.assigns[:params]["module"]
+      )
 
     new_libraries =
       socket.assigns.libraries
@@ -683,7 +656,20 @@ defmodule AshHqWeb.Pages.Docs do
           end)
       )
     else
-      assign(socket, :extension, nil)
+      if socket.assigns.library_version && socket.assigns[:params]["module"] do
+        extensions = socket.assigns.library_version.extensions
+
+        assign(socket,
+          extension:
+            Enum.find(extensions, fn extension ->
+              extension.sanitized_name == socket.assigns[:params]["module"] ||
+                AshHqWeb.DocRoutes.sanitize_name(extension.target) ==
+                  socket.assigns[:params]["module"]
+            end)
+        )
+      else
+        assign(socket, :extension, nil)
+      end
     end
   end
 
@@ -734,7 +720,7 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   defp assign_module(socket) do
-    if socket.assigns.library && socket.assigns.library_version &&
+    if !socket.assigns.extension && socket.assigns.library && socket.assigns.library_version &&
          socket.assigns[:params]["module"] do
       module =
         Enum.find(
@@ -775,6 +761,8 @@ defmodule AshHqWeb.Pages.Docs do
   defp assign_docs(socket) do
     cond do
       socket.assigns.module ->
+        send(self(), {:page_title, socket.assigns.module.name})
+
         assign(socket,
           docs: socket.assigns.module.html_for,
           title: "Module: #{socket.assigns.module.name}",
@@ -784,6 +772,8 @@ defmodule AshHqWeb.Pages.Docs do
         )
 
       socket.assigns.mix_task ->
+        send(self(), {:page_title, socket.assigns.module.name})
+
         assign(socket,
           docs: socket.assigns.mix_task.html_for,
           title: "Mix Task: #{socket.assigns.mix_task.name}",
@@ -793,6 +783,8 @@ defmodule AshHqWeb.Pages.Docs do
         )
 
       socket.assigns.dsl ->
+        send(self(), {:page_title, socket.assigns.module.name})
+
         meta_name =
           Enum.join(
             [

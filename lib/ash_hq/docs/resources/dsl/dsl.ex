@@ -27,10 +27,6 @@ defmodule AshHq.Docs.Dsl do
       default []
     end
 
-    attribute :links, :map do
-      default %{}
-    end
-
     attribute :examples, {:array, :string}
     attribute :args, {:array, :string}
     attribute :optional_args, {:array, :string} do

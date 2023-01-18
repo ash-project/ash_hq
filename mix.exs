@@ -40,15 +40,12 @@ defmodule AshHq.MixProject do
   defp deps do
     [
       {:ash, github: "ash-project/ash", override: true},
-      {:ash_postgres, "~> 1.1"},
+      {:ash_postgres, github: "ash-project/ash_postgres"},
       {:ash_admin, github: "ash-project/ash_admin"},
       {:ash_phoenix, github: "ash-project/ash_phoenix", override: true},
       {:ash_graphql, github: "ash-project/ash_graphql"},
       {:ash_json_api, github: "ash-project/ash_json_api"},
-      {:ash_authentication,
-       branch: "set-confirmed-field-to-nil",
-       github: "team-alembic/ash_authentication",
-       override: true},
+      {:ash_authentication, github: "team-alembic/ash_authentication", override: true},
       {:ash_authentication_phoenix, github: "team-alembic/ash_authentication_phoenix"},
       {:absinthe_plug, "~> 1.5"},
       {:ash_blog, github: "ash-project/ash_blog"},
@@ -61,6 +58,7 @@ defmodule AshHq.MixProject do
       {:surface, "~> 0.9.1"},
       {:surface_heroicons, "~> 0.6.0"},
       {:ua_inspector, "~> 3.0"},
+      {:nebulex, "~> 2.4"},
       # Syntax Highlighting
       {:elixir_sense, github: "elixir-lsp/elixir_sense", only: [:dev, :test]},
       {:makeup, "~> 1.1"},

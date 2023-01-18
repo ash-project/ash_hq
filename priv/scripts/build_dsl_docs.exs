@@ -1,7 +1,9 @@
 require Logger
-[name, version, file] = System.argv()
+[name, version, file, mix_project] = System.argv()
+mix_project = Module.concat([mix_project])
 
 Application.put_env(:dsl, :name, name)
+Application.put_env(:ash, :use_all_identities_in_manage_relationship?, true)
 
 Mix.install(
   [
@@ -177,8 +179,8 @@ defmodule Utils do
                 []
             end),
           arg_defaults:
-            Enum.reduce(entity.args, %{},
-            fn {:optional, name, default}, acc ->
+            Enum.reduce(entity.args, %{}, fn
+              {:optional, name, default}, acc ->
                 Map.put(acc, name, inspect(default))
 
               _, acc ->
@@ -198,15 +200,16 @@ defmodule Utils do
 
   defp add_argument_indices(values, arguments) do
     Enum.map(values, fn value ->
-      case Enum.find_index(arguments, fn {:optional, name, _} ->
-          name == value.name
+      case Enum.find_index(arguments, fn
+             {:optional, name, _} ->
+               name == value.name
 
-        {:optional, name} ->
-          name == value.name
+             {:optional, name} ->
+               name == value.name
 
-        name ->
-          name == value.name
-      end) do
+             name ->
+               name == value.name
+           end) do
         nil ->
           value
 
@@ -475,118 +478,186 @@ defmodule Utils do
   defp type({:spark_type, type, _}), do: inspect(type)
   defp type({:spark_type, type, _, _}), do: inspect(type)
 
-  def doc_index?(module) do
-    Spark.implements_behaviour?(module, Spark.DocIndex) &&
-      module.for_library() == Application.get_env(:dsl, :name)
-  end
-end
-
-dsls =
-  for [app] <- :ets.match(:ac_tab, {{:loaded, :"$1"}, :_}),
-      {:ok, modules} = :application.get_key(app, :modules),
-      module <- Enum.filter(modules, &Utils.doc_index?/1) do
-    module
-  end
-
-case Enum.at(dsls, 0) do
-  nil ->
-    File.write!(file, Base.encode64(:erlang.term_to_binary(nil)))
-
-  dsl ->
-    extensions = dsl.extensions()
-
-    acc = %{
-      doc: Utils.module_docs(dsl),
-      guides: [],
-      modules: [],
-      mix_tasks: []
-    }
-
-    default_guide = Utils.try_apply(fn -> dsl.default_guide() end)
-
-    acc =
-      Utils.try_apply(fn -> dsl.guides() end, [])
-      |> Enum.with_index()
-      |> Enum.reduce(acc, fn {guide, order}, acc ->
-        Map.update!(acc, :guides, fn guides ->
-          guide =
-            guide
-            |> Map.put(:order, order)
-            |> Map.update!(:route, &String.trim_trailing(&1, ".md"))
-
-          guide =
-            if guide.route == default_guide.route do
-              Map.put(guide, :default, true)
-            else
-              guide
-            end
-
-          [guide | guides]
+  def modules_for(all_modules, modules) do
+    case modules do
+      %Regex{} = regex ->
+        Enum.filter(all_modules, fn module ->
+          Regex.match?(regex, inspect(module)) || Regex.match?(regex, to_string(module))
         end)
-      end)
 
-    {:ok, all_modules} =
-      name
-      |> String.to_atom()
-      |> :application.get_key(:modules)
-
-    all_modules =
-      Enum.filter(all_modules, fn module ->
-        case Code.fetch_docs(module) do
-          {:docs_v1, _, _, _, type, _, _} when type != :hidden ->
-            true
-
-          _ ->
-            false
+      other ->
+        if is_list(modules) do
+          Enum.flat_map(modules, &modules_for(all_modules, &1))
+        else
+          List.wrap(other)
         end
-      end)
+    end
+  end
 
-    acc =
-      Utils.try_apply(fn -> dsl.code_modules() end, [])
-      |> Enum.reduce(acc, fn {category, modules}, acc ->
-        modules =
-          case modules do
-            %Regex{} = regex ->
-              Enum.filter(all_modules, fn module ->
-                Regex.match?(regex, inspect(module)) || Regex.match?(regex, to_string(module))
-              end)
+  def guides(mix_project, name) do
+    root_dir = File.cwd!()
+    app_dir =
+      name
+      |> Application.app_dir()
+      |> Path.join("../../../../deps/#{name}")
+      |> Path.expand()
 
-            other ->
-              List.wrap(other)
+    try do
+      File.cd!(app_dir)
+
+      extras =
+        Enum.map(mix_project.project[:docs][:extras], fn {file, config} ->
+          config =
+          if config[:title] do
+            Keyword.put(config, :name, config[:title])
+          else
+            config
           end
 
-        modules
+          {to_string(file), config}
+
+          file ->
+            title =
+              file
+              |> Path.basename(".md")
+              |> String.split(~r/[-_]/)
+              |> Enum.map(&String.capitalize/1)
+              |> Enum.join(" ")
+              |> case do
+                "F A Q" ->
+                  "FAQ"
+
+                other ->
+                  other
+              end
+
+            {to_string(file), name: title}
+        end)
+
+      groups_for_extras =
+        mix_project.project[:docs][:groups_for_extras]
+        |> List.wrap()
+        |> Kernel.++([{"Miscellaneous", ~r/.*/}])
+
+      groups_for_extras
+      |> Enum.reduce({extras, []}, fn {group, matcher}, {remaining_extras, acc} ->
+        matches_for_group =
+          matcher
+          |> List.wrap()
+          |> Enum.flat_map(&take_matching(remaining_extras, &1))
+
+        {remaining_extras -- matches_for_group, [{group, matches_for_group} | acc]}
+      end)
+      |> elem(1)
+      |> Enum.reverse()
+      |> Enum.flat_map(fn {category, matches} ->
+        matches
         |> Enum.with_index()
-        |> Enum.reduce(acc, fn {module, order}, acc ->
-          Map.update!(acc, :modules, fn modules ->
-            [Utils.build_module(module, category, order) | modules]
-          end)
+        |> Enum.map(fn {{path, config}, index} ->
+          route =
+            path
+            |> Path.absname()
+            |> String.trim_leading(app_dir)
+            |> String.trim_leading("/documentation/")
+            |> String.trim_trailing(".md")
+
+          config
+          |> Map.new()
+          |> Map.put(:order, index)
+          |> Map.put(:route, route)
+          |> Map.put(:category, category)
+          |> Map.put(:text, File.read!(path))
         end)
       end)
+    after
+      File.cd!(root_dir)
+    end
+  end
 
-    acc =
-      Utils.try_apply(fn -> dsl.mix_tasks() end, [])
-      |> List.wrap()
-      |> Enum.reduce(acc, fn {category, mix_tasks}, acc ->
-        mix_tasks
-        |> Enum.with_index()
-        |> Enum.reduce(acc, fn {mix_task, order}, acc ->
-          Map.update!(acc, :mix_tasks, fn mix_tasks ->
-            [Utils.build_mix_task(mix_task, category, order) | mix_tasks]
-          end)
-        end)
-      end)
+  defp take_matching(extras, matcher) when is_binary(matcher) do
+    extras
+    |> Enum.filter(fn {name, _} ->
+      name == matcher
+    end)
+  end
 
-    data =
-      extensions
-      |> Enum.with_index()
-      |> Enum.reduce(acc, fn {extension, i}, acc ->
-        acc
-        |> Map.put_new(:extensions, [])
-        |> Map.update!(:extensions, fn extensions ->
-          [Utils.build(extension, i) | extensions]
-        end)
-      end)
-
-    File.write!(file, Base.encode64(:erlang.term_to_binary(data)))
+  defp take_matching(extras, %Regex{} = matcher) do
+    Enum.filter(extras, fn {name, _} -> Regex.match?(matcher, name) end)
+  end
 end
+
+acc = %{
+  extensions: [],
+  guides: Utils.guides(mix_project, String.to_atom(name)),
+  modules: [],
+  mix_tasks: [],
+  default_guide: mix_project.project[:docs][:spark][:default_guide]
+}
+
+extensions = mix_project.project[:docs][:spark][:extensions] || mix_project.project[:docs][:spark_extensions]
+
+{:ok, all_modules} =
+  name
+  |> String.to_atom()
+  |> :application.get_key(:modules)
+
+all_modules =
+  all_modules
+  |> Kernel.||([])
+  |> Enum.reject(fn module ->
+    Enum.find(extensions || [], &(&1.target == inspect(module)))
+  end)
+
+all_modules =
+  Enum.filter(all_modules, fn module ->
+    case Code.fetch_docs(module) do
+      {:docs_v1, _, _, _, type, _, _} when type != :hidden ->
+        true
+
+      _ ->
+        false
+    end
+  end)
+
+acc =
+  mix_project.project[:docs][:groups_for_modules]
+  |> Kernel.||([{"Miscellaneous", ~r/.*/}])
+  |> Enum.reduce(acc, fn {category, modules}, acc ->
+    modules =
+      Utils.modules_for(all_modules, modules)
+
+    modules
+    |> Enum.with_index()
+    |> Enum.reduce(acc, fn {module, order}, acc ->
+      Map.update!(acc, :modules, fn modules ->
+        [Utils.build_module(module, category, order) | modules]
+      end)
+    end)
+  end)
+
+acc =
+  mix_project.project[:docs][:spark][:mix_tasks]
+  |> List.wrap()
+  |> Enum.reduce(acc, fn {category, mix_tasks}, acc ->
+    mix_tasks
+    |> Enum.with_index()
+    |> Enum.reduce(acc, fn {mix_task, order}, acc ->
+      Map.update!(acc, :mix_tasks, fn mix_tasks ->
+        [Utils.build_mix_task(mix_task, category, order) | mix_tasks]
+      end)
+    end)
+  end)
+
+data =
+  extensions
+  |> Kernel.||([])
+  |> Enum.with_index()
+  |> Enum.reduce(acc, fn {extension, i}, acc ->
+    acc
+    |> Map.put_new(:extensions, [])
+    |> Map.update!(:extensions, fn extensions ->
+      [Utils.build(extension, i) | extensions]
+    end)
+  end)
+
+File.write!(file, Base.encode64(:erlang.term_to_binary(data)))

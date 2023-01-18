@@ -32,7 +32,7 @@ defmodule AshHqWeb.Components.Docs.Functions do
                 </div>
               </div>
               <div class="p-4">
-                {raw(rendered(@libraries, @selected_versions, function.html_for))}
+                {raw(rendered(function.html_for))}
               </div>
             </div>
           </div>
@@ -41,9 +41,8 @@ defmodule AshHqWeb.Components.Docs.Functions do
     """
   end
 
-  defp rendered(libraries, selected_versions, html_for) do
-    libraries
-    |> render_replacements(selected_versions, html_for)
+  defp rendered(html_for) do
+    html_for
     |> String.split("<!--- heads-end -->")
     |> case do
       [] ->
