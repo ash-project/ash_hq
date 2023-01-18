@@ -20,20 +20,9 @@ config :ash_hq, :github,
 host = System.get_env("PHX_HOST") || "localhost"
 port = String.to_integer(System.get_env("PORT") || "4000")
 
-config :ash_hq, url: System.get_env("ASH_HQ_URL") || "http://localhost:4000"
-
 if config_env() != :dev do
   config :logger, level: String.to_existing_atom(System.get_env("LOG_LEVEL") || "info")
 end
-
-ash_hq_url =
-  case port do
-    443 -> "https://#{host}"
-    80 -> "http://#{host}"
-    port -> "http://#{host}:#{port}"
-  end
-
-config :ash_hq, url: ash_hq_url
 
 if config_env() == :prod do
   database_url =
