@@ -187,7 +187,7 @@ defmodule AshHqWeb.AppViewLive do
   end
 
   def handle_info({:page_title, title}, socket) do
-    assign(socket, :page_title, "Ash Framework - #{title}")
+    {:noreply, assign(socket, :page_title, "Ash Framework - #{title}")}
   end
 
   def handle_event("remove_version", %{"library" => library}, socket) do

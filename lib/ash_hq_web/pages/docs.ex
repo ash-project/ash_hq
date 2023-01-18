@@ -772,7 +772,7 @@ defmodule AshHqWeb.Pages.Docs do
         )
 
       socket.assigns.mix_task ->
-        send(self(), {:page_title, socket.assigns.module.name})
+        send(self(), {:page_title, socket.assigns.mix_task.name})
 
         assign(socket,
           docs: socket.assigns.mix_task.html_for,
@@ -783,7 +783,7 @@ defmodule AshHqWeb.Pages.Docs do
         )
 
       socket.assigns.dsl ->
-        send(self(), {:page_title, socket.assigns.module.name})
+        send(self(), {:page_title, socket.assigns.dsl.name})
 
         meta_name =
           Enum.join(
@@ -813,6 +813,8 @@ defmodule AshHqWeb.Pages.Docs do
         )
 
       socket.assigns.extension ->
+        send(self(), {:page_title, socket.assigns.extension.name})
+
         assign(socket,
           docs: socket.assigns.extension.html_for,
           title: "Extension: #{socket.assigns.extension.name}",
@@ -822,6 +824,8 @@ defmodule AshHqWeb.Pages.Docs do
         )
 
       socket.assigns.guide ->
+        send(self(), {:page_title, socket.assigns.guide.name})
+
         assign(socket,
           title: "Guide: #{socket.assigns.guide.name}",
           docs: socket.assigns.guide.html_for,
