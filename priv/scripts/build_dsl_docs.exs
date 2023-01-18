@@ -590,8 +590,7 @@ acc = %{
   extensions: [],
   guides: Utils.guides(mix_project, String.to_atom(name)),
   modules: [],
-  mix_tasks: [],
-  default_guide: mix_project.project[:docs][:spark][:default_guide]
+  mix_tasks: []
 }
 
 extensions = mix_project.project[:docs][:spark][:extensions] || mix_project.project[:docs][:spark_extensions]
@@ -605,7 +604,7 @@ all_modules =
   all_modules
   |> Kernel.||([])
   |> Enum.reject(fn module ->
-    Enum.find(extensions || [], &(&1.target == inspect(module)))
+    Enum.find(extensions || [], &(&1.module == module))
   end)
 
 all_modules =
@@ -621,7 +620,6 @@ all_modules =
 
 acc =
   mix_project.project[:docs][:groups_for_modules]
-  |> Kernel.||([{"Miscellaneous", ~r/.*/}])
   |> Enum.reduce(acc, fn {category, modules}, acc ->
     modules =
       Utils.modules_for(all_modules, modules)
