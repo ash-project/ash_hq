@@ -570,6 +570,10 @@ defmodule Utils do
           matcher
           |> List.wrap()
           |> Enum.flat_map(&take_matching(remaining_extras, &1))
+          # only reason I'm using uniq_by here is because the module docs for uniq_by says
+          # "the first unique element is kept", and I need those semantics.
+          # uniq might be the same way, but the docs don't say it.
+          |> Enum.uniq_by(& &1)
 
         {remaining_extras -- matches_for_group, [{group, matches_for_group} | acc]}
       end)

@@ -8,7 +8,6 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
   * Adds a `name_matches` calculation
   * Adds a `matches` calculation
   * Adds relevant indexes using custom sql statements
-  * Adds an `html_for` calculation, that shows the html if a certain field matches, so docs are only shown on the right pages
   * Adds a `match_rank` calculation.
   * Adds a search action
   * Adds a code interface for the search action
@@ -49,95 +48,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
      |> add_name_matches_calculation(config)
      |> add_matches_calculation(config)
      |> add_indexes(config)
-     |> add_html_for_calculation(config)
-     |> add_additional_html_calculations(config)
      |> add_match_rank_calculation(config)}
-  end
-
-  # sobelow_skip ["DOS.BinToAtom"]
-  defp add_additional_html_calculations(dsl_state, config) do
-    dsl_state
-    |> Transformer.get_option([:render_markdown], :render_attributes)
-    |> List.wrap()
-    |> Enum.reject(fn {source, _} ->
-      config.doc_attribute == source
-    end)
-    |> Enum.reduce(dsl_state, fn {_, dest}, dsl_state ->
-      name = :"#{dest}_for"
-      type = Ash.Resource.Info.attribute(dsl_state, dest).type
-
-      expr =
-        Enum.reduce(config.show_docs_on, nil, fn attr, expr ->
-          if expr do
-            expr(^expr or ^ref(attr) == ^arg(:for))
-          else
-            expr(^ref(attr) == ^arg(:for))
-          end
-        end)
-
-      dsl_state
-      |> Transformer.add_entity(
-        [:calculations],
-        Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
-          name: name,
-          type: type,
-          private?: true,
-          arguments: [html_for_argument()],
-          calculation:
-            Ash.Query.expr(
-              if ^expr do
-                ^ref(dest)
-              else
-                nil
-              end
-            )
-        )
-      )
-    end)
-  end
-
-  defp add_html_for_calculation(dsl_state, config) do
-    if config.doc_attribute do
-      html_for_attribute =
-        if dest =
-             Transformer.get_option(dsl_state, [:render_markdown], :render_attributes)[
-               config.doc_attribute
-             ] do
-          dest
-        else
-          config.doc_attribute
-        end
-
-      expr =
-        Enum.reduce(config.show_docs_on, nil, fn attr, expr ->
-          if expr do
-            expr(^expr or ^ref(attr) == ^arg(:for))
-          else
-            expr(^ref(attr) == ^arg(:for))
-          end
-        end)
-
-      dsl_state
-      |> Transformer.add_entity(
-        [:calculations],
-        Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
-          name: :html_for,
-          type: :string,
-          private?: true,
-          arguments: [html_for_argument()],
-          calculation:
-            Ash.Query.expr(
-              if ^expr do
-                ^ref(html_for_attribute)
-              else
-                nil
-              end
-            )
-        )
-      )
-    else
-      dsl_state
-    end
   end
 
   defp add_sanitized_name(dsl_state, config) do
@@ -404,17 +315,6 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
         )
       )
     end
-  end
-
-  defp html_for_argument do
-    Transformer.build_entity!(
-      Ash.Resource.Dsl,
-      [:calculations, :calculate],
-      :argument,
-      type: :string,
-      name: :for,
-      allow_nil?: false
-    )
   end
 
   defp query_argument do

@@ -4,13 +4,13 @@ defmodule AshHqWeb.Components.Docs.Functions do
 
   alias AshHqWeb.Components.Docs.SourceLink
 
-  prop type, :atom, required: true
-  prop functions, :list, required: true
-  prop header, :string, required: true
-  prop library, :any, required: true
-  prop library_version, :any, required: true
-  prop libraries, :list, required: true
-  prop selected_versions, :map, required: true
+  prop(type, :atom, required: true)
+  prop(functions, :list, required: true)
+  prop(header, :string, required: true)
+  prop(library, :any, required: true)
+  prop(library_version, :any, required: true)
+  prop(libraries, :list, required: true)
+  prop(selected_versions, :map, required: true)
 
   def render(assigns) do
     ~F"""
@@ -31,7 +31,7 @@ defmodule AshHqWeb.Components.Docs.Functions do
                 </div>
               </div>
               <div class="p-4">
-                {raw(rendered(function.html_for))}
+                {raw(rendered(function.html))}
               </div>
             </div>
           </div>
@@ -40,8 +40,8 @@ defmodule AshHqWeb.Components.Docs.Functions do
     """
   end
 
-  defp rendered(html_for) do
-    html_for
+  defp rendered(html) do
+    html
     |> String.split("<!--- heads-end -->")
     |> case do
       [] ->

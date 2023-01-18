@@ -94,7 +94,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
   end
 
   defp opts(true) do
-    [postprocessor: &add_ids/1, escape: false]
+    [postprocessor: &add_ids/1]
   end
 
   defp opts(_) do

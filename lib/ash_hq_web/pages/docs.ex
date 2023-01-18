@@ -10,6 +10,7 @@ defmodule AshHqWeb.Pages.Docs do
   alias Phoenix.LiveView.JS
   alias Surface.Components.LivePatch
   require Logger
+  require Ash.Query
 
   prop(change_versions, :event, required: true)
   prop(selected_versions, :map, required: true)
@@ -238,7 +239,7 @@ defmodule AshHqWeb.Pages.Docs do
                         <th>{Map.get(@dsl.arg_defaults || %{}, option.name)}</th>
                       {/if}
                       <td>
-                        {raw(option.html_for)}
+                        {raw(option.html)}
                       </td>
                     </tr>
                   {/for}
@@ -274,7 +275,7 @@ defmodule AshHqWeb.Pages.Docs do
                       {if option.default == "nil", do: nil, else: option.default}
                     </td>
                     <td>
-                      {raw(option.html_for)}
+                      {raw(option.html)}
                     </td>
                   </tr>
                 {/for}
@@ -307,18 +308,16 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   def update(assigns, socket) do
-    if (assigns[:selected_versions] == socket.assigns[:selected_versions] &&
-          Map.get(socket.assigns.library_version || %{}, :id) ==
-            Map.get(assigns[:library_version] || %{}, :id)) || !socket.assigns[:loaded_once?] do
-      {:ok,
-       socket
-       |> assign(assigns)
-       |> assign(:loaded_once?, false)
-       |> load_docs()}
+    if socket.assigns[:loaded_once?] &&
+         assigns[:selected_versions] == socket.assigns[:selected_versions] do
+      {:ok, socket |> assign(Map.delete(assigns, :libraries)) |> load_docs()}
     else
       {:ok,
        socket
-       |> assign(assigns)}
+       |> assign(assigns)
+       |> assign_libraries()
+       |> load_docs()
+       |> assign(:loaded_once?, true)}
     end
   end
 
@@ -429,41 +428,39 @@ defmodule AshHqWeb.Pages.Docs do
     )
   end
 
-  def load_docs(socket) do
+  def assign_libraries(socket) do
     socket = assign_library(socket)
 
     dsls_query =
       AshHq.Docs.Dsl
       |> Ash.Query.sort(order: :asc)
-      |> load_for_search(socket.assigns[:params]["dsl_path"])
+      |> load_for_search()
 
     options_query =
       AshHq.Docs.Option
       |> Ash.Query.sort(order: :asc)
-      |> load_for_search(socket.assigns[:params]["dsl_path"])
+      |> load_for_search()
 
     guides_query =
       AshHq.Docs.Guide
       |> Ash.Query.new()
-      |> load_for_search(Enum.join(List.wrap(socket.assigns[:params]["guide"]), "/"))
+      |> load_for_search()
 
     modules_query =
       AshHq.Docs.Module
       |> Ash.Query.sort(order: :asc)
-      |> load_for_search(socket.assigns[:params]["module"])
+      |> load_for_search()
 
     mix_tasks_query =
       AshHq.Docs.MixTask
       |> Ash.Query.sort(order: :asc)
-      |> load_for_search(socket.assigns[:params]["mix_task"])
+      |> load_for_search()
 
     extensions_query =
       AshHq.Docs.Extension
       |> Ash.Query.sort(order: :asc)
       |> Ash.Query.load(options: options_query, dsls: dsls_query)
-      |> load_for_search(
-        socket.assigns[:params]["extension"] || socket.assigns[:params]["module"]
-      )
+      |> load_for_search()
 
     new_libraries =
       socket.assigns.libraries
@@ -507,8 +504,11 @@ defmodule AshHqWeb.Pages.Docs do
         end)
       end)
 
+    assign(socket, :libraries, new_libraries)
+  end
+
+  def load_docs(socket) do
     socket
-    |> assign(:libraries, new_libraries)
     |> assign_library()
     |> assign_extension()
     |> assign_guide()
@@ -531,7 +531,7 @@ defmodule AshHqWeb.Pages.Docs do
             String.contains?(guide.sanitized_name, "started")
           end) || Enum.at(socket.assigns.library_version.guides, 0)
 
-      guide = AshHq.Docs.load!(guide, [html_for: %{for: guide.sanitized_name}], lazy?: true)
+      guide = guide |> reselect!(:text_html)
 
       assign(socket, guide: guide)
     else
@@ -539,44 +539,33 @@ defmodule AshHqWeb.Pages.Docs do
     end
   end
 
-  defp load_for_search(query, docs_for) do
+  defp reselect!(%resource{} = record, field) do
+    if Ash.Resource.selected?(record, field) do
+      record
+    else
+      # will blow up if pkey is not an id or if its not a docs resource
+      # but w/e
+      value =
+        resource
+        |> Ash.Query.select(field)
+        |> Ash.Query.filter(id == ^record.id)
+        |> AshHq.Docs.read_one!()
+        |> Map.get(field)
+
+      Map.put(record, field, value)
+    end
+  end
+
+  defp reselect_and_get!(record, field) do
+    record
+    |> reselect!(field)
+    |> Map.get(field)
+  end
+
+  defp load_for_search(query) do
     query
     |> Ash.Query.load(AshHq.Docs.Extensions.Search.load_for_search(query.resource))
     |> deselect_doc_attributes()
-    |> load_docs_for(docs_for)
-  end
-
-  defp load_docs_for(query, nil), do: query
-  defp load_docs_for(query, []), do: query
-
-  defp load_docs_for(_query, true) do
-    raise "unreachable"
-  end
-
-  defp load_docs_for(query, name) when is_list(name) do
-    name = Enum.join(name, "/")
-    load_docs_for(query, name)
-  end
-
-  defp load_docs_for(query, name) do
-    query
-    |> Ash.Query.load(html_for: %{for: name})
-    |> load_additional_docs(name)
-  end
-
-  defp load_additional_docs(query, name) do
-    query.resource
-    |> AshHq.Docs.Extensions.RenderMarkdown.render_attributes()
-    |> Enum.reduce(query, fn {source, dest}, query ->
-      doc_source = AshHq.Docs.Extensions.Search.doc_attribute(query.resource)
-
-      if doc_source && source == doc_source do
-        query
-      else
-        load = String.to_existing_atom("#{dest}_for")
-        Ash.Query.load(query, [{load, %{for: name}}])
-      end
-    end)
   end
 
   defp deselect_doc_attributes(query) do
@@ -731,7 +720,7 @@ defmodule AshHqWeb.Pages.Docs do
       functions_query =
         AshHq.Docs.Function
         |> Ash.Query.sort(name: :asc, arity: :asc)
-        |> load_for_search(socket.assigns[:params]["module"])
+        |> load_for_search()
 
       assign(socket,
         module: AshHq.Docs.load!(module, [functions: functions_query], lazy?: true)
@@ -764,7 +753,7 @@ defmodule AshHqWeb.Pages.Docs do
         send(self(), {:page_title, socket.assigns.module.name})
 
         assign(socket,
-          docs: socket.assigns.module.html_for,
+          docs: socket.assigns.module |> reselect_and_get!(:doc_html),
           title: "Module: #{socket.assigns.module.name}",
           description: "View the documentation for #{socket.assigns.module.name} on Ash HQ.",
           doc_path: [socket.assigns.library.name, socket.assigns.module.name],
@@ -775,7 +764,7 @@ defmodule AshHqWeb.Pages.Docs do
         send(self(), {:page_title, socket.assigns.mix_task.name})
 
         assign(socket,
-          docs: socket.assigns.mix_task.html_for,
+          docs: socket.assigns.mix_task |> reselect_and_get!(:doc_html),
           title: "Mix Task: #{socket.assigns.mix_task.name}",
           description: "View the documentation for #{socket.assigns.mix_task.name} on Ash HQ.",
           doc_path: [socket.assigns.library.name, socket.assigns.mix_task.name],
@@ -797,7 +786,7 @@ defmodule AshHqWeb.Pages.Docs do
         meta_type = String.capitalize(to_string(socket.assigns.dsl.type))
 
         assign(socket,
-          docs: socket.assigns.dsl.html_for,
+          docs: socket.assigns.dsl |> reselect_and_get!(:doc_html),
           title: "DSL #{meta_type}: #{meta_name}",
           description: "View the documentation for DSL #{meta_type}: #{meta_name} on Ash HQ.",
           doc_path:
@@ -816,7 +805,7 @@ defmodule AshHqWeb.Pages.Docs do
         send(self(), {:page_title, socket.assigns.extension.name})
 
         assign(socket,
-          docs: socket.assigns.extension.html_for,
+          docs: socket.assigns.extension |> reselect_and_get!(:doc_html),
           title: "Extension: #{socket.assigns.extension.name}",
           description: "View the documentation for #{socket.assigns.extension.name} on Ash HQ.",
           doc_path: [socket.assigns.library.name, socket.assigns.extension.name],
@@ -828,7 +817,7 @@ defmodule AshHqWeb.Pages.Docs do
 
         assign(socket,
           title: "Guide: #{socket.assigns.guide.name}",
-          docs: socket.assigns.guide.html_for,
+          docs: socket.assigns.guide |> reselect_and_get!(:text_html),
           description: "Read the \"#{socket.assigns.guide.name}\" guide on Ash HQ",
           doc_path: [socket.assigns.library.name, socket.assigns.guide.name],
           options: []
