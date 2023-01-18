@@ -3,7 +3,7 @@
   "absinthe_plug": {:hex, :absinthe_plug, "1.5.8", "38d230641ba9dca8f72f1fed2dfc8abd53b3907d1996363da32434ab6ee5d6ab", [:mix], [{:absinthe, "~> 1.5", [hex: :absinthe, repo: "hexpm", optional: false]}, {:plug, "~> 1.4", [hex: :plug, repo: "hexpm", optional: false]}], "hexpm", "bbb04176647b735828861e7b2705465e53e2cf54ccf5a73ddd1ebd855f996e5a"},
   "ash": {:git, "https://github.com/ash-project/ash.git", "22e07c06b5e0da531e7e6f632009290031429875", []},
   "ash_admin": {:git, "https://github.com/ash-project/ash_admin.git", "cdb3b469abeeadddda884e7cfcf67c6fea10f9ef", []},
-  "ash_authentication": {:git, "https://github.com/team-alembic/ash_authentication.git", "d4f3bec947b3cef160fa8e6768396884a3ee6149", []},
+  "ash_authentication": {:git, "https://github.com/team-alembic/ash_authentication.git", "00f082cc8dfa0f56d3e2dec3eaf178a58d6d4b4a", []},
   "ash_authentication_phoenix": {:git, "https://github.com/team-alembic/ash_authentication_phoenix.git", "14c38739cf56c4821797963b9ee261597a261b00", []},
   "ash_blog": {:git, "https://github.com/ash-project/ash_blog.git", "9254773dfedabfc7987af6326a62885c24c3655b", []},
   "ash_csv": {:git, "https://github.com/ash-project/ash_csv.git", "2a068cea47d13065f23a3686f4c28bf875353ffd", []},

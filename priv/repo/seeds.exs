@@ -87,7 +87,7 @@ AshHq.Docs.Library.create!(
   %{
     name: "ash_authentication_phoenix",
     display_name: "AshAuthenticationPhoenix",
-    module_prefixes: ["AshAuthenticationPhoenix"],
+    module_prefixes: ["AshAuthentication.Phoenix"],
     order: 56,
     repo_org: "team-alembic",
     description: """

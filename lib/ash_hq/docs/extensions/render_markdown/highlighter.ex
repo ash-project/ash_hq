@@ -365,10 +365,27 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
     end
   end
 
-  defp library_for(module, libraries) do
-    Enum.find(libraries, fn library ->
-      Enum.any?(library.module_prefixes, &String.starts_with?(module, &1 <> "."))
+  @doc false
+  def library_for(module, libraries) do
+    libraries
+    |> Enum.map(fn library ->
+      {library,
+       Enum.find(library.module_prefixes, fn prefix ->
+         prefix == module || String.starts_with?(module, prefix <> ".")
+       end)}
     end)
+    |> Enum.filter(fn
+      {_library, nil} ->
+        false
+
+      _ ->
+        true
+    end)
+    |> Enum.sort_by(fn {_library, match} ->
+      -String.length(match)
+    end)
+    |> Enum.at(0)
+    |> elem(0)
   end
 
   defp render_code(lang, lexer, lexer_opts, code) do
