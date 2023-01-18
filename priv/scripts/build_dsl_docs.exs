@@ -340,44 +340,48 @@ defmodule Utils do
   def build_function(_, _, _, _, _, _), do: []
 
   def build_module(module, category, order) do
-    {:docs_v1, _, :elixir, _, docs, _, defs} = Code.fetch_docs(module)
+    case Code.fetch_docs(module) do
+      {:docs_v1, _, :elixir, _, docs, _, defs} ->
+        module_doc =
+          case docs do
+            %{"en" => en} ->
+              en
 
-    module_doc =
-      case docs do
-        %{"en" => en} ->
-          en
+            _ ->
+              ""
+          end
 
-        _ ->
-          ""
-      end
+        module_info =
+          try do
+            module.module_info(:compile)
+          rescue
+            _ ->
+              nil
+          end
 
-    module_info =
-      try do
-        module.module_info(:compile)
-      rescue
-        _ ->
-          nil
-      end
+        file = file(module_info[:source])
 
-    file = file(module_info[:source])
+        types = Types.for_module(module)
+        callbacks = Types.callbacks_for_module(module)
+        typespecs = Types.specs_for_module(module)
 
-    types = Types.for_module(module)
-    callbacks = Types.callbacks_for_module(module)
-    typespecs = Types.specs_for_module(module)
+        {:ok, %{
+          name: inspect(module),
+          doc: module_doc,
+          file: file,
+          order: order,
+          category: category,
+          functions:
+            defs
+            |> Enum.with_index()
+            |> Enum.flat_map(fn {definition, i} ->
+              build_function(definition, file, types, callbacks, typespecs, i)
+            end)
+        }}
+      _ ->
+        :error
+    end
 
-    %{
-      name: inspect(module),
-      doc: module_doc,
-      file: file,
-      order: order,
-      category: category,
-      functions:
-        defs
-        |> Enum.with_index()
-        |> Enum.flat_map(fn {definition, i} ->
-          build_function(definition, file, types, callbacks, typespecs, i)
-        end)
-    }
   end
 
   def build_mix_task(mix_task, category, order) do
@@ -632,9 +636,14 @@ acc =
     modules
     |> Enum.with_index()
     |> Enum.reduce(acc, fn {module, order}, acc ->
-      Map.update!(acc, :modules, fn modules ->
-        [Utils.build_module(module, category, order) | modules]
-      end)
+      case Utils.build_module(module, category, order) do
+        {:ok, built} ->
+          Map.update!(acc, :modules, fn modules ->
+            [built | modules]
+          end)
+        _ ->
+          acc
+      end
     end)
   end)
 
