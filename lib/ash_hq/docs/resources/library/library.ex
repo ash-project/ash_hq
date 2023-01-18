@@ -47,7 +47,36 @@ defmodule AshHq.Docs.Library do
   end
 
   actions do
-    defaults [:read, :create, :update, :destroy]
+    defaults [:create, :update, :destroy]
+
+    read :read do
+      primary? true
+
+      argument :check_cache, :boolean do
+        default true
+      end
+
+      prepare fn query, _ ->
+        if Ash.Query.get_argument(query, :check_cache) do
+          Ash.Query.before_action(query, fn query ->
+            AshHq.Docs
+            |> Ash.Filter.Runtime.filter_matches(
+              AshHq.Docs.Library.Agent.get(),
+              query.filter
+            )
+            |> case do
+              {:ok, results} ->
+                Ash.Query.set_result(query, {:ok, Ash.Sort.runtime_sort(results, query.sort)})
+
+              {:error, _} ->
+                query
+            end
+          end)
+        else
+          query
+        end
+      end
+    end
 
     read :by_name do
       argument :name, :string do
@@ -73,6 +102,15 @@ defmodule AshHq.Docs.Library do
   identities do
     identity :unique_order, [:order]
     identity :unique_name, [:name]
+  end
+
+  changes do
+    change fn changeset, _ ->
+      Ash.Changeset.after_action(changeset, fn _changeset, result ->
+        AshHq.Docs.Library.Agent.clear()
+        {:ok, result}
+      end)
+    end
   end
 
   aggregates do

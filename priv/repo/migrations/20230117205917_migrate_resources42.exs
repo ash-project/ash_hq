@@ -9,7 +9,7 @@ defmodule AshHq.Repo.Migrations.MigrateResources42 do
 
   def up do
     alter table(:libraries) do
-      add :mix_project, :text
+      add(:mix_project, :text)
     end
 
     # alter table(:dsls) do
@@ -32,7 +32,7 @@ defmodule AshHq.Repo.Migrations.MigrateResources42 do
     # end
     # 
     alter table(:libraries) do
-      remove :mix_project
+      remove(:mix_project)
     end
   end
 end

@@ -9,15 +9,15 @@ defmodule AshHq.Repo.Migrations.MigrateResources40 do
 
   def up do
     alter table(:dsls) do
-      add :optional_args, {:array, :text}, default: []
-      add :arg_defaults, :map
+      add(:optional_args, {:array, :text}, default: [])
+      add(:arg_defaults, :map)
     end
   end
 
   def down do
     alter table(:dsls) do
-      remove :arg_defaults
-      remove :optional_args
+      remove(:arg_defaults)
+      remove(:optional_args)
     end
   end
 end

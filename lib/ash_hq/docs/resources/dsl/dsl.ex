@@ -29,9 +29,11 @@ defmodule AshHq.Docs.Dsl do
 
     attribute :examples, {:array, :string}
     attribute :args, {:array, :string}
+
     attribute :optional_args, {:array, :string} do
       default []
     end
+
     attribute :arg_defaults, :map
     attribute :path, {:array, :string}
     attribute :recursive_as, :string

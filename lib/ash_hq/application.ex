@@ -34,7 +34,9 @@ defmodule AshHq.Application do
         {Phoenix.PubSub, name: AshHq.PubSub},
         {AshHq.Docs.Cache, []},
         # Start the Endpoint (http/https)
-        AshHqWeb.Endpoint
+        AshHqWeb.Endpoint,
+        {AshHq.Docs.Library.Agent, nil}
+
         # Start a worker by calling: AshHq.Worker.start_link(arg)
         # {AshHq.Worker, arg}
       ] ++ importer

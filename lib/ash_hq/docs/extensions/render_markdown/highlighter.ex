@@ -19,6 +19,33 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
       {"a", attrs, contents} ->
         {"a", rewrite_href_attr(attrs, current_library, libraries), contents}
 
+      {"pre", _, [{:keep, contents}]} ->
+        {:keep, ~s(<pre class="code-pre">#{contents}</pre>)}
+
+      {"pre", _, [{"code", attrs, [body]}]} when is_binary(body) ->
+        lexer =
+          find_value_class(attrs, fn class ->
+            case Makeup.Registry.fetch_lexer_by_name(class) do
+              {:ok, {lexer, opts}} -> {class, lexer, opts}
+              :error -> nil
+            end
+          end)
+
+        code =
+          case lexer do
+            {lang, lexer, opts} ->
+              render_code(lang, lexer, opts, body)
+
+            nil ->
+              if find_value_class(attrs, &(&1 == "inline")) do
+                maybe_highlight_module(body, libraries, current_module)
+              else
+                ~s(<code class="text-black dark:text-white">#{body}</code>)
+              end
+          end
+
+        {:keep, ~s(<pre class="code-pre">#{code}</pre>)}
+
       {"code", attrs, [body]} when is_binary(body) ->
         lexer =
           find_value_class(attrs, fn class ->
@@ -60,7 +87,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
   def rewrite_href(value, current_library, libraries) do
     uri = URI.parse(value)
 
-    case {uri, Path.split(String.trim_leading(uri.path || "", "/"))} |> IO.inspect() do
+    case {uri, Path.split(String.trim_leading(uri.path || "", "/"))} do
       {%{host: "hexdocs.pm"}, [library, guide]} ->
         if Enum.any?(libraries, &(&1.name == library)) do
           if String.ends_with?(guide, ".html") do
@@ -385,7 +412,13 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
       -String.length(match)
     end)
     |> Enum.at(0)
-    |> elem(0)
+    |> case do
+      {library, _match} ->
+        library
+
+      _ ->
+        nil
+    end
   end
 
   defp render_code(lang, lexer, lexer_opts, code) do

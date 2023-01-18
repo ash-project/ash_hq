@@ -9,21 +9,21 @@ defmodule AshHq.Repo.Migrations.MigrateResources41 do
 
   def up do
     alter table(:library_versions) do
-      add :hydrated, :boolean, null: false, default: false
+      add(:hydrated, :boolean, null: false, default: false)
     end
 
     alter table(:libraries) do
-      add :module_prefixes, {:array, :text}, null: false, default: []
+      add(:module_prefixes, {:array, :text}, null: false, default: [])
     end
   end
 
   def down do
     alter table(:libraries) do
-      remove :module_prefixes
+      remove(:module_prefixes)
     end
 
     alter table(:library_versions) do
-      remove :hydrated
+      remove(:hydrated)
     end
   end
 end

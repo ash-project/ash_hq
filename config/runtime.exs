@@ -17,6 +17,8 @@ config :ash_hq, :github,
   client_secret: System.get_env("GITHUB_CLIENT_SECRET"),
   redirect_uri: System.get_env("GITHUB_REDIRECT_URI")
 
+config :ash_hq, :periodic_imports, System.get_env("PERIODIC_IMPORTS") == "true"
+
 host = System.get_env("PHX_HOST") || "localhost"
 port = String.to_integer(System.get_env("PORT") || "4000")
 

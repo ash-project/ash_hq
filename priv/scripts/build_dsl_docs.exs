@@ -365,23 +365,24 @@ defmodule Utils do
         callbacks = Types.callbacks_for_module(module)
         typespecs = Types.specs_for_module(module)
 
-        {:ok, %{
-          name: inspect(module),
-          doc: module_doc,
-          file: file,
-          order: order,
-          category: category,
-          functions:
-            defs
-            |> Enum.with_index()
-            |> Enum.flat_map(fn {definition, i} ->
-              build_function(definition, file, types, callbacks, typespecs, i)
-            end)
-        }}
+        {:ok,
+         %{
+           name: inspect(module),
+           doc: module_doc,
+           file: file,
+           order: order,
+           category: category,
+           functions:
+             defs
+             |> Enum.with_index()
+             |> Enum.flat_map(fn {definition, i} ->
+               build_function(definition, file, types, callbacks, typespecs, i)
+             end)
+         }}
+
       _ ->
         :error
     end
-
   end
 
   def build_mix_task(mix_task, category, order) do
@@ -500,6 +501,7 @@ defmodule Utils do
 
   def guides(mix_project, name) do
     root_dir = File.cwd!()
+
     app_dir =
       name
       |> Application.app_dir()
@@ -510,17 +512,36 @@ defmodule Utils do
       File.cd!(app_dir)
 
       extras =
-        Enum.map(mix_project.project[:docs][:extras], fn {file, config} ->
-          config =
-          if config[:title] do
-            Keyword.put(config, :name, config[:title])
-          else
-            config
-          end
+        Enum.map(mix_project.project[:docs][:extras], fn
+          {file, config} ->
+            file = to_string(file)
 
-          {to_string(file), config}
+            config =
+              if config[:title] do
+                Keyword.put(config, :name, config[:title])
+              else
+                title =
+                  file
+                  |> Path.basename(".md")
+                  |> String.split(~r/[-_]/)
+                  |> Enum.map(&String.capitalize/1)
+                  |> Enum.join(" ")
+                  |> case do
+                    "F A Q" ->
+                      "FAQ"
+
+                    other ->
+                      other
+                  end
+
+                Keyword.put(config, :name, title)
+              end
+
+            {to_string(file), config}
 
           file ->
+            file = to_string(file)
+
             title =
               file
               |> Path.basename(".md")
@@ -535,7 +556,7 @@ defmodule Utils do
                   other
               end
 
-            {to_string(file), name: title}
+            {file, name: title}
         end)
 
       groups_for_extras =
@@ -597,7 +618,8 @@ acc = %{
   mix_tasks: []
 }
 
-extensions = mix_project.project[:docs][:spark][:extensions] || mix_project.project[:docs][:spark_extensions]
+extensions =
+  mix_project.project[:docs][:spark][:extensions] || mix_project.project[:docs][:spark_extensions]
 
 {:ok, all_modules} =
   name
@@ -624,14 +646,15 @@ all_modules =
 
 acc =
   mix_project.project[:docs][:groups_for_modules]
-  |> Enum.reject(fn {"Internals", _} ->
-    true
+  |> Enum.reject(fn
+    {"Internals", _} ->
+      true
+
     _ ->
       false
   end)
   |> Enum.reduce(acc, fn {category, modules}, acc ->
-    modules =
-      Utils.modules_for(all_modules, modules)
+    modules = Utils.modules_for(all_modules, modules)
 
     modules
     |> Enum.with_index()
@@ -641,6 +664,7 @@ acc =
           Map.update!(acc, :modules, fn modules ->
             [built | modules]
           end)
+
         _ ->
           acc
       end
