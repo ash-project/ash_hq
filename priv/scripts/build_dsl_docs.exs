@@ -620,6 +620,11 @@ all_modules =
 
 acc =
   mix_project.project[:docs][:groups_for_modules]
+  |> Enum.reject(fn {"Internals", _} ->
+    true
+    _ ->
+      false
+  end)
   |> Enum.reduce(acc, fn {category, modules}, acc ->
     modules =
       Utils.modules_for(all_modules, modules)
