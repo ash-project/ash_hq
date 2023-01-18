@@ -46,7 +46,7 @@ defmodule AshHq.Docs.Importer do
       |> Enum.reject(&String.starts_with?(&1, "/_build"))
       |> Enum.join(":")
 
-    for %{name: name, latest_version: latest_version} = library <-
+    for %{name: name, latest_version: latest_version, mix_project: mix_project} = library <-
           AshHq.Docs.Library.read!(load: :latest_version, query: query) do
       latest_version =
         if latest_version do
@@ -83,22 +83,21 @@ defmodule AshHq.Docs.Importer do
 
         result =
           try do
-            with_retry("#{name}: #{version}", fn ->
-              {_, 0} =
-                System.cmd(
-                  "elixir",
-                  [
-                    Path.join([:code.priv_dir(:ash_hq), "scripts", "build_dsl_docs.exs"]),
-                    name,
-                    version,
-                    file
-                  ],
-                  env: %{"PATH" => path_var}
-                )
+            {_, 0} =
+              System.cmd(
+                "elixir",
+                [
+                  Path.join([:code.priv_dir(:ash_hq), "scripts", "build_dsl_docs.exs"]),
+                  name,
+                  version,
+                  file,
+                  mix_project || Macro.camelize(name) <> ".MixProject"
+                ],
+                env: %{"PATH" => path_var}
+              )
 
-              output = File.read!(file)
-              :erlang.binary_to_term(Base.decode64!(String.trim(output)))
-            end)
+            output = File.read!(file)
+            :erlang.binary_to_term(Base.decode64!(String.trim(output)))
           after
             File.rm_rf!(file)
           end
@@ -125,7 +124,7 @@ defmodule AshHq.Docs.Importer do
                 id: id,
                 extensions: result[:extensions],
                 doc: result[:doc],
-                guides: add_text(result[:guides], library.name, version),
+                guides: result[:guides],
                 modules: result[:modules],
                 mix_tasks: result[:mix_tasks]
               }
@@ -134,83 +133,6 @@ defmodule AshHq.Docs.Importer do
         end
       end)
     end
-  end
-
-  # sobelow_skip ["Misc.BinToTerm", "Traversal.FileModule"]
-  defp add_text([], _, _), do: []
-
-  # sobelow_skip ["Misc.BinToTerm", "Traversal.FileModule"]
-  defp add_text(guides, name, version) do
-    path = Path.expand("tmp")
-    tarball_path = Path.expand(Path.join(["tmp", "tarballs"]))
-    tar_path = Path.join(tarball_path, "#{name}-#{version}.tar")
-    untar_path = Path.join(path, "#{name}-#{version}")
-    contents_untar_path = Path.join(path, "#{name}-#{version}/contents")
-    contents_tar_path = Path.join([path, "#{name}-#{version}", "contents.tar.gz"])
-
-    try do
-      File.rm_rf!(tar_path)
-      File.rm_rf!(contents_untar_path)
-      File.mkdir_p!(untar_path)
-      File.mkdir_p!(contents_untar_path)
-
-      {_, 0} =
-        System.cmd(
-          "curl",
-          [
-            "-L",
-            "--create-dirs",
-            "-o",
-            "#{tar_path}",
-            "https://repo.hex.pm/tarballs/#{name}-#{version}.tar"
-          ]
-        )
-
-      {_, 0} =
-        System.cmd(
-          "tar",
-          [
-            "-xf",
-            tar_path,
-            "-C",
-            untar_path
-          ],
-          cd: "tmp"
-        )
-
-      {_, 0} =
-        System.cmd(
-          "tar",
-          [
-            "-xzf",
-            contents_tar_path
-          ],
-          cd: contents_untar_path
-        )
-
-      Enum.map(guides, fn %{path: path} = guide ->
-        contents =
-          contents_untar_path
-          |> Path.join(path)
-          |> File.read!()
-
-        Map.put(guide, :text, contents)
-      end)
-    after
-      File.rm_rf!(tar_path)
-      File.rm_rf!(untar_path)
-    end
-  end
-
-  defp with_retry(context, func, retries \\ 3) do
-    func.()
-  rescue
-    _e ->
-      if retries == 1 do
-        Logger.error("Failed to import: #{context}")
-      else
-        with_retry(context, func, retries - 1)
-      end
   end
 
   defp filter_by_version(versions, latest_version) do

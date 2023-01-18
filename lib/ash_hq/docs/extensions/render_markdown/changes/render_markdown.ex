@@ -4,13 +4,16 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
   """
 
   require Logger
+  require Ash.Query
   use Ash.Resource.Change
+  use AshHqWeb, :verified_routes
 
   def change(changeset, opts, _) do
     Ash.Changeset.before_action(changeset, fn changeset ->
       if Ash.Changeset.changing_attribute?(changeset, opts[:source]) do
         source = Ash.Changeset.get_attribute(changeset, opts[:source])
-        text = remove_ash_hq_hidden_content(source)
+        libraries = AshHq.Docs.Library.read!()
+        text = process_text(source)
 
         attribute = Ash.Resource.Info.attribute(changeset.resource, opts[:destination])
 
@@ -21,8 +24,39 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
             changeset
           end
 
+        current_module =
+          cond do
+            changeset.resource == AshHq.Docs.Module ->
+              Ash.Changeset.get_attribute(changeset, :name)
+
+            changeset.resource == AshHq.Docs.Function ->
+              AshHq.Docs.get!(
+                AshHq.Docs.Module,
+                Ash.Changeset.get_attribute(changeset, :module_id)
+              ).name
+
+            true ->
+              nil
+          end
+
+        current_library =
+          case Ash.Changeset.get_attribute(changeset, :library_version_id) do
+            nil ->
+              nil
+
+            library_version_id ->
+              AshHq.Docs.Library
+              |> Ash.Query.select(:name)
+              |> Ash.Query.filter(versions.id == ^library_version_id)
+              |> AshHq.Docs.read_one!()
+              |> Map.get(:name)
+          end
+
         case AshHq.Docs.Extensions.RenderMarkdown.as_html(
                text,
+               libraries,
+               current_library,
+               current_module,
                AshHq.Docs.Extensions.RenderMarkdown.header_ids?(changeset.resource)
              ) do
           {:error, html_doc, error_messages} ->
@@ -67,11 +101,17 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
     end)
   end
 
-  defp remove_ash_hq_hidden_content(nil), do: nil
-
-  defp remove_ash_hq_hidden_content(strings) when is_list(strings) do
-    Enum.map(strings, &remove_ash_hq_hidden_content/1)
+  @doc false
+  def process_text(text) when is_list(text) do
+    Enum.map(text, &process_text(&1))
   end
+
+  def process_text(text) do
+    text
+    |> remove_ash_hq_hidden_content()
+  end
+
+  defp remove_ash_hq_hidden_content(nil), do: nil
 
   defp remove_ash_hq_hidden_content(string) do
     string

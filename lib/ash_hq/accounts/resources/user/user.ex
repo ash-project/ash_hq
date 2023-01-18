@@ -165,8 +165,7 @@ defmodule AshHq.Accounts.User do
 
       validate confirm(:password, :password_confirmation)
 
-      validate {AshHq.Accounts.User.Validations.ValidateCurrentPassword,
-                argument: :current_password} do
+      validate {AshAuthentication.Strategy.Password.PasswordValidation, password_argument: :current_password} do
         only_when_valid? true
         before_action? true
       end
@@ -183,8 +182,7 @@ defmodule AshHq.Accounts.User do
         allow_nil? false
       end
 
-      validate {AshHq.Accounts.User.Validations.ValidateCurrentPassword,
-                argument: :current_password} do
+      validate {AshAuthentication.Strategy.Password.PasswordValidation, password_argument: :current_password} do
         only_when_valid? true
         before_action? true
       end

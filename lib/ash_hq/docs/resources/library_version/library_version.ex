@@ -12,6 +12,11 @@ defmodule AshHq.Docs.LibraryVersion do
       allow_nil? false
     end
 
+    attribute :hydrated, :boolean do
+      default false
+      allow_nil? false
+    end
+
     timestamps()
   end
 

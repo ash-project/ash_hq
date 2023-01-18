@@ -32,50 +32,33 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
     Spark.Dsl.Extension.get_opt(resource, [:render_markdown], :header_ids?, [])
   end
 
-  def render!(%resource{} = record, key, on_demand? \\ false) do
-    cond do
-      render_attributes(resource)[key] ->
-        Map.get(record, render_attributes(resource)[key])
+  def as_html!(text, libraries, current_module, add_ids? \\ true)
 
-      on_demand? ->
-        case Map.get(record, key) do
-          value when is_list(value) ->
-            Enum.map(value, fn value ->
-              as_html!(value || "", header_ids?(resource))
-            end)
-
-          value ->
-            as_html!(value || "", header_ids?(resource))
-        end
-
-      true ->
-        raise "#{resource} dos not render #{key} as markdown. Pass the `on_demand?` argument as `true` to render it dynamically."
-    end
-  end
-
-  def as_html!(text, add_ids? \\ true)
-
-  def as_html!(nil, _) do
+  def as_html!(nil, _, _, _) do
     ""
   end
 
-  def as_html!(%Ash.NotLoaded{}, _) do
+  def as_html!(%Ash.NotLoaded{}, _libraries, _, _) do
     ""
   end
 
-  def as_html!(text, add_ids?) when is_list(text) do
-    Enum.map(text, &as_html!(&1, add_ids?))
+  def as_html!(text, libraries, current_module, add_ids?) when is_list(text) do
+    Enum.map(text, &as_html!(&1, libraries, current_module, add_ids?))
   end
 
-  def as_html!(text, add_ids?) do
+  def as_html!(text, libraries, current_library, current_module, add_ids?) do
     text
     |> Earmark.as_html!(opts(add_ids?))
-    |> AshHq.Docs.Extensions.RenderMarkdown.Highlighter.highlight()
+    |> AshHq.Docs.Extensions.RenderMarkdown.Highlighter.highlight(
+      libraries,
+      current_library,
+      current_module
+    )
   end
 
-  def as_html(text, add_ids?) when is_list(text) do
+  def as_html(text, libraries, current_module, add_ids?) when is_list(text) do
     Enum.reduce_while(text, {:ok, [], []}, fn text, {:ok, list, errors} ->
-      case as_html(text, add_ids?) do
+      case as_html(text, libraries, current_module, add_ids?) do
         {:ok, text, new_errors} ->
           {:cont, {:ok, [text | list], errors ++ new_errors}}
 
@@ -92,12 +75,18 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
     end
   end
 
-  def as_html(text, add_ids?) do
+  def as_html(text, libraries, current_library, current_module, add_ids?) do
     text
     |> Earmark.as_html(opts(add_ids?))
     |> case do
       {:ok, html_doc, errors} ->
-        {:ok, AshHq.Docs.Extensions.RenderMarkdown.Highlighter.highlight(html_doc), errors}
+        {:ok,
+         AshHq.Docs.Extensions.RenderMarkdown.Highlighter.highlight(
+           html_doc,
+           libraries,
+           current_library,
+           current_module
+         ), errors}
 
       {:error, html_doc, errors} ->
         {:error, html_doc, errors}
@@ -105,7 +94,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
   end
 
   defp opts(true) do
-    [postprocessor: &add_ids/1]
+    [postprocessor: &add_ids/1, escape: false]
   end
 
   defp opts(_) do
