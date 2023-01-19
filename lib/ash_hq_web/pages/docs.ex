@@ -308,7 +308,7 @@ defmodule AshHqWeb.Pages.Docs do
   def docs(assigns) do
     ~F"""
     <div id={docs_container_id(@doc_path)}>
-    {raw(@docs)}
+      {raw(@docs)}
     </div>
     """
   end
