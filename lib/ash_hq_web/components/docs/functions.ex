@@ -31,7 +31,7 @@ defmodule AshHqWeb.Components.Docs.Functions do
                 </div>
               </div>
               <div class="p-4">
-                {raw(rendered(function.html))}
+                {raw(rendered(function.text_html))}
               </div>
             </div>
           </div>

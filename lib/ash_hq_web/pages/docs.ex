@@ -110,9 +110,7 @@ defmodule AshHqWeb.Pages.Docs do
                   library_version={@library_version}
                 /></h2>
             {/if}
-            <div id={docs_container_id(@doc_path)}>
-              {raw(@docs)}
-            </div>
+            <.docs doc_path={@doc_path} docs={@docs} />
             {#if @extension && !@dsl && !@guide}
               {#case Enum.count_until(Stream.filter(@extension.dsls, &(&1.type == :section)), 2)}
                 {#match 0}
@@ -239,7 +237,7 @@ defmodule AshHqWeb.Pages.Docs do
                         <th>{Map.get(@dsl.arg_defaults || %{}, option.name)}</th>
                       {/if}
                       <td>
-                        {raw(option.html)}
+                        {raw(option.doc_html)}
                       </td>
                     </tr>
                   {/for}
@@ -275,7 +273,7 @@ defmodule AshHqWeb.Pages.Docs do
                       {if option.default == "nil", do: nil, else: option.default}
                     </td>
                     <td>
-                      {raw(option.html)}
+                      {raw(option.doc_html)}
                     </td>
                   </tr>
                 {/for}
@@ -303,6 +301,14 @@ defmodule AshHqWeb.Pages.Docs do
           <div />
         {/if}
       </div>
+    </div>
+    """
+  end
+
+  def docs(assigns) do
+    ~F"""
+    <div id={docs_container_id(@doc_path)}>
+    {raw(@docs)}
     </div>
     """
   end

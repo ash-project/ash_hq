@@ -7,23 +7,23 @@ defmodule AshHqWeb.Components.DocSidebar do
   alias AshHqWeb.DocRoutes
   alias Phoenix.LiveView.JS
 
-  prop class, :css_class, default: ""
-  prop libraries, :list, required: true
-  prop extension, :any, default: nil
-  prop guide, :any, default: nil
-  prop library, :any, default: nil
-  prop library_version, :any, default: nil
-  prop selected_versions, :map, default: %{}
-  prop id, :string, required: true
-  prop dsl, :any, required: true
-  prop module, :any, required: true
-  prop mix_task, :any, required: true
-  prop remove_version, :event, required: true
+  prop(class, :css_class, default: "")
+  prop(libraries, :list, required: true)
+  prop(extension, :any, default: nil)
+  prop(guide, :any, default: nil)
+  prop(library, :any, default: nil)
+  prop(library_version, :any, default: nil)
+  prop(selected_versions, :map, default: %{})
+  prop(id, :string, required: true)
+  prop(dsl, :any, required: true)
+  prop(module, :any, required: true)
+  prop(mix_task, :any, required: true)
+  prop(remove_version, :event, required: true)
 
-  data guides_by_category_and_library, :any
-  data extensions, :any
-  data modules_by_category, :any
-  data mix_tasks_by_category, :any
+  data(guides_by_category_and_library, :any)
+  data(extensions, :any)
+  data(modules_by_category, :any)
+  data(mix_tasks_by_category, :any)
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
