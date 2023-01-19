@@ -1,7 +1,7 @@
 %{
   "absinthe": {:hex, :absinthe, "1.7.0", "36819e7b1fd5046c9c734f27fe7e564aed3bda59f0354c37cd2df88fd32dd014", [:mix], [{:dataloader, "~> 1.0.0", [hex: :dataloader, repo: "hexpm", optional: true]}, {:decimal, "~> 1.0 or ~> 2.0", [hex: :decimal, repo: "hexpm", optional: true]}, {:nimble_parsec, "~> 0.5 or ~> 1.0", [hex: :nimble_parsec, repo: "hexpm", optional: false]}, {:telemetry, "~> 1.0 or ~> 0.4", [hex: :telemetry, repo: "hexpm", optional: false]}], "hexpm", "566a5b5519afc9b29c4d367f0c6768162de3ec03e9bf9916f9dc2bcbe7c09643"},
   "absinthe_plug": {:hex, :absinthe_plug, "1.5.8", "38d230641ba9dca8f72f1fed2dfc8abd53b3907d1996363da32434ab6ee5d6ab", [:mix], [{:absinthe, "~> 1.5", [hex: :absinthe, repo: "hexpm", optional: false]}, {:plug, "~> 1.4", [hex: :plug, repo: "hexpm", optional: false]}], "hexpm", "bbb04176647b735828861e7b2705465e53e2cf54ccf5a73ddd1ebd855f996e5a"},
-  "ash": {:git, "https://github.com/ash-project/ash.git", "e3a4f51d67232223584fe0ecf5154dd9885247a3", []},
+  "ash": {:git, "https://github.com/ash-project/ash.git", "b1afa0502634e267138e94be6b71e330714a5c9f", []},
   "ash_admin": {:git, "https://github.com/ash-project/ash_admin.git", "cdb3b469abeeadddda884e7cfcf67c6fea10f9ef", []},
   "ash_authentication": {:git, "https://github.com/team-alembic/ash_authentication.git", "00f082cc8dfa0f56d3e2dec3eaf178a58d6d4b4a", []},
   "ash_authentication_phoenix": {:git, "https://github.com/team-alembic/ash_authentication_phoenix.git", "14c38739cf56c4821797963b9ee261597a261b00", []},

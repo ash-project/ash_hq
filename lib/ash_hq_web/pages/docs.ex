@@ -727,6 +727,7 @@ defmodule AshHqWeb.Pages.Docs do
         AshHq.Docs.Function
         |> Ash.Query.sort(name: :asc, arity: :asc)
         |> load_for_search()
+        |> Ash.Query.load(:doc_html)
 
       assign(socket,
         module: AshHq.Docs.load!(module, [functions: functions_query], lazy?: true)

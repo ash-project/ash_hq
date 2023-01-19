@@ -259,23 +259,7 @@ defmodule AshHqWeb.AppViewLive do
         get_connect_params(socket)["user_agent"]
       end)
 
-    socket =
-      case socket.assigns[:user_agent] do
-        empty when empty in [nil, ""] ->
-          assign(socket, :device_brand, :unknown)
-
-        ua ->
-          brand =
-            case UAInspector.parse(ua) do
-              %{device: %{brand: brand}} ->
-                brand
-
-              _ ->
-                :unknown
-            end
-
-          assign(socket, :device_brand, brand)
-      end
+    socket = assign(socket, :device_brand, "Apple")
 
     socket = Context.put(socket, platform: socket.assigns.platform)
     configured_theme = session["theme"] || "system"

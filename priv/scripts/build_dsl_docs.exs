@@ -638,8 +638,12 @@ all_modules =
   end)
 
 all_modules =
-  Enum.filter(all_modules, fn module ->
+  all_modules
+  |> Enum.filter(fn module ->
     case Code.fetch_docs(module) do
+      {:docs_v1, _, _, _, :none, _, _} ->
+        false
+
       {:docs_v1, _, _, _, type, _, _} when type != :hidden ->
         true
 
@@ -652,6 +656,9 @@ acc =
   mix_project.project[:docs][:groups_for_modules]
   |> Enum.reject(fn
     {"Internals", _} ->
+      true
+
+    {:Internals, _} ->
       true
 
     _ ->
