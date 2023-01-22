@@ -10,14 +10,14 @@ defmodule AshHqWeb.Pages.Forum do
 
   import AshHqWeb.Tails
 
-  prop params, :map, default: %{}
+  prop(params, :map, default: %{})
 
-  data thread, :any, default: nil
-  data threads, :any, default: []
-  data tag, :string, default: nil
-  data tags, :any, default: []
-  data channels, :any, default: []
-  data channel, :any, default: []
+  data(thread, :any, default: nil)
+  data(threads, :any, default: [])
+  data(tag, :string, default: nil)
+  data(tags, :any, default: [])
+  data(channels, :any, default: [])
+  data(channel, :any, default: [])
 
   def render(assigns) do
     ~F"""
@@ -63,7 +63,7 @@ defmodule AshHqWeb.Pages.Forum do
                 content={"See the forum discussion in the #{String.capitalize(@channel.name)} channel"}
               />
             </head>
-            <div class="border shadow-sm rounded-lg px-8 pb-6 dark:border-gray-600 mb-4" ">
+            <div class="border shadow-sm rounded-lg px-8 pb-6 dark:border-gray-600 mb-4">
               <h2 class="mt-6 text-3xl font-semibold mb-4">{@thread.name}</h2>
               <div class="border-b pb-2">
                 <div>

@@ -13,7 +13,7 @@ defmodule AshHqWeb.Components.Forum.Attachment do
             <source src={@attachment.url} type={mime}>
           </video>
 
-        {#match {:image, mime}}
+        {#match {:image, _mime}}
           <img src={@attachment.url} width={@attachment.width} height={@attachment.height} />
 
         {#match _}

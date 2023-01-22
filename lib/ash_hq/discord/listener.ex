@@ -118,7 +118,11 @@ defmodule AshHq.Discord.Listener do
   end
 
   def handle_event({:READY, _msg, _ws_state}) do
-    rebuild()
+    # What is happening? For some reason startup is getting timeouts at the ecto pool?
+    Task.async(fn ->
+      :timer.sleep(:timer.seconds(30))
+      rebuild()
+    end)
   end
 
   # Default event handler, if you don't include this, your consumer WILL crash if
@@ -128,11 +132,13 @@ defmodule AshHq.Discord.Listener do
   end
 
   def rebuild do
-    libraries =
-      AshHq.Docs.Library.read!()
-      |> Enum.filter(& &1.latest_library_version)
+    if Application.get_env(:ash_hq, :discord_bot) do
+      libraries =
+        AshHq.Docs.Library.read!()
+        |> Enum.filter(& &1.latest_library_version)
 
-    build_search_action(libraries)
+      build_search_action(libraries)
+    end
   end
 
   defp build_search_action(libraries) do

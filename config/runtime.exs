@@ -18,6 +18,7 @@ config :ash_hq, :github,
   redirect_uri: System.get_env("GITHUB_REDIRECT_URI")
 
 config :ash_hq, :periodic_imports, System.get_env("PERIODIC_IMPORTS") == "true"
+config :ash_hq, :discord_bot, System.get_env("DISCORD_BOT") == "true"
 
 host = System.get_env("PHX_HOST") || "localhost"
 port = String.to_integer(System.get_env("PORT") || "4000")
