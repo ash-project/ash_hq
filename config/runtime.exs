@@ -26,6 +26,9 @@ if config_env() != :dev do
   config :logger, level: String.to_existing_atom(System.get_env("LOG_LEVEL") || "info")
 end
 
+config :nostrum,
+  token: System.get_env("DISCORD_BOT_TOKEN")
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||

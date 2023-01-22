@@ -47,19 +47,23 @@ defmodule AshHq.MixProject do
       {:ash_json_api, github: "ash-project/ash_json_api"},
       {:ash_authentication, github: "team-alembic/ash_authentication", override: true},
       {:ash_authentication_phoenix, github: "team-alembic/ash_authentication_phoenix"},
-      {:absinthe_plug, "~> 1.5"},
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, github: "ash-project/ash_csv"},
+      # Discord
+      {:nostrum, github: "zachdaniel/nostrum"},
+      {:cowlib, "~> 2.11", hex: :remedy_cowlib, override: true},
+      # UI
       {:tails, "~> 0.1"},
       {:sunflower_ui, github: "zachdaniel/sunflower_ui"},
       {:earmark, "~> 1.5.0-pre1", override: true},
+      # Other
+      {:absinthe_plug, "~> 1.5"},
       {:nimble_options, "~> 0.5.1", override: true},
       {:spark, "~> 0.3", override: true},
       {:surface, "~> 0.9.1"},
       {:surface_heroicons, "~> 0.6.0"},
       {:ua_inspector, "~> 3.0"},
       # Syntax Highlighting
-      {:elixir_sense, github: "elixir-lsp/elixir_sense", only: [:dev, :test]},
       {:makeup, "~> 1.1"},
       {:makeup_elixir, "~> 0.16.0"},
       {:makeup_graphql, "~> 0.1.2"},

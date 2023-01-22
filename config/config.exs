@@ -12,7 +12,8 @@ config :ash_hq,
 
 config :ash, allow_flow: true
 
-config :ash_hq, ash_apis: [AshHq.Blog, AshHq.Docs, AshHq.Accounts, AshHq.MailingList]
+config :ash_hq,
+  ash_apis: [AshHq.Blog, AshHq.Docs, AshHq.Accounts, AshHq.MailingList, AshHq.Discord]
 
 config :ash_hq, AshHq.Repo,
   timeout: :timer.minutes(10),

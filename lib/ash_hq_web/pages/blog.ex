@@ -29,7 +29,7 @@ defmodule AshHqWeb.Pages.Blog do
                 <h1 class="mt-6 text-3xl font-semibold mb-4">{@post.title}</h1>
                 <div class="flex flex-row space-x-2 mb-4">
                   {#for tag <- @post.tag_names}
-                    <Tag tag={tag} />
+                    <Tag prefix="/blog" tag={tag} />
                   {/for}
                 </div>
                 <div class="flex flex-row items-center align-middle justify-between">
@@ -70,7 +70,7 @@ defmodule AshHqWeb.Pages.Blog do
                   </div>
                   <div class="flex space-x-2">
                     {#for tag <- post.tag_names}
-                      <Tag tag={tag} />
+                      <Tag prefix="/blog" tag={tag} />
                     {/for}
                   </div>
                 </div>
@@ -96,7 +96,7 @@ defmodule AshHqWeb.Pages.Blog do
             <h3 class="text-lg font-bold mb-1">All Tags:</h3>
             <div class="flex gap-2 flex-wrap w-full">
               {#for tag <- @tags}
-                <Tag tag={to_string(tag.name)} />
+                <Tag prefix="/blog" tag={to_string(tag.name)} />
               {/for}
             </div>
           </div>

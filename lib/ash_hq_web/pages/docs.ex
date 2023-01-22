@@ -12,29 +12,29 @@ defmodule AshHqWeb.Pages.Docs do
   require Logger
   require Ash.Query
 
-  prop(change_versions, :event, required: true)
-  prop(selected_versions, :map, required: true)
-  prop(libraries, :list, default: [])
-  prop(uri, :string)
-  prop(remove_version, :event)
-  prop(add_version, :event)
-  prop(change_version, :event)
-  prop(params, :map, required: true)
+  prop change_versions, :event, required: true
+  prop selected_versions, :map, required: true
+  prop libraries, :list, default: []
+  prop uri, :string
+  prop remove_version, :event
+  prop add_version, :event
+  prop change_version, :event
+  prop params, :map, required: true
 
-  data(library, :any)
-  data(extension, :any)
-  data(docs, :any)
-  data(library_version, :any)
-  data(guide, :any)
-  data(doc_path, :list, default: [])
-  data(dsls, :list, default: [])
-  data(dsl, :any)
-  data(options, :list, default: [])
-  data(module, :any)
-  data(mix_task, :any)
-  data(positional_options, :list)
-  data(description, :string)
-  data(title, :string)
+  data library, :any
+  data extension, :any
+  data docs, :any
+  data library_version, :any
+  data guide, :any
+  data doc_path, :list, default: []
+  data dsls, :list, default: []
+  data dsl, :any
+  data options, :list, default: []
+  data module, :any
+  data mix_task, :any
+  data positional_options, :list
+  data description, :string
+  data title, :string
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do

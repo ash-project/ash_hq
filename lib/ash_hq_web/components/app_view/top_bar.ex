@@ -54,6 +54,13 @@ defmodule AshHqWeb.Components.AppView.TopBar do
           Blog
         </a>
         <a
+          href="/forum/showcase"
+          title="Forum"
+          class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-light-500 hover:text-primary-light-700"
+        >
+          Forum
+        </a>
+        <a
           href="/media"
           title="Media"
           class="text-lg font-bold px-2 md:px-4 pr-2 md:pr-8 dark:hover:text-primary-light-500 hover:text-primary-light-700"

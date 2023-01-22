@@ -5,29 +5,29 @@ defmodule AshHqWeb.AppViewLive do
 
   alias AshHqWeb.Components.AppView.TopBar
   alias AshHqWeb.Components.{CatalogueModal, Search}
-  alias AshHqWeb.Pages.{Blog, Docs, Home, Media, UserSettings}
+  alias AshHqWeb.Pages.{Blog, Docs, Forum, Home, Media, UserSettings}
   alias Phoenix.LiveView.JS
   alias Surface.Components.Context
   require Ash.Query
 
   import AshHqWeb.Tails
 
-  data(configured_theme, :string, default: :system)
-  data(selected_versions, :map, default: %{})
-  data(libraries, :list, default: [])
-  data(selected_types, :map, default: %{})
-  data(current_user, :map)
+  data configured_theme, :string, default: :system
+  data selected_versions, :map, default: %{}
+  data libraries, :list, default: []
+  data selected_types, :map, default: %{}
+  data current_user, :map
 
-  data(library, :any, default: nil)
-  data(extension, :any, default: nil)
-  data(docs, :any, default: nil)
-  data(library_version, :any, default: nil)
-  data(guide, :any, default: nil)
-  data(doc_path, :list, default: [])
-  data(dsls, :list, default: [])
-  data(dsl, :any, default: nil)
-  data(options, :list, default: [])
-  data(module, :any, default: nil)
+  data library, :any, default: nil
+  data extension, :any, default: nil
+  data docs, :any, default: nil
+  data library_version, :any, default: nil
+  data guide, :any, default: nil
+  data doc_path, :list, default: []
+  data dsls, :list, default: []
+  data dsl, :any, default: nil
+  data options, :list, default: []
+  data module, :any, default: nil
 
   def render(%{platform: :ios} = assigns) do
     ~F"""
@@ -47,7 +47,7 @@ defmodule AshHqWeb.AppViewLive do
     >
       <head>
         <meta property="og:type" content="text/html">
-        <meta property="og:image" content="https://ash-hq.org/images/ash-logo.png">
+        <meta property="og:image" content="https://ash-hq.org/images/ash-logo-side-big.svg">
         <meta property="og:url" content={to_string(@uri)}>
         <meta property="og:site_name" content="Ash HQ">
         <meta property="twitter:card" content="summary_large_image">
@@ -56,7 +56,7 @@ defmodule AshHqWeb.AppViewLive do
         <!-- Need to adjust this for future blog writers -->
         <meta property="twitter:creator" content="@ZachSDaniel1">
 
-        {#if @live_action not in [:docs_dsl, :blog]}
+        {#if @live_action not in [:docs_dsl, :blog, :forum]}
           <meta property="og:title" content="Ash Framework">
           <meta
             property="og:description"
@@ -120,6 +120,8 @@ defmodule AshHqWeb.AppViewLive do
             <UserSettings id="user_settings" current_user={@current_user} />
           {#match :media}
             <Media id="media" />
+          {#match :forum}
+            <Forum id="forum" params={@params} />
         {/case}
 
         {#if @live_action != :docs_dsl}

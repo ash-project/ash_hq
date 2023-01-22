@@ -29,7 +29,8 @@ defmodule AshHq.Application do
         {Phoenix.PubSub, name: AshHq.PubSub},
         # Start the Endpoint (http/https)
         AshHqWeb.Endpoint,
-        {AshHq.Docs.Library.Agent, nil}
+        {AshHq.Docs.Library.Agent, nil},
+        AshHq.Discord.Supervisor
 
         # Start a worker by calling: AshHq.Worker.start_link(arg)
         # {AshHq.Worker, arg}

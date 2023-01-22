@@ -1,0 +1,73 @@
+{
+  "attributes": [
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": true,
+      "references": null,
+      "size": null,
+      "source": "id",
+      "type": "bigint"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "name",
+      "type": "citext"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": {
+        "destination_attribute": "id",
+        "destination_attribute_default": null,
+        "destination_attribute_generated": null,
+        "multitenancy": {
+          "attribute": null,
+          "global": null,
+          "strategy": null
+        },
+        "name": "discord_tags_channel_id_fkey",
+        "on_delete": null,
+        "on_update": null,
+        "schema": "public",
+        "table": "discord_channels"
+      },
+      "size": null,
+      "source": "channel_id",
+      "type": "bigint"
+    }
+  ],
+  "base_filter": null,
+  "check_constraints": [],
+  "custom_indexes": [],
+  "custom_statements": [],
+  "has_create_action": true,
+  "hash": "4BC43E070E42BD9B6DF346361EA7C569CEC386861E071BE60010802B3B7B1A4C",
+  "identities": [
+    {
+      "base_filter": null,
+      "index_name": "discord_tags_unique_name_per_channel_index",
+      "keys": [
+        "name",
+        "channel_id"
+      ],
+      "name": "unique_name_per_channel"
+    }
+  ],
+  "multitenancy": {
+    "attribute": null,
+    "global": null,
+    "strategy": null
+  },
+  "repo": "Elixir.AshHq.Repo",
+  "schema": null,
+  "table": "discord_tags"
+}

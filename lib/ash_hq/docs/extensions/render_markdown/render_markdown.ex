@@ -75,6 +75,10 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
     end
   end
 
+  def as_html(nil, _, _, _, _) do
+    {:ok, nil, []}
+  end
+
   def as_html(text, libraries, current_library, current_module, add_ids?) do
     text
     |> Earmark.as_html(opts(add_ids?))
