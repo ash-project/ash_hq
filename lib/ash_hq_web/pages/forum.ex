@@ -303,16 +303,16 @@ defmodule AshHqWeb.Pages.Forum do
   end
 
   defp assign_channel(socket) do
+    channel_name = socket.assigns.params["channel"] || "showcase"
+
     channel =
       Enum.find(
         socket.assigns.channels,
-        &(&1.name == socket.assigns.params["channel"])
+        &(&1.name == channel_name)
       )
 
     if is_nil(channel) do
-      raise Ash.Error.Query.NotFound.exception(
-              primary_key: %{name: socket.assigns.params["channel"]}
-            )
+      raise Ash.Error.Query.NotFound.exception(primary_key: %{name: channel_name})
     end
 
     assign(

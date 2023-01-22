@@ -51,6 +51,7 @@ defmodule AshHqWeb.Router do
       live("/media", AppViewLive, :media)
       live("/blog", AppViewLive, :blog)
       live("/blog/:slug", AppViewLive, :blog)
+      live("/forum", AppViewLive, :forum)
       live("/forum/:channel", AppViewLive, :forum)
       live("/forum/:channel/:id", AppViewLive, :forum)
       live("/docs/", AppViewLive, :docs_dsl)

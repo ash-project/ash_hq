@@ -5,7 +5,7 @@ defmodule AshHq.Discord.Poller do
 
   use GenServer
 
-  @poll_interval :timer.hours(2)
+  @poll_interval :timer.hours(1)
   @server_id 711_271_361_523_351_632
   @archived_thread_lookback 50
 
@@ -103,7 +103,7 @@ defmodule AshHq.Discord.Poller do
       _ ->
         false
     end)
-    |> Enum.map(fn %{thread: thread, messages: messages} ->
+    |> Enum.each(fn %{thread: thread, messages: messages} ->
       thread
       |> Map.put(:author, Enum.at(messages, 0).author)
       |> Map.from_struct()
