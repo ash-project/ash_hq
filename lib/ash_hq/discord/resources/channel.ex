@@ -1,4 +1,8 @@
 defmodule AshHq.Discord.Channel do
+  @moduledoc """
+  The channel is the discord forum channel. We explicitly configure which ones we import.
+  """
+
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer
 

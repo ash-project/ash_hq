@@ -1,4 +1,5 @@
 defmodule AshHq.Discord.Attachment do
+  @moduledoc "A discord attachment on a message"
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer
 

@@ -134,6 +134,15 @@ defmodule AshHq.Docs.LibraryVersion do
     identity :unique_version_for_library, [:version, :library_id]
   end
 
+  changes do
+    change fn changeset, _ ->
+      Ash.Changeset.after_action(changeset, fn _changeset, result ->
+        AshHq.Docs.Library.Agent.clear()
+        {:ok, result}
+      end)
+    end
+  end
+
   preparations do
     prepare AshHq.Docs.LibraryVersion.Preparations.SortBySortableVersionInstead
   end

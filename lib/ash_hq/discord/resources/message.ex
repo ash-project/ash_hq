@@ -1,15 +1,18 @@
 defmodule AshHq.Discord.Message do
+  @moduledoc """
+  Represents all of the messages on a given forum post/thread.
+  """
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.RenderMarkdown]
 
   postgres do
     table "discord_messages"
-    repo AshHq.Repo
+    repo(AshHq.Repo)
   end
 
   render_markdown do
-    render_attributes content: :content_html
+    render_attributes(content: :content_html)
   end
 
   actions do

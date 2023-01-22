@@ -1,7 +1,8 @@
 defmodule AshHqWeb.Components.Forum.Attachment do
+  @moduledoc "Renders an attachment"
   use Surface.Component
 
-  prop attachment, :any, required: true
+  prop(attachment, :any, required: true)
 
   def render(assigns) do
     ~F"""
@@ -11,8 +12,10 @@ defmodule AshHqWeb.Components.Forum.Attachment do
           <video controls width={@attachment.width} height={@attachment.height}>
             <source src={@attachment.url} type={mime}>
           </video>
-        {#match :image}
-          image
+
+        {#match {:image, mime}}
+          <img src={@attachment.url} width={@attachment.width} height={@attachment.height} />
+
         {#match _}
           other
       {/case}

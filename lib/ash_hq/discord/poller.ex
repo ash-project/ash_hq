@@ -1,9 +1,13 @@
 defmodule AshHq.Discord.Poller do
+  @moduledoc """
+  Every 2 hours, synchronizes all active threads and the 50 most recent archived threads
+  """
+
   use GenServer
 
   @poll_interval :timer.hours(2)
   @server_id 711_271_361_523_351_632
-  @archived_thread_lookback 20
+  @archived_thread_lookback 50
 
   @channels [
     1_066_222_835_758_014_606,
@@ -40,7 +44,7 @@ defmodule AshHq.Discord.Poller do
     {:noreply, state}
   end
 
-  def poll() do
+  def poll do
     for {channel, index} <- Enum.with_index(@channels) do
       channel
       |> Nostrum.Api.get_channel!()

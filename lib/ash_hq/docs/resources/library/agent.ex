@@ -10,7 +10,12 @@ defmodule AshHq.Docs.Library.Agent do
     Agent.get_and_update(__MODULE__, fn state ->
       state =
         if state == nil do
-          AshHq.Docs.Library.read!(%{check_cache: false})
+          AshHq.Docs.Library.read!(%{check_cache: false},
+            load: [
+              :latest_version_id,
+              latest_library_version: [guides: Ash.Query.select(AshHq.Docs.Guide, :name)]
+            ]
+          )
         else
           state
         end
@@ -20,6 +25,8 @@ defmodule AshHq.Docs.Library.Agent do
   end
 
   def clear do
+    AshHq.Discord.Listener.rebuild()
+
     Agent.update(__MODULE__, fn _state ->
       nil
     end)

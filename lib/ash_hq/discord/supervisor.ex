@@ -1,4 +1,5 @@
 defmodule AshHq.Discord.Supervisor do
+  @moduledoc "Supervises the discord listener"
   use Supervisor
 
   def start_link(args) do

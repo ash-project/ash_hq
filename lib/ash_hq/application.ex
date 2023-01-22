@@ -16,6 +16,13 @@ defmodule AshHq.Application do
         []
       end
 
+    discord_bot =
+      if Application.get_env(:ash_hq, :discord_bot) do
+        [AshHq.Discord.Supervisor]
+      else
+        []
+      end
+
     children =
       [
         Supervisor.child_spec({Finch, name: AshHq.Finch}, id: AshHq.Finch),
@@ -29,12 +36,11 @@ defmodule AshHq.Application do
         {Phoenix.PubSub, name: AshHq.PubSub},
         # Start the Endpoint (http/https)
         AshHqWeb.Endpoint,
-        {AshHq.Docs.Library.Agent, nil},
-        AshHq.Discord.Supervisor
+        {AshHq.Docs.Library.Agent, nil}
 
         # Start a worker by calling: AshHq.Worker.start_link(arg)
         # {AshHq.Worker, arg}
-      ] ++ importer
+      ] ++ importer ++ discord_bot
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

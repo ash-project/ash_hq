@@ -1,4 +1,8 @@
 defmodule AshHq.Discord.Thread do
+  @moduledoc """
+  A thread is an individual forum post (because they are really just fancy threads)
+  """
+
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer
 
@@ -54,7 +58,7 @@ defmodule AshHq.Discord.Thread do
           AshHq.Repo.delete_all(to_delete)
 
           Enum.map(tags, fn tag ->
-            AshHq.Discord.ThreadTag.tag!(thread.id, tag) |> IO.inspect()
+            AshHq.Discord.ThreadTag.tag!(thread.id, tag)
           end)
 
           {:ok, thread}

@@ -37,6 +37,10 @@ defmodule AshHq.Docs.Library do
 
   relationships do
     has_many :versions, AshHq.Docs.LibraryVersion
+
+    has_one :latest_library_version, AshHq.Docs.LibraryVersion do
+      sort version: :desc
+    end
   end
 
   postgres do
@@ -115,6 +119,10 @@ defmodule AshHq.Docs.Library do
 
   aggregates do
     first :latest_version, :versions, :version do
+      sort version: :desc
+    end
+
+    first :latest_version_id, :versions, :id do
       sort version: :desc
     end
   end

@@ -1,10 +1,13 @@
 defmodule AshHq.Discord.Reaction do
+  @moduledoc """
+  Reactions store emoji reaction counts.
+  """
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer
 
   postgres do
     table "discord_reactions"
-    repo AshHq.Repo
+    repo(AshHq.Repo)
   end
 
   actions do

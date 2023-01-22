@@ -1,4 +1,5 @@
 defmodule AshHq.Discord.ThreadTag do
+  @moduledoc "Joins a thread to a tag"
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer
 
