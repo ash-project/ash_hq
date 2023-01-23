@@ -41,38 +41,6 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
     Spark.Dsl.Extension.get_opt(resource, [:render_markdown], :table_of_contents?, [])
   end
 
-  def as_html!(text, libraries, current_module, add_ids? \\ true, add_table_of_contents? \\ false)
-
-  def as_html!(nil, _, _, _, _) do
-    ""
-  end
-
-  def as_html!(%Ash.NotLoaded{}, _libraries, _, _, _) do
-    ""
-  end
-
-  def as_html!(text, libraries, current_module, add_ids?, add_table_of_contents?)
-      when is_list(text) do
-    Enum.map(text, &as_html!(&1, libraries, current_module, add_ids?, add_table_of_contents?))
-  end
-
-  def as_html!(
-        text,
-        libraries,
-        current_library,
-        current_module,
-        add_ids?,
-        _add_table_of_contents?
-      ) do
-    text
-    |> Earmark.as_html!(opts(add_ids?))
-    |> AshHq.Docs.Extensions.RenderMarkdown.Highlighter.highlight(
-      libraries,
-      current_library,
-      current_module
-    )
-  end
-
   def as_html(text, libraries, current_module, add_ids?, add_table_of_contents?)
       when is_list(text) do
     Enum.reduce_while(text, {:ok, [], []}, fn text, {:ok, list, errors} ->
