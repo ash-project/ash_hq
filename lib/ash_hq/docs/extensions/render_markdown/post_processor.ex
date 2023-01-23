@@ -4,18 +4,22 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessor do
   post-processor transformations on them.
   """
 
-  def run(html, libraries, current_library, current_module) when is_list(html) do
-    Enum.map(html, &run(&1, libraries, current_library, current_module))
+  alias AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.{HeadingAutolinker, Highlighter}
+  alias AshHq.Docs.Extensions.RenderMarkdown.RawHTML
+
+  def run(html, libraries, current_library, current_module, add_ids?, add_table_of_contents?)
+      when is_list(html) do
+    Enum.map(
+      html,
+      &run(&1, libraries, current_library, current_module, add_ids?, add_table_of_contents?)
+    )
   end
 
-  def run(html, libraries, current_library, current_module) do
+  def run(html, libraries, current_library, current_module, add_ids?, _add_table_of_contents?) do
     html
     |> Floki.parse_document!()
-    |> AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.Highlighter.highlight(
-      libraries,
-      current_library,
-      current_module
-    )
-    |> AshHq.Docs.Extensions.RenderMarkdown.RawHTML.raw_html(pretty: true)
+    |> HeadingAutolinker.autolink(add_ids?)
+    |> Highlighter.highlight(libraries, current_library, current_module)
+    |> RawHTML.raw_html(pretty: true)
   end
 end
