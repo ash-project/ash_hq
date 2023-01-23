@@ -494,7 +494,9 @@ defmodule Utils do
         if is_list(modules) do
           Enum.flat_map(modules, &modules_for(all_modules, &1))
         else
-          List.wrap(other)
+          other
+          |> List.wrap()
+          |> Enum.map(&Module.concat(List.wrap(&1)))
         end
     end
   end
