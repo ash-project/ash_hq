@@ -1,20 +1,12 @@
-defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
+defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.Highlighter do
   @moduledoc false
   # Copied *directly* from nimble_publisher
   # https://github.com/dashbitco/nimble_publisher/blob/v0.1.2/lib/nimble_publisher/highlighter.ex
 
   use AshHqWeb, :verified_routes
 
-  @doc """
-  Highlights all code block in an already generated HTML document.
-  """
-  def highlight(html, libraries, current_library, current_module) when is_list(html) do
-    Enum.map(html, &highlight(&1, libraries, current_library, current_module))
-  end
-
-  def highlight(html, libraries, current_library, current_module) do
-    html
-    |> Floki.parse_document!()
+  def highlight(ast, libraries, current_library, current_module) do
+    ast
     |> Floki.traverse_and_update(fn
       {"a", attrs, contents} ->
         {"a", rewrite_href_attr(attrs, current_library, libraries), contents}
@@ -70,7 +62,6 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Highlighter do
       other ->
         other
     end)
-    |> AshHq.Docs.Extensions.RenderMarkdown.RawHTML.raw_html(pretty: true)
   end
 
   defp rewrite_href_attr(attrs, current_library, libraries) do

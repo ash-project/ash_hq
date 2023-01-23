@@ -70,13 +70,15 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
     |> Earmark.as_html(opts(add_ids?))
     |> case do
       {:ok, html_doc, errors} ->
-        {:ok,
-         AshHq.Docs.Extensions.RenderMarkdown.Highlighter.highlight(
-           html_doc,
-           libraries,
-           current_library,
-           current_module
-         ), errors}
+        processed_html =
+          AshHq.Docs.Extensions.RenderMarkdown.PostProcessor.run(
+            html_doc,
+            libraries,
+            current_library,
+            current_module
+          )
+
+        {:ok, processed_html, errors}
 
       {:error, html_doc, errors} ->
         {:error, html_doc, errors}
