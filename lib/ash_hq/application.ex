@@ -18,8 +18,7 @@ defmodule AshHq.Application do
 
     discord_bot =
       if Application.get_env(:ash_hq, :discord_bot) do
-        Nostrum.Application.start(:normal, [])
-        [AshHq.Discord.Supervisor, AshHq.Discord.Poller]
+        [AshHq.Discord.Supervisor]
       else
         []
       end

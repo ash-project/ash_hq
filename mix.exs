@@ -50,7 +50,7 @@ defmodule AshHq.MixProject do
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, github: "ash-project/ash_csv"},
       # Discord
-      {:nostrum, github: "zachdaniel/nostrum", runtime: false},
+      {:nostrum, github: "zachdaniel/nostrum"},
       {:cowlib, "~> 2.11", hex: :remedy_cowlib, override: true},
       # UI
       {:tails, "~> 0.1"},
@@ -93,7 +93,7 @@ defmodule AshHq.MixProject do
       {:phoenix_live_view, "~> 0.18"},
       {:finch, "~> 0.10.2"},
       {:floki, ">= 0.30.0"},
-      {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
+      {:esbuild, "~> 0.3", runtime: false},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},

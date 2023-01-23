@@ -23,6 +23,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.TableOfContentsGen
     contents =
       Enum.map(headings, fn [h2 | h3s] ->
         {_tag, attrs, [text]} = h2
+        text = Floki.text(text)
         {"id", id} = Enum.find(attrs, fn {k, _v} -> k == "id" end)
 
         {
@@ -82,6 +83,8 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.TableOfContentsGen
     contents =
       Enum.map(h3s, fn h3 ->
         {_tag, attrs, [text]} = h3
+
+        text = Floki.text(text)
         {"id", id} = Enum.find(attrs, fn {k, _v} -> k == "id" end)
 
         {

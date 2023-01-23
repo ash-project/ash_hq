@@ -17,8 +17,9 @@ config :ash_hq, :github,
   client_secret: System.get_env("GITHUB_CLIENT_SECRET"),
   redirect_uri: System.get_env("GITHUB_REDIRECT_URI")
 
+discord_bot? = System.get_env("DISCORD_BOT") == "true"
 config :ash_hq, :periodic_imports, System.get_env("PERIODIC_IMPORTS") == "true"
-config :ash_hq, :discord_bot, System.get_env("DISCORD_BOT") == "true"
+config :ash_hq, :discord_bot, discord_bot?
 
 host = System.get_env("PHX_HOST") || "localhost"
 port = String.to_integer(System.get_env("PORT") || "4000")
@@ -27,8 +28,11 @@ if config_env() != :dev do
   config :logger, level: String.to_existing_atom(System.get_env("LOG_LEVEL") || "info")
 end
 
+nostrum_token = System.get_env("DISCORD_BOT_TOKEN")
+
 config :nostrum,
-  token: System.get_env("DISCORD_BOT_TOKEN")
+  token: nostrum_token,
+  disabled?: is_nil(nostrum_token) || !discord_bot?
 
 if config_env() == :prod do
   database_url =

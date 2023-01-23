@@ -7,10 +7,11 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.HeadingAutolinker 
     ast
     |> Floki.traverse_and_update(fn
       {tag, attrs, [contents]}
-      when tag in ["h1", "h2", "h3", "h4", "h5", "h6"] and is_binary(contents) ->
+      when tag in ["h1", "h2", "h3", "h4", "h5", "h6"] ->
+        text_contents = Floki.text(contents)
         new_attrs = Enum.reject(attrs, fn {key, _} -> key == "id" end)
 
-        id = to_hash(contents)
+        id = to_hash(text_contents)
         new_attrs = [{"id", id} | new_attrs]
 
         {"div", [{"class", "flex flex-row items-baseline"}],
