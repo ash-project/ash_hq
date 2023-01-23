@@ -50,7 +50,7 @@ defmodule AshHq.MixProject do
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, github: "ash-project/ash_csv"},
       # Discord
-      {:nostrum, github: "zachdaniel/nostrum"},
+      {:nostrum, github: "zachdaniel/nostrum", runtime: false},
       {:cowlib, "~> 2.11", hex: :remedy_cowlib, override: true},
       # UI
       {:tails, "~> 0.1"},
