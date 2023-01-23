@@ -38,7 +38,6 @@ RUN mix assets.deploy
 RUN mix compile
 COPY ./config/runtime.exs config/runtime.exs
 COPY ./rel ./rel
-RUN mix ua_inspector.download
 RUN mix release --overwrite
 RUN mkdir indexes
 CMD ["_build/prod/rel/ash_hq/bin/ash_hq", "start"]

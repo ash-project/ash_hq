@@ -15,7 +15,7 @@ defmodule AshHq.MixProject do
       deps: deps(),
       dialyzer: [
         ignore_warnings: "dialyzer.ignore_warnings",
-        plt_add_apps: [:mix]
+        plt_add_apps: [:mix, :nostrum]
       ]
     ]
   end
@@ -62,7 +62,6 @@ defmodule AshHq.MixProject do
       {:spark, "~> 0.3", override: true},
       {:surface, "~> 0.9.1"},
       {:surface_heroicons, "~> 0.6.0"},
-      {:ua_inspector, "~> 3.0"},
       # Syntax Highlighting
       {:makeup, "~> 1.1"},
       {:makeup_elixir, "~> 0.16.0"},
@@ -124,8 +123,7 @@ defmodule AshHq.MixProject do
       setup: [
         "ash_postgres.create",
         "ash_postgres.migrate",
-        "seed",
-        "ua_inspector.download --force"
+        "seed"
       ],
       reset: ["drop", "setup"],
       credo: "credo --strict",

@@ -41,7 +41,8 @@ defmodule AshHqWeb.Pages.Media do
             class="twitter-timeline"
             data-height="560px"
             href="https://twitter.com/AshFramework/lists/1604385682176327681?ref_src=twsrc%5Etfw"
-          >Twitter Feed...</a>
+          >Loading Twitter Feed...
+          </a>
         </div>
 
         <div class="col-span-2 lg:col-span-1">
@@ -58,7 +59,7 @@ defmodule AshHqWeb.Pages.Media do
         </div>
 
         <div class="col-span-2 lg:col-span-1 text-2xl">
-          <div class="text-xl mb-8">Example Open Source Projects</div>
+          <div class="text-xl mb-8">Example Projects</div>
           <ul class="list-disc">
             <li class="mb-4">
               <a class="hover:text-primary-light-400" href="https://github.com/ash-project/ash_hq">AshHq (this website)</a>

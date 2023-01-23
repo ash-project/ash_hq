@@ -12,10 +12,8 @@ defmodule AshHqWeb.Components.Forum.Attachment do
           <video controls width={@attachment.width} height={@attachment.height}>
             <source src={@attachment.url} type={mime}>
           </video>
-
         {#match {:image, _mime}}
-          <img src={@attachment.url} width={@attachment.width} height={@attachment.height} />
-
+          <img src={@attachment.url} width={@attachment.width} height={@attachment.height}>
         {#match _}
           other
       {/case}

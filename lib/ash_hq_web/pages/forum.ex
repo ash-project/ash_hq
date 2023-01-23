@@ -241,14 +241,12 @@ defmodule AshHqWeb.Pages.Forum do
   defp assign_tags(socket) do
     tags =
       AshHq.Discord.Tag
-      # TODO: use distinct
-      # |> Ash.Query.distinct(:name)
+      |> Ash.Query.distinct(:name)
       |> Ash.Query.filter(channel_id == ^socket.assigns.channel.id)
       |> Ash.Query.select(:name)
       |> Ash.Query.sort(:name)
       |> AshHq.Discord.read!()
       |> Enum.map(&to_string(&1.name))
-      |> Enum.uniq_by(&String.downcase/1)
 
     assign(socket, :tags, tags)
   end
