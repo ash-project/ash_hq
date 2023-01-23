@@ -62,6 +62,7 @@ defmodule AshHq.Docs.Guide do
 
   render_markdown do
     render_attributes text: :text_html
+    table_of_contents? true
   end
 
   graphql do

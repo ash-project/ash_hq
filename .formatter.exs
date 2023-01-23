@@ -32,6 +32,7 @@
     item_type: 1,
     sanitized_name_attribute: 1,
     show_docs_on: 1,
-    header_ids?: 1
+    header_ids?: 1,
+    table_of_contents?: 1
   ]
 ]

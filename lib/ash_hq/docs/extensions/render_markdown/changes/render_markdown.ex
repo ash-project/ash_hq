@@ -57,7 +57,8 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
                libraries,
                current_library,
                current_module,
-               AshHq.Docs.Extensions.RenderMarkdown.header_ids?(changeset.resource)
+               AshHq.Docs.Extensions.RenderMarkdown.header_ids?(changeset.resource),
+               AshHq.Docs.Extensions.RenderMarkdown.table_of_contents?(changeset.resource)
              ) do
           {:error, html_doc, error_messages} ->
             Logger.warn("""
