@@ -93,14 +93,14 @@ defmodule AshHqWeb.Components.DocSidebar do
             name={slug(category)}
             text={category}
             collapsable
-            class="text-base-light-500"
+            class="text-base-light-500 dark:text-base-dark-300 -ml-4"
           >
             <TreeView.Item
               :for={{library, guides} <- by_library}
               name={slug(library)}
               text={library}
               collapsable
-              class="text-base-light-500"
+              class="text-base-light-500 dark:text-base-dark-300"
             >
               <TreeView.Item
                 :for={guide <- guides}
@@ -109,7 +109,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                 icon={render_icon(assigns, "Guide")}
                 selected={@guide && @guide.id == guide.id}
                 on_click={JS.patch(DocRoutes.doc_link(guide, @selected_versions))}
-                class="text-base-light-900 dark:text-base-dark-200"
+                class="text-base-light-900 dark:text-base-dark-100"
               >
               </TreeView.Item>
             </TreeView.Item>
@@ -122,14 +122,14 @@ defmodule AshHqWeb.Components.DocSidebar do
             text="Extensions"
             collapsable
             collapsed={!@extension}
-            class="text-base-light-500"
+            class="text-base-light-500 dark:text-base-dark-300 -ml-4"
           >
             <TreeView.Item
               :for={{library, extensions} <- @extensions}
               name={slug(library)}
               text={library}
               collapsable
-              class="text-base-light-400"
+              class="text-base-light-500 dark:text-base-dark-300"
             >
               <TreeView.Item
                 :for={extension <- extensions}
@@ -158,14 +158,14 @@ defmodule AshHqWeb.Components.DocSidebar do
             text="Mix Tasks"
             collapsable
             collapsed={!@mix_task}
-            class="text-base-light-500"
+            class="text-base-light-500 dark:text-base-dark-300 -ml-4"
           >
             <TreeView.Item
               :for={{category, mix_tasks} <- @mix_tasks_by_category}
               name={slug(category)}
               text={category}
               collapsable
-              class="text-base-light-400"
+              class="text-base-light-500 dark:text-base-dark-300"
             >
               <TreeView.Item
                 :for={mix_task <- mix_tasks}
@@ -183,14 +183,14 @@ defmodule AshHqWeb.Components.DocSidebar do
             text="Modules"
             collapsable
             collapsed={!@module}
-            class="text-base-light-500"
+            class="text-base-light-500 dark:text-base-dark-300 -ml-4"
           >
             <TreeView.Item
               :for={{category, modules} <- @modules_by_category}
               name={slug(category)}
               text={category}
               collapsable
-              class="text-base-light-400"
+              class="text-base-light-500 dark:text-base-dark-300"
             >
               <TreeView.Item
                 :for={module <- modules}
@@ -199,7 +199,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                 icon={render_icon(assigns, "Code")}
                 on_click={JS.patch(DocRoutes.doc_link(module, @selected_versions))}
                 selected={@module && @module.id == module.id}
-                class="text-base-light-900 dark:text-base-dark-200"
+                class="text-base-light-900 dark:text-base-dark-100"
               >
               </TreeView.Item>
             </TreeView.Item>
@@ -212,55 +212,55 @@ defmodule AshHqWeb.Components.DocSidebar do
 
   def render_icon(assigns, "Guide") do
     ~F"""
-    <Heroicons.Outline.BookOpenIcon class="h-4 w-4 flex-none" />
+    <Heroicons.Outline.BookOpenIcon class="h-4 w-4 flex-none mt-1 mr-1" />
     """
   end
 
   def render_icon(assigns, "Resource") do
     ~F"""
-    <Heroicons.Outline.ServerIcon class="h-4 w-4 flex-none" />
+    <Heroicons.Outline.ServerIcon class="h-4 w-4 flex-none mt-1 mx-1" />
     """
   end
 
   def render_icon(assigns, "Api") do
     ~F"""
-    <Heroicons.Outline.SwitchHorizontalIcon class="h-4 w-4 flex-none" />
+    <Heroicons.Outline.SwitchHorizontalIcon class="h-4 w-4 flex-none mt-1 mx-1" />
     """
   end
 
   def render_icon(assigns, "DataLayer") do
     ~F"""
-    <Heroicons.Outline.DatabaseIcon class="h-4 w-4 flex-none" />
+    <Heroicons.Outline.DatabaseIcon class="h-4 w-4 flex-none mt-1 mx-1" />
     """
   end
 
   def render_icon(assigns, "Flow") do
     ~F"""
-    <Heroicons.Outline.MapIcon class="h-4 w-4 flex-none" />
+    <Heroicons.Outline.MapIcon class="h-4 w-4 flex-none mt-1 mx-1" />
     """
   end
 
   def render_icon(assigns, "Notifier") do
     ~F"""
-    <Heroicons.Outline.MailIcon class="h-4 w-4 flex-none" />
+    <Heroicons.Outline.MailIcon class="h-4 w-4 flex-none mt-1 mx-1" />
     """
   end
 
   def render_icon(assigns, "Registry") do
     ~F"""
-    <Heroicons.Outline.ViewListIcon class="h-4 w-4 flex-none" />
+    <Heroicons.Outline.ViewListIcon class="h-4 w-4 flex-none mt-1 mx-1" />
     """
   end
 
   def render_icon(assigns, "Mix Task") do
     ~F"""
-    <Heroicons.Outline.TerminalIcon class="h-4 w-4 flex-none" />
+    <Heroicons.Outline.TerminalIcon class="h-4 w-4 flex-none mt-1 mx-1" />
     """
   end
 
   def render_icon(assigns, _) do
     ~F"""
-    <Heroicons.Outline.PuzzleIcon class="h-4 w-4 flex-none" />
+    <Heroicons.Outline.PuzzleIcon class="h-4 w-4 flex-none mt-1 mx-1" />
     """
   end
 

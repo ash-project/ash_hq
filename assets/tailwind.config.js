@@ -41,11 +41,15 @@ module.exports = {
     // Used in Table of Contents generation, which is stored in the DB and cannot be
     // checked at build time.
     "m-0",
-    "w-[20em]",
-    "float-right",
+    "md:w-[20em]",
+    "md:p-4",
+    "md:float-right",
     "list-[lower-alpha]",
-    "border-base-light-300",
-    "dark:border-base-dark-600",
-    "ml-8",
+    "md:border",
+    "md:border-base-light-300",
+    "md:dark:border-base-dark-600",
+    "md:ml-8",
+    "text-ellipsis",
+    "overflow-hidden",
   ],
 };

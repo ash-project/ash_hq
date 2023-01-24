@@ -24,17 +24,18 @@ defmodule AshHqWeb.Components.AppView.TopBar do
       }
     >
       <div class="flex flex-row align-baseline">
-        <a href="/">
-          <img class="h-6 md:h-10 hidden dark:block" src="/images/ash-framework-dark.png">
-          <img class="h-6 md:h-10 dark:hidden" src="/images/ash-framework-light.png">
+        <a href="/" class="mt-2">
+          <img class="h-10 hidden lg:dark:block" src="/images/ash-framework-dark.png">
+          <img class="h-10 hidden lg:block lg:dark:hidden" src="/images/ash-framework-light.png">
+          <img class="h-10 lg:hidden" src="/images/ash-logo.png">
         </a>
       </div>
       {#if @live_action == :docs_dsl}
-        <SearchBar class="hidden lg:block" />
+        <SearchBar class="hidden xl:block" />
       {/if}
       <div class="flex flex-row align-middle items-center space-x-2">
         {#if @live_action == :docs_dsl}
-          <button class="block lg:hidden" type="button" phx-click={AshHqWeb.AppViewLive.toggle_search()}>
+          <button class="block xl:hidden" type="button" phx-click={AshHqWeb.AppViewLive.toggle_search()}>
             <Heroicons.Solid.SearchIcon class="w-6 h-6 dark:fill-base-dark-400 dark:hover:fill-base-dark-200 hover:fill-base-light-600" />
           </button>
         {/if}
