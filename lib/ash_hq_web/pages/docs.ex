@@ -93,7 +93,7 @@ defmodule AshHqWeb.Pages.Docs do
         </div>
         <div
           id="docs-window"
-          class="w-full shrink prose max-w-6xl bg-white dark:bg-base-dark-850 dark:prose-invert md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden"
+          class="w-full shrink prose prose-td:pl-0 max-w-6xl bg-white dark:bg-base-dark-850 dark:prose-invert md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden"
           phx-hook="Docs"
         >
           <div
@@ -219,7 +219,7 @@ defmodule AshHqWeb.Pages.Docs do
                       <td>
                         <div class="flex flex-row items-baseline">
                           <LivePatch to={"##{DocRoutes.sanitize_name(option.name)}"}>
-                            <Heroicons.Outline.LinkIcon class="h-3 m-3" />
+                            <Heroicons.Outline.LinkIcon class="h-3 w-3 mr-2" />
                           </LivePatch>
                           <div class="flex flex-row space-x-2">
                             <CalloutText text={option.name} />
@@ -260,7 +260,7 @@ defmodule AshHqWeb.Pages.Docs do
                     <td id={DocRoutes.sanitize_name(option.name)}>
                       <div class="flex flex-row items-baseline">
                         <LivePatch to={"##{DocRoutes.sanitize_name(option.name)}"}>
-                          <Heroicons.Outline.LinkIcon class="h-3 m-3" />
+                          <Heroicons.Outline.LinkIcon class="h-3 w-3 mr-2" />
                         </LivePatch>
                         <CalloutText text={option.name} />
                         {render_tags(assigns, option)}

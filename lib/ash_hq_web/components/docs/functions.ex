@@ -23,7 +23,7 @@ defmodule AshHqWeb.Components.Docs.Functions do
             <div class="bg-base-light-200 dark:bg-base-dark-700 w-full rounded-lg">
               <div class="flex flex-row items-center bg-opacity-50 py-1 rounded-t-lg bg-base-light-300 dark:bg-base-dark-850 w-full">
                 <a href={"##{@type}-#{function.sanitized_name}-#{function.arity}"}>
-                  <Heroicons.Outline.LinkIcon class="h-3 m-3" />
+                  <Heroicons.Outline.LinkIcon class="h-3 w-3 mr-2" />
                 </a>
                 <div class="flex flex-row items-center justify-between w-full pr-2">
                   <div class="text-xl w-full font-semibold">{function.name}/{function.arity}</div>
