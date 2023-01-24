@@ -370,7 +370,7 @@
 }
 
 .light .code-pre {
-  background-color: #d2d2d2
+  background-color: #f3f4f6  /* base-light-100 */
 }
 
 .light .not-prose > .code-pre {
@@ -378,7 +378,20 @@
 }
 
 .light .inline {
-  background-color: #d2d2d2;
+  background-color: #f3f4f6;
+  border-radius: 0.1rem;
+}
+
+.dark .code-pre {
+  background-color: #22242D; /* base-dark-750 */
+}
+
+.dark .not-prose > .code-pre {
+  background-color: inherit
+}
+
+.dark .inline {
+  background-color: #22242D;
   border-radius: 0.1rem;
 }
 

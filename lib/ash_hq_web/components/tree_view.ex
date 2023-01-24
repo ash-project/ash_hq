@@ -91,8 +91,8 @@ defmodule AshHqWeb.Components.TreeView do
         <div
           id={"#{@path}-#{@name}"}
           class={
-            "rounded-lg hover:bg-base-light-100 dark:hover:bg-base-dark-700",
-            "bg-base-light-300 dark:bg-base-dark-600": @selected,
+            "rounded-lg hover:bg-base-light-100 dark:hover:bg-base-dark-750",
+            "bg-base-light-200 dark:bg-base-dark-700": @selected,
             collapsed: @collapsed
           }
         >
