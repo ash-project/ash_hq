@@ -128,7 +128,7 @@ defmodule AshHqWeb.Pages.Forum do
               {/if}
             </div>
             <head>
-              <meta property="og:title" content="Ash Framework Blog">
+              <meta property="og:title" content="Ash Framework Forum">
               <meta
                 property="og:description"
                 content="A declarative foundation for ambitious Elixir applications. Model your domain, derive the rest."
