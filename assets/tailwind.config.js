@@ -45,7 +45,9 @@ module.exports = {
     "float-right",
     "list-[lower-alpha]",
     "border-base-light-300",
-    "dark:border-base-dark-600",
+    "border-base-dark-600",
     "ml-8",
+    "text-ellipsis",
+    "overflow-hidden",
   ],
 };
