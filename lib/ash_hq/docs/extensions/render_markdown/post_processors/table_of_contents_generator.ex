@@ -47,7 +47,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.TableOfContentsGen
       {"div",
        [
          {"class",
-          "float-right w-[20em] border border-base-light-300 border-base-dark-600 p-4 ml-8 mb-8"}
+          "md:float-right md:w-[20em] md:border md:border-base-light-300 md:border-base-dark-600 md:p-4 md:ml-8 md:mb-8"}
        ],
        [
          {"p", [{"class", "m-0 font-bold"}],
@@ -104,7 +104,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.TableOfContentsGen
         }
       end)
 
-    [{"ol", [{"class", "list-[lower-alpha] m-0"}], contents}]
+    [{"ol", [{"class", "list-[lower-alpha] m-0 hidden md:block"}], contents}]
   end
 
   defp parse_headings(ast) do
