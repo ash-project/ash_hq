@@ -34,7 +34,8 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.TableOfContentsGen
               "a",
               [
                 {"href", "##{id}"},
-                {"class", "text-primary-light-600 dark:text-primary-dark-400"}
+                {"class",
+                 "text-primary-light-600 dark:text-primary-dark-400 text-ellipsis overflow-hidden block"}
               ],
               [String.trim(text)]
             }
