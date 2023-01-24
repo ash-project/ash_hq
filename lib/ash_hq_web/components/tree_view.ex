@@ -84,7 +84,7 @@ defmodule AshHqWeb.Components.TreeView do
         }
         }
         .indent-guide {
-        @apply border-l pl-1 border-primary-light-600 border-opacity-30;
+        @apply border-l pl-4 -ml-3 border-primary-light-600 border-opacity-30;
         }
       </style>
       <li class={@class, "pt-2": @collapsable, "indent-guide": @indent_guide}>
@@ -98,16 +98,16 @@ defmodule AshHqWeb.Components.TreeView do
         >
           <button
             :on-click={@on_click |> handle_click("#{@path}-#{@name}", @collapsable)}
-            class="flex flex-row items-center w-full"
+            class="flex flex-row items-start w-full text-left"
           >
-            <div :if={@collapsable && slot_assigned?(:default)} class="chevron">
-              <Heroicons.Outline.ChevronDownIcon class="w-3 h-3 mr-1" />
+            <div :if={@collapsable && slot_assigned?(:default)} class="chevron mr-0.5 mt-1.5">
+              <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
             </div>
             {#if @icon}{@icon}{/if}
             <span class="ml-1">{@text}</span>
           </button>
         </div>
-        <ul :if={slot_assigned?(:default)} class="pl-2">
+        <ul :if={slot_assigned?(:default)} class="pl-4">
           <#slot context_put={Item, path: "#{@path}-#{@name}"} :for={item <- @default} {item} />
         </ul>
       </li>
