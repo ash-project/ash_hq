@@ -47,7 +47,7 @@ module.exports = {
     "list-[lower-alpha]",
     "md:border",
     "md:border-base-light-300",
-    "md:border-base-dark-600",
+    "md:dark:border-base-dark-600",
     "md:ml-8",
     "text-ellipsis",
     "overflow-hidden",
