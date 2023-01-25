@@ -93,7 +93,7 @@ defmodule AshHq.Docs.Dsl do
   end
 
   actions do
-    defaults [:destroy]
+    defaults [:update, :destroy]
 
     read :read do
       primary? true

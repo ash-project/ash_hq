@@ -40,7 +40,7 @@ defmodule AshHq.Docs.Importer do
   end
 
   def reimport_dsls do
-    AshHq.Docs.Guide
+    AshHq.Docs.Dsl
     |> AshHq.Docs.read!()
     |> Enum.each(fn dsl ->
       dsl
