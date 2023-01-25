@@ -477,5 +477,6 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
   def before?(Ash.Resource.Transformers.SetTypes), do: true
   def before?(_), do: false
   def after?(Ash.Resource.Transformers.SetPrimaryActions), do: true
+  def after?(Ash.Resource.Transformers.BelongsToAttribute), do: true
   def after?(_), do: false
 end
