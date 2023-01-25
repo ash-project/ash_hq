@@ -104,8 +104,13 @@ defmodule AshHq.Discord.Poller do
         false
     end)
     |> Enum.each(fn %{thread: thread, messages: messages} ->
+      author =
+        messages
+        |> Enum.min_by(& &1.timestamp, DateTime)
+        |> Map.get(:author)
+
       thread
-      |> Map.put(:author, Enum.at(messages, 0).author)
+      |> Map.put(:author, author)
       |> Map.from_struct()
       |> Map.put(:channel_id, thread.parent_id)
       |> Map.put(:tags, thread.applied_tags)
