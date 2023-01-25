@@ -40,7 +40,8 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
           end
 
         current_library =
-          case Ash.Changeset.get_attribute(changeset, :library_version_id) do
+          case Ash.Changeset.get_argument(changeset, :library_version) ||
+                 Ash.Changeset.get_attribute(changeset, :library_version_id) do
             nil ->
               nil
 
