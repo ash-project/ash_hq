@@ -47,6 +47,8 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.TableOfContentsGen
     [
       {"div",
        [
+         {"id", "table-of-contents-#{Ash.UUID.generate()}"},
+         {"phx-hook", "TableOfContentsTextOverflow"},
          {"class",
           "md:float-right md:w-[20em] md:border md:border-base-light-300 md:dark:border-base-dark-600 md:p-4 md:ml-8 md:mb-8"}
        ],
