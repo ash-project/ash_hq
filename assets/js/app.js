@@ -188,8 +188,24 @@ Hooks.RightNav = {
       }
       el.setAttribute("aria-current", "true");
     }
-  }
-}
+  },
+};
+
+Hooks.TableOfContentsTextOverflow = {
+  mounted() {
+    this.setTitlesForOverflowingLinks(this.el);
+  },
+  updated() {
+    this.setTitlesForOverflowingLinks(this.el);
+  },
+  setTitlesForOverflowingLinks(selector) {
+    for (elem of selector.querySelectorAll("a")) {
+      if (elem.offsetWidth < elem.scrollWidth) {
+        elem.setAttribute("title", elem.innerHTML.trim());
+      }
+    }
+  },
+};
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
