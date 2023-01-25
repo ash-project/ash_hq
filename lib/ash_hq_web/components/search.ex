@@ -142,7 +142,7 @@ defmodule AshHqWeb.Components.Search do
               {/for}
               <Heroicons.Solid.ChevronRightIcon class="h-6 w-6" />
               <div class="font-bold text-lg">
-                {#if item.name_matches}
+                {#if Map.get(item, :name_matches)}
                   <CalloutText text={item_name(item)} />
                 {#else}
                   {item_name(item)}
@@ -161,6 +161,11 @@ defmodule AshHqWeb.Components.Search do
 
   defp render_item_type(assigns, item) do
     case item_type(item) do
+      "Forum" ->
+        ~F"""
+        <Heroicons.Outline.UserGroupIcon class="h-4 w-4" />
+        """
+
       "Mix Task" ->
         ~F"""
         <svg
@@ -222,6 +227,9 @@ defmodule AshHqWeb.Components.Search do
     |> JS.toggle(to: "#search-body")
     |> JS.toggle(to: "#search-versions")
   end
+
+  defp item_name(%{thread_name: thread_name, channel_name: channel_name}),
+    do: "#{String.capitalize(channel_name)} Forum: #{inspect(thread_name)}"
 
   defp item_name(%{name: name}), do: name
   defp item_name(%{version: version}), do: version

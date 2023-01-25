@@ -28,6 +28,28 @@ defmodule AshHq.Docs.Importer do
     {:noreply, state}
   end
 
+  def reimport_guides() do
+    AshHq.Docs.Guide
+    |> AshHq.Docs.read!()
+    |> Enum.each(fn guide ->
+      guide
+      |> Ash.Changeset.for_update(:update)
+      |> Map.update!(:attributes, &Map.put(&1, :text, guide.text))
+      |> AshHq.Docs.update!()
+    end)
+  end
+
+  def reimport_dsls() do
+    AshHq.Docs.Guide
+    |> AshHq.Docs.read!()
+    |> Enum.each(fn dsl ->
+      dsl
+      |> Ash.Changeset.for_update(:update)
+      |> Map.update!(:attributes, &Map.put(&1, :doc, dsl.doc))
+      |> AshHq.Docs.update!()
+    end)
+  end
+
   # sobelow_skip ["Misc.BinToTerm", "Traversal.FileModule"]
   def import(opts \\ []) do
     only = opts[:only] || nil

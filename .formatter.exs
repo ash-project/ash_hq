@@ -21,7 +21,7 @@
   plugins: [Spark.Formatter, Surface.Formatter.Plugin],
   subdirectories: ["priv/*/migrations"],
   locals_without_parens: [
-    auto_sanitize_name_attribute?: 1,
+    has_name_attribute?: 1,
     name_attribute: 1,
     library_version_attribute: 1,
     load_for_search: 1,

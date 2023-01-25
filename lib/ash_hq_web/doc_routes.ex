@@ -6,6 +6,13 @@ defmodule AshHqWeb.DocRoutes do
 
   def doc_link(entity, selected_versions \\ %{})
 
+  def doc_link(
+        %AshHq.Discord.Message{thread_id: thread_id, channel_name: channel_name},
+        _selected_version
+      ) do
+    "/forum/#{channel_name}/#{thread_id}"
+  end
+
   def doc_link(%AshHq.Docs.Library{name: name}, _selected_version) do
     "/docs/dsl/#{name}"
   end

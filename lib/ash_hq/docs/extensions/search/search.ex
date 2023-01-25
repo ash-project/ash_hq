@@ -30,7 +30,7 @@ defmodule AshHq.Docs.Extensions.Search do
         doc:
           "The name of the attribute to store the sanitized name in. If not set, will default to the `sanitized_<name_attribute>`"
       ],
-      auto_sanitize_name_attribute?: [
+      has_name_attribute?: [
         type: :boolean,
         default: true,
         doc:
@@ -99,11 +99,11 @@ defmodule AshHq.Docs.Extensions.Search do
     )
   end
 
-  def auto_sanitize_name_attribute?(resource) do
+  def has_name_attribute?(resource) do
     Extension.get_opt(
       resource,
       [:search],
-      :auto_sanitize_name_attribute?,
+      :has_name_attribute?,
       true
     )
   end

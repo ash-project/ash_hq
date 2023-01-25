@@ -18,16 +18,21 @@ defmodule AshHq.Docs.Search.Steps.BuildResults do
   end
 
   defp name_is_exactly(%resource{} = record, search) do
-    # this is inverted because `false < true`
-    if attr = AshHq.Docs.Extensions.Search.name_attribute(resource) do
-      Map.get(record, attr) != search
+    if AshHq.Docs.Extensions.Search.has_name_attribute?(resource) do
+      # this is inverted because `false < true`
+      if attr = AshHq.Docs.Extensions.Search.name_attribute(resource) do
+        Map.get(record, attr) != search
+      else
+        true
+      end
     else
-      true
+      false
     end
   end
 
-  defp name_match_rank(record) do
-    if record.name_matches do
+  defp name_match_rank(%resource{} = record) do
+    if AshHq.Docs.Extensions.Search.has_name_attribute?(resource) &&
+         record.name_matches do
       -(100_000 - search_length(record))
     else
       0

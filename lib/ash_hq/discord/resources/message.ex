@@ -4,15 +4,28 @@ defmodule AshHq.Discord.Message do
   """
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshHq.Docs.Extensions.RenderMarkdown]
+    extensions: [AshHq.Docs.Extensions.RenderMarkdown, AshHq.Docs.Extensions.Search]
+
+  search do
+    doc_attribute :content
+
+    type "Forum"
+
+    load_for_search [
+      :channel_name,
+      :thread_name
+    ]
+
+    has_name_attribute?(false)
+  end
 
   postgres do
     table "discord_messages"
-    repo(AshHq.Repo)
+    repo AshHq.Repo
   end
 
   render_markdown do
-    render_attributes(content: :content_html)
+    render_attributes content: :content_html
   end
 
   actions do
@@ -66,5 +79,10 @@ defmodule AshHq.Discord.Message do
 
     has_many :attachments, AshHq.Discord.Attachment
     has_many :reactions, AshHq.Discord.Reaction
+  end
+
+  aggregates do
+    first :channel_name, [:thread, :channel], :name
+    first :thread_name, [:thread], :name
   end
 end

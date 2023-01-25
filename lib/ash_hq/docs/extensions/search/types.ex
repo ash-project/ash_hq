@@ -3,8 +3,8 @@ defmodule AshHq.Docs.Extensions.Search.Types do
   A static list of all search types that currently exist
   """
 
-  @search_types AshHq.Docs.Registry
-                |> Ash.Registry.Info.entries()
+  @search_types [AshHq.Docs.Registry, AshHq.Discord.Registry]
+                |> Enum.flat_map(&Ash.Registry.Info.entries/1)
                 |> Enum.filter(&(AshHq.Docs.Extensions.Search in Spark.extensions(&1)))
                 |> Enum.map(&AshHq.Docs.Extensions.Search.type/1)
                 |> Enum.uniq()
