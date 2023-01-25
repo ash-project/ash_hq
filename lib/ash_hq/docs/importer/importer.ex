@@ -28,7 +28,7 @@ defmodule AshHq.Docs.Importer do
     {:noreply, state}
   end
 
-  def reimport_guides() do
+  def reimport_guides do
     AshHq.Docs.Guide
     |> AshHq.Docs.read!()
     |> Enum.each(fn guide ->
@@ -39,7 +39,7 @@ defmodule AshHq.Docs.Importer do
     end)
   end
 
-  def reimport_dsls() do
+  def reimport_dsls do
     AshHq.Docs.Guide
     |> AshHq.Docs.read!()
     |> Enum.each(fn dsl ->
