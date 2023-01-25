@@ -7,7 +7,7 @@ kill_timeout = 5
 processes = []
 
 [deploy]
-  # release_command = "_build/prod/rel/ash_hq/bin/ash_hq eval 'AshHq.Release.migrate'"
+  release_command = "_build/prod/rel/ash_hq/bin/ash_hq eval 'AshHq.Release.migrate'"
   
 [env]
 
