@@ -49,6 +49,7 @@ module.exports = {
     "md:border-base-light-300",
     "md:dark:border-base-dark-600",
     "md:ml-8",
+    "md:mb-8",
     "text-ellipsis",
     "overflow-hidden",
   ],
