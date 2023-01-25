@@ -10,18 +10,16 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.HeadingAutolinker 
       when tag in ["h1", "h2", "h3", "h4", "h5", "h6"] ->
         text_contents = Floki.text(contents)
         new_attrs = Enum.reject(attrs, fn {key, _} -> key == "id" end)
-
         id = to_hash(text_contents)
-        new_attrs = [{"id", id} | new_attrs]
 
-        {"div", [{"class", "flex flex-row items-baseline"}],
+        {tag, [{"id", id}, {"class", "flex flex-row items-center"}],
          [
            {"a", [{"href", "##{id}"}],
             [
               {"svg",
                [
                  {"xmlns", "http://www.w3.org/2000/svg"},
-                 {"class", "h-6 w-6"},
+                 {"class", "h-6 w-6 mr-1"},
                  {"fill", "none"},
                  {"viewBox", "0 0 24 24"},
                  {"stroke", "currentColor"},
@@ -37,7 +35,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.HeadingAutolinker 
                   ], []}
                ]}
             ]},
-           {tag, new_attrs, [contents]}
+           {"span", new_attrs, [contents]}
          ]}
 
       other ->
