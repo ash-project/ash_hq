@@ -120,7 +120,7 @@ defmodule AshHqWeb.Components.Search do
       <LivePatch
         class="block w-full text-left"
         to={DocRoutes.doc_link(item, @selected_versions)}
-        opts={id: "result-#{item.id}"}
+        opts={id: "result-#{item.id}", "phx-click": @close}
       >
         <div class={
           "rounded-lg mb-4 py-2 px-2 hover:bg-base-dark-300 dark:hover:bg-base-dark-700",
