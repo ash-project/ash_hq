@@ -120,7 +120,7 @@ defmodule AshHq.Docs.Importer do
     end
   end
 
-  defp path_var() do
+  defp path_var do
     "PATH"
     |> System.get_env()
     |> String.split(":")
@@ -128,6 +128,7 @@ defmodule AshHq.Docs.Importer do
     |> Enum.join(":")
   end
 
+  # sobelow_skip ["Misc.BinToTerm", "Traversal.FileModule"]
   defp import_version(library, name, repo_org, mix_project, path_var, version, github_sha \\ nil) do
     file = Path.expand("./#{Ash.UUID.generate()}.json")
 

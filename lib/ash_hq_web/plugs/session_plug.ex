@@ -17,7 +17,7 @@ defmodule AshHqWeb.SessionPlug do
           Plug.Conn.put_session(conn, cookie, nil)
 
         value ->
-          Plug.Conn.put_session(conn, cookie, value)
+          Plug.Conn.put_session(conn, cookie, value |> IO.inspect(label: "cookie"))
       end
     end)
     |> Plug.Conn.assign(:configured_theme, conn.assigns[:configured_theme] || "dark")
