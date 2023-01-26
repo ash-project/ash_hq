@@ -47,7 +47,7 @@ defmodule AshHqWeb.AppViewLive do
     >
       <head>
         <meta property="og:type" content="text/html">
-        <meta property="og:image" content="https://ash-hq.org/images/ash-logo-side-big.svg">
+        <meta property="og:image" content="https://ash-hq.org/images/ash-logo-side.png">
         <meta property="og:url" content={to_string(@uri)}>
         <meta property="og:site_name" content="Ash HQ">
         <meta property="twitter:card" content="summary_large_image">

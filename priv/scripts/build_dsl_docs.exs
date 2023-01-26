@@ -514,7 +514,15 @@ defmodule Utils do
       File.cd!(app_dir)
 
       extras =
-        Enum.map(mix_project.project[:docs][:extras], fn
+        mix_project.project[:docs][:extras]
+        |> Enum.reject(fn
+          {name, config} ->
+            config[:ash_hq?] == false
+
+          _ ->
+            false
+        end)
+        |> Enum.map(fn
           {file, config} ->
             file = to_string(file)
 
