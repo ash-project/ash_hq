@@ -11,7 +11,6 @@ defmodule AshHqWeb.Router do
     plug(:put_root_layout, {AshHqWeb.LayoutView, :root})
     plug(:protect_from_forgery)
     plug(AshHqWeb.SessionPlug)
-    plug(:assign_user_agent)
     plug(:load_from_session)
   end
 
@@ -134,17 +133,5 @@ defmodule AshHqWeb.Router do
     username = System.fetch_env!("ADMIN_AUTH_USERNAME")
     password = System.fetch_env!("ADMIN_AUTH_PASSWORD")
     Plug.BasicAuth.basic_auth(conn, username: username, password: password)
-  end
-
-  def assign_user_agent(conn, _opts) do
-    ua = get_req_header(conn, "user-agent")
-
-    case ua do
-      [ua] ->
-        assign(conn, :user_agent, ua)
-
-      _ ->
-        assign(conn, :user_agent, "")
-    end
   end
 end
