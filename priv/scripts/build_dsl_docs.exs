@@ -1,19 +1,41 @@
 require Logger
-[name, version, file, mix_project] = System.argv()
+[name, version, file, mix_project, repo_org | rest] = System.argv()
+
+github_sha =
+  case rest do
+    [github_sha] ->
+      github_sha
+
+    _ ->
+      nil
+  end
+
 mix_project = Module.concat([mix_project])
 
 Application.put_env(:dsl, :name, name)
 Application.put_env(:ash, :use_all_identities_in_manage_relationship?, true)
 
-Mix.install(
-  [
-    {String.to_atom(name), "== #{version}"}
-  ],
-  force: true,
-  system_env: [
-    {"MIX_QUIET", "true"}
-  ]
-)
+if github_sha do
+  Mix.install(
+    [
+      {String.to_atom(name), github: "#{repo_org}/#{name}", sha: github_sha}
+    ],
+    force: true,
+    system_env: [
+      {"MIX_QUIET", "true"}
+    ]
+  )
+else
+  Mix.install(
+    [
+      {String.to_atom(name), "== #{version}"}
+    ],
+    force: true,
+    system_env: [
+      {"MIX_QUIET", "true"}
+    ]
+  )
+end
 
 defmodule Types do
   def for_module(module) do
@@ -517,7 +539,7 @@ defmodule Utils do
         mix_project.project[:docs][:extras]
         |> Enum.reject(fn
           {name, config} ->
-            config[:ash_hq?] == false
+            config[:ash_hq?] == false || config[:ash_hq] == false
 
           _ ->
             false
