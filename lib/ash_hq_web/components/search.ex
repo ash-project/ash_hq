@@ -52,10 +52,17 @@ defmodule AshHqWeb.Components.Search do
           :on-window-keydown="select-next"
           phx-key="ArrowDown"
         >
+          <button
+            id="close-search"
+            class="absolute top-6 right-6 h-6 w-6 cursor-pointer z-10 hover:text-base-light-400"
+            :on-click={@close}
+          >
+            <Heroicons.Outline.XIcon class="h-6 w-6" />
+          </button>
           <div class="flex flex-col w-full sticky">
             <div class="w-full flex flex-row justify-start top-0">
               <Heroicons.Outline.SearchIcon class="h-6 w-6 mr-4" />
-              <div class="flex flex-row justify-between w-full border-b border-base-light-600">
+              <div class="flex flex-row justify-between w-full mr-10 border-b border-base-light-600">
                 <Form for={:search} change="search" submit="go-to-doc" class="w-full">
                   <input
                     id="search-input"
@@ -65,9 +72,6 @@ defmodule AshHqWeb.Components.Search do
                     class="text-lg dark:bg-base-dark-850 grow ring-0 outline-none w-full"
                   />
                 </Form>
-                <button id="close-search" class="ml-4 h-6 w-6 hover:text-base-light-400" :on-click={@close}>
-                  <Heroicons.Outline.XIcon class="h-6 w-6" />
-                </button>
               </div>
             </div>
             <div class="ml-10">
