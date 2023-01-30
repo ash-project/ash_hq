@@ -62,13 +62,22 @@ defmodule AshHqWeb.Pages.Media do
           <div class="text-xl mb-8">Example Projects</div>
           <ul class="list-disc">
             <li class="mb-4">
-              <a class="hover:text-primary-light-400 dark:hover:text-primary-dark-400" href="https://github.com/ash-project/ash_hq">AshHq (this website)</a>
+              <a
+                class="hover:text-primary-light-400 dark:hover:text-primary-dark-400"
+                href="https://github.com/ash-project/ash_hq"
+              >AshHq (this website)</a>
             </li>
             <li class="mb-4">
-              <a class="hover:text-primary-light-400 dark:hover:text-primary-dark-400" href="https://github.com/lukegalea/openats">Open ATS</a>
+              <a
+                class="hover:text-primary-light-400 dark:hover:text-primary-dark-400"
+                href="https://github.com/lukegalea/openats"
+              >Open ATS</a>
             </li>
             <li>
-              <a class="hover:text-primary-light-400 dark:hover:text-primary-dark-400" href="https://github.com/brettkolodny/todoish">Todoish</a>
+              <a
+                class="hover:text-primary-light-400 dark:hover:text-primary-dark-400"
+                href="https://github.com/brettkolodny/todoish"
+              >Todoish</a>
             </li>
           </ul>
         </div>

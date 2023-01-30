@@ -13,7 +13,11 @@ defmodule AshHqWeb.Components.RightNav do
       }
     </style>
     <div id="right-nav" class="scroll-parent w-min hidden lg:flex flex-col pb-12" phx-hook="RightNav">
-      <a id="right-nav-module-docs" class="hover:text-primary-light-300 hover:dark:text-primary-dark-300 right-nav" href="#module-docs">
+      <a
+        id="right-nav-module-docs"
+        class="hover:text-primary-light-300 hover:dark:text-primary-dark-300 right-nav"
+        href="#module-docs"
+      >
         {@module}
       </a>
       {#for %{type: :type} = function <- @functions}
