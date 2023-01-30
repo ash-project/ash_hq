@@ -43,28 +43,28 @@ defmodule AshHqWeb.Components.AppView.TopBar do
         <a
           href="/docs/guides/ash/latest/tutorials/get-started"
           title="Documentation"
-          class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-light-500 hover:text-primary-light-700 hidden md:block"
+          class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700 hidden md:block"
         >
           Documentation
         </a>
         <a
           href="/blog"
           title="Blog"
-          class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-light-500 hover:text-primary-light-700"
+          class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700"
         >
           Blog
         </a>
         <a
           href="/forum/showcase"
           title="Forum"
-          class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-light-500 hover:text-primary-light-700"
+          class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700"
         >
           Forum
         </a>
         <a
           href="/media"
           title="Media"
-          class="text-lg font-bold px-2 md:px-4 pr-2 md:pr-8 dark:hover:text-primary-light-500 hover:text-primary-light-700"
+          class="text-lg font-bold px-2 md:px-4 pr-2 md:pr-8 dark:hover:text-primary-dark-400 hover:text-primary-light-700"
         >
           Media
         </a>

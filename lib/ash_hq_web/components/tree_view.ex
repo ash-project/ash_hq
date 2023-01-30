@@ -84,7 +84,7 @@ defmodule AshHqWeb.Components.TreeView do
         }
         }
         .indent-guide {
-        @apply border-l pl-4 -ml-3 border-primary-light-600 border-opacity-30;
+        @apply border-l pl-4 -ml-3 border-primary-light-600 dark:border-primary-dark-400 border-opacity-30 dark:border-opacity-30;
         }
       </style>
       <li class={@class, "pt-2": @collapsable, "indent-guide": @indent_guide}>
