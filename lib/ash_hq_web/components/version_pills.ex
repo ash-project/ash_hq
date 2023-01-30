@@ -17,7 +17,7 @@ defmodule AshHqWeb.Components.VersionPills do
     <div class="flex flex-row flex-wrap align-center items-center ml-2 justify-start gap-2 flex-grow">
       {#for library <- @libraries}
         {#if @selected_versions[library.id] not in [nil, ""]}
-          <div class="flex flex-row flex-wrap contents-center px-2 py-1 bg-primary-light-500 dark:bg-primary-light-400 hover:bg-primary-light-600 text-black text-xs font-medium rounded-full">
+          <div class="flex flex-row flex-wrap contents-center px-2 py-1 bg-primary-light-500 dark:bg-primary-dark-300 hover:bg-primary-light-600 hover:dark:bg-primary-dark-400 text-black text-xs font-medium rounded-full">
             {library.name}{#if selected_version(library, @selected_versions[library.id]) != "latest"}
               | {selected_version(library, @selected_versions[library.id])}
             {/if}
