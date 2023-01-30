@@ -48,7 +48,7 @@ defmodule AshHqWeb.Components.Search do
         </div>
         <div
           id="search-body"
-          class="h-full px-6 my-6"
+          class="h-full p-6 grid gap-4 grid-rows-[max-content_auto_max-content]"
           :on-window-keydown="select-next"
           phx-key="ArrowDown"
         >
@@ -91,12 +91,12 @@ defmodule AshHqWeb.Components.Search do
               </Form>
             </div>
           </div>
-          <div class="grid h-[80%] mt-3">
+          <div class="grid">
             <div class="pl-4 overflow-auto scroll-parent">
               {render_items(assigns, @item_list)}
             </div>
           </div>
-          <div class="flex flex-row justify-start items-center relative bottom-0 mt-2">
+          <div class="flex flex-row justify-start items-center relative bottom-0">
             <div class="flex text-black dark:text-white font-light px-2">
               Packages:
             </div>
