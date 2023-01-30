@@ -10,19 +10,19 @@ defmodule AshHqWeb.Components.Search do
   alias Surface.Components.{Form, LivePatch}
   alias Surface.Components.Form.Checkbox
 
-  prop close, :event, required: true
-  prop libraries, :list, required: true
-  prop selected_versions, :map, required: true
-  prop selected_types, :list, required: true
-  prop change_types, :event, required: true
-  prop change_versions, :event, required: true
-  prop remove_version, :event, required: true
-  prop uri, :string, required: true
+  prop(close, :event, required: true)
+  prop(libraries, :list, required: true)
+  prop(selected_versions, :map, required: true)
+  prop(selected_types, :list, required: true)
+  prop(change_types, :event, required: true)
+  prop(change_versions, :event, required: true)
+  prop(remove_version, :event, required: true)
+  prop(uri, :string, required: true)
 
-  data search, :string, default: ""
-  data item_list, :list, default: []
-  data selected_item, :string
-  data selecting_packages, :boolean, default: false
+  data(search, :string, default: "")
+  data(item_list, :list, default: [])
+  data(selected_item, :string)
+  data(selecting_packages, :boolean, default: false)
 
   def render(assigns) do
     ~F"""
@@ -54,8 +54,8 @@ defmodule AshHqWeb.Components.Search do
         >
           <div class="flex flex-col w-full sticky">
             <div class="w-full flex flex-row justify-start top-0">
-              <Heroicons.Outline.SearchIcon class="h-6 w-6 mr-4 ml-4" />
-              <div class="flex flex-row justify-between w-full  pb-3 border-b border-base-light-600">
+              <Heroicons.Outline.SearchIcon class="h-6 w-6 mr-4" />
+              <div class="flex flex-row justify-between w-full border-b border-base-light-600">
                 <Form for={:search} change="search" submit="go-to-doc" class="w-full">
                   <input
                     id="search-input"
@@ -65,14 +65,14 @@ defmodule AshHqWeb.Components.Search do
                     class="text-lg dark:bg-base-dark-850 grow ring-0 outline-none w-full"
                   />
                 </Form>
-                <button id="close-search" class="mr-4 ml-4 h-6 w-6 hover:text-base-light-400" :on-click={@close}>
+                <button id="close-search" class="ml-4 h-6 w-6 hover:text-base-light-400" :on-click={@close}>
                   <Heroicons.Outline.XIcon class="h-6 w-6" />
                 </button>
               </div>
             </div>
-            <div class="ml-2 pl-4">
+            <div class="ml-10">
               <Form for={:types} change={@change_types}>
-                <div class="flex flex-row space-x-8 flex-wrap mt-4">
+                <div class="flex flex-row space-x-8 flex-wrap mt-2 text-sm text-base-light-500 dark:text-base-dark-300">
                   <div>Search For:</div>
                   {#for type <- AshHq.Docs.Extensions.Search.Types.types()}
                     <div class="flex flex-row items-center">
@@ -91,13 +91,11 @@ defmodule AshHqWeb.Components.Search do
               </Form>
             </div>
           </div>
-          <div class="grid">
-            <div class="pl-4 overflow-auto scroll-parent">
-              {render_items(assigns, @item_list)}
-            </div>
+          <div class="grid overflow-auto">
+            {render_items(assigns, @item_list)}
           </div>
           <div class="flex flex-row justify-start items-center relative bottom-0">
-            <div class="flex text-black dark:text-white font-light px-2">
+            <div class="flex text-black dark:text-white font-light">
               Packages:
             </div>
             <AshHqWeb.Components.VersionPills
