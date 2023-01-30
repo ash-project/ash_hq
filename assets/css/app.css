@@ -9,7 +9,7 @@
 @import "./_components.css";
 
 .search-hit {
-  color: #fb923c;
+  @apply text-primary-light-500 dark:text-primary-dark-300
 }
 
 /* Alerts and form errors used by phx.new */
