@@ -327,3 +327,22 @@ liveSocket.connect();
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket;
+
+window.addEventListener("load", function () {
+  window.cookieconsent.initialise({
+    content: {
+      message:
+        "Hi, this website uses essential cookies for remembering your explicitly set preferences, if you opt-in. We do not use google analytics, but we do use plausible.io, an ethical google analytics alternative which does not use any cookies and collects no personal data.",
+      link: null,
+    },
+    type: "opt-in",
+    palette: {
+      popup: {
+        background: "#000",
+      },
+      button: {
+        background: "#f1d600",
+      },
+    },
+  });
+});

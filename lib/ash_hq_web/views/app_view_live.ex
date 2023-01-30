@@ -197,8 +197,7 @@ defmodule AshHqWeb.AppViewLive do
 
     {:noreply,
      socket
-     |> assign(:selected_versions, new_selected_versions)
-     |> push_event("selected-versions", new_selected_versions)}
+     |> set_selected_library_versions(new_selected_versions)}
   end
 
   def handle_event("add_version", %{"library" => library}, socket) do
@@ -206,15 +205,13 @@ defmodule AshHqWeb.AppViewLive do
 
     {:noreply,
      socket
-     |> assign(:selected_versions, new_selected_versions)
-     |> push_event("selected-versions", new_selected_versions)}
+     |> set_selected_library_versions(new_selected_versions)}
   end
 
   def handle_event("change-versions", %{"versions" => versions}, socket) do
     {:noreply,
      socket
-     |> assign(:selected_versions, versions)
-     |> push_event("selected-versions", versions)}
+     |> set_selected_library_versions(versions)}
   end
 
   def handle_event("change-types", %{"types" => types}, socket) do
@@ -323,10 +320,15 @@ defmodule AshHqWeb.AppViewLive do
        :selected_types,
        selected_types
      )
-     |> assign(:selected_versions, selected_versions)
      |> assign(configured_theme: configured_theme)
-     |> push_event("selected-versions", selected_versions)
+     |> set_selected_library_versions(selected_versions)
      |> push_event("selected_types", %{types: selected_types})}
+  end
+
+  defp set_selected_library_versions(socket, library_versions) do
+    socket
+    |> assign(:selected_versions, library_versions)
+    |> push_event("selected-versions", library_versions)
   end
 
   def toggle_search(js \\ %JS{}) do
