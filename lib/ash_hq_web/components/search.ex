@@ -46,67 +46,64 @@ defmodule AshHqWeb.Components.Search do
             change_versions={@change_versions}
           />
         </div>
-        <div
-          id="search-body"
-          class="h-full p-6 grid gap-6 grid-rows-[max-content_auto_max-content]"
-          :on-window-keydown="select-next"
-          phx-key="ArrowDown"
-        >
-          <button
-            id="close-search"
-            class="absolute top-6 right-6 h-6 w-6 cursor-pointer z-10 hover:text-base-light-400"
-            :on-click={@close}
-          >
-            <Heroicons.Outline.XIcon class="h-6 w-6" />
-          </button>
-          <div class="flex flex-col w-full sticky">
-            <div class="w-full flex flex-row justify-start top-0">
-              <Heroicons.Outline.SearchIcon class="h-6 w-6 mr-4" />
-              <div class="flex flex-row justify-between w-full mr-10 border-b border-base-light-600">
-                <Form for={:search} change="search" submit="go-to-doc" class="w-full">
-                  <input
-                    id="search-input"
-                    name="search"
-                    value={@search}
-                    phx-debounce={300}
-                    class="text-lg dark:bg-base-dark-850 grow ring-0 outline-none w-full"
-                  />
+        <div id="search-body" class="h-full" :on-window-keydown="select-next" phx-key="ArrowDown">
+          <div class="p-6 h-full grid gap-6 grid-rows-[max-content_auto_max-content]">
+            <button
+              id="close-search"
+              class="absolute top-6 right-6 h-6 w-6 cursor-pointer z-10 hover:text-base-light-400"
+              :on-click={@close}
+            >
+              <Heroicons.Outline.XIcon class="h-6 w-6" />
+            </button>
+            <div class="flex flex-col w-full sticky">
+              <div class="w-full flex flex-row justify-start top-0">
+                <Heroicons.Outline.SearchIcon class="h-6 w-6 mr-4" />
+                <div class="flex flex-row justify-between w-full mr-10 border-b border-base-light-600">
+                  <Form for={:search} change="search" submit="go-to-doc" class="w-full">
+                    <input
+                      id="search-input"
+                      name="search"
+                      value={@search}
+                      phx-debounce={300}
+                      class="text-lg dark:bg-base-dark-850 grow ring-0 outline-none w-full"
+                    />
+                  </Form>
+                </div>
+              </div>
+              <div class="ml-10">
+                <Form for={:types} change={@change_types}>
+                  <div class="flex flex-row space-x-8 flex-wrap mt-2 text-sm text-base-light-500 dark:text-base-dark-300">
+                    <div>Search For:</div>
+                    {#for type <- AshHq.Docs.Extensions.Search.Types.types()}
+                      <div class="flex flex-row items-center">
+                        <Checkbox
+                          class="mr-2"
+                          id={"#{type}-selected"}
+                          value={type in @selected_types}
+                          name={"types[#{type}]"}
+                        />
+                        <label for={"#{type}-selected"}>
+                          {type}
+                        </label>
+                      </div>
+                    {/for}
+                  </div>
                 </Form>
               </div>
             </div>
-            <div class="ml-10">
-              <Form for={:types} change={@change_types}>
-                <div class="flex flex-row space-x-8 flex-wrap mt-2 text-sm text-base-light-500 dark:text-base-dark-300">
-                  <div>Search For:</div>
-                  {#for type <- AshHq.Docs.Extensions.Search.Types.types()}
-                    <div class="flex flex-row items-center">
-                      <Checkbox
-                        class="mr-2"
-                        id={"#{type}-selected"}
-                        value={type in @selected_types}
-                        name={"types[#{type}]"}
-                      />
-                      <label for={"#{type}-selected"}>
-                        {type}
-                      </label>
-                    </div>
-                  {/for}
-                </div>
-              </Form>
+            <div class="grid overflow-auto">
+              {render_items(assigns, @item_list)}
             </div>
-          </div>
-          <div class="grid overflow-auto">
-            {render_items(assigns, @item_list)}
-          </div>
-          <div class="flex flex-row justify-start items-center relative bottom-0">
-            <Heroicons.Outline.CollectionIcon class="w-6 h-6 mr-2" />
-            <AshHqWeb.Components.VersionPills
-              id="search-version-pills"
-              selected_versions={@selected_versions}
-              remove_version={@remove_version}
-              libraries={@libraries}
-              toggle={toggle_libraries()}
-            />
+            <div class="flex flex-row justify-start items-center relative bottom-0">
+              <Heroicons.Outline.CollectionIcon class="w-6 h-6 mr-2" />
+              <AshHqWeb.Components.VersionPills
+                id="search-version-pills"
+                selected_versions={@selected_versions}
+                remove_version={@remove_version}
+                libraries={@libraries}
+                toggle={toggle_libraries()}
+              />
+            </div>
           </div>
         </div>
       </div>
