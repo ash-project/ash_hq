@@ -165,9 +165,9 @@ defmodule AshHqWeb.Pages.Home do
 
         <div
           id="testimonials"
-          class="flex flex-col items-center content-center space-y-8 w-full lg:w-[28rem] max-w-7xl md:h-[74rem] lg:h-[86rem] mb-8 lg:mb-0 px-4 md:px-8 lg:px-0"
+          class="flex flex-col items-center content-center w-full lg:w-[28rem] max-w-7xl md:h-[74rem] lg:h-[86rem] mb-8 lg:mb-0 px-4 md:px-8 lg:px-0"
         >
-          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-200 rounded-xl p-8 md:p-0 dark:bg-base-dark-700 drop-shadow-xl md:relative lg:top-16 md:-left-[8rem] lg:-left-[10rem]">
+          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-200 rounded-xl p-8 md:p-0 dark:bg-base-dark-700 drop-shadow-xl md:relative lg:top-16 md:-left-[8rem] lg:-left-[10rem] mt-8">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
                 "Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!"
@@ -184,7 +184,7 @@ defmodule AshHqWeb.Pages.Home do
             </div>
           </div>
 
-          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-100 rounded-xl p-8 md:p-0 dark:bg-base-dark-600 drop-shadow-xl md:relative md:-top-16 md:-right-[10rem]">
+          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-100 rounded-xl p-8 md:p-0 dark:bg-base-dark-600 drop-shadow-xl md:relative md:-top-16 md:-right-[10rem] mt-8">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
                 "I’m constantly blown away with the quality of work and support the Ash community has put into this project. It’s gotten to the point that I can’t imagine starting a new Elixir project that doesn’t use Ash."
@@ -201,7 +201,7 @@ defmodule AshHqWeb.Pages.Home do
             </div>
           </div>
 
-          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-200 rounded-xl p-8 md:p-0 dark:bg-base-dark-700 drop-shadow-xl md:relative md:-top-32 md:-left-[11rem]">
+          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-200 rounded-xl p-8 md:p-0 dark:bg-base-dark-700 drop-shadow-xl md:relative md:-top-32 md:-left-[11rem] mt-8">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
                 "Ash is an incredibly powerful idea that gives Alembic a massive competitive advantage. It empowers us to build wildly ambitious applications for our clients with tiny teams, while consistently delivering the high level of quality that our customers have come to expect."
@@ -218,7 +218,7 @@ defmodule AshHqWeb.Pages.Home do
             </div>
           </div>
 
-          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-100 rounded-xl p-8 md:p-0 dark:bg-base-dark-600 drop-shadow-xl md:relative md:-top-[4rem] md:-top-64 md:-right-44">
+          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-100 rounded-xl p-8 md:p-0 dark:bg-base-dark-600 drop-shadow-xl md:relative md:-top-[4rem] md:-top-64 md:-right-44 mt-8">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
                 "Ash Framework enabled us to build a robust platform for delivering financial services using bitcoin. Ash proved itself to our team by handling innovative use cases with ease and it continues to evolve ahead of our growing list of needs."
@@ -235,7 +235,7 @@ defmodule AshHqWeb.Pages.Home do
             </div>
           </div>
 
-          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-200 rounded-xl p-8 md:p-0 dark:bg-base-dark-700 drop-shadow-xl md:relative md:-top-[20rem] md:-left-[11rem]">
+          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-200 rounded-xl p-8 md:p-0 dark:bg-base-dark-700 drop-shadow-xl md:relative md:-top-[20rem] md:-left-[11rem] mt-8">
             <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
               <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
                 "The more I’ve used Ash, the more blown away I am by how much I get out of it – and how little boilerplate I have to write. I’m yet to encounter a situation where I would need to fight the “Ash way” of doing things, but the framework still allows me to choose how I build my software."
