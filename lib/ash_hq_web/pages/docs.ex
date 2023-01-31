@@ -20,6 +20,7 @@ defmodule AshHqWeb.Pages.Docs do
   prop(add_version, :event)
   prop(change_version, :event)
   prop(params, :map, required: true)
+  prop(show_catalogue_call_to_action, :boolean)
 
   data(library, :any)
   data(extension, :any)
@@ -100,6 +101,7 @@ defmodule AshHqWeb.Pages.Docs do
             id="module-docs"
             class="w-full nav-anchor text-black dark:text-white relative py-4 md:py-auto"
           >
+            <.catalogue_call_to_action :if={@show_catalogue_call_to_action} />
             {#if @module}
               <h2>{@module.name} <SourceLink module_or_function={@module} library={@library} library_version={@library_version} /></h2>
             {/if}
@@ -309,6 +311,25 @@ defmodule AshHqWeb.Pages.Docs do
     ~F"""
     <div id={docs_container_id(@doc_path)}>
       {raw(@docs)}
+    </div>
+    """
+  end
+
+  def catalogue_call_to_action(assigns) do
+    ~F"""
+    <div
+      class="bg-blue-500 text-white px-4 py-2 mb-8 cursor-pointer flex justify-between items-center"
+      id="catalogue-call-to-action"
+      :on-click={AshHqWeb.AppViewLive.toggle_catalogue()}
+    >
+      <span>View the full range of Ash libraries for authentication, soft deletion, GraphQL and more</span>
+      <button
+        id="close-search"
+        class="h-6 w-6 cursor-pointer"
+        :on-click="dismiss_catalogue_call_to_action"
+      >
+        <Heroicons.Outline.XIcon class="h-6 w-6" />
+      </button>
     </div>
     """
   end

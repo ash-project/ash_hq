@@ -80,6 +80,7 @@ defmodule AshHqWeb.AppViewLive do
         libraries={@libraries}
         selected_versions={@selected_versions}
         change_versions="change-versions"
+        show_catalogue_call_to_action={@show_catalogue_call_to_action}
       />
       <button id="search-button" class="hidden" phx-click={AshHqWeb.AppViewLive.toggle_search()} />
       <div
@@ -115,6 +116,7 @@ defmodule AshHqWeb.AppViewLive do
               change_versions="change-versions"
               selected_versions={@selected_versions}
               libraries={@libraries}
+              show_catalogue_call_to_action={@show_catalogue_call_to_action}
             />
           {#match :user_settings}
             <UserSettings id="user_settings" current_user={@current_user} />
@@ -190,6 +192,13 @@ defmodule AshHqWeb.AppViewLive do
 
   def handle_info({:page_title, title}, socket) do
     {:noreply, assign(socket, :page_title, "Ash Framework - #{title}")}
+  end
+
+  def handle_event("dismiss_catalogue_call_to_action", _, socket) do
+    {:noreply,
+     socket
+     |> assign(:show_catalogue_call_to_action, false)
+     |> push_event("catalogue-call-to-action-dismissed", %{})}
   end
 
   def handle_event("remove_version", %{"library" => library}, socket) do
@@ -311,6 +320,10 @@ defmodule AshHqWeb.AppViewLive do
 
     {:ok,
      socket
+     |> assign(
+       :show_catalogue_call_to_action,
+       session["catalogue_call_to_action_dismissed"] != "true"
+     )
      |> assign(:libraries, libraries)
      |> assign(
        :selected_versions,

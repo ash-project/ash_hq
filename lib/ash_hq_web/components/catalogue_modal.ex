@@ -4,10 +4,11 @@ defmodule AshHqWeb.Components.CatalogueModal do
 
   alias AshHqWeb.Components.Catalogue
 
-  prop id, :string, required: true
-  prop libraries, :list, required: true
-  prop selected_versions, :map, required: true
-  prop change_versions, :event, required: true
+  prop(id, :string, required: true)
+  prop(libraries, :list, required: true)
+  prop(selected_versions, :map, required: true)
+  prop(change_versions, :event, required: true)
+  prop(show_catalogue_call_to_action, :boolean)
 
   def render(assigns) do
     ~F"""
@@ -18,13 +19,14 @@ defmodule AshHqWeb.Components.CatalogueModal do
     >
       <div
         :on-click-away={AshHqWeb.AppViewLive.toggle_catalogue()}
-        class="dark:text-white absolute rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white dark:bg-base-dark-850 border-2 dark:border-base-dark-900"
+        class="dark:text-white absolute rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 max-w-[1200px] h-3/4 bg-white dark:bg-base-dark-850 border-2 dark:border-base-dark-900"
       >
         <Catalogue
           id={"#{@id}-contents"}
           libraries={@libraries}
           selected_versions={@selected_versions}
           change_versions={@change_versions}
+          show_catalogue_call_to_action={@show_catalogue_call_to_action}
         />
       </div>
     </div>
