@@ -308,6 +308,12 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
+window.addEventListener("phx:catalogue-call-to-action-dismissed", (event) => {
+  if (cookiesAreAllowed()) {
+    document.cookie = "catalogue_call_to_action_dismissed=true;path=/";
+  }
+});
+
 window.addEventListener("phx:click-on-item", (event) => {
   document.getElementById(event.detail.id).click();
   document.getElementById("close-search").click();
