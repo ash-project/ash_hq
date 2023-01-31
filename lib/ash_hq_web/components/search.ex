@@ -358,6 +358,8 @@ defmodule AshHqWeb.Components.Search do
           %{types: socket.assigns[:selected_types]}
         )
 
+      item_list = Enum.take(item_list, 50)
+
       selected_item = Enum.at(item_list, 0)
 
       socket
