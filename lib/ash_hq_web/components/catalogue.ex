@@ -5,11 +5,12 @@ defmodule AshHqWeb.Components.Catalogue do
   alias Surface.Components.Form
   alias Surface.Components.Form.Select
 
-  prop id, :string, required: true
-  prop libraries, :list, required: true
-  prop selected_versions, :map, required: true
-  prop change_versions, :event, required: true
-  prop toggle, :any
+  prop(id, :string, required: true)
+  prop(libraries, :list, required: true)
+  prop(selected_versions, :map, required: true)
+  prop(change_versions, :event, required: true)
+  prop(toggle, :any)
+  prop(show_catalogue_call_to_action, :boolean, default: false)
 
   def render(assigns) do
     ~F"""
@@ -21,6 +22,13 @@ defmodule AshHqWeb.Components.Catalogue do
             <Heroicons.Solid.XIcon class="h-6 w-6" />
           </button>
         {/if}
+      </div>
+      <div
+        :if={@show_catalogue_call_to_action}
+        class="text-sm my-2 text-base-light-700 dark:text-base-dark-50"
+      >
+        <Heroicons.Outline.ExclamationCircleIcon class="h-4 w-4 inline-block mb-0.5" />
+        You can see this screen at any time by pressing <Heroicons.Solid.PlusIcon class="h-4 w-4 inline-block mb-0.5" /> next to the list of included packages in the sidebar
       </div>
       <Form for={:selected_versions} change={@change_versions} class="lg:grid lg:grid-cols-2">
         {#for library <- Enum.sort_by(@libraries, & &1.order)}

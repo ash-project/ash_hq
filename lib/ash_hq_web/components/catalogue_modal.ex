@@ -4,10 +4,11 @@ defmodule AshHqWeb.Components.CatalogueModal do
 
   alias AshHqWeb.Components.Catalogue
 
-  prop id, :string, required: true
-  prop libraries, :list, required: true
-  prop selected_versions, :map, required: true
-  prop change_versions, :event, required: true
+  prop(id, :string, required: true)
+  prop(libraries, :list, required: true)
+  prop(selected_versions, :map, required: true)
+  prop(change_versions, :event, required: true)
+  prop(show_catalogue_call_to_action, :boolean)
 
   def render(assigns) do
     ~F"""
@@ -25,6 +26,7 @@ defmodule AshHqWeb.Components.CatalogueModal do
           libraries={@libraries}
           selected_versions={@selected_versions}
           change_versions={@change_versions}
+          show_catalogue_call_to_action={@show_catalogue_call_to_action}
         />
       </div>
     </div>

@@ -80,6 +80,7 @@ defmodule AshHqWeb.AppViewLive do
         libraries={@libraries}
         selected_versions={@selected_versions}
         change_versions="change-versions"
+        show_catalogue_call_to_action={@show_catalogue_call_to_action}
       />
       <button id="search-button" class="hidden" phx-click={AshHqWeb.AppViewLive.toggle_search()} />
       <div
