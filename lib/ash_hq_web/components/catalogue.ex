@@ -32,7 +32,7 @@ defmodule AshHqWeb.Components.Catalogue do
                 "text-base-light-500 dark:text-base-dark-300": !value(@selected_versions, library.id)
               ]}>{library.display_name}</div>
               <Select
-                class="rounded-lg text-black"
+                class="rounded-lg text-black dark:bg-base-dark-700 dark:text-white dark:border-0"
                 name={"versions[#{library.id}]"}
                 id={"#{@id}-selected_versions-#{library.id}"}
                 selected={value(@selected_versions, library.id)}
