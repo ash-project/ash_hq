@@ -32,23 +32,4 @@ defmodule AshHq.Docs.Search.Steps.BuildResults do
       false
     end
   end
-
-  # defp name_match_rank(%resource{} = record) do
-  #   if AshHq.Docs.Extensions.Search.has_name_attribute?(resource) &&
-  #        record.name_matches do
-  #     -(100_000 - search_length(record))
-  #   else
-  #     0
-  #   end
-  # end
-
-  defp search_length(%resource{} = record) do
-    case AshHq.Docs.Extensions.Search.name_attribute(resource) do
-      nil ->
-        0
-
-      doc_attribute ->
-        String.length(Map.get(record, doc_attribute))
-    end
-  end
 end

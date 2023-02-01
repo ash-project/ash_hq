@@ -4,7 +4,7 @@ defmodule AshHqWeb.Components.Search do
 
   require Ash.Query
 
-  alias AshHqWeb.Components.{CalloutText, Catalogue}
+  alias AshHqWeb.Components.Catalogue
   alias AshHqWeb.DocRoutes
   alias Phoenix.LiveView.JS
   alias Surface.Components.{Form, LivePatch}

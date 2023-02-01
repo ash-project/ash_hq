@@ -45,7 +45,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
       :searchable | currently_ignored_attributes
     ])
     |> add_search_headline_calculation(config)
-    |> add_matches_calculation(config)
+    |> add_matches_calculation()
     |> add_full_text_column(config)
     |> add_full_text_index()
     |> add_match_rank_calculation(config)
@@ -232,7 +232,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
     )
   end
 
-  defp add_matches_calculation(dsl_state, config) do
+  defp add_matches_calculation(dsl_state) do
     Transformer.add_entity(
       dsl_state,
       [:calculations],
