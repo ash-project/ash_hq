@@ -22,8 +22,6 @@ import "phoenix_html";
 import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar";
-import mermaid from "mermaid";
-mermaid.init(".mermaid");
 
 function cookiesAreAllowed() {
   const consentStatus = document.cookie
@@ -130,12 +128,6 @@ Hooks.ColorTheme = {
     this.handleEvent("set_theme", (payload) => {
       setTheme(payload.theme, true);
     });
-  },
-};
-
-Hooks.Docs = {
-  mounted() {
-    mermaid.init(".mermaid");
   },
 };
 
