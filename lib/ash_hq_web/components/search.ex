@@ -139,11 +139,7 @@ defmodule AshHqWeb.Components.Search do
                 {/for}
                 <Heroicons.Solid.ChevronRightIcon class="h-4 w-4 mt-1" />
                 <div class="font-bold">
-                  {#if Map.get(item, :name_matches)}
-                    <CalloutText text={item_name(item)} />
-                  {#else}
-                    {item_name(item)}
-                  {/if}
+                  {item_name(item)}
                 </div>
               </div>
             </div>

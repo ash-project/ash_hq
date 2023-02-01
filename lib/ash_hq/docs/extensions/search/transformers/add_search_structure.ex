@@ -5,7 +5,6 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
   * Adds a sanitized name attribute if it doesn't already exist
   * Adds a change to set the sanitized name, if it should.
   * Adds a `search_headline` calculation
-  * Adds a `name_matches` calculation
   * Adds a `matches` calculation
   * Adds relevant indexes using custom sql statements
   * Adds a `match_rank` calculation.
@@ -35,16 +34,27 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
       sanitized_name_attribute: sanitized_name_attribute
     }
 
-    {:ok,
-     dsl_state
-     |> add_sanitized_name(config)
-     |> add_search_action(config)
-     |> add_code_interface()
-     |> add_search_headline_calculation(config)
-     |> add_name_matches_calculation(config)
-     |> add_matches_calculation(config)
-     |> add_indexes(config)
-     |> add_match_rank_calculation(config)}
+    currently_ignored_attributes =
+      AshPostgres.DataLayer.Info.migration_ignore_attributes(dsl_state)
+
+    dsl_state
+    |> add_sanitized_name(config)
+    |> add_search_action(config)
+    |> add_code_interface()
+    |> Transformer.set_option([:postgres], :migration_ignore_attributes, [
+      :searchable | currently_ignored_attributes
+    ])
+    |> add_search_headline_calculation(config)
+    |> add_matches_calculation(config)
+    |> add_full_text_column(config)
+    |> add_full_text_index()
+    |> add_match_rank_calculation(config)
+    |> Ash.Resource.Builder.add_preparation(
+      {AshHq.Docs.Extensions.Search.Preparations.DeselectSearchable, []}
+    )
+    |> Ash.Resource.Builder.add_attribute(:searchable, AshHq.Docs.Search.Types.TsVector,
+      private?: true
+    )
   end
 
   defp add_sanitized_name(dsl_state, config) do
@@ -93,267 +103,179 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
     end
   end
 
-  defp add_indexes(dsl_state, config) do
+  defp add_full_text_index(dsl_state) do
+    Transformer.add_entity(
+      dsl_state,
+      [:postgres, :custom_indexes],
+      Transformer.build_entity!(
+        AshPostgres.DataLayer,
+        [:postgres, :custom_indexes],
+        :index,
+        fields: [:searchable],
+        using: "GIN"
+      )
+    )
+  end
+
+  defp add_full_text_column(dsl_state, config) do
+    if config.doc_attribute do
+      if Transformer.get_option(dsl_state, [:search], :has_name_attribute?, true) do
+        Transformer.add_entity(
+          dsl_state,
+          [:postgres, :custom_statements],
+          Transformer.build_entity!(
+            AshPostgres.DataLayer,
+            [:postgres, :custom_statements],
+            :statement,
+            name: :search_column,
+            up: """
+            ALTER TABLE #{config.table}
+              ADD COLUMN searchable tsvector
+              GENERATED ALWAYS AS (
+                setweight(to_tsvector('english', #{config.name_attribute}), 'A') ||
+                setweight(to_tsvector('english', #{config.doc_attribute}), 'B')
+              ) STORED;
+            """,
+            down: """
+            ALTER TABLE #{config.table}
+              DROP COLUMN searchable
+            """
+          )
+        )
+      else
+        Transformer.add_entity(
+          dsl_state,
+          [:postgres, :custom_statements],
+          Transformer.build_entity!(
+            AshPostgres.DataLayer,
+            [:postgres, :custom_statements],
+            :statement,
+            name: :search_column,
+            up: """
+            ALTER TABLE #{config.table}
+              ADD COLUMN searchable tsvector
+              GENERATED ALWAYS AS (
+                setweight(to_tsvector('english', #{config.doc_attribute}), 'A')
+              ) STORED;
+            """,
+            down: """
+            ALTER TABLE #{config.table}
+              DROP COLUMN searchable
+            """
+          )
+        )
+      end
+    else
+      Transformer.add_entity(
+        dsl_state,
+        [:postgres, :custom_statements],
+        Transformer.build_entity!(
+          AshPostgres.DataLayer,
+          [:postgres, :custom_statements],
+          :statement,
+          name: :search_column,
+          up: """
+          ALTER TABLE #{config.table}
+            ADD COLUMN searchable tsvector
+            GENERATED ALWAYS AS (
+              setweight(to_tsvector('english', #{config.name_attribute}), 'A')
+            ) STORED;
+          """,
+          down: """
+          ALTER TABLE #{config.table}
+            DROP COLUMN searchable
+          """
+        )
+      )
+    end
+  end
+
+  # defp add_trigram_index(dsl_state, config) do
+  #   if Transformer.get_option(dsl_state, [:search], :has_name_attribute?, true) do
+  #     Transformer.add_entity(
+  #       dsl_state,
+  #       [:postgres, :custom_statements],
+  #       Transformer.build_entity!(
+  #         AshPostgres.DataLayer,
+  #         [:postgres, :custom_statements],
+  #         :statement,
+  #         name: :trigram_index,
+  #         up: """
+  #         CREATE INDEX #{config.table}_name_trigram_index ON #{config.table} USING GIST (#{config.name_attribute} gist_trgm_ops);
+  #         """,
+  #         down: "DROP INDEX #{config.table}_name_trigram_index;"
+  #       )
+  #     )
+  #   else
+  #     dsl_state
+  #   end
+  # end
+
+  defp add_match_rank_calculation(dsl_state, _config) do
     dsl_state
-    |> add_full_text_index(config)
-    |> add_trigram_index(config)
-    |> add_name_index(config)
-  end
-
-  defp add_full_text_index(dsl_state, config) do
-    if config.doc_attribute do
-      if Transformer.get_option(dsl_state, [:search], :has_name_attribute?, true) do
-        Transformer.add_entity(
-          dsl_state,
-          [:postgres, :custom_statements],
-          Transformer.build_entity!(
-            AshPostgres.DataLayer,
-            [:postgres, :custom_statements],
-            :statement,
-            name: :search_index,
-            up: """
-            CREATE INDEX #{config.table}_search_index ON #{config.table} USING GIN((
-              setweight(to_tsvector('english', #{config.name_attribute}), 'A') ||
-              setweight(to_tsvector('english', #{config.doc_attribute}), 'D')
-            ));
-            """,
-            down: "DROP INDEX #{config.table}_search_index;"
-          )
-        )
-      else
-        Transformer.add_entity(
-          dsl_state,
-          [:postgres, :custom_statements],
-          Transformer.build_entity!(
-            AshPostgres.DataLayer,
-            [:postgres, :custom_statements],
-            :statement,
-            name: :search_index,
-            up: """
-            CREATE INDEX #{config.table}_search_index ON #{config.table} USING GIN((
-              setweight(to_tsvector('english', #{config.doc_attribute}), 'D')
-            ));
-            """,
-            down: "DROP INDEX #{config.table}_search_index;"
-          )
-        )
-      end
-    else
-      Transformer.add_entity(
-        dsl_state,
-        [:postgres, :custom_statements],
-        Transformer.build_entity!(
-          AshPostgres.DataLayer,
-          [:postgres, :custom_statements],
-          :statement,
-          name: :search_index,
-          up: """
-          CREATE INDEX #{config.table}_search_index ON #{config.table} USING GIN((
-            to_tsvector('english', #{config.name_attribute})
-          ));
-          """,
-          down: "DROP INDEX #{config.table}_search_index;"
-        )
-      )
-    end
-  end
-
-  defp add_trigram_index(dsl_state, config) do
-    if Transformer.get_option(dsl_state, [:search], :has_name_attribute?, true) do
-      Transformer.add_entity(
-        dsl_state,
-        [:postgres, :custom_statements],
-        Transformer.build_entity!(
-          AshPostgres.DataLayer,
-          [:postgres, :custom_statements],
-          :statement,
-          name: :trigram_index,
-          up: """
-          CREATE INDEX #{config.table}_name_trigram_index ON #{config.table} USING GIST (#{config.name_attribute} gist_trgm_ops);
-          """,
-          down: "DROP INDEX #{config.table}_name_trigram_index;"
-        )
-      )
-    else
-      dsl_state
-    end
-  end
-
-  defp add_name_index(dsl_state, config) do
-    if Transformer.get_option(dsl_state, [:search], :has_name_attribute?, true) do
-      Transformer.add_entity(
-        dsl_state,
-        [:postgres, :custom_statements],
-        Transformer.build_entity!(
-          AshPostgres.DataLayer,
-          [:postgres, :custom_statements],
-          :statement,
-          name: :name_index,
-          up: """
-          CREATE INDEX #{config.table}_name_lower_index ON #{config.table}(lower(#{config.name_attribute}));
-          """,
-          down: "DROP INDEX #{config.table}_name_lower_index;"
-        )
-      )
-    else
-      dsl_state
-    end
-  end
-
-  defp add_match_rank_calculation(dsl_state, config) do
-    if config.doc_attribute do
-      if Transformer.get_option(dsl_state, [:search], :has_name_attribute?, true) do
-        dsl_state
-        |> Transformer.add_entity(
-          [:calculations],
-          Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
-            name: :match_rank,
-            type: :float,
-            private?: true,
-            arguments: [query_argument()],
-            calculation:
-              Ash.Query.expr(
-                fragment(
-                  "ts_rank(setweight(to_tsvector('english', ?), 'A') || setweight(to_tsvector('english', ?), 'D'), plainto_tsquery(?))",
-                  ^ref(config.name_attribute),
-                  ^ref(config.doc_attribute),
-                  ^arg(:query)
-                )
-              )
-          )
-        )
-      else
-        dsl_state
-        |> Transformer.add_entity(
-          [:calculations],
-          Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
-            name: :match_rank,
-            type: :float,
-            private?: true,
-            arguments: [query_argument()],
-            calculation:
-              Ash.Query.expr(
-                fragment(
-                  "ts_rank(setweight(to_tsvector('english', ?), 'D'), plainto_tsquery(?))",
-                  ^ref(config.doc_attribute),
-                  ^arg(:query)
-                )
-              )
-          )
-        )
-      end
-    else
-      dsl_state
-      |> Transformer.add_entity(
-        [:calculations],
-        Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
-          name: :match_rank,
-          type: :float,
-          private?: true,
-          arguments: [query_argument()],
-          calculation:
-            Ash.Query.expr(
-              fragment(
-                "ts_rank(to_tsvector('english', ?), plainto_tsquery(?))",
-                ^ref(config.name_attribute),
-                ^arg(:query)
-              )
+    |> Transformer.add_entity(
+      [:calculations],
+      Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
+        name: :match_rank,
+        type: :float,
+        private?: true,
+        arguments: [query_argument()],
+        calculation:
+          Ash.Query.expr(
+            fragment(
+              "ts_rank_cd(?, websearch_to_tsquery(?))",
+              ^ref(:searchable),
+              ^arg(:query)
             )
-        )
+          )
       )
-    end
+    )
   end
 
   defp add_matches_calculation(dsl_state, config) do
-    if config.doc_attribute do
-      if AshHq.Docs.Extensions.Search.has_name_attribute?(dsl_state) do
-        Transformer.add_entity(
-          dsl_state,
-          [:calculations],
-          Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
-            name: :matches,
-            type: :boolean,
-            private?: true,
-            arguments: [query_argument()],
-            calculation:
-              Ash.Query.expr(
-                name_matches(query: arg(:query), similarity: 0.8) or
-                  fragment(
-                    "(to_tsvector('english', ? || ?) @@ plainto_tsquery(?))",
-                    ^ref(config.name_attribute),
-                    ^ref(config.doc_attribute),
-                    ^arg(:query)
-                  )
-              )
-          )
-        )
-      else
-        Transformer.add_entity(
-          dsl_state,
-          [:calculations],
-          Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
-            name: :matches,
-            type: :boolean,
-            private?: true,
-            arguments: [query_argument()],
-            calculation:
-              Ash.Query.expr(
-                fragment(
-                  "(to_tsvector('english', ?) @@ plainto_tsquery(?))",
-                  ^ref(config.doc_attribute),
-                  ^arg(:query)
-                )
-              )
-          )
-        )
-      end
-    else
-      Transformer.add_entity(
-        dsl_state,
-        [:calculations],
-        Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
-          name: :matches,
-          type: :boolean,
-          arguments: [query_argument()],
-          private?: true,
-          calculation:
-            Ash.Query.expr(
-              name_matches(query: arg(:query), similarity: 0.8) or
-                fragment(
-                  "(to_tsvector('english', ?) @@ plainto_tsquery(?))",
-                  ^ref(config.name_attribute),
-                  ^arg(:query)
-                )
+    Transformer.add_entity(
+      dsl_state,
+      [:calculations],
+      Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
+        name: :matches,
+        type: :boolean,
+        private?: true,
+        arguments: [query_argument()],
+        calculation:
+          Ash.Query.expr(
+            fragment(
+              "(? @@ websearch_to_tsquery(?))",
+              ^ref(:searchable),
+              ^arg(:query)
             )
-        )
+          )
       )
-    end
+    )
   end
 
-  defp add_name_matches_calculation(dsl_state, config) do
-    if AshHq.Docs.Extensions.Search.has_name_attribute?(dsl_state) do
-      Transformer.add_entity(
-        dsl_state,
-        [:calculations],
-        Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
-          name: :name_matches,
-          type: :boolean,
-          arguments: [query_argument(), similarity_argument()],
-          private?: true,
-          calculation:
-            Ash.Query.expr(
-              contains(
-                fragment("lower(?)", ^ref(config.name_attribute)),
-                fragment("lower(?)", ^arg(:query))
-              ) or
-                trigram_similarity(^ref(config.name_attribute), ^arg(:query)) >= ^arg(:similarity)
-            )
-        )
-      )
-    else
-      dsl_state
-    end
-  end
+  # defp add_name_matches_calculation(dsl_state, config) do
+  #   if AshHq.Docs.Extensions.Search.has_name_attribute?(dsl_state) do
+  #     Transformer.add_entity(
+  #       dsl_state,
+  #       [:calculations],
+  #       Transformer.build_entity!(Ash.Resource.Dsl, [:calculations], :calculate,
+  #         name: :name_matches,
+  #         type: :boolean,
+  #         arguments: [query_argument(), similarity_argument()],
+  #         private?: true,
+  #         calculation:
+  #           Ash.Query.expr(
+  #             contains(
+  #               fragment("lower(?)", ^ref(config.name_attribute)),
+  #               fragment("lower(?)", ^arg(:query))
+  #             )
+  #           )
+  #       )
+  #     )
+  #   else
+  #     dsl_state
+  #   end
+  # end
 
   defp add_search_headline_calculation(dsl_state, config) do
     if config.doc_attribute do
@@ -369,7 +291,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
             Ash.Query.expr(
               # credo:disable-for-next-line
               fragment(
-                "ts_headline('english', ?, plainto_tsquery('english', ?), 'MaxFragments=2,StartSel=\"<span class=\"\"search-hit\"\">\", StopSel=</span>')",
+                "ts_headline('english', ?, websearch_to_tsquery('english', ?), 'MaxFragments=2,StartSel=\"<span class=\"\"search-hit\"\">\", StopSel=</span>')",
                 ^ref(config.doc_attribute),
                 ^arg(:query)
               )
@@ -402,16 +324,16 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
     )
   end
 
-  defp similarity_argument do
-    Transformer.build_entity!(
-      Ash.Resource.Dsl,
-      [:calculations, :calculate],
-      :argument,
-      type: :float,
-      name: :similarity,
-      allow_nil?: false
-    )
-  end
+  # defp similarity_argument do
+  #   Transformer.build_entity!(
+  #     Ash.Resource.Dsl,
+  #     [:calculations, :calculate],
+  #     :argument,
+  #     type: :float,
+  #     name: :similarity,
+  #     allow_nil?: false
+  #   )
+  # end
 
   defp add_search_action(dsl_state, config) do
     query_argument =

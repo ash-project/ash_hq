@@ -17,12 +17,5 @@ defmodule AshHq.Extensions.Search.Preparations.LoadSearchData do
     |> Ash.Query.load(match_rank: [query: query_string])
     |> Ash.Query.load(to_load)
     |> Ash.Query.sort(match_rank: {:asc, %{query: query_string}})
-    |> then(fn query ->
-      if AshHq.Docs.Extensions.Search.has_name_attribute?(query.resource) do
-        Ash.Query.load(query, name_matches: [query: query_string, similarity: 0.7])
-      else
-        query
-      end
-    end)
   end
 end

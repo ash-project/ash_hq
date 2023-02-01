@@ -12,7 +12,7 @@ defmodule AshHq.Docs.Search.Steps.BuildResults do
      |> Enum.reject(&is_nil/1)
      |> Enum.sort_by(
        # false comes first, and we want all things where the name matches to go first
-       &{is_forum?(&1), name_is_exactly(&1, input[:query]), name_match_rank(&1), -&1.match_rank,
+       &{is_forum?(&1), name_is_exactly(&1, input[:query]), -&1.match_rank,
         Map.get(&1, :extension_order, -1), Enum.count(Map.get(&1, :path, []))}
      )}
   end
@@ -33,14 +33,14 @@ defmodule AshHq.Docs.Search.Steps.BuildResults do
     end
   end
 
-  defp name_match_rank(%resource{} = record) do
-    if AshHq.Docs.Extensions.Search.has_name_attribute?(resource) &&
-         record.name_matches do
-      -(100_000 - search_length(record))
-    else
-      0
-    end
-  end
+  # defp name_match_rank(%resource{} = record) do
+  #   if AshHq.Docs.Extensions.Search.has_name_attribute?(resource) &&
+  #        record.name_matches do
+  #     -(100_000 - search_length(record))
+  #   else
+  #     0
+  #   end
+  # end
 
   defp search_length(%resource{} = record) do
     case AshHq.Docs.Extensions.Search.name_attribute(resource) do
