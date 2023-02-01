@@ -223,7 +223,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
         calculation:
           Ash.Query.expr(
             fragment(
-              "ts_rank_cd(?, websearch_to_tsquery(?))",
+              "ts_rank_cd(?, websearch_to_tsquery(?), 4)",
               ^ref(:searchable),
               ^arg(:query)
             )
