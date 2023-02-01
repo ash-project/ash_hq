@@ -16,7 +16,8 @@ defmodule AshHq.Discord.Message do
       :thread_name
     ]
 
-    has_name_attribute?(false)
+    has_name_attribute? false
+    weight_content -0.7
   end
 
   postgres do

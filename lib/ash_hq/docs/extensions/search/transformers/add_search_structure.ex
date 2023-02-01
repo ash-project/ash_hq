@@ -133,7 +133,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
               ADD COLUMN searchable tsvector
               GENERATED ALWAYS AS (
                 setweight(to_tsvector('english', #{config.name_attribute}), 'A') ||
-                setweight(to_tsvector('english', #{config.doc_attribute}), 'B')
+                setweight(to_tsvector('english', #{config.doc_attribute}), 'D')
               ) STORED;
             """,
             down: """
@@ -155,7 +155,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
             ALTER TABLE #{config.table}
               ADD COLUMN searchable tsvector
               GENERATED ALWAYS AS (
-                setweight(to_tsvector('english', #{config.doc_attribute}), 'A')
+                setweight(to_tsvector('english', #{config.doc_attribute}), 'D')
               ) STORED;
             """,
             down: """
@@ -191,6 +191,9 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
   end
 
   defp add_match_rank_calculation(dsl_state, _config) do
+    weight_content =
+      AshHq.Docs.Extensions.Search.weight_content(dsl_state)
+
     dsl_state
     |> Transformer.add_entity(
       [:calculations],
@@ -202,9 +205,10 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
         calculation:
           Ash.Query.expr(
             fragment(
-              "ts_rank_cd(?, websearch_to_tsquery(?), 4)",
+              "(ts_rank_cd('{0.05, 0.1, 0.1, 1.0}', ?, websearch_to_tsquery(?), 32) + ?)",
               ^ref(:searchable),
-              ^arg(:query)
+              ^arg(:query),
+              ^weight_content
             )
           )
       )

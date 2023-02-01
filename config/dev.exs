@@ -22,6 +22,8 @@ config :git_ops,
   manage_readme_version: "README.md",
   version_tag_prefix: "v"
 
+config :ash_hq, :show_search_ranking, true
+
 secret_key_base = "FxKFwVYhDFah3bLLXXqWdpdcLf5e5T1UyVM6XQp7kCt/Reg5yuAEI3upAVDRoP5e"
 
 config :ash_hq, token_signing_secret: secret_key_base

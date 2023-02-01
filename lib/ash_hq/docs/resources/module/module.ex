@@ -40,6 +40,8 @@ defmodule AshHq.Docs.Module do
   search do
     doc_attribute :doc
 
+    weight_content 0.5
+
     load_for_search [
       :version_name,
       :library_name,

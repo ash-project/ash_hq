@@ -20,6 +20,10 @@ defmodule AshHq.Docs.Extensions.Search do
         doc:
           "A name for what kind of thing this is, shows up next to it in search results. i.e Module, or Guide. Defaults to the last part of the module name."
       ],
+      weight_content: [
+        type: {:or, [:float, :integer]},
+        doc: "A static amount to add to the `match_rank` when determining how relevant content is"
+      ],
       name_attribute: [
         type: :atom,
         default: :name,
@@ -105,6 +109,15 @@ defmodule AshHq.Docs.Extensions.Search do
       [:search],
       :has_name_attribute?,
       true
+    )
+  end
+
+  def weight_content(resource) do
+    Extension.get_opt(
+      resource,
+      [:search],
+      :weight_content,
+      0
     )
   end
 
