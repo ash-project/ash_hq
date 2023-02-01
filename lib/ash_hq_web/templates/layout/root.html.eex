@@ -31,10 +31,6 @@
     <% end %>
 
     <%= @inner_content %>
-    <%= if @live_action == :docs do %>
-      <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-      <script>mermaid.init(".mermaid")</script>
-    <% end %>
     <%= if @live_action == :media do %>
       <script src="https://platform.twitter.com/widgets.js" charset="utf-8" ></script>
     <% end %>
