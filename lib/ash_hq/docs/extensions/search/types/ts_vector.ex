@@ -1,4 +1,5 @@
 defmodule AshHq.Docs.Search.Types.TsVector do
+  @moduledoc "A stub for a tsvector type that should never actually get loaded."
   use Ash.Type
 
   def storage_type, do: :tsvector
