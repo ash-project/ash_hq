@@ -190,27 +190,6 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
     end
   end
 
-  # defp add_trigram_index(dsl_state, config) do
-  #   if Transformer.get_option(dsl_state, [:search], :has_name_attribute?, true) do
-  #     Transformer.add_entity(
-  #       dsl_state,
-  #       [:postgres, :custom_statements],
-  #       Transformer.build_entity!(
-  #         AshPostgres.DataLayer,
-  #         [:postgres, :custom_statements],
-  #         :statement,
-  #         name: :trigram_index,
-  #         up: """
-  #         CREATE INDEX #{config.table}_name_trigram_index ON #{config.table} USING GIST (#{config.name_attribute} gist_trgm_ops);
-  #         """,
-  #         down: "DROP INDEX #{config.table}_name_trigram_index;"
-  #       )
-  #     )
-  #   else
-  #     dsl_state
-  #   end
-  # end
-
   defp add_match_rank_calculation(dsl_state, _config) do
     dsl_state
     |> Transformer.add_entity(
