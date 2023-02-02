@@ -8,6 +8,7 @@ defmodule AshHqWeb.Components.TreeView do
 
   use Surface.Component
   alias AshHqWeb.Components.TreeView.Item
+  alias Surface.Components.LivePatch
   alias Phoenix.LiveView.JS
 
   @doc "DOM id for the outer div"
