@@ -1,6 +1,6 @@
 defmodule AshHq.Docs.Guide do
   @moduledoc false
-  use AshHq.Resource,
+  use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     extensions: [
       AshHq.Docs.Extensions.Search,

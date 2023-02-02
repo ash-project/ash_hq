@@ -558,7 +558,7 @@ defmodule AshHqWeb.Pages.Home do
 
   @post_example """
                 defmodule Example.Post do
-                  use AshHq.Resource,
+                  use Ash.Resource,
                     data_layer: AshPostgres.DataLayer
 
                   resource do

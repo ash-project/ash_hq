@@ -1,7 +1,7 @@
 defmodule AshHq.Accounts.UserToken do
   @moduledoc false
 
-  use AshHq.Resource,
+  use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer],
     extensions: [AshAuthentication.TokenResource]

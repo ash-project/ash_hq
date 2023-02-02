@@ -1,14 +1,13 @@
 defmodule AshHq.Accounts.User do
   @moduledoc false
 
-  use AshHq.Resource,
+  use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer],
     extensions: [AshAuthentication]
 
-  alias AshHq.Accounts.Preparations, warn: false
-
   require Ash.Query
+  alias AshHq.Accounts.Preparations, warn: false
 
   authentication do
     api AshHq.Accounts
@@ -265,7 +264,7 @@ defmodule AshHq.Accounts.User do
   end
 
   calculations do
-    calculate :address, :string, decrypt(:encrypted_address)
-    calculate :name, :string, decrypt(:encrypted_name)
+    calculate :address, :string, {AshHq.Calculations.Decrypt, field: :encrypted_address}
+    calculate :name, :string, {AshHq.Calculations.Decrypt, field: :encrypted_name}
   end
 end

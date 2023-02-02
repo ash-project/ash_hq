@@ -2,10 +2,6 @@ defmodule AshHq.Calculations.Decrypt do
   @moduledoc "Decrypts a given value on demand"
   use Ash.Calculation
 
-  def decrypt(field) do
-    {__MODULE__, field: field}
-  end
-
   def calculate(records, opts, _) do
     {:ok,
      Enum.map(records, fn record ->

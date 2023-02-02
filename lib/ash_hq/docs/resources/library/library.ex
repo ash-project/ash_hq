@@ -1,6 +1,6 @@
 defmodule AshHq.Docs.Library do
   @moduledoc false
-  use AshHq.Resource,
+  use Ash.Resource,
     data_layer: AshPostgres.DataLayer
 
   attributes do

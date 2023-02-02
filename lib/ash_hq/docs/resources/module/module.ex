@@ -1,7 +1,7 @@
 defmodule AshHq.Docs.Module do
   @moduledoc false
 
-  use AshHq.Resource,
+  use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
