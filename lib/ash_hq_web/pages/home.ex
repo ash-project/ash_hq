@@ -165,92 +165,41 @@ defmodule AshHqWeb.Pages.Home do
 
         <div
           id="testimonials"
-          class="flex flex-col items-center content-center w-full lg:w-[28rem] max-w-7xl md:h-[74rem] lg:h-[86rem] mb-8 lg:mb-0 px-4 md:px-8 lg:px-0"
+          class="flex flex-col items-center content-center w-full lg:w-[28rem] px-4 md:px-8 lg:px-0"
         >
-          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-200 rounded-xl p-8 md:p-0 dark:bg-base-dark-700 drop-shadow-xl md:relative lg:top-16 md:-left-[8rem] lg:-left-[10rem] mt-8">
-            <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-              <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
-                "Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!"
-              </p>
+          <.testimonial
+            text="Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!"
+            author="Frank Dugan III"
+            title="System Specialist, SunnyCor Inc."
+          />
 
-              <p>
-                <div class="font-bold text-primary-light-500 dark:text-primary-dark-400">
-                  Frank Dugan III
-                </div>
-                <div class="text-base-light-700 dark:text-base-dark-200">
-                  System Specialist, SunnyCor Inc.
-                </div>
-              </p>
-            </div>
-          </div>
+          <.testimonial
+            text="I’m constantly blown away with the quality of work and support the Ash community has put into this project. It’s gotten to the point that I can’t imagine starting a new Elixir project that doesn’t use Ash."
+            author="Brett Kolodny"
+            title="Full stack engineer, MEW"
+            class_overrides="md:-mt-20"
+          />
 
-          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-100 rounded-xl p-8 md:p-0 dark:bg-base-dark-600 drop-shadow-xl md:relative md:-top-16 md:-right-[10rem] mt-8">
-            <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-              <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
-                "I’m constantly blown away with the quality of work and support the Ash community has put into this project. It’s gotten to the point that I can’t imagine starting a new Elixir project that doesn’t use Ash."
-              </p>
+          <.testimonial
+            text="Ash is an incredibly powerful idea that gives Alembic a massive competitive advantage. It empowers us to build wildly ambitious applications for our clients with tiny teams, while consistently delivering the high level of quality that our customers have come to expect."
+            author="Josh Price"
+            title="Technical Director, Alembic"
+            class_overrides="md:-mt-4"
+          />
 
-              <p>
-                <div class="font-bold text-primary-light-500 dark:text-primary-dark-400">
-                  Brett Kolodny
-                </div>
-                <div class="text-base-light-700 dark:text-base-dark-200">
-                  Full stack engineer, MEW
-                </div>
-              </p>
-            </div>
-          </div>
+          <.testimonial
+            text="Ash Framework enabled us to build a robust platform for delivering financial services using bitcoin. Ash proved itself to our team by handling innovative use cases with ease and it continues to evolve ahead of our growing list of needs."
+            author="Yousef Janajri"
+            title="CTO & Co-Founder, Coinbits"
+            class_overrides="md:-mt-20"
+          />
 
-          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-200 rounded-xl p-8 md:p-0 dark:bg-base-dark-700 drop-shadow-xl md:relative md:-top-32 md:-left-[11rem] mt-8">
-            <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-              <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
-                "Ash is an incredibly powerful idea that gives Alembic a massive competitive advantage. It empowers us to build wildly ambitious applications for our clients with tiny teams, while consistently delivering the high level of quality that our customers have come to expect."
-              </p>
-
-              <p>
-                <div class="font-bold text-primary-light-500 dark:text-primary-dark-400">
-                  Josh Price
-                </div>
-                <div class="text-base-light-700 dark:text-base-dark-100">
-                  Technical Director, Alembic
-                </div>
-              </p>
-            </div>
-          </div>
-
-          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-100 rounded-xl p-8 md:p-0 dark:bg-base-dark-600 drop-shadow-xl md:relative md:-top-[4rem] md:-top-64 md:-right-44 mt-8">
-            <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-              <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
-                "Ash Framework enabled us to build a robust platform for delivering financial services using bitcoin. Ash proved itself to our team by handling innovative use cases with ease and it continues to evolve ahead of our growing list of needs."
-              </p>
-
-              <p>
-                <div class="font-bold text-primary-light-500 dark:text-primary-dark-400">
-                  Yousef Janajri
-                </div>
-                <div class="text-base-light-700 dark:text-base-dark-100">
-                  CTO & Co-Founder, Coinbits
-                </div>
-              </p>
-            </div>
-          </div>
-
-          <div class="w-full md:w-[26rem] lg:min-w-fit lg:max-w-min bg-base-light-200 rounded-xl p-8 md:p-0 dark:bg-base-dark-700 drop-shadow-xl md:relative md:-top-[20rem] md:-left-[11rem] mt-8">
-            <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-              <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
-                "The more I’ve used Ash, the more blown away I am by how much I get out of it – and how little boilerplate I have to write. I’m yet to encounter a situation where I would need to fight the “Ash way” of doing things, but the framework still allows me to choose how I build my software."
-              </p>
-
-              <p>
-                <div class="font-bold text-primary-light-500 dark:text-primary-dark-400">
-                  Juha Lehtonen
-                </div>
-                <div class="text-base-light-700 dark:text-base-dark-100">
-                  Senior Software Developer
-                </div>
-              </p>
-            </div>
-          </div>
+          <.testimonial
+            text="The more I’ve used Ash, the more blown away I am by how much I get out of it – and how little boilerplate I have to write. I’m yet to encounter a situation where I would need to fight the “Ash way” of doing things, but the framework still allows me to choose how I build my software."
+            author="Juha Lehtonen"
+            title="Senior Software Developer"
+            class_overrides="md:-mt-4"
+          />
         </div>
 
         <div class="flex flex-col text-center items-center mt-24">
@@ -399,6 +348,31 @@ defmodule AshHqWeb.Pages.Home do
           </div>
         </div>
       </div>
+    </div>
+    """
+  end
+
+  attr(:class_overrides, :string, default: "")
+
+  def testimonial(assigns) do
+    ~F"""
+    <div class={[
+      "w-full md:w-[26rem] lg:min-w-fit lg:max-w-min rounded-xl shadow-xl mt-8 p-8
+      odd:bg-base-light-200 even:bg-base-light-100 odd:dark:bg-base-dark-700 even:dark:bg-base-dark-600
+      space-y-4 text-center md:text-left relative md:odd:-left-[10rem] md:even:left-[10rem]",
+      @class_overrides
+    ]}>
+      <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
+        "{@text}"
+      </p>
+
+      <p class="font-bold text-primary-light-500 dark:text-primary-dark-400">
+        {@author}
+      </p>
+
+      <p class="text-base-light-700 dark:text-base-dark-200">
+        {@title}
+      </p>
     </div>
     """
   end
