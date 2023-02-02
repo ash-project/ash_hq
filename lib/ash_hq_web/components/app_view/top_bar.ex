@@ -40,34 +40,34 @@ defmodule AshHqWeb.Components.AppView.TopBar do
           </button>
         {/if}
 
-        <a
-          href="/docs/guides/ash/latest/tutorials/get-started"
+        <LivePatch
+          to="/docs/guides/ash/latest/tutorials/get-started"
           title="Documentation"
           class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700 hidden md:block"
         >
           Documentation
-        </a>
-        <a
-          href="/blog"
+        </LivePatch>
+        <LivePatch
+          to="/blog"
           title="Blog"
           class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700"
         >
           Blog
-        </a>
-        <a
-          href="/forum/showcase"
+        </LivePatch>
+        <LivePatch
+          to="/forum/showcase"
           title="Forum"
           class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700"
         >
           Forum
-        </a>
-        <a
-          href="/media"
+        </LivePatch>
+        <LivePatch
+          to="/media"
           title="Media"
           class="text-lg font-bold px-2 md:px-4 pr-2 md:pr-8 dark:hover:text-primary-dark-400 hover:text-primary-light-700"
         >
           Media
-        </a>
+        </LivePatch>
         <a href="https://github.com/ash-project" title="Github" class="hidden md:block">
           <svg
             xmlns="http://www.w3.org/2000/svg"
