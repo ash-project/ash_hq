@@ -75,9 +75,9 @@ defmodule AshHqWeb.Components.DocSidebar do
       class={"grid pb-36 z-40 bg-white dark:bg-base-dark-850", @class}
       aria-label="Sidebar"
     >
-      <div class="flex flex-col">
-        <div class="text-black dark:text-white font-light w-full px-2 mb-2">
-          Including Packages:
+      <div class="flex flex-col px-1">
+        <div class="text-black dark:text-white text-sm w-full px-2 mb-2">
+          Including Libraries:
         </div>
         <AshHqWeb.Components.VersionPills
           id={"#{@id}-version-pills"}
