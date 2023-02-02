@@ -3,7 +3,6 @@ defmodule AshHqWeb.Components.DocSidebarDslItems do
   Surface component for generating the recursive TreeView items for an extension DSL.
   """
   use Surface.Component
-  alias Phoenix.LiveView.JS
 
   alias __MODULE__
   alias AshHqWeb.Components.DocSidebar
