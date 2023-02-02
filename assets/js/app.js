@@ -220,7 +220,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
 topbar.config({ barColors: { 0: "#29d" }, shadowColor: "rgba(0, 0, 0, .3)" });
 
 let topBarScheduled = undefined;
-window.addEventListener("phx:page-loading-start", () => {
+window.addEventListener("phx:page-loading-start", ({ detail }) => {
   scrolled = false;
 
   // close mobile sidebar on navigation
@@ -229,13 +229,14 @@ window.addEventListener("phx:page-loading-start", () => {
     mobileSideBar.click()
   }
 
-  if (!topBarScheduled) {
+  if (detail.kind !== 'patch' && !topBarScheduled) {
     topBarScheduled = setTimeout(() => topbar.show(), 500);
   }
 });
 
 window.addEventListener("phx:page-loading-stop", ({ detail }) => {
   clearTimeout(topBarScheduled);
+  topbar.hide();
   topBarScheduled = undefined;
   let scrollEl;
   if (detail.kind === "initial" && window.location.hash) {
@@ -251,7 +252,6 @@ window.addEventListener("phx:page-loading-stop", ({ detail }) => {
   } else {
     scrolled = true;
   }
-  topbar.hide();
 });
 
 window.addEventListener("js:focus", (e) => e.target.focus());
