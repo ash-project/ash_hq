@@ -6,6 +6,25 @@ defmodule AshHq.Discord.Message do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.RenderMarkdown, AshHq.Docs.Extensions.Search]
 
+  attributes do
+    integer_primary_key :id, generated?: false, writable?: true
+
+    attribute :author, :string do
+      allow_nil? false
+    end
+
+    attribute :content, :string
+    attribute :content_html, :string
+
+    attribute :timestamp, :utc_datetime do
+      allow_nil? false
+    end
+  end
+
+  render_markdown do
+    render_attributes content: :content_html
+  end
+
   search do
     doc_attribute :content
 
@@ -17,16 +36,22 @@ defmodule AshHq.Discord.Message do
     ]
 
     has_name_attribute? false
-    weight_content -0.7
+    weight_content(-0.7)
+  end
+
+  relationships do
+    belongs_to :thread, AshHq.Discord.Thread do
+      attribute_type :integer
+      allow_nil? false
+    end
+
+    has_many :attachments, AshHq.Discord.Attachment
+    has_many :reactions, AshHq.Discord.Reaction
   end
 
   postgres do
     table "discord_messages"
     repo AshHq.Repo
-  end
-
-  render_markdown do
-    render_attributes content: :content_html
   end
 
   actions do
@@ -55,31 +80,6 @@ defmodule AshHq.Discord.Message do
                use_identities: [:unique_message_emoji]
              )
     end
-  end
-
-  attributes do
-    integer_primary_key :id, generated?: false, writable?: true
-
-    attribute :author, :string do
-      allow_nil? false
-    end
-
-    attribute :content, :string
-    attribute :content_html, :string
-
-    attribute :timestamp, :utc_datetime do
-      allow_nil? false
-    end
-  end
-
-  relationships do
-    belongs_to :thread, AshHq.Discord.Thread do
-      attribute_type :integer
-      allow_nil? false
-    end
-
-    has_many :attachments, AshHq.Discord.Attachment
-    has_many :reactions, AshHq.Discord.Reaction
   end
 
   aggregates do

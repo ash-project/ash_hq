@@ -3,17 +3,24 @@ defmodule AshHq.Discord.Tag do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer
 
-  postgres do
-    table "discord_tags"
-    repo AshHq.Repo
-  end
-
   attributes do
     integer_primary_key :id, generated?: false, writable?: true
 
     attribute :name, :ci_string do
       allow_nil? false
     end
+  end
+
+  relationships do
+    belongs_to :channel, AshHq.Discord.Channel do
+      attribute_type :integer
+      attribute_writable? true
+    end
+  end
+
+  postgres do
+    table "discord_tags"
+    repo AshHq.Repo
   end
 
   actions do
@@ -25,10 +32,6 @@ defmodule AshHq.Discord.Tag do
     end
   end
 
-  identities do
-    identity :unique_name_per_channel, [:name, :channel_id]
-  end
-
   code_interface do
     define_for AshHq.Discord
     define :upsert, args: [:channel_id, :id, :name]
@@ -36,10 +39,7 @@ defmodule AshHq.Discord.Tag do
     define :destroy
   end
 
-  relationships do
-    belongs_to :channel, AshHq.Discord.Channel do
-      attribute_type :integer
-      attribute_writable? true
-    end
+  identities do
+    identity :unique_name_per_channel, [:name, :channel_id]
   end
 end

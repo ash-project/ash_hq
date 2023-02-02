@@ -191,8 +191,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
   end
 
   defp add_match_rank_calculation(dsl_state, _config) do
-    weight_content =
-      AshHq.Docs.Extensions.Search.weight_content(dsl_state)
+    weight_content = AshHq.Docs.Extensions.Search.weight_content(dsl_state)
 
     dsl_state
     |> Transformer.add_entity(

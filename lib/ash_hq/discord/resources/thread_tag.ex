@@ -3,6 +3,22 @@ defmodule AshHq.Discord.ThreadTag do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer
 
+  relationships do
+    belongs_to :thread, AshHq.Discord.Thread do
+      primary_key? true
+      allow_nil? false
+      attribute_writable? true
+      attribute_type :integer
+    end
+
+    belongs_to :tag, AshHq.Discord.Tag do
+      primary_key? true
+      allow_nil? false
+      attribute_writable? true
+      attribute_type :integer
+    end
+  end
+
   postgres do
     table "discord_thread_tags"
     repo AshHq.Repo
@@ -19,21 +35,5 @@ defmodule AshHq.Discord.ThreadTag do
   code_interface do
     define_for AshHq.Discord
     define :tag, args: [:thread_id, :tag_id]
-  end
-
-  relationships do
-    belongs_to :thread, AshHq.Discord.Thread do
-      primary_key? true
-      allow_nil? false
-      attribute_writable? true
-      attribute_type :integer
-    end
-
-    belongs_to :tag, AshHq.Discord.Tag do
-      primary_key? true
-      allow_nil? false
-      attribute_writable? true
-      attribute_type :integer
-    end
   end
 end

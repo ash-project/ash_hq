@@ -3,15 +3,6 @@ defmodule AshHq.Discord.Attachment do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer
 
-  postgres do
-    table "discord_attachments"
-    repo AshHq.Repo
-  end
-
-  actions do
-    defaults [:create, :read, :update, :destroy]
-  end
-
   attributes do
     integer_primary_key :id, generated?: false, writable?: true
     attribute :filename, :string
@@ -27,5 +18,14 @@ defmodule AshHq.Discord.Attachment do
       allow_nil? false
       attribute_type :integer
     end
+  end
+
+  postgres do
+    table "discord_attachments"
+    repo AshHq.Repo
+  end
+
+  actions do
+    defaults [:create, :read, :update, :destroy]
   end
 end

@@ -8,6 +8,39 @@ defmodule AshHq.Discord.Thread do
 
   import Ecto.Query
 
+  attributes do
+    integer_primary_key :id, generated?: false, writable?: true
+    attribute :type, :integer
+
+    attribute :name, :string do
+      allow_nil? false
+    end
+
+    attribute :author, :string do
+      allow_nil? false
+    end
+
+    attribute :create_timestamp, :utc_datetime do
+      allow_nil? false
+    end
+  end
+
+  relationships do
+    has_many :messages, AshHq.Discord.Message
+
+    belongs_to :channel, AshHq.Discord.Channel do
+      attribute_type :integer
+      allow_nil? false
+      attribute_writable? true
+    end
+
+    many_to_many :tags, AshHq.Discord.Tag do
+      through AshHq.Discord.ThreadTag
+      source_attribute_on_join_resource :thread_id
+      destination_attribute_on_join_resource :tag_id
+    end
+  end
+
   postgres do
     table "discord_threads"
     repo AshHq.Repo
@@ -72,38 +105,5 @@ defmodule AshHq.Discord.Thread do
     define :upsert
     define :by_id, action: :read, get_by: [:id]
     define :feed, args: [:channel]
-  end
-
-  attributes do
-    integer_primary_key :id, generated?: false, writable?: true
-    attribute :type, :integer
-
-    attribute :name, :string do
-      allow_nil? false
-    end
-
-    attribute :author, :string do
-      allow_nil? false
-    end
-
-    attribute :create_timestamp, :utc_datetime do
-      allow_nil? false
-    end
-  end
-
-  relationships do
-    has_many :messages, AshHq.Discord.Message
-
-    belongs_to :channel, AshHq.Discord.Channel do
-      attribute_type :integer
-      allow_nil? false
-      attribute_writable? true
-    end
-
-    many_to_many :tags, AshHq.Discord.Tag do
-      through AshHq.Discord.ThreadTag
-      source_attribute_on_join_resource :thread_id
-      destination_attribute_on_join_resource :tag_id
-    end
   end
 end

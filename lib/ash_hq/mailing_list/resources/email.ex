@@ -5,11 +5,6 @@ defmodule AshHq.MailingList.Email do
     data_layer: AshPostgres.DataLayer,
     notifiers: AshHq.MailingList.EmailNotifier
 
-  postgres do
-    repo AshHq.Repo
-    table "emails"
-  end
-
   attributes do
     uuid_primary_key :id
 
@@ -18,6 +13,11 @@ defmodule AshHq.MailingList.Email do
     end
 
     timestamps()
+  end
+
+  postgres do
+    repo AshHq.Repo
+    table "emails"
   end
 
   actions do

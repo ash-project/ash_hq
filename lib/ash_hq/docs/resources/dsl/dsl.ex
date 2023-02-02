@@ -59,7 +59,7 @@ defmodule AshHq.Docs.Dsl do
       :library_id
     ]
 
-    weight_content 0.2
+    weight_content(0.2)
 
     sanitized_name_attribute :sanitized_path
     use_path_for_name? true
