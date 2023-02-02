@@ -108,7 +108,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                 text={guide.name}
                 icon={render_icon(assigns, "Guide")}
                 selected={@guide && @guide.id == guide.id}
-                on_click={JS.patch(DocRoutes.doc_link(guide, @selected_versions))}
+                to={DocRoutes.doc_link(guide, @selected_versions)}
                 class="text-base-light-900 dark:text-base-dark-100"
               >
               </TreeView.Item>
@@ -138,7 +138,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                 icon={render_icon(assigns, extension.type)}
                 collapsable={extension.dsls != []}
                 collapsed={!(@extension && @extension.id == extension.id)}
-                on_click={JS.patch(DocRoutes.doc_link(extension, @selected_versions))}
+                to={DocRoutes.doc_link(extension, @selected_versions)}
                 selected={@extension && !@dsl && @extension.id == extension.id}
                 indent_guide
                 class="text-base-light-900 dark:text-base-dark-200"
@@ -172,7 +172,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                 name={slug(mix_task.name)}
                 text={mix_task.name}
                 icon={render_icon(assigns, "Mix Task")}
-                on_click={JS.patch(DocRoutes.doc_link(mix_task, selected_versions))}
+                to={DocRoutes.doc_link(mix_task, selected_versions)}
                 selected={@mix_task && @mix_task.id == mix_task.id}
                 class="text-base-light-900 dark:text-base-dark-200"
               />
@@ -197,7 +197,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                 name={slug(module.name)}
                 text={module.name}
                 icon={render_icon(assigns, "Code")}
-                on_click={JS.patch(DocRoutes.doc_link(module, @selected_versions))}
+                to={DocRoutes.doc_link(module, @selected_versions)}
                 selected={@module && @module.id == module.id}
                 class="text-base-light-900 dark:text-base-dark-100"
               >

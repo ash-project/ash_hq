@@ -8,6 +8,7 @@ defmodule AshHqWeb.Components.TreeView do
 
   use Surface.Component
   alias AshHqWeb.Components.TreeView.Item
+  alias Surface.Components.LivePatch
   alias Phoenix.LiveView.JS
 
   @doc "DOM id for the outer div"
@@ -49,7 +50,7 @@ defmodule AshHqWeb.Components.TreeView do
     prop icon, :any
 
     @doc "Event handler to run when item clicked, eg JS.patch(~p'/some/path')"
-    prop on_click, :event, default: %JS{}
+    prop to, :string
 
     @doc "When true, allows the item's children to be hidden with a chevron icon."
     prop collapsable, :boolean, default: false
@@ -96,16 +97,30 @@ defmodule AshHqWeb.Components.TreeView do
             collapsed: @collapsed
           }
         >
-          <button
-            :on-click={@on_click |> handle_click("#{@path}-#{@name}", @collapsable)}
-            class="flex flex-row items-start w-full text-left"
-          >
-            <div :if={@collapsable && slot_assigned?(:default)} class="chevron mr-0.5 mt-1.5">
-              <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
-            </div>
-            {#if @icon}{@icon}{/if}
-            <span class="ml-1">{@text}</span>
-          </button>
+          {#if @to}
+            <LivePatch
+              to={@to}
+              opts={phx_click: handle_click("#{@path}-#{@name}", @collapsable)}
+              class="flex flex-row items-start w-full text-left"
+            >
+              <div :if={@collapsable && slot_assigned?(:default)} class="chevron mr-0.5 mt-1.5">
+                <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
+              </div>
+              {#if @icon}{@icon}{/if}
+              <span class="ml-1">{@text}</span>
+            </LivePatch>
+          {#else}
+            <button
+              :on-click={handle_click("#{@path}-#{@name}", @collapsable)}
+              class="flex flex-row items-start w-full text-left"
+            >
+              <div :if={@collapsable && slot_assigned?(:default)} class="chevron mr-0.5 mt-1.5">
+                <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
+              </div>
+              {#if @icon}{@icon}{/if}
+              <span class="ml-1">{@text}</span>
+            </button>
+          {/if}
         </div>
         <ul :if={slot_assigned?(:default)} class="pl-4">
           <#slot context_put={Item, path: "#{@path}-#{@name}"} :for={item <- @default} {item} />
@@ -114,7 +129,7 @@ defmodule AshHqWeb.Components.TreeView do
       """
     end
 
-    defp handle_click(js, id, collapsable) do
+    defp handle_click(js \\ %Phoenix.LiveView.JS{}, id, collapsable) do
       if collapsable,
         do: toggle_class(js, "collapsed", to: "##{id}"),
         else: js

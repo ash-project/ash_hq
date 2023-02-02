@@ -30,7 +30,7 @@ defmodule AshHqWeb.Components.DocSidebarDslItems do
       text={dsl.name}
       collapsable={false}
       selected={@dsl && @dsl.id == dsl.id}
-      on_click={JS.patch(DocRoutes.doc_link(dsl, @selected_versions))}
+      to={DocRoutes.doc_link(dsl, @selected_versions)}
       indent_guide
       class={"pt-2": Enum.any?(@dsls, &(&1.path == @dsl_path ++ [dsl.name]))}
     >
