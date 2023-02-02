@@ -42,28 +42,28 @@ defmodule AshHqWeb.Components.AppView.TopBar do
 
         <LivePatch
           to="/docs/guides/ash/latest/tutorials/get-started"
-          title="Documentation"
+          opts={title: "Documentation"}
           class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700 hidden md:block"
         >
           Documentation
         </LivePatch>
         <LivePatch
           to="/blog"
-          title="Blog"
+          opts={title: "Blog"}
           class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700"
         >
           Blog
         </LivePatch>
         <LivePatch
           to="/forum/showcase"
-          title="Forum"
+          opts={title: "Forum"}
           class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700"
         >
           Forum
         </LivePatch>
         <LivePatch
           to="/media"
-          title="Media"
+          opts={title: "Media"}
           class="text-lg font-bold px-2 md:px-4 pr-2 md:pr-8 dark:hover:text-primary-dark-400 hover:text-primary-light-700"
         >
           Media
