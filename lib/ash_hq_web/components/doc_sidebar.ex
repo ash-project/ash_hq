@@ -33,14 +33,14 @@ defmodule AshHqWeb.Components.DocSidebar do
         />
         <ul class="ml-1">
           {#for %{name: name, id: id, categories: categories} <- @sidebar_data}
-            <li id={"sidebar-#{id}"}>
+            <li id={"#{@id}-#{id}"}>
               <button
                 class="flex flex-row items-start w-full text-left rounded-lg hover:bg-base-light-100 dark:hover:bg-base-dark-750"
-                phx-click={collapse("sidebar-#{id}")}
+                phx-click={collapse("#{@id}-#{id}")}
               >
                 <div
                   class={"chevron mr-0.5 mt-1.5 origin-center", "rotate-[-90deg]": !has_active?(categories)}
-                  id={"sidebar-#{id}-chevron"}
+                  id={"#{@id}-#{id}-chevron"}
                 >
                   <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
                 </div>
@@ -48,18 +48,18 @@ defmodule AshHqWeb.Components.DocSidebar do
               </button>
               <ul
                 class="ml-2"
-                id={"sidebar-#{id}-contents"}
+                id={"#{@id}-#{id}-contents"}
                 style={if !has_active?(categories), do: "display: none", else: ""}
               >
                 {#for {category, items} <- categories}
-                  <li class="pt-1" id={"sidebar-#{id}-#{slug(category)}"}>
+                  <li class="pt-1" id={"#{@id}-#{id}-#{slug(category)}"}>
                     <button
                       class="flex flex-row items-start w-full text-left rounded-lg hover:bg-base-light-100 dark:hover:bg-base-dark-750"
-                      phx-click={collapse("sidebar-#{id}-#{slug(category)}")}
+                      phx-click={collapse("#{@id}-#{id}-#{slug(category)}")}
                     >
                       <div
                         class={"chevron mr-0.5 mt-1.5 origin-center", "rotate-[-90deg]": !has_active?(items)}
-                        id={"sidebar-#{id}-#{slug(category)}-chevron"}
+                        id={"#{@id}-#{id}-#{slug(category)}-chevron"}
                       >
                         <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
                       </div>
@@ -68,16 +68,16 @@ defmodule AshHqWeb.Components.DocSidebar do
 
                     <ul
                       class="ml-2"
-                      id={"sidebar-#{id}-#{slug(category)}-contents"}
+                      id={"#{@id}-#{id}-#{slug(category)}-contents"}
                       style={if !has_active?(items), do: "display: none", else: ""}
                     >
                       {#for {library, items} <- items}
-                        <li class="pt-1" id={"sidebar-#{id}-#{slug(category)}-#{slug(library)}"}>
+                        <li class="pt-1" id={"#{@id}-#{id}-#{slug(category)}-#{slug(library)}"}>
                           <span class="text-base-light-500 dark:text-base-dark-300">{library}</span>
 
                           <ul class="ml-2">
                             {#for %{name: item_name, to: to, id: item_id, active?: active?} <- items}
-                              {id = id(category, library, item_name, id, item_id)
+                              {id = id(category, library, item_name, id, item_id, @id)
                               nil}
                               <li
                                 id={id}
@@ -180,11 +180,15 @@ defmodule AshHqWeb.Components.DocSidebar do
     Search.icon_for_type("Unknown", item_classes, assigns)
   end
 
-  defp id(category, library, name, id, item_id) do
+  defp id(category, library, name, id, item_id, global_id) do
     if category == "Tutorials" && library == "Ash" && name == "Get Started" do
-      "get-started-guide"
+      if String.starts_with?(global_id, "mobile") do
+        "mobile-get-started-guide"
+      else
+        "get-started-guide"
+      end
     else
-      "sidebar-#{id}-#{slug(category)}-#{slug(library)}-#{item_id}"
+      "#{global_id}-#{id}-#{slug(category)}-#{slug(library)}-#{item_id}"
     end
   end
 
@@ -203,6 +207,10 @@ defmodule AshHqWeb.Components.DocSidebar do
       "bg-base-light-200 dark:bg-base-dark-700 active-sidebar-nav",
       to: "##{id}"
     )
+    |> JS.add_class(
+      "bg-base-light-200 dark:bg-base-dark-700 active-sidebar-nav",
+      to: "##{add_or_remove_mobile(id)}"
+    )
   end
 
   def collapse(js \\ %JS{}, id) do
@@ -211,12 +219,24 @@ defmodule AshHqWeb.Components.DocSidebar do
       "rotate-[-90deg]",
       to: "##{id}-chevron.rotate-\\[-90deg\\]"
     )
+    |> JS.remove_class(
+      "rotate-[-90deg]",
+      to: "##{add_or_remove_mobile(id)}-chevron.rotate-\\[-90deg\\]"
+    )
     |> JS.add_class(
       "rotate-[-90deg]",
       to: "##{id}-chevron:not(.rotate-\\[-90deg\\])"
     )
+    |> JS.add_class(
+      "rotate-[-90deg]",
+      to: "##{add_or_remove_mobile(id)}-chevron:not(.rotate-\\[-90deg\\])"
+    )
     |> JS.toggle(to: "##{id}-contents")
+    |> JS.toggle(to: "##{add_or_remove_mobile(id)}-contents")
   end
+
+  defp add_or_remove_mobile("mobile-" <> rest), do: rest
+  defp add_or_remove_mobile(rest), do: "mobile-#{rest}"
 
   defp slug(string) do
     string

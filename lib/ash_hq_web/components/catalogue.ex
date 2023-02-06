@@ -58,14 +58,18 @@ defmodule AshHqWeb.Components.Catalogue do
   end
 
   defp formatted_versions(versions) do
-    [{latest, _} | rest] =
-      versions
-      |> Enum.sort(&(Version.compare(&1.version, &2.version) != :lt))
-      |> Enum.map(fn version ->
-        {version.version, version.id}
-      end)
+    versions
+    |> Enum.sort(&(Version.compare(&1.version, &2.version) != :lt))
+    |> Enum.map(fn version ->
+      {version.version, version.id}
+    end)
+    |> case do
+      [{latest, _} | rest] ->
+        [{"#{latest} (latest)", "latest"} | rest]
 
-    [{"#{latest} (latest)", "latest"} | rest]
+      other ->
+        other
+    end
   end
 
   defp value(selected_versions, library_id) do

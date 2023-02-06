@@ -50,13 +50,13 @@ defmodule AshHq.Docs.Importer do
     end)
   end
 
-  def reimport_docs(library, github_sha, version \\ nil) do
+  def reimport_docs(library, opts \\ []) do
     library =
       AshHq.Docs.Library
       |> Ash.Query.filter(name == ^library)
       |> AshHq.Docs.read_one!(load: :latest_version)
 
-    version = version || library.latest_version
+    version = opts[:version] || library.latest_version
 
     import_version(
       library,
@@ -65,7 +65,7 @@ defmodule AshHq.Docs.Importer do
       library.mix_project,
       path_var(),
       version,
-      github_sha
+      opts[:github_sha]
     )
   end
 
