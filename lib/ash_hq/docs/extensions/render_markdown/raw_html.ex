@@ -23,7 +23,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.RawHTML do
 
   @encoder &HtmlEntities.encode/1
 
-  def raw_html(html_tree, options) do
+  def raw_html(html_tree, options \\ []) do
     encoder =
       case Keyword.fetch(options, :encode) do
         {:ok, true} -> @encoder
