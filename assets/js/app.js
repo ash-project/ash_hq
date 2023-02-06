@@ -229,8 +229,8 @@ window.addEventListener("phx:page-loading-start", ({ detail }) => {
     mobileSideBar.click()
   }
 
-  if (detail.kind !== 'patch' && !topBarScheduled) {
-    topBarScheduled = setTimeout(() => topbar.show(), 500);
+  if (!topBarScheduled) {
+    topBarScheduled = setTimeout(() => topbar.show(), 120);
   }
 });
 
