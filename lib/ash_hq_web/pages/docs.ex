@@ -447,16 +447,6 @@ defmodule AshHqWeb.Pages.Docs do
   def assign_libraries(socket) do
     socket = assign_library(socket)
 
-    dsls_query =
-      AshHq.Docs.Dsl
-      |> Ash.Query.sort(order: :asc)
-      |> load_for_search()
-
-    options_query =
-      AshHq.Docs.Option
-      |> Ash.Query.sort(order: :asc)
-      |> load_for_search()
-
     guides_query =
       AshHq.Docs.Guide
       |> Ash.Query.new()
@@ -475,7 +465,6 @@ defmodule AshHqWeb.Pages.Docs do
     extensions_query =
       AshHq.Docs.Extension
       |> Ash.Query.sort(order: :asc)
-      |> Ash.Query.load(options: options_query, dsls: dsls_query)
       |> load_for_search()
 
     new_libraries =
@@ -851,27 +840,57 @@ defmodule AshHqWeb.Pages.Docs do
 
   defp assign_extension(socket) do
     if socket.assigns.library_version && socket.assigns[:params]["extension"] do
-      extensions = socket.assigns.library_version.extensions
+      extension =
+        Enum.find(socket.assigns.library_version.extensions, fn extension ->
+          extension.sanitized_name == socket.assigns[:params]["extension"] ||
+            AshHqWeb.DocRoutes.sanitize_name(extension.target) ==
+              socket.assigns[:params]["extension"]
+        end)
+
+      extension =
+        if extension do
+          dsls_query =
+            AshHq.Docs.Dsl
+            |> Ash.Query.sort(order: :asc)
+            |> load_for_search()
+
+          options_query =
+            AshHq.Docs.Option
+            |> Ash.Query.sort(order: :asc)
+            |> load_for_search()
+
+          AshHq.Docs.load!(extension, dsls: dsls_query, options: options_query)
+        end
 
       assign(socket,
-        extension:
-          Enum.find(extensions, fn extension ->
-            extension.sanitized_name == socket.assigns[:params]["extension"] ||
-              AshHqWeb.DocRoutes.sanitize_name(extension.target) ==
-                socket.assigns[:params]["extension"]
-          end)
+        extension: extension
       )
     else
       if socket.assigns.library_version && socket.assigns[:params]["module"] do
-        extensions = socket.assigns.library_version.extensions
+        extension =
+          Enum.find(socket.assigns.library_version.extensions, fn extension ->
+            extension.sanitized_name == socket.assigns[:params]["module"] ||
+              AshHqWeb.DocRoutes.sanitize_name(extension.target) ==
+                socket.assigns[:params]["module"]
+          end)
+
+        extension =
+          if extension do
+            dsls_query =
+              AshHq.Docs.Dsl
+              |> Ash.Query.sort(order: :asc)
+              |> load_for_search()
+
+            options_query =
+              AshHq.Docs.Option
+              |> Ash.Query.sort(order: :asc)
+              |> load_for_search()
+
+            AshHq.Docs.load!(extension, dsls: dsls_query, options: options_query)
+          end
 
         assign(socket,
-          extension:
-            Enum.find(extensions, fn extension ->
-              extension.sanitized_name == socket.assigns[:params]["module"] ||
-                AshHqWeb.DocRoutes.sanitize_name(extension.target) ==
-                  socket.assigns[:params]["module"]
-            end)
+          extension: extension
         )
       else
         assign(socket, :extension, nil)
