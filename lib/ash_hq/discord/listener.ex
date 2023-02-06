@@ -4,7 +4,7 @@ defmodule AshHq.Discord.Listener do
   """
   use Nostrum.Consumer
 
-  # alias Nostrum.Api
+  import Bitwise
 
   def start_link do
     Consumer.start_link(__MODULE__)
@@ -75,8 +75,6 @@ defmodule AshHq.Discord.Listener do
         "all libraries"
       end
 
-    url = AshHqWeb.Endpoint.url()
-
     if item_list do
       item_list = Enum.take(item_list, 10)
 
@@ -92,25 +90,39 @@ defmodule AshHq.Discord.Listener do
       """
       Found #{count} #{result_type} in #{library}:
 
-      #{Enum.map_join(item_list, "\n", &render_search_result(&1, url))}
+      #{Enum.map_join(item_list, "\n", &render_search_result(&1))}
       """
     else
       "Something went wrong."
     end
   end
 
-  defp render_search_result(item, url) do
-    link = Path.join(url, AshHqWeb.DocRoutes.doc_link(item))
+  defp render_search_result(item) do
+    link = Path.join("https://ash-hq.org", AshHqWeb.DocRoutes.doc_link(item))
 
     "* #{item.name}: #{link}"
   end
 
   def handle_event({:INTERACTION_CREATE, %Nostrum.Struct.Interaction{} = interaction, _ws_state}) do
+    public? =
+      interaction.data.options
+      |> Enum.find_value(fn option ->
+        if option.name == "public" do
+          option.value
+        end
+      end)
+
     response = %{
       # ChannelMessageWithSource
       type: 4,
       data: %{
-        content: search_results!(interaction)
+        content: search_results!(interaction),
+        flags:
+          if public? do
+            0
+          else
+            1 <<< 6
+          end
       }
     }
 
@@ -186,6 +198,13 @@ defmodule AshHq.Discord.Listener do
                 value: name
               }
             end)
+        },
+        %{
+          # ApplicationCommandType::STRING
+          type: 5,
+          name: "public",
+          description: "If the results should be shown publicly in the channel",
+          required: false
         }
       ]
     }
