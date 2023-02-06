@@ -104,13 +104,14 @@ defmodule AshHq.Discord.Listener do
   end
 
   def handle_event({:INTERACTION_CREATE, %Nostrum.Struct.Interaction{} = interaction, _ws_state}) do
-    public? =
+    public =
       interaction.data.options
       |> Enum.find_value(fn option ->
         if option.name == "public" do
           option.value
         end
       end)
+      |> IO.inspect()
 
     response = %{
       # ChannelMessageWithSource
@@ -118,10 +119,10 @@ defmodule AshHq.Discord.Listener do
       data: %{
         content: search_results!(interaction),
         flags:
-          if public? do
-            0
+          if public == "True" do
+            1 <<< 2
           else
-            1 <<< 6
+            1 <<< 6 ||| 1 <<< 2
           end
       }
     }
@@ -200,7 +201,7 @@ defmodule AshHq.Discord.Listener do
             end)
         },
         %{
-          # ApplicationCommandType::STRING
+          # ApplicationCommandType::Boolean
           type: 5,
           name: "public",
           description: "If the results should be shown publicly in the channel",
