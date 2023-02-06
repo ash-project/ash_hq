@@ -52,6 +52,8 @@ defmodule AshHq.MixProject do
       # Discord
       {:nostrum, github: "zachdaniel/nostrum"},
       {:cowlib, "~> 2.11", hex: :remedy_cowlib, override: true},
+      # Clustering
+      {:libcluster, "~> 3.3"},
       # UI
       {:tails, "~> 0.1"},
       {:sunflower_ui, github: "zachdaniel/sunflower_ui"},

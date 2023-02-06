@@ -10,6 +10,7 @@ processes = []
   release_command = "_build/prod/rel/ash_hq/bin/ash_hq eval 'AshHq.Release.migrate'"
   
 [env]
+  RELEASE_COOKIE = "VsipafjUVIYVpiYiljPg6DNZB8XiSnEf4zLi8WOf9bAU0XK7HuHQqA=="
 
 [[services]]
   internal_port = 4000
