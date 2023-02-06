@@ -111,7 +111,6 @@ defmodule AshHq.Discord.Listener do
           option.value
         end
       end)
-      |> IO.inspect()
 
     response = %{
       # ChannelMessageWithSource
