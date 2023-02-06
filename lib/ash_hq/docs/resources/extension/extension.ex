@@ -37,6 +37,8 @@ defmodule AshHq.Docs.Extension do
       allow_nil? false
     end
 
+    attribute :module, :string
+
     timestamps()
   end
 

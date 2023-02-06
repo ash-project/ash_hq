@@ -154,68 +154,152 @@ defmodule AshHqWeb.Components.Search do
   end
 
   defp render_item_type(assigns, item) do
-    icon_classes = "h-4 w-4 flex-none mt-1 mx-1"
-
-    case item_type(item) do
-      "Forum" ->
-        ~F"""
-        <Heroicons.Outline.UserGroupIcon class={icon_classes} />
-        """
-
-      "Mix Task" ->
-        ~F"""
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class={icon_classes}
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"
-          />
-        </svg>
-        """
-
+    item
+    |> item_type()
+    |> case do
       "Function" ->
         case item.type do
           type when type in [:function, :macro] ->
-            ~F"""
-            <Heroicons.Outline.CodeIcon class={icon_classes} />
-            """
+            "Function"
 
           :callback ->
-            ~F"""
-            <Heroicons.Outline.AtSymbolIcon class={icon_classes} />
-            """
+            "Callback"
 
           :type ->
-            ~F"""
-            <Heroicons.Outline.InformationCircleIcon class={icon_classes} />
-            """
+            "Type"
         end
 
-      "Module" ->
-        ~F"""
-        <Heroicons.Outline.CodeIcon class={icon_classes} />
-        """
-
-      type when type in ["Dsl", "Option"] ->
-        AshHqWeb.Components.DocSidebar.render_icon(assigns, item.extension_type)
-
       "Guide" ->
-        ~F"""
-        <Heroicons.Outline.BookOpenIcon class={icon_classes} />
-        """
+        case item.category do
+          "Tutorials" ->
+            "Tutorial"
 
-      _ ->
-        ~F"""
-        <Heroicons.Outline.PuzzleIcon class={icon_classes} />
-        """
+          "How To" ->
+            "How To"
+
+          "Topics" ->
+            "Topic"
+
+          _ ->
+            "Guide"
+        end
+
+      "Extension" ->
+        item.target || "Extension"
+
+      other ->
+        other
     end
+    |> icon_for_type("h-4 w-4 flex-none mt-1 mx-1", assigns)
+  end
+
+  def icon_for_type("Ash.Registry", icon_classes, assigns) do
+    ~F"""
+    <Heroicons.Outline.ViewListIcon class={icon_classes} />
+    """
+  end
+
+  def icon_for_type("Ash.Resource", icon_classes, assigns) do
+    ~F"""
+    <Heroicons.Outline.ServerIcon class={icon_classes} />
+    """
+  end
+
+  def icon_for_type("Ash.Api", icon_classes, assigns) do
+    ~F"""
+    <Heroicons.Outline.SwitchHorizontalIcon class={icon_classes} />
+    """
+  end
+
+  def icon_for_type("Ash.Flow", icon_classes, assigns) do
+    ~F"""
+    <Heroicons.Outline.MapIcon class={icon_classes} />
+    """
+  end
+
+  def icon_for_type("Tutorial", icon_classes, assigns) do
+    ~F"""
+    <Heroicons.Outline.AcademicCapIcon class={icon_classes} />
+    """
+  end
+
+  def icon_for_type("How To", icon_classes, assigns) do
+    ~F"""
+    <Heroicons.Outline.PresentationChartBarIcon class={icon_classes} />
+    """
+  end
+
+  def icon_for_type("Topic", icon_classes, assigns) do
+    ~F"""
+    <Heroicons.Outline.BookOpenIcon class={icon_classes} />
+    """
+  end
+
+  def icon_for_type("Forum", icon_classes, assigns) do
+    ~F"""
+    <Heroicons.Outline.UserGroupIcon class={icon_classes} />
+    """
+  end
+
+  def icon_for_type("Mix Task", icon_classes, assigns) do
+    ~F"""
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class={icon_classes}
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"
+      />
+    </svg>
+    """
+  end
+
+  def icon_for_type("Function", icon_classes, assigns) do
+    ~F"""
+    <Heroicons.Outline.CodeIcon class={icon_classes} />
+    """
+  end
+
+  def icon_for_type("Callback", icon_classes, assigns) do
+    ~F"""
+    <Heroicons.Outline.AtSymbolIcon class={icon_classes} />
+    """
+  end
+
+  def icon_for_type("Type", icon_classes, assigns) do
+    ~F"""
+    <Heroicons.Outline.InformationCircleIcon class={icon_classes} />
+    """
+  end
+
+  def icon_for_type("Module", icon_classes, assigns) do
+    ~F"""
+    <Heroicons.Outline.CodeIcon class={icon_classes} />
+    """
+  end
+
+  def icon_for_type(type, icon_classes, assigns) when type in ["Dsl", "Option"] do
+    ~F"""
+    <Heroicons.Outline.PuzzleIcon class={icon_classes} />
+    """
+  end
+
+  def icon_for_type("Guide", icon_classes, assigns) do
+    ~F"""
+    <Heroicons.Outline.BookOpenIcon class={icon_classes} />
+    """
+  end
+
+  def icon_for_type(_, icon_classes, assigns) do
+    ~F"""
+    <Heroicons.Outline.PuzzleIcon class={icon_classes} />
+    """
   end
 
   defp toggle_libraries(js \\ %JS{}) do

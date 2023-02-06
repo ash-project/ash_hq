@@ -106,11 +106,10 @@ defmodule Utils do
   end
 
   def build(extension, order) do
-    extension_name = extension.name
-
     %{
-      name: extension_name,
+      name: extension.name,
       target: extension[:target],
+      module: inspect(extension.module),
       default_for_target: extension[:default_for_target?] || false,
       type: extension[:type],
       order: order,

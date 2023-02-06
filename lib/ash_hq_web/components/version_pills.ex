@@ -27,7 +27,7 @@ defmodule AshHqWeb.Components.VersionPills do
           </div>
         {/if}
       {/for}
-      {#if @editable && can_be_added?(@selected_versions)}
+      {#if @editable}
         {#if @toggle}
           <button :on-click={@toggle}>
             <Heroicons.Solid.PlusIcon class="h-4 w-4" />
@@ -50,10 +50,6 @@ defmodule AshHqWeb.Components.VersionPills do
       _ ->
         {:ok, assign(socket, assigns)}
     end
-  end
-
-  defp can_be_added?(selected_versions) do
-    Enum.any?(selected_versions, fn {_, val} -> val in [nil, ""] end)
   end
 
   defp selected_version(library, selected_version) do

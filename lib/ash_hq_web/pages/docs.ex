@@ -36,6 +36,7 @@ defmodule AshHqWeb.Pages.Docs do
   data(positional_options, :list)
   data(description, :string)
   data(title, :string)
+  data(sidebar_data, :any)
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -62,16 +63,10 @@ defmodule AshHqWeb.Pages.Docs do
           <DocSidebar
             id="mobile-sidebar"
             class="max-w-sm"
-            remove_version={@remove_version}
             libraries={@libraries}
-            extension={@extension}
-            module={@module}
-            mix_task={@mix_task}
-            guide={@guide}
-            library={@library}
-            library_version={@library_version}
+            remove_version={@remove_version}
             selected_versions={@selected_versions}
-            dsl={@dsl}
+            sidebar_data={@sidebar_data}
           />
         </div>
       </span>
@@ -80,16 +75,10 @@ defmodule AshHqWeb.Pages.Docs do
           <DocSidebar
             id="sidebar"
             class="hidden xl:block w-80"
-            remove_version={@remove_version}
-            module={@module}
-            mix_task={@mix_task}
             libraries={@libraries}
-            extension={@extension}
-            guide={@guide}
-            library={@library}
-            library_version={@library_version}
+            remove_version={@remove_version}
             selected_versions={@selected_versions}
-            dsl={@dsl}
+            sidebar_data={@sidebar_data}
           />
         </div>
         <div
@@ -343,6 +332,7 @@ defmodule AshHqWeb.Pages.Docs do
        |> assign(assigns)
        |> assign_libraries()
        |> load_docs()
+       |> assign_sidebar_content()
        |> assign(:loaded_once?, true)}
     end
   end
@@ -543,6 +533,207 @@ defmodule AshHqWeb.Pages.Docs do
     |> assign_dsl()
     |> assign_fallback_guide()
     |> assign_docs()
+  end
+
+  defp assign_sidebar_content(socket) do
+    sidebar_data = [
+      %{
+        name: "Guides",
+        id: "guides",
+        categories:
+          guides_by_category_and_library(
+            socket.assigns[:libraries],
+            socket.assigns[:library_version],
+            socket.assigns[:selected_versions],
+            socket.assigns[:guide]
+          )
+      },
+      %{
+        name: "DSLs & Extensions",
+        id: "dsls",
+        categories:
+          get_extensions(
+            socket.assigns[:libraries],
+            socket.assigns[:library_version],
+            socket.assigns[:selected_versions],
+            socket.assigns[:extension]
+          )
+      },
+      %{
+        name: "Code",
+        id: "code",
+        categories:
+          modules_by_category_and_library(
+            socket.assigns[:libraries],
+            socket.assigns[:library_version],
+            socket.assigns[:selected_versions],
+            socket.assigns[:module]
+          )
+      },
+      %{
+        name: "Mix Tasks",
+        id: "mix-tasks",
+        categories:
+          mix_tasks_by_category_and_library(
+            socket.assigns[:libraries],
+            socket.assigns[:library_version],
+            socket.assigns[:selected_versions],
+            socket.assigns[:mix_task]
+          )
+      }
+    ]
+
+    assign(socket, sidebar_libraries: socket.assigns.libraries, sidebar_data: sidebar_data)
+  end
+
+  @start_guides ["Tutorials", "Topics", "How To", "Misc"]
+
+  defp guides_by_category_and_library(libraries, library_version, selected_versions, active_guide) do
+    libraries
+    |> Enum.map(&{&1, selected_version(&1, library_version, selected_versions)})
+    |> Enum.filter(fn {_library, version} -> version != nil end)
+    |> Enum.sort_by(fn {library, _version} -> library.order end)
+    |> Enum.flat_map(fn {library, %{guides: guides}} ->
+      guides
+      |> Enum.sort_by(& &1.order)
+      |> Enum.group_by(& &1.category, fn guide ->
+        %{
+          id: guide.id,
+          name: guide.name,
+          to: DocRoutes.doc_link(guide, selected_versions),
+          active?: active_guide && active_guide.id == guide.id
+        }
+      end)
+      |> Enum.map(fn {category, guides} -> {category, {library.display_name, guides}} end)
+    end)
+    |> Enum.group_by(&elem(&1, 0), &elem(&1, 1))
+    |> partially_alphabetically_sort(@start_guides, [])
+  end
+
+  @last_categories ["Errors"]
+
+  defp modules_by_category_and_library(
+         libraries,
+         library_version,
+         selected_versions,
+         active_module
+       ) do
+    libraries
+    |> Enum.map(&{&1, selected_version(&1, library_version, selected_versions)})
+    |> Enum.filter(fn {_library, version} -> version != nil end)
+    |> Enum.sort_by(fn {library, _version} -> library.order end)
+    |> Enum.flat_map(fn {library, %{modules: modules}} ->
+      modules
+      |> Enum.sort_by(& &1.order)
+      |> Enum.group_by(& &1.category, fn module ->
+        %{
+          id: module.id,
+          name: module.name,
+          to: DocRoutes.doc_link(module, selected_versions),
+          active?: active_module && active_module.id == module.id
+        }
+      end)
+      |> Enum.map(fn {category, modules} -> {category, {library.display_name, modules}} end)
+    end)
+    |> Enum.group_by(&elem(&1, 0), &elem(&1, 1))
+    |> partially_alphabetically_sort([], @last_categories)
+  end
+
+  defp mix_tasks_by_category_and_library(
+         libraries,
+         library_version,
+         selected_versions,
+         active_mix_task
+       ) do
+    libraries
+    |> Enum.map(&{&1, selected_version(&1, library_version, selected_versions)})
+    |> Enum.filter(fn {_library, version} -> version != nil end)
+    |> Enum.sort_by(fn {library, _version} -> library.order end)
+    |> Enum.flat_map(fn {library, %{mix_tasks: mix_tasks}} ->
+      mix_tasks
+      |> Enum.sort_by(& &1.order)
+      |> Enum.group_by(& &1.category, fn mix_task ->
+        %{
+          id: mix_task.id,
+          name: mix_task.name,
+          to: DocRoutes.doc_link(mix_task, selected_versions),
+          active?: active_mix_task && active_mix_task.id == mix_task.id
+        }
+      end)
+      |> Enum.map(fn {category, mix_tasks} -> {category, {library.display_name, mix_tasks}} end)
+    end)
+    |> Enum.group_by(&elem(&1, 0), &elem(&1, 1))
+    |> partially_alphabetically_sort([], @last_categories)
+  end
+
+  defp selected_version(library, library_version, selected_versions) do
+    selected_version = selected_versions[library.id]
+
+    if library_version && library_version.library_id == library.id do
+      library_version
+    else
+      if selected_version == "latest" do
+        AshHqWeb.Helpers.latest_version(library)
+      else
+        if selected_version not in [nil, ""] do
+          Enum.find(library.versions, &(&1.id == selected_version))
+        end
+      end
+    end
+  end
+
+  defp partially_alphabetically_sort(keyed_list, first, last) do
+    {first_items, rest} =
+      Enum.split_with(keyed_list, fn {key, _} ->
+        key in first
+      end)
+
+    {last_items, rest} =
+      Enum.split_with(rest, fn {key, _} ->
+        key in last
+      end)
+
+    first_items
+    |> Enum.sort_by(fn {key, _} ->
+      Enum.find_index(first, &(&1 == key))
+    end)
+    |> Enum.concat(Enum.sort_by(rest, &elem(&1, 0)))
+    |> Enum.concat(
+      Enum.sort_by(last_items, fn {key, _} ->
+        Enum.find_index(last, &(&1 == key))
+      end)
+    )
+  end
+
+  def slug(string) do
+    string
+    |> String.downcase()
+    |> String.replace(" ", "_")
+    |> String.replace(~r/[^a-z0-9-_]/, "-")
+  end
+
+  @target_order ["Ash.Resource", "Ash.Api", "Ash.Flow", "Ash.Registry"]
+
+  defp get_extensions(libraries, library_version, selected_versions, active_extension) do
+    libraries
+    |> Enum.map(&{&1, selected_version(&1, library_version, selected_versions)})
+    |> Enum.filter(fn {_library, version} -> version != nil end)
+    |> Enum.sort_by(fn {library, _version} -> library.order end)
+    |> Enum.flat_map(fn {library, %{extensions: extensions}} ->
+      extensions
+      |> Enum.sort_by(& &1.order)
+      |> Enum.group_by(& &1.target, fn extension ->
+        %{
+          id: extension.id,
+          name: extension.module || extension.name,
+          to: DocRoutes.doc_link(extension, selected_versions),
+          active?: active_extension && active_extension.id == extension.id
+        }
+      end)
+      |> Enum.map(fn {target, extensions} -> {target, {library.display_name, extensions}} end)
+    end)
+    |> Enum.group_by(&elem(&1, 0), &elem(&1, 1))
+    |> partially_alphabetically_sort(@target_order, [])
   end
 
   defp assign_fallback_guide(socket) do

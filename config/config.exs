@@ -58,11 +58,6 @@ config :ash, :use_all_identities_in_manage_relationship?, false
 config :swoosh, :api_client, false
 config :sunflower_ui, :tails, AshHqWeb.Tails
 
-config :surface, :components, [
-  {AshHqWeb.Components.TreeView.Item, propagate_context_to_slots: true},
-  {AshHqWeb.Components.TreeView, propagate_context_to_slots: true}
-]
-
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.14.0",

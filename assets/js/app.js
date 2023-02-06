@@ -23,12 +23,19 @@ import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar";
 
-function cookiesAreAllowed() {
-  const consentStatus = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("cookieconsent_status="));
+function setCookie(name, value) {
+  document.cookie = name + "=" + value + ";path=/;" + "expires=Fri, 31 Dec 9999 23:59:59 GMT;";
+}
 
-  return consentStatus === "cookieconsent_status=allow";
+function getCookie(name) {
+  const cookie = document.cookie.split("; ").find((row) => row.startsWith(name + "="))
+  if(cookie) {
+    return cookie.split("=")[1]
+  }
+}
+
+function cookiesAreAllowed() {
+  return getCookie("cookieconsent_status") === "allow"
 }
 
 function get_platform() {
@@ -55,13 +62,10 @@ const Hooks = {};
 
 let configuredThemeRow;
 if (cookiesAreAllowed()) {
-  configuredThemeRow = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("theme="));
+  configuredThemeRow = getCookie("theme")
 }
 
 if (!configuredThemeRow) {
-  let theme;
   if (
     window.matchMedia &&
     window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -77,9 +81,7 @@ window
   .addEventListener("change", (event) => {
     let configuredThemeRow;
     if (cookiesAreAllowed()) {
-      configuredThemeRow = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("theme="));
+      getCookie("theme")
     }
 
     if (!configuredThemeRow || configuredThemeRow === "theme=system") {
@@ -119,7 +121,7 @@ function setTheme(theme, set) {
   }
 
   if (set && cookiesAreAllowed()) {
-    document.cookie = "theme" + "=" + theme + ";path=/";
+    setCookie("theme", theme)
   }
 }
 
@@ -271,14 +273,15 @@ window.addEventListener("phx:selected-versions", (e) => {
     const cookie = Object.keys(e.detail)
       .map((key) => `${key}:${e.detail[key]}`)
       .join(",");
-    document.cookie = "selected_versions" + "=" + cookie + ";path=/";
+
+    setCookie("selected_versions", cookie)
   }
 });
 
 window.addEventListener("phx:selected-types", (e) => {
   if (cookiesAreAllowed()) {
     const cookie = e.detail.types.join(",");
-    document.cookie = "selected_types" + "=" + cookie + ";path=/";
+    setCookies("selected_types", cookie)
   }
 });
 
@@ -302,7 +305,7 @@ window.addEventListener("keydown", (event) => {
 
 window.addEventListener("phx:catalogue-call-to-action-dismissed", (event) => {
   if (cookiesAreAllowed()) {
-    document.cookie = "catalogue_call_to_action_dismissed=true;path=/";
+    setCookie("catalogue_call_to_action_dismissed", "true")
   }
 });
 

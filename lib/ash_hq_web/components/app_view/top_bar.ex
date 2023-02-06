@@ -7,7 +7,7 @@ defmodule AshHqWeb.Components.AppView.TopBar do
   prop(configured_theme, :string, required: true)
   prop(current_user, :any)
 
-  alias AshHqWeb.Components.SearchBar
+  alias AshHqWeb.Components.{DocSidebar, SearchBar}
   alias AshHqWeb.Router.Helpers, as: Routes
   alias Phoenix.LiveView.JS
   alias Surface.Components.{Form, LivePatch}
@@ -42,7 +42,7 @@ defmodule AshHqWeb.Components.AppView.TopBar do
 
         <LivePatch
           to="/docs/guides/ash/latest/tutorials/get-started"
-          opts={title: "Documentation"}
+          opts={title: "Documentation", phx_click: DocSidebar.mark_active("get-started-guide")}
           class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700 hidden md:block"
         >
           Documentation
