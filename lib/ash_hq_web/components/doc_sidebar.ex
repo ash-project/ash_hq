@@ -31,15 +31,15 @@ defmodule AshHqWeb.Components.DocSidebar do
           remove_version={@remove_version}
           selected_versions={@selected_versions}
         />
-        <ul class="ml-1">
+        <ul class="ml-2 mt-4">
           {#for %{name: name, id: id, categories: categories} <- @sidebar_data}
-            <li id={"#{@id}-#{id}"}>
+            <li id={"#{@id}-#{id}"} class="mb-4">
               <button
                 class="flex flex-row items-start w-full text-left rounded-lg hover:bg-base-light-100 dark:hover:bg-base-dark-750"
                 phx-click={collapse("#{@id}-#{id}")}
               >
                 <div
-                  class={"chevron mr-0.5 mt-1.5 origin-center", "rotate-[-90deg]": !has_active?(categories)}
+                  class={"chevron mr-1.5 mt-1.5 origin-center", "rotate-[-90deg]": !has_active?(categories)}
                   id={"#{@id}-#{id}-chevron"}
                 >
                   <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
@@ -47,18 +47,18 @@ defmodule AshHqWeb.Components.DocSidebar do
                 {name}
               </button>
               <ul
-                class="ml-2"
+                class="ml-4"
                 id={"#{@id}-#{id}-contents"}
                 style={if !has_active?(categories), do: "display: none", else: ""}
               >
                 {#for {category, items} <- categories}
-                  <li class="pt-1" id={"#{@id}-#{id}-#{slug(category)}"}>
+                  <li class="pt-1 pl-0.5" id={"#{@id}-#{id}-#{slug(category)}"}>
                     <button
                       class="flex flex-row items-start w-full text-left rounded-lg hover:bg-base-light-100 dark:hover:bg-base-dark-750"
                       phx-click={collapse("#{@id}-#{id}-#{slug(category)}")}
                     >
                       <div
-                        class={"chevron mr-0.5 mt-1.5 origin-center", "rotate-[-90deg]": !has_active?(items)}
+                        class={"chevron mr-1.5 mt-1.5 origin-center", "rotate-[-90deg]": !has_active?(items)}
                         id={"#{@id}-#{id}-#{slug(category)}-chevron"}
                       >
                         <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
@@ -67,15 +67,15 @@ defmodule AshHqWeb.Components.DocSidebar do
                     </button>
 
                     <ul
-                      class="ml-2"
+                      class="ml-4"
                       id={"#{@id}-#{id}-#{slug(category)}-contents"}
                       style={if !has_active?(items), do: "display: none", else: ""}
                     >
                       {#for {library, items} <- items}
-                        <li class="pt-1" id={"#{@id}-#{id}-#{slug(category)}-#{slug(library)}"}>
+                        <li class="pt-1 pl-0.5" id={"#{@id}-#{id}-#{slug(category)}-#{slug(library)}"}>
                           <span class="text-base-light-500 dark:text-base-dark-300">{library}</span>
 
-                          <ul class="ml-2">
+                          <ul>
                             {#for %{name: item_name, to: to, id: item_id, active?: active?} <- items}
                               {id = id(category, library, item_name, id, item_id, @id)
                               nil}
@@ -91,7 +91,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                                   opts={phx_click: mark_active(id)}
                                   class="flex flex-row items-start w-full text-left text-base-light-900 dark:text-base-dark-100"
                                 >
-                                  {render_icon(name, category, item_name, "h-4 w-4 flex-none mt-1 mx-1", assigns)}
+                                  {render_icon(name, category, item_name, "h-4 w-4 flex-none mt-1 mr-1.5", assigns)}
                                   {item_name}
                                 </LivePatch>
                               </li>
