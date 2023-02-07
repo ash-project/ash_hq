@@ -58,11 +58,12 @@ defmodule AshHqWeb.Pages.Docs do
       <span class="grid xl:hidden z-40">
         <div
           id="mobile-sidebar-container"
-          class="hidden fixed transition sidebar-container overflow-y-auto z-40"
+          class="hidden fixed transition sidebar-container overflow-y-auto z-40 border-r border-b border-base-light-300 dark:border-base-dark-700"
+          :on-click-away={hide_sidebar()}
         >
           <DocSidebar
             id="mobile-sidebar"
-            class="max-w-sm"
+            class="max-w-sm p-2 pr-4"
             libraries={@libraries}
             remove_version={@remove_version}
             selected_versions={@selected_versions}
