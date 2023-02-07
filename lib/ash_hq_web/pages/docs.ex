@@ -12,31 +12,32 @@ defmodule AshHqWeb.Pages.Docs do
   require Logger
   require Ash.Query
 
-  prop(change_versions, :event, required: true)
-  prop(selected_versions, :map, required: true)
-  prop(libraries, :list, default: [])
-  prop(uri, :string)
-  prop(remove_version, :event)
-  prop(add_version, :event)
-  prop(change_version, :event)
-  prop(params, :map, required: true)
-  prop(show_catalogue_call_to_action, :boolean)
+  prop change_versions, :event, required: true
+  prop selected_versions, :map, required: true
+  prop libraries, :list, default: []
+  prop uri, :string
+  prop remove_version, :event
+  prop add_version, :event
+  prop change_version, :event
+  prop params, :map, required: true
+  prop show_catalogue_call_to_action, :boolean
 
-  data(library, :any)
-  data(extension, :any)
-  data(docs, :any)
-  data(library_version, :any)
-  data(guide, :any)
-  data(doc_path, :list, default: [])
-  data(dsls, :list, default: [])
-  data(dsl, :any)
-  data(options, :list, default: [])
-  data(module, :any)
-  data(mix_task, :any)
-  data(positional_options, :list)
-  data(description, :string)
-  data(title, :string)
-  data(sidebar_data, :any)
+  data library, :any
+  data extension, :any
+  data docs, :any
+  data library_version, :any
+  data guide, :any
+  data doc_path, :list, default: []
+  data dsls, :list, default: []
+  data dsl, :any
+  data options, :list, default: []
+  data module, :any
+  data mix_task, :any
+  data positional_options, :list
+  data description, :string
+  data title, :string
+  data sidebar_data, :any
+  data not_found, :boolean, default: false
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -84,6 +85,16 @@ defmodule AshHqWeb.Pages.Docs do
         </div>
         <div
           id="docs-window"
+          :if={@not_found}
+          class="w-full shrink prose prose-td:pl-0 max-w-6xl bg-white dark:bg-base-dark-850 dark:prose-invert md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden"
+        >
+          <div class="w-full nav-anchor text-black dark:text-white relative py-4 md:py-auto">
+            We couldn't find that page.
+          </div>
+        </div>
+        <div
+          id="docs-window"
+          :if={!@not_found}
           class="w-full shrink prose prose-td:pl-0 max-w-6xl bg-white dark:bg-base-dark-850 dark:prose-invert md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden"
         >
           <div
@@ -523,6 +534,9 @@ defmodule AshHqWeb.Pages.Docs do
     |> assign_dsl()
     |> assign_fallback_guide()
     |> assign_docs()
+  rescue
+    _e in Ash.Error.Query.NotFound ->
+      assign(socket, :not_found, true)
   end
 
   defp assign_sidebar_content(socket) do
@@ -789,9 +803,10 @@ defmodule AshHqWeb.Pages.Docs do
            &(&1.name == socket.assigns.params["library"])
          ) do
       nil ->
-        socket
-        |> assign(:library, nil)
-        |> assign(:library_version, nil)
+        assign(socket,
+          not_found: true,
+          library: Enum.find(socket.assigns.libraries, &(&1.name == "ash"))
+        )
 
       library ->
         socket =
@@ -808,7 +823,12 @@ defmodule AshHqWeb.Pages.Docs do
                   )
               end
 
-            if library_version do
+            if is_nil(library_version) do
+              assign(socket,
+                not_found: true,
+                library_version: AshHqWeb.Helpers.latest_version(library)
+              )
+            else
               socket =
                 assign(
                   socket,
@@ -826,10 +846,8 @@ defmodule AshHqWeb.Pages.Docs do
                 |> assign(selected_versions: new_selected_versions)
                 |> push_event("selected-versions", new_selected_versions)
               else
-                socket
+                assign(socket, :library_version, nil)
               end
-            else
-              assign(socket, :library_version, nil)
             end
           else
             assign(socket, :library_version, nil)
@@ -846,22 +864,21 @@ defmodule AshHqWeb.Pages.Docs do
           extension.sanitized_name == socket.assigns[:params]["extension"] ||
             AshHqWeb.DocRoutes.sanitize_name(extension.target) ==
               socket.assigns[:params]["extension"]
-        end)
+        end) ||
+          raise Ash.Error.Query.NotFound,
+            primary_key: %{sanitized_name: socket.assigns[:params]["extension"]}
 
-      extension =
-        if extension do
-          dsls_query =
-            AshHq.Docs.Dsl
-            |> Ash.Query.sort(order: :asc)
-            |> load_for_search()
+      dsls_query =
+        AshHq.Docs.Dsl
+        |> Ash.Query.sort(order: :asc)
+        |> load_for_search()
 
-          options_query =
-            AshHq.Docs.Option
-            |> Ash.Query.sort(order: :asc)
-            |> load_for_search()
+      options_query =
+        AshHq.Docs.Option
+        |> Ash.Query.sort(order: :asc)
+        |> load_for_search()
 
-          AshHq.Docs.load!(extension, dsls: dsls_query, options: options_query)
-        end
+      extension = AshHq.Docs.load!(extension, dsls: dsls_query, options: options_query)
 
       assign(socket,
         extension: extension
@@ -935,7 +952,9 @@ defmodule AshHqWeb.Pages.Docs do
           Enum.find(
             socket.assigns.extension.dsls,
             &(&1.sanitized_path == path)
-          )
+          ) ||
+            raise Ash.Error.Query.NotFound,
+              primary_key: %{sanitized_path: socket.assigns[:params]["dsl_path"]}
 
         socket
         |> assign(
@@ -952,7 +971,9 @@ defmodule AshHqWeb.Pages.Docs do
         Enum.find(
           socket.assigns.library_version.modules,
           &(&1.sanitized_name == socket.assigns[:params]["module"])
-        )
+        ) ||
+          raise Ash.Error.Query.NotFound,
+            primary_key: %{sanitized_name: socket.assigns[:params]["module"]}
 
       functions_query =
         AshHq.Docs.Function
@@ -975,7 +996,9 @@ defmodule AshHqWeb.Pages.Docs do
         Enum.find(
           socket.assigns.library_version.mix_tasks,
           &(&1.sanitized_name == socket.assigns[:params]["mix_task"])
-        )
+        ) ||
+          raise Ash.Error.Query.NotFound,
+            primary_key: %{sanitized_name: socket.assigns[:params]["mix_task"]}
 
       assign(socket,
         mix_task: mix_task
