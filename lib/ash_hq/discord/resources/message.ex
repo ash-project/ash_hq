@@ -52,6 +52,10 @@ defmodule AshHq.Discord.Message do
   postgres do
     table "discord_messages"
     repo AshHq.Repo
+
+    references do
+      reference :thread, on_delete: :delete, on_update: :update
+    end
   end
 
   actions do

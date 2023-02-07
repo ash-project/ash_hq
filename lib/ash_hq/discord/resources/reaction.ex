@@ -27,6 +27,10 @@ defmodule AshHq.Discord.Reaction do
   postgres do
     table "discord_reactions"
     repo AshHq.Repo
+
+    references do
+      reference :message, on_delete: :delete, on_update: :update
+    end
   end
 
   actions do

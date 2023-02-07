@@ -23,6 +23,10 @@ defmodule AshHq.Discord.Attachment do
   postgres do
     table "discord_attachments"
     repo AshHq.Repo
+
+    references do
+      reference :message, on_delete: :delete, on_update: :update
+    end
   end
 
   actions do
