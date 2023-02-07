@@ -26,6 +26,6 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessor do
     |> HeadingAutolinker.autolink(add_ids?)
     |> TableOfContentsGenerator.generate(add_table_of_contents?)
     |> Highlighter.highlight(libraries, current_library, current_module)
-    |> RawHTML.raw_html()
+    |> RawHTML.raw_html(pretty: true)
   end
 end
