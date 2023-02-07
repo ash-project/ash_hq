@@ -846,7 +846,7 @@ defmodule AshHqWeb.Pages.Docs do
                 |> assign(selected_versions: new_selected_versions)
                 |> push_event("selected-versions", new_selected_versions)
               else
-                assign(socket, :library_version, nil)
+                socket
               end
             end
           else
