@@ -22,7 +22,10 @@ defmodule AshHqWeb.Components.Docs.DocPath do
             <Heroicons.Outline.ChevronRightIcon class="w-3 h-3" />
           {/for}
           <span class="dark:text-white overflow-hidden" phx-hook="TextOverflow" id="doc-path">
-            <CalloutText text={List.last(path)} class="overflow-hidden block text-ellipsis whitespace-nowrap" />
+            <CalloutText
+              text={List.last(path)}
+              class="overflow-hidden block text-ellipsis whitespace-nowrap"
+            />
           </span>
       {/case}
     </div>

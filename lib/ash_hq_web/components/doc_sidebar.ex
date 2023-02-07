@@ -16,11 +16,7 @@ defmodule AshHqWeb.Components.DocSidebar do
 
   def render(assigns) do
     ~F"""
-    <aside
-      id={@id}
-      class={"grid z-40 bg-white dark:bg-base-dark-850", @class}
-      aria-label="Sidebar"
-    >
+    <aside id={@id} class={"grid z-40 bg-white dark:bg-base-dark-850", @class} aria-label="Sidebar">
       <div class="flex flex-col px-1">
         <div class="text-black dark:text-white text-sm w-full px-2 mb-2">
           Including Libraries:
