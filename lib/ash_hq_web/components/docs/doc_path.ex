@@ -8,7 +8,7 @@ defmodule AshHqWeb.Components.Docs.DocPath do
 
   def render(assigns) do
     ~F"""
-    <div class="flex flex-row space-x-1 items-center">
+    <div class="flex flex-row space-x-1 items-center overflow-hidden">
       {#case @doc_path}
         {#match [item]}
           <div class="dark:text-white">
@@ -21,8 +21,8 @@ defmodule AshHqWeb.Components.Docs.DocPath do
             </span>
             <Heroicons.Outline.ChevronRightIcon class="w-3 h-3" />
           {/for}
-          <span class="dark:text-white">
-            <CalloutText text={List.last(path)} />
+          <span class="dark:text-white overflow-hidden" phx-hook="TextOverflow" id="doc-path">
+            <CalloutText text={List.last(path)} class="overflow-hidden block text-ellipsis whitespace-nowrap" />
           </span>
       {/case}
     </div>

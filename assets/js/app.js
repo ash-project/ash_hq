@@ -185,7 +185,7 @@ Hooks.RightNav = {
   },
 };
 
-Hooks.TableOfContentsTextOverflow = {
+Hooks.TextOverflow = {
   mounted() {
     this.setTitlesForOverflowingLinks(this.el);
   },
@@ -193,13 +193,15 @@ Hooks.TableOfContentsTextOverflow = {
     this.setTitlesForOverflowingLinks(this.el);
   },
   setTitlesForOverflowingLinks(selector) {
-    for (elem of selector.querySelectorAll("a")) {
+    for (elem of selector.querySelectorAll("a, span.text-ellipsis")) {
       if (elem.offsetWidth < elem.scrollWidth) {
         elem.setAttribute("title", elem.innerHTML.trim());
       }
     }
   },
 };
+
+Hooks.TableOfContentsTextOverflow = Hooks.TextOverflow;
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")

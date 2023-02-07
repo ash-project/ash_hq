@@ -18,7 +18,7 @@ defmodule AshHqWeb.Components.DocSidebar do
     ~F"""
     <aside
       id={@id}
-      class={"grid pb-36 z-40 bg-white dark:bg-base-dark-850", @class}
+      class={"grid z-40 bg-white dark:bg-base-dark-850", @class}
       aria-label="Sidebar"
     >
       <div class="flex flex-col px-1">

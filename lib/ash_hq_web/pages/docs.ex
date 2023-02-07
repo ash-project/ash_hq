@@ -46,8 +46,8 @@ defmodule AshHqWeb.Pages.Docs do
         <meta property="og:title" content={@title}>
         <meta property="og:description" content={@description}>
       </head>
-      <div class="xl:hidden sticky top-20 z-40 h-14 bg-white dark:bg-base-dark-850 flex flex-row justify-start w-full space-x-12 items-center border-b border-t border-base-light-300 dark:border-base-dark-700 py-3">
-        <button class="dark:hover:text-base-dark-600" phx-click={show_sidebar()}>
+      <div class="xl:hidden sticky top-20 z-40 h-14 bg-white dark:bg-base-dark-850 flex flex-row justify-start w-full space-x-6 items-center border-b border-base-light-300 dark:border-base-dark-700 py-3">
+        <button phx-click={show_sidebar()}>
           <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
         </button>
         <button id={"#{@id}-hide"} class="hidden" phx-click={hide_sidebar()} />

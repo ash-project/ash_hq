@@ -48,7 +48,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.TableOfContentsGen
       {"div",
        [
          {"id", "table-of-contents-#{Ash.UUID.generate()}"},
-         {"phx-hook", "TableOfContentsTextOverflow"},
+         {"phx-hook", "TextOverflow"},
          {"class",
           "md:float-right md:w-[20em] md:border md:border-base-light-300 md:dark:border-base-dark-600 md:p-4 md:ml-8 md:mb-8"}
        ],
@@ -58,7 +58,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.TableOfContentsGen
             {"svg",
              [
                {"xmlns", "http://www.w3.org/2000/svg"},
-               {"class", "inline-block h-5 w-5"},
+               {"class", "inline-block h-5 w-5 ml-0.5 mr-1"},
                {"fill", "none"},
                {"viewBox", "0 0 24 24"},
                {"stroke", "currentColor"},
