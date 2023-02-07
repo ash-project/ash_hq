@@ -8,84 +8,96 @@ defmodule AshHq.Repo.Migrations.MigrateResources48 do
   use Ecto.Migration
 
   def up do
-    drop constraint(:discord_reactions, "discord_reactions_message_id_fkey")
+    drop(constraint(:discord_reactions, "discord_reactions_message_id_fkey"))
 
     alter table(:discord_reactions) do
-      modify :message_id,
-             references(:discord_messages,
-               column: :id,
-               prefix: "public",
-               name: "discord_reactions_message_id_fkey",
-               type: :bigint,
-               on_delete: :delete_all,
-               on_update: :update_all
-             )
+      modify(
+        :message_id,
+        references(:discord_messages,
+          column: :id,
+          prefix: "public",
+          name: "discord_reactions_message_id_fkey",
+          type: :bigint,
+          on_delete: :delete_all,
+          on_update: :update_all
+        )
+      )
     end
 
-    drop constraint(:discord_messages, "discord_messages_thread_id_fkey")
+    drop(constraint(:discord_messages, "discord_messages_thread_id_fkey"))
 
     alter table(:discord_messages) do
-      modify :thread_id,
-             references(:discord_threads,
-               column: :id,
-               prefix: "public",
-               name: "discord_messages_thread_id_fkey",
-               type: :bigint,
-               on_delete: :delete_all,
-               on_update: :update_all
-             )
+      modify(
+        :thread_id,
+        references(:discord_threads,
+          column: :id,
+          prefix: "public",
+          name: "discord_messages_thread_id_fkey",
+          type: :bigint,
+          on_delete: :delete_all,
+          on_update: :update_all
+        )
+      )
     end
 
-    drop constraint(:discord_attachments, "discord_attachments_message_id_fkey")
+    drop(constraint(:discord_attachments, "discord_attachments_message_id_fkey"))
 
     alter table(:discord_attachments) do
-      modify :message_id,
-             references(:discord_messages,
-               column: :id,
-               prefix: "public",
-               name: "discord_attachments_message_id_fkey",
-               type: :bigint,
-               on_delete: :delete_all,
-               on_update: :update_all
-             )
+      modify(
+        :message_id,
+        references(:discord_messages,
+          column: :id,
+          prefix: "public",
+          name: "discord_attachments_message_id_fkey",
+          type: :bigint,
+          on_delete: :delete_all,
+          on_update: :update_all
+        )
+      )
     end
   end
 
   def down do
-    drop constraint(:discord_attachments, "discord_attachments_message_id_fkey")
+    drop(constraint(:discord_attachments, "discord_attachments_message_id_fkey"))
 
     alter table(:discord_attachments) do
-      modify :message_id,
-             references(:discord_messages,
-               column: :id,
-               prefix: "public",
-               name: "discord_attachments_message_id_fkey",
-               type: :bigint
-             )
+      modify(
+        :message_id,
+        references(:discord_messages,
+          column: :id,
+          prefix: "public",
+          name: "discord_attachments_message_id_fkey",
+          type: :bigint
+        )
+      )
     end
 
-    drop constraint(:discord_messages, "discord_messages_thread_id_fkey")
+    drop(constraint(:discord_messages, "discord_messages_thread_id_fkey"))
 
     alter table(:discord_messages) do
-      modify :thread_id,
-             references(:discord_threads,
-               column: :id,
-               prefix: "public",
-               name: "discord_messages_thread_id_fkey",
-               type: :bigint
-             )
+      modify(
+        :thread_id,
+        references(:discord_threads,
+          column: :id,
+          prefix: "public",
+          name: "discord_messages_thread_id_fkey",
+          type: :bigint
+        )
+      )
     end
 
-    drop constraint(:discord_reactions, "discord_reactions_message_id_fkey")
+    drop(constraint(:discord_reactions, "discord_reactions_message_id_fkey"))
 
     alter table(:discord_reactions) do
-      modify :message_id,
-             references(:discord_messages,
-               column: :id,
-               prefix: "public",
-               name: "discord_reactions_message_id_fkey",
-               type: :bigint
-             )
+      modify(
+        :message_id,
+        references(:discord_messages,
+          column: :id,
+          prefix: "public",
+          name: "discord_reactions_message_id_fkey",
+          type: :bigint
+        )
+      )
     end
   end
 end
