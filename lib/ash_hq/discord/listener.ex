@@ -100,7 +100,13 @@ defmodule AshHq.Discord.Listener do
   defp render_search_result(item) do
     link = Path.join("https://ash-hq.org", AshHqWeb.DocRoutes.doc_link(item))
 
-    "* #{item.name}: #{link}"
+    case item do
+      %{name: name} ->
+        "* #{name}: #{link}"
+
+      _ ->
+        "* forum message: #{link}"
+    end
   end
 
   def handle_event({:INTERACTION_CREATE, %Nostrum.Struct.Interaction{} = interaction, _ws_state}) do
