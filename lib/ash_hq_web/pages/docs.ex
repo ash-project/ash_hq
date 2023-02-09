@@ -12,32 +12,32 @@ defmodule AshHqWeb.Pages.Docs do
   require Logger
   require Ash.Query
 
-  prop change_versions, :event, required: true
-  prop selected_versions, :map, required: true
-  prop libraries, :list, default: []
-  prop uri, :string
-  prop remove_version, :event
-  prop add_version, :event
-  prop change_version, :event
-  prop params, :map, required: true
-  prop show_catalogue_call_to_action, :boolean
+  prop(change_versions, :event, required: true)
+  prop(selected_versions, :map, required: true)
+  prop(libraries, :list, default: [])
+  prop(uri, :string)
+  prop(remove_version, :event)
+  prop(add_version, :event)
+  prop(change_version, :event)
+  prop(params, :map, required: true)
+  prop(show_catalogue_call_to_action, :boolean)
 
-  data library, :any
-  data extension, :any
-  data docs, :any
-  data library_version, :any
-  data guide, :any
-  data doc_path, :list, default: []
-  data dsls, :list, default: []
-  data dsl, :any
-  data options, :list, default: []
-  data module, :any
-  data mix_task, :any
-  data positional_options, :list
-  data description, :string
-  data title, :string
-  data sidebar_data, :any
-  data not_found, :boolean, default: false
+  data(library, :any)
+  data(extension, :any)
+  data(docs, :any)
+  data(library_version, :any)
+  data(guide, :any)
+  data(doc_path, :list, default: [])
+  data(dsls, :list, default: [])
+  data(dsl, :any)
+  data(options, :list, default: [])
+  data(module, :any)
+  data(mix_task, :any)
+  data(positional_options, :list)
+  data(description, :string)
+  data(title, :string)
+  data(sidebar_data, :any)
+  data(not_found, :boolean, default: false)
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -534,9 +534,6 @@ defmodule AshHqWeb.Pages.Docs do
     |> assign_dsl()
     |> assign_fallback_guide()
     |> assign_docs()
-  rescue
-    _e in Ash.Error.Query.NotFound ->
-      assign(socket, :not_found, true)
   end
 
   defp assign_sidebar_content(socket) do
@@ -864,25 +861,27 @@ defmodule AshHqWeb.Pages.Docs do
           extension.sanitized_name == socket.assigns[:params]["extension"] ||
             AshHqWeb.DocRoutes.sanitize_name(extension.target) ==
               socket.assigns[:params]["extension"]
-        end) ||
-          raise Ash.Error.Query.NotFound,
-            primary_key: %{sanitized_name: socket.assigns[:params]["extension"]}
+        end)
 
-      dsls_query =
-        AshHq.Docs.Dsl
-        |> Ash.Query.sort(order: :asc)
-        |> load_for_search()
+      if is_nil(extension) do
+        assign(socket, extension: nil, not_found: true)
+      else
+        dsls_query =
+          AshHq.Docs.Dsl
+          |> Ash.Query.sort(order: :asc)
+          |> load_for_search()
 
-      options_query =
-        AshHq.Docs.Option
-        |> Ash.Query.sort(order: :asc)
-        |> load_for_search()
+        options_query =
+          AshHq.Docs.Option
+          |> Ash.Query.sort(order: :asc)
+          |> load_for_search()
 
-      extension = AshHq.Docs.load!(extension, dsls: dsls_query, options: options_query)
+        extension = AshHq.Docs.load!(extension, dsls: dsls_query, options: options_query)
 
-      assign(socket,
-        extension: extension
-      )
+        assign(socket,
+          extension: extension
+        )
+      end
     else
       if socket.assigns.library_version && socket.assigns[:params]["module"] do
         extension =
@@ -946,21 +945,27 @@ defmodule AshHqWeb.Pages.Docs do
         assign(socket, :dsl, nil)
 
       path ->
-        path = Enum.join(path, "/")
+        if socket.assigns.extension do
+          path = Enum.join(path, "/")
 
-        dsl =
-          Enum.find(
-            socket.assigns.extension.dsls,
-            &(&1.sanitized_path == path)
-          ) ||
-            raise Ash.Error.Query.NotFound,
-              primary_key: %{sanitized_path: socket.assigns[:params]["dsl_path"]}
+          dsl =
+            Enum.find(
+              socket.assigns.extension.dsls,
+              &(&1.sanitized_path == path)
+            )
 
-        socket
-        |> assign(
-          :dsl,
-          dsl
-        )
+          if is_nil(dsl) do
+            assign(socket, dsl: nil, not_found: true)
+          else
+            socket
+            |> assign(
+              :dsl,
+              dsl
+            )
+          end
+        else
+          assign(socket, dsl: nil, not_found: true)
+        end
     end
   end
 
@@ -971,19 +976,21 @@ defmodule AshHqWeb.Pages.Docs do
         Enum.find(
           socket.assigns.library_version.modules,
           &(&1.sanitized_name == socket.assigns[:params]["module"])
-        ) ||
-          raise Ash.Error.Query.NotFound,
-            primary_key: %{sanitized_name: socket.assigns[:params]["module"]}
+        )
 
-      functions_query =
-        AshHq.Docs.Function
-        |> Ash.Query.sort(name: :asc, arity: :asc)
-        |> load_for_search()
-        |> Ash.Query.load(:doc_html)
+      if is_nil(module) do
+        assign(socket, module: nil, not_found: true)
+      else
+        functions_query =
+          AshHq.Docs.Function
+          |> Ash.Query.sort(name: :asc, arity: :asc)
+          |> load_for_search()
+          |> Ash.Query.load(:doc_html)
 
-      assign(socket,
-        module: AshHq.Docs.load!(module, [functions: functions_query], lazy?: true)
-      )
+        assign(socket,
+          module: AshHq.Docs.load!(module, [functions: functions_query], lazy?: true)
+        )
+      end
     else
       assign(socket, :module, nil)
     end
@@ -996,13 +1003,15 @@ defmodule AshHqWeb.Pages.Docs do
         Enum.find(
           socket.assigns.library_version.mix_tasks,
           &(&1.sanitized_name == socket.assigns[:params]["mix_task"])
-        ) ||
-          raise Ash.Error.Query.NotFound,
-            primary_key: %{sanitized_name: socket.assigns[:params]["mix_task"]}
+        )
 
-      assign(socket,
-        mix_task: mix_task
-      )
+      if mix_task do
+        assign(socket,
+          mix_task: mix_task
+        )
+      else
+        assign(socket, mix_task: nil, not_found: true)
+      end
     else
       assign(socket, :mix_task, nil)
     end
