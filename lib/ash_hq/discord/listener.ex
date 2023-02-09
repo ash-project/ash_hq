@@ -5,6 +5,7 @@ defmodule AshHq.Discord.Listener do
   use Nostrum.Consumer
 
   import Bitwise
+  @all_types AshHq.Docs.Extensions.Search.Types.types() -- ["Forum"]
 
   def start_link do
     Consumer.start_link(__MODULE__)
@@ -56,7 +57,7 @@ defmodule AshHq.Discord.Listener do
       if type do
         %{types: [type]}
       else
-        %{}
+        %{types: @all_types}
       end
 
     %{result: item_list} = AshHq.Docs.Search.run!(search, library_version_ids, input)
@@ -124,7 +125,7 @@ defmodule AshHq.Discord.Listener do
       data: %{
         content: search_results!(interaction),
         flags:
-          if public == "True" do
+          if public do
             1 <<< 2
           else
             1 <<< 6 ||| 1 <<< 2
@@ -182,7 +183,7 @@ defmodule AshHq.Discord.Listener do
           description: "What type of thing you want to search for. Defaults to everything.",
           required: false,
           choices:
-            Enum.map(AshHq.Docs.Extensions.Search.Types.types(), fn type ->
+            Enum.map(@all_types, fn type ->
               %{
                 name: String.downcase(type),
                 description: "Search only for #{String.downcase(type)} items.",
