@@ -417,28 +417,11 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.Highlighter do
       code
       |> unescape_html()
       |> IO.iodata_to_binary()
-      |> String.replace(~r/{{mix_dep:.*}}/, fn value ->
-        try do
-          "{{mix_dep:" <> dep = String.trim_trailing(value, "}}")
-          "______#{dep}______"
-        rescue
-          _ ->
-            value
-        end
-      end)
       |> Makeup.highlight_inner_html(
         lexer: lexer,
         lexer_options: lexer_opts,
         formatter_options: [highlight_tag: "span"]
       )
-      |> String.replace(~r/______.*______/, fn dep ->
-        value =
-          dep
-          |> String.trim_leading("_")
-          |> String.trim_trailing("_")
-
-        "{{mix_dep:#{value}}}"
-      end)
 
     ~s(<code class="makeup #{lang} highlight">#{highlighted}</code>)
   end
