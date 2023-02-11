@@ -859,7 +859,7 @@ defmodule AshHqWeb.Pages.Docs do
       extension =
         Enum.find(socket.assigns.library_version.extensions, fn extension ->
           extension.sanitized_name == socket.assigns[:params]["extension"] ||
-            AshHqWeb.DocRoutes.sanitize_name(extension.target) ==
+            AshHqWeb.DocRoutes.sanitize_name(extension.module) ==
               socket.assigns[:params]["extension"]
         end)
 
