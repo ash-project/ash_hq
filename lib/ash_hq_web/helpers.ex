@@ -28,4 +28,8 @@ defmodule AshHqWeb.Helpers do
       "https://github.com/#{library.repo_org}/#{library.name}/tree/v#{library_version.version}/#{file}"
     end
   end
+
+  def source_link(%AshHq.Docs.Guide{route: route}, library, library_version) do
+    "https://github.com/#{library.repo_org}/#{library.name}/tree/v#{library_version.version}/documentation/#{route}.md"
+  end
 end
