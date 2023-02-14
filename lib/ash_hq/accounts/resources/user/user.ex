@@ -7,7 +7,8 @@ defmodule AshHq.Accounts.User do
     extensions: [AshAuthentication]
 
   require Ash.Query
-  alias AshHq.Accounts.Preparations, warn: false
+
+  alias AshHq.Calculations.Decrypt
 
   authentication do
     api AshHq.Accounts
@@ -264,7 +265,7 @@ defmodule AshHq.Accounts.User do
   end
 
   calculations do
-    calculate :address, :string, {AshHq.Calculations.Decrypt, field: :encrypted_address}
-    calculate :name, :string, {AshHq.Calculations.Decrypt, field: :encrypted_name}
+    calculate :address, :string, {Decrypt, field: :encrypted_address}
+    calculate :name, :string, {Decrypt, field: :encrypted_name}
   end
 end

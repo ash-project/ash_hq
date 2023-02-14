@@ -311,7 +311,7 @@ defmodule AshHqWeb.AppViewLive do
 
     selected_versions =
       Enum.reduce(libraries, configured_library_versions, fn library, acc ->
-        if library.name == "ash" do
+        if library.name in ["ash", "ash_phoenix", "ash_postgres"] do
           Map.put_new(acc, library.id, "latest")
         else
           Map.put_new(acc, library.id, "")

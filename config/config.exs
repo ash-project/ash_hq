@@ -21,6 +21,7 @@ config :ash_hq, AshHq.Repo,
 
 config :spark, :formatter,
   remove_parens?: true,
+  "Ash.Registry": [],
   "Ash.Resource": [
     type: Ash.Resource,
     section_order: [

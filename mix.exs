@@ -61,7 +61,7 @@ defmodule AshHq.MixProject do
       # Other
       {:absinthe_plug, "~> 1.5"},
       {:nimble_options, "~> 0.5.1", override: true},
-      {:spark, "~> 0.3", override: true},
+      {:spark, "~> 0.4", override: true},
       {:surface, "~> 0.9.1"},
       {:surface_heroicons, "~> 0.6.0"},
       # Syntax Highlighting
