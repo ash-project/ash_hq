@@ -912,7 +912,33 @@ defmodule AshHqWeb.Pages.Docs do
         )
       end
     else
-      assign(socket, :extension, nil)
+      if socket.assigns.library_version && socket.assigns[:params]["module"] do
+        extension =
+          Enum.find(socket.assigns.library_version.extensions, fn extension ->
+            extension.sanitized_name == socket.assigns[:params]["module"]
+          end)
+
+        extension =
+          if extension do
+            dsls_query =
+              AshHq.Docs.Dsl
+              |> Ash.Query.sort(order: :asc)
+              |> load_for_search()
+
+            options_query =
+              AshHq.Docs.Option
+              |> Ash.Query.sort(order: :asc)
+              |> load_for_search()
+
+            AshHq.Docs.load!(extension, dsls: dsls_query, options: options_query)
+          end
+
+        assign(socket,
+          extension: extension
+        )
+      else
+        assign(socket, :extension, nil)
+      end
     end
   end
 
