@@ -102,15 +102,18 @@ defmodule AshHqWeb.Pages.Docs do
             class="w-full nav-anchor text-black dark:text-white relative py-4 md:py-auto"
           >
             <.catalogue_call_to_action :if={@show_catalogue_call_to_action} />
+            {#if @extension && !@dsl}
+              <h1>{@extension.name}</h1>
+            {/if}
             {#if @module}
-              <h2>{@module.name} <SourceLink module_or_function={@module} library={@library} library_version={@library_version} /></h2>
+              <h1>{@module.name} <SourceLink module_or_function={@module} library={@library} library_version={@library_version} /></h1>
             {/if}
             {#if @mix_task}
-              <h2>{@mix_task.name} <SourceLink
+              <h1>{@mix_task.name} <SourceLink
                   module_or_function={@mix_task}
                   library={@library}
                   library_version={@library_version}
-                /></h2>
+                /></h1>
             {/if}
             <.github_guide_link
               :if={@guide}
@@ -124,13 +127,13 @@ defmodule AshHqWeb.Pages.Docs do
                 {#match 0}
                   <div />
                 {#match 1}
-                  <h3>
+                  <h2>
                     DSL
-                  </h3>
+                  </h2>
                 {#match 2}
-                  <h3>
+                  <h2>
                     DSL Sections
-                  </h3>
+                  </h2>
               {/case}
               <ul>
                 {#for section <- Enum.filter(@extension.dsls, &(&1.type == :section))}

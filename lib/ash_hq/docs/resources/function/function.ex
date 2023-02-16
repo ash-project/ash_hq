@@ -47,6 +47,10 @@ defmodule AshHq.Docs.Function do
       allow_nil? false
     end
 
+    attribute :deprecated, :string do
+      allow_nil? true
+    end
+
     timestamps()
   end
 

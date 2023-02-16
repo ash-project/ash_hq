@@ -20,17 +20,21 @@ defmodule AshHqWeb.Components.Docs.Functions do
         <h3>{@header}</h3>
         {#for function <- functions}
           <div id={"#{@type}-#{function.sanitized_name}-#{function.arity}"} class="nav-anchor mb-8">
-            <div class="bg-base-light-200 dark:bg-base-dark-700 w-full rounded-lg">
-              <div class="flex flex-row items-center bg-opacity-50 py-1 rounded-t-lg bg-base-light-300 dark:bg-base-dark-850 w-full">
+            <div class="w-full">
+              <div class="flex flex-row items-center bg-opacity-50 py-1 bg-base-light-200 dark:bg-base-dark-750 w-full border-l-2 border-primary-light-400 dark:border-primary-dark-400 pl-2">
                 <a href={"##{@type}-#{function.sanitized_name}-#{function.arity}"}>
                   <Heroicons.Outline.LinkIcon class="h-3 w-3 mr-2" />
                 </a>
                 <div class="flex flex-row items-center justify-between w-full pr-2">
-                  <div class="text-xl w-full font-semibold">{function.name}/{function.arity}</div>
-                  <SourceLink module_or_function={function} library={@library} library_version={@library_version} />
+                  <div class="text-lg w-full font-semibold">{function.name}/{function.arity}</div>
+                  <span class="text-sm"><SourceLink module_or_function={function} library={@library} library_version={@library_version} /></span>
                 </div>
               </div>
-              <div class="p-4">
+              <div :if={function.deprecated} class="mt-2 px-2 py-1 bg-yellow-400 text-black">
+                <Heroicons.Solid.ExclamationIcon class="w-6 h-6 fill-black inline-block" />
+                Deprecated: {function.deprecated}
+              </div>
+              <div class="p-2">
                 {raw(rendered(function.doc_html))}
               </div>
             </div>
@@ -61,7 +65,7 @@ defmodule AshHqWeb.Components.Docs.Functions do
           """
         else
           """
-          <div class="not-prose border-b pb-2">
+          <div class="not-prose border-b dark:border-base-dark-400 pb-2">
             #{heads}
           </div>
 

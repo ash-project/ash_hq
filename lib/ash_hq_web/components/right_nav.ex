@@ -12,7 +12,7 @@ defmodule AshHqWeb.Components.RightNav do
       @apply text-primary-light-600 dark:text-primary-dark-400;
       }
     </style>
-    <div id="right-nav" class="scroll-parent w-min hidden lg:flex flex-col pb-12" phx-hook="RightNav">
+    <div id="right-nav" class="scroll-parent hidden lg:flex flex-col pb-12" phx-hook="RightNav">
       <a
         id="right-nav-module-docs"
         class="hover:text-primary-light-300 hover:dark:text-primary-dark-300 right-nav"
@@ -52,6 +52,9 @@ defmodule AshHqWeb.Components.RightNav do
       href={"##{@function.type}-#{@function.sanitized_name}-#{@function.arity}"}
     >
       {"#{@function.name}/#{@function.arity}"}
+      {#if @function.deprecated}
+        <span class="text-xs italic text-yellow-500 dark:text-yellow-400">deprecated</span>
+      {/if}
     </a>
     """
   end
