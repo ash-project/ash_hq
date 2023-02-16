@@ -1,4 +1,5 @@
 defmodule AshHq.Changes.Encrypt do
+  @moduledoc "Encrypt attributes that are being changed before submitting the action"
   use Ash.Resource.Change
 
   def change(changeset, opts, _) do
