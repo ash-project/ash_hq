@@ -102,6 +102,9 @@ defmodule AshHqWeb.Pages.Docs do
             class="w-full nav-anchor text-black dark:text-white relative py-4 md:py-auto"
           >
             <.catalogue_call_to_action :if={@show_catalogue_call_to_action} />
+            {#if @extension && !@dsl}
+              <h1>{@extension.name}</h1>
+            {/if}
             {#if @module}
               <h1>{@module.name} <SourceLink module_or_function={@module} library={@library} library_version={@library_version} /></h1>
             {/if}
