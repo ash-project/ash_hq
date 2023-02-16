@@ -101,7 +101,7 @@ defmodule AshHqWeb.DocRoutes do
         "/docs/dsl/#{item.library_name}/#{version(item.version_name, item.library_id, selected_versions)}/#{sanitize_name(item.extension_name)}/#{item.sanitized_path}"
 
       %AshHq.Docs.Option{} = item ->
-        "/docs/dsl/#{item.library_name}/#{version(item.version_name, item.library_id, selected_versions)}/#{sanitize_name(item.extension_name)}/#{item.sanitized_path}##{item.name}"
+        "/docs/dsl/#{item.library_name}/#{version(item.version_name, item.library_id, selected_versions)}/#{sanitize_name(item.extension_name)}/#{item.sanitized_path}##{sanitize_name(item.name)}"
     end
   end
 
