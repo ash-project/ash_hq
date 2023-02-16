@@ -277,7 +277,7 @@ defmodule Utils do
   def build_function({_, _, _, :hidden, _}, _, _, _, _, _), do: []
 
   def build_function(
-        {{type, name, arity}, line, heads, docs, _},
+        {{type, name, arity}, line, heads, docs, metadata},
         file,
         types,
         callbacks,
@@ -353,7 +353,8 @@ defmodule Utils do
         line: line,
         arity: arity,
         order: order,
-        doc: docs || "No documentation"
+        doc: docs || "No documentation",
+        deprecated: Map.get(metadata, :deprecated)
       }
     ]
   end
