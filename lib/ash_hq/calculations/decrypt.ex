@@ -12,7 +12,9 @@ defmodule AshHq.Calculations.Decrypt do
            nil
 
          value ->
-           AshHq.Vault.decrypt!(value)
+           value
+           |> Base.decode64!()
+           |> AshHq.Vault.decrypt!()
        end
      end)}
   end

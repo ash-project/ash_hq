@@ -58,8 +58,8 @@ defmodule AshHq.Accounts.User do
 
     attribute :hashed_password, :string, private?: true, sensitive?: true
 
-    attribute :encrypted_name, AshHq.Types.EncryptedString
-    attribute :encrypted_address, AshHq.Types.EncryptedString
+    attribute :encrypted_name, :string
+    attribute :encrypted_address, :string
     attribute :shirt_size, :string
     attribute :github_info, :map
 
@@ -258,6 +258,8 @@ defmodule AshHq.Accounts.User do
   changes do
     change AshHq.Accounts.User.Changes.RemoveAllTokens,
       where: [action_is(:password_reset_with_password)]
+
+    change {AshHq.Changes.Encrypt, fields: [:encrypted_address, :encrypted_name]}
   end
 
   validations do
