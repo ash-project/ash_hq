@@ -101,7 +101,7 @@ defmodule AshHq.Docs.Guide do
 
     read :read do
       primary? true
-      pagination offset?: true, countable: true, default_limit: 25, required?: false
+      pagination keyset?: true, offset?: true, countable: true, default_limit: 25, required?: false
     end
 
     read :read_for_version do
