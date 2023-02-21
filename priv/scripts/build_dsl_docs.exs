@@ -150,15 +150,21 @@ defmodule Utils do
   defp docs_with_examples(doc, examples) do
     case doc do
       nil ->
-        "### Examples\n#{Enum.map_join(examples, "\n\n", &wrap_code/1)}"
+        maybe_add_examples(examples)
 
       doc ->
         """
         #{doc}
-        # Examples
-        #{Enum.map_join(examples, "\n\n", &wrap_code/1)}
+
+        #{maybe_add_examples(examples)}
         """
     end
+  end
+
+  defp maybe_add_examples([]), do: ""
+
+  defp maybe_add_examples(examples) do
+    "Examples:\n\n#{Enum.map_join(examples, "\n\n", &wrap_code/1)}"
   end
 
   defp build_entities(entities, path) do
