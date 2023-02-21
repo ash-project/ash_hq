@@ -262,10 +262,10 @@ defmodule AshHqWeb.Pages.Docs do
           </div>
         </div>
         {#if !Enum.empty?(options)}
-          <div class="mt-2 mb-6">
-            {#case modules_in_scope(dsl, extension, @libraries, @selected_versions)}
-              {#match []}
-              {#match imports}
+          {#case modules_in_scope(dsl, extension, @libraries, @selected_versions)}
+            {#match []}
+            {#match imports}
+              <div class="mt-2 mb-6">
                 <div>Imported Modules:</div>
                 <ul>
                   {#for mod <- imports}
@@ -278,8 +278,8 @@ defmodule AshHqWeb.Pages.Docs do
                     </li>
                   {/for}
                 </ul>
-            {/case}
-          </div>
+              </div>
+          {/case}
         {/if}
       </div>
       <div
