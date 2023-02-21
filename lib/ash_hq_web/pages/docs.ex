@@ -284,11 +284,11 @@ defmodule AshHqWeb.Pages.Docs do
       </div>
       <div
         :if={!Enum.empty?(options)}
-        class="grid grid-cols-[min-content_auto] w-full border-b border-gray-600 pb-2 mb-12"
+        class="grid grid-cols-[min-content_auto] w-full border-b border-gray-300 dark:border-gray-600 pb-2 mb-12"
       >
         {#for option <- options}
           <div
-            class="flex flex-col border-t border-gray-600 py-3 nav-anchor pr-4"
+            class="flex flex-col border-t border-gray-300 dark:border-gray-600 py-3 nav-anchor pr-4"
             id={"#{String.replace(option.sanitized_path, "/", "-")}-#{DocRoutes.sanitize_name(option.name)}"}
           >
             <div class="flex flex-row align-middle leading-7">
@@ -304,7 +304,7 @@ defmodule AshHqWeb.Pages.Docs do
               {option.type}
             </span>
           </div>
-          <div class="prose dark:prose-invert border-t border-gray-600 py-3">
+          <div class="prose dark:prose-invert border-t border-gray-300 dark:border-gray-600 py-3">
             {raw(option.doc_html)}
           </div>
         {/for}
