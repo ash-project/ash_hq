@@ -281,24 +281,23 @@ defmodule AshHqWeb.Pages.Docs do
       </div>
       <div
         :if={!Enum.empty?(options)}
-        class="grid w-full"
-        style="grid-template-columns: min-content auto"
+        class="grid grid-cols-[min-content_auto] w-full border-b border-gray-600 pb-2 mb-12"
       >
         {#for option <- options}
           <div
-            class="flex flex-col border-t border-gray-600 mt-2 nav-anchor"
+            class="flex flex-col border-t border-gray-600 mt-2 nav-anchor pr-4"
             id={"#{String.replace(option.sanitized_path, "/", "-")}-#{DocRoutes.sanitize_name(option.name)}"}
           >
-            <div class="flex flex-row align-middle">
+            <div class="flex flex-row align-middle leading-7">
               <LivePatch
                 to={"##{String.replace(option.sanitized_path, "/", "-")}-#{DocRoutes.sanitize_name(option.name)}"}
-                class="text-primary-light-600 dark:text-primary-dark-400 hover:dark:text-primary-dark-600 hover:text-primary-light-700 text-lg pr-4"
+                class="text-primary-light-600 dark:text-primary-dark-400 hover:dark:text-primary-dark-600 hover:text-primary-light-700 pr-2"
               >
                 {option.name}
               </LivePatch>
               {render_tags(assigns, dsl, option)}
             </div>
-            <span class="break-keep">
+            <span class="break-keep text-sm">
               {option.type}
             </span>
           </div>
@@ -307,7 +306,6 @@ defmodule AshHqWeb.Pages.Docs do
           </div>
         {/for}
       </div>
-      <hr class="mt-0 mb-12">
       {#case child_dsls(extension, dsl)}
         {#match []}
         {#match children}
@@ -444,12 +442,12 @@ defmodule AshHqWeb.Pages.Docs do
 
     ~F"""
     {#if option.argument_index}
-      <Tag color={:blue}>
+      <Tag color={:blue} class="mt-1 py-0.5 h-5">
         Arg[{option.argument_index}]
       </Tag>
     {/if}
     {#if required}
-      <Tag color={:red} class={classes("ml-2": option.argument_index)}>
+      <Tag color={:red} class={classes(["mt-1 py-0.5 h-5", "ml-2": option.argument_index])}>
         Required
       </Tag>
     {/if}
