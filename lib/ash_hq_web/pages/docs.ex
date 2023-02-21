@@ -194,12 +194,12 @@ defmodule AshHqWeb.Pages.Docs do
           </footer>
         </div>
         {#if @module}
-          <div class="sidebar-container hidden lg:block lg:w-80 sticky top-36 xl:top-20 shrink-0 overflow-y-auto overflow-x-hidden dark:bg-base-dark-850 bg-opacity-70 mt-4">
+          <div class="sidebar-container hidden lg:block lg:w-72 sticky top-36 xl:top-20 shrink-0 overflow-y-auto overflow-x-hidden dark:bg-base-dark-850 bg-opacity-70 mt-4">
             <ModuleRightNav functions={@module.functions} module={@module.name} />
           </div>
         {#else}
           {#if @dsl_target}
-            <div class="sidebar-container hidden lg:block lg:w-80 sticky top-36 xl:top-20 shrink-0 overflow-y-auto overflow-x-hidden dark:bg-base-dark-850 bg-opacity-70 mt-4">
+            <div class="sidebar-container hidden lg:block lg:w-72 sticky top-36 xl:top-20 shrink-0 overflow-y-auto overflow-x-hidden dark:bg-base-dark-850 bg-opacity-70 mt-4">
               <DslRightNav dsls={Enum.flat_map(@dsl_target_extensions, & &1.dsls)} dsl_target={@dsl_target} />
             </div>
           {#else}
