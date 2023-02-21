@@ -253,7 +253,7 @@ defmodule AshHqWeb.Pages.Docs do
             </div>
           </div>
 
-          <div class="prose-lg dark:prose-invert my-4">
+          <div class="prose dark:prose-invert my-4">
             {raw(dsl.doc_html)}
           </div>
         </div>
@@ -301,7 +301,7 @@ defmodule AshHqWeb.Pages.Docs do
               {option.type}
             </span>
           </div>
-          <div class="prose prose-lg dark:prose-invert border-t border-gray-600 mt-2 pt-0">
+          <div class="prose dark:prose-invert border-t border-gray-600 mt-2 pt-0">
             {raw(option.doc_html)}
           </div>
         {/for}
