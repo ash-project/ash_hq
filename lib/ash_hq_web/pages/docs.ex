@@ -127,12 +127,14 @@ defmodule AshHqWeb.Pages.Docs do
             {/if}
             {#if @dsl_target_extensions}
               {#for extension <- @dsl_target_extensions}
-                <div class="text-3xl font-extrabold mb-12">
-                  {#if extension.default_for_target}
-                    {extension.target}
-                  {#else}
-                    {extension.module}
-                  {/if}
+                <div class="prose dark:prose-invert mb-8">
+                  <h1>
+                    {#if extension.default_for_target}
+                      {extension.target}
+                    {#else}
+                      {extension.module}
+                    {/if}
+                  </h1>
                 </div>
                 {#for dsl <- extension.dsls |> Enum.filter(&(&1.path == []))}
                   {render_dsl(assigns, extension, dsl)}
