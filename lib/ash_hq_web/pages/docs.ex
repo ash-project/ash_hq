@@ -135,6 +135,7 @@ defmodule AshHqWeb.Pages.Docs do
                       {extension.module}
                     {/if}
                   </h1>
+                  {raw(extension.doc_html)}
                 </div>
                 {#for dsl <- extension.dsls |> Enum.filter(&(&1.path == []))}
                   {render_dsl(assigns, extension, dsl)}
