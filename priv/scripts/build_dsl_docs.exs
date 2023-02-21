@@ -209,7 +209,10 @@ defmodule Utils do
             end),
           type: :entity,
           path: path,
-          options: add_argument_indices(schema(option_schema, path ++ [entity.name]), entity.args)
+          options:
+            option_schema
+            |> schema(path ++ [entity.name])
+            |> add_argument_indices(entity.args)
         }
       ] ++ build_entities(List.flatten(Keyword.values(entity.entities)), path ++ [entity.name])
     end)
@@ -260,11 +263,17 @@ defmodule Utils do
         order: index,
         links: Map.new(value[:links] || []),
         type: value[:type_name] || type(value[:type]),
-        doc: value[:doc] || "No documentation",
+        doc: add_default(value[:doc] || "No documentation", value[:default]),
         required: value[:required] || false,
         default: inspect(value[:default])
       }
     end)
+  end
+
+  defp add_default(docs, nil), do: docs
+
+  defp add_default(docs, default) do
+    "#{docs} Defaults to `#{inspect(default)}`."
   end
 
   def module_docs(module) do

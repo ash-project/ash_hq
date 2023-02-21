@@ -1,4 +1,4 @@
-defmodule AshHqWeb.Components.RightNav do
+defmodule AshHqWeb.Components.ModuleRightNav do
   @moduledoc "The right nav shown for functions in a module."
   use Surface.Component
 

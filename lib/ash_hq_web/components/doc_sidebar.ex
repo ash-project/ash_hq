@@ -47,6 +47,26 @@ defmodule AshHqWeb.Components.DocSidebar do
                 id={"#{@id}-#{id}-contents"}
                 style={if !has_active?(categories), do: "display: none", else: ""}
               >
+                {#for %{name: item_name, to: to, id: item_id, active?: active?} <- categories}
+                  {id = "#{@id}-#{id}-#{item_id}"
+                  nil}
+                  <li
+                    id={id}
+                    class={
+                      "rounded-lg hover:bg-base-light-100 dark:hover:bg-base-dark-750",
+                      "bg-base-light-200 dark:bg-base-dark-700 active-sidebar-nav": active?
+                    }
+                  >
+                    <LivePatch
+                      to={to}
+                      opts={phx_click: mark_active(id)}
+                      class="flex flex-row items-start w-full text-left text-base-light-900 dark:text-base-dark-100"
+                    >
+                      {render_icon(name, "DSLs", item_name, "h-4 w-4 flex-none mt-1 mr-1.5", assigns)}
+                      {item_name}
+                    </LivePatch>
+                  </li>
+                {/for}
                 {#for {category, items} <- categories}
                   <li class="pt-1 pl-0.5" id={"#{@id}-#{id}-#{slug(category)}"}>
                     <button
@@ -107,36 +127,6 @@ defmodule AshHqWeb.Components.DocSidebar do
     """
   end
 
-  # def render_icon(assigns, "Guide") do
-  #   ~F"""
-  #   <Heroicons.Outline.BookOpenIcon class="h-4 w-4 flex-none mt-1 mr-1" />
-  #   """
-  # end
-
-  # def render_icon(assigns, "Api") do
-  #   ~F"""
-  #   <Heroicons.Outline.SwitchHorizontalIcon class="h-4 w-4 flex-none mt-1 mx-1" />
-  #   """
-  # end
-
-  # def render_icon(assigns, "DataLayer") do
-  #   ~F"""
-  #   <Heroicons.Outline.DatabaseIcon class="h-4 w-4 flex-none mt-1 mx-1" />
-  #   """
-  # end
-
-  # def render_icon(assigns, "Notifier") do
-  #   ~F"""
-  #   <Heroicons.Outline.MailIcon class="h-4 w-4 flex-none mt-1 mx-1" />
-  #   """
-  # end
-
-  # def render_icon(assigns, "Registry") do
-  #   ~F"""
-  #   <Heroicons.Outline.ViewListIcon class="h-4 w-4 flex-none mt-1 mx-1" />
-  #   """
-  # end
-
   defp render_icon("Mix Tasks", _, _, item_classes, assigns) do
     Search.icon_for_type("Mix Task", item_classes, assigns)
   end
@@ -145,7 +135,7 @@ defmodule AshHqWeb.Components.DocSidebar do
     Search.icon_for_type("Module", item_classes, assigns)
   end
 
-  defp render_icon("DSLs & Extensions", type, _item_name, item_classes, assigns) do
+  defp render_icon("DSLs", type, _item_name, item_classes, assigns) do
     Search.icon_for_type(type, item_classes, assigns)
   end
 

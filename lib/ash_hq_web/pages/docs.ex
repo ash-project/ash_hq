@@ -3,8 +3,9 @@ defmodule AshHqWeb.Pages.Docs do
   use Surface.LiveComponent
 
   import AshHqWeb.Helpers
+  import AshHqWeb.Tails
 
-  alias AshHqWeb.Components.{CalloutText, DocSidebar, RightNav, Tag}
+  alias AshHqWeb.Components.{DocSidebar, DslRightNav, ModuleRightNav, Tag}
   alias AshHqWeb.Components.Docs.{DocPath, Functions, SourceLink}
   alias AshHqWeb.DocRoutes
   alias Phoenix.LiveView.JS
@@ -12,32 +13,32 @@ defmodule AshHqWeb.Pages.Docs do
   require Logger
   require Ash.Query
 
-  prop(change_versions, :event, required: true)
-  prop(selected_versions, :map, required: true)
-  prop(libraries, :list, default: [])
-  prop(uri, :string)
-  prop(remove_version, :event)
-  prop(add_version, :event)
-  prop(change_version, :event)
-  prop(params, :map, required: true)
-  prop(show_catalogue_call_to_action, :boolean)
+  prop change_versions, :event, required: true
+  prop selected_versions, :map, required: true
+  prop libraries, :list, default: []
+  prop uri, :string
+  prop remove_version, :event
+  prop add_version, :event
+  prop change_version, :event
+  prop params, :map, required: true
+  prop show_catalogue_call_to_action, :boolean
 
-  data(library, :any)
-  data(extension, :any)
-  data(docs, :any)
-  data(library_version, :any)
-  data(guide, :any)
-  data(doc_path, :list, default: [])
-  data(dsls, :list, default: [])
-  data(dsl, :any)
-  data(options, :list, default: [])
-  data(module, :any)
-  data(mix_task, :any)
-  data(positional_options, :list)
-  data(description, :string)
-  data(title, :string)
-  data(sidebar_data, :any)
-  data(not_found, :boolean, default: false)
+  data library, :any
+  data docs, :any
+  data library_version, :any
+  data guide, :any
+  data doc_path, :list, default: []
+  data dsls, :list, default: []
+  data dsl, :any
+  data module, :any
+  data mix_task, :any
+  data positional_options, :list
+  data description, :string
+  data title, :string
+  data sidebar_data, :any
+  data not_found, :boolean, default: false
+  data dsl_target_extensions, :list
+  data dsl_target, :string
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -86,7 +87,7 @@ defmodule AshHqWeb.Pages.Docs do
         <div
           id="docs-window"
           :if={@not_found}
-          class="w-full shrink prose prose-td:pl-0 max-w-6xl bg-white dark:bg-base-dark-850 dark:prose-invert md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden"
+          class="w-full shrink max-w-6xl prose prose-td:pl-0 bg-white dark:bg-base-dark-850 dark:prose-invert md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden"
         >
           <div class="w-full nav-anchor text-black dark:text-white relative py-4 md:py-auto">
             We couldn't find that page.
@@ -95,16 +96,16 @@ defmodule AshHqWeb.Pages.Docs do
         <div
           id="docs-window"
           :if={!@not_found}
-          class="w-full shrink prose prose-td:pl-0 max-w-6xl bg-white dark:bg-base-dark-850 dark:prose-invert md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden"
+          class={classes([
+            "w-full shrink max-w-6xl bg-white dark:bg-base-dark-850 md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden",
+            "prose prose-td:pl-0 dark:prose-invert": !@dsl_target
+          ])}
         >
           <div
             id="module-docs"
             class="w-full nav-anchor text-black dark:text-white relative py-4 md:py-auto"
           >
             <.catalogue_call_to_action :if={@show_catalogue_call_to_action} />
-            {#if @extension && !@dsl}
-              <h1>{@extension.name}</h1>
-            {/if}
             {#if @module}
               <h1>{@module.name} <SourceLink module_or_function={@module} library={@library} library_version={@library_version} /></h1>
             {/if}
@@ -121,27 +122,22 @@ defmodule AshHqWeb.Pages.Docs do
               library={@library}
               library_version={@library_version}
             />
-            <.docs doc_path={@doc_path} docs={@docs} />
-            {#if @extension && !@dsl && !@guide}
-              {#case Enum.count_until(Stream.filter(@extension.dsls, &(&1.type == :section)), 2)}
-                {#match 0}
-                  <div />
-                {#match 1}
-                  <h2>
-                    DSL
-                  </h2>
-                {#match 2}
-                  <h2>
-                    DSL Sections
-                  </h2>
-              {/case}
-              <ul>
-                {#for section <- Enum.filter(@extension.dsls, &(&1.type == :section))}
-                  <li>
-                    <LivePatch to={DocRoutes.doc_link(section, @selected_versions)}>{section.name}</LivePatch>
-                  </li>
+            {#if @docs}
+              <.docs doc_path={@doc_path} docs={@docs} />
+            {/if}
+            {#if @dsl_target_extensions}
+              {#for extension <- @dsl_target_extensions}
+                <div class="text-3xl font-extrabold mb-12">
+                  {#if extension.default_for_target}
+                    {extension.target}
+                  {#else}
+                    {extension.module}
+                  {/if}
+                </div>
+                {#for dsl <- extension.dsls |> Enum.filter(&(&1.path == []))}
+                  {render_dsl(assigns, extension, dsl)}
                 {/for}
-              </ul>
+              {/for}
             {/if}
           </div>
           {#if @module}
@@ -182,115 +178,6 @@ defmodule AshHqWeb.Pages.Docs do
               selected_versions={@selected_versions}
             />
           {/if}
-          {#case modules_in_scope(@dsl, @extension, @libraries, @selected_versions)}
-            {#match []}
-            {#match imports}
-              <h3>Imported Modules</h3>
-              {#for mod <- imports}
-                <ul>
-                  <li>
-                    <LivePatch to={DocRoutes.doc_link(mod, @selected_versions)}>{mod.name}</LivePatch>
-                  </li>
-                </ul>
-              {/for}
-          {/case}
-          {#case child_dsls(@extension, @dsl)}
-            {#match []}
-            {#match children}
-              <h3>
-                Nested DSLs
-              </h3>
-              <ul>
-                {#for child <- children}
-                  <li>
-                    <LivePatch to={DocRoutes.doc_link(child, @selected_versions)}>{child.name}</LivePatch>
-                  </li>
-                {/for}
-              </ul>
-          {/case}
-          <div class="ml-2">
-            <table>
-              {#if !Enum.empty?(@options)}
-                {#if Enum.any?(@options, & &1.argument_index)}
-                  <td colspan="100%">
-                    <h3>
-                      Arguments
-                    </h3>
-                  </td>
-                  <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                    {#if @dsl.arg_defaults not in [%{}, nil]}
-                      <th>Default</th>
-                    {/if}
-                    <th>Doc</th>
-                  </tr>
-                  {#for option <- positional_options(@options)}
-                    <tr id={"#{option.sanitized_path}/#{option.name}"}>
-                      <td>
-                        <div class="flex flex-row items-baseline">
-                          <LivePatch to={"##{DocRoutes.sanitize_name(option.name)}"}>
-                            <Heroicons.Outline.LinkIcon class="h-3 w-3 mr-2" />
-                          </LivePatch>
-                          <div class="flex flex-row space-x-2">
-                            <CalloutText text={option.name} />
-                            {render_tags(assigns, %{
-                              option
-                              | required: option.required && !Map.has_key?(@dsl.arg_defaults || %{}, option.name)
-                            })}
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        {option.type}
-                      </td>
-                      {#if @dsl.arg_defaults not in [%{}, nil]}
-                        <th>{Map.get(@dsl.arg_defaults || %{}, option.name)}</th>
-                      {/if}
-                      <td>
-                        {raw(option.doc_html)}
-                      </td>
-                    </tr>
-                  {/for}
-                {/if}
-                <tr>
-                  <td colspan="100%">
-                    <h3>
-                      Options
-                    </h3>
-                  </td>
-                </tr>
-                <tr>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Default</th>
-                  <th>Doc</th>
-                </tr>
-                {#for %{argument_index: nil} = option <- @options}
-                  <tr id={"#{option.sanitized_path}/#{option.name}"}>
-                    <td id={DocRoutes.sanitize_name(option.name)}>
-                      <div class="flex flex-row items-baseline">
-                        <LivePatch to={"##{DocRoutes.sanitize_name(option.name)}"}>
-                          <Heroicons.Outline.LinkIcon class="h-3 w-3 mr-2" />
-                        </LivePatch>
-                        <CalloutText text={option.name} />
-                        {render_tags(assigns, option)}
-                      </div>
-                    </td>
-                    <td>
-                      {option.type}
-                    </td>
-                    <td>
-                      {if option.default == "nil", do: nil, else: option.default}
-                    </td>
-                    <td>
-                      {raw(option.doc_html)}
-                    </td>
-                  </tr>
-                {/for}
-              {/if}
-            </table>
-          </div>
 
           <footer class="p-2 sm:justify-center">
             <div class="md:flex md:justify-around items-center">
@@ -305,13 +192,126 @@ defmodule AshHqWeb.Pages.Docs do
         </div>
         {#if @module}
           <div class="sidebar-container hidden lg:block lg:w-80 sticky top-36 xl:top-20 shrink-0 overflow-y-auto overflow-x-hidden dark:bg-base-dark-850 bg-opacity-70 mt-4">
-            <RightNav functions={@module.functions} module={@module.name} />
+            <ModuleRightNav functions={@module.functions} module={@module.name} />
           </div>
         {#else}
-          <!-- empty div to preserve flex row spacing -->
-          <div />
+          {#if @dsl_target}
+            <div class="sidebar-container hidden lg:block lg:w-80 sticky top-36 xl:top-20 shrink-0 overflow-y-auto overflow-x-hidden dark:bg-base-dark-850 bg-opacity-70 mt-4">
+              <DslRightNav dsls={Enum.flat_map(@dsl_target_extensions, & &1.dsls)} dsl_target={@dsl_target} />
+            </div>
+          {#else}
+            <!-- empty div to preserve flex row spacing -->
+            <div />
+          {/if}
         {/if}
       </div>
+    </div>
+    """
+  end
+
+  def render_dsl(assigns, extension, dsl) do
+    options =
+      Enum.filter(
+        extension.options,
+        &(&1.path == dsl.path ++ [dsl.name])
+      )
+      |> Enum.split_with(& &1.argument_index)
+      |> then(fn {args, not_args} ->
+        Enum.sort_by(args, & &1.argument_index) ++ not_args
+      end)
+
+    arguments =
+      options
+      |> Enum.filter(& &1.argument_index)
+      |> Enum.sort_by(& &1.argument_index)
+
+    arg_count = Enum.count(arguments)
+
+    ~F"""
+    <div class={classes(["mb-12", "ml-6": !Enum.empty?(dsl.path)])}>
+      <div class="flex flex-col">
+        <div class="w-full">
+          <div class="text-2xl font-bold nav-anchor" id={String.replace(dsl.sanitized_path, "/", "-")}>
+            <div class="flex flex-row items-center bg-opacity-50 py-1 bg-base-light-200 dark:bg-base-dark-750 w-full border-l-2 border-primary-light-400 dark:border-primary-dark-400 pl-2">
+              <div class="flex flex-row items-center justify-between w-full pr-2">
+                <div class="text-lg w-full font-semibold">
+                  {dsl.name}
+                  {#for {arg, i} <- Enum.with_index(arguments)}
+                    <LivePatch to={"##{String.replace(arg.sanitized_path, "/", "-")}-#{DocRoutes.sanitize_name(arg.name)}"}>
+                      <span class="text-primary-light-600 dark:text-primary-dark-400 hover:dark:text-primary-dark-600 hover:text-primary-light-700">
+                        {arg.name}</span>{#if arg.name in dsl.optional_args}
+                        \\ {Map.get(dsl.arg_defaults, arg.name, "nil")}
+                      {/if}</LivePatch>{#if i != arg_count - 1},{/if}
+                  {/for}
+                </div>
+                <a href={"##{String.replace(dsl.sanitized_path, "/", "-")}"}>
+                  <Heroicons.Outline.LinkIcon class="h-3 w-3 mr-2" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="prose-lg dark:prose-invert my-4">
+            {raw(dsl.doc_html)}
+          </div>
+        </div>
+        {#if !Enum.empty?(options)}
+          <div class="my-2">
+            {#case modules_in_scope(dsl, extension, @libraries, @selected_versions)}
+              {#match []}
+              {#match imports}
+                <div>Imported Modules:</div>
+                <ul>
+                  {#for mod <- imports}
+                    <li class="list-disc">
+                      <LivePatch to={DocRoutes.doc_link(mod, @selected_versions)}>
+                        <span class="text-primary-light-600 dark:text-primary-dark-400 hover:dark:text-primary-dark-600 hover:text-primary-light-700">
+                          {mod.name}
+                        </span>
+                      </LivePatch>
+                    </li>
+                  {/for}
+                </ul>
+            {/case}
+          </div>
+        {/if}
+      </div>
+      <div
+        :if={!Enum.empty?(options)}
+        class="grid w-full"
+        style="grid-template-columns: min-content auto"
+      >
+        {#for option <- options}
+          <div
+            class="flex flex-col border-t border-gray-600 mt-2 nav-anchor"
+            id={"#{String.replace(option.sanitized_path, "/", "-")}-#{DocRoutes.sanitize_name(option.name)}"}
+          >
+            <div class="flex flex-row align-middle">
+              <LivePatch
+                to={"##{String.replace(option.sanitized_path, "/", "-")}-#{DocRoutes.sanitize_name(option.name)}"}
+                class="text-primary-light-600 dark:text-primary-dark-400 hover:dark:text-primary-dark-600 hover:text-primary-light-700 text-lg pr-4"
+              >
+                {option.name}
+              </LivePatch>
+              {render_tags(assigns, dsl, option)}
+            </div>
+            <span class="break-keep">
+              {option.type}
+            </span>
+          </div>
+          <div class="prose prose-lg dark:prose-invert border-t border-gray-600 mt-2 pt-0">
+            {raw(option.doc_html)}
+          </div>
+        {/for}
+      </div>
+      <hr class="mt-0 mb-12">
+      {#case child_dsls(extension, dsl)}
+        {#match []}
+        {#match children}
+          {#for child <- children}
+            {render_dsl(assigns, extension, child)}
+          {/for}
+      {/case}
     </div>
     """
   end
@@ -353,7 +353,7 @@ defmodule AshHqWeb.Pages.Docs do
     >
       <span>View the full range of Ash libraries for authentication, soft deletion, GraphQL and more</span>
       <button
-        id="close-search"
+        id="dismiss-catalogue"
         class="h-6 w-6 cursor-pointer"
         :on-click="dismiss_catalogue_call_to_action"
       >
@@ -436,20 +436,17 @@ defmodule AshHqWeb.Pages.Docs do
     end)
   end
 
-  defp positional_options(options) do
-    options
-    |> Enum.filter(& &1.argument_index)
-    |> Enum.sort_by(& &1.argument_index)
-  end
+  defp render_tags(assigns, dsl, option) do
+    required = option.required || (option.argument_index && option.name not in dsl.optional_args)
 
-  def path_to_name(path, name) do
-    Enum.map_join(path ++ [name], "-", &DocRoutes.sanitize_name/1)
-  end
-
-  defp render_tags(assigns, option) do
     ~F"""
-    {#if option.required}
-      <Tag color={:red}>
+    {#if option.argument_index}
+      <Tag color={:blue}>
+        Arg[{option.argument_index}]
+      </Tag>
+    {/if}
+    {#if required}
+      <Tag color={:red} class={classes("ml-2": option.argument_index)}>
         Required
       </Tag>
     {/if}
@@ -556,13 +553,57 @@ defmodule AshHqWeb.Pages.Docs do
   def load_docs(socket) do
     socket
     |> assign_library()
-    |> assign_extension()
+    |> assign_dsl_target()
     |> assign_guide()
     |> assign_module()
     |> assign_mix_task()
-    |> assign_dsl()
     |> assign_fallback_guide()
     |> assign_docs()
+  end
+
+  defp assign_dsl_target(socket) do
+    if socket.assigns[:params]["dsl_target"] do
+      extensions =
+        socket.assigns.libraries
+        |> Enum.map(fn library ->
+          selected_version(library, socket.assigns.selected_versions[library.id])
+        end)
+        |> Enum.reject(&is_nil/1)
+        |> Enum.flat_map(& &1.extensions)
+        |> Enum.filter(fn extension ->
+          AshHqWeb.DocRoutes.sanitize_name(extension.target) ==
+            socket.assigns[:params]["dsl_target"]
+        end)
+
+      dsls_query =
+        AshHq.Docs.Dsl
+        |> Ash.Query.sort(order: :asc)
+        |> load_for_search()
+        |> Ash.Query.ensure_selected([:examples_html])
+        |> Ash.Query.load([:doc_html, :path])
+
+      options_query =
+        AshHq.Docs.Option
+        |> Ash.Query.sort(order: :asc)
+        |> load_for_search()
+        |> Ash.Query.load([:doc_html, :path])
+
+      extensions = AshHq.Docs.load!(extensions, dsls: dsls_query, options: options_query)
+
+      target_name =
+        case Enum.at(extensions, 0) do
+          %{target: target} -> target
+          _ -> nil
+        end
+
+      assign(socket,
+        dsl_target_extensions: extensions,
+        dsl_target: target_name,
+        not_found: Enum.empty?(extensions)
+      )
+    else
+      assign(socket, dsl_target_extensions: nil, dsl_target: nil)
+    end
   end
 
   defp assign_sidebar_content(socket) do
@@ -579,14 +620,15 @@ defmodule AshHqWeb.Pages.Docs do
           )
       },
       %{
-        name: "DSLs & Extensions",
+        name: "DSLs",
         id: "dsls",
+        categories_only?: true,
         categories:
           get_extensions(
             socket.assigns[:libraries],
             socket.assigns[:library_version],
             socket.assigns[:selected_versions],
-            socket.assigns[:extension]
+            socket.assigns[:dsl_target]
           )
       },
       %{
@@ -712,6 +754,14 @@ defmodule AshHqWeb.Pages.Docs do
     end
   end
 
+  defp partially_alphabetically_sort([value | _rest] = list, first, last)
+       when not is_tuple(value) do
+    list
+    |> Enum.map(&{&1, nil})
+    |> partially_alphabetically_sort(first, last)
+    |> Enum.map(&elem(&1, 0))
+  end
+
   defp partially_alphabetically_sort(keyed_list, first, last) do
     {first_items, rest} =
       Enum.split_with(keyed_list, fn {key, _} ->
@@ -744,31 +794,28 @@ defmodule AshHqWeb.Pages.Docs do
 
   @target_order ["Ash.Resource", "Ash.Api", "Ash.Flow", "Ash.Registry"]
 
-  defp get_extensions(libraries, library_version, selected_versions, active_extension) do
+  defp get_extensions(libraries, library_version, selected_versions, dsl_target) do
     libraries
-    |> Enum.map(&{&1, selected_version(&1, library_version, selected_versions)})
-    |> Enum.filter(fn {_library, version} -> version != nil end)
-    |> Enum.sort_by(fn {library, _version} -> library.order end)
-    |> Enum.flat_map(fn {library, %{extensions: extensions}} ->
-      extensions
-      |> Enum.sort_by(& &1.order)
-      |> Enum.group_by(& &1.target, fn extension ->
-        %{
-          id: extension.id,
-          name: extension.module || extension.name,
-          to: DocRoutes.doc_link(extension, selected_versions),
-          active?: active_extension && active_extension.id == extension.id
-        }
-      end)
-      |> Enum.map(fn {target, extensions} -> {target, {library.display_name, extensions}} end)
-    end)
-    |> Enum.group_by(&elem(&1, 0), &elem(&1, 1))
+    |> Enum.map(&selected_version(&1, library_version, selected_versions))
+    |> Enum.reject(&is_nil/1)
+    |> Enum.flat_map(& &1.extensions)
+    |> Enum.map(& &1.target)
+    |> Enum.uniq()
     |> partially_alphabetically_sort(@target_order, [])
+    |> Enum.map(fn target ->
+      %{
+        id: DocRoutes.sanitize_name(target),
+        name: target,
+        to: DocRoutes.dsl_link(target),
+        active?: dsl_target == target
+      }
+    end)
   end
 
   defp assign_fallback_guide(socket) do
     if socket.assigns[:library_version] &&
-         !(socket.assigns[:dsl] || socket.assigns[:mix_task] || socket.assigns[:guide] ||
+         !(socket.assigns[:dsl_target_extensions] || socket.assigns[:dsl] ||
+             socket.assigns[:mix_task] || socket.assigns[:guide] ||
              socket.assigns[:extension] || socket.assigns[:module]) do
       guide =
         Enum.find(socket.assigns.library_version.guides, fn guide ->
@@ -803,6 +850,8 @@ defmodule AshHqWeb.Pages.Docs do
     end
   end
 
+  defp reselect!(nil, _), do: nil
+
   defp reselect_and_get!(record, field) do
     record
     |> reselect!(field)
@@ -829,9 +878,12 @@ defmodule AshHqWeb.Pages.Docs do
            &(&1.name == socket.assigns.params["library"])
          ) do
       nil ->
+        library = Enum.find(socket.assigns.libraries, &(&1.name == "ash"))
+
         assign(socket,
           not_found: true,
-          library: Enum.find(socket.assigns.libraries, &(&1.name == "ash"))
+          library: library,
+          library_version: AshHqWeb.Helpers.latest_version(library)
         )
 
       library ->
@@ -883,65 +935,6 @@ defmodule AshHqWeb.Pages.Docs do
     end
   end
 
-  defp assign_extension(socket) do
-    if socket.assigns.library_version && socket.assigns[:params]["extension"] do
-      extension =
-        Enum.find(socket.assigns.library_version.extensions, fn extension ->
-          extension.sanitized_name == socket.assigns[:params]["extension"] ||
-            AshHqWeb.DocRoutes.sanitize_name(extension.module) ==
-              socket.assigns[:params]["extension"]
-        end)
-
-      if is_nil(extension) do
-        assign(socket, extension: nil, not_found: true)
-      else
-        dsls_query =
-          AshHq.Docs.Dsl
-          |> Ash.Query.sort(order: :asc)
-          |> load_for_search()
-
-        options_query =
-          AshHq.Docs.Option
-          |> Ash.Query.sort(order: :asc)
-          |> load_for_search()
-
-        extension = AshHq.Docs.load!(extension, dsls: dsls_query, options: options_query)
-
-        assign(socket,
-          extension: extension
-        )
-      end
-    else
-      if socket.assigns.library_version && socket.assigns[:params]["module"] do
-        extension =
-          Enum.find(socket.assigns.library_version.extensions, fn extension ->
-            extension.sanitized_name == socket.assigns[:params]["module"]
-          end)
-
-        extension =
-          if extension do
-            dsls_query =
-              AshHq.Docs.Dsl
-              |> Ash.Query.sort(order: :asc)
-              |> load_for_search()
-
-            options_query =
-              AshHq.Docs.Option
-              |> Ash.Query.sort(order: :asc)
-              |> load_for_search()
-
-            AshHq.Docs.load!(extension, dsls: dsls_query, options: options_query)
-          end
-
-        assign(socket,
-          extension: extension
-        )
-      else
-        assign(socket, :extension, nil)
-      end
-    end
-  end
-
   defp assign_guide(socket) do
     guide_route = socket.assigns[:params]["guide"]
 
@@ -966,38 +959,8 @@ defmodule AshHqWeb.Pages.Docs do
     DocRoutes.sanitize_name(guide.name) == DocRoutes.sanitize_name(guide_name)
   end
 
-  defp assign_dsl(socket) do
-    case socket.assigns[:params]["dsl_path"] do
-      nil ->
-        assign(socket, :dsl, nil)
-
-      path ->
-        if socket.assigns.extension do
-          path = Enum.join(path, "/")
-
-          dsl =
-            Enum.find(
-              socket.assigns.extension.dsls,
-              &(&1.sanitized_path == path)
-            )
-
-          if is_nil(dsl) do
-            assign(socket, dsl: nil, not_found: true)
-          else
-            socket
-            |> assign(
-              :dsl,
-              dsl
-            )
-          end
-        else
-          assign(socket, dsl: nil, not_found: true)
-        end
-    end
-  end
-
   defp assign_module(socket) do
-    if !socket.assigns.extension && socket.assigns.library && socket.assigns.library_version &&
+    if socket.assigns.library && socket.assigns.library_version &&
          socket.assigns[:params]["module"] do
       module =
         Enum.find(
@@ -1046,6 +1009,25 @@ defmodule AshHqWeb.Pages.Docs do
 
   defp assign_docs(socket) do
     cond do
+      socket.assigns.dsl_target_extensions ->
+        target_name = socket.assigns.dsl_target
+
+        title =
+          if target_name do
+            "DSL Docs"
+          else
+            target_name
+          end
+
+        send(self(), {:page_title, title})
+
+        assign(socket,
+          docs: nil,
+          title: target_name,
+          description: "View the documentation for #{target_name} on Ash HQ.",
+          doc_path: [target_name]
+        )
+
       socket.assigns.module ->
         send(self(), {:page_title, socket.assigns.module.name})
 
@@ -1053,8 +1035,7 @@ defmodule AshHqWeb.Pages.Docs do
           docs: socket.assigns.module |> reselect_and_get!(:doc_html),
           title: "Module: #{socket.assigns.module.name}",
           description: "View the documentation for #{socket.assigns.module.name} on Ash HQ.",
-          doc_path: [socket.assigns.library.name, socket.assigns.module.name],
-          options: []
+          doc_path: [socket.assigns.library.name, socket.assigns.module.name]
         )
 
       socket.assigns.mix_task ->
@@ -1064,54 +1045,7 @@ defmodule AshHqWeb.Pages.Docs do
           docs: socket.assigns.mix_task |> reselect_and_get!(:doc_html),
           title: "Mix Task: #{socket.assigns.mix_task.name}",
           description: "View the documentation for #{socket.assigns.mix_task.name} on Ash HQ.",
-          doc_path: [socket.assigns.library.name, socket.assigns.mix_task.name],
-          options: []
-        )
-
-      socket.assigns.dsl ->
-        send(self(), {:page_title, socket.assigns.dsl.name})
-
-        meta_name =
-          Enum.join(
-            [
-              socket.assigns.library.name,
-              socket.assigns.extension.name
-            ] ++ socket.assigns.dsl.path ++ [socket.assigns.dsl.name],
-            " > "
-          )
-
-        meta_type = String.capitalize(to_string(socket.assigns.dsl.type))
-
-        dsl = AshHq.Docs.load!(socket.assigns.dsl, [:doc_html], lazy?: true)
-
-        options =
-          Enum.filter(
-            socket.assigns.extension.options,
-            &(&1.path == socket.assigns.dsl.path ++ [socket.assigns.dsl.name])
-          )
-          |> AshHq.Docs.load!(:doc_html, lazy?: true)
-
-        assign(socket,
-          docs: dsl.doc_html,
-          title: "DSL #{meta_type}: #{meta_name}",
-          description: "View the documentation for DSL #{meta_type}: #{meta_name} on Ash HQ.",
-          doc_path:
-            [
-              socket.assigns.library.name,
-              socket.assigns.extension.name
-            ] ++ socket.assigns.dsl.path ++ [socket.assigns.dsl.name],
-          options: options
-        )
-
-      socket.assigns.extension ->
-        send(self(), {:page_title, socket.assigns.extension.name})
-
-        assign(socket,
-          docs: socket.assigns.extension |> reselect_and_get!(:doc_html),
-          title: "Extension: #{socket.assigns.extension.name}",
-          description: "View the documentation for #{socket.assigns.extension.name} on Ash HQ.",
-          doc_path: [socket.assigns.library.name, socket.assigns.extension.name],
-          options: []
+          doc_path: [socket.assigns.library.name, socket.assigns.mix_task.name]
         )
 
       socket.assigns.guide ->
@@ -1121,8 +1055,7 @@ defmodule AshHqWeb.Pages.Docs do
           title: "Guide: #{socket.assigns.guide.name}",
           docs: socket.assigns.guide |> reselect_and_get!(:text_html),
           description: "Read the \"#{socket.assigns.guide.name}\" guide on Ash HQ",
-          doc_path: [socket.assigns.library.name, socket.assigns.guide.name],
-          options: []
+          doc_path: [socket.assigns.library.name, socket.assigns.guide.name]
         )
 
       true ->
@@ -1131,8 +1064,7 @@ defmodule AshHqWeb.Pages.Docs do
           title: "Ash Framework",
           description: default_description(),
           doc_path: [],
-          dsls: [],
-          options: []
+          dsls: []
         )
     end
   end

@@ -4,6 +4,10 @@ defmodule AshHqWeb.DocRoutes do
     "/docs/dsl/#{library.name}/#{name}"
   end
 
+  def dsl_link(target) do
+    "/docs/dsl/#{sanitize_name(target)}"
+  end
+
   def doc_link(entity, selected_versions \\ %{})
 
   def doc_link(
@@ -95,13 +99,13 @@ defmodule AshHqWeb.DocRoutes do
     "/docs/dsl/#{library_name}/#{version(version, library_id, selected_versions)}/#{sanitized_name}"
   end
 
-  def doc_link(item, selected_versions) do
+  def doc_link(item, _selected_versions) do
     case item do
       %AshHq.Docs.Dsl{} = item ->
-        "/docs/dsl/#{item.library_name}/#{version(item.version_name, item.library_id, selected_versions)}/#{sanitize_name(item.extension_name)}/#{item.sanitized_path}"
+        "/docs/dsl/#{sanitize_name(item.extension_target)}##{String.replace(item.sanitized_path, "/", "-")}"
 
       %AshHq.Docs.Option{} = item ->
-        "/docs/dsl/#{item.library_name}/#{version(item.version_name, item.library_id, selected_versions)}/#{sanitize_name(item.extension_name)}/#{item.sanitized_path}##{sanitize_name(item.name)}"
+        "/docs/dsl/#{sanitize_name(item.extension_target)}##{String.replace(item.sanitized_path, "/", "-")}-#{sanitize_name(item.name)}"
     end
   end
 

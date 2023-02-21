@@ -51,12 +51,7 @@ defmodule AshHq.Docs.Dsl do
     doc_attribute :doc
 
     load_for_search [
-      :extension_order,
-      :extension_type,
-      :extension_name,
-      :version_name,
-      :library_name,
-      :library_id
+      :extension_target
     ]
 
     weight_content(0.2)
@@ -132,6 +127,7 @@ defmodule AshHq.Docs.Dsl do
     first :extension_type, :extension, :type
     first :extension_order, :extension, :order
     first :extension_name, :extension, :name
+    first :extension_target, :extension, :target
     first :version_name, :library_version, :version
     first :library_name, [:library_version, :library], :name
     first :library_id, [:library_version, :library], :id

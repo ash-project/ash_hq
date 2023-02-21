@@ -55,13 +55,14 @@ defmodule AshHqWeb.Router do
       live("/forum/:channel/:id", AppViewLive, :forum)
       live("/docs/", AppViewLive, :docs_dsl)
       live("/docs/guides/:library/:version/*guide", AppViewLive, :docs_dsl)
-      live("/docs/dsl/:library", AppViewLive, :docs_dsl)
+      live("/docs/dsl/:dsl_target", AppViewLive, :docs_dsl)
       live("/docs/dsl/:library/:version", AppViewLive, :docs_dsl)
       live("/docs/dsl/:library/:version/:extension", AppViewLive, :docs_dsl)
-      live("/docs/dsl/:library/:version/:extension/*dsl_path", AppViewLive, :docs_dsl)
       live("/docs/module/:library/:version/:module", AppViewLive, :docs_dsl)
       live("/docs/mix_task/:library/:version/:mix_task", AppViewLive, :docs_dsl)
       live("/docs/:library/:version", AppViewLive, :docs_dsl)
+
+      get("/docs/dsl/:library/:version/:extension/*dsl_path", DslRedirectController, :show)
 
       get("/unsubscribe", MailingListController, :unsubscribe)
     end
