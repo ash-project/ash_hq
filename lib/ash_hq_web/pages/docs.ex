@@ -579,7 +579,6 @@ defmodule AshHqWeb.Pages.Docs do
         AshHq.Docs.Dsl
         |> Ash.Query.sort(order: :asc)
         |> load_for_search()
-        |> Ash.Query.ensure_selected([:examples_html])
         |> Ash.Query.load([:doc_html, :path])
 
       options_query =
