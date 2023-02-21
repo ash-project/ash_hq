@@ -261,6 +261,9 @@ defmodule Utils do
 
   defp schema(schema, path) do
     schema
+    |> Enum.reject(fn {key, config} ->
+      config[:hide]
+    end)
     |> Enum.with_index()
     |> Enum.map(fn {{name, value}, index} ->
       %{
