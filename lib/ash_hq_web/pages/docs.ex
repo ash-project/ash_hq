@@ -127,12 +127,15 @@ defmodule AshHqWeb.Pages.Docs do
             {/if}
             {#if @dsl_target_extensions}
               {#for extension <- @dsl_target_extensions}
-                <div class="text-3xl font-extrabold mb-12">
-                  {#if extension.default_for_target}
-                    {extension.target}
-                  {#else}
-                    {extension.module}
-                  {/if}
+                <div class="prose dark:prose-invert mb-8">
+                  <h1>
+                    {#if extension.default_for_target}
+                      {extension.target}
+                    {#else}
+                      {extension.module}
+                    {/if}
+                  </h1>
+                  {raw(extension.doc_html)}
                 </div>
                 {#for dsl <- extension.dsls |> Enum.filter(&(&1.path == []))}
                   {render_dsl(assigns, extension, dsl)}
@@ -191,12 +194,12 @@ defmodule AshHqWeb.Pages.Docs do
           </footer>
         </div>
         {#if @module}
-          <div class="sidebar-container hidden lg:block lg:w-80 sticky top-36 xl:top-20 shrink-0 overflow-y-auto overflow-x-hidden dark:bg-base-dark-850 bg-opacity-70 mt-4">
+          <div class="sidebar-container hidden lg:block lg:w-72 sticky top-36 xl:top-20 shrink-0 overflow-y-auto overflow-x-hidden dark:bg-base-dark-850 bg-opacity-70 mt-4">
             <ModuleRightNav functions={@module.functions} module={@module.name} />
           </div>
         {#else}
           {#if @dsl_target}
-            <div class="sidebar-container hidden lg:block lg:w-80 sticky top-36 xl:top-20 shrink-0 overflow-y-auto overflow-x-hidden dark:bg-base-dark-850 bg-opacity-70 mt-4">
+            <div class="sidebar-container hidden lg:block lg:w-72 sticky top-36 xl:top-20 shrink-0 overflow-y-auto overflow-x-hidden dark:bg-base-dark-850 bg-opacity-70 mt-4">
               <DslRightNav dsls={Enum.flat_map(@dsl_target_extensions, & &1.dsls)} dsl_target={@dsl_target} />
             </div>
           {#else}
@@ -228,7 +231,7 @@ defmodule AshHqWeb.Pages.Docs do
     arg_count = Enum.count(arguments)
 
     ~F"""
-    <div class={classes(["mb-12", "ml-6": !Enum.empty?(dsl.path)])}>
+    <div class={classes(["mb-12 mt-4"])}>
       <div class="flex flex-col">
         <div class="w-full">
           <div class="text-2xl font-bold nav-anchor" id={String.replace(dsl.sanitized_path, "/", "-")}>
@@ -237,11 +240,14 @@ defmodule AshHqWeb.Pages.Docs do
                 <div class="text-lg w-full font-semibold">
                   {dsl.name}
                   {#for {arg, i} <- Enum.with_index(arguments)}
-                    <LivePatch to={"##{String.replace(arg.sanitized_path, "/", "-")}-#{DocRoutes.sanitize_name(arg.name)}"}>
-                      <span class="text-primary-light-600 dark:text-primary-dark-400 hover:dark:text-primary-dark-600 hover:text-primary-light-700">
+                    <LivePatch
+                      class={"after:content-[',']": i != arg_count - 1}
+                      to={"##{String.replace(arg.sanitized_path, "/", "-")}-#{DocRoutes.sanitize_name(arg.name)}"}
+                    >
+                      <span class="italic text-primary-light-600 dark:text-primary-dark-400 hover:dark:text-primary-dark-500 hover:text-primary-light-700">
                         {arg.name}</span>{#if arg.name in dsl.optional_args}
                         \\ {Map.get(dsl.arg_defaults, arg.name, "nil")}
-                      {/if}</LivePatch>{#if i != arg_count - 1},{/if}
+                      {/if}</LivePatch>
                   {/for}
                 </div>
                 <a href={"##{String.replace(dsl.sanitized_path, "/", "-")}"}>
@@ -251,60 +257,58 @@ defmodule AshHqWeb.Pages.Docs do
             </div>
           </div>
 
-          <div class="prose-lg dark:prose-invert my-4">
+          <div class="prose dark:prose-invert my-4">
             {raw(dsl.doc_html)}
           </div>
         </div>
         {#if !Enum.empty?(options)}
-          <div class="my-2">
-            {#case modules_in_scope(dsl, extension, @libraries, @selected_versions)}
-              {#match []}
-              {#match imports}
+          {#case modules_in_scope(dsl, extension, @libraries, @selected_versions)}
+            {#match []}
+            {#match imports}
+              <div class="mt-2 mb-6">
                 <div>Imported Modules:</div>
                 <ul>
                   {#for mod <- imports}
                     <li class="list-disc">
                       <LivePatch to={DocRoutes.doc_link(mod, @selected_versions)}>
-                        <span class="text-primary-light-600 dark:text-primary-dark-400 hover:dark:text-primary-dark-600 hover:text-primary-light-700">
+                        <span class="text-primary-light-600 dark:text-primary-dark-400 hover:dark:text-primary-dark-500 hover:text-primary-light-700">
                           {mod.name}
                         </span>
                       </LivePatch>
                     </li>
                   {/for}
                 </ul>
-            {/case}
-          </div>
+              </div>
+          {/case}
         {/if}
       </div>
       <div
         :if={!Enum.empty?(options)}
-        class="grid w-full"
-        style="grid-template-columns: min-content auto"
+        class="grid grid-cols-[min-content_auto] w-full border-b border-gray-300 dark:border-gray-600 pb-2 mb-12"
       >
         {#for option <- options}
           <div
-            class="flex flex-col border-t border-gray-600 mt-2 nav-anchor"
+            class="flex flex-col border-t border-gray-300 dark:border-gray-600 py-3 nav-anchor pr-4"
             id={"#{String.replace(option.sanitized_path, "/", "-")}-#{DocRoutes.sanitize_name(option.name)}"}
           >
-            <div class="flex flex-row align-middle">
+            <div class="flex flex-row align-middle leading-7">
               <LivePatch
                 to={"##{String.replace(option.sanitized_path, "/", "-")}-#{DocRoutes.sanitize_name(option.name)}"}
-                class="text-primary-light-600 dark:text-primary-dark-400 hover:dark:text-primary-dark-600 hover:text-primary-light-700 text-lg pr-4"
+                class="text-primary-light-600 dark:text-primary-dark-400 hover:dark:text-primary-dark-500 hover:text-primary-light-700 pr-2"
               >
                 {option.name}
               </LivePatch>
               {render_tags(assigns, dsl, option)}
             </div>
-            <span class="break-keep">
+            <span class="break-keep text-sm">
               {option.type}
             </span>
           </div>
-          <div class="prose prose-lg dark:prose-invert border-t border-gray-600 mt-2 pt-0">
+          <div class="prose dark:prose-invert border-t border-gray-300 dark:border-gray-600 py-3">
             {raw(option.doc_html)}
           </div>
         {/for}
       </div>
-      <hr class="mt-0 mb-12">
       {#case child_dsls(extension, dsl)}
         {#match []}
         {#match children}
@@ -441,12 +445,12 @@ defmodule AshHqWeb.Pages.Docs do
 
     ~F"""
     {#if option.argument_index}
-      <Tag color={:blue}>
+      <Tag color={:blue} class="mt-1 py-0.5 h-5">
         Arg[{option.argument_index}]
       </Tag>
     {/if}
     {#if required}
-      <Tag color={:red} class={classes("ml-2": option.argument_index)}>
+      <Tag color={:red} class={classes(["mt-1 py-0.5 h-5", "ml-2": option.argument_index])}>
         Required
       </Tag>
     {/if}
