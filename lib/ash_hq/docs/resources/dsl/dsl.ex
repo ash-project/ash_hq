@@ -51,7 +51,9 @@ defmodule AshHq.Docs.Dsl do
     doc_attribute :doc
 
     load_for_search [
-      :extension_target
+      :extension_name,
+      :extension_target,
+      :library_name
     ]
 
     weight_content(0.2)

@@ -49,13 +49,9 @@ defmodule AshHq.Docs.Option do
     doc_attribute :doc
 
     load_for_search [
-      :extension_order,
-      :extension_type,
       :extension_name,
       :extension_target,
-      :version_name,
-      :library_name,
-      :library_id
+      :library_name
     ]
 
     sanitized_name_attribute :sanitized_path
