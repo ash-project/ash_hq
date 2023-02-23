@@ -8,7 +8,7 @@ defmodule AshHq.Accounts.User.Senders.SendPasswordResetEmail do
   def send(user, token, _) do
     AshHq.Accounts.Emails.deliver_reset_password_instructions(
       user,
-      ~p"/password-reset/#{token}"
+      url(~p"/password-reset/#{token}")
     )
   end
 end
