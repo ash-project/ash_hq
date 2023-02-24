@@ -7,7 +7,8 @@ defmodule AshHqWeb.DslRedirectController do
     extension =
       library.latest_library_version.extensions
       |> Enum.find(fn extension ->
-        AshHqWeb.DocRoutes.sanitize_name(extension.name) == extension_name
+        AshHqWeb.DocRoutes.sanitize_name(extension.module) == extension_name ||
+          AshHqWeb.DocRoutes.sanitize_name(extension.name) == extension_name
       end)
       |> Kernel.||(raise Ash.Error.Query.NotFound)
 
