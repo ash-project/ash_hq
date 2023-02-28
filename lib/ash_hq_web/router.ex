@@ -38,9 +38,8 @@ defmodule AshHqWeb.Router do
   scope "/", AshHqWeb do
     pipe_through(:browser)
 
-    live_session :main,
+    ash_authentication_live_session :main,
       on_mount: [
-        AshAuthentication.Phoenix.LiveSession,
         {AshHqWeb.LiveUserAuth, :live_user_optional},
         {AshHqWeb.InitAssigns, :default}
       ],
@@ -67,9 +66,8 @@ defmodule AshHqWeb.Router do
       get("/unsubscribe", MailingListController, :unsubscribe)
     end
 
-    live_session :authenticated_only,
+    ash_authentication_live_session :authenticated_only,
       on_mount: [
-        AshAuthentication.Phoenix.LiveSession,
         {AshHqWeb.InitAssigns, :default},
         {AshHqWeb.LiveUserAuth, :live_user_required}
       ],
