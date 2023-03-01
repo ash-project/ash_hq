@@ -70,10 +70,16 @@ defmodule AshHqWeb.Pages.Media do
             <li class="mb-4">
               <a
                 class="hover:text-primary-light-400 dark:hover:text-primary-dark-400"
+                href="https://github.com/team-alembic/realworld"
+              >Real World</a>
+            </li>
+            <li class="mb-4">
+              <a
+                class="hover:text-primary-light-400 dark:hover:text-primary-dark-400"
                 href="https://github.com/lukegalea/openats"
               >Open ATS</a>
             </li>
-            <li>
+            <li class="mb-4">
               <a
                 class="hover:text-primary-light-400 dark:hover:text-primary-dark-400"
                 href="https://github.com/brettkolodny/todoish"
