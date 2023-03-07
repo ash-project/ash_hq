@@ -156,9 +156,15 @@ defmodule AshHqWeb.Pages.Home do
             </div>
           </div>
 
-          <div class="flex flex-row justify-center mt-12">
+          <div class="flex flex-row justify-center mt-12 gap-4">
             <a href="https://coinbits.app/">
               <img class="h-6" src="/images/coinbits-logo.png">
+            </a>
+            <a class="block dark:hidden" href="https://www.wintermeyer-consulting.de/">
+              <img class="h-6" src="/images/wintermeyer-logo.svg">
+            </a>
+            <a class="hidden dark:block" href="https://www.wintermeyer-consulting.de/">
+              <img class="h-6" src="/images/wintermeyer-logo-dark.svg">
             </a>
           </div>
         </div>
