@@ -89,7 +89,7 @@ defmodule AshHq.Discord.Listener do
         end
 
       """
-      Found #{count} #{result_type} in #{library}:
+      Found #{count} #{result_type} in #{library} for query "#{search}":
 
       #{Enum.map_join(item_list, "\n", &render_search_result(&1))}
       """
