@@ -47,6 +47,7 @@ defmodule AshHq.MixProject do
       {:ash_json_api, github: "ash-project/ash_json_api"},
       {:ash_authentication, github: "team-alembic/ash_authentication", override: true},
       {:ash_authentication_phoenix, github: "team-alembic/ash_authentication_phoenix"},
+      {:absinthe_plug, "~> 1.5"},
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, github: "ash-project/ash_csv"},
       # Discord
@@ -85,6 +86,9 @@ defmodule AshHq.MixProject do
       {:phoenix_live_dashboard, "~> 0.6"},
       {:ecto_psql_extras, "~> 0.6"},
       {:phoenix_ecto, "~> 4.4"},
+      # OpenApiSpex / SwaggerUI / Redoc
+      {:open_api_spex, "~> 3.16"},
+      {:redoc_ui_plug, github: "team-alembic/redoc_ui_plug"},
       # Phoenix/Core dependencies
       {:phoenix, "~> 1.7.0-rc.1", override: true},
       {:phoenix_view, "~> 2.0"},

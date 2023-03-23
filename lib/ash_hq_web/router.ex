@@ -83,6 +83,7 @@ defmodule AshHqWeb.Router do
 
   ## Api routes
   scope "/" do
+    forward("/json_api", AshHqWeb.DocsJsonApiRouter)
     forward("/gql", Absinthe.Plug, schema: AshHqWeb.Schema)
 
     forward(
@@ -91,6 +92,34 @@ defmodule AshHqWeb.Router do
       schema: AshHqWeb.Schema,
       interface: :playground
     )
+  end
+
+  ## Authentication routes
+
+  scope "/", AshHqWeb do
+    pipe_through([
+      :browser,
+      :dead_view_authentication,
+      :redirect_if_user_is_authenticated,
+      :put_session_layout
+    ])
+
+    get("/users/new_session", UserSessionController, :log_in)
+    post("/users/new_session", UserSessionController, :log_in)
+  end
+
+  scope "/", AshHqWeb do
+    pipe_through([:browser, :dead_view_authentication, :require_authenticated_user])
+
+    get("/users/settings/confirm_email/:token", UserSettingsController, :confirm_email)
+  end
+
+  scope "/", AshHqWeb do
+    pipe_through([:browser, :dead_view_authentication])
+
+    post("/users/log_out", UserSessionController, :delete)
+    post("/users/confirm", UserConfirmationController, :create)
+    get("/users/confirm/:token", UserConfirmationController, :confirm)
   end
 
   # Enables LiveDashboard only for development
