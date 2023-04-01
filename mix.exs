@@ -39,8 +39,7 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      # {:ash, github: "ash-project/ash", override: true},
-      {:ash, path: "../ash", override: true},
+      {:ash, github: "ash-project/ash", override: true},
       {:ash_postgres, github: "ash-project/ash_postgres"},
       {:ash_admin, github: "ash-project/ash_admin"},
       {:ash_phoenix, github: "ash-project/ash_phoenix", override: true},
@@ -115,7 +114,7 @@ defmodule AshHq.MixProject do
       {:nimble_options, "~> 0.5.1", override: true},
       {:surface, "~> 0.9.1"},
       {:surface_heroicons, "~> 0.6.0"},
-      {:spark, path: "../spark", override: true}
+      {:spark, "~> 1.0", override: true}
     ]
   end
 
