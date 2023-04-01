@@ -1,4 +1,4 @@
-FROM hexpm/elixir:1.13.4-erlang-25.0-ubuntu-xenial-20210804
+FROM hexpm/elixir:1.14.3-erlang-25.0-ubuntu-xenial-20210804
 # install build dependencies
 USER root
 RUN apt-get update
