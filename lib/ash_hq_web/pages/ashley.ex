@@ -247,7 +247,6 @@ defmodule AshHqWeb.Pages.Ashley do
          |> assign_message_form()}
 
       {:error, form} ->
-        IO.inspect(AshPhoenix.Form.errors(form, for_path: :all))
         {:noreply, assign(socket, message_form: form)}
     end
   end
