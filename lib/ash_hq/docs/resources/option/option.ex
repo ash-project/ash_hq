@@ -5,6 +5,51 @@ defmodule AshHq.Docs.Option do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
+  actions do
+    defaults [:update, :destroy]
+
+    read :read do
+      primary? true
+
+      pagination offset?: true,
+                 keyset?: true,
+                 countable: true,
+                 default_limit: 25,
+                 required?: false
+    end
+
+    create :create do
+      primary? true
+      argument :library_version, :uuid
+
+      argument :extension_id, :uuid do
+        allow_nil? false
+      end
+
+      change manage_relationship(:extension_id, :extension, type: :append_and_remove)
+      change manage_relationship(:library_version, type: :append_and_remove)
+    end
+  end
+
+  search do
+    doc_attribute :doc
+
+    load_for_search [
+      :extension_name,
+      :extension_target,
+      :library_name
+    ]
+
+    sanitized_name_attribute :sanitized_path
+    use_path_for_name? true
+    add_name_to_path? false
+    show_docs_on :dsl_sanitized_path
+  end
+
+  render_markdown do
+    render_attributes doc: :doc_html
+  end
+
   attributes do
     uuid_primary_key :id
 
@@ -45,25 +90,6 @@ defmodule AshHq.Docs.Option do
     timestamps()
   end
 
-  search do
-    doc_attribute :doc
-
-    load_for_search [
-      :extension_name,
-      :extension_target,
-      :library_name
-    ]
-
-    sanitized_name_attribute :sanitized_path
-    use_path_for_name? true
-    add_name_to_path? false
-    show_docs_on :dsl_sanitized_path
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html
-  end
-
   relationships do
     belongs_to :dsl, AshHq.Docs.Dsl do
       allow_nil? true
@@ -84,27 +110,6 @@ defmodule AshHq.Docs.Option do
 
     references do
       reference :library_version, on_delete: :delete
-    end
-  end
-
-  actions do
-    defaults [:update, :destroy]
-
-    read :read do
-      primary? true
-      pagination offset?: true, countable: true, default_limit: 25, required?: false
-    end
-
-    create :create do
-      primary? true
-      argument :library_version, :uuid
-
-      argument :extension_id, :uuid do
-        allow_nil? false
-      end
-
-      change manage_relationship(:extension_id, :extension, type: :append_and_remove)
-      change manage_relationship(:library_version, type: :append_and_remove)
     end
   end
 

@@ -5,43 +5,6 @@ defmodule AshHq.Docs.LibraryVersion do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  attributes do
-    uuid_primary_key :id
-
-    attribute :version, :string do
-      allow_nil? false
-    end
-
-    attribute :hydrated, :boolean do
-      default false
-      allow_nil? false
-    end
-
-    timestamps()
-  end
-
-  search do
-    name_attribute :version
-    library_version_attribute :id
-    load_for_search [:library_name, :library_display_name]
-  end
-
-  relationships do
-    belongs_to :library, AshHq.Docs.Library do
-      allow_nil? true
-    end
-
-    has_many :extensions, AshHq.Docs.Extension
-    has_many :guides, AshHq.Docs.Guide
-    has_many :modules, AshHq.Docs.Module
-    has_many :mix_tasks, AshHq.Docs.MixTask
-  end
-
-  postgres do
-    table "library_versions"
-    repo AshHq.Repo
-  end
-
   actions do
     defaults [:update, :destroy]
 
@@ -116,6 +79,43 @@ defmodule AshHq.Docs.LibraryVersion do
 
       filter expr(version in ^arg(:versions) and library_id == ^arg(:library))
     end
+  end
+
+  search do
+    name_attribute :version
+    library_version_attribute :id
+    load_for_search [:library_name, :library_display_name]
+  end
+
+  attributes do
+    uuid_primary_key :id
+
+    attribute :version, :string do
+      allow_nil? false
+    end
+
+    attribute :hydrated, :boolean do
+      default false
+      allow_nil? false
+    end
+
+    timestamps()
+  end
+
+  relationships do
+    belongs_to :library, AshHq.Docs.Library do
+      allow_nil? true
+    end
+
+    has_many :extensions, AshHq.Docs.Extension
+    has_many :guides, AshHq.Docs.Guide
+    has_many :modules, AshHq.Docs.Module
+    has_many :mix_tasks, AshHq.Docs.MixTask
+  end
+
+  postgres do
+    table "library_versions"
+    repo AshHq.Repo
   end
 
   code_interface do

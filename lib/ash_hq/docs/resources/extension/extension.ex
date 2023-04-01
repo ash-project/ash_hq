@@ -5,6 +5,41 @@ defmodule AshHq.Docs.Extension do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
+  actions do
+    defaults [:update, :destroy]
+
+    read :read do
+      primary? true
+      pagination offset?: true, countable: true, default_limit: 25, required?: false
+    end
+
+    create :create do
+      primary? true
+
+      argument :library_version, :uuid do
+        allow_nil? false
+      end
+
+      argument :dsls, {:array, :map}
+      change manage_relationship(:library_version, type: :append_and_remove)
+      change {AshHq.Docs.Changes.AddArgToRelationship, arg: :library_version, rel: :dsls}
+
+      change {AshHq.Docs.Changes.AddArgToRelationship,
+              attr: :id, arg: :extension_id, rel: :dsls, generate: &Ash.UUID.generate/0}
+
+      change manage_relationship(:dsls, type: :create)
+    end
+  end
+
+  search do
+    doc_attribute :doc
+    load_for_search library_version: [:library_display_name, :library_name]
+  end
+
+  render_markdown do
+    render_attributes doc: :doc_html
+  end
+
   attributes do
     uuid_primary_key :id
 
@@ -42,15 +77,6 @@ defmodule AshHq.Docs.Extension do
     timestamps()
   end
 
-  search do
-    doc_attribute :doc
-    load_for_search library_version: [:library_display_name, :library_name]
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html
-  end
-
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
       allow_nil? true
@@ -66,32 +92,6 @@ defmodule AshHq.Docs.Extension do
 
     references do
       reference :library_version, on_delete: :delete
-    end
-  end
-
-  actions do
-    defaults [:update, :destroy]
-
-    read :read do
-      primary? true
-      pagination offset?: true, countable: true, default_limit: 25, required?: false
-    end
-
-    create :create do
-      primary? true
-
-      argument :library_version, :uuid do
-        allow_nil? false
-      end
-
-      argument :dsls, {:array, :map}
-      change manage_relationship(:library_version, type: :append_and_remove)
-      change {AshHq.Docs.Changes.AddArgToRelationship, arg: :library_version, rel: :dsls}
-
-      change {AshHq.Docs.Changes.AddArgToRelationship,
-              attr: :id, arg: :extension_id, rel: :dsls, generate: &Ash.UUID.generate/0}
-
-      change manage_relationship(:dsls, type: :create)
     end
   end
 

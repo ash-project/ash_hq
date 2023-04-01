@@ -9,6 +9,59 @@ defmodule AshHq.Docs.Guide do
       AshAdmin.Resource
     ]
 
+  actions do
+    defaults [:create, :update, :destroy]
+
+    read :read do
+      primary? true
+
+      pagination keyset?: true,
+                 offset?: true,
+                 countable: true,
+                 default_limit: 25,
+                 required?: false
+    end
+
+    read :read_for_version do
+      argument :library_versions, {:array, :uuid} do
+        allow_nil? false
+        constraints max_length: 20, min_length: 1
+      end
+
+      pagination offset?: true, countable: true, default_limit: 25, required?: false
+
+      filter expr(library_version.id in ^arg(:library_versions))
+    end
+  end
+
+  search do
+    doc_attribute :text
+    show_docs_on [:sanitized_name, :sanitized_route]
+    type "Guides"
+    load_for_search library_version: [:library_name, :library_display_name]
+  end
+
+  render_markdown do
+    render_attributes text: :text_html
+    table_of_contents? true
+  end
+
+  graphql do
+    type :guide
+
+    queries do
+      list :list_guides, :read_for_version
+    end
+  end
+
+  admin do
+    form do
+      field :text do
+        type :markdown
+      end
+    end
+  end
+
   attributes do
     uuid_primary_key :id
 
@@ -53,34 +106,6 @@ defmodule AshHq.Docs.Guide do
     timestamps()
   end
 
-  search do
-    doc_attribute :text
-    show_docs_on [:sanitized_name, :sanitized_route]
-    type "Guides"
-    load_for_search library_version: [:library_name, :library_display_name]
-  end
-
-  render_markdown do
-    render_attributes text: :text_html
-    table_of_contents? true
-  end
-
-  graphql do
-    type :guide
-
-    queries do
-      list :list_guides, :read_for_version
-    end
-  end
-
-  admin do
-    form do
-      field :text do
-        type :markdown
-      end
-    end
-  end
-
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
       allow_nil? true
@@ -93,31 +118,6 @@ defmodule AshHq.Docs.Guide do
 
     references do
       reference :library_version, on_delete: :delete
-    end
-  end
-
-  actions do
-    defaults [:create, :update, :destroy]
-
-    read :read do
-      primary? true
-
-      pagination keyset?: true,
-                 offset?: true,
-                 countable: true,
-                 default_limit: 25,
-                 required?: false
-    end
-
-    read :read_for_version do
-      argument :library_versions, {:array, :uuid} do
-        allow_nil? false
-        constraints max_length: 20, min_length: 1
-      end
-
-      pagination offset?: true, countable: true, default_limit: 25, required?: false
-
-      filter expr(library_version.id in ^arg(:library_versions))
     end
   end
 

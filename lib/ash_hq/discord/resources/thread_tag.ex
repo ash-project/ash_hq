@@ -3,6 +3,14 @@ defmodule AshHq.Discord.ThreadTag do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer
 
+  actions do
+    defaults [:read, :destroy]
+
+    create :tag do
+      upsert? true
+    end
+  end
+
   relationships do
     belongs_to :thread, AshHq.Discord.Thread do
       primary_key? true
@@ -22,14 +30,6 @@ defmodule AshHq.Discord.ThreadTag do
   postgres do
     table "discord_thread_tags"
     repo AshHq.Repo
-  end
-
-  actions do
-    defaults [:read, :destroy]
-
-    create :tag do
-      upsert? true
-    end
   end
 
   code_interface do

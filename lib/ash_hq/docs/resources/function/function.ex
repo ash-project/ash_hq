@@ -5,6 +5,47 @@ defmodule AshHq.Docs.Function do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
+  actions do
+    defaults [:update, :destroy]
+
+    read :read do
+      primary? true
+
+      pagination offset?: true,
+                 keyset?: true,
+                 countable: true,
+                 default_limit: 25,
+                 required?: false
+    end
+
+    create :create do
+      primary? true
+      argument :library_version, :uuid
+
+      change manage_relationship(:library_version, type: :append_and_remove)
+    end
+  end
+
+  search do
+    doc_attribute :doc
+
+    load_for_search [
+      :version_name,
+      :library_name,
+      :module_name,
+      :library_id
+    ]
+
+    type "Code"
+
+    show_docs_on :module_sanitized_name
+  end
+
+  render_markdown do
+    render_attributes doc: :doc_html, heads: :heads_html
+    header_ids? false
+  end
+
   attributes do
     uuid_primary_key :id
 
@@ -54,26 +95,6 @@ defmodule AshHq.Docs.Function do
     timestamps()
   end
 
-  search do
-    doc_attribute :doc
-
-    load_for_search [
-      :version_name,
-      :library_name,
-      :module_name,
-      :library_id
-    ]
-
-    type "Code"
-
-    show_docs_on :module_sanitized_name
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html, heads: :heads_html
-    header_ids? false
-  end
-
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
       allow_nil? true
@@ -90,22 +111,6 @@ defmodule AshHq.Docs.Function do
 
     references do
       reference :library_version, on_delete: :delete
-    end
-  end
-
-  actions do
-    defaults [:update, :destroy]
-
-    read :read do
-      primary? true
-      pagination offset?: true, countable: true, default_limit: 25, required?: false
-    end
-
-    create :create do
-      primary? true
-      argument :library_version, :uuid
-
-      change manage_relationship(:library_version, type: :append_and_remove)
     end
   end
 

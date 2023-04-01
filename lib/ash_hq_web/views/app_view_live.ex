@@ -5,29 +5,29 @@ defmodule AshHqWeb.AppViewLive do
 
   alias AshHqWeb.Components.AppView.TopBar
   alias AshHqWeb.Components.{CatalogueModal, Search}
-  alias AshHqWeb.Pages.{Blog, Docs, Forum, Home, Media, UserSettings}
+  alias AshHqWeb.Pages.{Ashley, Blog, Docs, Forum, Home, Media, UserSettings}
   alias Phoenix.LiveView.JS
   alias Surface.Components.Context
   require Ash.Query
 
   import AshHqWeb.Tails
 
-  data configured_theme, :string, default: :system
-  data selected_versions, :map, default: %{}
-  data libraries, :list, default: []
-  data selected_types, :map, default: %{}
-  data current_user, :map
+  data(configured_theme, :string, default: :system)
+  data(selected_versions, :map, default: %{})
+  data(libraries, :list, default: [])
+  data(selected_types, :map, default: %{})
+  data(current_user, :map)
 
-  data library, :any, default: nil
-  data extension, :any, default: nil
-  data docs, :any, default: nil
-  data library_version, :any, default: nil
-  data guide, :any, default: nil
-  data doc_path, :list, default: []
-  data dsls, :list, default: []
-  data dsl, :any, default: nil
-  data options, :list, default: []
-  data module, :any, default: nil
+  data(library, :any, default: nil)
+  data(extension, :any, default: nil)
+  data(docs, :any, default: nil)
+  data(library_version, :any, default: nil)
+  data(guide, :any, default: nil)
+  data(doc_path, :list, default: [])
+  data(dsls, :list, default: [])
+  data(dsl, :any, default: nil)
+  data(options, :list, default: [])
+  data(module, :any, default: nil)
 
   def render(%{platform: :ios} = assigns) do
     ~F"""
@@ -124,9 +124,11 @@ defmodule AshHqWeb.AppViewLive do
             <Media id="media" />
           {#match :forum}
             <Forum id="forum" params={@params} />
+          {#match :ashley}
+            <Ashley id="ashley" current_user={@current_user} params={@params} />
         {/case}
 
-        {#if @live_action != :docs_dsl}
+        {#if @live_action not in [:docs_dsl, :ashley]}
           <footer class="p-8 sm:p-6 bg-base-light-200 dark:bg-base-dark-850 sm:justify-center sticky">
             <div class="md:flex md:justify-around">
               <div class="flex justify-center mb-6 md:mb-0">

@@ -8,6 +8,8 @@ defmodule AshHq.Docs do
       AshAdmin.Api
     ]
 
+  use AshHq.ApiHelpers
+
   admin do
     show? true
     default_resource_page :primary_read

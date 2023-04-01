@@ -5,6 +5,40 @@ defmodule AshHq.Docs.MixTask do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
+  actions do
+    defaults [:update, :destroy]
+
+    read :read do
+      primary? true
+      pagination offset?: true, countable: true, default_limit: 25, required?: false
+    end
+
+    create :create do
+      primary? true
+      argument :library_version, :uuid
+
+      change manage_relationship(:library_version, type: :append_and_remove)
+    end
+  end
+
+  search do
+    doc_attribute :doc
+
+    load_for_search [
+      :version_name,
+      :library_name,
+      :library_id
+    ]
+
+    item_type "Mix Task"
+
+    type "Mix Tasks"
+  end
+
+  render_markdown do
+    render_attributes doc: :doc_html
+  end
+
   attributes do
     uuid_primary_key :id
 
@@ -37,24 +71,6 @@ defmodule AshHq.Docs.MixTask do
     timestamps()
   end
 
-  search do
-    doc_attribute :doc
-
-    load_for_search [
-      :version_name,
-      :library_name,
-      :library_id
-    ]
-
-    item_type "Mix Task"
-
-    type "Mix Tasks"
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html
-  end
-
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
       allow_nil? true
@@ -67,22 +83,6 @@ defmodule AshHq.Docs.MixTask do
 
     references do
       reference :library_version, on_delete: :delete
-    end
-  end
-
-  actions do
-    defaults [:update, :destroy]
-
-    read :read do
-      primary? true
-      pagination offset?: true, countable: true, default_limit: 25, required?: false
-    end
-
-    create :create do
-      primary? true
-      argument :library_version, :uuid
-
-      change manage_relationship(:library_version, type: :append_and_remove)
     end
   end
 

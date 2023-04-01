@@ -10,20 +10,20 @@ defmodule AshHq.Blog.Tag do
     columns [:name]
   end
 
-  attributes do
-    attribute :name, :ci_string do
-      allow_nil? false
-      primary_key? true
-      constraints casing: :lower
-    end
-  end
-
   actions do
     defaults [:create, :read, :update, :destroy]
 
     create :upsert do
       accept [:name]
       upsert? true
+    end
+  end
+
+  attributes do
+    attribute :name, :ci_string do
+      allow_nil? false
+      primary_key? true
+      constraints casing: :lower
     end
   end
 

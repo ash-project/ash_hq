@@ -5,6 +5,10 @@ defmodule AshHq.MailingList.Email do
     data_layer: AshPostgres.DataLayer,
     notifiers: AshHq.MailingList.EmailNotifier
 
+  actions do
+    defaults [:create, :read]
+  end
+
   attributes do
     uuid_primary_key :id
 
@@ -18,10 +22,6 @@ defmodule AshHq.MailingList.Email do
   postgres do
     repo AshHq.Repo
     table "emails"
-  end
-
-  actions do
-    defaults [:create, :read]
   end
 
   code_interface do

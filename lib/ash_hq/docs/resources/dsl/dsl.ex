@@ -5,6 +5,55 @@ defmodule AshHq.Docs.Dsl do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
+  actions do
+    defaults [:update, :destroy]
+
+    read :read do
+      primary? true
+
+      pagination offset?: true,
+                 keyset?: true,
+                 countable: true,
+                 default_limit: 25,
+                 required?: false
+    end
+
+    create :create do
+      primary? true
+      argument :options, {:array, :map}
+      argument :library_version, :uuid
+
+      argument :extension_id, :uuid do
+        allow_nil? false
+      end
+
+      change {AshHq.Docs.Changes.AddArgToRelationship, arg: :extension_id, rel: :options}
+
+      change {AshHq.Docs.Changes.AddArgToRelationship, arg: :library_version, rel: :options}
+      change manage_relationship(:options, type: :direct_control)
+      change manage_relationship(:library_version, type: :append_and_remove)
+    end
+  end
+
+  search do
+    doc_attribute :doc
+
+    load_for_search [
+      :extension_name,
+      :extension_target,
+      :library_name
+    ]
+
+    weight_content(0.2)
+
+    sanitized_name_attribute :sanitized_path
+    use_path_for_name? true
+  end
+
+  render_markdown do
+    render_attributes doc: :doc_html
+  end
+
   attributes do
     uuid_primary_key :id
 
@@ -47,25 +96,6 @@ defmodule AshHq.Docs.Dsl do
     timestamps()
   end
 
-  search do
-    doc_attribute :doc
-
-    load_for_search [
-      :extension_name,
-      :extension_target,
-      :library_name
-    ]
-
-    weight_content(0.2)
-
-    sanitized_name_attribute :sanitized_path
-    use_path_for_name? true
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html
-  end
-
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
       allow_nil? true
@@ -89,31 +119,6 @@ defmodule AshHq.Docs.Dsl do
     end
 
     migration_defaults optional_args: "[]"
-  end
-
-  actions do
-    defaults [:update, :destroy]
-
-    read :read do
-      primary? true
-      pagination offset?: true, countable: true, default_limit: 25, required?: false
-    end
-
-    create :create do
-      primary? true
-      argument :options, {:array, :map}
-      argument :library_version, :uuid
-
-      argument :extension_id, :uuid do
-        allow_nil? false
-      end
-
-      change {AshHq.Docs.Changes.AddArgToRelationship, arg: :extension_id, rel: :options}
-
-      change {AshHq.Docs.Changes.AddArgToRelationship, arg: :library_version, rel: :options}
-      change manage_relationship(:options, type: :direct_control)
-      change manage_relationship(:library_version, type: :append_and_remove)
-    end
   end
 
   code_interface do

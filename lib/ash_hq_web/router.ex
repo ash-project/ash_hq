@@ -47,6 +47,8 @@ defmodule AshHqWeb.Router do
       session: {AshAuthentication.Phoenix.LiveSession, :generate_session, []},
       root_layout: {AshHqWeb.LayoutView, :root} do
       live("/", AppViewLive, :home)
+      live("/ashley", AppViewLive, :ashley)
+      live("/ashley/:conversation_id", AppViewLive, :ashley)
       live("/media", AppViewLive, :media)
       live("/blog", AppViewLive, :blog)
       live("/blog/:slug", AppViewLive, :blog)

@@ -6,6 +6,22 @@ defmodule AshHq.Accounts.UserToken do
     authorizers: [Ash.Policy.Authorizer],
     extensions: [AshAuthentication.TokenResource]
 
+  actions do
+    defaults [:read, :destroy]
+
+    read :email_token_for_user do
+      get? true
+
+      argument :user_id, :uuid do
+        allow_nil? false
+      end
+
+      prepare build(sort: [updated_at: :desc], limit: 1)
+
+      filter expr(purpose == "confirm" and not is_nil(extra_data[:email]))
+    end
+  end
+
   token do
     api AshHq.Accounts
   end
@@ -35,22 +51,6 @@ defmodule AshHq.Accounts.UserToken do
 
     references do
       reference :user, on_delete: :delete, on_update: :update
-    end
-  end
-
-  actions do
-    defaults [:read, :destroy]
-
-    read :email_token_for_user do
-      get? true
-
-      argument :user_id, :uuid do
-        allow_nil? false
-      end
-
-      prepare build(sort: [updated_at: :desc], limit: 1)
-
-      filter expr(purpose == "confirm" and not is_nil(extra_data[:email]))
     end
   end
 

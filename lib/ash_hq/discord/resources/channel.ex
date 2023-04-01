@@ -6,6 +6,14 @@ defmodule AshHq.Discord.Channel do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer
 
+  actions do
+    defaults [:create, :read, :update, :destroy]
+
+    create :upsert do
+      upsert? true
+    end
+  end
+
   attributes do
     integer_primary_key :id, writable?: true, generated?: false
 
@@ -25,14 +33,6 @@ defmodule AshHq.Discord.Channel do
   postgres do
     table "discord_channels"
     repo AshHq.Repo
-  end
-
-  actions do
-    defaults [:create, :read, :update, :destroy]
-
-    create :upsert do
-      upsert? true
-    end
   end
 
   code_interface do

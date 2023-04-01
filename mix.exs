@@ -39,31 +39,31 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:ash, github: "ash-project/ash", override: true},
+      # {:ash, github: "ash-project/ash", override: true},
+      {:ash, path: "../ash", override: true},
       {:ash_postgres, github: "ash-project/ash_postgres"},
       {:ash_admin, github: "ash-project/ash_admin"},
       {:ash_phoenix, github: "ash-project/ash_phoenix", override: true},
       {:ash_graphql, github: "ash-project/ash_graphql"},
       {:ash_json_api, github: "ash-project/ash_json_api"},
-      {:ash_authentication, github: "team-alembic/ash_authentication", override: true},
-      {:ash_authentication_phoenix, github: "team-alembic/ash_authentication_phoenix"},
+      {:ash_authentication, "~> 3.10"},
+      {:ash_authentication_phoenix, "~> 1.6"},
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, github: "ash-project/ash_csv"},
       # Discord
       {:nostrum, github: "zachdaniel/nostrum"},
       {:cowlib, "~> 2.11", hex: :remedy_cowlib, override: true},
+      # Ashley
+      {:open_ai, github: "hernanat/open_ai_ex"},
+      {:pinecone, "~> 0.1.0"},
+      # Tiktoken isn't working for some reason
+      # {:tiktoken, "~> 0.1.0"}
       # Clustering
       {:libcluster, "~> 3.3"},
       # UI
       {:tails, "~> 0.1"},
       {:sunflower_ui, github: "zachdaniel/sunflower_ui"},
       {:earmark, "~> 1.5.0-pre1", override: true},
-      # Other
-      {:absinthe_plug, "~> 1.5"},
-      {:nimble_options, "~> 0.5.1", override: true},
-      {:spark, "~> 0.4", override: true},
-      {:surface, "~> 0.9.1"},
-      {:surface_heroicons, "~> 0.6.0"},
       # Syntax Highlighting
       {:makeup, "~> 1.1"},
       {:makeup_elixir, "~> 0.16.0"},
@@ -93,7 +93,7 @@ defmodule AshHq.MixProject do
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.18"},
-      {:finch, "~> 0.10.2"},
+      {:finch, "~> 0.10"},
       {:floki, ">= 0.30.0"},
       {:esbuild, "~> 0.3", runtime: false},
       {:telemetry_metrics, "~> 0.6"},
@@ -109,7 +109,13 @@ defmodule AshHq.MixProject do
       {:dialyxir, ">= 0.0.0", only: :dev, runtime: false},
       {:sobelow, ">= 0.0.0", only: :dev, runtime: false},
       {:excoveralls, "~> 0.14", only: [:dev, :test]},
-      {:eflame, "~> 1.0", only: [:dev, :test]}
+      {:eflame, "~> 1.0", only: [:dev, :test]},
+      # Other
+      {:absinthe_plug, "~> 1.5"},
+      {:nimble_options, "~> 0.5.1", override: true},
+      {:surface, "~> 0.9.1"},
+      {:surface_heroicons, "~> 0.6.0"},
+      {:spark, path: "../spark", override: true}
     ]
   end
 

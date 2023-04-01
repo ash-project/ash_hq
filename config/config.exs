@@ -13,7 +13,14 @@ config :ash_hq,
 config :ash, allow_flow: true
 
 config :ash_hq,
-  ash_apis: [AshHq.Blog, AshHq.Docs, AshHq.Accounts, AshHq.MailingList, AshHq.Discord]
+  ash_apis: [
+    AshHq.Ashley,
+    AshHq.Blog,
+    AshHq.Docs,
+    AshHq.Accounts,
+    AshHq.MailingList,
+    AshHq.Discord
+  ]
 
 config :ash_hq, AshHq.Repo,
   timeout: :timer.minutes(10),
@@ -25,6 +32,7 @@ config :spark, :formatter,
   "Ash.Resource": [
     type: Ash.Resource,
     section_order: [
+      :actions,
       :authentication,
       :token,
       :attributes,
@@ -68,6 +76,8 @@ config :esbuild,
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
+
+config :open_ai, :http_client_impl, AshHq.Ashley.HttpClient
 
 # Configures Elixir's Logger
 config :logger, :console,

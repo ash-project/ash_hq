@@ -10,105 +10,6 @@ defmodule AshHq.Accounts.User do
 
   alias AshHq.Calculations.Decrypt
 
-  authentication do
-    api AshHq.Accounts
-
-    strategies do
-      password :password do
-        identity_field :email
-        hashed_password_field :hashed_password
-
-        resettable do
-          sender AshHq.Accounts.User.Senders.SendPasswordResetEmail
-        end
-      end
-
-      github do
-        client_id AshHq.Accounts.Secrets
-        client_secret AshHq.Accounts.Secrets
-        redirect_uri AshHq.Accounts.Secrets
-      end
-    end
-
-    tokens do
-      enabled? true
-      token_resource AshHq.Accounts.UserToken
-      signing_secret AshHq.Accounts.Secrets
-      store_all_tokens? true
-      require_token_presence_for_authentication? true
-    end
-
-    add_ons do
-      confirmation :confirm do
-        monitor_fields [:email]
-
-        sender AshHq.Accounts.User.Senders.SendConfirmationEmail
-      end
-    end
-  end
-
-  attributes do
-    uuid_primary_key :id
-
-    attribute :email, :ci_string,
-      allow_nil?: false,
-      constraints: [
-        max_length: 160
-      ]
-
-    attribute :hashed_password, :string, private?: true, sensitive?: true
-
-    attribute :encrypted_name, :string
-    attribute :encrypted_address, :string
-    attribute :shirt_size, :string
-    attribute :github_info, :map
-
-    create_timestamp :created_at
-    update_timestamp :updated_at
-  end
-
-  relationships do
-    has_one :token, AshHq.Accounts.UserToken do
-      destination_attribute :user_id
-      private? true
-    end
-  end
-
-  policies do
-    bypass AshAuthentication.Checks.AshAuthenticationInteraction do
-      authorize_if always()
-    end
-
-    policy action(:read) do
-      authorize_if expr(id == ^actor(:id))
-    end
-
-    policy action(:update_email) do
-      description "A logged in user can update their email"
-      authorize_if expr(id == ^actor(:id))
-    end
-
-    policy action(:resend_confirmation_instructions) do
-      description "A logged in user can request an email confirmation"
-      authorize_if expr(id == ^actor(:id))
-    end
-
-    policy action(:change_password) do
-      description "A logged in user can reset their password"
-      authorize_if expr(id == ^actor(:id))
-    end
-
-    policy action(:update_merch_settings) do
-      description "A logged in user can update their merch settings"
-      authorize_if expr(id == ^actor(:id))
-    end
-  end
-
-  postgres do
-    table "users"
-    repo AshHq.Repo
-  end
-
   actions do
     defaults [:read]
 
@@ -235,6 +136,109 @@ defmodule AshHq.Accounts.User do
       change set_attribute(:encrypted_address, arg(:address))
       change set_attribute(:encrypted_name, arg(:name))
     end
+  end
+
+  authentication do
+    api AshHq.Accounts
+
+    strategies do
+      password :password do
+        identity_field :email
+        hashed_password_field :hashed_password
+
+        resettable do
+          sender AshHq.Accounts.User.Senders.SendPasswordResetEmail
+        end
+      end
+
+      github do
+        client_id AshHq.Accounts.Secrets
+        client_secret AshHq.Accounts.Secrets
+        redirect_uri AshHq.Accounts.Secrets
+      end
+    end
+
+    tokens do
+      enabled? true
+      token_resource AshHq.Accounts.UserToken
+      signing_secret AshHq.Accounts.Secrets
+      store_all_tokens? true
+      require_token_presence_for_authentication? true
+    end
+
+    add_ons do
+      confirmation :confirm do
+        monitor_fields [:email]
+
+        sender AshHq.Accounts.User.Senders.SendConfirmationEmail
+      end
+    end
+  end
+
+  attributes do
+    uuid_primary_key :id
+
+    attribute :email, :ci_string,
+      allow_nil?: false,
+      constraints: [
+        max_length: 160
+      ]
+
+    attribute :hashed_password, :string, private?: true, sensitive?: true
+
+    attribute :encrypted_name, :string
+    attribute :encrypted_address, :string
+    attribute :shirt_size, :string
+    attribute :github_info, :map
+
+    attribute :ashley_access, :boolean do
+      default false
+    end
+
+    create_timestamp :created_at
+    update_timestamp :updated_at
+  end
+
+  relationships do
+    has_one :token, AshHq.Accounts.UserToken do
+      destination_attribute :user_id
+      private? true
+    end
+  end
+
+  policies do
+    bypass AshAuthentication.Checks.AshAuthenticationInteraction do
+      authorize_if always()
+    end
+
+    policy action(:read) do
+      authorize_if expr(id == ^actor(:id))
+    end
+
+    policy action(:update_email) do
+      description "A logged in user can update their email"
+      authorize_if expr(id == ^actor(:id))
+    end
+
+    policy action(:resend_confirmation_instructions) do
+      description "A logged in user can request an email confirmation"
+      authorize_if expr(id == ^actor(:id))
+    end
+
+    policy action(:change_password) do
+      description "A logged in user can reset their password"
+      authorize_if expr(id == ^actor(:id))
+    end
+
+    policy action(:update_merch_settings) do
+      description "A logged in user can update their merch settings"
+      authorize_if expr(id == ^actor(:id))
+    end
+  end
+
+  postgres do
+    table "users"
+    repo AshHq.Repo
   end
 
   code_interface do

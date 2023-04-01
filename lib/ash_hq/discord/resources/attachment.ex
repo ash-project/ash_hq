@@ -3,6 +3,10 @@ defmodule AshHq.Discord.Attachment do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer
 
+  actions do
+    defaults [:create, :read, :update, :destroy]
+  end
+
   attributes do
     integer_primary_key :id, generated?: false, writable?: true
     attribute :filename, :string
@@ -27,9 +31,5 @@ defmodule AshHq.Discord.Attachment do
     references do
       reference :message, on_delete: :delete, on_update: :update
     end
-  end
-
-  actions do
-    defaults [:create, :read, :update, :destroy]
   end
 end

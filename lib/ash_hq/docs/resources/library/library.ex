@@ -3,6 +3,65 @@ defmodule AshHq.Docs.Library do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer
 
+  actions do
+    defaults [:create, :update, :destroy]
+
+    read :read do
+      primary? true
+
+      argument :check_cache, :boolean do
+        default true
+      end
+
+      prepare fn query, _ ->
+        if Ash.Query.get_argument(query, :check_cache) do
+          Ash.Query.before_action(query, fn query ->
+            AshHq.Docs
+            |> Ash.Filter.Runtime.filter_matches(
+              AshHq.Docs.Library.Agent.get(),
+              query.filter
+            )
+            |> case do
+              {:ok, results} ->
+                results =
+                  results
+                  |> then(fn results ->
+                    if query.offset do
+                      Enum.drop(results, query.offset)
+                    else
+                      results
+                    end
+                  end)
+                  |> then(fn results ->
+                    if query.limit do
+                      Enum.take(results, query.limit)
+                    else
+                      results
+                    end
+                  end)
+                  |> Ash.Sort.runtime_sort(query.sort)
+
+                Ash.Query.set_result(query, {:ok, results})
+
+              {:error, _} ->
+                query
+            end
+          end)
+        else
+          query
+        end
+      end
+    end
+
+    read :by_name do
+      argument :name, :string do
+        allow_nil? false
+      end
+
+      filter expr(name == ^arg(:name))
+    end
+  end
+
   attributes do
     uuid_primary_key :id
 
@@ -48,47 +107,6 @@ defmodule AshHq.Docs.Library do
     repo AshHq.Repo
 
     migration_defaults module_prefixes: "[]"
-  end
-
-  actions do
-    defaults [:create, :update, :destroy]
-
-    read :read do
-      primary? true
-
-      argument :check_cache, :boolean do
-        default true
-      end
-
-      prepare fn query, _ ->
-        if Ash.Query.get_argument(query, :check_cache) do
-          Ash.Query.before_action(query, fn query ->
-            AshHq.Docs
-            |> Ash.Filter.Runtime.filter_matches(
-              AshHq.Docs.Library.Agent.get(),
-              query.filter
-            )
-            |> case do
-              {:ok, results} ->
-                Ash.Query.set_result(query, {:ok, Ash.Sort.runtime_sort(results, query.sort)})
-
-              {:error, _} ->
-                query
-            end
-          end)
-        else
-          query
-        end
-      end
-    end
-
-    read :by_name do
-      argument :name, :string do
-        allow_nil? false
-      end
-
-      filter expr(name == ^arg(:name))
-    end
   end
 
   code_interface do

@@ -12,6 +12,9 @@ if System.get_env("PHX_SERVER") && System.get_env("RELEASE_NAME") do
   config :ash_hq, AshHqWeb.Endpoint, server: true
 end
 
+config :open_ai,
+  api_key: System.get_env("OPEN_API_API_KEY")
+
 config :ash_hq, :github,
   client_id: System.get_env("GITHUB_CLIENT_ID"),
   client_secret: System.get_env("GITHUB_CLIENT_SECRET"),

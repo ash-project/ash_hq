@@ -21,6 +21,33 @@ defmodule AshHq.Blog.Post do
     end
   end
 
+  actions do
+    defaults [:create, :read, :update]
+
+    read :published do
+      argument :tag, :ci_string
+
+      filter expr(
+               state == :published and
+                 if is_nil(^arg(:tag)) do
+                   true
+                 else
+                   ^arg(:tag) in type(tag_names, ^{:array, :ci_string})
+                 end
+             )
+    end
+
+    read :by_slug do
+      argument :slug, :string do
+        allow_nil? false
+      end
+
+      get? true
+
+      filter expr(slug == ^arg(:slug) or ^arg(:slug) in past_slugs)
+    end
+  end
+
   attributes do
     uuid_primary_key :id
 
@@ -63,33 +90,6 @@ defmodule AshHq.Blog.Post do
            {post.id, Enum.filter(tags, &(&1.name in post.tag_names))}
          end)}
       end
-    end
-  end
-
-  actions do
-    defaults [:create, :read, :update]
-
-    read :published do
-      argument :tag, :ci_string
-
-      filter expr(
-               state == :published and
-                 if is_nil(^arg(:tag)) do
-                   true
-                 else
-                   ^arg(:tag) in type(tag_names, ^{:array, :ci_string})
-                 end
-             )
-    end
-
-    read :by_slug do
-      argument :slug, :string do
-        allow_nil? false
-      end
-
-      get? true
-
-      filter expr(slug == ^arg(:slug) or ^arg(:slug) in past_slugs)
     end
   end
 

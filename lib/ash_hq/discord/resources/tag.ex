@@ -3,6 +3,15 @@ defmodule AshHq.Discord.Tag do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer
 
+  actions do
+    defaults [:create, :read, :update, :destroy]
+
+    create :upsert do
+      upsert? true
+      upsert_identity :unique_name_per_channel
+    end
+  end
+
   attributes do
     integer_primary_key :id, generated?: false, writable?: true
 
@@ -21,15 +30,6 @@ defmodule AshHq.Discord.Tag do
   postgres do
     table "discord_tags"
     repo AshHq.Repo
-  end
-
-  actions do
-    defaults [:create, :read, :update, :destroy]
-
-    create :upsert do
-      upsert? true
-      upsert_identity :unique_name_per_channel
-    end
   end
 
   code_interface do
