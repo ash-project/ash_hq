@@ -17,7 +17,8 @@ defmodule AshHq.Ashley.OpenAi do
         %{role: :system, content: system_message}
         | fit_to_tokens(messages, @message_token_limit - system_message_tokens)
       ],
-      user: user_email
+      user: user_email,
+      temperature: 0.2
     )
   end
 

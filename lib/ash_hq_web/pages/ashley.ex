@@ -184,7 +184,7 @@ defmodule AshHqWeb.Pages.Ashley do
                     </Field>
                     <button
                       type="submit_new_message"
-                      class="p-4 rounded-xl bg-gray-200 dark:bg-gray-600 flex flex-row items-center lg:ml-12 h-12 w-full"
+                      class="p-4 rounded-xl bg-gray-200 dark:bg-gray-600 flex flex-row items-center lg:ml-12 h-12"
                     >
                       <Heroicons.Outline.PaperAirplaneIcon class="h-4 w-4" /><div>Submit</div>
                     </button>
