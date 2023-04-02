@@ -3,6 +3,7 @@ defmodule AshHqWeb.Pages.Ashley do
   use Surface.LiveComponent
   import AshHqWeb.Tails
 
+  alias Phoenix.LiveView.JS
   alias Surface.Components.Form
 
   alias Surface.Components.Form.{
@@ -24,14 +25,14 @@ defmodule AshHqWeb.Pages.Ashley do
 
   def render(assigns) do
     ~F"""
-    <div class="grid grid-cols-6 w-2/3 mx-auto">
+    <div class="lg:grid lg:grid-cols-6 lg:w-2/3 lg:mx-auto mx-8">
       {#if is_nil(@current_user) || !@current_user.ashley_access}
         You do not have access to this page.
       {#else}
-        <div class="grid-cols-1 flex-col w-full">
+        <div class="grid-cols-1 flex-col w-full hidden lg:block mr-2">
           <a
             href="/ashley"
-            class="p-2 rounded-md bg-gray-300 dark:bg-gray-800 w-full flex flex-row items-center"
+            class="p-2 rounded-md bg-gray-300 dark:bg-gray-800 w-full flex flex-row items-center hover:bg-gray-500 hover:dark:bg-gray-600"
           >
             <Heroicons.Solid.PlusIcon class="h-4 w-4" /> New
           </a>
@@ -44,6 +45,33 @@ defmodule AshHqWeb.Pages.Ashley do
                 {conversation.name} - {conversation.question_count}</a>
             </div>
           {/for}
+        </div>
+        <div class="grid-cols-1 flex-col w-full block lg:hidden">
+          <div class="flex flex-row items-center justify-end mb-4">
+            <a
+              href="/ashley"
+              class="p-2 rounded-md bg-gray-300 dark:bg-gray-800 flex flex-row items-center w-24 h-12"
+            >
+              <Heroicons.Solid.PlusIcon class="h-4 w-4" /> New
+            </a>
+            <button
+              phx-click={JS.toggle(to: "#mobile-conversations")}
+              class="p-2 rounded-md bg-gray-300 dark:bg-gray-800 w-12 h-12 ml-4 flex flex-row justify-center items-center"
+            >
+              <Heroicons.Outline.MenuIcon class="h-4 w-4" />
+            </button>
+          </div>
+          <div class="flex flex-col" id="mobile-conversations" style="display: none;">
+            {#for conversation <- @conversations}
+              <div class={classes([
+                "p-2",
+                ["text-gray-500": conversation.question_count >= AshHq.Ashley.Conversation.conversation_limit()]
+              ])}>
+                <a href={"/ashley/#{conversation.id}"}>
+                  {conversation.name} - {conversation.question_count}</a>
+              </div>
+            {/for}
+          </div>
         </div>
         <div
           id="chat-window"
@@ -114,8 +142,12 @@ defmodule AshHqWeb.Pages.Ashley do
               <Form for={@message_form} submit="save_message">
                 <div class="flex flex-row w-full">
                   <div class="w-full">
+                    <span class="text-sm font-extralight">{@conversation.question_count} of {AshHq.Ashley.Conversation.conversation_limit()} used</span>
                     <Field name={:question} class="w-full">
-                      <TextArea class="flex-grow text-black block focus:ring-primary-light-600 focus:primary-light-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300 w-full" />
+                      <TextArea
+                        class="flex-grow text-black block focus:ring-primary-light-600 focus:primary-light-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300 w-full"
+                        opts={disabled: @conversation.question_count >= AshHq.Ashley.Conversation.conversation_limit()}
+                      />
                     </Field>
                   </div>
 
@@ -146,17 +178,18 @@ defmodule AshHqWeb.Pages.Ashley do
                     </div>
                   </div>
                   <hr>
-                  <Field name={:question} class="w-full">
-                    <TextArea class="flex-grow text-black block focus:ring-primary-light-600 focus:primary-light-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300 w-full" />
-                  </Field>
+                  <div class="flex flex-col space-y-4 lg:flex-row lg:justify-between items-center justify-center">
+                    <Field name={:question} class="w-full">
+                      <TextArea class="flex-grow text-black block focus:ring-primary-light-600 focus:primary-light-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300 w-full" />
+                    </Field>
+                    <button
+                      type="submit_new_message"
+                      class="p-4 rounded-xl bg-gray-200 dark:bg-gray-600 flex flex-row items-center lg:ml-12 h-12 w-full"
+                    >
+                      <Heroicons.Outline.PaperAirplaneIcon class="h-4 w-4" /><div>Submit</div>
+                    </button>
+                  </div>
                 </div>
-
-                <button
-                  type="submit_new_message"
-                  class="p-4 rounded-xl bg-gray-200 dark:bg-gray-600 flex flex-row items-center ml-12 h-12"
-                >
-                  <Heroicons.Outline.PaperAirplaneIcon class="h-4 w-4" /><div>Submit</div>
-                </button>
               </div>
             </Form>
           {/if}

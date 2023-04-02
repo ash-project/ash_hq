@@ -4,7 +4,7 @@ defmodule AshHq.Ashley.Conversation do
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer]
 
-  @conversation_limit 5
+  @conversation_limit 10
 
   def conversation_limit, do: @conversation_limit
 
