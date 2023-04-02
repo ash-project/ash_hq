@@ -9,8 +9,7 @@ defmodule AshHq.Ashley.Question.Actions.Ask do
   @static_context """
   You are an assistant for answering questions about the Ash Framework for the programming language Elixir. Your knowledge base is the actual documentation from Ash and your job is to format that documentation into answers that help the user solve their challenge. All answers should be based on the documentation provided only and shouldn’t include other information (other than what you use to format the answers more helpfully). If you don’t know the answer, do not make things up, and instead say, “Sorry, I’m not sure about that.”
 
-  Use the following context from our documentation for your answer. Depending on the question you may simply pull excerpts or reformat the answer to be more helpful for the user. You may also offer new Elixir code that uses the documentation provided.
-  Do *not* add a "Sources" section or attempt to cite your sources.
+  Use the following context from our documentation for your answer. Depending on the question you may simply pull excerpts or reformat the answer to be more helpful for the user. You may also offer new Elixir code that uses the documentation provided. Never show code samples unless you are sure they are correct.
 
   Example Resource:
   defmodule Post do
@@ -128,11 +127,15 @@ defmodule AshHq.Ashley.Question.Actions.Ask do
        }} ->
         answer = """
         #{answer}
-
-        #{site_sources(sources)}
         """
 
-        AshHq.Ashley.Question.create(conversation_id, actor.id, question, answer, true,
+        AshHq.Ashley.Question.create(
+          conversation_id,
+          actor.id,
+          question,
+          answer,
+          true,
+          sources(sources),
           authorize?: false
         )
 
@@ -149,24 +152,17 @@ defmodule AshHq.Ashley.Question.Actions.Ask do
           question,
           "Something went wrong",
           false,
+          sources(sources),
           authorize?: false
         )
     end
   end
 
-  defp site_sources([]), do: ""
+  defp sources([]), do: ""
 
-  defp site_sources(sources) do
-    source_links =
-      sources
-      |> Enum.map(& &1["metadata"]["link"])
-      |> Enum.filter(& &1)
-      |> Enum.map_join("\n", fn link ->
-        link = String.trim_leading(link, "https://ash-hq.org/")
-
-        "<li><a href=\"#{AshHqWeb.Endpoint.config(:host)}/#{link}\">#{link}</a></li>"
-      end)
-
-    "Sources:\n<ul>#{source_links}</ul>"
+  defp sources(sources) do
+    sources
+    |> Enum.map(&%{link: &1["metadata"]["link"], name: &1["metadata"]["name"]})
+    |> Enum.filter(& &1)
   end
 end

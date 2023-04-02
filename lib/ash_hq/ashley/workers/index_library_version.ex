@@ -4,6 +4,7 @@ defmodule AshHq.Ashley.Workers.IndexLibraryVersion do
 
   def index_all do
     AshHq.Docs.Library.read!(load: :latest_version_id)
+    |> Enum.filter(& &1.latest_version_id)
     |> Enum.each(&perform(&1.latest_version_id))
   end
 
@@ -39,6 +40,7 @@ defmodule AshHq.Ashley.Workers.IndexLibraryVersion do
                 metadata: %{
                   library: library_version.library.name,
                   link: "#{path(item, library_version.library.name)}",
+                  name: "#{name(item)}",
                   text: text
                 }
               }
@@ -84,6 +86,38 @@ defmodule AshHq.Ashley.Workers.IndexLibraryVersion do
     |> Ash.Query.filter(library_version_id == ^library_version.id)
     |> Ash.Query.load(:extension_target)
     |> AshHq.Docs.stream()
+  end
+
+  defp name(%AshHq.Docs.Option{} = option) do
+    case option.path do
+      [] ->
+        "#{option.extension_target} - #{option.name}"
+
+      path ->
+        "#{option.extension_target} - #{Enum.join(path, ".")} | #{option.name}"
+    end
+  end
+
+  defp name(%AshHq.Docs.Dsl{} = dsl) do
+    case dsl.path do
+      [] ->
+        "#{dsl.extension_target} - #{dsl.name}"
+
+      path ->
+        "#{dsl.extension_target} - #{Enum.join(path ++ [dsl.name], ".")}"
+    end
+  end
+
+  defp name(%AshHq.Docs.Function{} = function) do
+    "#{function.type} - #{function.module_name}.#{function.name}/#{function.arity}"
+  end
+
+  defp name(%AshHq.Docs.Module{} = module) do
+    module.name
+  end
+
+  defp name(%AshHq.Docs.Guide{} = guide) do
+    guide.name
   end
 
   defp path(%AshHq.Docs.Option{} = option, _library_name) do

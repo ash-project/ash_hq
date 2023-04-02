@@ -37,7 +37,7 @@ defmodule AshHqWeb.Pages.Ashley do
               "p-2",
               ["text-gray-500": conversation.question_count >= AshHq.Ashley.Conversation.conversation_limit()]
             ])}>
-              <a href="/ashley/#{conversation.id}">
+              <a href={"/ashley/#{conversation.id}"}>
                 {conversation.name} - {conversation.question_count}</a>
             </div>
           {/for}
@@ -75,6 +75,14 @@ defmodule AshHqWeb.Pages.Ashley do
             {/if}
             <div class="overflow-y-scroll h-2/3">
               <div style="scroll-snap-type: y; scroll-snap-align: end;">
+                <div>
+                  <div>
+                    Hello! My name is Ashley. I've been instructed to answer your questions as factually as possible, but I am *far* from perfect.
+                    My code snippets especially are not likely to be accurate. However, I cite my sources below each answer to show you what content
+                    I thought was relevant, so please use that for official clarification.
+                  </div>
+                </div>
+                <hr>
                 {#for question <- @conversation.questions}
                   <div>
                     <div class="font-light mt-12">
@@ -84,6 +92,14 @@ defmodule AshHqWeb.Pages.Ashley do
                     <div>
                       {raw(question.answer_html)}
                     </div>
+                    {#if question.sources != []}
+                      <h3>Sources</h3>
+                      <ul>
+                        {#for source <- question.sources}
+                          <li><a href={"https://ash-hq.org/#{source.link}"}>{source.name}</a></li>
+                        {/for}
+                      </ul>
+                    {/if}
                   </div>
                 {/for}
               </div>
@@ -113,6 +129,14 @@ defmodule AshHqWeb.Pages.Ashley do
                       opts={placeholder: "New Conversation"}
                     />
                   </Field>
+                  <div>
+                    <div>
+                      Hello! My name is Ashley. I've been instructed to answer your questions as factually as possible, but I am *far* from perfect.
+                      My code snippets especially are not likely to be accurate. However, I cite my sources below each answer to show you what content
+                      I thought was relevant, so please use that for official clarification.
+                    </div>
+                  </div>
+                  <hr>
                   <Field name={:question} class="w-full">
                     <TextArea class="flex-grow text-black block focus:ring-primary-light-600 focus:primary-light-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300 w-full" />
                   </Field>
@@ -254,6 +278,7 @@ defmodule AshHqWeb.Pages.Ashley do
          |> assign_message_form()}
 
       {:error, form} ->
+        IO.inspect(AshPhoenix.Form.errors(form, for_path: :all))
         {:noreply, assign(socket, message_form: form)}
     end
   end
