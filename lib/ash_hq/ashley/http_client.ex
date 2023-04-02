@@ -1,8 +1,8 @@
 defmodule AshHq.Ashley.HttpClient do
   @moduledoc false
 
-  alias OpenAI.Error
   alias OpenAI.Behaviours.HttpClientBehaviour
+  alias OpenAI.Error
 
   @behaviour HttpClientBehaviour
 

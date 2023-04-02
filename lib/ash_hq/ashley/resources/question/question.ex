@@ -1,4 +1,5 @@
 defmodule AshHq.Ashley.Question do
+  @moduledoc false
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer],
@@ -129,7 +130,7 @@ defmodule AshHq.Ashley.Question do
   postgres do
     table "questions"
     repo AshHq.Repo
-    
+
     references do
       reference :conversation, on_delete: :delete
     end

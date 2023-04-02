@@ -1,7 +1,8 @@
 defmodule AshHq.Ashley.Workers.IndexLibraryVersion do
+  @moduledoc false
   require Ash.Query
 
-  def index_all() do
+  def index_all do
     AshHq.Docs.Library.read!(load: :latest_version_id)
     |> Enum.each(&perform(&1.latest_version_id))
   end

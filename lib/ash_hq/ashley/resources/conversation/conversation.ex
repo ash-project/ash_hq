@@ -1,4 +1,5 @@
 defmodule AshHq.Ashley.Conversation do
+  @moduledoc false
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer]

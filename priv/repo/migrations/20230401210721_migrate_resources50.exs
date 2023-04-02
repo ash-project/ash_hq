@@ -9,81 +9,87 @@ defmodule AshHq.Repo.Migrations.MigrateResources50 do
 
   def up do
     alter table(:users) do
-      add :ashley_access, :boolean, default: false
+      add(:ashley_access, :boolean, default: false)
     end
 
     create table(:questions, primary_key: false) do
-      add :id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true
-      add :question, :text, null: false
-      add :answer, :text, null: false
-      add :answer_html, :text, null: false
-      add :success, :boolean, null: false
-      add :inserted_at, :utc_datetime_usec, null: false, default: fragment("now()")
-      add :updated_at, :utc_datetime_usec, null: false, default: fragment("now()")
+      add(:id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true)
+      add(:question, :text, null: false)
+      add(:answer, :text, null: false)
+      add(:answer_html, :text, null: false)
+      add(:success, :boolean, null: false)
+      add(:inserted_at, :utc_datetime_usec, null: false, default: fragment("now()"))
+      add(:updated_at, :utc_datetime_usec, null: false, default: fragment("now()"))
 
-      add :user_id,
-          references(:users,
-            column: :id,
-            name: "questions_user_id_fkey",
-            type: :uuid,
-            prefix: "public"
-          ),
-          null: false
+      add(
+        :user_id,
+        references(:users,
+          column: :id,
+          name: "questions_user_id_fkey",
+          type: :uuid,
+          prefix: "public"
+        ),
+        null: false
+      )
 
-      add :conversation_id, :uuid, null: false
+      add(:conversation_id, :uuid, null: false)
     end
 
     create table(:conversations, primary_key: false) do
-      add :id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true
+      add(:id, :uuid, null: false, default: fragment("uuid_generate_v4()"), primary_key: true)
     end
 
     alter table(:questions) do
-      modify :conversation_id,
-             references(:conversations,
-               column: :id,
-               prefix: "public",
-               name: "questions_conversation_id_fkey",
-               type: :uuid,
-               on_delete: :delete_all
-             )
+      modify(
+        :conversation_id,
+        references(:conversations,
+          column: :id,
+          prefix: "public",
+          name: "questions_conversation_id_fkey",
+          type: :uuid,
+          on_delete: :delete_all
+        )
+      )
     end
 
     alter table(:conversations) do
-      add :name, :text
+      add(:name, :text)
 
-      add :user_id,
-          references(:users,
-            column: :id,
-            name: "conversations_user_id_fkey",
-            type: :uuid,
-            prefix: "public"
-          ),
-          null: false
+      add(
+        :user_id,
+        references(:users,
+          column: :id,
+          name: "conversations_user_id_fkey",
+          type: :uuid,
+          prefix: "public"
+        ),
+        null: false
+      )
     end
   end
 
   def down do
-    drop constraint(:conversations, "conversations_user_id_fkey")
+    drop(constraint(:conversations, "conversations_user_id_fkey"))
 
     alter table(:conversations) do
-      remove :user_id
-      remove :name
+      remove(:user_id)
+      remove(:name)
     end
 
-    drop constraint(:questions, "questions_conversation_id_fkey")
+    drop(constraint(:questions, "questions_conversation_id_fkey"))
 
     alter table(:questions) do
-      modify :conversation_id, :uuid
+      modify(:conversation_id, :uuid)
     end
 
-    drop table(:conversations)
+    drop(table(:conversations))
 
-    drop constraint(:questions, "questions_user_id_fkey")
+    drop(constraint(:questions, "questions_user_id_fkey"))
 
-    drop table(:questions)
+    drop(table(:questions))
 
     alter table(:users) do
-      remove :ashley_access
+      remove(:ashley_access)
     end
   end
 end

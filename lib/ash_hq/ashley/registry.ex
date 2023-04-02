@@ -1,4 +1,5 @@
 defmodule AshHq.Ashley.Registry do
+  @moduledoc false
   use Ash.Registry,
     extensions: [Ash.Registry.ResourceValidations]
 

@@ -1,4 +1,5 @@
 defmodule AshHq.Ashley.Question.Actions.Ask do
+  @moduledoc false
   use Ash.Resource.ManualCreate
 
   require Logger

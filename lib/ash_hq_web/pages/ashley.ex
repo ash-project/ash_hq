@@ -1,5 +1,5 @@
 defmodule AshHqWeb.Pages.Ashley do
-  @moduledoc "Blog page"
+  @moduledoc "Ashley page"
   use Surface.LiveComponent
   import AshHqWeb.Tails
 
@@ -29,7 +29,7 @@ defmodule AshHqWeb.Pages.Ashley do
         You do not have access to this page.
       {#else}
         <div class="grid-cols-1 flex-col w-full">
-          <a href="/ashley" class="p-2 rounded-md bg-gray-300 w-full flex flex-row items-center">
+          <a href="/ashley" class="p-2 rounded-md bg-gray-300 dark:bg-gray-800 w-full flex flex-row items-center">
             <Heroicons.Solid.PlusIcon class="h-4 w-4" /> New
           </a>
           {#for conversation <- @conversations}
@@ -42,7 +42,7 @@ defmodule AshHqWeb.Pages.Ashley do
             </div>
           {/for}
         </div>
-        <div id="chat-window" class="col-span-5 flex-col prose prose-xl h-screen w-full">
+        <div id="chat-window" class="col-span-5 flex-col prose prose-xl dark:prose-invert h-screen w-full">
           {#if @conversation}
             {#if @editing_conversation}
               <Form for={@conversation_form} submit="save_conversation" class="flex flex-row justify-between">
@@ -63,7 +63,11 @@ defmodule AshHqWeb.Pages.Ashley do
                     <Heroicons.Outline.PencilIcon class="h-5 w-5" />
                   </button>
 
-                  <button :on-click="destroy-conversation" phx-value-conversation-id={@conversation.id} data-confirm="Are you sure?">
+                  <button
+                    :on-click="destroy-conversation"
+                    phx-value-conversation-id={@conversation.id}
+                    data-confirm="Are you sure?"
+                  >
                     <Heroicons.Outline.XIcon class="h-5 w-5" />
                   </button>
                 </div>
@@ -104,7 +108,10 @@ defmodule AshHqWeb.Pages.Ashley do
               <div class="flex flex-row w-full">
                 <div class="w-full">
                   <Field name={:conversation_name} class="mb-4">
-                    <TextInput class="flex-grow text-black block focus:ring-primary-light-600 focus:primary-light-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300 w-full" opts={placeholder: "New Conversation"} />
+                    <TextInput
+                      class="flex-grow text-black block focus:ring-primary-light-600 focus:primary-light-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300 w-full"
+                      opts={placeholder: "New Conversation"}
+                    />
                   </Field>
                   <Field name={:question} class="w-full">
                     <TextArea class="flex-grow text-black block focus:ring-primary-light-600 focus:primary-light-primary-light-600 min-w-0 rounded-md sm:text-sm border-base-light-300 w-full" />

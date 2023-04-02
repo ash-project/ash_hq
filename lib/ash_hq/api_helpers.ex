@@ -1,4 +1,5 @@
 defmodule AshHq.ApiHelpers do
+  @moduledoc false
   defmacro __using__(_) do
     quote do
       def stream(query, opts \\ []) do
