@@ -2,6 +2,18 @@ defmodule AshHq.Ashley.Workers.IndexLibraryVersion do
   @moduledoc false
   require Ash.Query
 
+  @dialyzer {:nowarn_function, {:delete_vectors, 2}}
+  @dialyzer {:nowarn_function, {:index_all, 0}}
+  @dialyzer {:nowarn_function, {:perform, 1}}
+  @dialyzer {:nowarn_function, {:guides, 1}}
+  @dialyzer {:nowarn_function, {:modules, 1}}
+  @dialyzer {:nowarn_function, {:functions, 1}}
+  @dialyzer {:nowarn_function, {:dsls, 1}}
+  @dialyzer {:nowarn_function, {:options, 1}}
+  @dialyzer {:nowarn_function, {:name, 1}}
+  @dialyzer {:nowarn_function, {:path, 2}}
+  @dialyzer {:nowarn_function, {:format, 2}}
+
   def index_all do
     AshHq.Docs.Library.read!(load: :latest_version_id)
     |> Enum.filter(& &1.latest_version_id)
@@ -12,13 +24,7 @@ defmodule AshHq.Ashley.Workers.IndexLibraryVersion do
     pinecone_client = AshHq.Ashley.Pinecone.client()
 
     library_version = AshHq.Docs.get!(AshHq.Docs.LibraryVersion, id, load: :library)
-
-    pinecone_client
-    |> Pinecone.Vector.delete(%{
-      filter: %{
-        library: library_version.library.name
-      }
-    })
+    delete_vectors(pinecone_client, library_version)
 
     guides(library_version)
     |> Stream.concat(modules(library_version))
@@ -210,5 +216,14 @@ defmodule AshHq.Ashley.Workers.IndexLibraryVersion do
     else
       String.downcase(String.replace(to_string(name), ~r/[^A-Za-z0-9_]/, "-"))
     end
+  end
+
+  defp delete_vectors(pinecone_client, library_version) do
+    pinecone_client
+    |> Pinecone.Vector.delete(%{
+      filter: %{
+        library: library_version.library.name
+      }
+    })
   end
 end

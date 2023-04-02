@@ -28,6 +28,9 @@ defmodule AshHq.Ashley.Question.Actions.Ask do
 
   @system_message_tokens AshHq.Ashley.OpenAi.tokens(@static_context)
 
+  @dialyzer {:nowarn_function, {:create, 3}}
+  @dialyzer {:nowarn_function, {:sources, 1}}
+
   def create(changeset, _, %{actor: actor}) do
     question = Ash.Changeset.get_attribute(changeset, :question)
 

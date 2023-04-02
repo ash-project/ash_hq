@@ -4,6 +4,8 @@ defmodule AshHq.Ashley.OpenAi do
   @open_ai_chat_model "gpt-3.5-turbo"
   @message_token_limit 3500
 
+  @dialyzer {:nowarn_function, {:complete, 4}}
+
   def create_embeddings(embeddings) do
     OpenAI.Embeddings.create(@open_ai_embed_model, embeddings, user: "ash-hq-importer")
   end
