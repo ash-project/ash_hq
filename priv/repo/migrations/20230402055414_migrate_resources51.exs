@@ -9,13 +9,13 @@ defmodule AshHq.Repo.Migrations.MigrateResources51 do
 
   def up do
     alter table(:questions) do
-      add :sources, {:array, :map}, null: false, default: []
+      add(:sources, {:array, :map}, null: false, default: [])
     end
   end
 
   def down do
     alter table(:questions) do
-      remove :sources
+      remove(:sources)
     end
   end
 end

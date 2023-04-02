@@ -29,7 +29,10 @@ defmodule AshHqWeb.Pages.Ashley do
         You do not have access to this page.
       {#else}
         <div class="grid-cols-1 flex-col w-full">
-          <a href="/ashley" class="p-2 rounded-md bg-gray-300 dark:bg-gray-800 w-full flex flex-row items-center">
+          <a
+            href="/ashley"
+            class="p-2 rounded-md bg-gray-300 dark:bg-gray-800 w-full flex flex-row items-center"
+          >
             <Heroicons.Solid.PlusIcon class="h-4 w-4" /> New
           </a>
           {#for conversation <- @conversations}
@@ -42,7 +45,10 @@ defmodule AshHqWeb.Pages.Ashley do
             </div>
           {/for}
         </div>
-        <div id="chat-window" class="col-span-5 flex-col prose prose-xl dark:prose-invert h-screen w-full">
+        <div
+          id="chat-window"
+          class="col-span-5 flex-col prose prose-xl dark:prose-invert h-screen w-full"
+        >
           {#if @conversation}
             {#if @editing_conversation}
               <Form for={@conversation_form} submit="save_conversation" class="flex flex-row justify-between">
@@ -113,7 +119,10 @@ defmodule AshHqWeb.Pages.Ashley do
                     </Field>
                   </div>
 
-                  <button type="submit" class="p-4 rounded-xl bg-gray-200 dark:bg-gray-600 flex flex-row items-center ml-12 h-12">
+                  <button
+                    type="submit"
+                    class="p-4 rounded-xl bg-gray-200 dark:bg-gray-600 flex flex-row items-center ml-12 h-12"
+                  >
                     <Heroicons.Outline.PaperAirplaneIcon class="h-4 w-4" /><div>Submit</div>
                   </button>
                 </div>
