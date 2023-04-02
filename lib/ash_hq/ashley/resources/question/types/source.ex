@@ -1,4 +1,5 @@
 defmodule AshHq.Ashley.Question.Types.Source do
+  @moduledoc false
   use Ash.Resource,
     data_layer: :embedded
 
