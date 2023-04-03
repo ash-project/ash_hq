@@ -52,7 +52,7 @@ defmodule AshHq.Ashley.Question.Actions.Ask do
       AshHq.Ashley.Pinecone.client()
       |> Pinecone.Vector.query(%{
         vector: vector,
-        topK: 4,
+        topK: 10,
         includeMetadata: true,
         includeValues: true
       })
