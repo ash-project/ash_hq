@@ -167,6 +167,7 @@ defmodule AshHq.Ashley.Workers.IndexLibraryVersion do
   defp format(%AshHq.Docs.Option{} = option, _library_version) do
     """
     DSL Entity: #{Enum.join(option.path ++ [option.name])}
+    Type: #{option.type}
     Default: #{option.default}
     #{option.doc}
     """
@@ -191,7 +192,10 @@ defmodule AshHq.Ashley.Workers.IndexLibraryVersion do
   defp format(%AshHq.Docs.Function{} = function, _library_version) do
     """
     #{function.type} #{function.module_name}.#{function.name}/#{function.arity}
+    Types:
     #{Enum.join(function.heads, "\n")}
+
+    Docs:
     #{function.doc}
     """
   end
