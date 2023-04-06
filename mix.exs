@@ -45,7 +45,7 @@ defmodule AshHq.MixProject do
       {:ash_phoenix, github: "ash-project/ash_phoenix", override: true},
       {:ash_graphql, github: "ash-project/ash_graphql"},
       {:ash_json_api, github: "ash-project/ash_json_api"},
-      {:ash_authentication, "~> 3.10.5"},
+      {:ash_authentication, "~> 3.10"},
       {:ash_authentication_phoenix, "~> 1.6"},
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, github: "ash-project/ash_csv"},
