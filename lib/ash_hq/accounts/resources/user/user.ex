@@ -3,8 +3,8 @@ defmodule AshHq.Accounts.User do
 
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
-    authorizers: [Ash.Policy.Authorizer],
-    extensions: [AshAuthentication]
+    extensions: [AshAuthentication],
+    fragments: [AshHq.Accounts.User.Policies]
 
   require Ash.Query
 
@@ -203,36 +203,6 @@ defmodule AshHq.Accounts.User do
     has_one :token, AshHq.Accounts.UserToken do
       destination_attribute :user_id
       private? true
-    end
-  end
-
-  policies do
-    bypass AshAuthentication.Checks.AshAuthenticationInteraction do
-      authorize_if always()
-    end
-
-    policy action(:read) do
-      authorize_if expr(id == ^actor(:id))
-    end
-
-    policy action(:update_email) do
-      description "A logged in user can update their email"
-      authorize_if expr(id == ^actor(:id))
-    end
-
-    policy action(:resend_confirmation_instructions) do
-      description "A logged in user can request an email confirmation"
-      authorize_if expr(id == ^actor(:id))
-    end
-
-    policy action(:change_password) do
-      description "A logged in user can reset their password"
-      authorize_if expr(id == ^actor(:id))
-    end
-
-    policy action(:update_merch_settings) do
-      description "A logged in user can update their merch settings"
-      authorize_if expr(id == ^actor(:id))
     end
   end
 
