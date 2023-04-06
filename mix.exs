@@ -91,7 +91,8 @@ defmodule AshHq.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.18"},
+      # locked for compatibility
+      {:phoenix_live_view, "0.18.16"},
       {:finch, "~> 0.10"},
       {:floki, ">= 0.30.0"},
       {:esbuild, "~> 0.3", runtime: false},
