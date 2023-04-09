@@ -7,6 +7,8 @@ defmodule AshHq.Discord.Listener do
   import Bitwise
   @all_types AshHq.Docs.Extensions.Search.Types.types() -- ["Forum"]
 
+  @user_id 1_066_406_803_769_933_834
+
   def start_link do
     Consumer.start_link(__MODULE__)
   end
@@ -216,6 +218,10 @@ defmodule AshHq.Discord.Listener do
       ]
     }
 
-    Nostrum.Api.create_guild_application_command(AshHq.Discord.Poller.server_id(), command)
+    Nostrum.Api.create_guild_application_command(
+      @user_id,
+      AshHq.Discord.Poller.server_id(),
+      command
+    )
   end
 end

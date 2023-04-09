@@ -261,7 +261,7 @@ defmodule Utils do
 
   defp schema(schema, path) do
     schema
-    |> Enum.reject(fn {key, config} ->
+    |> Enum.reject(fn {_key, config} ->
       config[:hide]
     end)
     |> Enum.with_index()
@@ -556,7 +556,7 @@ defmodule Utils do
       extras =
         mix_project.project[:docs][:extras]
         |> Enum.reject(fn
-          {name, config} ->
+          {_name, config} ->
             config[:ash_hq?] == false || config[:ash_hq] == false
 
           _ ->
