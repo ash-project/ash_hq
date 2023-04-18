@@ -1,10 +1,13 @@
 defmodule AshHq.Discord.Message do
   @moduledoc """
-  Represents all of the messages on a given forum post/thread.
+  Discord messages synchronized by the discord bot
   """
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshHq.Docs.Extensions.RenderMarkdown, AshHq.Docs.Extensions.Search]
+    extensions: [
+      AshHq.Docs.Extensions.RenderMarkdown,
+      AshHq.Docs.Extensions.Search
+    ]
 
   actions do
     defaults [:read, :destroy]

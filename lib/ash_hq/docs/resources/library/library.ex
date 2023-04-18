@@ -13,44 +13,7 @@ defmodule AshHq.Docs.Library do
         default true
       end
 
-      prepare fn query, _ ->
-        if Ash.Query.get_argument(query, :check_cache) do
-          Ash.Query.before_action(query, fn query ->
-            AshHq.Docs
-            |> Ash.Filter.Runtime.filter_matches(
-              AshHq.Docs.Library.Agent.get(),
-              query.filter
-            )
-            |> case do
-              {:ok, results} ->
-                results =
-                  results
-                  |> then(fn results ->
-                    if query.offset do
-                      Enum.drop(results, query.offset)
-                    else
-                      results
-                    end
-                  end)
-                  |> then(fn results ->
-                    if query.limit do
-                      Enum.take(results, query.limit)
-                    else
-                      results
-                    end
-                  end)
-                  |> Ash.Sort.runtime_sort(query.sort)
-
-                Ash.Query.set_result(query, {:ok, results})
-
-              {:error, _} ->
-                query
-            end
-          end)
-        else
-          query
-        end
-      end
+      prepare AshHq.Docs.Library.Preparations.CheckCache
     end
 
     read :by_name do
