@@ -1,4 +1,7 @@
 defmodule AshHq.Docs.Library.Preparations.CheckCache do
+  @moduledoc """
+  Checks a simple agent cache for libraries
+  """
   use Ash.Resource.Preparation
 
   def prepare(query, _, _) when query.arguments.check_cache == true do
