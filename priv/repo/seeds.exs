@@ -101,6 +101,20 @@ AshHq.Docs.Library.create!(
 
 AshHq.Docs.Library.create!(
   %{
+    name: "ash_state_machine",
+    display_name: "AshStateMachine",
+    module_prefixes: ["AshStateMachine"],
+    order: 62,
+    description: """
+    An Ash.Resource extension for building finite state machines.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
     name: "ash_csv",
     display_name: "AshCSV",
     module_prefixes: ["AshCsv"],
