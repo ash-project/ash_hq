@@ -1,8 +1,8 @@
 defmodule AshHq.Ashley.OpenAi do
   @moduledoc false
   @open_ai_embed_model "text-embedding-ada-002"
-  @open_ai_chat_model "gpt-3.5-turbo"
-  @message_token_limit 3500
+  @open_ai_chat_model "gpt-4"
+  @message_token_limit 7000
 
   @dialyzer {:nowarn_function, {:complete, 4}}
 
