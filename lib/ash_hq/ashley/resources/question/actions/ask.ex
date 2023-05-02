@@ -5,6 +5,7 @@ defmodule AshHq.Ashley.Question.Actions.Ask do
   require Logger
 
   @dialyzer {:nowarn_function, {:create, 3}}
+  @dialyzer {:nowarn_function, {:sources, 1}}
 
   @system_message_limit 4000
 
