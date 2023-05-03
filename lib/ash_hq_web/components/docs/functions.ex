@@ -34,7 +34,7 @@ defmodule AshHqWeb.Components.Docs.Functions do
                 <Heroicons.Solid.ExclamationIcon class="w-6 h-6 fill-black inline-block" />
                 Deprecated: {function.deprecated}
               </div>
-              <div class="p-2 prose-ul:list-outside">
+              <div class="p-2">
                 {raw(rendered(function.doc_html))}
               </div>
             </div>

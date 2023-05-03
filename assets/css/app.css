@@ -11,9 +11,9 @@
 .search-hit {
   @apply text-primary-light-500 dark:text-primary-dark-300
 }
-/* why do I even need this */
-ul {
-   list-style-position: inside;
+
+@layer components {
+  .prose li p { @apply m-0; }
 }
 
 /* Alerts and form errors used by phx.new */
