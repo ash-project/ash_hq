@@ -21,6 +21,7 @@ RUN apt-get install -y nodejs yarn
 RUN mix local.hex --force && \
   mix local.rebar --force
 ENV MIX_ENV=prod
+ENV FOO=bar
 COPY ./assets/package.json assets/package.json
 COPY ./assets/package-lock.json assets/package-lock.json
 RUN npm install --prefix ./assets

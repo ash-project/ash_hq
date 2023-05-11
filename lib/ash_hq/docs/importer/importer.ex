@@ -14,17 +14,13 @@ defmodule AshHq.Docs.Importer do
   end
 
   def init(_) do
-    import_periodically()
+    send(self(), :import)
     {:ok, %{}}
   end
 
-  defp import_periodically do
+  def handle_info(:import, state) do
     __MODULE__.import()
     Process.send_after(self(), :import, :timer.minutes(30))
-  end
-
-  def handle_info(:import, state) do
-    import_periodically()
     {:noreply, state}
   end
 
@@ -89,7 +85,7 @@ defmodule AshHq.Docs.Importer do
           Version.parse!(latest_version)
         end
 
-      versions =
+      hex_info =
         Finch.build(:get, "https://hex.pm/api/packages/#{name}")
         |> Finch.request(AshHq.Finch)
         |> case do
@@ -99,8 +95,17 @@ defmodule AshHq.Docs.Importer do
           {:error, error} ->
             raise "Something went wrong #{inspect(error)}"
         end
+
+      retired_versions =
+        hex_info
+        |> Map.get("retirements", %{})
+        |> Map.keys()
+
+      versions =
+        hex_info
         |> Map.get("releases", [])
         |> Enum.map(&Map.get(&1, "version"))
+        |> Enum.reject(&(&1 in retired_versions))
         |> filter_by_version(latest_version)
         |> Enum.reverse()
 
