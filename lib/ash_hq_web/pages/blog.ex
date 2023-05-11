@@ -6,13 +6,13 @@ defmodule AshHqWeb.Pages.Blog do
 
   alias AshHqWeb.Components.Blog.Tag
 
-  prop params, :map, default: %{}
+  prop(params, :map, default: %{})
 
-  data post, :any, default: nil
-  data posts, :any, default: []
-  data tag, :string
-  data tags, :any, default: []
-  data slug, :string
+  data(post, :any, default: nil)
+  data(posts, :any, default: [])
+  data(tag, :string)
+  data(tags, :any, default: [])
+  data(slug, :string)
 
   def render(assigns) do
     ~F"""
@@ -28,7 +28,7 @@ defmodule AshHqWeb.Pages.Blog do
               <div class="border-b">
                 <h1 class="mt-6 text-3xl font-semibold mb-4">{@post.title}</h1>
                 <div class="flex flex-row space-x-2 mb-4">
-                  {#for tag <- @post.tag_names}
+                  {#for tag <- @post.tag_names || []}
                     <Tag prefix="/blog" tag={tag} />
                   {/for}
                 </div>
@@ -69,7 +69,7 @@ defmodule AshHqWeb.Pages.Blog do
                     {post.published_at |> DateTime.to_date()}
                   </div>
                   <div class="flex space-x-2">
-                    {#for tag <- post.tag_names}
+                    {#for tag <- post.tag_names || []}
                       <Tag prefix="/blog" tag={tag} />
                     {/for}
                   </div>

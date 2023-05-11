@@ -105,7 +105,7 @@ defmodule Utils do
       default
   end
 
-  def build(extension, order) do
+  def build(extension, all_extensions, order) do
     %{
       name: extension.name,
       target: extension[:target],
@@ -114,18 +114,37 @@ defmodule Utils do
       type: extension[:type],
       order: order,
       doc: module_docs(extension.module) || "No documentation",
-      dsls: build_sections(extension.module.sections())
+      dsls: build_sections(extension.module.sections(), extension.module, all_extensions)
     }
   end
 
-  defp build_sections(sections, path \\ []) do
+  defp build_sections(sections, this_extension_module, all_extensions, path \\ []) do
     sections
     |> Enum.with_index()
     |> Enum.flat_map(fn {section, index} ->
+      section_path = path ++ [section.name]
+
+      entities =
+        all_extensions
+        |> Enum.flat_map(fn extension ->
+          extension.module.dsl_patches()
+          |> Enum.filter(&match?(%Spark.Dsl.Patch.AddEntity{section_path: ^section_path}, &1))
+          |> Enum.map(fn %{entity: entity} ->
+            if extension.module == this_extension_module do
+              entity
+            else
+              Map.put(entity, :__requires_extension__, inspect(extension.module))
+            end
+          end)
+        end)
+        |> then(fn entities ->
+          Enum.concat(section.entities, entities)
+        end)
+
       [
         %{
           name: section.name,
-          options: schema(section.schema, path ++ [section.name]),
+          options: schema(section.schema, section_path),
           links: Map.new(section.links || []),
           imports: Enum.map(section.imports, &inspect/1),
           type: :section,
@@ -134,8 +153,8 @@ defmodule Utils do
           path: path
         }
       ] ++
-        build_entities(section.entities, path ++ [section.name]) ++
-        build_sections(section.sections, path ++ [section.name])
+        build_entities(entities, section_path) ++
+        build_sections(section.sections, this_extension_module, all_extensions, section_path)
     end)
   end
 
@@ -171,56 +190,67 @@ defmodule Utils do
     entities
     |> Enum.with_index()
     |> Enum.flat_map(fn {entity, index} ->
-      keys_to_remove = Enum.map(entity.auto_set_fields || [], &elem(&1, 0))
+      [build_entity(entity, path, index)] ++
+        build_entities(List.flatten(Keyword.values(entity.entities)), path ++ [entity.name])
+    end)
+  end
 
-      option_schema = Keyword.drop(entity.schema || [], keys_to_remove)
+  defp build_entity(entity, path, index) do
+    keys_to_remove = Enum.map(entity.auto_set_fields || [], &elem(&1, 0))
+    option_schema = Keyword.drop(entity.schema || [], keys_to_remove)
 
-      [
-        %{
-          name: entity.name,
-          recursive_as: Map.get(entity, :recursive_as),
-          order: index,
-          doc: docs_with_examples(entity.describe || "", examples(entity.examples)),
-          imports: [],
-          links: Map.new(entity.links || []),
-          args:
-            Enum.map(entity.args, fn
-              {:optional, name, _} ->
-                name
+    %{
+      name: entity.name,
+      recursive_as: Map.get(entity, :recursive_as),
+      doc: docs_with_examples(entity.describe || "", examples(entity.examples)),
+      order: index,
+      imports: [],
+      links: Map.new(entity.links || []),
+      args:
+        Enum.map(entity.args, fn
+          {:optional, name, _} ->
+            name
 
-              {:optional, name} ->
-                name
+          {:optional, name} ->
+            name
 
-              name ->
-                name
-            end),
-          optional_args:
-            Enum.flat_map(entity.args, fn
-              {:optional, name, _} ->
-                [name]
+          name ->
+            name
+        end),
+      optional_args:
+        Enum.flat_map(entity.args, fn
+          {:optional, name, _} ->
+            [name]
 
-              {:optional, name} ->
-                [name]
+          {:optional, name} ->
+            [name]
 
-              _ ->
-                []
-            end),
-          arg_defaults:
-            Enum.reduce(entity.args, %{}, fn
-              {:optional, name, default}, acc ->
-                Map.put(acc, name, inspect(default))
+          _ ->
+            []
+        end),
+      arg_defaults:
+        Enum.reduce(entity.args, %{}, fn
+          {:optional, name, default}, acc ->
+            Map.put(acc, name, inspect(default))
 
-              _, acc ->
-                acc
-            end),
-          type: :entity,
-          path: path,
-          options:
-            option_schema
-            |> schema(path ++ [entity.name])
-            |> add_argument_indices(entity.args)
-        }
-      ] ++ build_entities(List.flatten(Keyword.values(entity.entities)), path ++ [entity.name])
+          _, acc ->
+            acc
+        end),
+      type: :entity,
+      path: path,
+      options:
+        option_schema
+        |> schema(path ++ [entity.name])
+        |> add_argument_indices(entity.args)
+    }
+    |> then(fn config ->
+      case Map.fetch(entity, :__requires_extension__) do
+        {:ok, value} ->
+          Map.put(config, :requires_extension, value)
+
+        :error ->
+          config
+      end
     end)
   end
 
@@ -271,7 +301,7 @@ defmodule Utils do
         path: path,
         order: index,
         links: Map.new(value[:links] || []),
-        type: value[:type_name] || type(value[:type]),
+        type: value[:type_name] || type(value[:type] |> IO.inspect()),
         doc: add_default(value[:doc] || "No documentation", value[:default]),
         required: value[:required] || false,
         default: inspect(value[:default])
@@ -511,6 +541,8 @@ defmodule Utils do
   defp type(:pid), do: "Pid"
   defp type(:mfa), do: "MFA"
   defp type(:mod_arg), do: "Module and Arguments"
+  defp type(:map), do: "Map"
+  defp type(nil), do: "nil"
   defp type({:fun, arity}), do: "Function/#{arity}"
   defp type({:one_of, choices}), do: type({:in, choices})
   defp type({:in, choices}), do: Enum.map_join(choices, " | ", &inspect/1)
@@ -752,8 +784,8 @@ data =
   |> Enum.reduce(acc, fn {extension, i}, acc ->
     acc
     |> Map.put_new(:extensions, [])
-    |> Map.update!(:extensions, fn extensions ->
-      [Utils.build(extension, i) | extensions]
+    |> Map.update!(:extensions, fn acc ->
+      [Utils.build(extension, extensions, i) | acc]
     end)
   end)
 

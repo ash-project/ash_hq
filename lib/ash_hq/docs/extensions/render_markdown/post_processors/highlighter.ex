@@ -47,17 +47,20 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.Highlighter do
             end
           end)
 
-        case lexer do
-          {lang, lexer, opts} ->
-            {:keep, render_code(lang, lexer, opts, body)}
+        code =
+          case lexer do
+            {lang, lexer, opts} ->
+              render_code(lang, lexer, opts, body)
 
-          nil ->
-            if find_value_class(attrs, &(&1 == "inline")) do
-              {:keep, maybe_highlight_module(body, libraries, current_module)}
-            else
-              {:keep, ~s(<code class="text-black dark:text-white">#{body}</code>)}
-            end
-        end
+            nil ->
+              if find_value_class(attrs, &(&1 == "inline")) do
+                maybe_highlight_module(body, libraries, current_module)
+              else
+                ~s(<code class="text-black dark:text-white">#{body}</code>)
+              end
+          end
+
+        {:keep, code}
 
       other ->
         other
@@ -423,7 +426,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.Highlighter do
         formatter_options: [highlight_tag: "span"]
       )
 
-    ~s(<code class="makeup #{lang} highlight">#{highlighted}</code>)
+    ~s(<code class="not-prose makeup #{lang} highlight">#{highlighted}</code>)
   end
 
   entities = [{"&amp;", ?&}, {"&lt;", ?<}, {"&gt;", ?>}, {"&quot;", ?"}, {"&#39;", ?'}]

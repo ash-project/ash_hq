@@ -13,32 +13,32 @@ defmodule AshHqWeb.Pages.Docs do
   require Logger
   require Ash.Query
 
-  prop change_versions, :event, required: true
-  prop selected_versions, :map, required: true
-  prop libraries, :list, default: []
-  prop uri, :string
-  prop remove_version, :event
-  prop add_version, :event
-  prop change_version, :event
-  prop params, :map, required: true
-  prop show_catalogue_call_to_action, :boolean
+  prop(change_versions, :event, required: true)
+  prop(selected_versions, :map, required: true)
+  prop(libraries, :list, default: [])
+  prop(uri, :string)
+  prop(remove_version, :event)
+  prop(add_version, :event)
+  prop(change_version, :event)
+  prop(params, :map, required: true)
+  prop(show_catalogue_call_to_action, :boolean)
 
-  data library, :any
-  data docs, :any
-  data library_version, :any
-  data guide, :any
-  data doc_path, :list, default: []
-  data dsls, :list, default: []
-  data dsl, :any
-  data module, :any
-  data mix_task, :any
-  data positional_options, :list
-  data description, :string
-  data title, :string
-  data sidebar_data, :any
-  data not_found, :boolean, default: false
-  data dsl_target_extensions, :list
-  data dsl_target, :string
+  data(library, :any)
+  data(docs, :any)
+  data(library_version, :any)
+  data(guide, :any)
+  data(doc_path, :list, default: [])
+  data(dsls, :list, default: [])
+  data(dsl, :any)
+  data(module, :any)
+  data(mix_task, :any)
+  data(positional_options, :list)
+  data(description, :string)
+  data(title, :string)
+  data(sidebar_data, :any)
+  data(not_found, :boolean, default: false)
+  data(dsl_target_extensions, :list)
+  data(dsl_target, :string)
 
   @spec render(any) :: Phoenix.LiveView.Rendered.t()
   def render(assigns) do
@@ -256,6 +256,11 @@ defmodule AshHqWeb.Pages.Docs do
               </div>
             </div>
           </div>
+          {#if dsl.requires_extension}
+            <div class="w-full pt-4">
+              Requires Extension: <span class="text-primary-light-600">{dsl.requires_extension}</span>
+            </div>
+          {/if}
 
           <div class="prose dark:prose-invert my-4">
             {raw(dsl.doc_html)}

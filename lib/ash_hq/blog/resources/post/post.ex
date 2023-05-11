@@ -77,7 +77,7 @@ defmodule AshHq.Blog.Post do
   relationships do
     has_many :tags, AshHq.Blog.Tag do
       manual fn posts, %{query: query} ->
-        all_tags = Enum.flat_map(posts, & &1.tag_names)
+        all_tags = Enum.flat_map(posts, &(&1.tag_names || []))
 
         tags =
           query
@@ -104,11 +104,12 @@ defmodule AshHq.Blog.Post do
              Ash.Changeset.after_action(changeset, fn _, %{tag_names: tag_names} = record ->
                all_post_tags =
                  __MODULE__.published!()
-                 |> Enum.flat_map(& &1.tag_names)
+                 |> Enum.flat_map(&(&1.tag_names || []))
+                 |> IO.inspect()
 
                notifications =
                  Enum.flat_map(
-                   tag_names,
+                   tag_names || [],
                    &elem(AshHq.Blog.Tag.upsert!(&1, return_notifications?: true), 1)
                  )
 
