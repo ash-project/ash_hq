@@ -301,7 +301,7 @@ defmodule Utils do
         path: path,
         order: index,
         links: Map.new(value[:links] || []),
-        type: value[:type_name] || type(value[:type] |> IO.inspect()),
+        type: value[:type_name] || type(value[:type]),
         doc: add_default(value[:doc] || "No documentation", value[:default]),
         required: value[:required] || false,
         default: inspect(value[:default])

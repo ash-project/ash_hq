@@ -9,13 +9,13 @@ defmodule AshHq.Repo.Migrations.MigrateResources52 do
 
   def up do
     alter table(:dsls) do
-      add :requires_extension, :text
+      add(:requires_extension, :text)
     end
   end
 
   def down do
     alter table(:dsls) do
-      remove :requires_extension
+      remove(:requires_extension)
     end
   end
 end

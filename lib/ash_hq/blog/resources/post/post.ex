@@ -105,7 +105,6 @@ defmodule AshHq.Blog.Post do
                all_post_tags =
                  __MODULE__.published!()
                  |> Enum.flat_map(&(&1.tag_names || []))
-                 |> IO.inspect()
 
                notifications =
                  Enum.flat_map(

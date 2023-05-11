@@ -60,7 +60,7 @@ defmodule AshHq.Docs.Dsl do
     attribute :name, :string do
       allow_nil? false
     end
-    
+
     attribute :requires_extension, :string
 
     attribute :doc, :string do
