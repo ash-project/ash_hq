@@ -49,6 +49,8 @@ defmodule AshHq.MixProject do
       {:ash_authentication_phoenix, "~> 1.6"},
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, github: "ash-project/ash_csv"},
+      # Api Docs
+      {:open_api_spex, "~> 3.16"},
       # Discord
       {:nostrum, github: "zachdaniel/nostrum"},
       {:cowlib, "~> 2.11", hex: :remedy_cowlib, override: true},
