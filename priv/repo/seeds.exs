@@ -141,6 +141,20 @@ AshHq.Docs.Library.create!(
   upsert_identity: :unique_name
 )
 
+AshHq.Docs.Library.create!(
+  %{
+    name: "reactor",
+    display_name: "Reactor",
+    module_prefixes: ["Reactor"],
+    order: 90,
+    description: """
+    Reactor is a dynamic, concurrent, dependency resolving saga orchestrator.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
 # Always at the bottom
 AshHq.Docs.Library.create!(
   %{
