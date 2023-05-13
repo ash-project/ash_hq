@@ -4,7 +4,7 @@ defmodule AshHqWeb.Components.Search do
 
   require Ash.Query
 
-  alias AshHqWeb.Components.Catalogue
+  alias AshHqWeb.Components.{Catalogue, Icon}
   alias AshHqWeb.DocRoutes
   alias Phoenix.LiveView.JS
   alias Surface.Components.{Form, LivePatch}
@@ -72,8 +72,8 @@ defmodule AshHqWeb.Components.Search do
               </div>
               <div class="ml-10">
                 <Form for={:types} change={@change_types}>
-                  <div class="flex flex-row space-x-8 flex-wrap mt-2 text-sm text-base-light-500 dark:text-base-dark-300">
-                    <div>Search For:</div>
+                  <div class="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:flex lg:flex-row lg:space-x-6 lg:flex-wrap mt-2 text-sm text-base-light-500 dark:text-base-dark-300">
+                    <div class="hidden lg:block">Search For:</div>
                     {#for type <- AshHq.Docs.Extensions.Search.Types.types()}
                       <div class="flex flex-row items-center">
                         <Checkbox
@@ -83,6 +83,7 @@ defmodule AshHqWeb.Components.Search do
                           name={"types[#{type}]"}
                         />
                         <label for={"#{type}-selected"}>
+                          <Icon type={type} classes="h-5 w-5 flex-none -mt-0.5 inline-block" />
                           {type}
                         </label>
                       </div>
@@ -91,9 +92,23 @@ defmodule AshHqWeb.Components.Search do
                 </Form>
               </div>
             </div>
-            <div class="grid overflow-auto">
-              {render_items(assigns, @item_list)}
-            </div>
+            {#if @search in [nil, ""] && @item_list == []}
+              <div class="grid content-center ml-8">
+                <p class="mb-8">
+                  <Heroicons.Outline.ArrowUpIcon class="w-6 h-6 -mt-1 inline-block" />
+                  Enter your search term in the box above.
+                </p>
+
+                <p>
+                  <Heroicons.Outline.ArrowDownIcon class="w-6 h-6 -mt-1 inline-block" />
+                  Select Ash libraries to search from below!
+                </p>
+              </div>
+            {#else}
+              <div class="grid overflow-auto">
+                {render_items(assigns, @item_list)}
+              </div>
+            {/if}
             <div class="flex flex-row justify-start items-center relative bottom-0">
               <Heroicons.Outline.CollectionIcon class="w-6 h-6 mr-2" />
               <AshHqWeb.Components.VersionPills
@@ -126,7 +141,7 @@ defmodule AshHqWeb.Components.Search do
           }>
             <div class="flex justify-start items-center space-x-2 pb-2 pl-2">
               <div>
-                {render_item_type(assigns, item)}
+                <Icon type={item_type(item)} classes="h-4 w-4 flex-none mt-1 mx-1" />
               </div>
               <div class="flex flex-row flex-wrap items-center">
                 {#for {path_item, index} <- Enum.with_index(item_path(item))}
@@ -150,155 +165,6 @@ defmodule AshHqWeb.Components.Search do
         </LivePatch>
       {/for}
     </div>
-    """
-  end
-
-  defp render_item_type(assigns, item) do
-    item
-    |> item_type()
-    |> case do
-      "Function" ->
-        case item.type do
-          type when type in [:function, :macro] ->
-            "Function"
-
-          :callback ->
-            "Callback"
-
-          :type ->
-            "Type"
-        end
-
-      "Guide" ->
-        case item.category do
-          "Tutorials" ->
-            "Tutorial"
-
-          "How To" ->
-            "How To"
-
-          "Topics" ->
-            "Topic"
-
-          _ ->
-            "Guide"
-        end
-
-      "Extension" ->
-        item.target || "Extension"
-
-      other ->
-        other
-    end
-    |> icon_for_type("h-4 w-4 flex-none mt-1 mx-1", assigns)
-  end
-
-  def icon_for_type("Ash.Registry", icon_classes, assigns) do
-    ~F"""
-    <Heroicons.Outline.ViewListIcon class={icon_classes} />
-    """
-  end
-
-  def icon_for_type("Ash.Resource", icon_classes, assigns) do
-    ~F"""
-    <Heroicons.Outline.ServerIcon class={icon_classes} />
-    """
-  end
-
-  def icon_for_type("Ash.Api", icon_classes, assigns) do
-    ~F"""
-    <Heroicons.Outline.SwitchHorizontalIcon class={icon_classes} />
-    """
-  end
-
-  def icon_for_type("Ash.Flow", icon_classes, assigns) do
-    ~F"""
-    <Heroicons.Outline.MapIcon class={icon_classes} />
-    """
-  end
-
-  def icon_for_type("Tutorial", icon_classes, assigns) do
-    ~F"""
-    <Heroicons.Outline.AcademicCapIcon class={icon_classes} />
-    """
-  end
-
-  def icon_for_type("How To", icon_classes, assigns) do
-    ~F"""
-    <Heroicons.Outline.PresentationChartBarIcon class={icon_classes} />
-    """
-  end
-
-  def icon_for_type("Topic", icon_classes, assigns) do
-    ~F"""
-    <Heroicons.Outline.BookOpenIcon class={icon_classes} />
-    """
-  end
-
-  def icon_for_type("Forum", icon_classes, assigns) do
-    ~F"""
-    <Heroicons.Outline.UserGroupIcon class={icon_classes} />
-    """
-  end
-
-  def icon_for_type("Mix Task", icon_classes, assigns) do
-    ~F"""
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke-width="1.5"
-      stroke="currentColor"
-      class={icon_classes}
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"
-      />
-    </svg>
-    """
-  end
-
-  def icon_for_type("Function", icon_classes, assigns) do
-    ~F"""
-    <Heroicons.Outline.CodeIcon class={icon_classes} />
-    """
-  end
-
-  def icon_for_type("Callback", icon_classes, assigns) do
-    ~F"""
-    <Heroicons.Outline.AtSymbolIcon class={icon_classes} />
-    """
-  end
-
-  def icon_for_type("Type", icon_classes, assigns) do
-    ~F"""
-    <Heroicons.Outline.InformationCircleIcon class={icon_classes} />
-    """
-  end
-
-  def icon_for_type("Module", icon_classes, assigns) do
-    ~F"""
-    <Heroicons.Outline.CodeIcon class={icon_classes} />
-    """
-  end
-
-  def icon_for_type(type, icon_classes, assigns) when type in ["Dsl", "Option"] do
-    ~F"""
-    <Heroicons.Outline.PuzzleIcon class={icon_classes} />
-    """
-  end
-
-  def icon_for_type("Guide", icon_classes, assigns) do
-    ~F"""
-    <Heroicons.Outline.BookOpenIcon class={icon_classes} />
-    """
-  end
-
-  def icon_for_type(_, icon_classes, assigns) do
-    ~F"""
-    <Heroicons.Outline.PuzzleIcon class={icon_classes} />
     """
   end
 
