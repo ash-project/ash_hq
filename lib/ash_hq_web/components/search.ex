@@ -83,7 +83,7 @@ defmodule AshHqWeb.Components.Search do
                           name={"types[#{type}]"}
                         />
                         <label for={"#{type}-selected"}>
-                          <Icon type={type} classes={"h-5 w-5 flex-none -mt-0.5 inline-block"} />
+                          <Icon type={type} classes="h-5 w-5 flex-none -mt-0.5 inline-block" />
                           {type}
                         </label>
                       </div>
@@ -100,8 +100,8 @@ defmodule AshHqWeb.Components.Search do
                 </p>
 
                 <p>
-                <Heroicons.Outline.ArrowDownIcon class="w-6 h-6 -mt-1 inline-block" />
-                Select Ash libraries to search from below!
+                  <Heroicons.Outline.ArrowDownIcon class="w-6 h-6 -mt-1 inline-block" />
+                  Select Ash libraries to search from below!
                 </p>
               </div>
             {#else}
@@ -141,7 +141,7 @@ defmodule AshHqWeb.Components.Search do
           }>
             <div class="flex justify-start items-center space-x-2 pb-2 pl-2">
               <div>
-                <Icon type={item_type(item)} classes={"h-4 w-4 flex-none mt-1 mx-1"} />
+                <Icon type={item_type(item)} classes="h-4 w-4 flex-none mt-1 mx-1" />
               </div>
               <div class="flex flex-row flex-wrap items-center">
                 {#for {path_item, index} <- Enum.with_index(item_path(item))}

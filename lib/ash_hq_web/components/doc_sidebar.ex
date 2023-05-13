@@ -4,7 +4,7 @@ defmodule AshHqWeb.Components.DocSidebar do
   """
   use Surface.LiveComponent
 
-  alias AshHqWeb.Components.{Icon, Search}
+  alias AshHqWeb.Components.Icon
   alias Phoenix.LiveView.JS
   alias Surface.Components.LivePatch
 
