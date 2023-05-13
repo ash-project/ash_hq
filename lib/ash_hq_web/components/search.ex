@@ -92,9 +92,23 @@ defmodule AshHqWeb.Components.Search do
                 </Form>
               </div>
             </div>
-            <div class="grid overflow-auto">
-              {render_items(assigns, @item_list)}
-            </div>
+            {#if @search in [nil, ""] && @item_list == []}
+              <div class="grid content-center ml-8">
+                <p class="mb-8">
+                  <Heroicons.Outline.ArrowUpIcon class="w-6 h-6 -mt-1 inline-block" />
+                  Enter your search term in the box above.
+                </p>
+
+                <p>
+                <Heroicons.Outline.ArrowDownIcon class="w-6 h-6 -mt-1 inline-block" />
+                Select Ash libraries to search from below!
+                </p>
+              </div>
+            {#else}
+              <div class="grid overflow-auto">
+                {render_items(assigns, @item_list)}
+              </div>
+            {/if}
             <div class="flex flex-row justify-start items-center relative bottom-0">
               <Heroicons.Outline.CollectionIcon class="w-6 h-6 mr-2" />
               <AshHqWeb.Components.VersionPills
