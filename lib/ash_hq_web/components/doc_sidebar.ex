@@ -4,7 +4,7 @@ defmodule AshHqWeb.Components.DocSidebar do
   """
   use Surface.LiveComponent
 
-  alias AshHqWeb.Components.Search
+  alias AshHqWeb.Components.{Icon, Search}
   alias Phoenix.LiveView.JS
   alias Surface.Components.LivePatch
 
@@ -62,7 +62,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                       opts={phx_click: mark_active(id)}
                       class="flex flex-row items-start w-full text-left text-base-light-900 dark:text-base-dark-100"
                     >
-                      {render_icon(name, "DSLs", item_name, "h-4 w-4 flex-none mt-1 mr-1.5", assigns)}
+                      <Icon type="DSL" classes="h-4 w-4 flex-none mt-1 mr-1.5" />
                       {item_name}
                     </LivePatch>
                   </li>
@@ -107,7 +107,7 @@ defmodule AshHqWeb.Components.DocSidebar do
                                   opts={phx_click: mark_active(id)}
                                   class="flex flex-row items-start w-full text-left text-base-light-900 dark:text-base-dark-100"
                                 >
-                                  {render_icon(name, category, item_name, "h-4 w-4 flex-none mt-1 mr-1.5", assigns)}
+                                  <Icon type={name} classes="h-4 w-4 flex-none mt-1 mr-1.5" />
                                   {item_name}
                                 </LivePatch>
                               </li>
@@ -125,45 +125,6 @@ defmodule AshHqWeb.Components.DocSidebar do
       </div>
     </aside>
     """
-  end
-
-  defp render_icon("Mix Tasks", _, _, item_classes, assigns) do
-    Search.icon_for_type("Mix Task", item_classes, assigns)
-  end
-
-  defp render_icon("Code", _, _, item_classes, assigns) do
-    Search.icon_for_type("Module", item_classes, assigns)
-  end
-
-  defp render_icon("DSLs", type, _item_name, item_classes, assigns) do
-    Search.icon_for_type(type, item_classes, assigns)
-  end
-
-  defp render_icon("Guides", "Tutorials", _item_name, item_classes, assigns) do
-    Search.icon_for_type("Tutorial", item_classes, assigns)
-  end
-
-  defp render_icon("Guides", category, _item_name, item_classes, assigns) do
-    type =
-      case category do
-        "Tutorials" ->
-          "Tutorial"
-
-        "How To" ->
-          "How To"
-
-        "Topics" ->
-          "Topic"
-
-        _ ->
-          "Guide"
-      end
-
-    Search.icon_for_type(type, item_classes, assigns)
-  end
-
-  defp render_icon(_name, _category, _item_name, item_classes, assigns) do
-    Search.icon_for_type("Unknown", item_classes, assigns)
   end
 
   defp id(category, library, name, id, item_id, global_id) do
