@@ -72,8 +72,8 @@ defmodule AshHqWeb.Components.Search do
               </div>
               <div class="ml-10">
                 <Form for={:types} change={@change_types}>
-                  <div class="flex flex-row space-x-8 flex-wrap mt-2 text-sm text-base-light-500 dark:text-base-dark-300">
-                    <div>Search For:</div>
+                  <div class="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:flex lg:flex-row lg:space-x-6 lg:flex-wrap mt-2 text-sm text-base-light-500 dark:text-base-dark-300">
+                    <div class="hidden lg:block">Search For:</div>
                     {#for type <- AshHq.Docs.Extensions.Search.Types.types()}
                       <div class="flex flex-row items-center">
                         <Checkbox
