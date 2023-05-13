@@ -4,7 +4,7 @@ defmodule AshHqWeb.Components.Search do
 
   require Ash.Query
 
-  alias AshHqWeb.Components.Catalogue
+  alias AshHqWeb.Components.{Catalogue, Icon}
   alias AshHqWeb.DocRoutes
   alias Phoenix.LiveView.JS
   alias Surface.Components.{Form, LivePatch}
@@ -83,6 +83,7 @@ defmodule AshHqWeb.Components.Search do
                           name={"types[#{type}]"}
                         />
                         <label for={"#{type}-selected"}>
+                          <Icon type={type} classes={"h-5 w-5 flex-none -mt-0.5 inline-block"} />
                           {type}
                         </label>
                       </div>
@@ -126,7 +127,7 @@ defmodule AshHqWeb.Components.Search do
           }>
             <div class="flex justify-start items-center space-x-2 pb-2 pl-2">
               <div>
-                {render_item_type(assigns, item)}
+                <Icon type={item_type(item)} classes={"h-4 w-4 flex-none mt-1 mx-1"} />
               </div>
               <div class="flex flex-row flex-wrap items-center">
                 {#for {path_item, index} <- Enum.with_index(item_path(item))}
@@ -151,46 +152,6 @@ defmodule AshHqWeb.Components.Search do
       {/for}
     </div>
     """
-  end
-
-  defp render_item_type(assigns, item) do
-    item
-    |> item_type()
-    |> case do
-      "Function" ->
-        case item.type do
-          type when type in [:function, :macro] ->
-            "Function"
-
-          :callback ->
-            "Callback"
-
-          :type ->
-            "Type"
-        end
-
-      "Guide" ->
-        case item.category do
-          "Tutorials" ->
-            "Tutorial"
-
-          "How To" ->
-            "How To"
-
-          "Topics" ->
-            "Topic"
-
-          _ ->
-            "Guide"
-        end
-
-      "Extension" ->
-        item.target || "Extension"
-
-      other ->
-        other
-    end
-    |> icon_for_type("h-4 w-4 flex-none mt-1 mx-1", assigns)
   end
 
   def icon_for_type("Ash.Registry", icon_classes, assigns) do
