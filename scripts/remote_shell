@@ -1,0 +1,3 @@
+#! /bin/sh
+
+flyctl ssh console -a ash-hq-importer -C "./_build/prod/rel/ash_hq/bin/ash_hq remote"

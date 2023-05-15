@@ -52,7 +52,7 @@ defmodule AshHq.Docs.Importer do
       |> Ash.Query.filter(name == ^library)
       |> AshHq.Docs.read_one!(load: :latest_version)
 
-    version = opts[:version] || library.latest_version
+    version = opts[:version] || library.latest_version || latest_version(library.name)
 
     import_version(
       library,
@@ -131,6 +131,30 @@ defmodule AshHq.Docs.Importer do
     |> String.split(":")
     |> Enum.reject(&String.starts_with?(&1, "/_build"))
     |> Enum.join(":")
+  end
+
+  defp latest_version(name) do
+    hex_info =
+      Finch.build(:get, "https://hex.pm/api/packages/#{name}")
+      |> Finch.request(AshHq.Finch)
+      |> case do
+        {:ok, response} ->
+          Jason.decode!(response.body)
+
+        {:error, error} ->
+          raise "Something went wrong #{inspect(error)}"
+      end
+
+    retired_versions =
+      hex_info
+      |> Map.get("retirements", %{})
+      |> Map.keys()
+
+    hex_info
+    |> Map.get("releases", [])
+    |> Enum.map(&Map.get(&1, "version"))
+    |> Enum.reject(&(&1 in retired_versions))
+    |> Enum.at(0)
   end
 
   # sobelow_skip ["Misc.BinToTerm", "Traversal.FileModule"]

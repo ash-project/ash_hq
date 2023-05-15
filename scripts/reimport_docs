@@ -1,0 +1,28 @@
+#! /bin/sh
+
+#!/bin/bash
+if [ "$#" -lt 1 ]
+then
+  echo "Must provide a library or a library and a version. For example: 
+\`reimport_docs ash\` or \`reimport_docs ash 2.9.3\`
+"
+  exit 1
+fi
+
+#!/bin/bash
+if [ "$#" -lt 2 ]
+then
+  flyctl ssh console \
+  -a ash-hq-importer \
+  -C "./_build/prod/rel/ash_hq/bin/ash_hq rpc \\\"AshHq.Docs.Importer.reimport_docs(\"$1\")\\\""
+
+  exit $?
+fi
+
+if [ "$#" -lt 3 ]
+then
+  flyctl ssh console \
+  -a ash-hq-importer \
+  -C "./_build/prod/rel/ash_hq/bin/ash_hq rpc 'AshHq.Docs.Importer.reimport_docs(\"$1\", version: \"$2\")'"
+fi
+

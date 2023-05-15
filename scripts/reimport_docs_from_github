@@ -1,0 +1,28 @@
+#! /bin/sh
+
+if [ "$#" -lt 2 ]
+then
+  echo "Must provide a library or a library, github sha, and optionally a version. For example: 
+\`reimport_docs ash main\` or \`reimport_docs ash main 2.9.3\`
+"
+  exit 1
+fi
+
+#!/bin/bash
+if [ "$#" -lt 3 ]
+then
+  echo "\"AshHq.Docs.Importer.reimport_docs(\\\"$1\\\", github_sha: \\\"$2\\\")\""
+  flyctl ssh console \
+  -a ash-hq-importer \
+  -C "./_build/prod/rel/ash_hq/bin/ash_hq rpc \"AshHq.Docs.Importer.reimport_docs(\\\"$1\\\", github_sha: \\\"$2\\\")\""
+
+  exit $?
+fi
+
+if [ "$#" -lt 4 ]
+then
+  flyctl ssh console \
+  -a ash-hq-importer \
+  -C "./_build/prod/rel/ash_hq/bin/ash_hq rpc \\\"AshHq.Docs.Importer.reimport_docs(\"$1\", github_sha: \"$2\", version: \"$3\")\\\""
+fi
+
