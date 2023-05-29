@@ -240,8 +240,17 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.Highlighter do
               Enum.join(module, ".")
           end
 
-        dsl_dots = Enum.join(dsl_path, ".")
+        dsl_dots = Enum.join(dsl_path ++ List.wrap(maybe_anchor), ".")
         dsl_path = Enum.join(dsl_path, "/")
+
+        code =
+          case maybe_anchor do
+            [] ->
+              code
+
+            anchor ->
+              "#{code}.#{anchor}"
+          end
 
         code =
           ~s[<code class="inline maybe-dsl text-black dark:text-white" data-module="#{module}" data-dsl="#{dsl_dots}">#{code}</code>]
