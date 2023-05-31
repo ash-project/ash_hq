@@ -9,11 +9,11 @@ defmodule AshHqWeb.Pages.Home do
   import AshHqWeb.Components.CodeExample, only: [to_code: 1]
   import AshHqWeb.Tails
 
-  prop device_brand, :string
+  prop(device_brand, :string)
 
-  data signed_up, :boolean, default: false
-  data email_form, :any
-  data theme, :atom, default: :default
+  data(signed_up, :boolean, default: false)
+  data(email_form, :any)
+  data(theme, :atom, default: :default)
 
   def render(%{__context__: %{platform: :ios}} = assigns) do
     ~F"""
@@ -166,6 +166,12 @@ defmodule AshHqWeb.Pages.Home do
             <a class="hidden dark:block" href="https://www.wintermeyer-consulting.de/">
               <img class="h-6" src="/images/wintermeyer-logo-dark.svg">
             </a>
+            <a class="block dark:hidden" href="https://www.heretask.com/">
+              <img class="h-6" src="/images/heretask-logo-light.svg">
+            </a>
+            <a class="hidden dark:block" href="https://www.heretask.com/">
+              <img class="h-6" src="/images/heretask-logo-dark.svg">
+            </a>
           </div>
         </div>
 
@@ -174,37 +180,44 @@ defmodule AshHqWeb.Pages.Home do
           class="flex flex-col items-center content-center w-full lg:w-[28rem] px-4 md:px-8 lg:px-0"
         >
           <.testimonial
+            text="The ease of defining our domain model and configuring Ash to generate a powerful GraphQL API has been a game-changer. What used to be complex and time-consuming has become simplicity itself."
+            author="Alan Heywood"
+            title="CTO, HereTask"
+          />
+
+          <.testimonial
             text="Through its declarative extensibility, Ash delivers more than you'd expect: Powerful APIs with filtering/sorting/pagination/calculations/aggregations, pub/sub, authorization, rich introspection, GraphQL... It's what empowers this solo developer to build an ambitious ERP!"
             author="Frank Dugan III"
             title="System Specialist, SunnyCor Inc."
+            class_overrides="md:-mt-20"
           />
 
           <.testimonial
             text="I’m constantly blown away with the quality of work and support the Ash community has put into this project. It’s gotten to the point that I can’t imagine starting a new Elixir project that doesn’t use Ash."
             author="Brett Kolodny"
             title="Full stack engineer, MEW"
-            class_overrides="md:-mt-20"
+            class_overrides="md:-mt-4"
           />
 
           <.testimonial
             text="Ash is an incredibly powerful idea that gives Alembic a massive competitive advantage. It empowers us to build wildly ambitious applications for our clients with tiny teams, while consistently delivering the high level of quality that our customers have come to expect."
             author="Josh Price"
             title="Technical Director, Alembic"
-            class_overrides="md:-mt-4"
+            class_overrides="md:-mt-20"
           />
 
           <.testimonial
             text="Ash Framework enabled us to build a robust platform for delivering financial services using bitcoin. Ash proved itself to our team by handling innovative use cases with ease and it continues to evolve ahead of our growing list of needs."
             author="Yousef Janajri"
             title="CTO & Co-Founder, Coinbits"
-            class_overrides="md:-mt-20"
+            class_overrides="md:-mt-4"
           />
 
           <.testimonial
             text="The more I’ve used Ash, the more blown away I am by how much I get out of it – and how little boilerplate I have to write. I’m yet to encounter a situation where I would need to fight the “Ash way” of doing things, but the framework still allows me to choose how I build my software."
             author="Juha Lehtonen"
             title="Senior Software Developer"
-            class_overrides="md:-mt-4"
+            class_overrides="md:-mt-20"
           />
         </div>
 
