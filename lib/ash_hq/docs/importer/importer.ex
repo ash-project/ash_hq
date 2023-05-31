@@ -119,8 +119,18 @@ defmodule AshHq.Docs.Importer do
       |> Enum.reject(fn version ->
         Enum.find(already_defined_versions, &(&1.version == version))
       end)
+      |> Enum.reject(fn version ->
+        version in library.skip_versions
+      end)
       |> Enum.each(fn version ->
-        import_version(library, name, library.repo_org, mix_project, path_var, version)
+        try do
+          import_version(library, name, library.repo_org, mix_project, path_var, version)
+        rescue
+          e ->
+            Logger.error(
+              "Failed to import version #{name} #{version} #{Exception.format(:error, e, __STACKTRACE__)}"
+            )
+        end
       end)
     end
   end

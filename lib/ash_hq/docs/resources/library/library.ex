@@ -53,6 +53,11 @@ defmodule AshHq.Docs.Library do
     end
 
     attribute :mix_project, :string
+    
+    attribute :skip_versions, {:array, :string} do
+      default []
+      allow_nil? false
+    end
 
     timestamps()
   end
@@ -69,7 +74,7 @@ defmodule AshHq.Docs.Library do
     table "libraries"
     repo AshHq.Repo
 
-    migration_defaults module_prefixes: "[]"
+    migration_defaults module_prefixes: "[]", skip_versions: "[]"
   end
 
   code_interface do
