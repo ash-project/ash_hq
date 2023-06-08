@@ -436,6 +436,9 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.Highlighter do
       )
 
     ~s(<code class="not-prose makeup #{lang} highlight">#{highlighted}</code>)
+  rescue
+    _ ->
+      ~s(<code class="text-black dark:text-white">#{code}</code>)
   end
 
   entities = [{"&amp;", ?&}, {"&lt;", ?<}, {"&gt;", ?>}, {"&quot;", ?"}, {"&#39;", ?'}]

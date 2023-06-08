@@ -542,6 +542,8 @@ defmodule Utils do
   defp type(:mfa), do: "MFA"
   defp type(:mod_arg), do: "Module and Arguments"
   defp type(:map), do: "Map"
+  defp type(:struct), do: "Struct"
+  defp type({:struct, struct}), do: "#{inspect(struct)}"
   defp type(nil), do: "nil"
   defp type({:fun, arity}), do: "Function/#{arity}"
   defp type({:one_of, choices}), do: type({:in, choices})
