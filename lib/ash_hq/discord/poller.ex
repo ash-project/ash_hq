@@ -4,6 +4,7 @@ defmodule AshHq.Discord.Poller do
   """
 
   use GenServer
+  require Logger
 
   @poll_interval :timer.hours(1)
   @server_id 711_271_361_523_351_632
@@ -104,6 +105,7 @@ defmodule AshHq.Discord.Poller do
         false
     end)
     |> Enum.each(fn %{thread: thread, messages: messages} ->
+      try do
       author =
         messages
         |> Enum.min_by(& &1.timestamp, DateTime)
@@ -117,6 +119,9 @@ defmodule AshHq.Discord.Poller do
       |> Map.put(:create_timestamp, thread.thread_metadata.create_timestamp)
       |> Map.put(:messages, Enum.map(messages, &Map.from_struct/1))
       |> AshHq.Discord.Thread.upsert!()
+      rescue
+        e ->
+          Logger.error("Failed to import message:\n #{Exception.format(:error, e, __STACKTRACE__)}")
     end)
   end
 
