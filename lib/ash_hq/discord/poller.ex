@@ -106,22 +106,25 @@ defmodule AshHq.Discord.Poller do
     end)
     |> Enum.each(fn %{thread: thread, messages: messages} ->
       try do
-      author =
-        messages
-        |> Enum.min_by(& &1.timestamp, DateTime)
-        |> Map.get(:author)
+        author =
+          messages
+          |> Enum.min_by(& &1.timestamp, DateTime)
+          |> Map.get(:author)
 
-      thread
-      |> Map.put(:author, author)
-      |> Map.from_struct()
-      |> Map.put(:channel_id, thread.parent_id)
-      |> Map.put(:tags, thread.applied_tags)
-      |> Map.put(:create_timestamp, thread.thread_metadata.create_timestamp)
-      |> Map.put(:messages, Enum.map(messages, &Map.from_struct/1))
-      |> AshHq.Discord.Thread.upsert!()
+        thread
+        |> Map.put(:author, author)
+        |> Map.from_struct()
+        |> Map.put(:channel_id, thread.parent_id)
+        |> Map.put(:tags, thread.applied_tags)
+        |> Map.put(:create_timestamp, thread.thread_metadata.create_timestamp)
+        |> Map.put(:messages, Enum.map(messages, &Map.from_struct/1))
+        |> AshHq.Discord.Thread.upsert!()
       rescue
         e ->
-          Logger.error("Failed to import message:\n #{Exception.format(:error, e, __STACKTRACE__)}")
+          Logger.error(
+            "Failed to import message:\n #{Exception.format(:error, e, __STACKTRACE__)}"
+          )
+      end
     end)
   end
 
