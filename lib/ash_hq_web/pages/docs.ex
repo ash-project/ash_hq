@@ -403,7 +403,7 @@ defmodule AshHqWeb.Pages.Docs do
     |> Enum.flat_map(fn mod_name ->
       case find_module(libraries, selected_versions, mod_name) do
         nil ->
-          Logger.warn("No such module found called #{inspect(mod_name)}")
+          Logger.warning("No such module found called #{inspect(mod_name)}")
           []
 
         module ->

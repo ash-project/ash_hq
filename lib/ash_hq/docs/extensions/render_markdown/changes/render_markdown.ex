@@ -62,7 +62,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
                AshHq.Docs.Extensions.RenderMarkdown.table_of_contents?(changeset.resource)
              ) do
           {:error, html_doc, error_messages} ->
-            Logger.warn("""
+            Logger.warning("""
             Error while transforming to HTML: #{inspect(error_messages)}
 
             Transforming:

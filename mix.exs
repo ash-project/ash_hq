@@ -45,6 +45,7 @@ defmodule AshHq.MixProject do
       {:ash_phoenix, github: "ash-project/ash_phoenix", override: true},
       {:ash_graphql, github: "ash-project/ash_graphql"},
       {:ash_json_api, github: "ash-project/ash_json_api"},
+      {:gun, "== 2.0.1", env: :prod, hex: "remedy_gun", override: true},
       {:ash_authentication, "~> 3.10"},
       {:ash_authentication_phoenix, "~> 1.6"},
       {:ash_blog, github: "ash-project/ash_blog"},

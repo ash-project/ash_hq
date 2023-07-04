@@ -3,7 +3,7 @@ defmodule AshHqWeb.Pages.Home do
 
   use Surface.LiveComponent
 
-  alias AshHqWeb.Components.{CalloutText, CodeExample, SearchBar}
+  alias AshHqWeb.Components.{CalloutText, CodeExample, Feature, SearchBar}
   alias Surface.Components.Form
   alias Surface.Components.Form.{Field, Submit, TextInput}
   import AshHqWeb.Components.CodeExample, only: [to_code: 1]
@@ -15,46 +15,20 @@ defmodule AshHqWeb.Pages.Home do
   data(email_form, :any)
   data(theme, :atom, default: :default)
 
-  def render(%{__context__: %{platform: :ios}} = assigns) do
-    ~F"""
-    <vstack>
-      <hstack>
-        <text>Build</text> <CalloutText text="powerful" /><text>
-          and
-        </text>
-        <CalloutText text="composable" /> <text>
-          applications</text>
-      </hstack>
-      <hstack>
-        <text>with a
-        </text>
-        <CalloutText text="flexible" /> <text>
-          tool-chain.
-        </text>
-      </hstack>
-      <hstack>
-        <text font="callout">A declarative foundation for ambitious Elixir applications.</text>
-      </hstack>
-      <hstack>
-        <text font="callout">Model your domain, derive the rest.</text>
-      </hstack>
-    </vstack>
-    """
-  end
-
   def render(assigns) do
     ~F"""
     <div class="antialiased">
-      <div class="my-2 dark:bg-base-dark-850 flex flex-col items-center pt-4 md:pt-12">
+      <div class="my-2 mx-16 dark:bg-base-dark-850 flex flex-col items-center pt-4 md:pt-12">
         <div class="flex flex-col">
           <img class="h-64" src="/images/ash-logo-side.svg">
         </div>
         <div class="text-3xl md:text-5xl px-4 md:px-12 font-bold max-w-5xl mx-auto mt-8 md:text-center">
-          Build <CalloutText text="powerful" /> and <CalloutText text="composable" /> applications with a <CalloutText text="flexible" /> tool-chain.
+          Model your domain, <CalloutText text="derive the rest" />
         </div>
-        <div class="text-xl font-light text-base-dark-700 dark:text-base-light-100 max-w-4xl mx-auto px-4 md:px-0 mt-4 md:text-center">
-          A declarative foundation for ambitious Elixir applications. Model your domain, derive the rest.
+        <div class="text-2xl font-light text-base-dark-700 dark:text-base-light-100 max-w-4xl mx-auto px-4 md:px-0 mt-4 md:text-center">
+          Build <CalloutText text="powerful" /> applications with a <CalloutText text="flexible" /> tool-chain.
         </div>
+
         <div class="flex flex-col space-y-4 md:space-x-4 md:space-y-0 md:flex-row items-center mt-8 md:mt-16 mb-6 md:mb-10">
           <a
             href="/docs/guides/ash/latest/tutorials/get-started"
@@ -65,89 +39,118 @@ defmodule AshHqWeb.Pages.Home do
           <SearchBar class="w-80 md:w-96" device_brand={@device_brand} />
         </div>
 
-        <div class="flex flex-col">
-          <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
-            <h2 class="mt-8 font-semibold text-primary-light-500 dark:text-primary-dark-400">
-              Framework
-            </h2>
-            <p class="mt-4 text-3xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50">
-              What is Ash?
-            </p>
-            <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6">
-              Ash Framework is a declarative, resource-oriented application
-              development framework for Elixir. A resource can model anything,
-              like a database table, an external API, or even custom code. Ash
-              provides a rich, and extensive set of tools for interacting with
-              and building on top of these resources. By modeling your
-              application as a set of resources, other tools know exactly how to
-              use them, allowing extensions like AshGraphql and AshJsonApi to
-              provide top tier APIs with minimal configuration. With
-              filtering, sorting, pagination, calculations, aggregations, pub_sub,
-              policy authorization, rich introspection, and much more built-in.
-              Coupled with a comprehensive suite of tools to allow you to build your own
-              extensions, the possibilities are endless.
-            </p>
-          </div>
-          <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
-            <h2 class="mt-8 font-semibold text-primary-light-500 dark:text-primary-dark-400">
-              Write it once
-            </h2>
-            <p class="mt-4 text-3xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50">
-              Why do developers keep reinventing the wheel?
-            </p>
-            <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6">
-              Every time you start a new app, are you rebuilding features that you've already built many times?
-              Wouldn't it be great if you could just focus on the important parts of an app without reinventing ways to authenticate, add permissions, etc.
-              Ash allows you to not only use patterns in existing extensions, it lets you extract your own patterns into custom extensions.
-              So when you need to do it again in a new application, it's already done. Just wire it up!
-            </p>
-          </div>
+        <div class="grid justify-center grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 dark:bg-none dark:bg-opacity-0 py-6 text-center mx-8 gap-16 max-w-lg md:max-w-lg xl:max-w-4xl mt-2 border-t border-t-gray-600 pt-16">
+            <Feature name="Resources">
+              <:description>
+                <CalloutText text="Plug and play"/> building blocks that scale with the complexity of your application.
+              </:description>
+              <:icon>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" >
+                  <path fill-rule="evenodd" d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576l-2.846-.813a.75.75 0 010-1.442l2.846-.813A3.75 3.75 0 007.466 7.89l.813-2.846A.75.75 0 019 4.5zM18 1.5a.75.75 0 01.728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 010 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 01-1.456 0l-.258-1.036a2.625 2.625 0 00-1.91-1.91l-1.036-.258a.75.75 0 010-1.456l1.036-.258a2.625 2.625 0 001.91-1.91l.258-1.036A.75.75 0 0118 1.5zM16.5 15a.75.75 0 01.712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 010 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 01-1.422 0l-.395-1.183a1.5 1.5 0 00-.948-.948l-1.183-.395a.75.75 0 010-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0116.5 15z" clip-rule="evenodd" />
+                </svg>
+              </:icon>
+            </Feature>
+            <Feature name="GraphQL" class="text-pink-700 dark:text-pink-500">
+              <:description>
+                Easily create rich, customizable, full featured <CalloutText text="GraphQL APIs"/> backed by Absinthe.
+              </:description>
+              <:icon>
+                <svg role="img" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><title/><path d="M14.051 2.751l4.935 2.85c.816-.859 2.173-.893 3.032-.077.148.14.274.301.377.477.589 1.028.232 2.339-.796 2.928-.174.1-.361.175-.558.223v5.699c1.146.273 1.854 1.423 1.58 2.569-.048.204-.127.4-.232.581-.592 1.023-1.901 1.374-2.927.782-.196-.113-.375-.259-.526-.429l-4.905 2.832c.372 1.124-.238 2.335-1.361 2.706-.217.071-.442.108-.67.108-1.181.001-2.139-.955-2.14-2.136 0-.205.029-.41.088-.609l-4.936-2.847c-.816.854-2.171.887-3.026.07-.854-.816-.886-2.171-.07-3.026.283-.297.646-.506 1.044-.603l.001-5.699c-1.15-.276-1.858-1.433-1.581-2.584.047-.198.123-.389.224-.566.592-1.024 1.902-1.374 2.927-.782.177.101.339.228.48.377l4.938-2.85C9.613 1.612 10.26.423 11.39.088 11.587.029 11.794 0 12 0c1.181-.001 2.139.954 2.14 2.134.001.209-.03.418-.089.617zm-.515.877c-.019.021-.037.039-.058.058l6.461 11.19c.026-.009.056-.016.082-.023V9.146c-1.145-.283-1.842-1.442-1.558-2.588.006-.024.012-.049.019-.072l-4.946-2.858zm-3.015.059l-.06-.06-4.946 2.852c.327 1.135-.327 2.318-1.461 2.645-.026.008-.051.014-.076.021v5.708l.084.023 6.461-11.19-.002.001zm2.076.507c-.39.112-.803.112-1.192 0l-6.46 11.189c.294.283.502.645.6 1.041h12.911c.097-.398.307-.761.603-1.044L12.597 4.194zm.986 16.227l4.913-2.838c-.015-.047-.027-.094-.038-.142H5.542l-.021.083 4.939 2.852c.388-.404.934-.653 1.54-.653.627 0 1.19.269 1.583.698z"/></svg>
+              </:icon>
+            </Feature>
+            <Feature name="JSON:API" class="text-green-700 dark:text-green-600">
+              <:description>
+                Create JSON:API spec compliant apis in <CalloutText text="minutes"/>, not days.
+              </:description>
+              <:icon>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 32 32" version="1.1">
+                  <title>alt-curly</title>
+                  <path d="M0 16q0 1.664 1.184 2.848t2.816 1.152q0.832 0 1.408 0.608t0.608 1.408v4q0 2.496 1.728 4.224t4.256 1.76v-4q-0.832 0-1.408-0.576t-0.576-1.408v-4q0-2.496-1.76-4.256t-4.256-1.76q2.496 0 4.256-1.76t1.76-4.224v-4q0-0.864 0.576-1.44t1.408-0.576v-4q-2.496 0-4.256 1.76t-1.728 4.256v4q0 0.832-0.608 1.408t-1.408 0.576q-1.664 0-2.816 1.184t-1.184 2.816zM14.016 16q0 0.832 0.576 1.44t1.408 0.576 1.408-0.576 0.608-1.44-0.608-1.408-1.408-0.576-1.408 0.576-0.576 1.408zM20 28v4q2.496 0 4.256-1.76t1.76-4.224v-4q0-0.864 0.576-1.44t1.408-0.576q1.664 0 2.816-1.152t1.184-2.848-1.184-2.816-2.816-1.184q-0.832 0-1.408-0.576t-0.576-1.408v-4q0-2.496-1.76-4.256t-4.256-1.76v4q0.832 0 1.408 0.608t0.608 1.408v4q0 2.496 1.728 4.224t4.256 1.76q-2.496 0-4.256 1.76t-1.728 4.256v4q0 0.832-0.608 1.408t-1.408 0.576z"/>
+                </svg>
+              </:icon>
+            </Feature>
+            <Feature name="Authentication" class="text-indigo-500 dark:text-indigo-400">
+              <:description>
+                Effortless authentication with <CalloutText text="magic link"/> and <CalloutText text="social login"/> out of the box.
+              </:description>
+                <:icon>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" />
+                  </svg>
+                </:icon>
+            </Feature>
+            <Feature name="Authorization" class="text-gray-700 dark:text-gray-400">
+              <:description>
+                Add row and field level policies to <CalloutText text="prohibit access"/> to data.
+              </:description>
+                <:icon>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
+                </svg>
+                </:icon>
+            </Feature>
+            <Feature name="Multitenancy" class="text-black dark:text-white">
+              <:description>
+                <CalloutText text="Built in strategies" /> for splitting your application by tenant.
+              </:description>
+              <:icon>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path fill-rule="evenodd" d="M3 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5H15v-18a.75.75 0 000-1.5H3zM6.75 19.5v-2.25a.75.75 0 01.75-.75h3a.75.75 0 01.75.75v2.25a.75.75 0 01-.75.75h-3a.75.75 0 01-.75-.75zM6 6.75A.75.75 0 016.75 6h.75a.75.75 0 010 1.5h-.75A.75.75 0 016 6.75zM6.75 9a.75.75 0 000 1.5h.75a.75.75 0 000-1.5h-.75zM6 12.75a.75.75 0 01.75-.75h.75a.75.75 0 010 1.5h-.75a.75.75 0 01-.75-.75zM10.5 6a.75.75 0 000 1.5h.75a.75.75 0 000-1.5h-.75zm-.75 3.75A.75.75 0 0110.5 9h.75a.75.75 0 010 1.5h-.75a.75.75 0 01-.75-.75zM10.5 12a.75.75 0 000 1.5h.75a.75.75 0 000-1.5h-.75zM16.5 6.75v15h5.25a.75.75 0 000-1.5H21v-12a.75.75 0 000-1.5h-4.5zm1.5 4.5a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008zm.75 2.25a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75v-.008a.75.75 0 00-.75-.75h-.008zM18 17.25a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008z" clip-rule="evenodd" />
+                </svg>
+              </:icon>
+            </Feature>
+            <Feature name="Data Layers" class="text-yellow-800 dark:text-yellow-500">
+              <:description>
+                Postgres, Ets, Mnesia, CSV and <CalloutText text="more on the way!"/>
+              </:description>
+              <:icon>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M21 6.375c0 2.692-4.03 4.875-9 4.875S3 9.067 3 6.375 7.03 1.5 12 1.5s9 2.183 9 4.875z" />
+                  <path d="M12 12.75c2.685 0 5.19-.586 7.078-1.609a8.283 8.283 0 001.897-1.384c.016.121.025.244.025.368C21 12.817 16.97 15 12 15s-9-2.183-9-4.875c0-.124.009-.247.025-.368a8.285 8.285 0 001.897 1.384C6.809 12.164 9.315 12.75 12 12.75z" />
+                  <path d="M12 16.5c2.685 0 5.19-.586 7.078-1.609a8.282 8.282 0 001.897-1.384c.016.121.025.244.025.368 0 2.692-4.03 4.875-9 4.875s-9-2.183-9-4.875c0-.124.009-.247.025-.368a8.284 8.284 0 001.897 1.384C6.809 15.914 9.315 16.5 12 16.5z" />
+                  <path d="M12 20.25c2.685 0 5.19-.586 7.078-1.609a8.282 8.282 0 001.897-1.384c.016.121.025.244.025.368 0 2.692-4.03 4.875-9 4.875s-9-2.183-9-4.875c0-.124.009-.247.025-.368a8.284 8.284 0 001.897 1.384C6.809 19.664 9.315 20.25 12 20.25z" />
+                </svg>
+              </:icon>
+            </Feature>
+            <Feature name="Admin" class="text-violet-700 dark:text-violet-400">
+              <:description>
+                A <CalloutText text="push-button admin interface"/> you can drop right into your application.
+              </:description>
+                <:icon>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.75 12.75h1.5a.75.75 0 000-1.5h-1.5a.75.75 0 000 1.5zM12 6a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 0112 6zM12 18a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 0112 18zM3.75 6.75h1.5a.75.75 0 100-1.5h-1.5a.75.75 0 000 1.5zM5.25 18.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 010 1.5zM3 12a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 013 12zM9 3.75a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zM12.75 12a2.25 2.25 0 114.5 0 2.25 2.25 0 01-4.5 0zM9 15.75a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" />
+                </svg>
+                </:icon>
+            </Feature>
+            <Feature name="Extensions" class="text-red-700 dark:text-red-500">
+              <:description>
+                A suite of tools for you to <CalloutText text="build your own"/> extensions and DSLs.
+              </:description>
+                <:icon>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path fill-rule="evenodd" d="M14.447 3.027a.75.75 0 01.527.92l-4.5 16.5a.75.75 0 01-1.448-.394l4.5-16.5a.75.75 0 01.921-.526zM16.72 6.22a.75.75 0 011.06 0l5.25 5.25a.75.75 0 010 1.06l-5.25 5.25a.75.75 0 11-1.06-1.06L21.44 12l-4.72-4.72a.75.75 0 010-1.06zm-9.44 0a.75.75 0 010 1.06L2.56 12l4.72 4.72a.75.75 0 11-1.06 1.06L.97 12.53a.75.75 0 010-1.06l5.25-5.25a.75.75 0 011.06 0z" clip-rule="evenodd" />
+                </svg>
+                </:icon>
+            </Feature>
+            <div class="hidden xl:block"/>
+            <Feature name="Compatible" class="text-purple-700 dark:text-purple-500">
+              <:description>
+                Works great with <CalloutText text="Phoenix"/>, <CalloutText text="Ecto"/> and all the other <CalloutText text="first rate tools" /> in the Elixir ecosystem.
+              </:description>
+                <:icon>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 005.427-.63 48.05 48.05 0 00.582-4.717.532.532 0 00-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 00.658-.663 48.422 48.422 0 00-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 01-.61-.58v0z" />
+                </svg>
 
-          <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
-            <h2 class="mt-8 font-semibold text-primary-light-500 dark:text-primary-dark-400">
-              Consistency
-            </h2>
-            <p class="mt-4 text-3xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50">
-              A place for everything and everything in its place
-            </p>
-            <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6">
-              Ash helps keep things neat and organized by providing good patterns for structuring your application.
-              Over time and with larger teams of different experience levels,
-              patterns change and drift away from each-other across our applications.
-              With that said, nothing in Ash depends on what folders or files you put things in, so you are
-              free to experiment or make the choices that make sense to you.
-            </p>
-            <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6">
-              Spaghetti belongs in the kitchen, not in your codebase.
-              Ash provides the ability to keep all similar parts of your application consistent,
-              making it easy to share an architectural vision while allowing escape hatches to do something different if needed.
-            </p>
-          </div>
-
-          <div class="max-w-7xl px-4 sm:px-6 md:px-8 mb-8">
-            <h2 class="mt-8 font-semibold text-primary-light-500 dark:text-primary-dark-400">
-              Incredibly Powerful
-            </h2>
-            <p class="mt-4 text-3xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50">
-              Ash is more than it appears
-            </p>
-            <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6">
-              Ash is more than just auto-generated API or an Admin UI.
-              It’s a fully extensible DSL to model your domain, which creates a declarative,
-              highly introspectable representation. This in turn can be used to derive anything you want.
-            </p>
-            <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6">
-              Ash has built in extensions that allow you to generate Admin UIs or Phoenix LiveView Form helpers,
-              saving a ton of boilerplate. Even going as far as fully swapping data layers, Ash lets you do
-              something traditionally extremely difficult with ease.
-            </p>
-          </div>
+                </:icon>
+            </Feature>
+            <div class="hidden xl:block"/>
         </div>
 
         <div class="flex flex-col w-full dark:bg-none dark:bg-opacity-0 py-6">
           <div class="flex flex-col w-full">
             <div class="flex flex-row text-center justify-center w-full text-2xl text-black dark:text-white">
-              Brought to you by
+              Our Sponsors
             </div>
             <div class="flex flex-row mt-6 justify-center">
               <a href="https://alembic.com.au">

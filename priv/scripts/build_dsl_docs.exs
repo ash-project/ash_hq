@@ -550,6 +550,12 @@ defmodule Utils do
   defp type({:in, choices}), do: Enum.map_join(choices, " | ", &inspect/1)
   defp type({:or, subtypes}), do: Enum.map_join(subtypes, " | ", &type/1)
   defp type({:list, subtype}), do: type(subtype) <> "[]"
+
+  defp type({:wrap_list, subtype}) do
+    str = type(subtype)
+    str <> "[] | " <> str
+  end
+
   defp type({:list_of, subtype}), do: type({:list, subtype})
   defp type({:mfa_or_fun, arity}), do: "MFA | function/#{arity}"
   defp type(:literal), do: "any literal"
