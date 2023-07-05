@@ -66,10 +66,6 @@ defmodule AshHq.Accounts.UserToken do
     """
   end
 
-  identities do
-    identity :token_context, [:context, :token]
-  end
-
   changes do
     change fn changeset, _ ->
              case changeset.context[:ash_authentication][:user] do
