@@ -103,7 +103,7 @@ defmodule AshHq.Blog.Post do
     change fn changeset, _ ->
              Ash.Changeset.after_action(changeset, fn _, %{tag_names: tag_names} = record ->
                all_post_tags =
-                 __MODULE__.published!()
+                 AshHq.Blog.Post.published!()
                  |> Enum.flat_map(&(&1.tag_names || []))
 
                notifications =

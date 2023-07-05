@@ -36,16 +36,6 @@ defmodule AshHqWeb.Pages.Media do
           />
         </div>
         <div class="col-span-2 lg:col-span-1">
-          <div class="text-xl">Twitter</div>
-          <a
-            class="twitter-timeline"
-            data-height="560px"
-            href="https://twitter.com/AshFramework/lists/1604385682176327681?ref_src=twsrc%5Etfw"
-          >Loading Twitter Feed...
-          </a>
-        </div>
-
-        <div class="col-span-2 lg:col-span-1">
           <div class="text-xl">Youtube</div>
           <iframe
             width="560"
