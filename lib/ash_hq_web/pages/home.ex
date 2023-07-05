@@ -430,8 +430,8 @@ defmodule AshHqWeb.Pages.Home do
   def testimonial(assigns) do
     ~F"""
     <div class={[
-      "w-full md:w-[26rem] lg:min-w-fit lg:max-w-min rounded-xl shadow-xl mt-8 p-8
-      odd:bg-base-light-200 even:bg-base-light-100 odd:dark:bg-base-dark-700 even:dark:bg-base-dark-600
+      "w-full md:w-[26rem] lg:min-w-fit lg:max-w-min rounded-xl shadow-xl dark:shadow-none mt-8 p-8
+      odd:bg-base-light-200/80 even:bg-base-light-100/80 odd:dark:bg-base-dark-800/80 even:dark:bg-base-dark-700/80
       space-y-4 text-center md:text-left relative md:odd:-left-[10rem] md:even:left-[10rem]",
       @class_overrides
     ]}>
