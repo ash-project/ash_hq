@@ -226,6 +226,9 @@ defmodule AshHqWeb.Pages.Home do
             <a class="hidden dark:block" href="https://www.heretask.com/">
               <img class="h-6" src="/images/heretask-logo-dark.svg">
             </a>
+            <a class="block" href="https://www.groupflow.app">
+              <img class="h-6" src="/images/group-flow-logo.svg">
+            </a>
           </div>
         </div>
 
