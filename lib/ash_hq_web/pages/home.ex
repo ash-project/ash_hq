@@ -210,8 +210,8 @@ defmodule AshHqWeb.Pages.Home do
             </div>
           </div>
 
-          <div class="flex flex-row justify-center mt-12 gap-4">
-            <a href="https://coinbits.app/">
+          <div class="grid grid-cols-1 md:grid-cols-4 items-center align-middle justify-items-center justify-center mt-12 gap-4">
+            <a class=" block" href="https://coinbits.app/">
               <img class="h-6" src="/images/coinbits-logo.png">
             </a>
             <a class="block dark:hidden" href="https://www.wintermeyer-consulting.de/">
