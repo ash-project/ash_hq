@@ -210,8 +210,8 @@ defmodule AshHqWeb.Pages.Home do
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-4 items-center align-middle justify-items-center justify-center mt-12 gap-4">
-            <a class=" block" href="https://coinbits.app/">
+          <div class="grid grid-cols-1 md:grid-cols-4 items-center align-middle justify-items-center justify-center mt-12 gap-4 gap-y-12">
+            <a class="block" href="https://coinbits.app/">
               <img class="h-6" src="/images/coinbits-logo.png">
             </a>
             <a class="block dark:hidden" href="https://www.wintermeyer-consulting.de/">
@@ -229,6 +229,16 @@ defmodule AshHqWeb.Pages.Home do
             <a class="block" href="https://www.groupflow.app">
               <img class="h-6" src="/images/group-flow-logo.svg">
             </a>
+            <div class="hidden md:block">
+            </div>
+            <a class="block dark:hidden col-span-1 md:col-span-2" href="https://www.zoonect.com/en/homepage">
+              <img class="h-6" src="/images/zoonect-light.svg">
+            </a>
+            <a class="hidden dark:block col-span-2" href="https://www.zoonect.com/en/homepage">
+              <img class="h-6" src="/images/zoonect-dark.svg">
+            </a>
+            <div class="hidden md:block">
+            </div>
           </div>
         </div>
 
