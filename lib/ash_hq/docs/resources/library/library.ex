@@ -53,7 +53,7 @@ defmodule AshHq.Docs.Library do
     end
 
     attribute :mix_project, :string
-    
+
     attribute :skip_versions, {:array, :string} do
       default []
       allow_nil? false

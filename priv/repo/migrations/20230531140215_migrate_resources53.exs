@@ -9,13 +9,13 @@ defmodule AshHq.Repo.Migrations.MigrateResources53 do
 
   def up do
     alter table(:libraries) do
-      add :skip_versions, {:array, :text}, null: false, default: []
+      add(:skip_versions, {:array, :text}, null: false, default: [])
     end
   end
 
   def down do
     alter table(:libraries) do
-      remove :skip_versions
+      remove(:skip_versions)
     end
   end
 end
