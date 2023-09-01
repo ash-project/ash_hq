@@ -39,6 +39,49 @@ defmodule AshHqWeb.Pages.Home do
           <SearchBar class="w-80 md:w-96" device_brand={@device_brand} />
         </div>
 
+        <div class="mb-4 md:mb-8 hidden sm:block">
+          <span class="flex items-center justify-center h-full bg-base-dark-800 rounded-full overflow-hidden text-center font-bold p-4">OR</span>
+        </div>
+
+        <div class="hidden sm:flex justify-center items-center mb-6 md:mb-10 gap-4">
+          <a
+            href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd"
+            class="hover:scale-110 transition"
+          >
+            <img src="https://livebook.dev/badge/v1/pink.svg" alt="Run in Livebook">
+          </a>
+          <div class="flex">
+            <svg
+              width="100"
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              xmlns:svgjs="http://svgjs.dev/svgjs"
+              viewBox="50 300 650 200"
+            ><g
+                stroke-width="11"
+                stroke="hsl(0, 0%, 75%)"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-dasharray="19 30"
+                transform="matrix(-0.6293203910498373,0.777145961456971,-0.777145961456971,-0.6293203910498373,938.5865410027234,330.8697718371465)"
+              ><path
+                  d="M188.5 188.5Q415.5 590.5 400 400Q392.5 157.5 611.5 611.5"
+                  marker-end="url(#SvgjsMarker5399)"
+                /></g><defs><marker
+                  markerWidth="5"
+                  markerHeight="5"
+                  refX="2.5"
+                  refY="2.5"
+                  viewBox="0 0 5 5"
+                  orient="auto"
+                  id="SvgjsMarker5399"
+                ><polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" fill="hsl(0, 0%, 75%)" /></marker></defs></svg>
+            <p class="italic text-sm max-w-[100px] text-center">Try our interactive tutorial with Livebook</p>
+          </div>
+        </div>
+
         <div class="grid justify-center grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 dark:bg-none dark:bg-opacity-0 py-6 text-center mx-8 gap-16 max-w-lg md:max-w-lg xl:max-w-4xl mt-2 border-t border-t-gray-600 pt-16">
           <Feature name="Resources">
             <:description>
