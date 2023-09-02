@@ -40,7 +40,7 @@ defmodule AshHqWeb.Pages.Home do
         </div>
 
         <div class="mb-4 md:mb-8 hidden sm:block">
-          <span class="flex items-center justify-center h-full bg-base-dark-800 rounded-full overflow-hidden text-center font-bold p-4">OR</span>
+          <span class="flex items-center justify-center h-full bg-base-light-100 dark:bg-base-dark-800 rounded-full overflow-hidden text-center font-bold p-4">OR</span>
         </div>
 
         <div class="hidden sm:flex justify-center items-center mb-6 md:mb-10 gap-4">
