@@ -357,7 +357,7 @@ defmodule AshHqWeb.Pages.Home do
               for={@email_form}
               change="validate_email_form"
               submit="submit_email_form"
-              class="flex flex-col md:flex-row space-x-4 space-y-4 items-center"
+              class="flex flex-col md:flex-row gap-4 items-center"
             >
               <Field name={:email}>
                 <TextInput
