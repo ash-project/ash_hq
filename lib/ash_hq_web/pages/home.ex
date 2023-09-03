@@ -40,7 +40,7 @@ defmodule AshHqWeb.Pages.Home do
         </div>
 
         <div class="mb-4 md:mb-8 hidden sm:block">
-          <span class="flex items-center justify-center h-full bg-base-dark-800 rounded-full overflow-hidden text-center font-bold p-4">OR</span>
+          <span class="flex items-center justify-center h-full bg-base-light-100 dark:bg-base-dark-800 rounded-full overflow-hidden text-center font-bold p-4">OR</span>
         </div>
 
         <div class="hidden sm:flex justify-center items-center mb-6 md:mb-10 gap-4">
@@ -357,7 +357,7 @@ defmodule AshHqWeb.Pages.Home do
               for={@email_form}
               change="validate_email_form"
               submit="submit_email_form"
-              class="flex flex-col md:flex-row space-x-4 space-y-4 items-center"
+              class="flex flex-col md:flex-row gap-4 items-center"
             >
               <Field name={:email}>
                 <TextInput
