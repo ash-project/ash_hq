@@ -172,6 +172,9 @@ defmodule AshHqWeb.AppViewLive do
                     <li class="mb-4">
                       <a href="https://github.com/ash-project/ash_hq/issues/new/choose" class="hover:underline">Report an issue</a>
                     </li>
+                    <li class="mb-4">
+                      <a href="https://ash-hq.appsignal-status.com" class="hover:underline">Status Page</a>
+                    </li>
                     <li>
                       <a href="/docs/guides/ash/latest/how_to/contribute" class="hover:underline">Contribute</a>
                     </li>
