@@ -31,6 +31,9 @@ config :ash_appsignal,
     :preparation
   ]
 
+{revision, _exitcode} = System.cmd("git", ["log", "--pretty=format:%h", "-n 1"])
+config :appsignal, :config, revision: revision
+
 config :ash_hq,
   ash_apis: [
     AshHq.Ashley,
