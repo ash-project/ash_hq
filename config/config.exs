@@ -12,6 +12,25 @@ config :ash_hq,
 
 config :ash, allow_flow: true
 
+config :ash, :tracer, AshAppsignal
+
+config :ash_appsignal,
+  trace_types: [
+    :custom,
+    :action,
+    :changeset,
+    :validation,
+    :change,
+    :before_transaction,
+    :before_action,
+    :after_transaction,
+    :after_action,
+    :custom_flow_step,
+    :flow,
+    :query,
+    :preparation
+  ]
+
 config :ash_hq,
   ash_apis: [
     AshHq.Ashley,
