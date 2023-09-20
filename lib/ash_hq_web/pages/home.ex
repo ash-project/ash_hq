@@ -81,7 +81,7 @@ defmodule AshHqWeb.Pages.Home do
             <p class="italic text-sm max-w-[100px] text-center">Try our interactive tutorial with Livebook</p>
           </div>
         </div>
-        <div class="flex flex-col justify-center items-center mb-2 gap-4 w-full">
+        <div class="flex flex-col justify-center items-center mb-2 gap-4 w-full max-w-3xl">
           <iframe
             class="rounded-xl w-full aspect-video"
             src="https://www.youtube.com/embed/c4iou77kOFc?si=gxPdzGng5cQTrr7P"
