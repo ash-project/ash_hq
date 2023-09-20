@@ -12,7 +12,7 @@ config :ash_hq,
 
 config :ash, allow_flow: true
 
-config :ash, :tracer, AshAppsignal
+config :ash, :tracer, [AshAppsignal]
 
 config :ash_appsignal,
   trace_types: [

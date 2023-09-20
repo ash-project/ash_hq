@@ -81,6 +81,18 @@ defmodule AshHqWeb.Pages.Home do
             <p class="italic text-sm max-w-[100px] text-center">Try our interactive tutorial with Livebook</p>
           </div>
         </div>
+        <div class="flex flex-col justify-center items-center mb-2 gap-4 w-full">
+          <iframe
+            class="rounded-xl w-full aspect-video"
+            src="https://www.youtube.com/embed/c4iou77kOFc?si=gxPdzGng5cQTrr7P"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          />
+
+          <p class="italic text-sm text-center">Watch the ElixirConf 2023 talk</p>
+        </div>
 
         <div class="grid justify-center grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 dark:bg-none dark:bg-opacity-0 py-6 text-center mx-8 gap-16 max-w-lg md:max-w-lg xl:max-w-4xl mt-2 border-t border-t-gray-600 pt-16">
           <Feature name="Resources">
