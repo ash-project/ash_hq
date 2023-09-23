@@ -17,12 +17,16 @@ defmodule AshHqWeb.Components.VersionPills do
     <div class="flex flex-row flex-wrap align-center items-center ml-2 justify-start gap-2 flex-grow">
       {#for library <- @libraries}
         {#if @selected_versions[library.id] not in [nil, ""]}
-          <div class="flex flex-row flex-wrap contents-center px-2 py-1 bg-primary-light-500 dark:bg-primary-dark-300 hover:bg-primary-light-600 hover:dark:bg-primary-dark-400 text-black text-xs font-medium rounded-full">
+          <div class="flex flex-row flex-wrap contents-center items-center ml-1 px-2 py-1 bg-primary-light-500 dark:bg-primary-dark-300 hover:bg-primary-light-600 hover:dark:bg-primary-dark-400 text-black text-xs font-medium rounded-full">
             {library.name}{#if selected_version(library, @selected_versions[library.id]) != "latest"}
               | {selected_version(library, @selected_versions[library.id])}
             {/if}
             {#if @editable}
-              <button :on-click={@remove_version} phx-value-library={library.id}><Heroicons.Outline.XIcon class="h-3 w-3 ml-1" /></button>
+              <button
+                :on-click={@remove_version}
+                phx-value-library={library.id}
+                class="flex items-center w-6 h-6"
+              ><Heroicons.Outline.XIcon class="h-4 w-4 ml-1" /></button>
             {/if}
           </div>
         {/if}
