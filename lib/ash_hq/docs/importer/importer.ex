@@ -117,10 +117,8 @@ defmodule AshHq.Docs.Importer do
 
       versions
       |> Enum.reject(fn version ->
-        Enum.find(already_defined_versions, &(&1.version == version))
-      end)
-      |> Enum.reject(fn version ->
-        version in library.skip_versions
+        Enum.find(already_defined_versions, &(&1.version == version)) ||
+          version in library.skip_versions
       end)
       |> Enum.each(fn version ->
         try do
