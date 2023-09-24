@@ -26,7 +26,7 @@ defmodule AshHqWeb.Pages.Home do
           Model your domain, <CalloutText text="derive the rest" />
         </div>
         <div class="text-2xl font-light text-base-dark-700 dark:text-base-light-100 max-w-4xl mx-auto px-4 md:px-0 mt-4 md:text-center">
-          Build <CalloutText text="powerful" /> applications with a <CalloutText text="flexible" /> tool-chain.
+          Build <CalloutText text="powerful Elixir applications" /> with a <CalloutText text="flexible" /> tool-chain.
         </div>
 
         <div class="flex flex-col space-y-4 md:space-x-4 md:space-y-0 md:flex-row items-center mt-8 md:mt-16 mb-6 md:mb-10">
