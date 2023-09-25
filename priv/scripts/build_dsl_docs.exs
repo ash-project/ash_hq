@@ -13,7 +13,6 @@ github_sha =
 mix_project = Module.concat([mix_project])
 
 Application.put_env(:dsl, :name, name)
-Application.put_env(:ash, :use_all_identities_in_manage_relationship?, true)
 
 if github_sha do
   Mix.install(
