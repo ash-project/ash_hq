@@ -18,17 +18,9 @@ config :ash_appsignal,
   trace_types: [
     :custom,
     :action,
-    :changeset,
-    :validation,
-    :change,
-    :before_transaction,
-    :before_action,
-    :after_transaction,
-    :after_action,
     :custom_flow_step,
     :flow,
-    :query,
-    :preparation
+    :query
   ]
 
 {revision, _exitcode} = System.cmd("git", ["log", "--pretty=format:%h", "-n 1"])

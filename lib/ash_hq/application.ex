@@ -24,7 +24,6 @@ defmodule AshHq.Application do
       end
 
     topologies = Application.get_env(:libcluster, :topologies) || []
-    Appsignal.Phoenix.LiveView.attach()
 
     children =
       [
