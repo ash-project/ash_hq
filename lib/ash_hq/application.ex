@@ -7,6 +7,8 @@ defmodule AshHq.Application do
 
   @impl true
   def start(_type, _args) do
+    Appsignal.Phoenix.LiveView.attach()
+
     importer =
       if Application.get_env(:ash_hq, :periodic_imports) do
         [

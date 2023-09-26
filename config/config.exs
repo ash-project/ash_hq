@@ -18,13 +18,11 @@ config :ash_appsignal,
   trace_types: [
     :custom,
     :action,
-    :custom_flow_step,
-    :flow,
-    :query
+    :flow
   ]
 
 {revision, _exitcode} = System.cmd("git", ["log", "--pretty=format:%h", "-n 1"])
-config :appsignal, :config, revision: revision
+config :appsignal, :config, revision: "test-4"
 
 config :ash_hq,
   ash_apis: [
