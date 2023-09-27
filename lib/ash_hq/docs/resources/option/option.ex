@@ -111,6 +111,7 @@ defmodule AshHq.Docs.Option do
 
     references do
       reference :library_version, on_delete: :delete
+      reference :dsl, on_delete: :delete
     end
   end
 
