@@ -8,30 +8,34 @@ defmodule AshHq.Repo.Migrations.MigrateResources55 do
   use Ecto.Migration
 
   def up do
-    drop constraint(:options, "options_dsl_id_fkey")
+    drop(constraint(:options, "options_dsl_id_fkey"))
 
     alter table(:options) do
-      modify :dsl_id,
-             references(:dsls,
-               column: :id,
-               name: "options_dsl_id_fkey",
-               type: :uuid,
-               prefix: "public",
-               on_delete: :delete_all
-             )
+      modify(
+        :dsl_id,
+        references(:dsls,
+          column: :id,
+          name: "options_dsl_id_fkey",
+          type: :uuid,
+          prefix: "public",
+          on_delete: :delete_all
+        )
+      )
     end
 
-    drop constraint(:dsls, "dsls_dsl_id_fkey")
+    drop(constraint(:dsls, "dsls_dsl_id_fkey"))
 
     alter table(:dsls) do
-      modify :dsl_id,
-             references(:dsls,
-               column: :id,
-               name: "dsls_dsl_id_fkey",
-               type: :uuid,
-               prefix: "public",
-               on_delete: :delete_all
-             )
+      modify(
+        :dsl_id,
+        references(:dsls,
+          column: :id,
+          name: "dsls_dsl_id_fkey",
+          type: :uuid,
+          prefix: "public",
+          on_delete: :delete_all
+        )
+      )
     end
 
     execute("ALTER TABLE dsls alter CONSTRAINT dsls_dsl_id_fkey NOT DEFERRABLE")
@@ -40,28 +44,32 @@ defmodule AshHq.Repo.Migrations.MigrateResources55 do
   end
 
   def down do
-    drop constraint(:dsls, "dsls_dsl_id_fkey")
+    drop(constraint(:dsls, "dsls_dsl_id_fkey"))
 
     alter table(:dsls) do
-      modify :dsl_id,
-             references(:dsls,
-               column: :id,
-               name: "dsls_dsl_id_fkey",
-               type: :uuid,
-               prefix: "public"
-             )
+      modify(
+        :dsl_id,
+        references(:dsls,
+          column: :id,
+          name: "dsls_dsl_id_fkey",
+          type: :uuid,
+          prefix: "public"
+        )
+      )
     end
 
-    drop constraint(:options, "options_dsl_id_fkey")
+    drop(constraint(:options, "options_dsl_id_fkey"))
 
     alter table(:options) do
-      modify :dsl_id,
-             references(:dsls,
-               column: :id,
-               name: "options_dsl_id_fkey",
-               type: :uuid,
-               prefix: "public"
-             )
+      modify(
+        :dsl_id,
+        references(:dsls,
+          column: :id,
+          name: "options_dsl_id_fkey",
+          type: :uuid,
+          prefix: "public"
+        )
+      )
     end
   end
 end

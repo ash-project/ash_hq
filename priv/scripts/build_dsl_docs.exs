@@ -562,6 +562,7 @@ defmodule Utils do
   defp type({:in, choices}), do: Enum.map_join(choices, " | ", &inspect/1)
   defp type({:or, subtypes}), do: Enum.map_join(subtypes, " | ", &type/1)
   defp type({:list, subtype}), do: type(subtype) <> "[]"
+  defp type({:literal, value}), do: inspect(value)
 
   defp type({:wrap_list, subtype}) do
     str = type(subtype)
@@ -608,6 +609,13 @@ defmodule Utils do
 
       extras =
         mix_project.project[:docs][:extras]
+        |> Stream.map(fn
+          {file, config} ->
+            {file, config}
+
+          file ->
+            {file, []}
+        end)
         |> Stream.reject(fn {item, _} ->
           Path.extname(to_string(item)) != ".md"
         end)

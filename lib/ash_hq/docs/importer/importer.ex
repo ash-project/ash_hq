@@ -219,20 +219,20 @@ defmodule AshHq.Docs.Importer do
       end
 
     if result do
-      AshHq.Repo.transaction(fn ->
-        Logger.info("Starting import of #{name}: #{version}")
+      {:ok, library_version} =
+        AshHq.Repo.transaction(fn ->
+          Logger.info("Starting import of #{name}: #{version}")
 
-        id =
-          case LibraryVersion.by_version(library.id, version) do
-            {:ok, version} ->
-              LibraryVersion.destroy!(version)
-              version.id
+          id =
+            case LibraryVersion.by_version(library.id, version) do
+              {:ok, version} ->
+                LibraryVersion.destroy!(version)
+                version.id
 
-            _ ->
-              Ash.UUID.generate()
-          end
+              _ ->
+                Ash.UUID.generate()
+            end
 
-        library_version =
           LibraryVersion.build!(
             library.id,
             version,
@@ -246,20 +246,20 @@ defmodule AshHq.Docs.Importer do
               mix_tasks: result[:mix_tasks]
             }
           )
+        end)
 
-        LibraryVersion
-        |> Ash.Query.for_read(:read)
-        |> Ash.Query.filter(id != ^library_version.id)
-        |> Ash.Query.filter(library_id == ^library.id)
-        |> Ash.Query.data_layer_query()
-        |> case do
-          {:ok, query} ->
-            AshHq.Repo.delete_all(query)
+      LibraryVersion
+      |> Ash.Query.for_read(:read)
+      |> Ash.Query.filter(id != ^library_version.id)
+      |> Ash.Query.filter(library_id == ^library.id)
+      |> Ash.Query.data_layer_query()
+      |> case do
+        {:ok, query} ->
+          AshHq.Repo.delete_all(query)
 
-          other ->
-            raise "bad match #{inspect(other)}"
-        end
-      end)
+        other ->
+          raise "bad match #{inspect(other)}"
+      end
     end
   end
 

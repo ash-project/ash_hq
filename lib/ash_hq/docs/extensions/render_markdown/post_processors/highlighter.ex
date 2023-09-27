@@ -75,7 +75,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.Highlighter do
 
     case {uri, Path.split(String.trim_leading(uri.path || "", "/"))} do
       {%{host: "hexdocs.pm"}, _} ->
-          value
+        value
 
       {%{host: nil}, ["documentation", _type, guide]} ->
         github_guide_link(value, libraries, nil, current_library, guide)
