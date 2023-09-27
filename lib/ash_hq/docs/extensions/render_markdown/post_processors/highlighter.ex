@@ -5,7 +5,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.Highlighter do
 
   use AshHqWeb, :verified_routes
 
-  def highlight(ast, libraries, current_library, current_module) do
+  def highlight(ast, libraries, current_library, _current_module) do
     ast
     |> Floki.traverse_and_update(fn
       {"a", attrs, contents} ->
@@ -29,11 +29,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.Highlighter do
               render_code(lang, lexer, opts, body)
 
             nil ->
-              if find_value_class(attrs, &(&1 == "inline")) do
-                maybe_highlight_module(body, libraries, current_module)
-              else
-                ~s(<code class="text-black dark:text-white">#{body}</code>)
-              end
+              ~s(<code class="text-black dark:text-white">#{body}</code>)
           end
 
         {:keep, ~s(<pre class="code-pre">#{code}</pre>)}
@@ -53,11 +49,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.Highlighter do
               render_code(lang, lexer, opts, body)
 
             nil ->
-              if find_value_class(attrs, &(&1 == "inline")) do
-                maybe_highlight_module(body, libraries, current_module)
-              else
-                ~s(<code class="text-black dark:text-white">#{body}</code>)
-              end
+              ~s(<code class="text-black dark:text-white">#{body}</code>)
           end
 
         {:keep, code}
@@ -82,46 +74,8 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.Highlighter do
     uri = URI.parse(value)
 
     case {uri, Path.split(String.trim_leading(uri.path || "", "/"))} do
-      {%{host: "hexdocs.pm"}, [library, guide]} ->
-        if Enum.any?(libraries, &(&1.name == library)) do
-          if String.ends_with?(guide, ".html") do
-            name =
-              guide
-              |> String.trim_trailing(".html")
-              |> AshHqWeb.DocRoutes.sanitize_name()
-
-            url(~p"/docs/guides/#{library}/latest/#{name}")
-          end
-        else
+      {%{host: "hexdocs.pm"}, _} ->
           value
-        end
-
-      {%{host: "hexdocs.pm"}, [library]} ->
-        if Enum.any?(libraries, &(&1.name == library)) do
-          url(~p"/docs/#{library}/latest")
-        else
-          value
-        end
-
-      {%{host: "hex.pm"}, ["packages", library]} ->
-        if Enum.any?(libraries, &(&1.name == library)) do
-          url(~p"/docs/#{library}/latest")
-        else
-          value
-        end
-
-      {%{host: "github.com"}, [owner, library]} ->
-        if Enum.any?(libraries, &(&1.name == library && &1.repo_org == owner)) do
-          url(~p"/docs/#{library}/latest")
-        else
-          value
-        end
-
-      {%{host: "github.com"}, [owner, library, "blob", _, "documentation", guide]} ->
-        github_guide_link(value, libraries, owner, library, guide)
-
-      {%{host: "github.com"}, [owner, library, "tree", _, "documentation", guide]} ->
-        github_guide_link(value, libraries, owner, library, guide)
 
       {%{host: nil}, ["documentation", _type, guide]} ->
         github_guide_link(value, libraries, nil, current_library, guide)
@@ -166,233 +120,6 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.Highlighter do
       _ ->
         nil
     end)
-  end
-
-  def maybe_highlight_module(code, libraries, current_module) do
-    code_without_c =
-      case code do
-        "c:" <> rest ->
-          rest
-
-        _ ->
-          nil
-      end
-
-    code_without_type =
-      case code do
-        "t:" <> rest ->
-          rest
-
-        _ ->
-          nil
-      end
-
-    code_without_dsl =
-      case code do
-        "d:" <> rest ->
-          rest
-
-        _ ->
-          nil
-      end
-
-    try_parse_multi(
-      [
-        {"callback", code_without_c},
-        {"type", code_without_type},
-        {"dsl", code_without_dsl},
-        {nil, code}
-      ],
-      libraries,
-      current_module
-    )
-  end
-
-  defp try_parse_multi([{_, nil} | rest], libraries, current_module),
-    do: try_parse_multi(rest, libraries, current_module)
-
-  defp try_parse_multi([{"dsl", code} | rest], libraries, current_module) do
-    code = String.trim(code)
-
-    with [code | maybe_anchor] when length(rest) in [0, 1] <- String.split(code, "|", trim: true),
-         {module, dsl_path} <-
-           code
-           |> String.split(".")
-           |> Enum.split_while(&capitalized?/1) do
-      if module == [] and !current_module do
-        ~s[<code class="inline">#{code}</code>]
-      else
-        anchor =
-          case maybe_anchor do
-            [] ->
-              ""
-
-            option ->
-              "##{option}"
-          end
-
-        module =
-          case module do
-            [] ->
-              current_module
-
-            module ->
-              Enum.join(module, ".")
-          end
-
-        dsl_dots = Enum.join(dsl_path ++ List.wrap(maybe_anchor), ".")
-        dsl_path = Enum.join(dsl_path, "/")
-
-        code =
-          case maybe_anchor do
-            [] ->
-              code
-
-            anchor ->
-              "#{code}.#{anchor}"
-          end
-
-        code =
-          ~s[<code class="inline maybe-dsl text-black dark:text-white" data-module="#{module}" data-dsl="#{dsl_dots}">#{code}</code>]
-
-        case library_for(module, libraries) do
-          nil ->
-            code
-
-          library ->
-            link =
-              url(
-                ~p'/docs/dsl/#{library.name}/latest/#{AshHqWeb.DocRoutes.sanitize_name(module)}'
-              ) <> "/" <> dsl_path <> anchor
-
-            ~s[<a href="#{link}">#{code}</a>]
-        end
-      end
-    else
-      _ ->
-        ~s[<code class="inline">#{code}</code>]
-    end
-  end
-
-  defp try_parse_multi([{type, code} | rest], libraries, current_module) do
-    case Code.string_to_quoted(code) do
-      {:ok, {fun, _, []}} when is_atom(fun) ->
-        arity = 0
-
-        if current_module do
-          function_href(
-            ~s[<code #{function_type(type)} class="inline maybe-call text-black dark:text-white" data-module="#{current_module}" data-fun="#{fun}" data-arity="#{arity}">#{code}</code>],
-            libraries,
-            type,
-            current_module,
-            fun,
-            arity
-          )
-        else
-          ~s[<code #{function_type(type)} class="inline maybe-local-call text-black dark:text-white" data-fun="#{fun}" data-arity="#{arity}">#{code}</code>]
-        end
-
-      {:ok,
-       {:/, _,
-        [
-          {{:., _, [{:__aliases__, _, parts}, fun]}, _, []},
-          arity
-        ]}}
-      when is_atom(fun) and is_integer(arity) ->
-        function_href(
-          ~s[<code #{function_type(type)} class="inline maybe-call text-black dark:text-white" data-module="#{Enum.join(parts, ".")}" data-fun="#{fun}" data-arity="#{arity}">#{code}</code>],
-          libraries,
-          type,
-          Enum.join(parts, "."),
-          fun,
-          arity
-        )
-
-      {:ok, {:/, _, [{fun, _, nil}, arity]}} when is_atom(fun) and is_integer(arity) ->
-        function_href(
-          if current_module do
-            ~s[<code #{function_type(type)} class="inline maybe-call text-black dark:text-white" data-module="#{current_module}" data-fun="#{fun}" data-arity="#{arity}">#{code}</code>]
-          else
-            ~s[<code #{function_type(type)} class="inline maybe-local-call text-black dark:text-white" data-fun="#{fun}" data-arity="#{arity}">#{code}</code>]
-          end,
-          libraries,
-          type,
-          current_module,
-          fun,
-          arity
-        )
-
-      {:ok, {:__aliases__, _, parts}} ->
-        module_name = Enum.join(parts, ".")
-
-        module_href(
-          ~s[<code class="inline maybe-module text-black dark:text-white" data-module="#{module_name}">#{code}</code>],
-          libraries,
-          type,
-          module_name
-        )
-
-      _ ->
-        if rest == [] do
-          ~s[<code class="inline text-black dark:text-white">#{code}</code>]
-        else
-          try_parse_multi(rest, libraries, current_module)
-        end
-    end
-  rescue
-    _ ->
-      ~s[<code class="inline">#{code}</code>]
-  end
-
-  defp capitalized?(string) do
-    str =
-      string
-      |> String.graphemes()
-      |> Enum.at(0)
-      |> Kernel.||("")
-
-    String.downcase(str) != str
-  end
-
-  defp function_type(nil), do: nil
-
-  defp function_type(type) do
-    "data-fun-type=\"#{type}\""
-  end
-
-  defp function_href(contents, _libraries, nil, _, _, _), do: contents
-
-  defp function_href(contents, _libraries, _, nil, _, _), do: contents
-
-  defp function_href(contents, libraries, type, module_name, fun, arity) do
-    case library_for(module_name, libraries) do
-      nil ->
-        contents
-
-      library ->
-        link =
-          url(
-            ~p'/docs/module/#{library.name}/latest/#{AshHqWeb.DocRoutes.sanitize_name(module_name)}'
-          ) <>
-            "##{type}-#{AshHqWeb.DocRoutes.sanitize_name(fun)}-#{arity}"
-
-        ~s[<a href="#{link}">#{contents}</a>]
-    end
-  end
-
-  defp module_href(contents, libraries, _type, module_name) do
-    case library_for(module_name, libraries) do
-      nil ->
-        contents
-
-      library ->
-        link =
-          url(
-            ~p'/docs/module/#{library.name}/latest/#{AshHqWeb.DocRoutes.sanitize_name(module_name)}'
-          )
-
-        ~s[<a href="#{link}">#{contents}</a>]
-    end
   end
 
   @doc false
