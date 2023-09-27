@@ -29,7 +29,7 @@ function setCookie(name, value) {
 
 function getCookie(name) {
   const cookie = document.cookie.split("; ").find((row) => row.startsWith(name + "="))
-  if(cookie) {
+  if (cookie) {
     return cookie.split("=")[1]
   }
 }
@@ -39,19 +39,19 @@ function cookiesAreAllowed() {
 }
 
 function get_platform() {
-    // 2022 way of detecting. Note : this userAgentData feature is available only in secure contexts (HTTPS)
-    if (typeof navigator.userAgentData !== 'undefined' && navigator.userAgentData != null) {
-        return navigator.userAgentData.platform;
+  // 2022 way of detecting. Note : this userAgentData feature is available only in secure contexts (HTTPS)
+  if (typeof navigator.userAgentData !== 'undefined' && navigator.userAgentData != null) {
+    return navigator.userAgentData.platform;
+  }
+  // Deprecated but still works for most of the browser
+  if (typeof navigator.platform !== 'undefined') {
+    if (typeof navigator.userAgent !== 'undefined' && /android/.test(navigator.userAgent.toLowerCase())) {
+      // android device's navigator.platform is often set as 'linux', so let's use userAgent for them
+      return 'android';
     }
-    // Deprecated but still works for most of the browser
-    if (typeof navigator.platform !== 'undefined') {
-        if (typeof navigator.userAgent !== 'undefined' && /android/.test(navigator.userAgent.toLowerCase())) {
-            // android device's navigator.platform is often set as 'linux', so let's use userAgent for them
-            return 'android';
-        }
-        return navigator.platform;
-    }
-    return 'unknown';
+    return navigator.platform;
+  }
+  return 'unknown';
 }
 
 let platform = get_platform();
@@ -251,7 +251,7 @@ window.addEventListener("phx:page-loading-stop", ({ detail }) => {
   if (scrollEl) {
     Hooks.RightNav.setAriaCurrent(scrollEl.id);
     // Not using scroll polyfill here - doesn't respect scroll-padding-top CSS
-    scrollEl.scrollIntoView({block: 'start'})
+    scrollEl.scrollIntoView({ block: 'start' })
     setTimeout(() => { scrolled = true; }, 1000);
   } else {
     scrolled = true;
@@ -268,16 +268,6 @@ window.addEventListener("phx:js:scroll-to", (e) => {
     block: "start",
     boundary: boundary,
   });
-});
-
-window.addEventListener("phx:selected-versions", (e) => {
-  if (cookiesAreAllowed()) {
-    const cookie = Object.keys(e.detail)
-      .map((key) => `${key}:${e.detail[key]}`)
-      .join(",");
-
-    setCookie("selected_versions", cookie)
-  }
 });
 
 window.addEventListener("phx:selected-types", (e) => {
@@ -305,12 +295,6 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
-window.addEventListener("phx:catalogue-call-to-action-dismissed", (event) => {
-  if (cookiesAreAllowed()) {
-    setCookie("catalogue_call_to_action_dismissed", "true")
-  }
-});
-
 window.addEventListener("phx:click-on-item", (event) => {
   document.getElementById(event.detail.id).click();
   document.getElementById("close-search").click();
@@ -331,7 +315,7 @@ liveSocket.connect();
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket;
 
-window.addEventListener("load", function () {
+window.addEventListener("load", function() {
   window.cookieconsent.initialise({
     content: {
       message:

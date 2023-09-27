@@ -328,24 +328,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
       )
 
     {arguments, filter} =
-      if Ash.Resource.Info.attribute(dsl_state, :library_version_id) do
-        {[
-           Transformer.build_entity!(
-             Ash.Resource.Dsl,
-             [:actions, :read],
-             :argument,
-             type: {:array, :uuid},
-             name: :library_versions
-           ),
-           query_argument
-         ],
-         Ash.Query.expr(
-           matches(query: arg(:query)) and
-             ^ref(config.library_version_attribute) in ^arg(:library_versions)
-         )}
-      else
         {[query_argument], Ash.Query.expr(matches(query: arg(:query)))}
-      end
 
     Transformer.add_entity(
       dsl_state,
@@ -365,7 +348,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
       [:code_interface],
       Transformer.build_entity!(Ash.Resource.Dsl, [:code_interface], :define,
         name: :search,
-        args: [:query, :library_versions]
+        args: [:query]
       )
     )
   end

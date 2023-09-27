@@ -10,7 +10,6 @@ defmodule AshHqWeb.Components.DocSidebar do
 
   prop libraries, :any
   prop remove_version, :any
-  prop selected_versions, :any
   prop class, :any
   prop sidebar_data, :any, default: []
 

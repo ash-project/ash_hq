@@ -13,7 +13,6 @@ defmodule AshHqWeb.AppViewLive do
   import AshHqWeb.Tails
 
   data(configured_theme, :string, default: :system)
-  data(selected_versions, :map, default: %{})
   data(libraries, :list, default: [])
   data(selected_types, :map, default: %{})
   data(current_user, :map)
@@ -71,16 +70,8 @@ defmodule AshHqWeb.AppViewLive do
         libraries={@libraries}
         selected_types={@selected_types}
         change_types="change-types"
-        selected_versions={@selected_versions}
         change_versions="change-versions"
         remove_version="remove_version"
-      />
-      <CatalogueModal
-        id="catalogue-box"
-        libraries={@libraries}
-        selected_versions={@selected_versions}
-        change_versions="change-versions"
-        show_catalogue_call_to_action={@show_catalogue_call_to_action}
       />
       <button id="search-button" class="hidden" phx-click={AshHqWeb.AppViewLive.toggle_search()} />
       <div
@@ -114,9 +105,7 @@ defmodule AshHqWeb.AppViewLive do
               params={@params}
               remove_version="remove_version"
               change_versions="change-versions"
-              selected_versions={@selected_versions}
               libraries={@libraries}
-              show_catalogue_call_to_action={@show_catalogue_call_to_action}
             />
           {#match :user_settings}
             <UserSettings id="user_settings" current_user={@current_user} />
@@ -197,34 +186,6 @@ defmodule AshHqWeb.AppViewLive do
     {:noreply, assign(socket, :page_title, "Ash Framework - #{title}")}
   end
 
-  def handle_event("dismiss_catalogue_call_to_action", _, socket) do
-    {:noreply,
-     socket
-     |> assign(:show_catalogue_call_to_action, false)
-     |> push_event("catalogue-call-to-action-dismissed", %{})}
-  end
-
-  def handle_event("remove_version", %{"library" => library}, socket) do
-    new_selected_versions = Map.put(socket.assigns.selected_versions, library, "")
-
-    {:noreply,
-     socket
-     |> set_selected_library_versions(new_selected_versions)}
-  end
-
-  def handle_event("add_version", %{"library" => library}, socket) do
-    new_selected_versions = Map.put(socket.assigns.selected_versions, library, "latest")
-
-    {:noreply,
-     socket
-     |> set_selected_library_versions(new_selected_versions)}
-  end
-
-  def handle_event("change-versions", %{"versions" => versions}, socket) do
-    {:noreply,
-     socket
-     |> set_selected_library_versions(versions)}
-  end
 
   def handle_event("change-types", %{"types" => types}, socket) do
     types =
@@ -275,24 +236,6 @@ defmodule AshHqWeb.AppViewLive do
     socket = Context.put(socket, platform: socket.assigns.platform)
     configured_theme = session["theme"] || "system"
 
-    configured_library_versions =
-      case session["selected_versions"] do
-        nil ->
-          %{}
-
-        "" ->
-          %{}
-
-        value ->
-          value
-          |> String.split(",")
-          |> Map.new(fn str ->
-            str
-            |> String.split(":")
-            |> List.to_tuple()
-          end)
-      end
-
     all_types = AshHq.Docs.Extensions.Search.Types.types()
 
     selected_types =
@@ -312,35 +255,15 @@ defmodule AshHqWeb.AppViewLive do
 
     libraries = AshHq.Docs.Library.read!(load: [versions: versions_query])
 
-    selected_versions =
-      Enum.reduce(libraries, configured_library_versions, fn library, acc ->
-        Map.put_new(acc, library.id, "latest")
-      end)
-
     {:ok,
      socket
-     |> assign(
-       :show_catalogue_call_to_action,
-       session["catalogue_call_to_action_dismissed"] != "true"
-     )
      |> assign(:libraries, libraries)
-     |> assign(
-       :selected_versions,
-       selected_versions
-     )
      |> assign(
        :selected_types,
        selected_types
      )
      |> assign(configured_theme: configured_theme)
-     |> set_selected_library_versions(selected_versions)
      |> push_event("selected_types", %{types: selected_types})}
-  end
-
-  defp set_selected_library_versions(socket, library_versions) do
-    socket
-    |> assign(:selected_versions, library_versions)
-    |> push_event("selected-versions", library_versions)
   end
 
   def toggle_search(js \\ %JS{}) do
@@ -361,24 +284,6 @@ defmodule AshHqWeb.AppViewLive do
     |> JS.dispatch("js:focus", to: "#search-input")
   end
 
-  def toggle_catalogue(js \\ %JS{}) do
-    js
-    |> JS.toggle(
-      to: "#catalogue-box",
-      in: {
-        "transition ease-in duration-100",
-        "opacity-0",
-        "opacity-100"
-      },
-      out: {
-        "transition ease-out duration-75",
-        "opacity-100",
-        "opacity-0"
-      }
-    )
-    |> JS.dispatch("phx:js:scroll-to", detail: %{id: "catalogue-box"})
-  end
-
   def close_search(js \\ %JS{}) do
     js
     |> JS.hide(
@@ -387,13 +292,5 @@ defmodule AshHqWeb.AppViewLive do
     )
     |> JS.hide(transition: "fade-out", to: "#search-versions")
     |> JS.show(transition: "fade-in", to: "#search-body")
-  end
-
-  def close_catalogue(js \\ %JS{}) do
-    js
-    |> JS.hide(
-      transition: "fade-out",
-      to: "#catalogue-box"
-    )
   end
 end

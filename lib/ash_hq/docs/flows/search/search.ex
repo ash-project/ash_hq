@@ -26,10 +26,6 @@ defmodule AshHq.Docs.Search do
       constraints trim?: false, allow_empty?: true
     end
 
-    argument :library_versions, {:array, :uuid} do
-      allow_nil? false
-    end
-
     argument :types, {:array, :string}
 
     returns :build_results
@@ -49,7 +45,6 @@ defmodule AshHq.Docs.Search do
 
         read :search, element(:search_results), :search do
           input %{
-            library_versions: arg(:library_versions),
             query: arg(:query)
           }
         end

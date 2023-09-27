@@ -4,7 +4,7 @@ defmodule AshHqWeb.Components.Search do
 
   require Ash.Query
 
-  alias AshHqWeb.Components.{Catalogue, Icon}
+  alias AshHqWeb.Components.Icon
   alias AshHqWeb.DocRoutes
   alias Phoenix.LiveView.JS
   alias Surface.Components.{Form, LivePatch}
@@ -12,7 +12,6 @@ defmodule AshHqWeb.Components.Search do
 
   prop(close, :event, required: true)
   prop(libraries, :list, required: true)
-  prop(selected_versions, :map, required: true)
   prop(selected_types, :list, required: true)
   prop(change_types, :event, required: true)
   prop(change_versions, :event, required: true)
@@ -37,15 +36,6 @@ defmodule AshHqWeb.Components.Search do
         :on-window-keydown="select-previous"
         phx-key="ArrowUp"
       >
-        <div class="h-full w-full" id="search-versions" style="display: none;">
-          <Catalogue
-            id="search-versions-contents"
-            toggle={toggle_libraries()}
-            libraries={@libraries}
-            selected_versions={@selected_versions}
-            change_versions={@change_versions}
-          />
-        </div>
         <div id="search-body" class="h-full" :on-window-keydown="select-next" phx-key="ArrowDown">
           <div class="p-6 h-full grid gap-6 grid-rows-[max-content_auto_max-content]">
             <button
@@ -109,7 +99,7 @@ defmodule AshHqWeb.Components.Search do
         {#if item.__struct__ != AshHq.Docs.Guide}
           <a
             class="block w-full text-left border-base-light-300 dark:border-base-dark-600"
-            href={DocRoutes.doc_link(item, @selected_versions)}
+            href={DocRoutes.doc_link(item)}
             id={"result-#{item.id}"}
             phx-click={@close}
           >
@@ -145,7 +135,7 @@ defmodule AshHqWeb.Components.Search do
         {#if item.__struct__ == AshHq.Docs.Guide}
           <LivePatch
             class="block w-full text-left border-base-light-300 dark:border-base-dark-600"
-            to={DocRoutes.doc_link(item, @selected_versions)}
+            to={DocRoutes.doc_link(item)}
             opts={id: "result-#{item.id}", "phx-click": @close}
           >
             <div class={
@@ -287,44 +277,22 @@ defmodule AshHqWeb.Components.Search do
   end
 
   defp search(socket) do
-    if socket.assigns[:search] in [nil, ""] || socket.assigns[:selected_versions] in [nil, %{}] ||
-         socket.assigns[:selected_types] == [] do
-      assign(socket, results: %{}, item_list: [])
-    else
-      versions =
-        Enum.map(socket.assigns.selected_versions, fn
-          {library_id, "latest"} ->
-            Enum.find_value(socket.assigns.libraries, fn library ->
-              if library.id == library_id do
-                case AshHqWeb.Helpers.latest_version(library) do
-                  nil ->
-                    nil
-
-                  version ->
-                    version.id
-                end
-              end
-            end)
-
-          {_, version_id} ->
-            version_id
-        end)
-        |> Enum.reject(&(&1 == "" || is_nil(&1)))
-
-      %{result: item_list} =
-        AshHq.Docs.Search.run!(
-          socket.assigns.search,
-          versions,
-          %{types: socket.assigns[:selected_types]}
-        )
-
-      item_list = Enum.take(item_list, 50)
-
-      selected_item = Enum.at(item_list, 0)
-
+    if socket.assigns.search in [nil, ""] do
       socket
-      |> assign(:item_list, item_list)
-      |> set_selected_item(selected_item)
+      else
+    %{result: item_list} =
+      AshHq.Docs.Search.run!(
+        socket.assigns.search,
+        %{types: socket.assigns[:selected_types]}
+      )
+
+    item_list = Enum.take(item_list, 50)
+
+    selected_item = Enum.at(item_list, 0)
+
+    socket
+    |> assign(:item_list, item_list)
+    |> set_selected_item(selected_item)
     end
   end
 

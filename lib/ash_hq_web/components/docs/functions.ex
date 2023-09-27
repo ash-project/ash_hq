@@ -10,7 +10,6 @@ defmodule AshHqWeb.Components.Docs.Functions do
   prop(library, :any, required: true)
   prop(library_version, :any, required: true)
   prop(libraries, :list, required: true)
-  prop(selected_versions, :map, required: true)
 
   def render(assigns) do
     ~F"""
