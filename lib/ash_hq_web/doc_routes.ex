@@ -1,63 +1,42 @@
 defmodule AshHqWeb.DocRoutes do
   @moduledoc "Helpers for routing to results of searches"
-  def library_link(library, name) do
-    "/docs/dsl/#{library.name}/#{name}"
-  end
-
-  def dsl_link(target) do
-    "/docs/dsl/#{sanitize_name(target)}"
-  end
 
   def doc_link(entity, selected_versions \\ %{})
 
-  def doc_link(
-        %AshHq.Discord.Message{thread_id: thread_id, channel_name: channel_name},
-        _selected_version
-      ) do
-    "/forum/#{channel_name}/#{thread_id}"
-  end
-
   def doc_link(%AshHq.Docs.Library{name: name}, _selected_version) do
-    "/docs/dsl/#{name}"
+    "https://hexdocs.pm/#{name}"
   end
 
   def doc_link(
         %AshHq.Docs.MixTask{
-          sanitized_name: sanitized_name,
           library_name: library_name,
-          version_name: version_name,
-          library_id: library_id
+          module_name: module_name
         },
-        selected_versions
+        _selected_versions
       ) do
-    "/docs/mix_task/#{library_name}/#{version(version_name, library_id, selected_versions)}/#{sanitized_name}"
+    "https://hexdocs.pm/#{library_name}/#{module_name}.html"
   end
 
   def doc_link(
         %AshHq.Docs.Module{
-          sanitized_name: sanitized_name,
           library_name: library_name,
-          version_name: version_name,
-          library_id: library_id
+          name: name
         },
-        selected_versions
+        _selected_versions
       ) do
-    "/docs/module/#{library_name}/#{version(version_name, library_id, selected_versions)}/#{sanitized_name}"
+    "https://hexdocs.pm/#{library_name}/#{name}.html"
   end
 
   def doc_link(
         %AshHq.Docs.Function{
-          sanitized_name: sanitized_name,
+          name: name,
           arity: arity,
-          type: type,
           module_name: module_name,
-          library_name: library_name,
-          version_name: version_name,
-          library_id: library_id
+          library_name: library_name
         },
-        selected_versions
+        _selected_versions
       ) do
-    "/docs/module/#{sanitize_name(library_name)}/#{version(version_name, library_id, selected_versions)}/#{sanitize_name(module_name)}##{type}-#{sanitized_name}-#{arity}"
+    "https://hexdocs.pm/#{library_name}/#{module_name}.html##{name}/#{arity}"
   end
 
   def doc_link(
@@ -74,39 +53,24 @@ defmodule AshHqWeb.DocRoutes do
     "/docs/guides/#{library_name}/#{version(version, library_id, selected_versions)}/#{route}"
   end
 
-  def doc_link(
-        %AshHq.Docs.LibraryVersion{
-          library_name: library_name,
-          version: version,
-          library_id: library_id
-        },
-        selected_versions
-      ) do
-    "/docs/dsl/#{library_name}/#{version(version, library_id, selected_versions)}"
+  def doc_link(%AshHq.Docs.LibraryVersion{}, _selected_versions) do
+    raise "Shouldn't be called anymore"
   end
 
   def doc_link(
         %AshHq.Docs.Extension{
           library_version: %{
-            library_name: library_name,
-            version: version,
-            library_id: library_id
+            library_name: library_name
           },
-          sanitized_name: sanitized_name
+          module: module
         },
-        selected_versions
+        _selected_versions
       ) do
-    "/docs/dsl/#{library_name}/#{version(version, library_id, selected_versions)}/#{sanitized_name}"
+    "https://hexdocs.pm/#{library_name}/#{module}.html"
   end
 
   def doc_link(item, _selected_versions) do
-    case item do
-      %AshHq.Docs.Dsl{} = item ->
-        "/docs/dsl/#{sanitize_name(item.extension_target)}##{String.replace(item.sanitized_path, "/", "-")}"
-
-      %AshHq.Docs.Option{} = item ->
-        "/docs/dsl/#{sanitize_name(item.extension_target)}##{String.replace(item.sanitized_path, "/", "-")}-#{sanitize_name(item.name)}"
-    end
+    "https://hexdocs.pm/#{item.library_name}/dsl-#{sanitize_name(String.trim_trailing(item.extension_module, ".Dsl"))}.html##{String.replace(item.sanitized_path, "/", "-")}"
   end
 
   defp version(version_name, library_id, selected_versions) do

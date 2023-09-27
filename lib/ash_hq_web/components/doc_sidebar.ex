@@ -18,101 +18,50 @@ defmodule AshHqWeb.Components.DocSidebar do
     ~F"""
     <aside id={@id} class={"grid z-40 bg-white dark:bg-base-dark-850", @class} aria-label="Sidebar">
       <div class="flex flex-col px-1">
-        <div class="text-black dark:text-white text-sm w-full px-2 mb-2">
-          Including Libraries:
-        </div>
-        <AshHqWeb.Components.VersionPills
-          id={"#{@id}-version-pills"}
-          libraries={@libraries}
-          remove_version={@remove_version}
-          selected_versions={@selected_versions}
-        />
         <ul class="ml-2 mt-4">
-          {#for %{name: name, id: id, categories: categories} <- @sidebar_data}
-            <li id={"#{@id}-#{id}"} class="mb-4">
+          {#for {category, items} <- @sidebar_data}
+            <li class="pt-1 pl-0.5" id={"#{@id}-guides-#{slug(category)}"}>
               <button
-                class="flex flex-row items-start w-full text-left rounded-lg hover:bg-base-light-100 dark:hover:bg-base-dark-750"
-                phx-click={collapse("#{@id}-#{id}")}
+                class="flex flex-row items-start w-full text-left rounded-lg hover:bg-base-light-100 dark:hover:bg-base-dark-750 p-[0.1rem]"
+                phx-click={collapse("#{@id}-guides-#{slug(category)}")}
               >
                 <div
-                  class={"chevron mr-1.5 mt-1.5 origin-center", "rotate-[-90deg]": !has_active?(categories)}
-                  id={"#{@id}-#{id}-chevron"}
+                  class={"chevron mr-1.5 mt-1.5 origin-center", "rotate-[-90deg]": !has_active?(items)}
+                  id={"#{@id}-guides-#{slug(category)}-chevron"}
                 >
                   <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
                 </div>
-                {name}
+                <span class="text-base-light-500 dark:text-base-dark-300 font-bold">{category}</span>
               </button>
+
               <ul
                 class="ml-4"
-                id={"#{@id}-#{id}-contents"}
-                style={if !has_active?(categories), do: "display: none", else: ""}
+                id={"#{@id}-guides-#{slug(category)}-contents"}
+                style={if !has_active?(items), do: "display: none", else: ""}
               >
-                {#for %{name: item_name, to: to, id: item_id, active?: active?} <- categories}
-                  {id = "#{@id}-#{id}-#{item_id}"
-                  nil}
-                  <li
-                    id={id}
-                    class={
-                      "rounded-lg hover:bg-base-light-100 dark:hover:bg-base-dark-750",
-                      "bg-base-light-200 dark:bg-base-dark-700 active-sidebar-nav": active?
-                    }
-                  >
-                    <LivePatch
-                      to={to}
-                      opts={phx_click: mark_active(id)}
-                      class="flex flex-row items-start w-full text-left text-base-light-900 dark:text-base-dark-100"
-                    >
-                      <Icon type="DSL" classes="h-4 w-4 flex-none mt-1 mr-1.5" />
-                      {item_name}
-                    </LivePatch>
-                  </li>
-                {/for}
-                {#for {category, items} <- categories}
-                  <li class="pt-1 pl-0.5" id={"#{@id}-#{id}-#{slug(category)}"}>
-                    <button
-                      class="flex flex-row items-start w-full text-left rounded-lg hover:bg-base-light-100 dark:hover:bg-base-dark-750"
-                      phx-click={collapse("#{@id}-#{id}-#{slug(category)}")}
-                    >
-                      <div
-                        class={"chevron mr-1.5 mt-1.5 origin-center", "rotate-[-90deg]": !has_active?(items)}
-                        id={"#{@id}-#{id}-#{slug(category)}-chevron"}
-                      >
-                        <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
-                      </div>
-                      <span class="text-base-light-500 dark:text-base-dark-300">{category}</span>
-                    </button>
+                {#for {library, items} <- items}
+                  <li class="pt-1 pl-0.5" id={"#{@id}-guides-#{slug(category)}-#{slug(library)}"}>
+                    <span class="text-primary-dark-500 dark:text-primary-light-500 font-extrabold">{library}</span>
 
-                    <ul
-                      class="ml-4"
-                      id={"#{@id}-#{id}-#{slug(category)}-contents"}
-                      style={if !has_active?(items), do: "display: none", else: ""}
-                    >
-                      {#for {library, items} <- items}
-                        <li class="pt-1 pl-0.5" id={"#{@id}-#{id}-#{slug(category)}-#{slug(library)}"}>
-                          <span class="text-base-light-500 dark:text-base-dark-300">{library}</span>
-
-                          <ul>
-                            {#for %{name: item_name, to: to, id: item_id, active?: active?} <- items}
-                              {id = id(category, library, item_name, id, item_id, @id)
-                              nil}
-                              <li
-                                id={id}
-                                class={
-                                  "rounded-lg hover:bg-base-light-100 dark:hover:bg-base-dark-750",
-                                  "bg-base-light-200 dark:bg-base-dark-700 active-sidebar-nav": active?
-                                }
-                              >
-                                <LivePatch
-                                  to={to}
-                                  opts={phx_click: mark_active(id)}
-                                  class="flex flex-row items-start w-full text-left text-base-light-900 dark:text-base-dark-100"
-                                >
-                                  <Icon type={name} classes="h-4 w-4 flex-none mt-1 mr-1.5" />
-                                  {item_name}
-                                </LivePatch>
-                              </li>
-                            {/for}
-                          </ul>
+                    <ul>
+                      {#for %{name: item_name, to: to, id: item_id, active?: active?} <- items}
+                        {id = id(category, library, item_name, "guides", item_id, @id)
+                        nil}
+                        <li
+                          id={id}
+                          class={
+                            "first:rounded-t-lg last:rounded-b-lg p-[0.1rem] pl-1 hover:bg-base-light-100 dark:hover:bg-base-dark-750",
+                            "bg-base-light-200 dark:bg-base-dark-750 active-sidebar-nav": active?
+                          }
+                        >
+                          <LivePatch
+                            to={to}
+                            opts={phx_click: mark_active(id)}
+                            class="flex flex-row items-start w-full text-left text-base-light-900 dark:text-base-dark-100"
+                          >
+                            <Icon type="Guides" classes="h-4 w-4 flex-none mt-1 mr-1.5" />
+                            {item_name}
+                          </LivePatch>
                         </li>
                       {/for}
                     </ul>
@@ -147,15 +96,15 @@ defmodule AshHqWeb.Components.DocSidebar do
   def mark_active(js \\ %JS{}, id) do
     js
     |> JS.remove_class(
-      "bg-base-light-200 dark:bg-base-dark-700 active-sidebar-nav",
+      "bg-base-light-200 dark:bg-base-dark-750 active-sidebar-nav",
       to: ".active-sidebar-nav"
     )
     |> JS.add_class(
-      "bg-base-light-200 dark:bg-base-dark-700 active-sidebar-nav",
+      "bg-base-light-200 dark:bg-base-dark-750 active-sidebar-nav",
       to: "##{id}"
     )
     |> JS.add_class(
-      "bg-base-light-200 dark:bg-base-dark-700 active-sidebar-nav",
+      "bg-base-light-200 dark:bg-base-dark-750 active-sidebar-nav",
       to: "##{add_or_remove_mobile(id)}"
     )
   end

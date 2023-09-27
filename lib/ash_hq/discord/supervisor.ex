@@ -8,7 +8,7 @@ defmodule AshHq.Discord.Supervisor do
 
   @impl true
   def init(_init_arg) do
-    children = [AshHq.Discord.Listener, AshHq.Discord.Poller]
+    children = [AshHq.Discord.Listener]
 
     Supervisor.init(children, strategy: :one_for_one)
   end

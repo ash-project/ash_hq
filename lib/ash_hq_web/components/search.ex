@@ -74,7 +74,7 @@ defmodule AshHqWeb.Components.Search do
                 <Form for={:types} change={@change_types}>
                   <div class="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:flex lg:flex-row lg:space-x-6 lg:flex-wrap mt-2 text-sm text-base-light-500 dark:text-base-dark-300">
                     <div class="hidden lg:block">Search For:</div>
-                    {#for type <- AshHq.Docs.Extensions.Search.Types.types()}
+                    {#for type <- AshHq.Docs.Extensions.Search.Types.types() -- ["Forum"]}
                       <div class="flex flex-row items-center">
                         <Checkbox
                           class="mr-2"
@@ -92,32 +92,8 @@ defmodule AshHqWeb.Components.Search do
                 </Form>
               </div>
             </div>
-            {#if @search in [nil, ""] && @item_list == []}
-              <div class="grid content-center ml-8">
-                <p class="mb-8">
-                  <Heroicons.Outline.ArrowUpIcon class="w-6 h-6 -mt-1 inline-block" />
-                  Enter your search term in the box above.
-                </p>
-
-                <p>
-                  <Heroicons.Outline.ArrowDownIcon class="w-6 h-6 -mt-1 inline-block" />
-                  Select Ash libraries to search from below!
-                </p>
-              </div>
-            {#else}
-              <div class="grid overflow-auto">
-                {render_items(assigns, @item_list)}
-              </div>
-            {/if}
-            <div class="flex flex-row justify-start items-center relative bottom-0">
-              <Heroicons.Outline.CollectionIcon class="w-6 h-6 mr-2" />
-              <AshHqWeb.Components.VersionPills
-                id="search-version-pills"
-                selected_versions={@selected_versions}
-                remove_version={@remove_version}
-                libraries={@libraries}
-                toggle={toggle_libraries()}
-              />
+            <div class="grid overflow-auto">
+              {render_items(assigns, @item_list)}
             </div>
           </div>
         </div>
@@ -130,39 +106,77 @@ defmodule AshHqWeb.Components.Search do
     ~F"""
     <div class="divide-y">
       {#for item <- items}
-        <LivePatch
-          class="block w-full text-left border-base-light-300 dark:border-base-dark-600"
-          to={DocRoutes.doc_link(item, @selected_versions)}
-          opts={id: "result-#{item.id}", "phx-click": @close}
-        >
-          <div class={
-            "hover:bg-base-light-100 dark:hover:bg-base-dark-750 py-4",
-            "bg-base-light-200 dark:bg-base-dark-700": @selected_item.id == item.id
-          }>
-            <div class="flex justify-start items-center space-x-2 pb-2 pl-2">
-              <div>
-                <Icon type={item_type(item)} classes="h-4 w-4 flex-none mt-1 mx-1" />
-              </div>
-              <div class="flex flex-row flex-wrap items-center">
-                {#for {path_item, index} <- Enum.with_index(item_path(item))}
-                  {#if index != 0}
-                    <Heroicons.Solid.ChevronRightIcon class="h-4 w-4 mt-1" />
-                  {/if}
-                  <div>
-                    {path_item}
+        {#if item.__struct__ != AshHq.Docs.Guide}
+          <a
+            class="block w-full text-left border-base-light-300 dark:border-base-dark-600"
+            href={DocRoutes.doc_link(item, @selected_versions)}
+            id={"result-#{item.id}"}
+            phx-click={@close}
+          >
+            <div class={
+              "hover:bg-base-light-100 dark:hover:bg-base-dark-750 py-4",
+              "bg-base-light-200 dark:bg-base-dark-700": @selected_item.id == item.id
+            }>
+              <div class="flex justify-start items-center space-x-2 pb-2 pl-2">
+                <div>
+                  <Icon type={item_type(item)} classes="h-4 w-4 flex-none mt-1 mx-1" />
+                </div>
+                <div class="flex flex-row flex-wrap items-center">
+                  {#for {path_item, index} <- Enum.with_index(item_path(item))}
+                    {#if index != 0}
+                      <Heroicons.Solid.ChevronRightIcon class="h-4 w-4 mt-1" />
+                    {/if}
+                    <div>
+                      {path_item}
+                    </div>
+                  {/for}
+                  <Heroicons.Solid.ChevronRightIcon class="h-4 w-4 mt-1" />
+                  <div class="font-bold">
+                    {item_name(item)}
                   </div>
-                {/for}
-                <Heroicons.Solid.ChevronRightIcon class="h-4 w-4 mt-1" />
-                <div class="font-bold">
-                  {item_name(item)}
                 </div>
               </div>
+              <div class="text-base-light-700 dark:text-base-dark-400 ml-10">
+                {raw(item.search_headline)}
+              </div>
             </div>
-            <div class="text-base-light-700 dark:text-base-dark-400 ml-10">
-              {raw(item.search_headline)}
+          </a>
+        {/if}
+        {#if item.__struct__ == AshHq.Docs.Guide}
+          <LivePatch
+            class="block w-full text-left border-base-light-300 dark:border-base-dark-600"
+            to={DocRoutes.doc_link(item, @selected_versions)}
+            opts={id: "result-#{item.id}", "phx-click": @close}
+          >
+            <div class={
+              "hover:bg-base-light-100 dark:hover:bg-base-dark-750 py-4",
+              "bg-base-light-200 dark:bg-base-dark-700": @selected_item.id == item.id
+            }>
+              <div class="flex justify-start items-center space-x-2 pb-2 pl-2">
+                <div>
+                  <Icon type={item_type(item)} classes="h-4 w-4 flex-none mt-1 mx-1" />
+                </div>
+                <div class="flex flex-row flex-wrap items-center">
+                  {#for {path_item, index} <- Enum.with_index(item_path(item))}
+                    {#if index != 0}
+                      <Heroicons.Solid.ChevronRightIcon class="h-4 w-4 mt-1" />
+                    {/if}
+                    <div>
+                      {path_item}
+                    </div>
+                  {/for}
+                  <Heroicons.Solid.ChevronRightIcon class="h-4 w-4 mt-1" />
+                  <div class="font-bold">
+                    {item_name(item)}
+                  </div>
+                </div>
+              </div>
+              <div class="text-base-light-700 dark:text-base-dark-400 ml-10">
+                {raw(item.search_headline)}
+              </div>
             </div>
-          </div>
-        </LivePatch>
+          </LivePatch>
+        {/if}
       {/for}
     </div>
     """

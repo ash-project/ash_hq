@@ -116,12 +116,20 @@ defmodule AshHqWeb.Pages.Docs do
                   library_version={@library_version}
                 /></h1>
             {/if}
-            <.github_guide_link
-              :if={@guide}
-              guide={@guide}
-              library={@library}
-              library_version={@library_version}
-            />
+            <div class="flex flex-col float-right">
+              <.github_guide_link
+                :if={@guide}
+                guide={@guide}
+                library={@library}
+                library_version={@library_version}
+              />
+              <.hex_guide_link
+                :if={@guide}
+                guide={@guide}
+                library={@library}
+                library_version={@library_version}
+              />
+            </div>
             {#if @docs}
               <.docs doc_path={@doc_path} docs={@docs} />
             {/if}
@@ -330,7 +338,7 @@ defmodule AshHqWeb.Pages.Docs do
     <a
       href={source_link(@guide, @library, @library_version)}
       target="_blank"
-      class="float-right no-underline mt-1 ml-2 hidden lg:block"
+      class="no-underline mt-1 ml-2 hidden lg:block"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -340,6 +348,33 @@ defmodule AshHqWeb.Pages.Docs do
         <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
       </svg>
       <span class="underline">View this guide on GitHub</span>
+      <Heroicons.Outline.ExternalLinkIcon class="w-6 h-6 inline-block -mt-1" />
+    </a>
+    """
+  end
+
+  def hex_guide_link(assigns) do
+    ~F"""
+    <a
+      href={hex_link(@guide, @library, @library_version)}
+      target="_blank"
+      class="no-underline mt-1 ml-2 hidden lg:block"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-6 h-6 inline-block mr-1 -mt-1 dark:fill-white fill-base-light-600"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
+        />
+      </svg>
+      <span class="underline">View this guide on Hex</span>
       <Heroicons.Outline.ExternalLinkIcon class="w-6 h-6 inline-block -mt-1" />
     </a>
     """
@@ -615,53 +650,13 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   defp assign_sidebar_content(socket) do
-    sidebar_data = [
-      %{
-        name: "Guides",
-        id: "guides",
-        categories:
-          guides_by_category_and_library(
-            socket.assigns[:libraries],
-            socket.assigns[:library_version],
-            socket.assigns[:selected_versions],
-            socket.assigns[:guide]
-          )
-      },
-      %{
-        name: "DSLs",
-        id: "dsls",
-        categories_only?: true,
-        categories:
-          get_extensions(
-            socket.assigns[:libraries],
-            socket.assigns[:library_version],
-            socket.assigns[:selected_versions],
-            socket.assigns[:dsl_target]
-          )
-      },
-      %{
-        name: "Code",
-        id: "code",
-        categories:
-          modules_by_category_and_library(
-            socket.assigns[:libraries],
-            socket.assigns[:library_version],
-            socket.assigns[:selected_versions],
-            socket.assigns[:module]
-          )
-      },
-      %{
-        name: "Mix Tasks",
-        id: "mix-tasks",
-        categories:
-          mix_tasks_by_category_and_library(
-            socket.assigns[:libraries],
-            socket.assigns[:library_version],
-            socket.assigns[:selected_versions],
-            socket.assigns[:mix_task]
-          )
-      }
-    ]
+    sidebar_data =
+      guides_by_category_and_library(
+        socket.assigns[:libraries],
+        socket.assigns[:library_version],
+        socket.assigns[:selected_versions],
+        socket.assigns[:guide]
+      )
 
     assign(socket, sidebar_libraries: socket.assigns.libraries, sidebar_data: sidebar_data)
   end
@@ -690,62 +685,6 @@ defmodule AshHqWeb.Pages.Docs do
     |> partially_alphabetically_sort(@start_guides, [])
   end
 
-  @last_categories ["Errors"]
-
-  defp modules_by_category_and_library(
-         libraries,
-         library_version,
-         selected_versions,
-         active_module
-       ) do
-    libraries
-    |> Enum.map(&{&1, selected_version(&1, library_version, selected_versions)})
-    |> Enum.filter(fn {_library, version} -> version != nil end)
-    |> Enum.sort_by(fn {library, _version} -> library.order end)
-    |> Enum.flat_map(fn {library, %{modules: modules}} ->
-      modules
-      |> Enum.sort_by(& &1.order)
-      |> Enum.group_by(& &1.category, fn module ->
-        %{
-          id: module.id,
-          name: module.name,
-          to: DocRoutes.doc_link(module, selected_versions),
-          active?: active_module && active_module.id == module.id
-        }
-      end)
-      |> Enum.map(fn {category, modules} -> {category, {library.display_name, modules}} end)
-    end)
-    |> Enum.group_by(&elem(&1, 0), &elem(&1, 1))
-    |> partially_alphabetically_sort([], @last_categories)
-  end
-
-  defp mix_tasks_by_category_and_library(
-         libraries,
-         library_version,
-         selected_versions,
-         active_mix_task
-       ) do
-    libraries
-    |> Enum.map(&{&1, selected_version(&1, library_version, selected_versions)})
-    |> Enum.filter(fn {_library, version} -> version != nil end)
-    |> Enum.sort_by(fn {library, _version} -> library.order end)
-    |> Enum.flat_map(fn {library, %{mix_tasks: mix_tasks}} ->
-      mix_tasks
-      |> Enum.sort_by(& &1.order)
-      |> Enum.group_by(& &1.category, fn mix_task ->
-        %{
-          id: mix_task.id,
-          name: mix_task.name,
-          to: DocRoutes.doc_link(mix_task, selected_versions),
-          active?: active_mix_task && active_mix_task.id == mix_task.id
-        }
-      end)
-      |> Enum.map(fn {category, mix_tasks} -> {category, {library.display_name, mix_tasks}} end)
-    end)
-    |> Enum.group_by(&elem(&1, 0), &elem(&1, 1))
-    |> partially_alphabetically_sort([], @last_categories)
-  end
-
   defp selected_version(library, library_version, selected_versions) do
     selected_version = selected_versions[library.id]
 
@@ -760,14 +699,6 @@ defmodule AshHqWeb.Pages.Docs do
         end
       end
     end
-  end
-
-  defp partially_alphabetically_sort([value | _rest] = list, first, last)
-       when not is_tuple(value) do
-    list
-    |> Enum.map(&{&1, nil})
-    |> partially_alphabetically_sort(first, last)
-    |> Enum.map(&elem(&1, 0))
   end
 
   defp partially_alphabetically_sort(keyed_list, first, last) do
@@ -798,26 +729,6 @@ defmodule AshHqWeb.Pages.Docs do
     |> String.downcase()
     |> String.replace(" ", "_")
     |> String.replace(~r/[^a-z0-9-_]/, "-")
-  end
-
-  @target_order ["Ash.Resource", "Ash.Api", "Ash.Flow", "Ash.Registry"]
-
-  defp get_extensions(libraries, library_version, selected_versions, dsl_target) do
-    libraries
-    |> Enum.map(&selected_version(&1, library_version, selected_versions))
-    |> Enum.reject(&is_nil/1)
-    |> Enum.flat_map(& &1.extensions)
-    |> Enum.map(& &1.target)
-    |> Enum.uniq()
-    |> partially_alphabetically_sort(@target_order, [])
-    |> Enum.map(fn target ->
-      %{
-        id: DocRoutes.sanitize_name(target),
-        name: target,
-        to: DocRoutes.dsl_link(target),
-        active?: dsl_target == target
-      }
-    end)
   end
 
   defp assign_fallback_guide(socket) do

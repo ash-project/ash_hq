@@ -128,6 +128,15 @@ defmodule AshHq.Docs.Importer do
             Logger.error(
               "Failed to import version #{name} #{version} #{Exception.format(:error, e, __STACKTRACE__)}"
             )
+
+            e
+        catch
+          e ->
+            Logger.error(
+              "Failed to import version #{name} #{version} #{Exception.format(:error, e, __STACKTRACE__)}"
+            )
+
+            e
         end
       end)
     end
@@ -223,30 +232,38 @@ defmodule AshHq.Docs.Importer do
               Ash.UUID.generate()
           end
 
-        LibraryVersion.build!(
-          library.id,
-          version,
-          %{
-            timeout: :infinity,
-            id: id,
-            extensions: result[:extensions],
-            doc: result[:doc],
-            guides: result[:guides],
-            modules: result[:modules],
-            mix_tasks: result[:mix_tasks]
-          }
-        )
+        library_version =
+          LibraryVersion.build!(
+            library.id,
+            version,
+            %{
+              timeout: :infinity,
+              id: id,
+              extensions: result[:extensions],
+              doc: result[:doc],
+              guides: result[:guides],
+              modules: result[:modules],
+              mix_tasks: result[:mix_tasks]
+            }
+          )
+
+        LibraryVersion
+        |> Ash.Query.for_read(:read)
+        |> Ash.Query.filter(id != ^library_version.id)
+        |> Ash.Query.filter(library_id == ^library.id)
+        |> Ash.Query.data_layer_query()
+        |> case do
+          {:ok, query} ->
+            AshHq.Repo.delete_all(query)
+
+          other ->
+            raise "bad match #{inspect(other)}"
+        end
       end)
     end
   end
 
-  defp filter_by_version(versions, latest_version) do
-    if latest_version do
-      Enum.take_while(versions, fn version ->
-        Version.match?(Version.parse!(version), "> #{latest_version}")
-      end)
-    else
-      Enum.take(versions, 1)
-    end
+  defp filter_by_version(versions, _latest_version) do
+    Enum.take(versions, 1)
   end
 end

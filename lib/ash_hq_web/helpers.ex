@@ -32,4 +32,9 @@ defmodule AshHqWeb.Helpers do
   def source_link(%AshHq.Docs.Guide{route: route}, library, library_version) do
     "https://github.com/#{library.repo_org}/#{library.name}/tree/v#{library_version.version}/documentation/#{route}.md"
   end
+
+  def hex_link(%AshHq.Docs.Guide{route: route}, library, _library_version) do
+    name = route |> Path.split() |> List.last()
+    "https://hexdocs.pm/#{library.name}/#{name}.html"
+  end
 end

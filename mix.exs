@@ -55,7 +55,7 @@ defmodule AshHq.MixProject do
       # Api Docs
       {:open_api_spex, "~> 3.16"},
       # Discord
-      {:nostrum, github: "zachdaniel/nostrum"},
+      {:nostrum, "~> 0.9.0-alpha2"},
       {:cowlib, "~> 2.11", hex: :remedy_cowlib, override: true},
       # Ashley
       {:open_ai, github: "hernanat/open_ai_ex"},

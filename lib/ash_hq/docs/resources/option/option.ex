@@ -36,6 +36,7 @@ defmodule AshHq.Docs.Option do
 
     load_for_search [
       :extension_name,
+      :extension_module,
       :extension_target,
       :library_name
     ]
@@ -127,6 +128,7 @@ defmodule AshHq.Docs.Option do
     first :extension_name, [:dsl, :extension], :name
     first :extension_order, [:dsl, :extension], :order
     first :extension_target, [:dsl, :extension], :target
+    first :extension_module, [:dsl, :extension], :module
     first :version_name, :library_version, :version
     first :library_name, [:library_version, :library], :name
     first :library_id, [:library_version, :library], :id

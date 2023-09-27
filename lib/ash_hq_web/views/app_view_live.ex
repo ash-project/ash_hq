@@ -5,7 +5,7 @@ defmodule AshHqWeb.AppViewLive do
 
   alias AshHqWeb.Components.AppView.TopBar
   alias AshHqWeb.Components.{CatalogueModal, Search}
-  alias AshHqWeb.Pages.{Ashley, Blog, Docs, Forum, Home, Media, UserSettings}
+  alias AshHqWeb.Pages.{Ashley, Blog, Docs, Home, Media, UserSettings}
   alias Phoenix.LiveView.JS
   alias Surface.Components.Context
   require Ash.Query
@@ -122,8 +122,6 @@ defmodule AshHqWeb.AppViewLive do
             <UserSettings id="user_settings" current_user={@current_user} />
           {#match :media}
             <Media id="media" />
-          {#match :forum}
-            <Forum id="forum" params={@params} />
           {#match :ashley}
             <Ashley id="ashley" current_user={@current_user} params={@params} />
         {/case}

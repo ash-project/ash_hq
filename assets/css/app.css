@@ -8,131 +8,141 @@
 /* Import scoped CSS rules for components */
 @import "./_components.css";
 
+@layer components {
+    .aspect-video {
+        @apply max-w-lg
+    }
+}
+
 .search-hit {
-  @apply text-primary-light-500 dark:text-primary-dark-300
+    @apply text-primary-light-500 dark:text-primary-dark-300
 }
 
 @layer components {
-  .prose li p { @apply m-0; }
+    .prose li p {
+        @apply m-0;
+    }
 }
 
 /* Alerts and form errors used by phx.new */
 .alert {
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid transparent;
-  border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
 }
 
 .alert-info {
-  color: #31708f;
-  background-color: #d9edf7;
-  border-color: #bce8f1;
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
 }
 
 .alert-warning {
-  color: #8a6d3b;
-  background-color: #fcf8e3;
-  border-color: #faebcc;
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
 }
 
 .alert-danger {
-  color: #a94442;
-  background-color: #f2dede;
-  border-color: #ebccd1;
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
 }
 
 .alert p {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .alert:empty {
-  display: none;
+    display: none;
 }
 
 .invalid-feedback {
-  color: #a94442;
-  display: block;
-  margin: -1rem 0 2rem;
+    color: #a94442;
+    display: block;
+    margin: -1rem 0 2rem;
 }
 
 /* LiveView specific classes for your customization */
 .phx-no-feedback.invalid-feedback,
 .phx-no-feedback .invalid-feedback {
-  display: none;
+    display: none;
 }
 
 .phx-click-loading {
-  opacity: 0.5;
-  transition: opacity 1s ease-out;
+    opacity: 0.5;
+    transition: opacity 1s ease-out;
 }
 
 .phx-loading {
-  cursor: wait;
+    cursor: wait;
 }
 
 .phx-modal {
-  opacity: 1 !important;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+    opacity: 1 !important;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .phx-modal-content {
-  background-color: #fefefe;
-  margin: 15vh auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
+    background-color: #fefefe;
+    margin: 15vh auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
 }
 
 .phx-modal-close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
 }
 
 .phx-modal-close:hover,
 .phx-modal-close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 
 /* Prevent scrolling beneath Topbar due to URL fragment */
 html {
-  scroll-padding-top: 8.5rem;
+    scroll-padding-top: 8.5rem;
 }
+
 @media (min-width: 1280px) {
-  html {
-    scroll-padding-top: 5rem;
-  }
+    html {
+        scroll-padding-top: 5rem;
+    }
 }
 
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
 /* Ensure dark-mode is applied to native elements, eg scrollbars */
 .dark {
-  color-scheme: dark;
+    color-scheme: dark;
 }
 
 /* Constrain sidebar container size to screen height - Topbar height - mobile button height*/
 .sidebar-container {
-  max-height: calc(100vh - 8.5rem);
+    max-height: calc(100vh - 8.5rem);
 }
 
 @media (min-width: 1280px) {
-  /* Constrain sidebar container size to screen height - Topbar height */
-  .sidebar-container {
-    max-height: calc(100vh - 5rem);
-  }
+
+    /* Constrain sidebar container size to screen height - Topbar height */
+    .sidebar-container {
+        max-height: calc(100vh - 5rem);
+    }
 }

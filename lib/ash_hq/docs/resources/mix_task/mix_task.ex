@@ -53,6 +53,8 @@ defmodule AshHq.Docs.MixTask do
 
     attribute :file, :string
 
+    attribute :module_name, :string
+
     attribute :doc, :string do
       allow_nil? false
       constraints trim?: false, allow_empty?: true

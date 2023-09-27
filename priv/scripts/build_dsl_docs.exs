@@ -392,6 +392,18 @@ defmodule Utils do
     #{docs}
     """
 
+    line =
+      cond do
+        is_integer(line) ->
+          line
+
+        is_list(line) ->
+          line[:location]
+
+        true ->
+          nil
+      end
+
     [
       %{
         name: to_string(name),
@@ -478,6 +490,7 @@ defmodule Utils do
 
     %{
       name: Mix.Task.task_name(mix_task),
+      module_name: inspect(mix_task),
       doc: module_doc,
       file: file,
       order: order,
@@ -559,6 +572,7 @@ defmodule Utils do
   defp type({:mfa_or_fun, arity}), do: "MFA | function/#{arity}"
   defp type(:literal), do: "any literal"
   defp type({:tagged_tuple, tag, type}), do: "{:#{tag}, #{type(type)}}"
+  defp type({:tuple, types}), do: "{#{Enum.map_join(types, ", ", &type/1)}}"
   defp type({:spark_type, type, _}), do: inspect(type)
   defp type({:spark_type, type, _, _}), do: inspect(type)
 
@@ -594,6 +608,12 @@ defmodule Utils do
 
       extras =
         mix_project.project[:docs][:extras]
+        |> Stream.reject(fn {item, _} ->
+          Path.extname(to_string(item)) != ".md"
+        end)
+        |> Stream.reject(fn {item, _} ->
+          String.contains(item, "hexdocs")
+        end)
         |> Enum.reject(fn
           {_name, config} ->
             config[:ash_hq?] == false || config[:ash_hq] == false

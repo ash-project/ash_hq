@@ -9,10 +9,6 @@ defmodule AshHq.Discord.Listener do
 
   @user_id 1_066_406_803_769_933_834
 
-  def start_link do
-    Consumer.start_link(__MODULE__)
-  end
-
   def search_results!(interaction) do
     search =
       interaction.data.options
@@ -101,7 +97,14 @@ defmodule AshHq.Discord.Listener do
   end
 
   defp render_search_result(item) do
-    link = Path.join("https://ash-hq.org", AshHqWeb.DocRoutes.doc_link(item))
+    link =
+      case item do
+        %AshHq.Docs.Guide{} ->
+          Path.join("https://ash-hq.org", AshHqWeb.DocRoutes.doc_link(item))
+
+        item ->
+          AshHqWeb.DocRoutes.doc_link(item)
+      end
 
     case item do
       %{name: name} ->

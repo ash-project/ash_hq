@@ -9,8 +9,7 @@ defmodule AshHq.Docs.Search do
     AshHq.Docs.Extension,
     AshHq.Docs.LibraryVersion,
     AshHq.Docs.Guide,
-    AshHq.Docs.Dsl,
-    AshHq.Discord.Message
+    AshHq.Docs.Dsl
   ]
 
   use Ash.Flow, otp_app: :ash_hq

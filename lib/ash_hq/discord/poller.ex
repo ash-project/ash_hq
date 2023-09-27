@@ -35,7 +35,7 @@ defmodule AshHq.Discord.Poller do
   end
 
   def init(_) do
-    Process.send_after(self(), :poll, @poll_interval)
+    send(self(), :poll)
     {:ok, nil}
   end
 
