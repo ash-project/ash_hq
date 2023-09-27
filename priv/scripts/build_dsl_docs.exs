@@ -612,7 +612,7 @@ defmodule Utils do
           Path.extname(to_string(item)) != ".md"
         end)
         |> Stream.reject(fn {item, _} ->
-          String.contains?(item, "hexdocs")
+          String.contains?(to_string(item), "hexdocs")
         end)
         |> Enum.reject(fn
           {_name, config} ->
