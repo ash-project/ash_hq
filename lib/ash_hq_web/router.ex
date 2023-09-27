@@ -42,13 +42,12 @@ defmodule AshHqWeb.Router do
       on_mount: [
         AshAuthentication.Phoenix.LiveSession,
         {AshHqWeb.LiveUserAuth, :live_user_optional},
-        {AshHqWeb.InitAssigns, :default}
+        {AshHqWeb.InitAssigns, :default},
+        {AshHqWeb.RedirectToHex, :default}
       ],
       session: {AshAuthentication.Phoenix.LiveSession, :generate_session, []},
       root_layout: {AshHqWeb.LayoutView, :root} do
       live("/", AppViewLive, :home)
-      live("/ashley", AppViewLive, :ashley)
-      live("/ashley/:conversation_id", AppViewLive, :ashley)
       live("/media", AppViewLive, :media)
       live("/blog", AppViewLive, :blog)
       live("/blog/:slug", AppViewLive, :blog)

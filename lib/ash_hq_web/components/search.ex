@@ -6,7 +6,6 @@ defmodule AshHqWeb.Components.Search do
 
   alias AshHqWeb.Components.Icon
   alias AshHqWeb.DocRoutes
-  alias Phoenix.LiveView.JS
   alias Surface.Components.{Form, LivePatch}
   alias Surface.Components.Form.Checkbox
 
@@ -172,12 +171,6 @@ defmodule AshHqWeb.Components.Search do
     """
   end
 
-  defp toggle_libraries(js \\ %JS{}) do
-    js
-    |> JS.toggle(to: "#search-body")
-    |> JS.toggle(to: "#search-versions")
-  end
-
   defp item_name(%{thread_name: thread_name, channel_name: channel_name}),
     do: "#{String.capitalize(channel_name)} Forum: #{inspect(thread_name)}"
 
@@ -279,20 +272,20 @@ defmodule AshHqWeb.Components.Search do
   defp search(socket) do
     if socket.assigns.search in [nil, ""] do
       socket
-      else
-    %{result: item_list} =
-      AshHq.Docs.Search.run!(
-        socket.assigns.search,
-        %{types: socket.assigns[:selected_types]}
-      )
+    else
+      %{result: item_list} =
+        AshHq.Docs.Search.run!(
+          socket.assigns.search,
+          %{types: socket.assigns[:selected_types]}
+        )
 
-    item_list = Enum.take(item_list, 50)
+      item_list = Enum.take(item_list, 50)
 
-    selected_item = Enum.at(item_list, 0)
+      selected_item = Enum.at(item_list, 0)
 
-    socket
-    |> assign(:item_list, item_list)
-    |> set_selected_item(selected_item)
+      socket
+      |> assign(:item_list, item_list)
+      |> set_selected_item(selected_item)
     end
   end
 

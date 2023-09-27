@@ -306,18 +306,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
     )
   end
 
-  # defp similarity_argument do
-  #   Transformer.build_entity!(
-  #     Ash.Resource.Dsl,
-  #     [:calculations, :calculate],
-  #     :argument,
-  #     type: :float,
-  #     name: :similarity,
-  #     allow_nil?: false
-  #   )
-  # end
-
-  defp add_search_action(dsl_state, config) do
+  defp add_search_action(dsl_state, _config) do
     query_argument =
       Transformer.build_entity!(
         Ash.Resource.Dsl,
@@ -328,7 +317,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
       )
 
     {arguments, filter} =
-        {[query_argument], Ash.Query.expr(matches(query: arg(:query)))}
+      {[query_argument], Ash.Query.expr(matches(query: arg(:query)))}
 
     Transformer.add_entity(
       dsl_state,

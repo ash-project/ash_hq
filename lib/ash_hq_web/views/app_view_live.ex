@@ -4,7 +4,7 @@ defmodule AshHqWeb.AppViewLive do
     container: {:div, class: "h-full"}
 
   alias AshHqWeb.Components.AppView.TopBar
-  alias AshHqWeb.Components.{CatalogueModal, Search}
+  alias AshHqWeb.Components.Search
   alias AshHqWeb.Pages.{Ashley, Blog, Docs, Home, Media, UserSettings}
   alias Phoenix.LiveView.JS
   alias Surface.Components.Context
@@ -185,7 +185,6 @@ defmodule AshHqWeb.AppViewLive do
   def handle_info({:page_title, title}, socket) do
     {:noreply, assign(socket, :page_title, "Ash Framework - #{title}")}
   end
-
 
   def handle_event("change-types", %{"types" => types}, socket) do
     types =

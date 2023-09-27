@@ -31,9 +31,7 @@ defmodule AshHqWeb.DocRoutes do
   def doc_link(%AshHq.Docs.Guide{
         route: route,
         library_version: %{
-          library_name: library_name,
-          version: version,
-          library_id: library_id
+          library_name: library_name
         }
       }) do
     "/docs/guides/#{library_name}/latest/#{route}"

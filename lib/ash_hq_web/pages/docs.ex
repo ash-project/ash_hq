@@ -5,8 +5,7 @@ defmodule AshHqWeb.Pages.Docs do
   import AshHqWeb.Helpers
   import AshHqWeb.Tails
 
-  alias AshHqWeb.Components.{DocSidebar, DslRightNav, ModuleRightNav, Tag}
-  alias AshHqWeb.Components.Docs.{DocPath, Functions, SourceLink}
+  alias AshHqWeb.Components.DocSidebar
   alias AshHqWeb.DocRoutes
   alias Phoenix.LiveView.JS
   alias Surface.Components.LivePatch
@@ -25,11 +24,6 @@ defmodule AshHqWeb.Pages.Docs do
   data(docs, :any)
   data(library_version, :any)
   data(guide, :any)
-  data(doc_path, :list, default: [])
-  data(dsls, :list, default: [])
-  data(dsl, :any)
-  data(module, :any)
-  data(mix_task, :any)
   data(positional_options, :list)
   data(description, :string)
   data(title, :string)
@@ -49,9 +43,6 @@ defmodule AshHqWeb.Pages.Docs do
           <Heroicons.Outline.MenuIcon class="w-8 h-8 ml-4" />
         </button>
         <button id={"#{@id}-hide"} class="hidden" phx-click={hide_sidebar()} />
-        {#if @doc_path && @doc_path != []}
-          <DocPath doc_path={@doc_path} />
-        {/if}
       </div>
       <span class="grid xl:hidden z-40">
         <div
@@ -84,13 +75,20 @@ defmodule AshHqWeb.Pages.Docs do
           class="w-full shrink max-w-6xl prose prose-td:pl-0 bg-white dark:bg-base-dark-850 dark:prose-invert md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden"
         >
           <div class="w-full nav-anchor text-black dark:text-white relative py-4 md:py-auto">
-            We couldn't find that page.
+            <p>
+              We couldn't find that page.
+            </p>
+            <p>
+              A lot of our documentation has moved recently, if you can't find it here, look in the <a href="https://hexdocs.pm/ash/using-hexdocs.html">HexDocs</a>
+            </p>
           </div>
         </div>
         <div
           id="docs-window"
           :if={!@not_found}
-          class={classes([ "w-full shrink max-w-6xl bg-white dark:bg-base-dark-850 md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden prose prose-td:pl-0 dark:prose-invert" ])}
+          class={classes([
+            "w-full shrink max-w-6xl bg-white dark:bg-base-dark-850 md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden prose prose-td:pl-0 dark:prose-invert"
+          ])}
         >
           <div
             id="module-docs"
@@ -111,7 +109,7 @@ defmodule AshHqWeb.Pages.Docs do
               />
             </div>
             {#if @docs}
-              <.docs doc_path={@doc_path} docs={@docs} />
+              <.docs docs={@docs} />
             {/if}
           </div>
 
@@ -182,7 +180,7 @@ defmodule AshHqWeb.Pages.Docs do
 
   def docs(assigns) do
     ~F"""
-    <div id={docs_container_id(@doc_path)}>
+    <div id="doc-text">
       {raw(@docs)}
     </div>
     """
@@ -200,38 +198,6 @@ defmodule AshHqWeb.Pages.Docs do
        |> assign_sidebar_content()
        |> assign(:loaded_once?, true)}
     end
-  end
-
-  defp child_dsls(_, nil), do: []
-  defp child_dsls(nil, _), do: []
-
-  defp child_dsls(%{dsls: dsls}, dsl) do
-    dsl_path = dsl.path ++ [dsl.name]
-    dsl_path_count = Enum.count(dsl_path)
-
-    Enum.filter(dsls, fn potential_child ->
-      potential_child_path = potential_child.path ++ [potential_child.name]
-
-      List.starts_with?(potential_child_path, dsl_path) &&
-        Enum.count(potential_child_path) - dsl_path_count == 1
-    end)
-  end
-
-  defp render_tags(assigns, dsl, option) do
-    required = option.required || (option.argument_index && option.name not in dsl.optional_args)
-
-    ~F"""
-    {#if option.argument_index}
-      <Tag color={:blue} class="mt-1 py-0.5 h-5">
-        Arg[{option.argument_index}]
-      </Tag>
-    {/if}
-    {#if required}
-      <Tag color={:red} class={classes(["mt-1 py-0.5 h-5", "ml-2": option.argument_index])}>
-        Required
-      </Tag>
-    {/if}
-    """
   end
 
   def show_sidebar(js \\ %JS{}) do
@@ -289,7 +255,6 @@ defmodule AshHqWeb.Pages.Docs do
     sidebar_data =
       guides_by_category_and_library(
         socket.assigns[:libraries],
-        socket.assigns[:library_version],
         socket.assigns[:guide]
       )
 
@@ -298,7 +263,7 @@ defmodule AshHqWeb.Pages.Docs do
 
   @start_guides ["Tutorials", "Topics", "How To", "Misc"]
 
-  defp guides_by_category_and_library(libraries, library_version, active_guide) do
+  defp guides_by_category_and_library(libraries, active_guide) do
     libraries
     |> Enum.map(fn library ->
       {library, Enum.at(library.versions, 0)}
@@ -353,10 +318,7 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   defp assign_fallback_guide(socket) do
-    if socket.assigns[:library_version] &&
-         !(socket.assigns[:dsl_target_extensions] || socket.assigns[:dsl] ||
-             socket.assigns[:mix_task] || socket.assigns[:guide] ||
-             socket.assigns[:extension] || socket.assigns[:module]) do
+    if socket.assigns[:library_version] && !socket.assigns[:module] do
       guide =
         Enum.find(socket.assigns.library_version.guides, fn guide ->
           guide.default
@@ -429,8 +391,7 @@ defmodule AshHqWeb.Pages.Docs do
       library ->
         socket
         |> assign(:library, library)
-        |> assign(:library_version,  AshHqWeb.Helpers.latest_version(library))
-
+        |> assign(:library_version, AshHqWeb.Helpers.latest_version(library))
     end
   end
 
@@ -466,32 +427,19 @@ defmodule AshHqWeb.Pages.Docs do
         assign(socket,
           title: "Guide: #{socket.assigns.guide.name}",
           docs: socket.assigns.guide |> reselect_and_get!(:text_html),
-          description: "Read the \"#{socket.assigns.guide.name}\" guide on Ash HQ",
-          doc_path: [socket.assigns.library.name, socket.assigns.guide.name]
+          description: "Read the \"#{socket.assigns.guide.name}\" guide on Ash HQ"
         )
 
       true ->
         assign(socket,
           docs: "",
           title: "Ash Framework",
-          description: default_description(),
-          doc_path: [],
-          dsls: []
+          description: default_description()
         )
     end
   end
 
   defp default_description do
     "A declarative foundation for ambitious Elixir applications. Model your domain, derive the rest."
-  end
-
-  # workaround for https://github.com/patrick-steele-idem/morphdom/pull/231
-  # Adding a unique ID on the container for the rendered docs prevents morphdom
-  # merging them incorrectly.
-  defp docs_container_id(doc_path) do
-    ["docs-container" | doc_path]
-    |> Enum.join("-")
-    |> String.replace(~r/[^A-Za-z0-9_]/, "-")
-    |> String.downcase()
   end
 end
