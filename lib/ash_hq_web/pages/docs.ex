@@ -318,7 +318,7 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   defp assign_fallback_guide(socket) do
-    if socket.assigns[:library_version] && !socket.assigns[:module] do
+    if socket.assigns[:library_version] && !socket.assigns[:guide] do
       guide =
         Enum.find(socket.assigns.library_version.guides, fn guide ->
           guide.default
@@ -425,7 +425,7 @@ defmodule AshHqWeb.Pages.Docs do
         send(self(), {:page_title, socket.assigns.guide.name})
 
         assign(socket,
-          title: "Guide: #{socket.assigns.guide.name}",
+          title: "Guide: #{socket.assigns.guide.name}" |> IO.inspect(),
           docs: socket.assigns.guide |> reselect_and_get!(:text_html),
           description: "Read the \"#{socket.assigns.guide.name}\" guide on Ash HQ"
         )
