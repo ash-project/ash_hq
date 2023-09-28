@@ -4,8 +4,10 @@ defmodule AshHqWeb.AppViewLive do
     container: {:div, class: "h-full"}
 
   alias AshHqWeb.Components.AppView.TopBar
+
   alias AshHqWeb.Components.Search
-  alias AshHqWeb.Pages.{Ashley, Blog, Docs, Home, Media, UserSettings}
+  alias AshHqWeb.Pages.{Ashley, Blog, Community, Docs, Home, Media, UserSettings}
+
   alias Phoenix.LiveView.JS
   alias Surface.Components.Context
   require Ash.Query
@@ -98,6 +100,8 @@ defmodule AshHqWeb.AppViewLive do
             <Home id="home" device_brand={@device_brand} />
           {#match :blog}
             <Blog id="blog" params={@params} />
+          {#match :community}
+            <Community id="community" />
           {#match :docs_dsl}
             <Docs
               id="docs"

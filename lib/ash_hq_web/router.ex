@@ -1,4 +1,5 @@
 defmodule AshHqWeb.Router do
+  alias AshHqWeb.Components.AppView
   use AshHqWeb, :router
   use AshAuthentication.Phoenix.Router
 
@@ -51,6 +52,7 @@ defmodule AshHqWeb.Router do
       live("/media", AppViewLive, :media)
       live("/blog", AppViewLive, :blog)
       live("/blog/:slug", AppViewLive, :blog)
+      live("/community", AppViewLive, :community)
       live("/docs/", AppViewLive, :docs_dsl)
       live("/docs/guides/:library/:version/*guide", AppViewLive, :docs_dsl)
       live("/docs/dsl/:dsl_target", AppViewLive, :docs_dsl)

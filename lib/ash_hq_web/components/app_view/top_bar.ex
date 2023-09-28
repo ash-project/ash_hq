@@ -54,6 +54,13 @@ defmodule AshHqWeb.Components.AppView.TopBar do
         >
           Blog
         </LivePatch>
+        <LivePatch
+          to="/community"
+          opts={title: "Community"}
+          class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700"
+        >
+          Community
+        </LivePatch>
         <a
           href="https://elixirforum.com/c/elixir-framework-forums/ash-framework-forum/"
           class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700"
