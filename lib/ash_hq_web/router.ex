@@ -1,5 +1,4 @@
 defmodule AshHqWeb.Router do
-  alias AshHqWeb.Components.AppView
   use AshHqWeb, :router
   use AshAuthentication.Phoenix.Router
 

@@ -420,17 +420,16 @@ defmodule AshHqWeb.Pages.Docs do
   end
 
   defp assign_docs(socket) do
-    cond do
-      socket.assigns.guide ->
+    if socket.assigns.guide do
         send(self(), {:page_title, socket.assigns.guide.name})
 
         assign(socket,
-          title: "Guide: #{socket.assigns.guide.name}" |> IO.inspect(),
+          title: "Guide: #{socket.assigns.guide.name}",
           docs: socket.assigns.guide |> reselect_and_get!(:text_html),
           description: "Read the \"#{socket.assigns.guide.name}\" guide on Ash HQ"
         )
 
-      true ->
+        else
         assign(socket,
           docs: "",
           title: "Ash Framework",
