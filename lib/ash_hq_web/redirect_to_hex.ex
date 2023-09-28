@@ -19,7 +19,12 @@ defmodule AshHqWeb.RedirectToHex do
     end
   end
 
-  def on_mount(:default, %{"library" => library, "version" => version, "mix_task" => mix_task}, session, socket) do
+  def on_mount(
+        :default,
+        %{"library" => library, "version" => version, "mix_task" => mix_task},
+        session,
+        socket
+      ) do
     to_load = AshHq.Docs.Extensions.Search.load_for_search(AshHq.Docs.MixTask)
 
     AshHq.Docs.MixTask
@@ -31,7 +36,12 @@ defmodule AshHqWeb.RedirectToHex do
         {:halt, redirect(socket, external: AshHqWeb.DocRoutes.doc_link(module))}
 
       _ ->
-        on_mount(:default, %{"module" => mix_task, "library" => library, "version" => version}, session, socket)
+        on_mount(
+          :default,
+          %{"module" => mix_task, "library" => library, "version" => version},
+          session,
+          socket
+        )
     end
   end
 
@@ -66,8 +76,6 @@ defmodule AshHqWeb.RedirectToHex do
         {:cont, socket}
     end
   end
-
-
 
   def on_mount(:default, _params, _session, socket) do
     {:cont, socket}
