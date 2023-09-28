@@ -421,20 +421,19 @@ defmodule AshHqWeb.Pages.Docs do
 
   defp assign_docs(socket) do
     if socket.assigns.guide do
-        send(self(), {:page_title, socket.assigns.guide.name})
+      send(self(), {:page_title, socket.assigns.guide.name})
 
-        assign(socket,
-          title: "Guide: #{socket.assigns.guide.name}",
-          docs: socket.assigns.guide |> reselect_and_get!(:text_html),
-          description: "Read the \"#{socket.assigns.guide.name}\" guide on Ash HQ"
-        )
-
-        else
-        assign(socket,
-          docs: "",
-          title: "Ash Framework",
-          description: default_description()
-        )
+      assign(socket,
+        title: "Guide: #{socket.assigns.guide.name}",
+        docs: socket.assigns.guide |> reselect_and_get!(:text_html),
+        description: "Read the \"#{socket.assigns.guide.name}\" guide on Ash HQ"
+      )
+    else
+      assign(socket,
+        docs: "",
+        title: "Ash Framework",
+        description: default_description()
+      )
     end
   end
 
