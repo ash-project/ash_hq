@@ -24,9 +24,17 @@ defmodule AshHq.Github.Monitor do
     |> AshHq.Docs.read!()
     |> Stream.flat_map(fn library ->
       :timer.sleep(1000)
+      opts = []
+
+      opts =
+        if api_key = Application.get_env(:ash_hq, :github)[:api_key] do
+          Keyword.put(opts, :headers, [{"Authorization", "token #{api_key}"}])
+        else
+          opts
+        end
 
       "https://api.github.com/repos/#{library.repo_org}/#{library.name}/contributors"
-      |> Req.get!(headers: [{"Authorization", "token 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"}])
+      |> Req.get!(opts)
       |> case do
         %{status: 200, body: body} ->
           Stream.map(body, &Map.take(&1, ["id", "avatar_url", "html_url", "login"]))
