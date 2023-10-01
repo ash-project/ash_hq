@@ -26,12 +26,13 @@ config :appsignal, :config, revision: "test-4"
 
 config :ash_hq,
   ash_apis: [
+    AshHq.Accounts,
     AshHq.Ashley,
     AshHq.Blog,
+    AshHq.Discord,
     AshHq.Docs,
-    AshHq.Accounts,
-    AshHq.MailingList,
-    AshHq.Discord
+    AshHq.Github,
+    AshHq.MailingList
   ]
 
 config :ash_hq, AshHq.Repo,

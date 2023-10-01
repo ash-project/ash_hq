@@ -41,7 +41,8 @@ defmodule AshHq.Application do
         # Start the Endpoint (http/https)
         AshHqWeb.Endpoint,
         {AshHq.Docs.Library.Agent, nil},
-        {Cluster.Supervisor, [topologies, [name: AshHq.ClusterSupervisor]]}
+        {Cluster.Supervisor, [topologies, [name: AshHq.ClusterSupervisor]]},
+        AshHq.Github.Monitor
         # Start a worker by calling: AshHq.Worker.start_link(arg)
         # {AshHq.Worker, arg}
       ] ++ importer ++ discord_bot

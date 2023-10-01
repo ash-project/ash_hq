@@ -14,6 +14,8 @@ defmodule AshHqWeb.Pages.Home do
   data(signed_up, :boolean, default: false)
   data(email_form, :any)
   data(theme, :atom, default: :default)
+  data(contributors, :list, default: [])
+  data(contributor_count, :integer, default: 0)
 
   def render(assigns) do
     ~F"""
@@ -345,13 +347,17 @@ defmodule AshHqWeb.Pages.Home do
 
         <div class="flex flex-col text-center items-center mt-24">
           <p class="mt-4 text-3xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50 mb-16">
-            It wouldn't be possible without our amazing community!
+            It wouldn't be possible without our amazing community.<br>
+            <CalloutText text={"#{@contributor_count} contributors"} /> and counting!
           </p>
 
-          <a href="https://github.com/ash-project/ash/graphs/contributors">
-            <img src="https://contrib.rocks/image?repo=ash-project/ash">
-          </a>
-
+          <div class="grid mx-auto gap-3 grid-cols-8 sm:grid-cols-10 md:grid-cols-114">
+            {#for %{login: login, avatar_url: avatar_url, html_url: html_url} <- @contributors}
+              <a href={html_url} class="flex flex-col items-center justify-center">
+                <img class="h-12 w-12 rounded-full" src={avatar_url} alt={login}>
+              </a>
+            {/for}
+          </div>
           <a
             href="docs/guides/ash/latest/how_to/contribute"
             class="flex justify-center items-center w-full md:w-auto h-10 px-4 rounded-lg bg-primary-light-500 dark:bg-primary-dark-500 font-semibold dark:text-white dark:hover:bg-primary-dark-700 hover:bg-primary-light-700 mt-6"
@@ -519,10 +525,14 @@ defmodule AshHqWeb.Pages.Home do
   end
 
   def mount(socket) do
+    contributors = AshHq.Github.Contributor.in_order!()
+
     {:ok,
      assign(
        socket,
        signed_up: false,
+       contributor_count: Enum.count(contributors),
+       contributors: contributors,
        email_form:
          AshPhoenix.Form.for_create(AshHq.MailingList.Email, :create,
            api: AshHq.MailingList,

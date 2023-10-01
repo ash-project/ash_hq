@@ -46,12 +46,14 @@ defmodule AshHq.MixProject do
       {:ash_graphql, github: "ash-project/ash_graphql"},
       {:ash_json_api, github: "ash-project/ash_json_api"},
       {:ash_appsignal, "~> 0.1.0"},
-      {:appsignal_phoenix, "~> 2.0"},
-      {:gun, "== 2.0.1", env: :prod, hex: "remedy_gun", override: true},
       {:ash_authentication, "~> 3.10"},
       {:ash_authentication_phoenix, "~> 1.6"},
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, github: "ash-project/ash_csv"},
+      # HTTP calls
+      {:req, "~> 0.4.3"},
+      # Appsignal
+      {:appsignal_phoenix, "~> 2.0"},
       # Api Docs
       {:open_api_spex, "~> 3.16"},
       # Discord
@@ -97,6 +99,7 @@ defmodule AshHq.MixProject do
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       # locked for compatibility
+      {:gun, "== 2.0.1", env: :prod, hex: "remedy_gun", override: true},
       {:phoenix_live_view, "0.18.16"},
       {:finch, "~> 0.10"},
       {:floki, ">= 0.30.0"},

@@ -1,0 +1,59 @@
+{
+  "attributes": [
+    {
+      "default": "nil",
+      "size": null,
+      "type": "bigint",
+      "source": "id",
+      "references": null,
+      "generated?": false,
+      "allow_nil?": false,
+      "primary_key?": true
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "login",
+      "references": null,
+      "generated?": false,
+      "allow_nil?": false,
+      "primary_key?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "avatar_url",
+      "references": null,
+      "generated?": false,
+      "allow_nil?": false,
+      "primary_key?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "html_url",
+      "references": null,
+      "generated?": false,
+      "allow_nil?": false,
+      "primary_key?": false
+    }
+  ],
+  "table": "contributors",
+  "hash": "C10DEE81B6ACD502EB81B3C5C88A90704B66F1D597271949A7288FDD9903F1BB",
+  "repo": "Elixir.AshHq.Repo",
+  "schema": null,
+  "check_constraints": [],
+  "identities": [],
+  "custom_indexes": [],
+  "multitenancy": {
+    "global": null,
+    "strategy": null,
+    "attribute": null
+  },
+  "base_filter": null,
+  "custom_statements": [],
+  "has_create_action": true
+}

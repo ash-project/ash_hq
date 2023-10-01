@@ -53,6 +53,7 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
       {AshHq.Docs.Extensions.Search.Preparations.DeselectSearchable, []}
     )
     |> Ash.Resource.Builder.add_attribute(:searchable, AshHq.Docs.Search.Types.TsVector,
+      generated?: true,
       private?: true
     )
   end
