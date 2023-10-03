@@ -60,74 +60,47 @@ let isOSX = /mac/.test(platform.toLowerCase()); // Mac desktop
 
 const Hooks = {};
 
-let configuredThemeRow;
+let selectedTheme;
 if (cookiesAreAllowed()) {
-  configuredThemeRow = getCookie("theme")
+  selectedTheme = getCookie("theme");
 }
+selectedTheme = selectedTheme || "system";
 
-if (!configuredThemeRow) {
-  if (
-    window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches
-  ) {
-    setTheme("dark");
-  } else {
-    setTheme("light");
-  }
-}
+setTheme(selectedTheme);
 
 window
   .matchMedia("(prefers-color-scheme: dark)")
   .addEventListener("change", (event) => {
-    let configuredThemeRow;
-    if (cookiesAreAllowed()) {
-      getCookie("theme")
-    }
-
-    if (!configuredThemeRow || configuredThemeRow === "theme=system") {
-      setTheme("system");
-    } else {
-      if (configuredThemeRow === "theme=dark") {
-        setTheme("dark");
-      } else if (configuredThemeRow === "theme=light") {
-        setTheme("light");
-      } else {
-        setTheme("system");
-      }
-    }
+    setTheme(selectedTheme);
   });
 
-function setTheme(theme, set) {
-  let setTheme;
-  if (theme == "system") {
-    if (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
-      setTheme = "dark";
+function setTheme(selectedTheme, doSetCookie = false) {
+  let newTheme = selectedTheme;
+  if (selectedTheme == "system") {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      newTheme = "dark";
     } else {
-      setTheme = "light";
+      newTheme = "light";
     }
-  } else {
-    setTheme = theme;
   }
 
-  document.documentElement.classList.add(setTheme);
+  document.documentElement.classList.add(newTheme);
 
-  if (setTheme === "dark") {
+  if (newTheme === "dark") {
     document.documentElement.classList.remove("light");
   } else {
     document.documentElement.classList.remove("dark");
   }
 
-  if (set && cookiesAreAllowed()) {
-    setCookie("theme", theme)
+  if (doSetCookie && cookiesAreAllowed()) {
+    setCookie("theme", selectedTheme);
   }
 }
 
 Hooks.ColorTheme = {
   mounted() {
     this.handleEvent("set_theme", (payload) => {
+      selectedTheme = payload.theme;
       setTheme(payload.theme, true);
     });
   },

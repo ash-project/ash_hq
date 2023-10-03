@@ -43,7 +43,7 @@ defmodule AshHqWeb.AppViewLive do
     ~F"""
     <div
       id="app"
-      class={classes([@configured_theme, "h-full font-sans": true])}
+      class={classes(["h-full font-sans": true])}
       phx-hook="ColorTheme"
     >
       <head>
