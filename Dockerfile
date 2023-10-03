@@ -1,8 +1,9 @@
-FROM hexpm/elixir:1.14.3-erlang-25.0-ubuntu-xenial-20210804
+FROM hexpm/elixir:1.15.4-erlang-26.0.2-ubuntu-bionic-20230126
 # install build dependencies
 USER root
 RUN apt-get update
 RUN apt-get install -y wget
+RUN apt-get install -y gnupg
 RUN wget https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb
 RUN dpkg -i erlang-solutions_2.0_all.deb
 RUN apt-get update
@@ -15,7 +16,6 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y esl-erlang
 RUN apt-get install -y apt-transport-https
 RUN apt-get install -y ca-certificates
-RUN apt-get install -y gnupg
 ENV NODE_MAJOR=16
 RUN mkdir -p /etc/apt/keyrings
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
