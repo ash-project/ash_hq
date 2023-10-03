@@ -83,23 +83,6 @@ defmodule AshHqWeb.Pages.Home do
             <p class="italic text-sm max-w-[100px] text-center">Try our interactive tutorial with Livebook</p>
           </div>
         </div>
-        <div class="flex flex-row justify-between bg-slate-100 dark:bg-[#2D4D5A] px-6 py-4 rounded-xl mt-8 space-x-6 hover:scale-110 dark:hover:opacity-90 hover:bg-slate-200 transition">
-          <a href="https://alembic.com.au/contact">
-            <div class="flex flex-row justify-between rounded-xl space-x-6">
-              <div class="flex flex-col text-center text-base-dark-900 font-extrabold tracking-tight dark:text-white">
-                <img class="h-12" src="/images/alembic.svg">
-                <div class="mt-2">
-                  <div class="text-2xl">
-                    Your <CalloutText text="Vision" class="text-[#EF3E24] dark:text-[#EF3E24]"/>, Our <CalloutText text="Expertise" class="text-[#EF3E24] dark:text-[#EF3E24]"/>
-                  </div>
-                  <div>
-                    Custom Solutions with Ash
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
-        </div>
 
         <div class="grid justify-center grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 dark:bg-none dark:bg-opacity-0 py-6 text-center mx-8 gap-16 max-w-lg md:max-w-lg xl:max-w-4xl mt-2 pt-16">
           <Feature name="Resources">
