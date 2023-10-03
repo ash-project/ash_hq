@@ -31,7 +31,7 @@ defmodule AshHqWeb.Pages.Home do
           Build <CalloutText text="powerful Elixir applications" /> with a <CalloutText text="flexible" /> tool-chain.
         </div>
 
-        <div class="flex flex-col space-y-4 md:space-x-4 md:space-y-0 md:flex-row items-center mt-8 md:mt-16 mb-6 md:mb-10">
+        <div class="flex flex-col space-y-4 md:space-x-4 md:space-y-0 md:flex-row items-center mt-8 mb-6 md:mb-10">
           <a
             href="/docs/guides/ash/latest/tutorials/get-started"
             class="flex justify-center items-center w-full md:w-auto h-12 px-4 rounded-lg bg-primary-light-500 dark:bg-primary-dark-500 font-semibold dark:text-white dark:hover:bg-primary-dark-700 hover:bg-primary-light-700"
@@ -45,7 +45,7 @@ defmodule AshHqWeb.Pages.Home do
           <span class="flex items-center justify-center h-full bg-base-light-100 dark:bg-base-dark-800 rounded-full overflow-hidden text-center font-bold p-4">OR</span>
         </div>
 
-        <div class="hidden sm:flex justify-center items-center mb-6 md:mb-10 gap-4">
+        <div class="hidden sm:flex justify-center items-center gap-4">
           <a
             href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd"
             class="hover:scale-110 transition"
@@ -83,20 +83,25 @@ defmodule AshHqWeb.Pages.Home do
             <p class="italic text-sm max-w-[100px] text-center">Try our interactive tutorial with Livebook</p>
           </div>
         </div>
-        <div class="flex flex-col justify-center items-center mb-2 gap-4 w-full max-w-3xl">
-          <iframe
-            class="rounded-xl w-full aspect-video"
-            src="https://www.youtube.com/embed/c4iou77kOFc?si=gxPdzGng5cQTrr7P"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-          />
-
-          <p class="italic text-sm text-center">Watch the ElixirConf 2023 talk</p>
+        <div class="flex flex-row justify-between bg-slate-100 dark:bg-[#2D4D5A] px-6 py-4 rounded-xl mt-8 space-x-6 hover:scale-110 dark:hover:opacity-90 hover:bg-slate-200 transition">
+          <a href="https://alembic.com.au/contact">
+            <div class="flex flex-row justify-between rounded-xl space-x-6">
+              <div class="flex flex-col text-center text-base-dark-900 font-extrabold tracking-tight dark:text-white">
+                <img class="h-12" src="/images/alembic.svg">
+                <div class="mt-2">
+                  <div class="text-2xl">
+                    Your <CalloutText text="Vision" class="text-[#EF3E24] dark:text-[#EF3E24]"/>, Our <CalloutText text="Expertise" class="text-[#EF3E24] dark:text-[#EF3E24]"/>
+                  </div>
+                  <div>
+                    Custom Solutions with Ash
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
         </div>
 
-        <div class="grid justify-center grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 dark:bg-none dark:bg-opacity-0 py-6 text-center mx-8 gap-16 max-w-lg md:max-w-lg xl:max-w-4xl mt-2 border-t border-t-gray-600 pt-16">
+        <div class="grid justify-center grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 dark:bg-none dark:bg-opacity-0 py-6 text-center mx-8 gap-16 max-w-lg md:max-w-lg xl:max-w-4xl mt-2 pt-16">
           <Feature name="Resources">
             <:description>
               <CalloutText text="Plug and play" /> building blocks that scale with the complexity of your application.
@@ -257,45 +262,38 @@ defmodule AshHqWeb.Pages.Home do
 
         <div class="flex flex-col w-full dark:bg-none dark:bg-opacity-0 py-6">
           <div class="flex flex-col w-full">
-            <div class="flex flex-row text-center justify-center w-full text-2xl text-black dark:text-white">
-              Our Sponsors
-            </div>
-            <div class="flex flex-row mt-6 justify-center">
-              <a href="https://alembic.com.au">
-                <img class="h-16" src="/images/alembic.svg">
-              </a>
+            <div class="text-center w-full text-5xl font-bold text-black dark:text-white">
+              Backed by our <CalloutText text="sponsors" />
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-4 items-center align-middle justify-items-center justify-center mt-12 gap-4 gap-y-12">
+          <div class="grid grid-cols-1 md:grid-cols-3 items-center align-middle justify-items-center justify-center mt-12 gap-4 gap-y-12 mx-auto">
             <a class="block" href="https://coinbits.app/">
-              <img class="h-6" src="/images/coinbits-logo.png">
+              <img class="h-8" src="/images/coinbits-logo.png">
             </a>
             <a class="block dark:hidden" href="https://www.wintermeyer-consulting.de/">
-              <img class="h-6" src="/images/wintermeyer-logo.svg">
+              <img class="h-8" src="/images/wintermeyer-logo.svg">
             </a>
             <a class="hidden dark:block" href="https://www.wintermeyer-consulting.de/">
-              <img class="h-6" src="/images/wintermeyer-logo-dark.svg">
+              <img class="h-8" src="/images/wintermeyer-logo-dark.svg">
             </a>
             <a class="block dark:hidden" href="https://www.heretask.com/">
-              <img class="h-6" src="/images/heretask-logo-light.svg">
+              <img class="h-8" src="/images/heretask-logo-light.svg">
             </a>
             <a class="hidden dark:block" href="https://www.heretask.com/">
-              <img class="h-6" src="/images/heretask-logo-dark.svg">
+              <img class="h-8" src="/images/heretask-logo-dark.svg">
             </a>
             <a class="block" href="https://www.groupflow.app">
-              <img class="h-6" src="/images/group-flow-logo.svg">
+              <img class="h-8" src="/images/group-flow-logo.svg">
             </a>
             <div class="hidden md:block">
             </div>
-            <a class="block dark:hidden col-span-1 md:col-span-2" href="https://www.zoonect.com/en/homepage">
-              <img class="h-6" src="/images/zoonect-light.svg">
+            <a class="block dark:hidden" href="https://www.zoonect.com/en/homepage">
+              <img class="h-8" src="/images/zoonect-light.svg">
             </a>
-            <a class="hidden dark:block col-span-2" href="https://www.zoonect.com/en/homepage">
-              <img class="h-6" src="/images/zoonect-dark.svg">
+            <a class="hidden dark:block" href="https://www.zoonect.com/en/homepage">
+              <img class="h-8" src="/images/zoonect-dark.svg">
             </a>
-            <div class="hidden md:block">
-            </div>
           </div>
         </div>
 
@@ -393,27 +391,26 @@ defmodule AshHqWeb.Pages.Home do
 
         <div class="flex flex-col mt-12">
           <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
-            Paid Support
+            Custom Solutions
           </h2>
           <div class="flex flex-row justify-between">
             <p class="mt-4 text-3xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50">
-              <a href="https://alembic.com.au"><CalloutText
+              <a href="https://alembic.com.au/contact"><CalloutText
                   text="Alembic"
-                  class="hover:text-primary-light-400 dark:hover:text-primary-dark-600"
+                  class="text-[#EF3E24] dark:text-[#EF3E24] hover:opacity-80"
                 /></a>
               can help
             </p>
-            <a href="https://alembic.com.au">
+            <a href="https://alembic.com.au/contact">
               <img class="h-16" src="/images/alembic-a.svg">
             </a>
           </div>
           <div class="flex flex-row">
             <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6">
-              Alembic offers expert support to help you overcome any challenges and ensure the success of your
-              project. Our team has extensive knowledge and experience with Ash Framework, as well as the larger Elixir
-              ecosystem and can provide personalized assistance to help you build products, implement new features, or
-              improve your existing codebases.  Contact us to learn more about our support options and how we can help
-              your project succeed.
+              Alembic specializes in providing custom solutions that ensure the success of your Ash Framework projects.
+              Leveraging extensive knowledge of both Ash Framework and the broader Elixir ecosystem, our team is
+              well-equipped to craft personalized projects, implement innovative features, or optimize your existing codebases.
+              Reach out to learn more about how our tailored solutions can make your project excel.
             </p>
           </div>
         </div>
