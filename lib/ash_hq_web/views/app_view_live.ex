@@ -41,11 +41,7 @@ defmodule AshHqWeb.AppViewLive do
 
   def render(assigns) do
     ~F"""
-    <div
-      id="app"
-      class={classes(["h-full font-sans": true])}
-      phx-hook="ColorTheme"
-    >
+    <div id="app" class={classes("h-full font-sans": true)} phx-hook="ColorTheme">
       <head>
         <meta property="og:type" content="text/html">
         <meta property="og:image" content="https://ash-hq.org/images/ash-logo-side.png">
