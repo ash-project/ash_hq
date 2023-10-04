@@ -361,7 +361,7 @@ defmodule AshHqWeb.Pages.Home do
             <CalloutText text={"#{@contributor_count} contributors"} /> and counting!
           </p>
 
-          <div class="grid mx-auto gap-3 grid-cols-8 sm:grid-cols-10 md:grid-cols-114">
+          <div class="grid mx-auto gap-3 grid-cols-6 sm:grid-cols-10 md:grid-cols-14">
             {#for %{login: login, avatar_url: avatar_url, html_url: html_url} <- @contributors}
               <a href={html_url} class="flex flex-col items-center justify-center">
                 <img class="h-12 w-12 rounded-full" src={avatar_url} alt={login}>
