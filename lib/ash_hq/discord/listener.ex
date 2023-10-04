@@ -9,6 +9,10 @@ defmodule AshHq.Discord.Listener do
 
   @user_id 1_066_406_803_769_933_834
 
+  def start_link() do
+    Consumer.start_link(__MODULE__)
+  end
+
   def search_results!(interaction) do
     search =
       interaction.data.options
