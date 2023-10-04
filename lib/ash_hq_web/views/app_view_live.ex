@@ -118,7 +118,7 @@ defmodule AshHqWeb.AppViewLive do
         {#if @live_action not in [:docs_dsl, :ashley]}
           <footer class="p-8 sm:p-6 bg-base-light-200 dark:bg-base-dark-850 sm:justify-center sticky">
             <div class="md:flex md:justify-around">
-              <div class="flex justify-center mb-6 md:mb-0">
+              <div class="flex justify-center flex-row mb-6 md:mb-0">
                 <a href="/" class="flex items-center">
                   <img src="/images/ash-logo-side.svg" class="mr-3 h-32" alt="Ash Framework Logo">
                 </a>

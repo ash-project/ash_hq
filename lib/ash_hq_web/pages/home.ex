@@ -243,6 +243,27 @@ defmodule AshHqWeb.Pages.Home do
           </Feature>
         </div>
 
+        <div class="flex flex-col mt-12 mb-2">
+          <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400 text-center">
+            In partnership with
+          </h2>
+          <div class="flex flex-row justify-around mb-2">
+            <p class="mt-4 text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50">
+              <img class="h-12" src="/images/alembic.svg">
+            </p>
+          </div>
+          <div class="flex flex-row text-xl">
+            <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6 text-center">
+              Alembic specializes in providing custom solutions that ensure the success of your Ash Framework projects.
+              Leveraging extensive knowledge of both Ash Framework and the broader Elixir ecosystem, our team is
+              well-equipped to craft personalized projects, implement innovative features, or optimize your existing codebases.
+              Reach out to learn more about how our tailored solutions can make your project excel.
+            </p>
+          </div>
+        </div>
+
+        <div class="my-8" />
+
         <div class="flex flex-col w-full dark:bg-none dark:bg-opacity-0 py-6">
           <div class="flex flex-col w-full">
             <div class="text-center w-full text-5xl font-bold text-black dark:text-white">
@@ -372,33 +393,7 @@ defmodule AshHqWeb.Pages.Home do
           {/if}
         </div>
 
-        <div class="flex flex-col mt-12">
-          <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
-            Custom Solutions
-          </h2>
-          <div class="flex flex-row justify-between">
-            <p class="mt-4 text-3xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50">
-              <a href="https://alembic.com.au/contact"><CalloutText
-                  text="Alembic"
-                  class="text-[#EF3E24] dark:text-[#EF3E24] hover:opacity-80"
-                /></a>
-              can help
-            </p>
-            <a href="https://alembic.com.au/contact">
-              <img class="h-16" src="/images/alembic-a.svg">
-            </a>
-          </div>
-          <div class="flex flex-row">
-            <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6">
-              Alembic specializes in providing custom solutions that ensure the success of your Ash Framework projects.
-              Leveraging extensive knowledge of both Ash Framework and the broader Elixir ecosystem, our team is
-              well-equipped to craft personalized projects, implement innovative features, or optimize your existing codebases.
-              Reach out to learn more about how our tailored solutions can make your project excel.
-            </p>
-          </div>
-        </div>
-
-        <div class="block md:hidden my-8" />
+        <div class="block md:hidden my-12" />
 
         <div class="max-w-7xl px-4 sm:px-6 md:px-8 my-8 hidden sm:block">
           <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">

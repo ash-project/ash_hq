@@ -63,14 +63,14 @@ defmodule AshHqWeb.Components.AppView.TopBar do
         </LivePatch>
         <a
           href="https://elixirforum.com/c/elixir-framework-forums/ash-framework-forum/"
-          class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700"
+          class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700 hidden lg:block"
         >
           Forum
         </a>
         <LivePatch
           to="/media"
           opts={title: "Media"}
-          class="text-lg font-bold px-2 md:px-4 pr-2 md:pr-8 dark:hover:text-primary-dark-400 hover:text-primary-light-700"
+          class="text-lg font-bold px-2 md:px-4 pr-2 md:pr-8 dark:hover:text-primary-dark-400 hover:text-primary-light-700 hidden lg:block"
         >
           Media
         </LivePatch>
