@@ -6,8 +6,8 @@ defmodule AshHqWeb.Pages.Media do
     ~F"""
     <div class="container sm:mx-auto">
       <div class="grid grid-cols-2 gap-4">
-        <div class="col-span-2 lg:col-span-1 flex-col">
-          <div class="text-xl">Podcasts</div>
+        <div class="col-span-2 lg:col-span-1 flex-col flex items-center justify-center">
+          <div class="text-3xl font-bold mt-8 mb-8 text-center">Podcasts</div>
           <iframe
             allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
             frameborder="0"
@@ -35,8 +35,8 @@ defmodule AshHqWeb.Pages.Media do
             src="https://embed.podcasts.apple.com/ro/podcast/27-ash-framework-with-zach-daniel/id1516100616?i=1000503190100"
           />
         </div>
-        <div class="col-span-2 lg:col-span-1">
-          <div class="text-xl">Youtube</div>
+        <div class="col-span-2 lg:col-span-1 flex-col flex items-center">
+          <div class="text-3xl font-bold mt-8 mb-8 text-center">Youtube Playlist</div>
           <iframe
             width="560"
             height="315"
@@ -47,38 +47,38 @@ defmodule AshHqWeb.Pages.Media do
             allowfullscreen
           />
         </div>
-
-        <div class="col-span-2 lg:col-span-1 text-2xl">
-          <div class="text-xl mb-8">Example Projects</div>
-          <ul class="list-disc">
-            <li class="mb-4">
-              <a
-                class="hover:text-primary-light-400 dark:hover:text-primary-dark-400"
-                href="https://github.com/ash-project/ash_hq"
-              >AshHq (this website)</a>
-            </li>
-            <li class="mb-4">
-              <a
-                class="hover:text-primary-light-400 dark:hover:text-primary-dark-400"
-                href="https://github.com/team-alembic/realworld"
-              >Real World</a>
-            </li>
-            <li class="mb-4">
-              <a
-                class="hover:text-primary-light-400 dark:hover:text-primary-dark-400"
-                href="https://github.com/lukegalea/openats"
-              >Open ATS</a>
-            </li>
-            <li class="mb-4">
-              <a
-                class="hover:text-primary-light-400 dark:hover:text-primary-dark-400"
-                href="https://github.com/brettkolodny/todoish"
-              >Todoish</a>
-            </li>
-          </ul>
         </div>
-      </div>
+        </div>
+
+        <div class="text-2xl flex flex-col items-center justify-center text-center">
+          <div class="text-3xl font-bold mt-8 mb-8 text-center">Example Projects</div>
+          {#for %{title: title, href: href, description: description} <- examples()}
+            <div class="max-w-7xl px-4 sm:px-6 md:px-8 my-8 hidden sm:block">
+              <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
+                <a href={href}>{title}</a>
+              </h2>
+              <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6">
+                {raw description}
+              </p>
+            </div>
+          {/for}
     </div>
     """
+  end
+
+  defp examples do
+    [
+      %{title: "AshHq", href: "https://github.com/ash-project/ash_hq", description: """
+      This website that you're on right now!
+      It contains all kinds of goodies, from a (now deprecated) ChatGPT bot, to a discord channel synchronizer, to a documentation importer.
+      """},
+      %{title: "Real World", href: "https://github.com/team-alembic/real-world", description: """
+      An idiomatic Ash implementation of the <a href="https://codebase.show/projects/realworld">Real World example app</a>. Contains lots of idiomatic Ash code, and uses a demo application that is
+      available in hundreds of languages/frameworks.
+      """},
+      %{title: "Todoish", href: "https://github.com/brettkolodny/todoish", description: """
+      A bite sized Ash & LiveView application that lets you create and shate to-do lists.
+      """}
+    ]
   end
 end

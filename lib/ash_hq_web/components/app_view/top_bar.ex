@@ -164,7 +164,7 @@ defmodule AshHqWeb.Components.AppView.TopBar do
                 </LivePatch>
               </div>
               <div class="py-1" role="none">
-                <Form for={:sign_out} action={~p'/sign-out'} method="get">
+                <Form for={%{}} as={:sign_out} action={~p'/sign-out'} method="get">
                   <button
                     label="logout"
                     type="submit"

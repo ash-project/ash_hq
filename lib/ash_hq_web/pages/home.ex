@@ -3,7 +3,7 @@ defmodule AshHqWeb.Pages.Home do
 
   use Surface.LiveComponent
 
-  alias AshHqWeb.Components.{CalloutText, CodeExample, Feature, SearchBar}
+  alias AshHqWeb.Components.{CalloutText, CodeExample, Feature}
   alias Surface.Components.Form
   alias Surface.Components.Form.{Field, Submit, TextInput}
   import AshHqWeb.Components.CodeExample, only: [to_code: 1]

@@ -48,7 +48,7 @@ defmodule AshHqWeb.Components.Search do
               <div class="w-full flex flex-row justify-start top-0">
                 <Heroicons.Outline.SearchIcon class="h-6 w-6 mr-4" />
                 <div class="flex flex-row justify-between w-full mr-10 border-b border-base-light-600">
-                  <Form for={:search} change="search" submit="go-to-doc" class="w-full">
+                  <Form for={%{}} as={:sign_out} change="search" submit="go-to-doc" class="w-full">
                     <input
                       id="search-input"
                       name="search"
@@ -60,7 +60,7 @@ defmodule AshHqWeb.Components.Search do
                 </div>
               </div>
               <div class="ml-10">
-                <Form for={:types} change={@change_types}>
+                <Form for={%{}} as={:types} change={@change_types}>
                   <div class="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:flex lg:flex-row lg:space-x-6 lg:flex-wrap mt-2 text-sm text-base-light-500 dark:text-base-dark-300">
                     <div class="hidden lg:block">Search For:</div>
                     {#for type <- AshHq.Docs.Extensions.Search.Types.types() -- ["Forum"]}
