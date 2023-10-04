@@ -30,7 +30,7 @@ defmodule AshHqWeb.Components.AppView.TopBar do
           <img class="h-10 lg:hidden" src="/images/ash-logo.png">
         </a>
       </div>
-      {#if @live_action == :docs_dsl}
+      {#if @live_action in [:docs_dsl, :home]}
         <SearchBar class="hidden xl:block" />
       {/if}
       <div class="flex flex-row align-middle items-center space-x-2">

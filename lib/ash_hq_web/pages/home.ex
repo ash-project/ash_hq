@@ -38,7 +38,14 @@ defmodule AshHqWeb.Pages.Home do
           >
             Get Started
           </a>
-          <SearchBar class="w-80 md:w-96" device_brand={@device_brand} />
+          <div class="flex flex-col space-y-4 md:space-x-4 md:space-y-0 md:flex-row items-center rounded-lg mt-8 mb-6 md:mb-10 border border-primary-light-500 hover:bg-primary-light-500 dark:hover:bg-primary-dark-500 dark:border-primary-dark-500">
+            <a
+              href="https://alembic.com.au/contact"
+              class="flex justify-center items-center w-full md:w-auto h-12 px-4 rounded-lg font-semibold dark:text-white"
+            >
+              Talk to an expert
+            </a>
+          </div>
         </div>
 
         <div class="mb-4 md:mb-8 hidden sm:block">
@@ -83,6 +90,7 @@ defmodule AshHqWeb.Pages.Home do
             <p class="italic text-sm max-w-[100px] text-center">Try our interactive tutorial with Livebook</p>
           </div>
         </div>
+
 
         <div class="grid justify-center grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 dark:bg-none dark:bg-opacity-0 py-6 text-center mx-8 gap-16 max-w-lg md:max-w-lg xl:max-w-4xl mt-2 pt-16">
           <Feature name="Resources">
