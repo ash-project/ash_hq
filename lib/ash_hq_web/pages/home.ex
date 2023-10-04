@@ -253,7 +253,7 @@ defmodule AshHqWeb.Pages.Home do
 
         <div class="flex flex-col mt-12 mb-2">
           <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400 text-center">
-            In partnership with
+            Service delivery partner
           </h2>
           <div class="flex flex-row justify-around mb-2">
             <p class="mt-4 text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50">
