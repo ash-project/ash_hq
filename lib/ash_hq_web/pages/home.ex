@@ -253,16 +253,20 @@ defmodule AshHqWeb.Pages.Home do
 
         <div class="flex flex-col mt-12 mb-2">
           <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400 text-center">
-            Service delivery partner
+            <a href="https://alembic.com.au/contact">
+              Service delivery partner
+            </a>
           </h2>
           <div class="flex flex-row justify-around mb-2">
             <p class="mt-4 text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50">
-              <img class="h-12" src="/images/alembic.svg">
+              <a href="https://alembic.com.au/contact">
+                <img class="h-12 hover:opacity-80 cursor-pointer" src="/images/alembic.svg">
+              </a>
             </p>
           </div>
           <div class="flex flex-row text-xl">
             <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6 text-center">
-              Alembic specializes in providing custom solutions that ensure the success of your Ash Framework projects.
+              <a href="https://alembic.com.au/contact"><CalloutText text="Alembic" class="hover:opacity-70"/></a> specializes in providing custom solutions that ensure the success of your Ash Framework projects.
               Leveraging extensive knowledge of both Ash Framework and the broader Elixir ecosystem, our team is
               well-equipped to craft personalized projects, implement innovative features, or optimize your existing codebases.
               Reach out to learn more about how our tailored solutions can make your project excel.
