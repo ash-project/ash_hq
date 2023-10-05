@@ -91,7 +91,6 @@ defmodule AshHqWeb.Pages.Home do
           </div>
         </div>
 
-
         <div class="grid justify-center grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 dark:bg-none dark:bg-opacity-0 py-6 text-center mx-8 gap-16 max-w-lg md:max-w-lg xl:max-w-4xl mt-2 pt-16">
           <Feature name="Resources">
             <:description>
@@ -266,7 +265,8 @@ defmodule AshHqWeb.Pages.Home do
           </div>
           <div class="flex flex-row text-xl">
             <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6 text-center">
-              <a href="https://alembic.com.au/contact"><CalloutText text="Alembic" class="hover:opacity-70"/></a> specializes in providing custom solutions that ensure the success of your Ash Framework projects.
+              <a href="https://alembic.com.au/contact"><CalloutText text="Alembic" class="hover:opacity-70" /></a>
+              specializes in providing custom solutions that ensure the success of your Ash Framework projects.
               Leveraging extensive knowledge of both Ash Framework and the broader Elixir ecosystem, our team is
               well-equipped to craft personalized projects, implement innovative features, or optimize your existing codebases.
               Reach out to learn more about how our tailored solutions can make your project excel.
