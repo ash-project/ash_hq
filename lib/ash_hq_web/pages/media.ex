@@ -30,7 +30,7 @@ defmodule AshHqWeb.Pages.Media do
             height="175"
             style="width:100%;max-width:660px;overflow:hidden;background:transparent;"
             sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
-            src="https://embed.podcasts.apple.com/kr/podcast/123-ash-framework-models-resources/id1516100616?i=1000584632201"
+            src="https://embed.podcasts.apple.com/us/podcast/123-ash-framework-models-resources/id1516100616?i=1000584632201"
           />
           <iframe
             allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
@@ -38,7 +38,7 @@ defmodule AshHqWeb.Pages.Media do
             height="175"
             style="width:100%;max-width:660px;overflow:hidden;background:transparent;"
             sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
-            src="https://embed.podcasts.apple.com/ro/podcast/27-ash-framework-with-zach-daniel/id1516100616?i=1000503190100"
+            src="https://embed.podcasts.apple.com/us/podcast/27-ash-framework-with-zach-daniel/id1516100616?i=1000503190100"
           />
         </div>
         <div class="col-span-2 lg:col-span-1 flex-col flex items-center">
