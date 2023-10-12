@@ -132,7 +132,7 @@ defmodule AshHq.Docs.Indexer do
         "name" => dsl.name,
         "library_name" => dsl.library_name,
         "doc" => dsl.doc,
-        "call_name" => "#{dsl.extension_module}.#{dsl.sanitized_path}.#{dsl.name}"
+        "call_name" => "mix #{dsl.extension_module}.#{dsl.sanitized_path}.#{dsl.name}"
       }
     end)
   end
