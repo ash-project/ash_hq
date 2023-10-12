@@ -9,12 +9,20 @@ defmodule AshHq.Discord.Listener do
   @user_id 1_066_406_803_769_933_834
   @server_id 711_271_361_523_351_632
 
-  def start_link() do
+  def start_link do
     Consumer.start_link(__MODULE__)
   end
 
   def search_results!(interaction) do
-    item_list = AshHq.Docs.Indexer.search!(search)
+    search =
+      interaction.data.options
+      |> Enum.find_value(fn option ->
+        if option.name == "search" do
+          option.value
+        end
+      end)
+
+    item_list = AshHq.Docs.Indexer.search(search)
 
     item_list = Enum.take(item_list, 10)
 
@@ -99,7 +107,7 @@ defmodule AshHq.Discord.Listener do
     end
   end
 
-  defp build_search_action() do
+  defp build_search_action do
     command = %{
       name: "ash_hq_search",
       description: "Search AshHq Documentation",

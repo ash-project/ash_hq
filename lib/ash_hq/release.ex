@@ -27,10 +27,6 @@ defmodule AshHq.Release do
     Application.fetch_env!(@app, :ecto_repos)
   end
 
-  defp apis do
-    Application.fetch_env!(@app, :ash_apis)
-  end
-
   defp load_app do
     Application.load(@app)
   end

@@ -1,4 +1,5 @@
 defmodule AshHq.Docs.Indexer do
+  @moduledoc "Indexes content and serves up a search interface"
   use GenServer
 
   require Ash.Query
