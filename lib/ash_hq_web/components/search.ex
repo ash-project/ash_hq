@@ -59,27 +59,6 @@ defmodule AshHqWeb.Components.Search do
                   </Form>
                 </div>
               </div>
-              <div class="ml-10">
-                <Form for={%{}} as={:types} change={@change_types}>
-                  <div class="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:flex lg:flex-row lg:space-x-6 lg:flex-wrap mt-2 text-sm text-base-light-500 dark:text-base-dark-300">
-                    <div class="hidden lg:block">Search For:</div>
-                    {#for type <- AshHq.Docs.Extensions.Search.Types.types() -- ["Forum"]}
-                      <div class="flex flex-row items-center">
-                        <Checkbox
-                          class="mr-2"
-                          id={"#{type}-selected"}
-                          value={type in @selected_types}
-                          name={"types[#{type}]"}
-                        />
-                        <label for={"#{type}-selected"}>
-                          <Icon type={type} classes="h-5 w-5 flex-none -mt-0.5 inline-block" />
-                          {type}
-                        </label>
-                      </div>
-                    {/for}
-                  </div>
-                </Form>
-              </div>
             </div>
             <div class="grid overflow-auto scroll-parent">
               {render_items(assigns, @item_list)}
