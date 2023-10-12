@@ -28,6 +28,20 @@ AshHq.Docs.Library.create!(
 
 AshHq.Docs.Library.create!(
   %{
+    name: "ash_sqlite",
+    display_name: "AshSqlite",
+    order: 17,
+    module_prefixes: ["AshSqlite"],
+    description: """
+    A Sqlite data layer for Ash resources. Supports fewer features than postgres, but is very lightweight and can be used as an in memory database."
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
     name: "ash_phoenix",
     display_name: "AshPhoenix",
     module_prefixes: ["AshPhoenix"],
