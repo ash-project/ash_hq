@@ -1,4 +1,4 @@
-FROM hexpm/elixir:1.15.4-erlang-26.0.2-ubuntu-bionic-20230126
+FROM hexpm/elixir:1.15.4-erlang-26.0.2-ubuntu-focal-20230126
 # install build dependencies
 USER root
 RUN apt-get update
@@ -13,9 +13,13 @@ RUN apt-get install -y g++
 RUN apt-get install -y make
 RUN apt-get install -y curl
 RUN apt-get install -y build-essential
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y esl-erlang
 RUN apt-get install -y apt-transport-https
 RUN apt-get install -y ca-certificates
+RUN apt-get install -y fuse3 libfuse3-dev libglib2.0-dev
+RUN apt-get install -y sqlite3
+COPY --from=flyio/litefs:0.5 /usr/local/bin/litefs /usr/local/bin/litefs
 ENV NODE_MAJOR=16
 RUN mkdir -p /etc/apt/keyrings
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
@@ -45,4 +49,5 @@ COPY ./config/runtime.exs config/runtime.exs
 COPY ./rel ./rel
 RUN mix release --overwrite
 RUN mkdir indexes
-CMD ["_build/prod/rel/ash_hq/bin/ash_hq", "start"]
+COPY ./litefs.yml ./litefs.yml
+ENTRYPOINT litefs mount

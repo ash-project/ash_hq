@@ -1,0 +1,3 @@
+!# bin/bash
+
+./ash_hq eval "'AshHq.Release.migrate'"

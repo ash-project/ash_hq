@@ -8,7 +8,7 @@
 import Config
 
 config :ash_hq,
-  ecto_repos: [AshHq.Repo]
+  ecto_repos: [AshHq.Repo, AshHq.SqliteRepo]
 
 config :ash, allow_flow: true
 
@@ -27,9 +27,7 @@ config :appsignal, :config, revision: "test-4"
 config :ash_hq,
   ash_apis: [
     AshHq.Accounts,
-    AshHq.Ashley,
     AshHq.Blog,
-    AshHq.Discord,
     AshHq.Docs,
     AshHq.Github,
     AshHq.MailingList
@@ -87,8 +85,6 @@ config :esbuild,
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
-
-config :open_ai, :http_client_impl, AshHq.Ashley.HttpClient
 
 # Configures Elixir's Logger
 config :logger, :console,

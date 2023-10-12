@@ -34,6 +34,7 @@ defmodule AshHq.Application do
         AshHq.Vault,
         # Start the Ecto repository
         AshHq.Repo,
+        AshHq.SqliteRepo,
         # Start the Telemetry supervisor
         AshHqWeb.Telemetry,
         # Start the PubSub system
@@ -42,6 +43,8 @@ defmodule AshHq.Application do
         AshHqWeb.Endpoint,
         {AshHq.Docs.Library.Agent, nil},
         {Cluster.Supervisor, [topologies, [name: AshHq.ClusterSupervisor]]},
+        {Haystack.Storage.ETS, storage: AshHq.Docs.Indexer.storage()},
+        AshHq.Docs.Indexer,
         AshHq.Github.Monitor
         # Start a worker by calling: AshHq.Worker.start_link(arg)
         # {AshHq.Worker, arg}

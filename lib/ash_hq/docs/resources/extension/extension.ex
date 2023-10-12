@@ -2,8 +2,26 @@ defmodule AshHq.Docs.Extension do
   @moduledoc false
 
   use Ash.Resource,
-    data_layer: AshPostgres.DataLayer,
+    data_layer: AshSqlite.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
+
+  sqlite do
+    table "extensions"
+    repo AshHq.SqliteRepo
+
+    references do
+      reference :library_version, on_delete: :delete
+    end
+  end
+
+  search do
+    doc_attribute :doc
+    load_for_search library_version: [:library_display_name, :library_name]
+  end
+
+  render_markdown do
+    render_attributes doc: :doc_html
+  end
 
   actions do
     defaults [:update, :destroy]
@@ -29,15 +47,6 @@ defmodule AshHq.Docs.Extension do
 
       change manage_relationship(:dsls, type: :create)
     end
-  end
-
-  search do
-    doc_attribute :doc
-    load_for_search library_version: [:library_display_name, :library_name]
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html
   end
 
   attributes do
@@ -84,15 +93,6 @@ defmodule AshHq.Docs.Extension do
 
     has_many :dsls, AshHq.Docs.Dsl
     has_many :options, AshHq.Docs.Option
-  end
-
-  postgres do
-    table "extensions"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
   end
 
   code_interface do

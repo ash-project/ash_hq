@@ -2,8 +2,40 @@ defmodule AshHq.Docs.Dsl do
   @moduledoc false
 
   use Ash.Resource,
-    data_layer: AshPostgres.DataLayer,
+    data_layer: AshSqlite.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
+
+  sqlite do
+    table "dsls"
+    repo AshHq.SqliteRepo
+
+    references do
+      reference :library_version, on_delete: :delete
+      reference :dsl, on_delete: :delete
+    end
+
+    migration_defaults optional_args: "[]"
+  end
+
+  search do
+    doc_attribute :doc
+
+    load_for_search [
+      :extension_name,
+      :extension_target,
+      :extension_module,
+      :library_name
+    ]
+
+    weight_content(0.2)
+
+    sanitized_name_attribute :sanitized_path
+    use_path_for_name? true
+  end
+
+  render_markdown do
+    render_attributes doc: :doc_html
+  end
 
   actions do
     defaults [:update, :destroy]
@@ -33,26 +65,6 @@ defmodule AshHq.Docs.Dsl do
       change manage_relationship(:options, type: :direct_control)
       change manage_relationship(:library_version, type: :append_and_remove)
     end
-  end
-
-  search do
-    doc_attribute :doc
-
-    load_for_search [
-      :extension_name,
-      :extension_target,
-      :extension_module,
-      :library_name
-    ]
-
-    weight_content(0.2)
-
-    sanitized_name_attribute :sanitized_path
-    use_path_for_name? true
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html
   end
 
   attributes do
@@ -113,18 +125,6 @@ defmodule AshHq.Docs.Dsl do
     has_many :dsls, __MODULE__
   end
 
-  postgres do
-    table "dsls"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-      reference :dsl, on_delete: :delete
-    end
-
-    migration_defaults optional_args: "[]"
-  end
-
   code_interface do
     define_for AshHq.Docs
     define :read
@@ -134,14 +134,14 @@ defmodule AshHq.Docs.Dsl do
     description "An entity or section in an Ash DSL"
   end
 
-  aggregates do
-    first :extension_type, :extension, :type
-    first :extension_order, :extension, :order
-    first :extension_name, :extension, :name
-    first :extension_module, :extension, :module
-    first :extension_target, :extension, :target
-    first :version_name, :library_version, :version
-    first :library_name, [:library_version, :library], :name
-    first :library_id, [:library_version, :library], :id
+  calculations do
+    calculate :extension_type, :string, expr(extension.type)
+    calculate :extension_order, :integer, expr(extension.order)
+    calculate :extension_name, :string, expr(extension.name)
+    calculate :extension_module, :string, expr(extension.module)
+    calculate :extension_target, :string, expr(extension.target)
+    calculate :version_name, :string, expr(library_version.version)
+    calculate :library_name, :string, expr(library_version.library.name)
+    calculate :library_id, :string, expr(library_version.library.id)
   end
 end

@@ -24,6 +24,10 @@ config :ash_hq, AshHqWeb.Endpoint,
   secret_key_base: secret_key_base,
   server: false
 
+config :ash_hq, AshHq.SqliteRepo,
+  database: Path.join(__DIR__, "../ash-hq#{System.get_env("MIX_TEST_PARTITION")}.db"),
+  pool_size: 10
+
 config :ash_hq, cloak_key: "J6ED3yBWjlaOW/5byrukZTEryKa++yXWblJuhP91Qq8="
 
 # In test we don't send emails.

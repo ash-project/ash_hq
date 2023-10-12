@@ -41,6 +41,7 @@ defmodule AshHq.MixProject do
     [
       {:ash, github: "ash-project/ash", override: true},
       {:ash_postgres, github: "ash-project/ash_postgres"},
+      {:ash_sqlite, github: "ash-project/ash_sqlite"},
       {:ash_admin, github: "ash-project/ash_admin"},
       {:ash_phoenix, github: "ash-project/ash_phoenix", override: true},
       {:ash_graphql, github: "ash-project/ash_graphql"},
@@ -50,6 +51,7 @@ defmodule AshHq.MixProject do
       {:ash_authentication_phoenix, "~> 1.6"},
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, github: "ash-project/ash_csv"},
+      {:spark, github: "ash-project/spark", override: true},
       # HTTP calls
       {:req, "~> 0.4.3"},
       # Appsignal
@@ -59,11 +61,8 @@ defmodule AshHq.MixProject do
       # Discord
       {:nostrum, github: "zachdaniel/nostrum"},
       {:cowlib, "~> 2.11", hex: :remedy_cowlib, override: true},
-      # Ashley
-      {:open_ai, github: "hernanat/open_ai_ex"},
-      {:pinecone, "~> 0.1.0"},
-      # Tiktoken isn't working for some reason
-      # {:tiktoken, "~> 0.1.0"}
+      # Search
+      {:haystack, "~> 0.1.0"},
       # Clustering
       {:libcluster, "~> 3.3"},
       # UI

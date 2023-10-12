@@ -192,10 +192,6 @@ defmodule AshHq.Accounts.User do
     attribute :shirt_size, :string
     attribute :github_info, :map
 
-    attribute :ashley_access, :boolean do
-      default false
-    end
-
     create_timestamp :created_at
     update_timestamp :updated_at
   end

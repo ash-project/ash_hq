@@ -1,4 +1,3 @@
 #! /bin/sh
 
 flyctl deploy
-flyctl deploy -a ash-hq-importer

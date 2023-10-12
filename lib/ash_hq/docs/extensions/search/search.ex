@@ -60,11 +60,6 @@ defmodule AshHq.Docs.Extensions.Search do
         type: :atom,
         doc: "The text field to be used in the search"
       ],
-      library_version_attribute: [
-        type: :atom,
-        default: :library_version_id,
-        doc: "The attribute to use to filter by library version"
-      ],
       load_for_search: [
         type: {:list, :any},
         default: [],
@@ -138,10 +133,6 @@ defmodule AshHq.Docs.Extensions.Search do
       sanitized_name_attribute(resource)
     )
     |> List.wrap()
-  end
-
-  def library_version_attribute(resource) do
-    Extension.get_opt(resource, [:search], :library_version_attribute, :library_version_id)
   end
 
   def load_for_search(resource) do

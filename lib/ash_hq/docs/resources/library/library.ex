@@ -1,7 +1,14 @@
 defmodule AshHq.Docs.Library do
   @moduledoc false
   use Ash.Resource,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshSqlite.DataLayer
+
+  sqlite do
+    table "libraries"
+    repo AshHq.SqliteRepo
+
+    migration_defaults module_prefixes: "[]", skip_versions: "[]"
+  end
 
   actions do
     defaults [:create, :update, :destroy]
@@ -67,14 +74,8 @@ defmodule AshHq.Docs.Library do
 
     has_one :latest_library_version, AshHq.Docs.LibraryVersion do
       sort version: :desc
+      from_many? true
     end
-  end
-
-  postgres do
-    table "libraries"
-    repo AshHq.Repo
-
-    migration_defaults module_prefixes: "[]", skip_versions: "[]"
   end
 
   code_interface do
@@ -103,13 +104,8 @@ defmodule AshHq.Docs.Library do
     end
   end
 
-  aggregates do
-    first :latest_version, :versions, :version do
-      sort version: :desc
-    end
-
-    first :latest_version_id, :versions, :id do
-      sort version: :desc
-    end
+  calculations do
+    calculate :latest_version, :string, expr(latest_library_version.version)
+    calculate :latest_version_id, :uuid, expr(latest_library_version.id)
   end
 end

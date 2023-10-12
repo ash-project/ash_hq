@@ -25,8 +25,6 @@ defmodule AshHq.Docs.Library.Agent do
   end
 
   def clear do
-    AshHq.Discord.Listener.rebuild()
-
     Agent.update(__MODULE__, fn _state ->
       nil
     end)

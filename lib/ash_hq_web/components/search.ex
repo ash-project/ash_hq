@@ -95,6 +95,42 @@ defmodule AshHqWeb.Components.Search do
     ~F"""
     <div class="divide-y">
       {#for item <- items}
+        {#if item.__struct__ == AshHq.Docs.Guide}
+          <LivePatch
+            class="block w-full text-left border-base-light-300 dark:border-base-dark-600"
+            to={DocRoutes.doc_link(item)}
+            opts={id: "result-#{item.id}", "phx-click": @close}
+          >
+            <div class={
+              "hover:bg-base-light-100 dark:hover:bg-base-dark-750 py-1 w-full",
+              "bg-base-light-200 dark:bg-base-dark-700": @selected_item.id == item.id
+            }>
+              <div class="flex justify-start items-center space-x-2 pb-2 pl-2">
+                <div>
+                  <Icon type={item_type(item)} classes="h-4 w-4 flex-none mt-1 mx-1" />
+                </div>
+                <div class="flex flex-col">
+                  <div class="text-primary-light-700 dark:text-primary-dark-300">
+                    <span class="text-primary-light-700 dark:text-primary-dark-500">
+                      {item.library_name}
+                    </span>
+                    {item_type(item)}
+                  </div>
+                  <div class="flex flex-row flex-wrap items-center">
+                    <div class="font-bold">
+                      {item_name(item)}
+                    </div>
+                  </div>
+                  <div>
+                    {first_sentence(item)}
+                  </div>
+                </div>
+              </div>
+              <div>
+              </div>
+            </div>
+          </LivePatch>
+        {/if}
         {#if item.__struct__ != AshHq.Docs.Guide}
           <a
             class="block w-full text-left border-base-light-300 dark:border-base-dark-600"
@@ -103,106 +139,68 @@ defmodule AshHqWeb.Components.Search do
             phx-click={@close}
           >
             <div class={
-              "hover:bg-base-light-100 dark:hover:bg-base-dark-750 py-4",
+              "hover:bg-base-light-100 dark:hover:bg-base-dark-750 py-1 w-full",
               "bg-base-light-200 dark:bg-base-dark-700": @selected_item.id == item.id
             }>
               <div class="flex justify-start items-center space-x-2 pb-2 pl-2">
                 <div>
                   <Icon type={item_type(item)} classes="h-4 w-4 flex-none mt-1 mx-1" />
                 </div>
-                <div class="flex flex-row flex-wrap items-center">
-                  {#for {path_item, index} <- Enum.with_index(item_path(item))}
-                    {#if index != 0}
-                      <Heroicons.Solid.ChevronRightIcon class="h-4 w-4 mt-1" />
-                    {/if}
-                    <div>
-                      {path_item}
+                <div class="flex flex-col">
+                  <div class="text-primary-light-700 dark:text-primary-dark-300">
+                    <span class="text-primary-light-700 dark:text-primary-dark-500">
+                      {item.library_name}
+                    </span>
+                    {item_type(item)}
+                  </div>
+                  <div class="flex flex-row flex-wrap items-center">
+                    <div class="font-bold">
+                      {item_name(item)}
                     </div>
-                  {/for}
-                  <Heroicons.Solid.ChevronRightIcon class="h-4 w-4 mt-1" />
-                  <div class="font-bold">
-                    {item_name(item)}
+                  </div>
+                  <div>
+                    {first_sentence(item)}
                   </div>
                 </div>
               </div>
-              <div class="text-base-light-700 dark:text-base-dark-400 ml-10">
-                {raw(item.search_headline)}
+              <div>
               </div>
             </div>
           </a>
-        {/if}
-        {#if item.__struct__ == AshHq.Docs.Guide}
-          <LivePatch
-            class="block w-full text-left border-base-light-300 dark:border-base-dark-600"
-            to={DocRoutes.doc_link(item)}
-            opts={id: "result-#{item.id}", "phx-click": @close}
-          >
-            <div class={
-              "hover:bg-base-light-100 dark:hover:bg-base-dark-750 py-4",
-              "bg-base-light-200 dark:bg-base-dark-700": @selected_item.id == item.id
-            }>
-              <div class="flex justify-start items-center space-x-2 pb-2 pl-2">
-                <div>
-                  <Icon type={item_type(item)} classes="h-4 w-4 flex-none mt-1 mx-1" />
-                </div>
-                <div class="flex flex-row flex-wrap items-center">
-                  {#for {path_item, index} <- Enum.with_index(item_path(item))}
-                    {#if index != 0}
-                      <Heroicons.Solid.ChevronRightIcon class="h-4 w-4 mt-1" />
-                    {/if}
-                    <div>
-                      {path_item}
-                    </div>
-                  {/for}
-                  <Heroicons.Solid.ChevronRightIcon class="h-4 w-4 mt-1" />
-                  <div class="font-bold">
-                    {item_name(item)}
-                  </div>
-                </div>
-              </div>
-              <div class="text-base-light-700 dark:text-base-dark-400 ml-10">
-                {raw(item.search_headline)}
-              </div>
-            </div>
-          </LivePatch>
         {/if}
       {/for}
     </div>
     """
   end
 
-  defp item_name(%{thread_name: thread_name, channel_name: channel_name}),
-    do: "#{String.capitalize(channel_name)} Forum: #{inspect(thread_name)}"
+  defp first_sentence(%{text: text}), do: first_sentence(text)
+  defp first_sentence(%{doc: doc}), do: first_sentence(doc)
 
+  defp first_sentence(doc) do
+    first_sentence =
+      doc
+      |> String.trim()
+      |> String.split("<!--- heads-end -->", parts: 2)
+      |> List.last()
+      |> String.trim()
+      |> String.split("\n", parts: 2)
+      |> Enum.at(0)
+      |> String.trim()
+
+    if String.starts_with?(first_sentence, "`") do
+      ""
+    else
+      first_sentence
+    end
+  end
+
+  defp item_name(%AshHq.Docs.Function{call_name: call_name, arity: arity}),
+    do: call_name <> "/#{arity}"
+
+  defp item_name(%AshHq.Docs.Option{path: path, name: name}), do: Enum.join(path ++ [name], ".")
+  defp item_name(%AshHq.Docs.Dsl{path: path, name: name}), do: Enum.join(path ++ [name], ".")
   defp item_name(%{name: name}), do: name
   defp item_name(%{version: version}), do: version
-
-  defp item_path(%{
-         library_name: library_name,
-         extension_name: extension_name,
-         path: path
-       }) do
-    [library_name, extension_name, path] |> List.flatten()
-  end
-
-  defp item_path(%{
-         library_name: library_name,
-         module_name: module_name
-       }) do
-    [library_name, module_name]
-  end
-
-  defp item_path(%{library_name: library_name}) do
-    [library_name]
-  end
-
-  defp item_path(%{library_version: %{library_name: library_name}}) do
-    [library_name]
-  end
-
-  defp item_path(_) do
-    []
-  end
 
   def mount(socket) do
     {:ok, socket}
@@ -273,19 +271,14 @@ defmodule AshHqWeb.Components.Search do
     if socket.assigns.search in [nil, ""] do
       socket
     else
-      %{result: item_list} =
-        AshHq.Docs.Search.run!(
-          socket.assigns.search,
-          %{types: socket.assigns[:selected_types]}
-        )
-
-      item_list = Enum.take(item_list, 50)
-
-      selected_item = Enum.at(item_list, 0)
+      item_list =
+        socket.assigns.search
+        |> AshHq.Docs.Indexer.search()
+        |> Enum.take(50)
 
       socket
       |> assign(:item_list, item_list)
-      |> set_selected_item(selected_item)
+      |> set_selected_item(Enum.at(item_list, 0))
     end
   end
 

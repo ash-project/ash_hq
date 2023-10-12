@@ -2,8 +2,18 @@ defmodule AshHq.Docs.LibraryVersion do
   @moduledoc false
 
   use Ash.Resource,
-    data_layer: AshPostgres.DataLayer,
+    data_layer: AshSqlite.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
+
+  sqlite do
+    table "library_versions"
+    repo AshHq.SqliteRepo
+  end
+
+  search do
+    name_attribute :version
+    load_for_search [:library_name, :library_display_name]
+  end
 
   actions do
     defaults [:update, :destroy]
@@ -81,12 +91,6 @@ defmodule AshHq.Docs.LibraryVersion do
     end
   end
 
-  search do
-    name_attribute :version
-    library_version_attribute :id
-    load_for_search [:library_name, :library_display_name]
-  end
-
   attributes do
     uuid_primary_key :id
 
@@ -111,11 +115,6 @@ defmodule AshHq.Docs.LibraryVersion do
     has_many :guides, AshHq.Docs.Guide
     has_many :modules, AshHq.Docs.Module
     has_many :mix_tasks, AshHq.Docs.MixTask
-  end
-
-  postgres do
-    table "library_versions"
-    repo AshHq.Repo
   end
 
   code_interface do
@@ -143,18 +142,8 @@ defmodule AshHq.Docs.LibraryVersion do
     end
   end
 
-  preparations do
-    prepare AshHq.Docs.LibraryVersion.Preparations.SortBySortableVersionInstead
-  end
-
-  aggregates do
-    first :library_name, :library, :name
-    first :library_display_name, :library, :display_name
-  end
-
   calculations do
-    calculate :sortable_version,
-              {:array, :string},
-              expr(fragment("string_to_array(?, '.')", version))
+    calculate :library_name, :string, expr(library.name)
+    calculate :library_display_name, :string, expr(library.display_name)
   end
 end

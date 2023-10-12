@@ -1,13 +1,50 @@
 defmodule AshHq.Docs.Guide do
   @moduledoc false
   use Ash.Resource,
-    data_layer: AshPostgres.DataLayer,
+    data_layer: AshSqlite.DataLayer,
     extensions: [
       AshHq.Docs.Extensions.Search,
       AshHq.Docs.Extensions.RenderMarkdown,
       AshGraphql.Resource,
       AshAdmin.Resource
     ]
+
+  sqlite do
+    repo AshHq.SqliteRepo
+    table "guides"
+
+    references do
+      reference :library_version, on_delete: :delete
+    end
+  end
+
+  search do
+    doc_attribute :text
+    show_docs_on [:sanitized_name, :sanitized_route]
+    type "Guides"
+    load_for_search [:library_name, library_version: [:library_name, :library_display_name]]
+  end
+
+  render_markdown do
+    render_attributes text: :text_html
+    table_of_contents? true
+  end
+
+  graphql do
+    type :guide
+
+    queries do
+      list :list_guides, :read_for_version
+    end
+  end
+
+  admin do
+    form do
+      field :text do
+        type :markdown
+      end
+    end
+  end
 
   actions do
     defaults [:create, :update, :destroy]
@@ -31,34 +68,6 @@ defmodule AshHq.Docs.Guide do
       pagination offset?: true, countable: true, default_limit: 25, required?: false
 
       filter expr(library_version.id in ^arg(:library_versions))
-    end
-  end
-
-  search do
-    doc_attribute :text
-    show_docs_on [:sanitized_name, :sanitized_route]
-    type "Guides"
-    load_for_search library_version: [:library_name, :library_display_name]
-  end
-
-  render_markdown do
-    render_attributes text: :text_html
-    table_of_contents? true
-  end
-
-  graphql do
-    type :guide
-
-    queries do
-      list :list_guides, :read_for_version
-    end
-  end
-
-  admin do
-    form do
-      field :text do
-        type :markdown
-      end
     end
   end
 
@@ -112,15 +121,6 @@ defmodule AshHq.Docs.Guide do
     end
   end
 
-  postgres do
-    repo AshHq.Repo
-    table "guides"
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
-  end
-
   code_interface do
     define_for AshHq.Docs
   end
@@ -145,5 +145,9 @@ defmodule AshHq.Docs.Guide do
         changeset
       end
     end
+  end
+
+  calculations do
+    calculate :library_name, :string, expr(library_version.library.name)
   end
 end

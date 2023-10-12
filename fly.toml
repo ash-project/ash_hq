@@ -6,11 +6,12 @@ kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
-[deploy]
-  release_command = "_build/prod/rel/ash_hq/bin/ash_hq eval 'AshHq.Release.migrate'"
-  
 [env]
   RELEASE_COOKIE = "VsipafjUVIYVpiYiljPg6DNZB8XiSnEf4zLi8WOf9bAU0XK7HuHQqA=="
+
+[mounts]
+source = "litefs"
+destination = "/var/lib/litefs"
 
 [[services]]
   internal_port = 4000

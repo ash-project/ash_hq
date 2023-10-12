@@ -4,6 +4,7 @@
     :phoenix,
     :ash,
     :ash_postgres,
+    :ash_sqlite,
     :ash_graphql,
     :surface,
     :ash_admin,
@@ -23,7 +24,6 @@
   locals_without_parens: [
     has_name_attribute?: 1,
     name_attribute: 1,
-    library_version_attribute: 1,
     load_for_search: 1,
     doc_attribute: 1,
     render_attributes: 1,

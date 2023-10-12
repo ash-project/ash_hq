@@ -2,8 +2,38 @@ defmodule AshHq.Docs.Function do
   @moduledoc false
 
   use Ash.Resource,
-    data_layer: AshPostgres.DataLayer,
+    data_layer: AshSqlite.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
+
+  sqlite do
+    table "functions"
+    repo AshHq.SqliteRepo
+
+    references do
+      reference :library_version, on_delete: :delete
+    end
+  end
+
+  search do
+    doc_attribute :doc
+
+    load_for_search [
+      :version_name,
+      :library_name,
+      :module_name,
+      :call_name,
+      :library_id
+    ]
+
+    type "Code"
+
+    show_docs_on :module_sanitized_name
+  end
+
+  render_markdown do
+    render_attributes doc: :doc_html, heads: :heads_html
+    header_ids? false
+  end
 
   actions do
     defaults [:update, :destroy]
@@ -24,26 +54,6 @@ defmodule AshHq.Docs.Function do
 
       change manage_relationship(:library_version, type: :append_and_remove)
     end
-  end
-
-  search do
-    doc_attribute :doc
-
-    load_for_search [
-      :version_name,
-      :library_name,
-      :module_name,
-      :library_id
-    ]
-
-    type "Code"
-
-    show_docs_on :module_sanitized_name
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html, heads: :heads_html
-    header_ids? false
   end
 
   attributes do
@@ -105,15 +115,6 @@ defmodule AshHq.Docs.Function do
     end
   end
 
-  postgres do
-    table "functions"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
-  end
-
   code_interface do
     define_for AshHq.Docs
   end
@@ -122,11 +123,12 @@ defmodule AshHq.Docs.Function do
     description "A function in a module exposed by an Ash library"
   end
 
-  aggregates do
-    first :version_name, :library_version, :version
-    first :library_name, [:library_version, :library], :name
-    first :library_id, [:library_version, :library], :id
-    first :module_name, :module, :name
-    first :module_sanitized_name, :module, :sanitized_name
+  calculations do
+    calculate :version_name, :string, expr(library_version.version)
+    calculate :library_name, :string, expr(library_version.library.name)
+    calculate :library_id, :uuid, expr(library_version.library.id)
+    calculate :module_name, :string, expr(module.name)
+    calculate :module_sanitized_name, :string, expr(module.sanitized_name)
+    calculate :call_name, :string, expr(module_name <> "." <> name)
   end
 end

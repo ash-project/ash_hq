@@ -135,8 +135,6 @@ defmodule AshHq.Docs.Importer do
             Logger.error(
               "Failed to import version #{name} #{version} #{Exception.format(:error, e, __STACKTRACE__)}"
             )
-
-            e
         end
       end)
     end
@@ -219,34 +217,21 @@ defmodule AshHq.Docs.Importer do
       end
 
     if result do
-      {:ok, library_version} =
-        AshHq.Repo.transaction(fn ->
-          Logger.info("Starting import of #{name}: #{version}")
+      Logger.info("Starting import of #{name}: #{version}")
 
-          id =
-            case LibraryVersion.by_version(library.id, version) do
-              {:ok, version} ->
-                LibraryVersion.destroy!(version)
-                version.id
-
-              _ ->
-                Ash.UUID.generate()
-            end
-
-          LibraryVersion.build!(
-            library.id,
-            version,
-            %{
-              timeout: :infinity,
-              id: id,
-              extensions: result[:extensions],
-              doc: result[:doc],
-              guides: result[:guides],
-              modules: result[:modules],
-              mix_tasks: result[:mix_tasks]
-            }
-          )
-        end)
+      library_version =
+        LibraryVersion.build!(
+          library.id,
+          version,
+          %{
+            timeout: :infinity,
+            extensions: result[:extensions],
+            doc: result[:doc],
+            guides: result[:guides],
+            modules: result[:modules],
+            mix_tasks: result[:mix_tasks]
+          }
+        )
 
       LibraryVersion
       |> Ash.Query.for_read(:read)

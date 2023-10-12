@@ -787,28 +787,21 @@ acc =
     modules
     |> Enum.with_index()
     |> Enum.reduce(acc, fn {module, order}, acc ->
-      case Utils.build_module(module, category, order) do
-        {:ok, built} ->
-          Map.update!(acc, :modules, fn modules ->
-            [built | modules]
-          end)
+      if Mix.Task.task?(module) do
+        Map.update!(acc, :mix_tasks, fn mix_tasks ->
+          [Utils.build_mix_task(module, category, order) | mix_tasks]
+        end)
+      else
+        case Utils.build_module(module, category, order) do
+          {:ok, built} ->
+            Map.update!(acc, :modules, fn modules ->
+              [built | modules]
+            end)
 
-        _ ->
-          acc
+          _ ->
+            acc
+        end
       end
-    end)
-  end)
-
-acc =
-  mix_project.project[:docs][:spark][:mix_tasks]
-  |> List.wrap()
-  |> Enum.reduce(acc, fn {category, mix_tasks}, acc ->
-    mix_tasks
-    |> Enum.with_index()
-    |> Enum.reduce(acc, fn {mix_task, order}, acc ->
-      Map.update!(acc, :mix_tasks, fn mix_tasks ->
-        [Utils.build_mix_task(mix_task, category, order) | mix_tasks]
-      end)
     end)
   end)
 
