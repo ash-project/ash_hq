@@ -7,7 +7,6 @@ defmodule AshHqWeb.Components.Search do
   alias AshHqWeb.Components.Icon
   alias AshHqWeb.DocRoutes
   alias Surface.Components.{Form, LivePatch}
-  alias Surface.Components.Form.Checkbox
 
   prop(close, :event, required: true)
   prop(libraries, :list, required: true)
@@ -159,10 +158,14 @@ defmodule AshHqWeb.Components.Search do
     first_sentence =
       doc
       |> String.trim()
-      |> String.split("<!--- heads-end -->", parts: 2)
+      |> String.split("<!--- heads-end -->", parts: 2, trim: true)
       |> List.last()
       |> String.trim()
-      |> String.split("\n", parts: 2)
+      |> String.split("\n", parts: 3, trim: true)
+      |> case do
+        ["#" <> _ | rest] -> rest
+        other -> other
+      end
       |> Enum.at(0)
       |> String.trim()
 
