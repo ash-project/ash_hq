@@ -30,7 +30,8 @@ config :ash_hq,
     AshHq.Blog,
     AshHq.Docs,
     AshHq.Github,
-    AshHq.MailingList
+    AshHq.MailingList,
+    AshHq.Discord
   ]
 
 config :ash_hq, AshHq.Repo,
