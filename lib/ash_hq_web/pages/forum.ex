@@ -306,7 +306,7 @@ defmodule AshHqWeb.Pages.Forum do
     channel =
       Enum.find(
         socket.assigns.channels,
-        &(&1.name == channel_name)
+        &(String.trim_trailing(&1.name, "-archive") == channel_name)
       )
 
     if is_nil(channel) do
