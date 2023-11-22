@@ -84,7 +84,7 @@ defmodule AshHqWeb.Pages.Media do
       },
       %{
         title: "Real World",
-        href: "https://github.com/team-alembic/real-world",
+        href: "https://github.com/team-alembic/realworld",
         description: """
         An idiomatic Ash implementation of the <a href="https://codebase.show/projects/realworld">Real World example app</a>. Contains lots of idiomatic Ash code, and uses a demo application that is
         available in hundreds of languages/frameworks.
