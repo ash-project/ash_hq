@@ -452,7 +452,7 @@ defmodule Utils do
            doc: module_doc,
            file: file,
            order: order,
-           category: category,
+           category: List.first(List.wrap(category)),
            functions:
              defs
              |> Enum.with_index()
