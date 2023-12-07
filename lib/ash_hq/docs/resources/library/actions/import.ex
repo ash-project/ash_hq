@@ -71,26 +71,36 @@ defmodule AshHq.Docs.Library.Actions.Import do
     if result do
       Logger.info("Starting import of #{name}: #{version}")
 
-      delete_except(
-        AshHq.Docs.load!(library, :latest_version_id).latest_version_id,
-        library.id
-      )
+      unless AshHq.Docs.exists?(
+               Ash.Query.for_read(AshHq.Docs.LibraryVersion, :read)
+               |> Ash.Query.filter(library_id == ^library.id and version == ^version)
+             ) do
+        AshHq.SqliteRepo.transaction(
+          fn ->
+            delete_except(
+              AshHq.Docs.load!(library, :latest_version_id).latest_version_id,
+              library.id
+            )
 
-      library_version =
-        AshHq.Docs.LibraryVersion.build!(
-          library.id,
-          version,
-          %{
-            timeout: :infinity,
-            extensions: result[:extensions],
-            doc: result[:doc],
-            guides: result[:guides],
-            modules: result[:modules],
-            mix_tasks: result[:mix_tasks]
-          }
+            library_version =
+              AshHq.Docs.LibraryVersion.build!(
+                library.id,
+                version,
+                %{
+                  timeout: :infinity,
+                  extensions: result[:extensions],
+                  doc: result[:doc],
+                  guides: result[:guides],
+                  modules: result[:modules],
+                  mix_tasks: result[:mix_tasks]
+                }
+              )
+
+            delete_except(library_version.id, library.id)
+          end,
+          timeout: :infinity
         )
-
-      delete_except(library_version.id, library.id)
+      end
     end
   end
 

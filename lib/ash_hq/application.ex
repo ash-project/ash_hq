@@ -11,16 +11,12 @@ defmodule AshHq.Application do
 
     Appsignal.Phoenix.LiveView.attach()
 
-    topologies = Application.get_env(:libcluster, :topologies) || []
+    # topologies = Application.get_env(:libcluster, :topologies) || []
 
     children =
       [
         {FLAME.Pool,
-         name: AshHq.ImporterPool,
-         min: 0,
-         max: 1,
-         max_concurrency: 10,
-         idle_shutdown_after: 30_000},
+         name: AshHq.ImporterPool, min: 0, max: 1, max_concurrency: 1, idle_shutdown_after: 30_000},
         !flame_parent && Supervisor.child_spec({Finch, name: AshHq.Finch}, id: AshHq.Finch),
         !flame_parent && Supervisor.child_spec({Finch, name: Swoosh.Finch}, id: Swoosh.Finch),
         AshHq.Vault,
@@ -32,10 +28,11 @@ defmodule AshHq.Application do
         # Start the PubSub system
         {Phoenix.PubSub, name: AshHq.PubSub},
         # Start the Endpoint (http/https)
-        !flame_parent && AshHqWeb.Endpoint,
+        AshHqWeb.Endpoint,
         {AshHq.Docs.Library.Agent, nil},
         # !flame_parent && {Cluster.Supervisor, [topologies, [name: AshHq.ClusterSupervisor]]},
         {Haystack.Storage.ETS, storage: AshHq.Docs.Indexer.storage()},
+        !flame_parent && {Cluster.Supervisor, [topologies, [name: AshHq.ClusterSupervisor]]},
         !flame_parent && AshHq.Docs.Indexer,
         !flame_parent && AshHq.Github.Monitor,
         !flame_parent && oban_worker(),

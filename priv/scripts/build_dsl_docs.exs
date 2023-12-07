@@ -711,7 +711,7 @@ defmodule Utils do
           |> Map.new()
           |> Map.put(:order, index)
           |> Map.put(:route, route)
-          |> Map.put(:category, category)
+          |> Map.put(:category, List.first(List.wrap(category)))
           |> Map.put(:text, File.read!(path))
         end)
       end)
