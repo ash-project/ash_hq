@@ -85,7 +85,7 @@ if config_env() == :prod do
 
   config :flame, :backend, FLAME.FlyBackend
   config :flame, FLAME.FlyBackend, token: System.fetch_env!("FLY_API_TOKEN")
-  config :flame, :terminator, shutdown_timeout: :timer.seconds(120)
+  config :flame, :terminator, shutdown_timeout: :timer.minutes(10)
 
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you

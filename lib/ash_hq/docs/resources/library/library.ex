@@ -53,9 +53,13 @@ defmodule AshHq.Docs.Library do
 
       change fn changeset, _ ->
         Ash.Changeset.around_transaction(changeset, fn changeset, func ->
-          FLAME.call(AshHq.ImporterPool, fn ->
-            func.(changeset)
-          end)
+          FLAME.call(
+            AshHq.ImporterPool,
+            fn ->
+              func.(changeset)
+            end,
+            timeout: :timer.minutes(10)
+          )
         end)
       end
 

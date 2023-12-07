@@ -25,7 +25,7 @@ defmodule AshHq.Application do
         !flame_parent && Supervisor.child_spec({Finch, name: Swoosh.Finch}, id: Swoosh.Finch),
         AshHq.Vault,
         # Start the Ecto repository
-        !flame_parent && AshHq.Repo,
+        AshHq.Repo,
         AshHq.SqliteRepo,
         # Start the Telemetry supervisor
         AshHqWeb.Telemetry,
@@ -34,8 +34,8 @@ defmodule AshHq.Application do
         # Start the Endpoint (http/https)
         !flame_parent && AshHqWeb.Endpoint,
         {AshHq.Docs.Library.Agent, nil},
-        {Cluster.Supervisor, [topologies, [name: AshHq.ClusterSupervisor]]},
-        !flame_parent && {Haystack.Storage.ETS, storage: AshHq.Docs.Indexer.storage()},
+        # !flame_parent && {Cluster.Supervisor, [topologies, [name: AshHq.ClusterSupervisor]]},
+        {Haystack.Storage.ETS, storage: AshHq.Docs.Indexer.storage()},
         !flame_parent && AshHq.Docs.Indexer,
         !flame_parent && AshHq.Github.Monitor,
         !flame_parent && oban_worker(),
