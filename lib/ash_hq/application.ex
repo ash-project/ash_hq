@@ -32,7 +32,6 @@ defmodule AshHq.Application do
         {AshHq.Docs.Library.Agent, nil},
         # !flame_parent && {Cluster.Supervisor, [topologies, [name: AshHq.ClusterSupervisor]]},
         {Haystack.Storage.ETS, storage: AshHq.Docs.Indexer.storage()},
-        !flame_parent && {Cluster.Supervisor, [topologies, [name: AshHq.ClusterSupervisor]]},
         !flame_parent && AshHq.Docs.Indexer,
         !flame_parent && AshHq.Github.Monitor,
         !flame_parent && oban_worker(),
