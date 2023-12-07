@@ -51,7 +51,8 @@ defmodule AshHq.MixProject do
       {:ash_authentication_phoenix, "~> 1.6"},
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, github: "ash-project/ash_csv"},
-      {:ash_oban, github: "ash-project/ash_oban"},
+      # {:ash_oban, github: "ash-project/ash_oban"},
+      {:ash_oban, path: "../ash_oban"},
       {:spark, github: "ash-project/spark", override: true},
       # Jobs
       {:oban, "~> 2.16"},

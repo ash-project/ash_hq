@@ -33,7 +33,6 @@ defmodule AshHq.Application do
         # !flame_parent && {Cluster.Supervisor, [topologies, [name: AshHq.ClusterSupervisor]]},
         {Haystack.Storage.ETS, storage: AshHq.Docs.Indexer.storage()},
         !flame_parent && AshHq.Docs.Indexer,
-        !flame_parent && AshHq.Github.Monitor,
         !flame_parent && oban_worker(),
         !flame_parent && Application.get_env(:ash_hq, :discord_bot) && AshHq.Discord.Supervisor
       ]

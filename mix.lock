@@ -13,7 +13,7 @@
   "ash_csv": {:git, "https://github.com/ash-project/ash_csv.git", "7f47b820077619ccb7340fbede0c4fd1b5313a17", []},
   "ash_graphql": {:git, "https://github.com/ash-project/ash_graphql.git", "cf57747d79f848608252ab167d74bb59aaef2345", []},
   "ash_json_api": {:git, "https://github.com/ash-project/ash_json_api.git", "31ece4fad9920c7e45c600d38ac82218296c4612", []},
-  "ash_oban": {:git, "https://github.com/ash-project/ash_oban.git", "870c4ff447abf1e50117dc558c5a1a467c1b8ff9", []},
+  "ash_oban": {:git, "https://github.com/ash-project/ash_oban.git", "80bae3bf43c5ef90061f9ba9f353795c57c79d77", []},
   "ash_phoenix": {:git, "https://github.com/ash-project/ash_phoenix.git", "35e4d2931e1664383c9a085a90f846e58986c8c8", []},
   "ash_postgres": {:git, "https://github.com/ash-project/ash_postgres.git", "54908395ebcd8e9a5f8e7e30c1cee3f57e233448", []},
   "ash_sqlite": {:git, "https://github.com/ash-project/ash_sqlite.git", "55bdce140f7ba9df9479923de2ab276be3e28588", []},
