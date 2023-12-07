@@ -51,7 +51,11 @@ defmodule AshHq.MixProject do
       {:ash_authentication_phoenix, "~> 1.6"},
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, github: "ash-project/ash_csv"},
+      {:ash_oban, github: "ash-project/ash_oban"},
       {:spark, github: "ash-project/spark", override: true},
+      # Jobs
+      {:oban, "~> 2.16"},
+      {:flame, "~> 0.1.4"},
       # HTTP calls
       {:req, "~> 0.4.3"},
       # Appsignal
@@ -137,11 +141,13 @@ defmodule AshHq.MixProject do
       setup: [
         "ash_postgres.create",
         "ash_postgres.migrate",
+        "ash_sqlite.create",
+        "ash_sqlite.migrate",
         "seed"
       ],
       reset: ["drop", "setup"],
       credo: "credo --strict",
-      drop: ["ash_postgres.drop"],
+      drop: ["ash_postgres.drop", "ash_sqlite.drop"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       sobelow: ["sobelow --skip -i Config.Headers,Config.CSRFRoute"],
       "assets.deploy": [

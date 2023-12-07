@@ -17,6 +17,8 @@ secret_key_base = "766JP3UO+dTbVfydE4RafFKbfUoudccDz1zS7x1N75WSiEJTq6dDR4r04+McH
 
 config :ash_hq, token_signing_secret: secret_key_base
 
+config :ash_hq, Oban, testing: :inline
+
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :ash_hq, AshHqWeb.Endpoint,

@@ -1,7 +1,8 @@
 defmodule AshHq.Docs.Library do
   @moduledoc false
   use Ash.Resource,
-    data_layer: AshSqlite.DataLayer
+    data_layer: AshSqlite.DataLayer,
+    extensions: [AshOban]
 
   sqlite do
     table "libraries"
@@ -29,6 +30,53 @@ defmodule AshHq.Docs.Library do
       end
 
       filter expr(name == ^arg(:name))
+    end
+
+    read :pending_import do
+      pagination keyset?: true, required?: false
+      prepare AshHq.Docs.Library.Preparations.FilterPendingImport
+    end
+
+    update :import do
+      transaction? false
+
+      argument :metadata, :map do
+        allow_nil? false
+
+        constraints fields: [
+                      version: [
+                        type: :string,
+                        allow_nil?: false
+                      ]
+                    ]
+      end
+
+      change fn changeset, _ ->
+        Ash.Changeset.around_transaction(changeset, fn changeset, func ->
+          FLAME.call(AshHq.ImporterPool, fn ->
+            func.(changeset)
+          end)
+        end)
+      end
+
+      manual AshHq.Docs.Library.Actions.Import
+    end
+  end
+
+  oban do
+    api AshHq.Docs
+
+    triggers do
+      trigger :import do
+        queue :importer
+        read_action :pending_import
+        action :import
+        scheduler_cron "0 */6 * * *"
+
+        read_metadata fn record ->
+          %{version: record.__metadata__.version}
+        end
+      end
     end
   end
 

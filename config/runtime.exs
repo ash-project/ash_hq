@@ -18,8 +18,10 @@ config :ash_hq, :github,
   client_secret: System.get_env("GITHUB_CLIENT_SECRET"),
   redirect_uri: System.get_env("GITHUB_REDIRECT_URI")
 
+periodic_imports? = System.get_env("PERIODIC_IMPORTS") == "true"
+
 discord_bot? = System.get_env("DISCORD_BOT") == "true"
-config :ash_hq, :periodic_imports, System.get_env("PERIODIC_IMPORTS") == "true"
+config :ash_hq, :periodic_imports, periodic_imports?
 config :ash_hq, :discord_bot, discord_bot?
 
 host = System.get_env("PHX_HOST") || "localhost"
@@ -34,6 +36,15 @@ nostrum_token = System.get_env("DISCORD_BOT_TOKEN")
 config :nostrum,
   token: nostrum_token,
   disabled?: is_nil(nostrum_token) || !discord_bot?
+
+# config/config.exs
+config :ash_hq, Oban,
+  repo: AshHq.Repo,
+  plugins: [
+    Oban.Plugins.Pruner,
+    {Oban.Plugins.Cron, crontab: []}
+  ],
+  queues: [importer: [limit: 3, paused: not (periodic_imports? || config_env() == :prod)]]
 
 if config_env() == :prod do
   app_name =
@@ -59,11 +70,22 @@ if config_env() == :prod do
       For example: ecto://USER:PASS@HOST/DATABASE
       """
 
+  pool_size =
+    if FLAME.Parent.get() do
+      3
+    else
+      String.to_integer(System.get_env("POOL_SIZE") || "10")
+    end
+
   config :ash_hq, AshHq.Repo,
     ssl: false,
     url: database_url,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+    pool_size: pool_size,
     socket_options: [:inet6]
+
+  config :flame, :backend, FLAME.FlyBackend
+  config :flame, FLAME.FlyBackend, token: System.fetch_env!("FLY_API_TOKEN")
+  config :flame, :terminator, shutdown_timeout: :timer.seconds(120)
 
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you

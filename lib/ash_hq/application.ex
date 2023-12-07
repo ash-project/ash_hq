@@ -7,48 +7,41 @@ defmodule AshHq.Application do
 
   @impl true
   def start(_type, _args) do
+    flame_parent = FLAME.Parent.get()
+
     Appsignal.Phoenix.LiveView.attach()
-
-    importer =
-      if Application.get_env(:ash_hq, :periodic_imports) do
-        [
-          AshHq.Docs.Importer
-        ]
-      else
-        []
-      end
-
-    discord_bot =
-      if Application.get_env(:ash_hq, :discord_bot) do
-        [AshHq.Discord.Supervisor]
-      else
-        []
-      end
 
     topologies = Application.get_env(:libcluster, :topologies) || []
 
     children =
       [
-        Supervisor.child_spec({Finch, name: AshHq.Finch}, id: AshHq.Finch),
-        Supervisor.child_spec({Finch, name: Swoosh.Finch}, id: Swoosh.Finch),
+        {FLAME.Pool,
+         name: AshHq.ImporterPool,
+         min: 0,
+         max: 1,
+         max_concurrency: 10,
+         idle_shutdown_after: 30_000},
+        !flame_parent && Supervisor.child_spec({Finch, name: AshHq.Finch}, id: AshHq.Finch),
+        !flame_parent && Supervisor.child_spec({Finch, name: Swoosh.Finch}, id: Swoosh.Finch),
         AshHq.Vault,
         # Start the Ecto repository
-        AshHq.Repo,
+        !flame_parent && AshHq.Repo,
         AshHq.SqliteRepo,
         # Start the Telemetry supervisor
         AshHqWeb.Telemetry,
         # Start the PubSub system
         {Phoenix.PubSub, name: AshHq.PubSub},
         # Start the Endpoint (http/https)
-        AshHqWeb.Endpoint,
+        !flame_parent && AshHqWeb.Endpoint,
         {AshHq.Docs.Library.Agent, nil},
         {Cluster.Supervisor, [topologies, [name: AshHq.ClusterSupervisor]]},
-        {Haystack.Storage.ETS, storage: AshHq.Docs.Indexer.storage()},
-        AshHq.Docs.Indexer,
-        AshHq.Github.Monitor
-        # Start a worker by calling: AshHq.Worker.start_link(arg)
-        # {AshHq.Worker, arg}
-      ] ++ importer ++ discord_bot
+        !flame_parent && {Haystack.Storage.ETS, storage: AshHq.Docs.Indexer.storage()},
+        !flame_parent && AshHq.Docs.Indexer,
+        !flame_parent && AshHq.Github.Monitor,
+        !flame_parent && oban_worker(),
+        !flame_parent && Application.get_env(:ash_hq, :discord_bot) && AshHq.Discord.Supervisor
+      ]
+      |> Enum.filter(& &1)
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
@@ -62,5 +55,11 @@ defmodule AshHq.Application do
   def config_change(changed, _new, removed) do
     AshHqWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp oban_worker do
+    apis = Application.fetch_env!(:ash_hq, :ash_apis)
+    config = Application.fetch_env!(:ash_hq, Oban)
+    {Oban, AshOban.config(apis, config)}
   end
 end

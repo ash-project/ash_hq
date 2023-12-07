@@ -46,6 +46,7 @@ config :spark, :formatter,
     section_order: [
       :actions,
       :authentication,
+      :oban,
       :token,
       :attributes,
       :relationships,
