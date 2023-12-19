@@ -50,4 +50,4 @@ lease:
 
   consul:
     url: "${FLY_CONSUL_URL}"
-    key: "litefs/${FLY_APP_NAME}"
+    key: "litefs/${FLY_APP_NAME}_2"

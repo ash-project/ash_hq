@@ -157,6 +157,34 @@ AshHq.Docs.Library.create!(
 
 AshHq.Docs.Library.create!(
   %{
+    name: "ash_money",
+    display_name: "AshMoney",
+    module_prefixes: ["AshMoney"],
+    order: 87,
+    description: """
+    A money extension that provides a money type and utilities for using it with various extensions.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "ash_double_entry",
+    display_name: "AshDoubleEntry",
+    module_prefixes: ["AshDoubleEntry"],
+    order: 89,
+    description: """
+    A customizable double entry bookkeeping system backed by Ash resources.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
     name: "reactor",
     display_name: "Reactor",
     module_prefixes: ["Reactor"],
