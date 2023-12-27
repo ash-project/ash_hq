@@ -77,11 +77,6 @@ defmodule AshHq.Docs.Library.Actions.Import do
              ) do
         AshHq.SqliteRepo.transaction(
           fn ->
-            delete_except(
-              AshHq.Docs.load!(library, :latest_version_id).latest_version_id,
-              library.id
-            )
-
             library_version =
               AshHq.Docs.LibraryVersion.build!(
                 library.id,
@@ -112,7 +107,7 @@ defmodule AshHq.Docs.Library.Actions.Import do
     |> Ash.Query.data_layer_query()
     |> case do
       {:ok, query} ->
-        AshHq.Repo.delete_all(query)
+        AshHq.SqliteRepo.delete_all(query)
 
       other ->
         raise "bad match #{inspect(other)}"

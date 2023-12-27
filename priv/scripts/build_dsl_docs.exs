@@ -640,6 +640,8 @@ defmodule Utils do
                 title =
                   file
                   |> Path.basename(".md")
+                  # We want to keep permalinks, so we remove the sorting number
+                  |> String.replace(~r/^\d+\-/, "")
                   |> String.split(~r/[-_]/)
                   |> Enum.map(&String.capitalize/1)
                   |> Enum.join(" ")
