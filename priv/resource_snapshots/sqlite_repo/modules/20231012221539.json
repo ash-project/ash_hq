@@ -128,7 +128,7 @@
   ],
   "table": "modules",
   "hash": "309E8CCA77F8E197373E7B87C09BF24DD1FC3E7E8C5ED8553E4899A5E7688399",
-  "repo": "Elixir.AshHq.SqliteRepo",
+  "repo": "Elixir.AshHq.Repo",
   "multitenancy": {
     "global": null,
     "attribute": null,

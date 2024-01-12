@@ -41,7 +41,6 @@ defmodule AshHq.MixProject do
     [
       {:ash, github: "ash-project/ash", override: true},
       {:ash_postgres, github: "ash-project/ash_postgres"},
-      {:ash_sqlite, github: "ash-project/ash_sqlite"},
       {:ash_admin, github: "ash-project/ash_admin"},
       {:ash_phoenix, github: "ash-project/ash_phoenix", override: true},
       {:ash_graphql, github: "ash-project/ash_graphql"},
@@ -141,13 +140,11 @@ defmodule AshHq.MixProject do
       setup: [
         "ash_postgres.create",
         "ash_postgres.migrate",
-        "ash_sqlite.create",
-        "ash_sqlite.migrate",
         "seed"
       ],
       reset: ["drop", "setup"],
       credo: "credo --strict",
-      drop: ["ash_postgres.drop", "ash_sqlite.drop"],
+      drop: ["ash_postgres.drop"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       sobelow: ["sobelow --skip -i Config.Headers,Config.CSRFRoute"],
       "assets.deploy": [

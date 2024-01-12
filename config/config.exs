@@ -8,7 +8,7 @@
 import Config
 
 config :ash_hq,
-  ecto_repos: [AshHq.Repo, AshHq.SqliteRepo]
+  ecto_repos: [AshHq.Repo]
 
 config :ash, allow_flow: true
 

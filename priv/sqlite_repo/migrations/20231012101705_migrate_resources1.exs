@@ -1,4 +1,4 @@
-defmodule AshHq.SqliteRepo.Migrations.MigrateResources1 do
+defmodule AshHq.Repo.Migrations.MigrateResources1 do
   @moduledoc """
   Updates resources based on their most recent snapshots.
 

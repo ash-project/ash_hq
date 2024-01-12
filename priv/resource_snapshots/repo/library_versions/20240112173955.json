@@ -4,14 +4,14 @@
       "default": "nil",
       "size": null,
       "type": "text",
-      "source": "sanitized_name",
+      "source": "sanitized_version",
       "references": null,
       "allow_nil?": false,
       "primary_key?": false,
       "generated?": false
     },
     {
-      "default": "nil",
+      "default": "fragment(\"uuid_generate_v4()\")",
       "size": null,
       "type": "uuid",
       "source": "id",
@@ -24,34 +24,24 @@
       "default": "nil",
       "size": null,
       "type": "text",
-      "source": "doc",
+      "source": "version",
       "references": null,
       "allow_nil?": false,
       "primary_key?": false,
       "generated?": false
     },
     {
-      "default": "nil",
+      "default": "false",
       "size": null,
-      "type": "text",
-      "source": "doc_html",
+      "type": "boolean",
+      "source": "hydrated",
       "references": null,
-      "allow_nil?": true,
+      "allow_nil?": false,
       "primary_key?": false,
       "generated?": false
     },
     {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "module",
-      "references": null,
-      "allow_nil?": true,
-      "primary_key?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
+      "default": "fragment(\"now()\")",
       "size": null,
       "type": "utc_datetime_usec",
       "source": "inserted_at",
@@ -61,7 +51,7 @@
       "generated?": false
     },
     {
-      "default": "nil",
+      "default": "fragment(\"now()\")",
       "size": null,
       "type": "utc_datetime_usec",
       "source": "updated_at",
@@ -74,39 +64,54 @@
       "default": "nil",
       "size": null,
       "type": "uuid",
-      "source": "library_version_id",
+      "source": "library_id",
       "references": {
-        "name": "extensions_library_version_id_fkey",
-        "table": "library_versions",
+        "name": "library_versions_library_id_fkey",
+        "table": "libraries",
+        "on_delete": null,
+        "on_update": null,
+        "destination_attribute": "id",
+        "schema": "public",
+        "primary_key?": true,
         "multitenancy": {
           "global": null,
           "strategy": null,
           "attribute": null
         },
-        "destination_attribute": "id",
-        "primary_key?": true,
         "deferrable": false,
+        "match_with": null,
+        "match_type": null,
         "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "on_delete": "delete",
-        "on_update": null
+        "destination_attribute_generated": null
       },
       "allow_nil?": true,
       "primary_key?": false,
       "generated?": false
     }
   ],
-  "table": "extensions",
-  "hash": "D5A8C840F686B00B4BBF777766E090ABF33DF738E31C4B55C9A74021F6DE5F93",
+  "table": "library_versions",
+  "hash": "C2D22CB8C4D6FA3C745114FBF4A9635E314D20C627B98BA022EC917057518CAF",
   "repo": "Elixir.AshHq.Repo",
+  "identities": [
+    {
+      "name": "unique_version_for_library",
+      "keys": [
+        "version",
+        "library_id"
+      ],
+      "base_filter": null,
+      "index_name": "library_versions_unique_version_for_library_index"
+    }
+  ],
+  "schema": null,
+  "base_filter": null,
+  "check_constraints": [],
   "custom_indexes": [],
-  "custom_statements": [],
   "multitenancy": {
     "global": null,
     "strategy": null,
     "attribute": null
   },
-  "identities": [],
-  "base_filter": null,
+  "custom_statements": [],
   "has_create_action": true
 }

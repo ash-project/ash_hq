@@ -221,7 +221,7 @@
   ],
   "table": "options",
   "hash": "22D8D77A5D911CB88F8C061E8B7E1AAEDF81742C1DBCDA8EE3757277B04C3F52",
-  "repo": "Elixir.AshHq.SqliteRepo",
+  "repo": "Elixir.AshHq.Repo",
   "identities": [],
   "custom_indexes": [],
   "base_filter": null,

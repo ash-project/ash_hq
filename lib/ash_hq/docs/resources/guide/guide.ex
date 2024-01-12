@@ -1,7 +1,7 @@
 defmodule AshHq.Docs.Guide do
   @moduledoc false
   use Ash.Resource,
-    data_layer: AshSqlite.DataLayer,
+    data_layer: AshPostgres.DataLayer,
     extensions: [
       AshHq.Docs.Extensions.Search,
       AshHq.Docs.Extensions.RenderMarkdown,
@@ -9,12 +9,37 @@ defmodule AshHq.Docs.Guide do
       AshAdmin.Resource
     ]
 
-  sqlite do
-    repo AshHq.SqliteRepo
+  postgres do
+    repo AshHq.Repo
     table "guides"
 
     references do
       reference :library_version, on_delete: :delete
+    end
+  end
+
+  actions do
+    defaults [:create, :update, :destroy]
+
+    read :read do
+      primary? true
+
+      pagination keyset?: true,
+                 offset?: true,
+                 countable: true,
+                 default_limit: 25,
+                 required?: false
+    end
+
+    read :read_for_version do
+      argument :library_versions, {:array, :uuid} do
+        allow_nil? false
+        constraints max_length: 20, min_length: 1
+      end
+
+      pagination offset?: true, countable: true, default_limit: 25, required?: false
+
+      filter expr(library_version.id in ^arg(:library_versions))
     end
   end
 
@@ -43,31 +68,6 @@ defmodule AshHq.Docs.Guide do
       field :text do
         type :markdown
       end
-    end
-  end
-
-  actions do
-    defaults [:create, :update, :destroy]
-
-    read :read do
-      primary? true
-
-      pagination keyset?: true,
-                 offset?: true,
-                 countable: true,
-                 default_limit: 25,
-                 required?: false
-    end
-
-    read :read_for_version do
-      argument :library_versions, {:array, :uuid} do
-        allow_nil? false
-        constraints max_length: 20, min_length: 1
-      end
-
-      pagination offset?: true, countable: true, default_limit: 25, required?: false
-
-      filter expr(library_version.id in ^arg(:library_versions))
     end
   end
 

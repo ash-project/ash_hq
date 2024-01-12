@@ -26,7 +26,7 @@ config :ash_hq, AshHqWeb.Endpoint,
   secret_key_base: secret_key_base,
   server: false
 
-config :ash_hq, AshHq.SqliteRepo,
+config :ash_hq, AshHq.Repo,
   database: Path.join(__DIR__, "../ash-hq#{System.get_env("MIX_TEST_PARTITION")}.db"),
   pool_size: 10
 

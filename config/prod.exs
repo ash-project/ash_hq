@@ -21,7 +21,7 @@ config :ash_hq, :analytics?, true
 config :ash_hq, :download_ua_on_start, true
 
 if config_env() == :prod do
-  config :ash_hq, AshHq.SqliteRepo,
+  config :ash_hq, AshHq.Repo,
     database: "/litefs/db",
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 end

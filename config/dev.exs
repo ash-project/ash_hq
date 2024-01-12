@@ -22,12 +22,6 @@ config :git_ops,
   manage_readme_version: "README.md",
   version_tag_prefix: "v"
 
-config :ash_hq, AshHq.SqliteRepo,
-  database: Path.join(__DIR__, "../ash-hq.db"),
-  port: 5432,
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 10
-
 config :ash_hq, :show_search_ranking, true
 
 secret_key_base = "FxKFwVYhDFah3bLLXXqWdpdcLf5e5T1UyVM6XQp7kCt/Reg5yuAEI3upAVDRoP5e"

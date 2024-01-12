@@ -148,7 +148,7 @@
   ],
   "table": "extensions",
   "hash": "B7E48389399B495B626A3B5DA3BD8DFB84020D6110AFC74C98282963D47532E1",
-  "repo": "Elixir.AshHq.SqliteRepo",
+  "repo": "Elixir.AshHq.Repo",
   "multitenancy": {
     "global": null,
     "attribute": null,

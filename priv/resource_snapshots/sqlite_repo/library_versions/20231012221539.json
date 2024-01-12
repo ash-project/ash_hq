@@ -88,7 +88,7 @@
   ],
   "table": "library_versions",
   "hash": "9D3B7DCCFD6D9DBE0CA3B5D44A9BD06741EDEBC133CFD67D979D50A248C3488D",
-  "repo": "Elixir.AshHq.SqliteRepo",
+  "repo": "Elixir.AshHq.Repo",
   "multitenancy": {
     "global": null,
     "attribute": null,

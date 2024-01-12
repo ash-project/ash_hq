@@ -2,12 +2,12 @@ defmodule AshHq.Docs.Dsl do
   @moduledoc false
 
   use Ash.Resource,
-    data_layer: AshSqlite.DataLayer,
+    data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  sqlite do
+  postgres do
     table "dsls"
-    repo AshHq.SqliteRepo
+    repo AshHq.Repo
 
     references do
       reference :library_version, on_delete: :delete
@@ -15,24 +15,6 @@ defmodule AshHq.Docs.Dsl do
     end
 
     migration_defaults optional_args: "[]"
-  end
-
-  search do
-    doc_attribute :doc
-
-    load_for_search [
-      :extension_module,
-      :library_name
-    ]
-
-    weight_content(0.2)
-
-    sanitized_name_attribute :sanitized_path
-    use_path_for_name? true
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html
   end
 
   actions do
@@ -63,6 +45,24 @@ defmodule AshHq.Docs.Dsl do
       change manage_relationship(:options, type: :direct_control)
       change manage_relationship(:library_version, type: :append_and_remove)
     end
+  end
+
+  search do
+    doc_attribute :doc
+
+    load_for_search [
+      :extension_module,
+      :library_name
+    ]
+
+    weight_content(0.2)
+
+    sanitized_name_attribute :sanitized_path
+    use_path_for_name? true
+  end
+
+  render_markdown do
+    render_attributes doc: :doc_html
   end
 
   attributes do

@@ -1,4 +1,4 @@
-defmodule AshHq.SqliteRepo.Migrations.RemoveExtensionFields do
+defmodule AshHq.Repo.Migrations.RemoveExtensionFields do
   @moduledoc """
   Updates resources based on their most recent snapshots.
 

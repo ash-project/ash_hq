@@ -119,7 +119,7 @@
   ],
   "table": "libraries",
   "hash": "2731C131CB28C040C03C0E6BADE2779536AD7B1E9DA86C870B8DC2D14B2A5DD8",
-  "repo": "Elixir.AshHq.SqliteRepo",
+  "repo": "Elixir.AshHq.Repo",
   "identities": [
     {
       "name": "unique_name",

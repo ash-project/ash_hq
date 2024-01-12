@@ -119,7 +119,7 @@
   ],
   "table": "libraries",
   "hash": "E15F5D47277F5D12F1F2B4F5FC7F3E94B76D5423833044A6D18FD34FF6B2382A",
-  "repo": "Elixir.AshHq.SqliteRepo",
+  "repo": "Elixir.AshHq.Repo",
   "multitenancy": {
     "global": null,
     "attribute": null,

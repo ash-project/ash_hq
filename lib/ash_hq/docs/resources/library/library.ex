@@ -1,12 +1,12 @@
 defmodule AshHq.Docs.Library do
   @moduledoc false
   use Ash.Resource,
-    data_layer: AshSqlite.DataLayer,
+    data_layer: AshPostgres.DataLayer,
     extensions: [AshOban]
 
-  sqlite do
+  postgres do
     table "libraries"
-    repo AshHq.SqliteRepo
+    repo AshHq.Repo
 
     migration_defaults module_prefixes: "[]", skip_versions: "[]"
   end

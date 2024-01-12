@@ -2,15 +2,36 @@ defmodule AshHq.Docs.Function do
   @moduledoc false
 
   use Ash.Resource,
-    data_layer: AshSqlite.DataLayer,
+    data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  sqlite do
+  postgres do
     table "functions"
-    repo AshHq.SqliteRepo
+    repo AshHq.Repo
 
     references do
       reference :library_version, on_delete: :delete
+    end
+  end
+
+  actions do
+    defaults [:update, :destroy]
+
+    read :read do
+      primary? true
+
+      pagination offset?: true,
+                 keyset?: true,
+                 countable: true,
+                 default_limit: 25,
+                 required?: false
+    end
+
+    create :create do
+      primary? true
+      argument :library_version, :uuid
+
+      change manage_relationship(:library_version, type: :append_and_remove)
     end
   end
 
@@ -33,27 +54,6 @@ defmodule AshHq.Docs.Function do
   render_markdown do
     render_attributes doc: :doc_html, heads: :heads_html
     header_ids? false
-  end
-
-  actions do
-    defaults [:update, :destroy]
-
-    read :read do
-      primary? true
-
-      pagination offset?: true,
-                 keyset?: true,
-                 countable: true,
-                 default_limit: 25,
-                 required?: false
-    end
-
-    create :create do
-      primary? true
-      argument :library_version, :uuid
-
-      change manage_relationship(:library_version, type: :append_and_remove)
-    end
   end
 
   attributes do

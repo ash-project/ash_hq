@@ -22,7 +22,6 @@ defmodule AshHq.Application do
         AshHq.Vault,
         # Start the Ecto repository
         AshHq.Repo,
-        AshHq.SqliteRepo,
         # Start the Telemetry supervisor
         AshHqWeb.Telemetry,
         # Start the PubSub system

@@ -148,7 +148,7 @@
   ],
   "table": "guides",
   "hash": "25F122033820A577CE8A2BA71F5B82A32884B4FF50B844923CB2BE4D264428F5",
-  "repo": "Elixir.AshHq.SqliteRepo",
+  "repo": "Elixir.AshHq.Repo",
   "identities": [],
   "custom_indexes": [],
   "base_filter": null,

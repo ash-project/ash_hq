@@ -4,7 +4,6 @@
     :phoenix,
     :ash,
     :ash_postgres,
-    :ash_sqlite,
     :ash_graphql,
     :surface,
     :ash_admin,

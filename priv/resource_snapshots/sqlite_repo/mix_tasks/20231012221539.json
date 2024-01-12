@@ -138,7 +138,7 @@
   ],
   "table": "mix_tasks",
   "hash": "B015AAFD4B61EA96B5305765B2F485F68013A330169D84AA079BBC20BAABA29C",
-  "repo": "Elixir.AshHq.SqliteRepo",
+  "repo": "Elixir.AshHq.Repo",
   "multitenancy": {
     "global": null,
     "attribute": null,

@@ -128,7 +128,7 @@
   ],
   "table": "modules",
   "hash": "1E61E69895F51572F798E771261BD5545AC33F24BFD6F56498D82B6B2F8E1503",
-  "repo": "Elixir.AshHq.SqliteRepo",
+  "repo": "Elixir.AshHq.Repo",
   "identities": [],
   "custom_indexes": [],
   "base_filter": null,

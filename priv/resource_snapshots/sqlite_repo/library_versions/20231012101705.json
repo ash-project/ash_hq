@@ -88,7 +88,7 @@
   ],
   "table": "library_versions",
   "hash": "D491A51EE472E1A5DF2EA4F32E1D014DD937D10879FE2C694E726EDB8E871FFA",
-  "repo": "Elixir.AshHq.SqliteRepo",
+  "repo": "Elixir.AshHq.Repo",
   "identities": [
     {
       "name": "unique_version_for_library",

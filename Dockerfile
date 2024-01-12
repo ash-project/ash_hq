@@ -18,7 +18,6 @@ RUN apt-get install -y esl-erlang
 RUN apt-get install -y apt-transport-https
 RUN apt-get install -y ca-certificates
 RUN apt-get install -y fuse3 libfuse3-dev libglib2.0-dev
-RUN apt-get install -y sqlite3
 COPY --from=flyio/litefs:0.5 /usr/local/bin/litefs /usr/local/bin/litefs
 ENV NODE_MAJOR=16
 RUN mkdir -p /etc/apt/keyrings

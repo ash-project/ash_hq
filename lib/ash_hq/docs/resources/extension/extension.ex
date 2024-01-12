@@ -2,11 +2,11 @@ defmodule AshHq.Docs.Extension do
   @moduledoc false
 
   use Ash.Resource,
-    data_layer: AshSqlite.DataLayer
+    data_layer: AshPostgres.DataLayer
 
-  sqlite do
+  postgres do
     table "extensions"
-    repo AshHq.SqliteRepo
+    repo AshHq.Repo
 
     references do
       reference :library_version, on_delete: :delete

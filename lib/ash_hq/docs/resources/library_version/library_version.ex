@@ -2,17 +2,12 @@ defmodule AshHq.Docs.LibraryVersion do
   @moduledoc false
 
   use Ash.Resource,
-    data_layer: AshSqlite.DataLayer,
+    data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  sqlite do
+  postgres do
     table "library_versions"
-    repo AshHq.SqliteRepo
-  end
-
-  search do
-    name_attribute :version
-    load_for_search [:library_name, :library_display_name]
+    repo AshHq.Repo
   end
 
   actions do
@@ -89,6 +84,11 @@ defmodule AshHq.Docs.LibraryVersion do
 
       filter expr(version in ^arg(:versions) and library_id == ^arg(:library))
     end
+  end
+
+  search do
+    name_attribute :version
+    load_for_search [:library_name, :library_display_name]
   end
 
   attributes do

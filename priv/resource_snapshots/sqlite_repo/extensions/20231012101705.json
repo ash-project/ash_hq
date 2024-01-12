@@ -148,7 +148,7 @@
   ],
   "table": "extensions",
   "hash": "85594B24618F7EC6EE267F52CF2D16401E54DB023649FDC9ADA49BA33FECB6B7",
-  "repo": "Elixir.AshHq.SqliteRepo",
+  "repo": "Elixir.AshHq.Repo",
   "identities": [
     {
       "name": "unique_name_by_library_version",

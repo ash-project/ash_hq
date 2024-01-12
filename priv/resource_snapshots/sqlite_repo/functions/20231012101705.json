@@ -209,7 +209,7 @@
   ],
   "table": "functions",
   "hash": "95D436C4E7FFEAAFB97F1C986637213AE7BC0F86C2F10DC5A7988AFB375E32A6",
-  "repo": "Elixir.AshHq.SqliteRepo",
+  "repo": "Elixir.AshHq.Repo",
   "identities": [],
   "custom_indexes": [],
   "base_filter": null,

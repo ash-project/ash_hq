@@ -2,34 +2,16 @@ defmodule AshHq.Docs.Module do
   @moduledoc false
 
   use Ash.Resource,
-    data_layer: AshSqlite.DataLayer,
+    data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  sqlite do
+  postgres do
     table "modules"
-    repo AshHq.SqliteRepo
+    repo AshHq.Repo
 
     references do
       reference :library_version, on_delete: :delete
     end
-  end
-
-  search do
-    doc_attribute :doc
-
-    weight_content(0.5)
-
-    load_for_search [
-      :version_name,
-      :library_name,
-      :library_id
-    ]
-
-    type "Code"
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html
   end
 
   actions do
@@ -54,6 +36,24 @@ defmodule AshHq.Docs.Module do
       change manage_relationship(:functions, type: :direct_control)
       change manage_relationship(:library_version, type: :append_and_remove)
     end
+  end
+
+  search do
+    doc_attribute :doc
+
+    weight_content(0.5)
+
+    load_for_search [
+      :version_name,
+      :library_name,
+      :library_id
+    ]
+
+    type "Code"
+  end
+
+  render_markdown do
+    render_attributes doc: :doc_html
   end
 
   attributes do

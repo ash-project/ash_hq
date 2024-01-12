@@ -263,7 +263,7 @@
   ],
   "table": "dsls",
   "hash": "1F9579EE107DF7B8C1697382D5D26B103E514DC76F1F6ED574AE1D4D9A63D52A",
-  "repo": "Elixir.AshHq.SqliteRepo",
+  "repo": "Elixir.AshHq.Repo",
   "identities": [],
   "custom_indexes": [],
   "base_filter": null,

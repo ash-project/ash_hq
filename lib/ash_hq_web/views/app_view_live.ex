@@ -186,6 +186,10 @@ defmodule AshHqWeb.AppViewLive do
     {:noreply, assign(socket, :page_title, "Ash Framework - #{title}")}
   end
 
+  def handle_info(_, socket) do
+    {:noreply, socket}
+  end
+
   def handle_event("change-types", %{"types" => types}, socket) do
     types =
       types

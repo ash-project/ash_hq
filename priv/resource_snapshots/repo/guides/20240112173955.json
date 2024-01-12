@@ -11,7 +11,7 @@
       "generated?": false
     },
     {
-      "default": "nil",
+      "default": "fragment(\"uuid_generate_v4()\")",
       "size": null,
       "type": "uuid",
       "source": "id",
@@ -23,8 +23,8 @@
     {
       "default": "nil",
       "size": null,
-      "type": "text",
-      "source": "doc",
+      "type": "bigint",
+      "source": "order",
       "references": null,
       "allow_nil?": false,
       "primary_key?": false,
@@ -34,9 +34,19 @@
       "default": "nil",
       "size": null,
       "type": "text",
-      "source": "doc_html",
+      "source": "name",
       "references": null,
-      "allow_nil?": true,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "\"\"",
+      "size": null,
+      "type": "text",
+      "source": "text",
+      "references": null,
+      "allow_nil?": false,
       "primary_key?": false,
       "generated?": false
     },
@@ -44,14 +54,54 @@
       "default": "nil",
       "size": null,
       "type": "text",
-      "source": "module",
+      "source": "text_html",
       "references": null,
       "allow_nil?": true,
       "primary_key?": false,
       "generated?": false
     },
     {
+      "default": "\"Topics\"",
+      "size": null,
+      "type": "text",
+      "source": "category",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
       "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "route",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "sanitized_route",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "false",
+      "size": null,
+      "type": "boolean",
+      "source": "default",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "fragment(\"now()\")",
       "size": null,
       "type": "utc_datetime_usec",
       "source": "inserted_at",
@@ -61,7 +111,7 @@
       "generated?": false
     },
     {
-      "default": "nil",
+      "default": "fragment(\"now()\")",
       "size": null,
       "type": "utc_datetime_usec",
       "source": "updated_at",
@@ -76,37 +126,42 @@
       "type": "uuid",
       "source": "library_version_id",
       "references": {
-        "name": "extensions_library_version_id_fkey",
+        "name": "guides_library_version_id_fkey",
         "table": "library_versions",
+        "on_delete": "delete",
+        "on_update": null,
+        "destination_attribute": "id",
+        "schema": "public",
+        "primary_key?": true,
         "multitenancy": {
           "global": null,
           "strategy": null,
           "attribute": null
         },
-        "destination_attribute": "id",
-        "primary_key?": true,
         "deferrable": false,
+        "match_with": null,
+        "match_type": null,
         "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "on_delete": "delete",
-        "on_update": null
+        "destination_attribute_generated": null
       },
       "allow_nil?": true,
       "primary_key?": false,
       "generated?": false
     }
   ],
-  "table": "extensions",
-  "hash": "D5A8C840F686B00B4BBF777766E090ABF33DF738E31C4B55C9A74021F6DE5F93",
+  "table": "guides",
+  "hash": "14F352DA23D0F993BE7ECE03B0CC6903AE9597D5F95F7B0ABF948E6677073810",
   "repo": "Elixir.AshHq.Repo",
+  "identities": [],
+  "schema": null,
+  "base_filter": null,
+  "check_constraints": [],
   "custom_indexes": [],
-  "custom_statements": [],
   "multitenancy": {
     "global": null,
     "strategy": null,
     "attribute": null
   },
-  "identities": [],
-  "base_filter": null,
+  "custom_statements": [],
   "has_create_action": true
 }

@@ -4,20 +4,20 @@
       "default": "nil",
       "size": null,
       "type": "text",
-      "source": "sanitized_path",
+      "source": "sanitized_name",
       "references": null,
-      "primary_key?": false,
       "allow_nil?": false,
+      "primary_key?": false,
       "generated?": false
     },
     {
-      "default": "nil",
+      "default": "fragment(\"uuid_generate_v4()\")",
       "size": null,
       "type": "uuid",
       "source": "id",
       "references": null,
-      "primary_key?": true,
       "allow_nil?": false,
+      "primary_key?": true,
       "generated?": false
     },
     {
@@ -26,133 +26,38 @@
       "type": "text",
       "source": "name",
       "references": null,
-      "primary_key?": false,
       "allow_nil?": false,
+      "primary_key?": false,
       "generated?": false
     },
     {
       "default": "nil",
       "size": null,
       "type": "text",
-      "source": "requires_extension",
+      "source": "file",
       "references": null,
-      "primary_key?": false,
       "allow_nil?": true,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "doc",
-      "references": null,
       "primary_key?": false,
-      "allow_nil?": false,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "doc_html",
-      "references": null,
-      "primary_key?": false,
-      "allow_nil?": true,
-      "generated?": false
-    },
-    {
-      "default": "[]",
-      "size": null,
-      "type": [
-        "array",
-        "text"
-      ],
-      "source": "imports",
-      "references": null,
-      "primary_key?": false,
-      "allow_nil?": true,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": [
-        "array",
-        "text"
-      ],
-      "source": "examples",
-      "references": null,
-      "primary_key?": false,
-      "allow_nil?": true,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": [
-        "array",
-        "text"
-      ],
-      "source": "args",
-      "references": null,
-      "primary_key?": false,
-      "allow_nil?": true,
-      "generated?": false
-    },
-    {
-      "default": "[]",
-      "size": null,
-      "type": [
-        "array",
-        "text"
-      ],
-      "source": "optional_args",
-      "references": null,
-      "primary_key?": false,
-      "allow_nil?": true,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "map",
-      "source": "arg_defaults",
-      "references": null,
-      "primary_key?": false,
-      "allow_nil?": true,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": [
-        "array",
-        "text"
-      ],
-      "source": "path",
-      "references": null,
-      "primary_key?": false,
-      "allow_nil?": true,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "text",
-      "source": "recursive_as",
-      "references": null,
-      "primary_key?": false,
-      "allow_nil?": true,
       "generated?": false
     },
     {
       "default": "nil",
       "size": null,
       "type": "bigint",
-      "source": "order",
+      "source": "line",
       "references": null,
+      "allow_nil?": true,
       "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "bigint",
+      "source": "arity",
+      "references": null,
       "allow_nil?": false,
+      "primary_key?": false,
       "generated?": false
     },
     {
@@ -161,28 +66,94 @@
       "type": "text",
       "source": "type",
       "references": null,
-      "primary_key?": false,
       "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "[]",
+      "size": null,
+      "type": [
+        "array",
+        "text"
+      ],
+      "source": "heads",
+      "references": null,
+      "allow_nil?": true,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "[]",
+      "size": null,
+      "type": [
+        "array",
+        "text"
+      ],
+      "source": "heads_html",
+      "references": null,
+      "allow_nil?": true,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "\"\"",
+      "size": null,
+      "type": "text",
+      "source": "doc",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
       "generated?": false
     },
     {
       "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "doc_html",
+      "references": null,
+      "allow_nil?": true,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "bigint",
+      "source": "order",
+      "references": null,
+      "allow_nil?": false,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "nil",
+      "size": null,
+      "type": "text",
+      "source": "deprecated",
+      "references": null,
+      "allow_nil?": true,
+      "primary_key?": false,
+      "generated?": false
+    },
+    {
+      "default": "fragment(\"now()\")",
       "size": null,
       "type": "utc_datetime_usec",
       "source": "inserted_at",
       "references": null,
-      "primary_key?": false,
       "allow_nil?": false,
+      "primary_key?": false,
       "generated?": false
     },
     {
-      "default": "nil",
+      "default": "fragment(\"now()\")",
       "size": null,
       "type": "utc_datetime_usec",
       "source": "updated_at",
       "references": null,
-      "primary_key?": false,
       "allow_nil?": false,
+      "primary_key?": false,
       "generated?": false
     },
     {
@@ -191,87 +162,70 @@
       "type": "uuid",
       "source": "library_version_id",
       "references": {
-        "name": "dsls_library_version_id_fkey",
+        "name": "functions_library_version_id_fkey",
         "table": "library_versions",
-        "multitenancy": {
-          "global": null,
-          "attribute": null,
-          "strategy": null
-        },
         "on_delete": "delete",
         "on_update": null,
-        "deferrable": false,
         "destination_attribute": "id",
+        "schema": "public",
         "primary_key?": true,
+        "multitenancy": {
+          "global": null,
+          "strategy": null,
+          "attribute": null
+        },
+        "deferrable": false,
+        "match_with": null,
+        "match_type": null,
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
-      "primary_key?": false,
       "allow_nil?": true,
+      "primary_key?": false,
       "generated?": false
     },
     {
       "default": "nil",
       "size": null,
       "type": "uuid",
-      "source": "extension_id",
+      "source": "module_id",
       "references": {
-        "name": "dsls_extension_id_fkey",
-        "table": "extensions",
-        "multitenancy": {
-          "global": null,
-          "attribute": null,
-          "strategy": null
-        },
+        "name": "functions_module_id_fkey",
+        "table": "modules",
         "on_delete": null,
         "on_update": null,
-        "deferrable": false,
         "destination_attribute": "id",
+        "schema": "public",
         "primary_key?": true,
-        "destination_attribute_default": null,
-        "destination_attribute_generated": null
-      },
-      "primary_key?": false,
-      "allow_nil?": true,
-      "generated?": false
-    },
-    {
-      "default": "nil",
-      "size": null,
-      "type": "uuid",
-      "source": "dsl_id",
-      "references": {
-        "name": "dsls_dsl_id_fkey",
-        "table": "dsls",
         "multitenancy": {
           "global": null,
-          "attribute": null,
-          "strategy": null
+          "strategy": null,
+          "attribute": null
         },
-        "on_delete": "delete",
-        "on_update": null,
         "deferrable": false,
-        "destination_attribute": "id",
-        "primary_key?": true,
+        "match_with": null,
+        "match_type": null,
         "destination_attribute_default": null,
         "destination_attribute_generated": null
       },
-      "primary_key?": false,
       "allow_nil?": true,
+      "primary_key?": false,
       "generated?": false
     }
   ],
-  "table": "dsls",
-  "hash": "48AE588FFC6527FCB577BAF5BED1D2BC77DDFB5F77DDE0530068B2C551A0D8DE",
+  "table": "functions",
+  "hash": "FA5C6C66BBB9F232D2675255BEA6C08D52F10351BA1895202F271891AB1E5858",
   "repo": "Elixir.AshHq.Repo",
+  "identities": [],
+  "schema": null,
+  "base_filter": null,
+  "check_constraints": [],
+  "custom_indexes": [],
   "multitenancy": {
     "global": null,
-    "attribute": null,
-    "strategy": null
+    "strategy": null,
+    "attribute": null
   },
-  "base_filter": null,
-  "identities": [],
-  "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true
 }
