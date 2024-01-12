@@ -104,16 +104,11 @@ defmodule Utils do
       default
   end
 
-  def build(extension, all_extensions, order) do
+  def build(extension, all_extensions, _order) do
     %{
-      name: extension.name,
-      target: extension[:target],
-      module: inspect(extension.module),
-      default_for_target: extension[:default_for_target?] || false,
-      type: extension[:type],
-      order: order,
-      doc: module_docs(extension.module) || "No documentation",
-      dsls: build_sections(extension.module.sections(), extension.module, all_extensions)
+      module: inspect(extension),
+      doc: module_docs(extension) || "No documentation",
+      dsls: build_sections(extension.sections(), extension, all_extensions)
     }
   end
 
@@ -126,13 +121,13 @@ defmodule Utils do
       entities =
         all_extensions
         |> Enum.flat_map(fn extension ->
-          extension.module.dsl_patches()
+          extension.dsl_patches()
           |> Enum.filter(&match?(%Spark.Dsl.Patch.AddEntity{section_path: ^section_path}, &1))
           |> Enum.map(fn %{entity: entity} ->
-            if extension.module == this_extension_module do
+            if extension == this_extension_module do
               entity
             else
-              Map.put(entity, :__requires_extension__, inspect(extension.module))
+              Map.put(entity, :__requires_extension__, inspect(extension))
             end
           end)
         end)
@@ -741,19 +736,21 @@ acc = %{
   mix_tasks: []
 }
 
-extensions =
-  mix_project.project[:docs][:spark][:extensions] || mix_project.project[:docs][:spark_extensions]
-
 {:ok, all_modules} =
   name
   |> String.to_atom()
   |> :application.get_key(:modules)
 
+extensions =
+  Enum.filter(all_modules, fn module ->
+    Spark.implements_behaviour?(module, Spark.Dsl.Extension)
+  end)
+
 all_modules =
   all_modules
   |> Kernel.||([])
   |> Enum.reject(fn module ->
-    Enum.find(extensions || [], &(&1.module == module))
+    Enum.find(extensions || [], &(&1 == module))
   end)
 
 all_modules =

@@ -19,9 +19,7 @@ defmodule AshHq.Docs.Option do
     doc_attribute :doc
 
     load_for_search [
-      :extension_name,
       :extension_module,
-      :extension_target,
       :library_name
     ]
 
@@ -126,9 +124,7 @@ defmodule AshHq.Docs.Option do
 
   calculations do
     calculate :extension_type, :string, expr(dsl.extension.type)
-    calculate :extension_name, :string, expr(dsl.extension.name)
     calculate :extension_order, :integer, expr(dsl.extension.order)
-    calculate :extension_target, :string, expr(dsl.extension.target)
     calculate :extension_module, :string, expr(dsl.extension.module)
     calculate :version_name, :string, expr(library_version.version)
     calculate :library_name, :string, expr(library_version.library.name)

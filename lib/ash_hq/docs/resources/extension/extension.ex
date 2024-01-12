@@ -2,8 +2,7 @@ defmodule AshHq.Docs.Extension do
   @moduledoc false
 
   use Ash.Resource,
-    data_layer: AshSqlite.DataLayer,
-    extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
+    data_layer: AshSqlite.DataLayer
 
   sqlite do
     table "extensions"
@@ -12,15 +11,6 @@ defmodule AshHq.Docs.Extension do
     references do
       reference :library_version, on_delete: :delete
     end
-  end
-
-  search do
-    doc_attribute :doc
-    load_for_search library_version: [:library_display_name, :library_name]
-  end
-
-  render_markdown do
-    render_attributes doc: :doc_html
   end
 
   actions do
@@ -52,35 +42,6 @@ defmodule AshHq.Docs.Extension do
   attributes do
     uuid_primary_key :id
 
-    attribute :name, :string do
-      allow_nil? false
-    end
-
-    attribute :target, :string
-
-    attribute :default_for_target, :boolean do
-      default false
-    end
-
-    attribute :doc, :string do
-      allow_nil? false
-      constraints trim?: false, allow_empty?: true
-      default ""
-    end
-
-    attribute :doc_html, :string do
-      constraints trim?: false, allow_empty?: true
-      writable? false
-    end
-
-    attribute :type, :string do
-      allow_nil? false
-    end
-
-    attribute :order, :integer do
-      allow_nil? false
-    end
-
     attribute :module, :string
 
     timestamps()
@@ -103,9 +64,5 @@ defmodule AshHq.Docs.Extension do
 
   resource do
     description "An Ash DSL extension."
-  end
-
-  identities do
-    identity :unique_name_by_library_version, [:name, :library_version_id]
   end
 end

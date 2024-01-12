@@ -21,8 +21,6 @@ defmodule AshHq.Docs.Dsl do
     doc_attribute :doc
 
     load_for_search [
-      :extension_name,
-      :extension_target,
       :extension_module,
       :library_name
     ]
@@ -137,9 +135,7 @@ defmodule AshHq.Docs.Dsl do
   calculations do
     calculate :extension_type, :string, expr(extension.type)
     calculate :extension_order, :integer, expr(extension.order)
-    calculate :extension_name, :string, expr(extension.name)
     calculate :extension_module, :string, expr(extension.module)
-    calculate :extension_target, :string, expr(extension.target)
     calculate :version_name, :string, expr(library_version.version)
     calculate :library_name, :string, expr(library_version.library.name)
     calculate :library_id, :string, expr(library_version.library.id)

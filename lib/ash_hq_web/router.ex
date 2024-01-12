@@ -66,8 +66,6 @@ defmodule AshHqWeb.Router do
       live("/forum/:channel", AppViewLive, :forum)
       live("/forum/:channel/:id", AppViewLive, :forum)
 
-      get("/docs/dsl/:library/:version/:extension/*dsl_path", DslRedirectController, :show)
-
       get("/unsubscribe", MailingListController, :unsubscribe)
     end
 
