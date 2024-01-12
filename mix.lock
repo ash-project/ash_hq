@@ -13,7 +13,7 @@
   "ash_csv": {:git, "https://github.com/ash-project/ash_csv.git", "7f47b820077619ccb7340fbede0c4fd1b5313a17", []},
   "ash_graphql": {:git, "https://github.com/ash-project/ash_graphql.git", "cf57747d79f848608252ab167d74bb59aaef2345", []},
   "ash_json_api": {:git, "https://github.com/ash-project/ash_json_api.git", "31ece4fad9920c7e45c600d38ac82218296c4612", []},
-  "ash_oban": {:git, "https://github.com/ash-project/ash_oban.git", "36a441f78195f4f4e656f6a0cf268084704ff174", []},
+  "ash_oban": {:git, "https://github.com/ash-project/ash_oban.git", "bfacb4572cda947bf6d5de27a075922b5d2e6c36", []},
   "ash_phoenix": {:git, "https://github.com/ash-project/ash_phoenix.git", "35e4d2931e1664383c9a085a90f846e58986c8c8", []},
   "ash_postgres": {:git, "https://github.com/ash-project/ash_postgres.git", "40c1a13652dc65406692ffbcaf6d78d1d8aa07c4", []},
   "assent": {:hex, :assent, "0.2.7", "aa68f68e577077c091ce722bff8fe1ae56b95b274bb8107f7a5406cc15a65da7", [:mix], [{:certifi, ">= 0.0.0", [hex: :certifi, repo: "hexpm", optional: true]}, {:finch, "~> 0.15", [hex: :finch, repo: "hexpm", optional: true]}, {:jose, "~> 1.8", [hex: :jose, repo: "hexpm", optional: true]}, {:mint, "~> 1.0", [hex: :mint, repo: "hexpm", optional: true]}, {:ssl_verify_fun, ">= 0.0.0", [hex: :ssl_verify_fun, repo: "hexpm", optional: true]}], "hexpm", "08106af439de4f9de114c0334de4c848de7cfbe53a5a52d342a784c4f6bc86f3"},

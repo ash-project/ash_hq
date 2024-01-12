@@ -4,13 +4,6 @@ defmodule AshHq.Docs.Library do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshOban]
 
-  postgres do
-    table "libraries"
-    repo AshHq.Repo
-
-    migration_defaults module_prefixes: "[]", skip_versions: "[]"
-  end
-
   actions do
     defaults [:create, :update, :destroy]
 
@@ -51,18 +44,17 @@ defmodule AshHq.Docs.Library do
                     ]
       end
 
-      # litefs can't write from another node, so we had to turn this off
-      # change fn changeset, _ ->
-      #   Ash.Changeset.around_transaction(changeset, fn changeset, func ->
-      #     FLAME.call(
-      #       AshHq.ImporterPool,
-      #       fn ->
-      #         func.(changeset)
-      #       end,
-      #       timeout: :timer.minutes(10)
-      #     )
-      #   end)
-      # end
+      change fn changeset, _ ->
+        Ash.Changeset.around_transaction(changeset, fn changeset, func ->
+          FLAME.call(
+            AshHq.ImporterPool,
+            fn ->
+              func.(changeset)
+            end,
+            timeout: :timer.minutes(10)
+          )
+        end)
+      end
 
       manual AshHq.Docs.Library.Actions.Import
     end
@@ -129,6 +121,13 @@ defmodule AshHq.Docs.Library do
       sort version: :desc
       from_many? true
     end
+  end
+
+  postgres do
+    table "libraries"
+    repo AshHq.Repo
+
+    migration_defaults module_prefixes: "[]", skip_versions: "[]"
   end
 
   code_interface do

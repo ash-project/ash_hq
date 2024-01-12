@@ -49,4 +49,4 @@ COPY ./rel ./rel
 RUN mix release --overwrite
 RUN mkdir indexes
 COPY ./litefs.yml ./litefs.yml
-ENTRYPOINT litefs mount
+CMD ["_build/prod/rel/ash_hq/bin/ash_hq", "start"]

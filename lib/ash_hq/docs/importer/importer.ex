@@ -4,6 +4,6 @@ defmodule AshHq.Docs.Importer do
   """
 
   def import() do
-    AshOban.Test.schedule_and_run_triggers(AshHq.Docs.Library)
+    AshOban.schedule_and_run_triggers(AshHq.Docs.Library)
   end
 end

@@ -16,7 +16,7 @@ defmodule AshHq.Application do
     children =
       [
         {FLAME.Pool,
-         name: AshHq.ImporterPool, min: 0, max: 1, max_concurrency: 1, idle_shutdown_after: 30_000},
+         name: AshHq.ImporterPool, min: 0, max: 1, max_concurrency: 6, idle_shutdown_after: 30_000},
         !flame_parent && Supervisor.child_spec({Finch, name: AshHq.Finch}, id: AshHq.Finch),
         !flame_parent && Supervisor.child_spec({Finch, name: Swoosh.Finch}, id: Swoosh.Finch),
         AshHq.Vault,
