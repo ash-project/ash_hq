@@ -5,11 +5,6 @@ defmodule AshHq.Docs.LibraryVersion do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  postgres do
-    table "library_versions"
-    repo AshHq.Repo
-  end
-
   actions do
     defaults [:update, :destroy]
 
@@ -115,6 +110,11 @@ defmodule AshHq.Docs.LibraryVersion do
     has_many :guides, AshHq.Docs.Guide
     has_many :modules, AshHq.Docs.Module
     has_many :mix_tasks, AshHq.Docs.MixTask
+  end
+
+  postgres do
+    table "library_versions"
+    repo AshHq.Repo
   end
 
   code_interface do

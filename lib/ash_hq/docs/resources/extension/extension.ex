@@ -4,15 +4,6 @@ defmodule AshHq.Docs.Extension do
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer
 
-  postgres do
-    table "extensions"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
-  end
-
   actions do
     defaults [:update, :destroy]
 
@@ -54,6 +45,15 @@ defmodule AshHq.Docs.Extension do
 
     has_many :dsls, AshHq.Docs.Dsl
     has_many :options, AshHq.Docs.Option
+  end
+
+  postgres do
+    table "extensions"
+    repo AshHq.Repo
+
+    references do
+      reference :library_version, on_delete: :delete
+    end
   end
 
   code_interface do

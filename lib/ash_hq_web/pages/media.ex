@@ -12,7 +12,15 @@ defmodule AshHqWeb.Pages.Media do
             allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
             frameborder="0"
             height="175"
-            style="width:100%;max-width:660px;overflow:hidden;background:transparent;"
+            style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;"
+            sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+            src="https://embed.podcasts.apple.com/us/podcast/streamlining-development-with-ash-framework-emx-236/id1379029137?i=1000641182373"
+          />
+          <iframe
+            allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
+            frameborder="0"
+            height="175"
+            style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;"
             sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
             src="https://embed.podcasts.apple.com/us/podcast/episode-61-zach-daniel-and-the-ash-framework/id1550737059?i=1000630232631"
           />
@@ -20,7 +28,7 @@ defmodule AshHqWeb.Pages.Media do
             allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
             frameborder="0"
             height="175"
-            style="width:100%;max-width:660px;overflow:hidden;background:transparent;"
+            style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;"
             sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
             src="https://embed.podcasts.apple.com/us/podcast/creating-powerful-applications-using-ash-framework/id1379029137?i=1000590178245"
           />
@@ -28,7 +36,7 @@ defmodule AshHqWeb.Pages.Media do
             allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
             frameborder="0"
             height="175"
-            style="width:100%;max-width:660px;overflow:hidden;background:transparent;"
+            style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;"
             sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
             src="https://embed.podcasts.apple.com/us/podcast/123-ash-framework-models-resources/id1516100616?i=1000584632201"
           />
@@ -36,7 +44,7 @@ defmodule AshHqWeb.Pages.Media do
             allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
             frameborder="0"
             height="175"
-            style="width:100%;max-width:660px;overflow:hidden;background:transparent;"
+            style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;"
             sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
             src="https://embed.podcasts.apple.com/us/podcast/27-ash-framework-with-zach-daniel/id1516100616?i=1000503190100"
           />

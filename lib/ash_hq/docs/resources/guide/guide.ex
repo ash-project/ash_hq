@@ -9,15 +9,6 @@ defmodule AshHq.Docs.Guide do
       AshAdmin.Resource
     ]
 
-  postgres do
-    repo AshHq.Repo
-    table "guides"
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
-  end
-
   actions do
     defaults [:create, :update, :destroy]
 
@@ -118,6 +109,15 @@ defmodule AshHq.Docs.Guide do
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
       allow_nil? true
+    end
+  end
+
+  postgres do
+    repo AshHq.Repo
+    table "guides"
+
+    references do
+      reference :library_version, on_delete: :delete
     end
   end
 

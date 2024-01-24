@@ -5,16 +5,6 @@ defmodule AshHq.Docs.Option do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  postgres do
-    table "options"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-      reference :dsl, on_delete: :delete
-    end
-  end
-
   actions do
     defaults [:update, :destroy]
 
@@ -110,6 +100,16 @@ defmodule AshHq.Docs.Option do
 
     belongs_to :extension, AshHq.Docs.Extension do
       allow_nil? true
+    end
+  end
+
+  postgres do
+    table "options"
+    repo AshHq.Repo
+
+    references do
+      reference :library_version, on_delete: :delete
+      reference :dsl, on_delete: :delete
     end
   end
 

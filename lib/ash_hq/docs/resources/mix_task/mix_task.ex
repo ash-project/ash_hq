@@ -5,15 +5,6 @@ defmodule AshHq.Docs.MixTask do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  postgres do
-    table "mix_tasks"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
-  end
-
   actions do
     defaults [:update, :destroy]
 
@@ -90,6 +81,15 @@ defmodule AshHq.Docs.MixTask do
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
       allow_nil? true
+    end
+  end
+
+  postgres do
+    table "mix_tasks"
+    repo AshHq.Repo
+
+    references do
+      reference :library_version, on_delete: :delete
     end
   end
 

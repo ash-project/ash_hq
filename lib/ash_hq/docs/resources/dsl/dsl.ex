@@ -5,18 +5,6 @@ defmodule AshHq.Docs.Dsl do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  postgres do
-    table "dsls"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-      reference :dsl, on_delete: :delete
-    end
-
-    migration_defaults optional_args: "[]"
-  end
-
   actions do
     defaults [:update, :destroy]
 
@@ -121,6 +109,18 @@ defmodule AshHq.Docs.Dsl do
     belongs_to :dsl, __MODULE__
     has_many :options, AshHq.Docs.Option
     has_many :dsls, __MODULE__
+  end
+
+  postgres do
+    table "dsls"
+    repo AshHq.Repo
+
+    references do
+      reference :library_version, on_delete: :delete
+      reference :dsl, on_delete: :delete
+    end
+
+    migration_defaults optional_args: "[]"
   end
 
   code_interface do

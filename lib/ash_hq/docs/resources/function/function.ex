@@ -5,15 +5,6 @@ defmodule AshHq.Docs.Function do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  postgres do
-    table "functions"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
-  end
-
   actions do
     defaults [:update, :destroy]
 
@@ -112,6 +103,15 @@ defmodule AshHq.Docs.Function do
 
     belongs_to :module, AshHq.Docs.Module do
       allow_nil? true
+    end
+  end
+
+  postgres do
+    table "functions"
+    repo AshHq.Repo
+
+    references do
+      reference :library_version, on_delete: :delete
     end
   end
 

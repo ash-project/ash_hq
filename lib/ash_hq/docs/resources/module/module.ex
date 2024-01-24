@@ -5,15 +5,6 @@ defmodule AshHq.Docs.Module do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
-  postgres do
-    table "modules"
-    repo AshHq.Repo
-
-    references do
-      reference :library_version, on_delete: :delete
-    end
-  end
-
   actions do
     defaults [:update, :destroy]
 
@@ -94,6 +85,15 @@ defmodule AshHq.Docs.Module do
     end
 
     has_many :functions, AshHq.Docs.Function
+  end
+
+  postgres do
+    table "modules"
+    repo AshHq.Repo
+
+    references do
+      reference :library_version, on_delete: :delete
+    end
   end
 
   code_interface do
