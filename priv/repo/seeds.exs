@@ -157,6 +157,20 @@ AshHq.Docs.Library.create!(
 
 AshHq.Docs.Library.create!(
   %{
+    name: "ash_paper_trail",
+    display_name: "AshPaperTrail",
+    module_prefixes: ["AshPaperTrail"],
+    order: 86,
+    description: """
+    Creates and manage a version tracking resource for a given resource.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
     name: "ash_money",
     display_name: "AshMoney",
     module_prefixes: ["AshMoney"],

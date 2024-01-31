@@ -7,18 +7,14 @@ defmodule AshHq.Application do
 
   @impl true
   def start(_type, _args) do
-    flame_parent = FLAME.Parent.get()
-
     Appsignal.Phoenix.LiveView.attach()
 
     # topologies = Application.get_env(:libcluster, :topologies) || []
 
     children =
       [
-        {FLAME.Pool,
-         name: AshHq.ImporterPool, min: 0, max: 1, max_concurrency: 6, idle_shutdown_after: 30_000},
-        !flame_parent && Supervisor.child_spec({Finch, name: AshHq.Finch}, id: AshHq.Finch),
-        !flame_parent && Supervisor.child_spec({Finch, name: Swoosh.Finch}, id: Swoosh.Finch),
+        Supervisor.child_spec({Finch, name: AshHq.Finch}, id: AshHq.Finch),
+        Supervisor.child_spec({Finch, name: Swoosh.Finch}, id: Swoosh.Finch),
         AshHq.Vault,
         # Start the Ecto repository
         AshHq.Repo,
@@ -29,11 +25,11 @@ defmodule AshHq.Application do
         # Start the Endpoint (http/https)
         AshHqWeb.Endpoint,
         {AshHq.Docs.Library.Agent, nil},
-        # !flame_parent && {Cluster.Supervisor, [topologies, [name: AshHq.ClusterSupervisor]]},
+        # {Cluster.Supervisor, [topologies, [name: AshHq.ClusterSupervisor]]},
         {Haystack.Storage.ETS, storage: AshHq.Docs.Indexer.storage()},
-        !flame_parent && AshHq.Docs.Indexer,
-        !flame_parent && oban_worker(),
-        !flame_parent && Application.get_env(:ash_hq, :discord_bot) && AshHq.Discord.Supervisor
+        AshHq.Docs.Indexer,
+        oban_worker(),
+        Application.get_env(:ash_hq, :discord_bot) && AshHq.Discord.Supervisor
       ]
       |> Enum.filter(& &1)
 
