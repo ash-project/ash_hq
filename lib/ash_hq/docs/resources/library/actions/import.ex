@@ -12,8 +12,13 @@ defmodule AshHq.Docs.Library.Actions.Import do
       path_var(),
       changeset.arguments.metadata.version
     )
+    |> case do
+      :ok ->
+        {:ok, changeset.data}
 
-    {:ok, changeset.data}
+      other ->
+        other
+    end
   end
 
   defp path_var do
@@ -68,33 +73,37 @@ defmodule AshHq.Docs.Library.Actions.Import do
         File.rm_rf!(file)
       end
 
-    if result do
-      Logger.info("Starting import of #{name}: #{version}")
+    Logger.info("Starting import of #{name}: #{version}")
 
-      unless AshHq.Docs.exists?(
-               Ash.Query.for_read(AshHq.Docs.LibraryVersion, :read)
-               |> Ash.Query.filter(library_id == ^library.id and version == ^version)
-             ) do
-        AshHq.Repo.transaction(
-          fn ->
-            library_version =
-              AshHq.Docs.LibraryVersion.build!(
-                library.id,
-                version,
-                %{
-                  timeout: :infinity,
-                  extensions: result[:extensions],
-                  doc: result[:doc],
-                  guides: result[:guides],
-                  modules: result[:modules],
-                  mix_tasks: result[:mix_tasks]
-                }
-              )
+    if AshHq.Docs.exists?(
+         Ash.Query.for_read(AshHq.Docs.LibraryVersion, :read)
+         |> Ash.Query.filter(library_id == ^library.id and version == ^version)
+       ) do
+      :ok
+    else
+      AshHq.Repo.transaction(
+        fn ->
+          library_version =
+            AshHq.Docs.LibraryVersion.build!(
+              library.id,
+              version,
+              %{
+                timeout: :infinity,
+                extensions: result[:extensions],
+                doc: result[:doc],
+                guides: result[:guides],
+                modules: result[:modules],
+                mix_tasks: result[:mix_tasks]
+              }
+            )
 
-            delete_except(library_version.id, library.id)
-          end,
-          timeout: :infinity
-        )
+          delete_except(library_version.id, library.id)
+        end,
+        timeout: :infinity
+      )
+      |> case do
+        {:ok, _} -> :ok
+        other -> other
       end
     end
   end
