@@ -30,11 +30,13 @@ defmodule AshHq.Docs.Library.Preparations.FilterPendingImport do
             hex_info
             |> Map.get("releases", [])
             |> Stream.map(&Map.get(&1, "version"))
-            |> Stream.reject(&(&1 in retired_versions))
+            |> Stream.reject(&(&1 in retired_versions || release_candidate?(Version.parse!(&1))))
             |> Enum.at(0)
 
-          if is_nil(result.latest_version) ||
-               Version.compare(latest_version, result.latest_version) == :gt do
+          if latest_version &&
+               (is_nil(result.latest_version) ||
+                  release_candidate?(latest_version) ||
+                  Version.compare(latest_version, result.latest_version) == :gt) do
             [Ash.Resource.set_metadata(result, %{version: latest_version})]
           else
             []
@@ -44,4 +46,7 @@ defmodule AshHq.Docs.Library.Preparations.FilterPendingImport do
       {:ok, pending_import}
     end)
   end
+
+  defp release_candidate?(%{pre: []}), do: false
+  defp release_candidate?(_), do: true
 end
