@@ -1,12 +1,12 @@
 defmodule AshHqWeb.Pages.Community do
   @moduledoc "The Community page - a spot to collect the various links to different Ash community hubs that exist around the web."
 
-  use Surface.LiveComponent
+  use Phoenix.Component
 
   alias AshHqWeb.Components.{CalloutText, CommunityLink}
 
-  def render(assigns) do
-    ~F"""
+  def community(assigns) do
+    ~H"""
     <div class="container sm:mx-auto">
       <div class="flex flex-col w-full sm:flex-row sm:pt-12 sm:mx-32 min-h-screen">
         <div class="sm:w-9/12">
@@ -22,13 +22,13 @@ defmodule AshHqWeb.Pages.Community do
             <img class="h-32 md:h-64" src="/images/ash-logo-cropped.svg">
           </div>
           <div class="text-3xl md:text-5xl px-4 md:px-12 font-bold max-w-5xl mx-auto mt-8 text-center">
-            Join the <CalloutText text="Community" />
+            Join the <CalloutText.callout text="Community" />
           </div>
           <div class="text-2xl font-light text-base-dark-700 dark:text-base-light-100 max-w-4xl mx-auto px-4 md:px-0 mt-4 text-center">
             The Ash Framework has a thriving community ready to welcome developers at all skill levels. All questions, ideas and contributions are valuable, so please join in!
           </div>
           <div class="grid justify-center grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 dark:bg-none dark:bg-opacity-0 py-6 text-center mx-8 gap-16  mt-2 border-t border-t-gray-600 pt-16">
-            <CommunityLink name="Discord" url="https://discord.gg/FmeMvFrw3j">
+            <CommunityLink.link name="Discord" url="https://discord.gg/FmeMvFrw3j">
               <:description>
                 The Ash discord is where you'll find people sharing ideas, collaborating on code, and discussing the Elixir ecosystem.
               </:description>
@@ -44,8 +44,8 @@ defmodule AshHqWeb.Pages.Community do
                   </defs>
                 </svg>
               </:icon>
-            </CommunityLink>
-            <CommunityLink
+            </CommunityLink.link>
+            <CommunityLink.link
               name="Elixir Forum"
               url="https://elixirforum.com/c/elixir-framework-forums/ash-framework-forum/123"
             >
@@ -55,8 +55,8 @@ defmodule AshHqWeb.Pages.Community do
               <:icon>
                 <svg fill="#CF3DFE" viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg"><path d="M19.793 16.575c0 3.752-2.927 7.426-7.743 7.426-5.249 0-7.843-3.71-7.843-8.29 0-5.21 3.892-12.952 8-15.647a.397.397 0 0 1 .61.371 9.716 9.716 0 0 0 1.694 6.518c.522.795 1.092 1.478 1.763 2.352.94 1.227 1.637 1.906 2.644 3.842l.015.028a7.107 7.107 0 0 1 .86 3.4z" /></svg>
               </:icon>
-            </CommunityLink>
-            <CommunityLink name="GitHub" url="https://github.com/ash-project">
+            </CommunityLink.link>
+            <CommunityLink.link name="GitHub" url="https://github.com/ash-project">
               <:description>
                 The Ash Project on GitHub is your one stop shop for all of the source code across the various Ash libraries.
               </:description>
@@ -87,15 +87,11 @@ defmodule AshHqWeb.Pages.Community do
                     ><g transform="scale(3.55556,3.55556)"><path d="M36,12c13.255,0 24,10.745 24,24c0,10.656 -6.948,19.685 -16.559,22.818c0.003,-0.009 0.007,-0.022 0.007,-0.022c0,0 -1.62,-0.759 -1.586,-2.114c0.038,-1.491 0,-4.971 0,-6.248c0,-2.193 -1.388,-3.747 -1.388,-3.747c0,0 10.884,0.122 10.884,-11.491c0,-4.481 -2.342,-6.812 -2.342,-6.812c0,0 1.23,-4.784 -0.426,-6.812c-1.856,-0.2 -5.18,1.774 -6.6,2.697c0,0 -2.25,-0.922 -5.991,-0.922c-3.742,0 -5.991,0.922 -5.991,0.922c-1.419,-0.922 -4.744,-2.897 -6.6,-2.697c-1.656,2.029 -0.426,6.812 -0.426,6.812c0,0 -2.342,2.332 -2.342,6.812c0,11.613 10.884,11.491 10.884,11.491c0,0 -1.097,1.239 -1.336,3.061c-0.76,0.258 -1.877,0.576 -2.78,0.576c-2.362,0 -4.159,-2.296 -4.817,-3.358c-0.649,-1.048 -1.98,-1.927 -3.221,-1.927c-0.817,0 -1.216,0.409 -1.216,0.876c0,0.467 1.146,0.793 1.902,1.659c1.594,1.826 1.565,5.933 7.245,5.933c0.617,0 1.876,-0.152 2.823,-0.279c-0.006,1.293 -0.007,2.657 0.013,3.454c0.034,1.355 -1.586,2.114 -1.586,2.114c0,0 0.004,0.013 0.007,0.022c-9.61,-3.133 -16.558,-12.162 -16.558,-22.818c0,-13.255 10.745,-24 24,-24z" /></g></g></g>
                 </svg>
               </:icon>
-            </CommunityLink>
+            </CommunityLink.link>
           </div>
         </div>
       </div>
     </div>
     """
-  end
-
-  def mount(socket) do
-    {:ok, socket}
   end
 end

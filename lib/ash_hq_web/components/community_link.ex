@@ -1,27 +1,27 @@
 defmodule AshHqWeb.Components.CommunityLink do
   @moduledoc "A component for rendering a link for the Community page."
-  use Surface.Component
+  use Phoenix.Component
 
   import AshHqWeb.Tails
 
-  prop name, :string, required: true
-  prop class, :string, default: nil
-  prop url, :string, required: true
+  attr :name, :string, required: true
+  attr :class, :string, default: nil
+  attr :url, :string, required: true
 
-  slot icon
-  slot description
+  slot :icon
+  slot :description
 
-  def render(assigns) do
-    ~F"""
+  def link(assigns) do
+    ~H"""
     <div class="flex flex-col items-center">
       <div class={classes(["w-16 h-16 text-primary-light-600 dark:text-primary-dark-400", @class])}>
-        <#slot {@icon} />
+        <%= render_slot(@icon) %>
       </div>
       <a
         href={@url}
         class="font-bold text-3xl mt-4 hover:underline flex flex-row items-center space-x-2"
       >
-        <span>{@name}</span>
+        <span><%= @name %></span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -38,7 +38,7 @@ defmodule AshHqWeb.Components.CommunityLink do
         </svg>
       </a>
       <div class="text-xl mt-4">
-        <#slot {@description} />
+        <%= render_slot(@description) %>
       </div>
     </div>
     """

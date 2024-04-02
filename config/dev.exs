@@ -81,7 +81,7 @@ config :ash_hq, AshHqWeb.Endpoint,
 
 # Watch static and templates for browser reloading.
 config :ash_hq, AshHqWeb.Endpoint,
-  reloadable_compilers: [:gettext, :elixir, :surface],
+  reloadable_compilers: [:gettext, :elixir],
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",

@@ -1,53 +1,46 @@
 defmodule AshHqWeb.Components.Search do
   @moduledoc "The search overlay modal"
-  use Surface.LiveComponent
+  use Phoenix.LiveComponent
 
   require Ash.Query
 
   alias AshHqWeb.Components.Icon
   alias AshHqWeb.DocRoutes
-  alias Surface.Components.{Form, LivePatch}
+  import AshHqWeb.Tails
 
-  prop(close, :event, required: true)
-  prop(libraries, :list, required: true)
-  prop(selected_types, :list, required: true)
-  prop(change_types, :event, required: true)
-  prop(change_versions, :event, required: true)
-  prop(remove_version, :event, required: true)
-  prop(uri, :string, required: true)
-
-  data(search, :string, default: "")
-  data(item_list, :list, default: [])
-  data(selected_item, :string)
-  data(selecting_packages, :boolean, default: false)
+  attr(:libraries, :list, required: true)
+  attr(:selected_types, :list, required: true)
+  attr(:uri, :string, required: true)
+  attr(:close, :any)
 
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div
       id={@id}
       style="display: none;"
       class="fixed flex justify-center align-middle w-screen h-full backdrop-blur-sm bg-white bg-opacity-10 z-50"
     >
       <div
-        :on-click-away={AshHqWeb.AppViewLive.toggle_search()}
+        phx-click-away={AshHqWeb.AppViewLive.toggle_search()}
         class="dark:text-white absolute rounded-xl left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 max-w-[1200px] bg-white dark:bg-base-dark-850 border-2 dark:border-base-dark-900"
-        :on-window-keydown="select-previous"
+        phx-target={@myself}
+        phx-window-keydown="select-previous"
         phx-key="ArrowUp"
       >
-        <div id="search-body" class="h-full" :on-window-keydown="select-next" phx-key="ArrowDown">
+        <div id="search-body" class="h-full" phx-target={@myself} phx-window-keydown="select-next" phx-key="ArrowDown">
           <div class="p-6 h-full grid gap-6 grid-rows-[max-content_auto_max-content]">
             <button
               id="close-search"
               class="absolute top-6 right-6 h-6 w-6 cursor-pointer z-10 hover:text-base-light-400"
-              :on-click={@close}
+              phx-click={@close}
             >
-              <Heroicons.Outline.XIcon class="h-6 w-6" />
+              <span class="hero-x-mark h-6 w-6"/>
             </button>
             <div class="flex flex-col w-full sticky">
               <div class="w-full flex flex-row justify-start top-0">
-                <Heroicons.Outline.SearchIcon class="h-6 w-6 mr-4" />
+                <span class="hero-magnifying-glass h-6 w-6 mr-4"/>
                 <div class="flex flex-row justify-between w-full mr-10 border-b border-base-light-600">
-                  <Form for={%{}} as={:sign_out} change="search" submit="go-to-doc" class="w-full">
+                  <.form for={%{}} as={:search} phx-target={@myself} phx-change="search" phx-submit="go-to-doc" class="w-full">
                     <input
                       id="search-input"
                       name="search"
@@ -55,12 +48,12 @@ defmodule AshHqWeb.Components.Search do
                       phx-debounce={300}
                       class="text-lg dark:bg-base-dark-850 grow ring-0 outline-none w-full"
                     />
-                  </Form>
+                  </.form>
                 </div>
               </div>
             </div>
             <div class="grid overflow-auto scroll-parent">
-              {render_items(assigns, @item_list)}
+              <%= render_items(assigns, @item_list) %>
             </div>
           </div>
         </div>
@@ -70,74 +63,79 @@ defmodule AshHqWeb.Components.Search do
   end
 
   defp render_items(assigns, items) do
-    ~F"""
+    assigns = assign(assigns, items: items)
+
+    ~H"""
     <div class="divide-y">
-      {#for item <- items}
-        {#if item.__struct__ == AshHq.Docs.Guide}
-          <LivePatch
+      <%= for item <- @items do %>
+        <%= if item.__struct__ == AshHq.Docs.Guide do %>
+          <.link
             class="block w-full text-left border-base-light-300 dark:border-base-dark-600"
-            to={DocRoutes.doc_link(item)}
-            opts={id: "result-#{item.id}", "phx-click": @close}
+            href={DocRoutes.doc_link(item)}
+            id="result-#{item.id}"
+            phx-click={@close}
           >
             <div class={
-              "hover:bg-base-light-100 dark:hover:bg-base-dark-750 py-1 w-full",
-              "bg-base-light-200 dark:bg-base-dark-700": @selected_item.id == item.id
+            classes(
+              ["hover:bg-base-light-100 dark:hover:bg-base-dark-750 py-1 w-full",
+              "bg-base-light-200 dark:bg-base-dark-700": @selected_item.id == item.id]
+            )
             }>
               <div class="flex justify-start items-center space-x-2 pb-2 pl-2">
                 <div>
-                  <Icon type={item_type(item)} classes="h-4 w-4 flex-none mt-1 mx-1" />
+                  <Icon.icon type={item_type(item)} classes="h-4 w-4 flex-none mt-1 mx-1" />
                 </div>
                 <div class="flex flex-col">
                   <div class="text-primary-light-700 dark:text-primary-dark-300">
                     <span class="text-primary-light-700 dark:text-primary-dark-500">
-                      {item.library_name}
+                      <%= item.library_name %>
                     </span>
-                    {item_type(item)}
+                    <%= item_type(item) %>
                   </div>
                   <div class="flex flex-row flex-wrap items-center">
                     <div class="font-bold">
-                      {item_name(item)}
+                      <%= item_name(item) %>
                     </div>
                   </div>
                   <div>
-                    {first_sentence(item)}
+                    <%= first_sentence(item) %>
                   </div>
                 </div>
               </div>
               <div>
               </div>
             </div>
-          </LivePatch>
-        {/if}
-        {#if item.__struct__ != AshHq.Docs.Guide}
+          </.link>
+        <% else %>
           <a
             class="block w-full text-left border-base-light-300 dark:border-base-dark-600"
             href={DocRoutes.doc_link(item)}
             id={"result-#{item.id}"}
             phx-click={@close}
           >
-            <div class={
+            <div class={classes([
               "hover:bg-base-light-100 dark:hover:bg-base-dark-750 py-1 w-full",
               "bg-base-light-200 dark:bg-base-dark-700": @selected_item.id == item.id
+            ])
             }>
               <div class="flex justify-start items-center space-x-2 pb-2 pl-2">
                 <div>
-                  <Icon type={item_type(item)} classes="h-4 w-4 flex-none mt-1 mx-1" />
+                  <Icon.icon type={item_type(item)} classes="h-4 w-4 flex-none mt-1 mx-1" />
                 </div>
                 <div class="flex flex-col">
                   <div class="text-primary-light-700 dark:text-primary-dark-300">
                     <span class="text-primary-light-700 dark:text-primary-dark-500">
-                      {item.library_name}
+                      <%= item.library_name %>
                     </span>
-                    {item_type(item)}
+                    <%= item_type(item) %>
                   </div>
                   <div class="flex flex-row flex-wrap items-center">
                     <div class="font-bold">
-                      {item_name(item)}
+                      <%= item_name(item) %>
                     </div>
                   </div>
                   <div>
-                    {first_sentence(item)}
+                    <%= first_sentence(item) %>
                   </div>
                 </div>
               </div>
@@ -145,8 +143,8 @@ defmodule AshHqWeb.Components.Search do
               </div>
             </div>
           </a>
-        {/if}
-      {/for}
+        <% end %>
+      <% end %>
     </div>
     """
   end
@@ -207,7 +205,8 @@ defmodule AshHqWeb.Components.Search do
   def handle_event("select-next", _, socket) do
     if socket.assigns[:selected_item] && socket.assigns[:item_list] do
       next =
-        socket.assigns.item_list
+        socket.assigns[:item_list]
+        |> Kernel.||([])
         |> Enum.drop_while(&(&1.id != socket.assigns.selected_item.id))
         |> Enum.at(1)
 
@@ -220,7 +219,8 @@ defmodule AshHqWeb.Components.Search do
   def handle_event("select-previous", _, socket) do
     if socket.assigns[:selected_item] && socket.assigns[:item_list] do
       next =
-        socket.assigns.item_list
+        socket.assigns[:item_list]
+        |> Kernel.||([])
         |> Enum.reverse()
         |> Enum.drop_while(&(&1.id != socket.assigns.selected_item.id))
         |> Enum.at(1)
@@ -232,7 +232,7 @@ defmodule AshHqWeb.Components.Search do
   end
 
   def handle_event("go-to-doc", _data, socket) do
-    case Enum.find(socket.assigns.item_list, fn item ->
+    case Enum.find(socket.assigns[:item_list] || [], fn item ->
            item.id == socket.assigns.selected_item.id
          end) do
       nil ->
@@ -251,7 +251,7 @@ defmodule AshHqWeb.Components.Search do
 
   defp search(socket) do
     if socket.assigns.search in [nil, ""] do
-      socket
+      assign(socket, :item_list, [])
     else
       item_list =
         socket.assigns.search

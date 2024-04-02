@@ -1,16 +1,16 @@
 defmodule AshHqWeb.Components.CalloutText do
   @moduledoc "Highlights some text on the page"
-  use Surface.Component
+  use Phoenix.Component
 
   import AshHqWeb.Tails
 
-  prop text, :string, required: true
-  prop class, :css_class
+  attr :text, :string, required: true
+  attr :class, :any, default: ""
 
-  def render(assigns) do
-    ~F"""
+  def callout(assigns) do
+    ~H"""
     <span class={classes(["text-primary-light-600 dark:text-primary-dark-400 font-bold", @class])}>
-      {@text}
+      <%= @text %>
     </span>
     """
   end

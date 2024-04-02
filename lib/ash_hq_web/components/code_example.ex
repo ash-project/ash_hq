@@ -1,28 +1,37 @@
 defmodule AshHqWeb.Components.CodeExample do
-  @moduledoc "Renders a code example, as seen on the home page"
-  use Surface.LiveComponent
+  @moduledoc """
+  Renders a code example, as seen on the home page
 
-  prop code, :string, required: true
-  prop class, :css_class
-  prop title, :string
-  prop start_collapsed, :boolean, default: false
-  prop collapsible, :boolean, default: false
+  This is so stupid. Why is this a live component
+  """
+  use Phoenix.LiveComponent
+  import AshHqWeb.Tails
 
-  data collapsed, :string, default: false
+  attr :code, :string, required: true
+  attr :class, :any
+  attr :title, :string
+  attr :start_collapsed, :boolean, default: false
+  attr :collapsible, :boolean, default: false
 
   def render(assigns) do
-    ~F"""
-    <div class={
+    ~H"""
+    <div class={classes([
+
       "rounded-xl bg-[#f3f4f6] dark:bg-[#22242D] border border-base-light-400 dark:border-base-dark-700 text-sm border-b",
       @class
+    ])
     }>
-      {#if @collapsible}
+    <%= if @collapsible do %>
         <button
           type="button"
-          :on-click="fold"
+          phx-click="fold"
+          phx-target={@myself}
           class={
+          classes([
+
             "flex flex-row rounded-t-xl w-full justify-between py-2 pl-2 pr-8 hover:bg-base-light-500 dark:hover:border-base-dark-600",
             "border-base-light-400 dark:border-base-dark-700 border-b": !@collapsed
+          ])
           }
         >
           <div class="flex flex-row justify-start space-x-1">
@@ -30,60 +39,54 @@ defmodule AshHqWeb.Components.CodeExample do
             <div class="w-3 h-3 bg-base-light-600 rounded-full" />
             <div class="w-3 h-3 bg-base-light-600 rounded-full" />
           </div>
-          {#if @title}
-            <h3 class="justify-self-end text-base-light-700 dark:text-white">{@title}</h3>
+          <%= if @title do %>
+            <h3 class="justify-self-end text-base-light-700 dark:text-white"><%= @title %></h3>
             <div>
-              {#if @collapsible}
-                {#if @collapsed}
-                  <Heroicons.Solid.ChevronDoubleDownIcon class="w-4 h-4" />
-                {#else}
-                  <Heroicons.Solid.ChevronDoubleUpIcon class="w-4 h-4" />
-                {/if}
-              {/if}
+              <%= if @collapsible do %>
+                <%= if @collapsed do %>
+                  <span class="hero-chevron-double-down-solid w-4 h-4"/>
+                <% else %>
+                  <span class="hero-chevron-double-up-solid w-4 h-4"/>
+                <% end %>
+              <% end %>
             </div>
-          {/if}
+          <% end %>
         </button>
-      {#else}
-        <div class={
+    <% else %>
+        <div class={classes([
           "flex flex-row justify-between py-2 pl-2 pr-8",
           "border-base-light-400 dark:border-base-dark-700 border-b": !@collapsed
+        ])
         }>
-          <div class="flex flex-row justify-start space-x-1">
+          <div class="flex flex-row justify-start space-x-1 w-full">
             <div class="w-3 h-3 bg-base-light-600 rounded-full" />
             <div class="w-3 h-3 bg-base-light-600 rounded-full" />
             <div class="w-3 h-3 bg-base-light-600 rounded-full" />
+            <div class="flex grow justify-center">
+          <%= if @title do %>
+            <h3 class="items-center text-base-light-700 dark:text-white"><%= @title %></h3>
+          <% end %>
           </div>
-          {#if @title}
-            <h3 class="justify-self-end text-base-light-700 dark:text-white">{@title}</h3>
-            <div>
-              {#if @collapsible}
-                {#if @collapsed}
-                  <Heroicons.Solid.ChevronDoubleDownIcon class="w-4 h-4" />
-                {#else}
-                  <Heroicons.Solid.ChevronDoubleUpIcon class="w-4 h-4" />
-                {/if}
-              {/if}
-            </div>
-          {/if}
+          </div>
         </div>
-      {/if}
-      <div class={"pl-1 py-2", hidden: @collapsed}>
+      <% end %>
+      <div class={classes(["pl-1 py-2", hidden: @collapsed])}>
         <div class="flex flex-row overflow-auto">
           <div class="flex flex-col border-r text-base-light-500 dark:text-white border-base-light-400 dark:border-base-dark-700 pr-1">
-            {#if !@collapsed}
-              {#for {_line, no} <- @code}
-                <pre>{no}</pre>
-              {/for}
-            {#else}
+            <%= if !@collapsed do %>
+              <%= for {_line, no} <- @code do %>
+                <pre><%= no %></pre>
+              <% end %>
+              <% else %>
               <div class="invisible h-0">{to_string(List.last(@code) |> elem(0))}</div>
-            {/if}
+            <% end %>
           </div>
           <div>
-            {#for {line, _no} <- @code}
-              <div class={"flex flex-row mr-4", "invisible h-0": @collapsed}>
-                <div class="sm:hidden md:block mr-8 text-base-light-600 font-mono" />{Phoenix.HTML.raw(line)}
+            <%= for {line, _no} <- @code do %>
+              <div class={classes(["flex flex-row mr-4", "invisible h-0": @collapsed])}>
+                <div class="sm:hidden md:block mr-8 text-base-light-600 font-mono" /><%= Phoenix.HTML.raw(line) %>
               </div>
-            {/for}
+            <% end %>
           </div>
         </div>
       </div>
@@ -96,7 +99,7 @@ defmodule AshHqWeb.Components.CodeExample do
   end
 
   def update(assigns, socket) do
-    if assigns.start_collapsed && assigns.collapsible do
+    if assigns[:start_collapsed] && assigns.collapsible do
       {:ok,
        socket
        |> assign(assigns)

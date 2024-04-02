@@ -2,35 +2,35 @@ defmodule AshHqWeb.Components.DocSidebar do
   @moduledoc """
   Renders the sidebar data, and uses `Phoenix.LiveView.JS` to manage selection/collapsible state.
   """
-  use Surface.LiveComponent
+  use Phoenix.LiveComponent
 
   alias AshHqWeb.Components.Icon
   alias Phoenix.LiveView.JS
-  alias Surface.Components.LivePatch
+  import AshHqWeb.Tails
 
-  prop libraries, :any
-  prop remove_version, :any
-  prop class, :any
-  prop sidebar_data, :any, default: []
+  attr :libraries, :any
+  attr :remove_version, :any
+  attr :class, :any
+  attr :sidebar_data, :any, default: []
 
   def render(assigns) do
-    ~F"""
-    <aside id={@id} class={"grid z-40 bg-white dark:bg-base-dark-850", @class} aria-label="Sidebar">
+    ~H"""
+    <aside id={@id} class={classes(["grid z-40 bg-white dark:bg-base-dark-850", @class])} aria-label="Sidebar">
       <div class="flex flex-col px-1">
         <ul class="ml-2 mt-4">
-          {#for {category, items} <- @sidebar_data}
+          <%= for {category, items} <- @sidebar_data do %>
             <li class="pt-1 pl-0.5" id={"#{@id}-guides-#{slug(category)}"}>
               <button
                 class="flex flex-row items-start w-full text-left rounded-lg hover:bg-base-light-100 dark:hover:bg-base-dark-750 p-[0.1rem]"
                 phx-click={collapse("#{@id}-guides-#{slug(category)}")}
               >
                 <div
-                  class={"chevron mr-1.5 mt-1.5 origin-center", "rotate-[-90deg]": !has_active?(items)}
+                  class={classes(["chevron mr-1.5 mt-1.5 origin-center", "rotate-[-90deg]": !has_active?(items)])}
                   id={"#{@id}-guides-#{slug(category)}-chevron"}
                 >
-                  <Heroicons.Outline.ChevronDownIcon class="w-3 h-3" />
+                  <span class="hero-chevron-down-solid w-3 h-3"/>
                 </div>
-                <span class="text-base-light-500 dark:text-base-dark-300 font-bold">{category}</span>
+                <span class="text-base-light-500 dark:text-base-dark-300 font-bold"><%= category %></span>
               </button>
 
               <ul
@@ -38,37 +38,36 @@ defmodule AshHqWeb.Components.DocSidebar do
                 id={"#{@id}-guides-#{slug(category)}-contents"}
                 style={if !has_active?(items), do: "display: none", else: ""}
               >
-                {#for {library, items} <- items}
+                <%= for {library, items} <- items do %>
                   <li class="pt-1 pl-0.5" id={"#{@id}-guides-#{slug(category)}-#{slug(library)}"}>
-                    <span class="text-primary-dark-500 dark:text-primary-light-500 font-extrabold">{library}</span>
+                    <span class="text-primary-dark-500 dark:text-primary-light-500 font-extrabold"><%= library %></span>
 
                     <ul>
-                      {#for %{name: item_name, to: to, id: item_id, active?: active?} <- items}
-                        {id = id(category, library, item_name, "guides", item_id, @id)
-                        nil}
+                      <%= for %{name: item_name, to: to, id: item_id, active?: active?} <- items do %>
+                        <% id = id(category, library, item_name, "guides", item_id, @id) %>
                         <li
                           id={id}
-                          class={
-                            "first:rounded-t-lg last:rounded-b-lg p-[0.1rem] pl-1 hover:bg-base-light-100 dark:hover:bg-base-dark-750",
-                            "bg-base-light-200 dark:bg-base-dark-750 active-sidebar-nav": active?
+                          class={classes(
+                            ["first:rounded-t-lg last:rounded-b-lg p-[0.1rem] pl-1 hover:bg-base-light-100 dark:hover:bg-base-dark-750",
+                            "bg-base-light-200 dark:bg-base-dark-750 active-sidebar-nav": active?]
+                          )
                           }
                         >
-                          <LivePatch
-                            to={to}
-                            opts={phx_click: mark_active(id)}
+                          <.link href={to}
+                            phx-click={mark_active(id)}
                             class="flex flex-row items-start w-full text-left text-base-light-900 dark:text-base-dark-100"
                           >
-                            <Icon type="Guides" classes="h-4 w-4 flex-none mt-1 mr-1.5" />
-                            {item_name}
-                          </LivePatch>
+                            <Icon.icon type="Guides" classes="h-4 w-4 flex-none mt-1 mr-1.5" />
+                            <%= item_name %>
+                          </.link>
                         </li>
-                      {/for}
+                      <% end %>
                     </ul>
                   </li>
-                {/for}
+                <% end %>
               </ul>
             </li>
-          {/for}
+          <% end %>
         </ul>
       </div>
     </aside>

@@ -59,6 +59,7 @@ config :spark, :formatter,
 # Configures the endpoint
 config :ash_hq, AshHqWeb.Endpoint,
   url: [host: "localhost"],
+  adapter: Bandit.PhoenixAdapter,
   render_errors: [view: AshHqWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: AshHq.PubSub,
   live_view: [signing_salt: "U1/3L4jI"]
@@ -76,7 +77,6 @@ config :ash_hq, AshHqWeb.Tails, colors_file: Path.join(File.cwd!(), "assets/tail
 
 # Swoosh API client is needed for adapters other than SMTP.
 config :swoosh, :api_client, false
-config :sunflower_ui, :tails, AshHqWeb.Tails
 
 # Configure esbuild (the version is required)
 config :esbuild,

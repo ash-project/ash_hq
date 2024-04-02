@@ -5,7 +5,6 @@
     :ash,
     :ash_postgres,
     :ash_graphql,
-    :surface,
     :ash_admin,
     :ash_csv,
     :ash_authentication,
@@ -19,7 +18,7 @@
     "priv/scripts/**/*.{ex,exs}",
     "{config,lib,test}/**/*.{ex,exs}"
   ],
-  plugins: [Spark.Formatter, Surface.Formatter.Plugin],
+  plugins: [Spark.Formatter],
   subdirectories: ["priv/*/migrations"],
   locals_without_parens: [
     has_name_attribute?: 1,

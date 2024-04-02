@@ -1,22 +1,21 @@
 defmodule AshHqWeb.Components.Forum.Attachment do
   @moduledoc "Renders an attachment"
-  use Surface.Component
+  use Phoenix.Component
 
-  prop(attachment, :any, required: true)
+  attr(:attachment, :any, required: true)
 
-  def render(assigns) do
-    ~F"""
+  def attachment(assigns) do
+    ~H"""
     <div>
-      {#case video_type(@attachment.filename)}
-        {#match {:video, mime}}
+      <%= case video_type(@attachment.filename) do %>
+        <% {:video, mime} -> %>
           <video controls width={@attachment.width} height={@attachment.height}>
             <source src={@attachment.url} type={mime}>
           </video>
-        {#match {:image, _mime}}
-          <img src={@attachment.url} width={@attachment.width} height={@attachment.height}>
-        {#match _}
-          other
-      {/case}
+          <% {:image, _mime} -> %>
+            <img src={@attachment.url} width={@attachment.width} height={@attachment.height}>
+          <% _ -> %>
+      <% end %>
     </div>
     """
   end

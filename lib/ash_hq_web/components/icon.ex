@@ -2,31 +2,32 @@ defmodule AshHqWeb.Components.Icon do
   @moduledoc """
   Defines icons for different types of resources.
   """
-  use Surface.Component
+  use Phoenix.Component
+  import AshHqWeb.Tails
 
-  prop(type, :string, required: true)
-  prop(classes, :string, required: false, default: "")
+  attr(:type, :string, required: true)
+  attr(:classes, :string, required: false, default: "")
 
-  def render(assigns) do
+  def icon(assigns) do
     case assigns.type do
       type when type in ["Dsl", "DSL"] ->
-        ~F"""
-        <Heroicons.Outline.PuzzleIcon class={@classes} />
+        ~H"""
+        <span class={classes(["hero-puzzle-piece", @classes])}/>
         """
 
       "Forum" ->
-        ~F"""
-        <Heroicons.Outline.UserGroupIcon class={@classes} />
+        ~H"""
+        <span class={classes(["hero-user-group", @classes])}/>
         """
 
       type when type in ["Guide", "Guides"] ->
-        ~F"""
-        <Heroicons.Outline.BookOpenIcon class={@classes} />
+        ~H"""
+        <span class={classes(["hero-book-open", @classes])}/>
         """
 
       type when type in ["Mix Task", "Mix Tasks"] ->
         # Command-line icon
-        ~F"""
+        ~H"""
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -45,8 +46,8 @@ defmodule AshHqWeb.Components.Icon do
 
       _default ->
         # Includes the Code category
-        ~F"""
-        <Heroicons.Outline.CodeIcon class={@classes} />
+        ~H"""
+        <span class={classes(["hero-code-bracket", @classes])}/>
         """
     end
   end

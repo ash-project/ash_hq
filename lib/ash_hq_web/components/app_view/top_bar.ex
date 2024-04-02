@@ -2,25 +2,24 @@ defmodule AshHqWeb.Components.AppView.TopBar do
   @moduledoc "The global top navigation bar"
   use AshHqWeb, :component
 
-  prop(live_action, :atom, required: true)
-  prop(toggle_theme, :event, required: true)
-  prop(configured_theme, :string, required: true)
-  prop(current_user, :any)
-
   alias AshHqWeb.Components.{DocSidebar, SearchBar}
-  alias AshHqWeb.Router.Helpers, as: Routes
-  alias Phoenix.LiveView.JS
-  alias Surface.Components.{Form, LivePatch}
+  import AshHqWeb.Tails
 
-  def render(assigns) do
-    ~F"""
+  attr(:live_action, :atom, required: true)
+  attr(:configured_theme, :string, required: true)
+  attr(:current_user, :any)
+
+  def top_bar(assigns) do
+    ~H"""
     <div
       id="top-bar"
-      class={
+      class={classes([
+
         "flex justify-between items-center py-4 px-4 h-20 top-0 z-40 2xl:w-[1500px] self-center",
         sticky: @live_action == :docs_dsl,
         "border-b border-base-light-300 dark:border-base-dark-700 bg-white dark:bg-base-dark-850":
           @live_action == :docs_dsl
+      ])
       }
     >
       <div class="flex flex-row align-baseline">
@@ -30,50 +29,51 @@ defmodule AshHqWeb.Components.AppView.TopBar do
           <img class="h-10 lg:hidden" src="/images/ash-logo.png">
         </a>
       </div>
-      {#if @live_action in [:docs_dsl, :home]}
-        <SearchBar class="hidden xl:block" />
-      {/if}
+      <%= if @live_action in [:docs_dsl] do %>
+        <SearchBar.search_bar class="hidden xl:block" />
+      <% end %>
       <div class="flex flex-row align-middle items-center space-x-2">
-        {#if @live_action == :docs_dsl}
+        <%= if @live_action == :docs_dsl do %>
           <button class="block xl:hidden" type="button" phx-click={AshHqWeb.AppViewLive.toggle_search()}>
-            <Heroicons.Solid.SearchIcon class="w-6 h-6 dark:fill-base-dark-400 dark:hover:fill-base-dark-200 hover:fill-base-light-600" />
+            <span class="hero-magnifying-glass-solid w-6 h-6 dark:fill-base-dark-400 dark:hover:fill-base-dark-200 hover:fill-base-light-600"/>
           </button>
-        {/if}
+          <% end %>
 
-        <LivePatch
-          to="/docs/guides/ash/latest/tutorials/get-started"
-          opts={title: "Documentation", phx_click: DocSidebar.mark_active("get-started-guide")}
+        <.link
+          href="/docs/guides/ash/latest/tutorials/get-started"
+          title="Documentation"
+          phx-click={DocSidebar.mark_active("get-started-guide")}
           class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700 hidden md:block"
         >
           Documentation
-        </LivePatch>
-        <LivePatch
-          to="/blog"
-          opts={title: "Blog"}
+        </.link>
+        <.link
+          href="/blog"
+          title="Blog"
           class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700"
         >
           Blog
-        </LivePatch>
-        <LivePatch
-          to="/community"
-          opts={title: "Community"}
+        </.link>
+        <.link
+          href="/community"
+          title="Community"
           class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700"
         >
           Community
-        </LivePatch>
+        </.link>
         <a
-          href="https://elixirforum.com/c/elixir-framework-forums/ash-framework-forum/"
+          href="https://elixirforum.com/c/ash-framework-forum/123"
           class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700 hidden lg:block"
         >
           Forum
         </a>
-        <LivePatch
-          to="/media"
-          opts={title: "Media"}
+        <.link
+          href="/media"
+          title="Media"
           class="text-lg font-bold px-2 md:px-4 pr-2 md:pr-8 dark:hover:text-primary-dark-400 hover:text-primary-light-700 hidden lg:block"
         >
           Media
-        </LivePatch>
+        </.link>
         <a href="https://github.com/ash-project" title="Github" class="hidden md:block">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -116,98 +116,18 @@ defmodule AshHqWeb.Components.AppView.TopBar do
           </svg>
         </a>
         <div class="hidden md:block">|</div>
-        <button :on-click={@toggle_theme}>
-          {#case @configured_theme}
-            {#match "light"}
-              <Heroicons.Solid.SunIcon class="w-6 h-6 hover:text-base-light-600" />
-            {#match "system"}
-              <Heroicons.Solid.DesktopComputerIcon class="w-6 h-6 fill-base-light-400 dark:text-black dark:hover:text-base-dark-600 hover:text-base-light-600" />
-            {#match _}
-              <Heroicons.Solid.MoonIcon class="w-6 h-6 fill-base-light-400 hover:fill-base-light-200 hover:text-base-light-200" />
-          {/case}
+        <button phx-click="toggle_theme">
+          <%= case @configured_theme do %>
+            <% "light" -> %>
+              <span class="hero-sun-solid w-6 h-6 hover:text-base-light-600"/>
+            <% "system" -> %>
+              <span class="hero-computer-desktop-solid w-6 h-6 fill-base-light-400 hover:fill-base-light-200 hover:text-base-light-200"/>
+            <% _ -> %>
+              <span class="hero-moon-solid w-6 h-6 fill-base-light-400 hover:fill-base-light-200 hover:text-base-light-200"/>
+         <% end %>
         </button>
-        <div>|</div>
-
-        <div class="relative inline-block text-left">
-          <div>
-            <button
-              phx-click={toggle_account_dropdown()}
-              type="button"
-              class="inline-flex items-center justify-center w-full rounded-md shadow-sm font-medium dark:text-base-dark-400 dark:hover:text-base-dark-200 hover:text-base-dark-600"
-              id="menu-button"
-              aria-expanded="true"
-              aria-haspopup="true"
-            >
-              <Heroicons.Solid.UserIcon class="h-6 w-6" />
-            </button>
-          </div>
-
-          <div
-            id="account-dropdown"
-            style="display: none;"
-            class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:text-white dark:bg-base-dark-850 ring-1 ring-black ring-opacity-5 divide-y divide-base-light-100 focus:outline-none"
-            role="menu"
-            aria-orientation="vertical"
-            aria-labelledby="menu-button"
-            tabindex="-1"
-            phx-click-away={toggle_account_dropdown()}
-          >
-            {#if @current_user}
-              <div class="py-1" role="none">
-                <!-- Active: "bg-base-light-100 text-base-light-900", Not Active: "text-base-light-700" -->
-                <LivePatch
-                  to={Routes.app_view_path(AshHqWeb.Endpoint, :user_settings)}
-                  class="dark:text-white group flex items-center px-4 py-2 text-sm"
-                >
-                  <Heroicons.Solid.PencilAltIcon class="mr-3 h-5 w-5 text-base-light-400 group-hover:text-base-light-500" />
-                  Settings
-                </LivePatch>
-              </div>
-              <div class="py-1" role="none">
-                <Form for={%{}} as={:sign_out} action={~p'/sign-out'} method="get">
-                  <button
-                    label="logout"
-                    type="submit"
-                    class="dark:text-white group flex items-center px-4 py-2 text-sm"
-                    method={:delete}
-                    id="logout-link"
-                  >
-                    <Heroicons.Outline.LogoutIcon class="mr-3 h-5 w-5 text-base-light-400 group-hover:text-base-light-500" />
-                    Logout
-                  </button>
-                </Form>
-              </div>
-            {#else}
-              <div class="py-1" role="none">
-                <a href={~p'/sign-in'} class="dark:text-white group flex items-center px-4 py-2 text-sm">
-                  <div class="flex items-center">
-                    <Heroicons.Outline.UserAddIcon class="mr-3 h-5 w-5 text-base-light-400 group-hover:text-base-light-500" />
-                    Sign In
-                  </div>
-                </a>
-              </div>
-            {/if}
-          </div>
-        </div>
       </div>
     </div>
     """
-  end
-
-  defp toggle_account_dropdown(js \\ %JS{}) do
-    js
-    |> JS.toggle(
-      to: "#account-dropdown",
-      in: {
-        "transition ease-out duration-100",
-        "opacity-0 scale-95",
-        "opacity-100 scale-100"
-      },
-      out: {
-        "transition ease-in duration-75",
-        "opacity-100 scale-100",
-        "opacity-0 scale-05"
-      }
-    )
   end
 end

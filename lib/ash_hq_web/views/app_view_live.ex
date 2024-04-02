@@ -1,46 +1,20 @@
 defmodule AshHqWeb.AppViewLive do
   # credo:disable-for-this-file Credo.Check.Readability.MaxLineLength
-  use Surface.LiveView,
+  use Phoenix.LiveView,
     container: {:div, class: "h-full"}
 
   alias AshHqWeb.Components.AppView.TopBar
 
   alias AshHqWeb.Components.Search
-  alias AshHqWeb.Pages.{Blog, Community, Docs, Forum, Home, Media, UserSettings}
+  alias AshHqWeb.Pages.{Blog, Community, Docs, Forum, Home, Media}
 
   alias Phoenix.LiveView.JS
-  alias Surface.Components.Context
   require Ash.Query
 
   import AshHqWeb.Tails
 
-  data(configured_theme, :string, default: :system)
-  data(libraries, :list, default: [])
-  data(selected_types, :map, default: %{})
-  data(current_user, :map)
-
-  data(library, :any, default: nil)
-  data(extension, :any, default: nil)
-  data(docs, :any, default: nil)
-  data(library_version, :any, default: nil)
-  data(guide, :any, default: nil)
-  data(doc_path, :list, default: [])
-  data(dsls, :list, default: [])
-  data(dsl, :any, default: nil)
-  data(options, :list, default: [])
-  data(module, :any, default: nil)
-
-  def render(%{platform: :ios} = assigns) do
-    ~F"""
-    {#case @live_action}
-      {#match :home}
-        <Home id="home" />
-    {/case}
-    """
-  end
-
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div id="app" class={classes("h-full font-sans": true)} phx-hook="ColorTheme">
       <head>
         <meta property="og:type" content="text/html">
@@ -53,15 +27,16 @@ defmodule AshHqWeb.AppViewLive do
         <!-- Need to adjust this for future blog writers -->
         <meta property="twitter:creator" content="@ZachSDaniel1">
 
-        {#if @live_action not in [:docs_dsl, :blog, :forum]}
+        <%= if @live_action not in [:docs_dsl, :blog, :forum] do %>
           <meta property="og:title" content="Ash Framework">
           <meta
             property="og:description"
             content="A declarative foundation for ambitious Elixir applications. Model your domain, derive the rest."
           />
-        {/if}
+        <% end %>
       </head>
-      <Search
+      <.live_component
+        module={Search}
         id="search-box"
         uri={@uri}
         close={close_search()}
@@ -74,32 +49,27 @@ defmodule AshHqWeb.AppViewLive do
       <button id="search-button" class="hidden" phx-click={AshHqWeb.AppViewLive.toggle_search()} />
       <div
         id="main-container"
-        class={
+        class={classes([
+
           "w-full min-h-screen bg-white dark:bg-base-dark-850 dark:text-white flex flex-col items-stretch",
           "h-screen overflow-y-auto": @live_action != :docs_dsl
+        ])
         }
       >
-        <TopBar
+        <TopBar.top_bar
           live_action={@live_action}
-          toggle_theme="toggle_theme"
           configured_theme={@configured_theme}
           current_user={@current_user}
         />
-        {#for flash <- List.wrap(live_flash(@flash, :error))}
-          <p class="alert alert-warning" role="alert">{flash}</p>
-        {/for}
-        {#for flash <- List.wrap(live_flash(@flash, :info))}
-          <p class="alert alert-info max-h-min" role="alert">{flash}</p>
-        {/for}
-        {#case @live_action}
-          {#match :home}
-            <Home id="home" device_brand={@device_brand} />
-          {#match :blog}
-            <Blog id="blog" params={@params} />
-          {#match :community}
-            <Community id="community" />
-          {#match :docs_dsl}
-            <Docs
+        <%= case @live_action do %>
+          <% :home -> %>
+          <.live_component module={Home} id="home" device_brand={@device_brand} />
+          <% :blog -> %>
+            <.live_component module={Blog} id="blog" params={@params} />
+          <% :community -> %>
+            <Community.community />
+          <% :docs_dsl -> %>
+            <.live_component module={Docs}
               id="docs"
               uri={@uri}
               params={@params}
@@ -107,15 +77,13 @@ defmodule AshHqWeb.AppViewLive do
               change_versions="change-versions"
               libraries={@libraries}
             />
-          {#match :user_settings}
-            <UserSettings id="user_settings" current_user={@current_user} />
-          {#match :media}
-            <Media id="media" />
-          {#match :forum}
-            <Forum id="forum" params={@params} />
-        {/case}
+          <% :media -> %>
+            <Media.media id="media" />
+          <% :forum -> %>
+            <.live_component module={Forum} id="forum" params={@params} />
+        <% end %>
 
-        {#if @live_action != :docs_dsl}
+        <%= if @live_action != :docs_dsl do %>
           <footer class="p-8 sm:p-6 bg-base-light-200 dark:bg-base-dark-850 sm:justify-center sticky">
             <div class="md:flex md:justify-around">
               <div class="flex justify-center flex-row mb-6 md:mb-0">
@@ -170,7 +138,7 @@ defmodule AshHqWeb.AppViewLive do
               </div>
             </div>
           </footer>
-        {/if}
+        <% end %>
       </div>
     </div>
     """
@@ -236,7 +204,6 @@ defmodule AshHqWeb.AppViewLive do
 
     socket = assign(socket, :device_brand, "Apple")
 
-    socket = Context.put(socket, platform: socket.assigns.platform)
     configured_theme = session["theme"] || "system"
 
     all_types = AshHq.Docs.Extensions.Search.Types.types()

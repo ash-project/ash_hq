@@ -151,12 +151,6 @@ defmodule AshHq.Accounts.User do
           sender AshHq.Accounts.User.Senders.SendPasswordResetEmail
         end
       end
-
-      github do
-        client_id AshHq.Accounts.Secrets
-        client_secret AshHq.Accounts.Secrets
-        redirect_uri AshHq.Accounts.Secrets
-      end
     end
 
     tokens do

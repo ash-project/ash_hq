@@ -1,51 +1,45 @@
 defmodule AshHqWeb.Pages.Blog do
   @moduledoc "Blog page"
-  use Surface.LiveComponent
+  use Phoenix.LiveComponent
 
   import AshHqWeb.Tails
 
   alias AshHqWeb.Components.Blog.Tag
 
-  prop(params, :map, default: %{})
-
-  data(post, :any, default: nil)
-  data(posts, :any, default: [])
-  data(tag, :string)
-  data(tags, :any, default: [])
-  data(slug, :string)
+  attr(:params, :map, default: %{})
 
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div class="container sm:mx-auto">
       <div class="flex flex-col sm:flex-row sm:pt-32 sm:mx-32 min-h-screen">
         <div class="sm:w-9/12">
-          {#if @post}
+          <%= if @post do %>
             <head>
               <meta property="og:title" content={"Ash Framework Blog: #{@post.title}"}>
               <meta property="og:description" content={@post.tag_line}>
             </head>
-            <div class="border shadow-sm rounded-lg px-8 pb-6 mb-6 dark:border-gray-600" ">
+            <div class="border shadow-sm rounded-lg px-8 pb-6 mb-6 dark:border-gray-600">
               <div class="border-b">
-                <h1 class="mt-6 text-3xl font-semibold mb-4">{@post.title}</h1>
+                <h1 class="mt-6 text-3xl font-semibold mb-4"><%= @post.title %></h1>
                 <div class="flex flex-row space-x-2 mb-4">
-                  {#for tag <- @post.tag_names || []}
-                    <Tag prefix="/blog" tag={tag} />
-                  {/for}
+                  <%= for tag <- @post.tag_names || [] do %>
+                    <Tag.tag prefix="/blog" tag={tag} />
+                  <% end %>
                 </div>
                 <div class="flex flex-row items-center align-middle justify-between">
                   <div>
-                    {@post.author}
+                    <%= @post.author %>
                   </div>
                   <div>
-                    {@post.published_at |> DateTime.to_date()}
+                    <%= @post.published_at |> DateTime.to_date() %>
                   </div>
                 </div>
               </div>
               <div class="prose dark:prose-invert max-w-none mt-6">
-                {raw(@post.body_html)}
+                <%= Phoenix.HTML.raw(@post.body_html) %>
               </div>
             </div>
-          {#else}
+          <% else %>
             <head>
               <meta property="og:title" content="Ash Framework Blog">
               <meta
@@ -53,58 +47,59 @@ defmodule AshHqWeb.Pages.Blog do
                 content="A declarative foundation for ambitious Elixir applications. Model your domain, derive the rest."
               />
             </head>
-            {#if @tag}
-              <h2 class="text-3xl font-semibold mb-1">Showing posts with tag: {@tag}</h2>
-            {#else}
+            <%= if @tag do %>
+              <h2 class="text-3xl font-semibold mb-1">Showing posts with tag: <%= @tag %></h2>
+            <% else %>
               <h2 class="text-3xl font-semibold mb-1">Showing all posts</h2>
-            {/if}
-            {#for post <- @posts}
-              <div class="border shadow-sm rounded-lg px-8 pb-6 dark:border-gray-600 mb-4" ">
-                <h1 class="mt-6 text-3xl font-semibold mb-4">{post.title}</h1>
+            <% end %>
+            <%= for post <- @posts do %>
+              <div class="border shadow-sm rounded-lg px-8 pb-6 dark:border-gray-600 mb-4">
+                <h1 class="mt-6 text-3xl font-semibold mb-4"><%= post.title %></h1>
                 <div class="border-b pb-2">
                   <div>
-                    {post.author}
+                    <%= post.author %>
                   </div>
                   <div>
-                    {post.published_at |> DateTime.to_date()}
+                    <%= post.published_at |> DateTime.to_date() %>
                   </div>
                   <div class="flex space-x-2">
-                    {#for tag <- post.tag_names || []}
-                      <Tag prefix="/blog" tag={tag} />
-                    {/for}
+                    <%= for tag <- post.tag_names || [] do %>
+                      <Tag.tag prefix="/blog" tag={tag} />
+                    <% end %>
                   </div>
                 </div>
                 <div class="flex flex-col sm:flex-row items-center mt-2 py-2">
                   <div class="text-muted pb-4 flex flex-grow">
-                    {post.tag_line}
+                    <%= post.tag_line %>
                   </div>
                   <a
                     href={"/blog/#{post.slug}"}
                     class="bg-primary-light-600 dark:bg-primary-dark-500 dark:text-black align-middle px-4 py-2 rounded-lg"
                   >
                     <div class="flex flex-row items-center">
-                      <span>Read</span><Heroicons.Solid.ArrowRightIcon class="h-4 w-4" />
+                      <span>Read</span>
+                      <span class="hero-arrow-right h-4 w-4"/>
                     </div>
                   </a>
                 </div>
               </div>
-            {/for}
-          {/if}
+            <% end %>
+          <% end %>
         </div>
         <div class={classes(["flex flex-col px-4 sm:pr-0 sm:pl-4 sm:w-3/12 space-y-6", "mt-9": !@post])}>
           <div class="border rounded-lg p-4 flex flex-col w-full dark:border-gray-600">
             <h3 class="text-lg font-bold mb-1">All Tags:</h3>
             <div class="flex gap-2 flex-wrap w-full">
-              {#for tag <- @tags}
-                <Tag prefix="/blog" tag={to_string(tag.name)} />
-              {/for}
+              <%= for tag <- @tags do %>
+                <Tag.tag prefix="/blog" tag={to_string(tag.name)} />
+              <% end %>
             </div>
           </div>
           <div class="border rounded-lg p-4 flex flex-col w-full dark:border-gray-600">
             <h3 class="text-lg font-bold mb-1">Connect</h3>
             <div class="flex flex-wrap gap-4">
               <a href="/rss" title="RSS Feed">
-                <Heroicons.Solid.RssIcon class="w-6 h-6 dark:fill-base-dark-400 dark:hover:fill-base-dark-200 hover:fill-base-light-600" />
+                <span class="hero-rss-solid w-6 h-6 dark:fill-base-dark-400 dark:hover:fill-base-dark-200 hover:fill-base-light-600"/>
               </a>
               <a href="https://github.com/ash-project" title="Github">
                 <svg

@@ -1,34 +1,23 @@
 defmodule AshHqWeb.Pages.Home do
   @moduledoc "The home page"
 
-  use Surface.LiveComponent
+  use Phoenix.LiveComponent
 
   alias AshHqWeb.Components.{CalloutText, CodeExample, Feature}
-  alias Surface.Components.Form
-  alias Surface.Components.Form.{Field, Submit, TextInput}
   import AshHqWeb.Components.CodeExample, only: [to_code: 1]
-  import AshHqWeb.Tails
-
-  prop(device_brand, :string)
-
-  data(signed_up, :boolean, default: false)
-  data(email_form, :any)
-  data(theme, :atom, default: :default)
-  data(contributors, :list, default: [])
-  data(contributor_count, :integer, default: 0)
 
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div class="antialiased">
       <div class="my-2 mx-2 dark:bg-base-dark-850 flex flex-col items-center pt-4 md:pt-12">
         <div class="flex flex-col">
           <img class="h-64" src="/images/ash-logo-side.svg">
         </div>
         <div class="text-3xl md:text-5xl px-4 md:px-12 font-bold max-w-5xl mx-auto mt-8 md:text-center">
-          Model your domain, <CalloutText text="derive the rest" />
+          Model your domain, <CalloutText.callout text="derive the rest" />
         </div>
         <div class="text-2xl font-light text-base-dark-700 dark:text-base-light-100 max-w-4xl mx-auto px-4 md:px-0 mt-4 md:text-center">
-          Build <CalloutText text="powerful Elixir applications" /> with a <CalloutText text="flexible" /> tool-chain.
+          Build <CalloutText.callout text="powerful Elixir applications" /> with a <CalloutText.callout text="flexible" /> tool-chain.
         </div>
 
         <div class="flex flex-col space-y-4 md:space-x-4 md:space-y-0 md:flex-row items-center mt-8 mb-6 md:mb-10">
@@ -92,9 +81,9 @@ defmodule AshHqWeb.Pages.Home do
         </div>
 
         <div class="grid justify-center grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 dark:bg-none dark:bg-opacity-0 py-6 text-center mx-8 gap-16 max-w-lg md:max-w-lg xl:max-w-4xl mt-2 pt-16">
-          <Feature name="Resources">
+          <Feature.feature name="Resources">
             <:description>
-              <CalloutText text="Plug and play" /> building blocks that scale with the complexity of your application.
+              <CalloutText.callout text="Plug and play" /> building blocks that scale with the complexity of your application.
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -105,18 +94,18 @@ defmodule AshHqWeb.Pages.Home do
                 />
               </svg>
             </:icon>
-          </Feature>
-          <Feature name="GraphQL" class="text-pink-700 dark:text-pink-500">
+          </Feature.feature>
+          <Feature.feature name="GraphQL" class="text-pink-700 dark:text-pink-500">
             <:description>
-              Easily create rich, customizable, full featured <CalloutText text="GraphQL APIs" /> backed by Absinthe.
+              Easily create rich, customizable, full featured <CalloutText.callout text="GraphQL APIs" /> backed by Absinthe.
             </:description>
             <:icon>
               <svg role="img" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><title /><path d="M14.051 2.751l4.935 2.85c.816-.859 2.173-.893 3.032-.077.148.14.274.301.377.477.589 1.028.232 2.339-.796 2.928-.174.1-.361.175-.558.223v5.699c1.146.273 1.854 1.423 1.58 2.569-.048.204-.127.4-.232.581-.592 1.023-1.901 1.374-2.927.782-.196-.113-.375-.259-.526-.429l-4.905 2.832c.372 1.124-.238 2.335-1.361 2.706-.217.071-.442.108-.67.108-1.181.001-2.139-.955-2.14-2.136 0-.205.029-.41.088-.609l-4.936-2.847c-.816.854-2.171.887-3.026.07-.854-.816-.886-2.171-.07-3.026.283-.297.646-.506 1.044-.603l.001-5.699c-1.15-.276-1.858-1.433-1.581-2.584.047-.198.123-.389.224-.566.592-1.024 1.902-1.374 2.927-.782.177.101.339.228.48.377l4.938-2.85C9.613 1.612 10.26.423 11.39.088 11.587.029 11.794 0 12 0c1.181-.001 2.139.954 2.14 2.134.001.209-.03.418-.089.617zm-.515.877c-.019.021-.037.039-.058.058l6.461 11.19c.026-.009.056-.016.082-.023V9.146c-1.145-.283-1.842-1.442-1.558-2.588.006-.024.012-.049.019-.072l-4.946-2.858zm-3.015.059l-.06-.06-4.946 2.852c.327 1.135-.327 2.318-1.461 2.645-.026.008-.051.014-.076.021v5.708l.084.023 6.461-11.19-.002.001zm2.076.507c-.39.112-.803.112-1.192 0l-6.46 11.189c.294.283.502.645.6 1.041h12.911c.097-.398.307-.761.603-1.044L12.597 4.194zm.986 16.227l4.913-2.838c-.015-.047-.027-.094-.038-.142H5.542l-.021.083 4.939 2.852c.388-.404.934-.653 1.54-.653.627 0 1.19.269 1.583.698z" /></svg>
             </:icon>
-          </Feature>
-          <Feature name="JSON:API" class="text-green-700 dark:text-green-600">
+          </Feature.feature>
+          <Feature.feature name="JSON:API" class="text-green-700 dark:text-green-600">
             <:description>
-              Create JSON:API spec compliant apis in <CalloutText text="minutes," /> not days.
+              Create JSON:API spec compliant apis in <CalloutText.callout text="minutes," /> not days.
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 32 32" version="1.1">
@@ -124,10 +113,10 @@ defmodule AshHqWeb.Pages.Home do
                 <path d="M0 16q0 1.664 1.184 2.848t2.816 1.152q0.832 0 1.408 0.608t0.608 1.408v4q0 2.496 1.728 4.224t4.256 1.76v-4q-0.832 0-1.408-0.576t-0.576-1.408v-4q0-2.496-1.76-4.256t-4.256-1.76q2.496 0 4.256-1.76t1.76-4.224v-4q0-0.864 0.576-1.44t1.408-0.576v-4q-2.496 0-4.256 1.76t-1.728 4.256v4q0 0.832-0.608 1.408t-1.408 0.576q-1.664 0-2.816 1.184t-1.184 2.816zM14.016 16q0 0.832 0.576 1.44t1.408 0.576 1.408-0.576 0.608-1.44-0.608-1.408-1.408-0.576-1.408 0.576-0.576 1.408zM20 28v4q2.496 0 4.256-1.76t1.76-4.224v-4q0-0.864 0.576-1.44t1.408-0.576q1.664 0 2.816-1.152t1.184-2.848-1.184-2.816-2.816-1.184q-0.832 0-1.408-0.576t-0.576-1.408v-4q0-2.496-1.76-4.256t-4.256-1.76v4q0.832 0 1.408 0.608t0.608 1.408v4q0 2.496 1.728 4.224t4.256 1.76q-2.496 0-4.256 1.76t-1.728 4.256v4q0 0.832-0.608 1.408t-1.408 0.576z" />
               </svg>
             </:icon>
-          </Feature>
-          <Feature name="Authentication" class="text-indigo-500 dark:text-indigo-400">
+          </Feature.feature>
+          <Feature.feature name="Authentication" class="text-indigo-500 dark:text-indigo-400">
             <:description>
-              Effortless authentication with <CalloutText text="magic link" /> and <CalloutText text="social login" /> out of the box.
+              Effortless authentication with <CalloutText.callout text="magic link" /> and <CalloutText.callout text="social login" /> out of the box.
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -138,20 +127,20 @@ defmodule AshHqWeb.Pages.Home do
                 />
               </svg>
             </:icon>
-          </Feature>
-          <Feature name="Community" class="text-red-700 dark:text-red-500">
+          </Feature.feature>
+          <Feature.feature name="Community" class="text-red-700 dark:text-red-500">
             <:description>
-              A thriving community of people <CalloutText text="working together" /> to <CalloutText text="build and learn." />
+              A thriving community of people <CalloutText.callout text="working together" /> to <CalloutText.callout text="build and learn." />
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
               </svg>
             </:icon>
-          </Feature>
-          <Feature name="Authorization" class="text-gray-700 dark:text-gray-400">
+          </Feature.feature>
+          <Feature.feature name="Authorization" class="text-gray-700 dark:text-gray-400">
             <:description>
-              Add row and field level policies to <CalloutText text="prohibit access" /> to data.
+              Add row and field level policies to <CalloutText.callout text="prohibit access" /> to data.
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -162,10 +151,10 @@ defmodule AshHqWeb.Pages.Home do
                 />
               </svg>
             </:icon>
-          </Feature>
-          <Feature name="Multitenancy" class="text-black dark:text-white">
+          </Feature.feature>
+          <Feature.feature name="Multitenancy" class="text-black dark:text-white">
             <:description>
-              <CalloutText text="Built in strategies" /> for splitting your application by tenant.
+              <CalloutText.callout text="Built in strategies" /> for splitting your application by tenant.
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -176,10 +165,10 @@ defmodule AshHqWeb.Pages.Home do
                 />
               </svg>
             </:icon>
-          </Feature>
-          <Feature name="Data Layers" class="text-yellow-800 dark:text-yellow-500">
+          </Feature.feature>
+          <Feature.feature name="Data Layers" class="text-yellow-800 dark:text-yellow-500">
             <:description>
-              Postgres, Ets, Mnesia, CSV and <CalloutText text="more on the way!" />
+              Postgres, Ets, Mnesia, CSV and <CalloutText.callout text="more on the way!" />
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -189,20 +178,20 @@ defmodule AshHqWeb.Pages.Home do
                 <path d="M12 20.25c2.685 0 5.19-.586 7.078-1.609a8.282 8.282 0 001.897-1.384c.016.121.025.244.025.368 0 2.692-4.03 4.875-9 4.875s-9-2.183-9-4.875c0-.124.009-.247.025-.368a8.284 8.284 0 001.897 1.384C6.809 19.664 9.315 20.25 12 20.25z" />
               </svg>
             </:icon>
-          </Feature>
-          <Feature name="Admin" class="text-violet-700 dark:text-violet-400">
+          </Feature.feature>
+          <Feature.feature name="Admin" class="text-violet-700 dark:text-violet-400">
             <:description>
-              A <CalloutText text="push-button admin interface" /> you can drop right into your application.
+              A <CalloutText.callout text="push-button admin interface" /> you can drop right into your application.
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M18.75 12.75h1.5a.75.75 0 000-1.5h-1.5a.75.75 0 000 1.5zM12 6a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 0112 6zM12 18a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 0112 18zM3.75 6.75h1.5a.75.75 0 100-1.5h-1.5a.75.75 0 000 1.5zM5.25 18.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 010 1.5zM3 12a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 013 12zM9 3.75a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zM12.75 12a2.25 2.25 0 114.5 0 2.25 2.25 0 01-4.5 0zM9 15.75a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" />
               </svg>
             </:icon>
-          </Feature>
-          <Feature name="Extensions" class="text-red-700 dark:text-red-500">
+          </Feature.feature>
+          <Feature.feature name="Extensions" class="text-red-700 dark:text-red-500">
             <:description>
-              A suite of tools for you to <CalloutText text="build your own" /> extensions and DSLs.
+              A suite of tools for you to <CalloutText.callout text="build your own" /> extensions and DSLs.
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -213,10 +202,10 @@ defmodule AshHqWeb.Pages.Home do
                 />
               </svg>
             </:icon>
-          </Feature>
-          <Feature name="Observability" class="text-green-700 dark:text-green-500">
+          </Feature.feature>
+          <Feature.feature name="Observability" class="text-green-700 dark:text-green-500">
             <:description>
-              Custom tracers and rich telemetry events allow you to export <CalloutText text="high fidelity observability data." />
+              Custom tracers and rich telemetry events allow you to export <CalloutText.callout text="high fidelity observability data." />
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -227,10 +216,10 @@ defmodule AshHqWeb.Pages.Home do
                 />
               </svg>
             </:icon>
-          </Feature>
-          <Feature name="Compatibility" class="text-purple-700 dark:text-purple-500">
+          </Feature.feature>
+          <Feature.feature name="Compatibility" class="text-purple-700 dark:text-purple-500">
             <:description>
-              Works great with <CalloutText text="Phoenix, Ecto" /> and all the other <CalloutText text="first rate tools" /> in the Elixir ecosystem.
+              Works great with <CalloutText.callout text="Phoenix, Ecto" /> and all the other <CalloutText.callout text="first rate tools" /> in the Elixir ecosystem.
             </:description>
             <:icon>
               <svg
@@ -247,7 +236,7 @@ defmodule AshHqWeb.Pages.Home do
                 />
               </svg>
             </:icon>
-          </Feature>
+          </Feature.feature>
         </div>
 
         <div class="flex flex-col mt-12 mb-2">
@@ -265,7 +254,7 @@ defmodule AshHqWeb.Pages.Home do
           </div>
           <div class="flex flex-row text-xl">
             <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6 text-center">
-              <a href="https://alembic.com.au/contact"><CalloutText text="Alembic" class="hover:opacity-70" /></a>
+              <a href="https://alembic.com.au/contact"><CalloutText.callout text="Alembic" class="hover:opacity-70" /></a>
               specializes in providing custom solutions that ensure the success of your Ash Framework projects.
               Leveraging extensive knowledge of both Ash Framework and the broader Elixir ecosystem, our team is
               well-equipped to craft personalized projects, implement innovative features, or optimize your existing codebases.
@@ -279,7 +268,7 @@ defmodule AshHqWeb.Pages.Home do
         <div class="flex flex-col w-full dark:bg-none dark:bg-opacity-0 py-6">
           <div class="flex flex-col w-full">
             <div class="text-center w-full text-5xl font-bold text-black dark:text-white">
-              Backed by our <CalloutText text="sponsors" />
+              Backed by our <CalloutText.callout text="sponsors" />
             </div>
           </div>
 
@@ -362,15 +351,15 @@ defmodule AshHqWeb.Pages.Home do
         <div class="flex flex-col text-center items-center mt-24">
           <p class="mt-4 text-3xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50 mb-16">
             It wouldn't be possible without our amazing community.<br>
-            <CalloutText text={"#{@contributor_count} contributors"} /> and counting!
+            <CalloutText.callout text={"#{@contributor_count} contributors"} /> and counting!
           </p>
 
           <div class="grid mx-auto gap-3 grid-cols-6 sm:grid-cols-10 md:grid-cols-14">
-            {#for %{login: login, avatar_url: avatar_url, html_url: html_url} <- @contributors}
+            <%= for %{login: login, avatar_url: avatar_url, html_url: html_url} <- @contributors do %>
               <a href={html_url} class="flex flex-col items-center justify-center">
                 <img class="h-12 w-12 rounded-full" src={avatar_url} alt={login}>
               </a>
-            {/for}
+            <% end %>
           </div>
           <a
             href="docs/guides/ash/latest/how_to/contribute"
@@ -378,31 +367,6 @@ defmodule AshHqWeb.Pages.Home do
           >
             Become a contributor
           </a>
-        </div>
-
-        <div class="flex flex-col items-center my-10 space-y-4">
-          {#if @signed_up}
-            Thank you for joining our mailing list!
-          {#else}
-            <p class="text-2xl font-medium text-base-light-700 dark:text-base-light-50 max-w-4xl mx-auto text-center">Join our mailing list for (tastefully paced) updates!</p>
-            <Form
-              for={@email_form}
-              change="validate_email_form"
-              submit="submit_email_form"
-              class="flex flex-col md:flex-row gap-4 items-center"
-            >
-              <Field name={:email}>
-                <TextInput
-                  class="w-80 md:w-96 button border border-base-light-400 bg-base-light-200 dark:border-base-dark-700 rounded-lg dark:bg-base-dark-700 hover:bg-base-light-300 dark:hover:bg-base-dark-600"
-                  opts={placeholder: "user@email.com"}
-                />
-              </Field>
-              <Submit class={classes([
-                "flex justify-center items-center w-full md:w-auto h-10 px-4 rounded-lg bg-primary-light-500 dark:bg-primary-dark-500 font-semibold dark:text-white dark:hover:bg-primary-dark-700 hover:bg-primary-light-700",
-                "disabled bg-gray-400": !@email_form.valid?
-              ])}>Join</Submit>
-            </Form>
-          {/if}
         </div>
 
         <div class="block md:hidden my-12" />
@@ -423,7 +387,7 @@ defmodule AshHqWeb.Pages.Home do
 
         <div class="pt-6 pb-6 w-full max-w-6xl">
           <div class="flex flex-col lg:flex-row gap-10 mx-8 lg:mx-0">
-            <CodeExample
+            <.live_component module={CodeExample}
               id="define-a-resource"
               class="grow w-full lg:w-min max-w-[1000px]"
               code={post_example()}
@@ -431,21 +395,21 @@ defmodule AshHqWeb.Pages.Home do
             />
             <div class="flex flex-col gap-10 w-full">
               <div class="flex flex-col space-y-8">
-                <CodeExample
+                <.live_component module={CodeExample}
                   class="w-full"
                   collapsible
                   id="use-it-programmatically"
                   code={changeset_example()}
                   title="Use it programmatically"
                 />
-                <CodeExample
+                <.live_component module={CodeExample}
                   class="w-auto"
                   collapsible
                   id="graphql-interface"
                   code={graphql_example()}
                   title="Add a GraphQL interface"
                 />
-                <CodeExample
+                <.live_component module={CodeExample}
                   class="w-auto"
                   collapsible
                   start_collapsed
@@ -453,7 +417,7 @@ defmodule AshHqWeb.Pages.Home do
                   code={policies_example()}
                   title="Add authorization policies"
                 />
-                <CodeExample
+                <.live_component module={CodeExample}
                   class="w-auto"
                   collapsible
                   start_collapsed
@@ -461,7 +425,7 @@ defmodule AshHqWeb.Pages.Home do
                   code={aggregate_example()}
                   title="Define aggregates and calculations"
                 />
-                <CodeExample
+                <.live_component module={CodeExample}
                   class="w-auto"
                   collapsible
                   start_collapsed
@@ -469,7 +433,7 @@ defmodule AshHqWeb.Pages.Home do
                   code={notifier_example()}
                   title="Broadcast changes over Phoenix PubSub"
                 />
-                <CodeExample
+                <.live_component module={CodeExample}
                   class="w-atuo"
                   collapsible
                   start_collapsed
@@ -487,9 +451,12 @@ defmodule AshHqWeb.Pages.Home do
   end
 
   attr(:class_overrides, :string, default: "")
+  attr :title, :string
+  attr :author, :string
+  attr :text, :string
 
   def testimonial(assigns) do
-    ~F"""
+    ~H"""
     <div class={[
       "w-full md:w-[26rem] lg:min-w-fit lg:max-w-min rounded-xl shadow-xl dark:shadow-none mt-8 p-8
       odd:bg-base-light-200/80 even:bg-base-light-100/80 odd:dark:bg-base-dark-800/80 even:dark:bg-base-dark-700/80
@@ -497,15 +464,15 @@ defmodule AshHqWeb.Pages.Home do
       @class_overrides
     ]}>
       <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
-        "{@text}"
+        "<%= @text %>"
       </p>
 
       <p class="font-bold text-primary-light-500 dark:text-primary-dark-400">
-        {@author}
+        <%= @author %>
       </p>
 
       <p class="text-base-light-700 dark:text-base-dark-200">
-        {@title}
+        <%= @title %>
       </p>
     </div>
     """
@@ -562,7 +529,7 @@ defmodule AshHqWeb.Pages.Home do
                      Example.Post
                      |> Ash.Query.filter(likes > 10)
                      |> Ash.Query.sort(likes: :desc)
-                     |> Example.read!()
+                     |> Ash.read!()
                      """
                      |> to_code()
 

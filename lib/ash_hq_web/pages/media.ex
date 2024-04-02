@@ -1,9 +1,9 @@
 defmodule AshHqWeb.Pages.Media do
   @moduledoc "Blog page"
-  use Surface.LiveComponent
+  use Phoenix.Component
 
-  def render(assigns) do
-    ~F"""
+  def media(assigns) do
+    ~H"""
     <div class="container sm:mx-auto">
       <div class="grid grid-cols-2 gap-4">
         <div class="col-span-2 lg:col-span-1 flex-col flex space-y-4 items-center justify-center">
@@ -65,16 +65,16 @@ defmodule AshHqWeb.Pages.Media do
 
       <div class="text-2xl flex flex-col items-center justify-center text-center">
         <div class="text-3xl font-bold mt-8 mb-8 text-center">Example Projects</div>
-        {#for %{title: title, href: href, description: description} <- examples()}
+        <%= for %{title: title, href: href, description: description} <- examples() do %>
           <div class="max-w-7xl px-4 sm:px-6 md:px-8 my-8 hidden sm:block">
             <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
-              <a href={href}>{title}</a>
+              <a href={href}><%= title %></a>
             </h2>
             <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6">
-              {raw(description)}
+              <%= Phoenix.HTML.raw(description) %>
             </p>
           </div>
-        {/for}
+        <% end %>
       </div>
     </div>
     """
