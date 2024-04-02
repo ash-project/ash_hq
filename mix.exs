@@ -39,20 +39,16 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:ash, github: "ash-project/ash", override: true},
-      {:ash_postgres, github: "ash-project/ash_postgres", branch: "2.0", override: true},
-      # {:ash_admin, github: "ash-project/ash_admin"},
-      {:ash_admin, github: "ash-project/ash_admin", branch: "2.0"},
-      {:ash_phoenix, "~> 1.3.4"},
-      {:ash_graphql, github: "ash-project/ash_graphql"},
-      {:ash_json_api, github: "ash-project/ash_json_api"},
-      {:ash_appsignal, "~> 0.1.0"},
-      {:ash_authentication, "~> 3.10"},
-      {:ash_authentication_phoenix, "~> 1.9"},
+      {:ash, "~> 3.0.0-rc"},
+      {:ash_postgres, "~> 2.0.0-rc"},
+      {:ash_admin, "~> 0.10.10-rc"},
+      {:ash_phoenix, "~> 2.0.0-rc"},
+      {:ash_graphql, "~> 1.0.0-rc"},
+      {:ash_json_api, "~> 1.0.0-rc"},
+      {:ash_appsignal, "~> 0.1"},
       {:ash_blog, github: "ash-project/ash_blog"},
-      {:ash_csv, github: "ash-project/ash_csv"},
-      {:ash_oban, github: "ash-project/ash_oban"},
-      {:spark, github: "ash-project/spark", override: true},
+      {:ash_csv, "~> 0.9.7-rc"},
+      {:ash_oban, "~> 0.2.3-rc"},
       # Jobs
       {:oban, "~> 2.16"},
       {:flame, "~> 0.1.4"},
@@ -107,7 +103,7 @@ defmodule AshHq.MixProject do
       {:finch, "~> 0.10"},
       {:floki, "~> 0.30"},
       {:esbuild, "~> 0.3", runtime: false},
-      {:telemetry_metrics, "~> 0.6"},
+      {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
@@ -121,8 +117,7 @@ defmodule AshHq.MixProject do
       {:excoveralls, "~> 0.14", only: [:dev, :test]},
       {:eflame, "~> 1.0", only: [:dev, :test]},
       # Other
-      {:absinthe_plug, "~> 1.5"},
-      {:nimble_options, "~> 0.5.1", override: true}
+      {:absinthe_plug, "~> 1.5"}
     ]
   end
 

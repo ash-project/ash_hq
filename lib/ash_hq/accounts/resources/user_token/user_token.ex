@@ -3,8 +3,7 @@ defmodule AshHq.Accounts.UserToken do
 
   use Ash.Resource,
     data_layer: AshPostgres.DataLayer,
-    authorizers: [Ash.Policy.Authorizer],
-    extensions: [AshAuthentication.TokenResource]
+    authorizers: [Ash.Policy.Authorizer]
 
   actions do
     defaults [:read, :destroy]
@@ -31,10 +30,6 @@ defmodule AshHq.Accounts.UserToken do
   end
 
   policies do
-    bypass AshAuthentication.Checks.AshAuthenticationInteraction do
-      authorize_if always()
-    end
-
     policy always() do
       description """
       There are currently no usages of user tokens resource that should be publicly

@@ -3,10 +3,6 @@ defmodule AshHq.Accounts.User.Policies do
   use Spark.Dsl.Fragment, of: Ash.Resource, authorizers: [Ash.Policy.Authorizer]
 
   policies do
-    bypass AshAuthentication.Checks.AshAuthenticationInteraction do
-      authorize_if(always())
-    end
-
     policy action(:read) do
       authorize_if(expr(id == ^actor(:id)))
     end

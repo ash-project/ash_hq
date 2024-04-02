@@ -1,6 +1,5 @@
 defmodule AshHqWeb.Router do
   use AshHqWeb, :router
-  use AshAuthentication.Phoenix.Router
 
   import AshAdmin.Router
 
@@ -25,27 +24,13 @@ defmodule AshHqWeb.Router do
 
   scope "/", AshHqWeb do
     pipe_through(:browser)
-    reset_route([])
-
-    sign_in_route(
-      overrides: [AshHqWeb.AuthOverrides, AshAuthentication.Phoenix.Overrides.Default]
-    )
-
-    sign_out_route(AuthController)
-    auth_routes_for(AshHq.Accounts.User, to: AuthController)
-  end
-
-  scope "/", AshHqWeb do
-    pipe_through(:browser)
 
     live_session :main,
       on_mount: [
-        AshAuthentication.Phoenix.LiveSession,
         {AshHqWeb.LiveUserAuth, :live_user_optional},
         {AshHqWeb.InitAssigns, :default},
         {AshHqWeb.RedirectToHex, :default}
       ],
-      session: {AshAuthentication.Phoenix.LiveSession, :generate_session, []},
       root_layout: {AshHqWeb.LayoutView, :root} do
       live("/", AppViewLive, :home)
       live("/media", AppViewLive, :media)
@@ -67,17 +52,6 @@ defmodule AshHqWeb.Router do
       live("/forum/:channel/:id", AppViewLive, :forum)
 
       get("/unsubscribe", MailingListController, :unsubscribe)
-    end
-
-    live_session :authenticated_only,
-      on_mount: [
-        AshAuthentication.Phoenix.LiveSession,
-        {AshHqWeb.InitAssigns, :default},
-        {AshHqWeb.LiveUserAuth, :live_user_required}
-      ],
-      session: {AshAuthentication.Phoenix.LiveSession, :generate_session, []},
-      root_layout: {AshHqWeb.LayoutView, :root} do
-      live("/users/settings", AppViewLive, :user_settings)
     end
   end
 
