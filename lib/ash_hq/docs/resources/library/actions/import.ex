@@ -1,4 +1,5 @@
 defmodule AshHq.Docs.Library.Actions.Import do
+  @moduledoc false
   use Ash.Resource.ManualUpdate
   require Ash.Query
   require Logger

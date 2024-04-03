@@ -1,4 +1,5 @@
 defmodule AshHq.Docs.Library.Preparations.FilterPendingImport do
+  @moduledoc false
   use Ash.Resource.Preparation
 
   def prepare(query, _opts, _context) do

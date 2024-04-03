@@ -15,6 +15,7 @@
     # {:my_arbitrary_tool, command: "npm test", cd: "assets"},
     # {:my_arbitrary_script, command: ["my_script", "argument with spaces"], cd: "scripts"}
     {:npm_test, false},
+    {:gettext, false},
     {:check_migrations, command: "mix ash_postgres.generate_migrations --check"}
   ]
 ]

@@ -1,0 +1,9 @@
+{
+  "installed": [
+    "pg_trgm",
+    "uuid-ossp",
+    "citext",
+    "pg_stat_statements",
+    "sslinfo"
+  ]
+}
