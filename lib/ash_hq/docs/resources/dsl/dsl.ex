@@ -101,12 +101,15 @@ defmodule AshHq.Docs.Dsl do
     attribute :arg_defaults, :map do
       public? true
     end
+
     attribute :path, {:array, :string} do
       public? true
     end
+
     attribute :recursive_as, :string do
       public? true
     end
+
     attribute :order, :integer do
       public? true
       allow_nil? false
@@ -135,9 +138,11 @@ defmodule AshHq.Docs.Dsl do
     belongs_to :dsl, __MODULE__ do
       public? true
     end
+
     has_many :options, AshHq.Docs.Option do
       public? true
     end
+
     has_many :dsls, __MODULE__ do
       public? true
     end

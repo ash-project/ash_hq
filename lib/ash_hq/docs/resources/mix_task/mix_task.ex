@@ -105,7 +105,6 @@ defmodule AshHq.Docs.MixTask do
     end
   end
 
-
   resource do
     description "Represents a mix task that has been exposed by a library"
   end

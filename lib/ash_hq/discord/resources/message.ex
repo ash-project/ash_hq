@@ -70,6 +70,7 @@ defmodule AshHq.Discord.Message do
     attribute :content, :string do
       public? true
     end
+
     attribute :content_html, :string do
       public? true
     end

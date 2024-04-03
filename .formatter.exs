@@ -7,8 +7,6 @@
     :ash_graphql,
     :ash_admin,
     :ash_csv,
-    :ash_authentication,
-    :ash_authentication_phoenix,
     :ash_oban
   ],
   inputs: [

@@ -51,6 +51,7 @@ defmodule AshHq.Docs.Extension do
     has_many :dsls, AshHq.Docs.Dsl do
       public? true
     end
+
     has_many :options, AshHq.Docs.Option do
       public? true
     end
@@ -66,7 +67,6 @@ defmodule AshHq.Docs.Extension do
   end
 
   code_interface do
-
     define :destroy
   end
 

@@ -131,7 +131,6 @@ defmodule AshHq.Docs.Guide do
     end
   end
 
-
   resource do
     description "Represents a markdown guide exposed by a library"
   end

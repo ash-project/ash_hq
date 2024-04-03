@@ -66,6 +66,7 @@ defmodule AshHq.Discord.Thread do
 
   attributes do
     integer_primary_key :id, generated?: false, writable?: true
+
     attribute :type, :integer do
       public? true
     end

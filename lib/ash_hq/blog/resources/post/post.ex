@@ -61,6 +61,7 @@ defmodule AshHq.Blog.Post do
 
     attribute :tag_names, {:array, :ci_string} do
       public? true
+
       constraints items: [
                     match: ~r/^[a-zA-Z]*$/,
                     casing: :lower
@@ -83,6 +84,7 @@ defmodule AshHq.Blog.Post do
   relationships do
     has_many :tags, AshHq.Blog.Tag do
       public? true
+
       manual fn posts, %{query: query} ->
         all_tags = Enum.flat_map(posts, &(&1.tag_names || []))
 

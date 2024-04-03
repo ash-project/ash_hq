@@ -49,7 +49,6 @@ defmodule AshHqWeb.AppViewLive do
       <div
         id="main-container"
         class={classes([
-
           "w-full min-h-screen bg-white dark:bg-base-dark-850 dark:text-white flex flex-col items-stretch",
           "h-screen overflow-y-auto": @live_action != :docs_dsl
         ])

@@ -48,7 +48,6 @@ defmodule AshHq.Github.Contributor do
   end
 
   code_interface do
-
     define :in_order
   end
 end

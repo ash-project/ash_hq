@@ -60,6 +60,7 @@ defmodule AshHq.Docs.Function do
     attribute :file, :string do
       public? true
     end
+
     attribute :line, :integer do
       public? true
     end
@@ -131,7 +132,6 @@ defmodule AshHq.Docs.Function do
       reference :library_version, on_delete: :delete
     end
   end
-
 
   resource do
     description "A function in a module exposed by an Ash library"

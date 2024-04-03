@@ -114,12 +114,15 @@ defmodule AshHq.Docs.LibraryVersion do
     has_many :extensions, AshHq.Docs.Extension do
       public? true
     end
+
     has_many :guides, AshHq.Docs.Guide do
       public? true
     end
+
     has_many :modules, AshHq.Docs.Module do
       public? true
     end
+
     has_many :mix_tasks, AshHq.Docs.MixTask do
       public? true
     end

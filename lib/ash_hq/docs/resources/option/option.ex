@@ -95,9 +95,11 @@ defmodule AshHq.Docs.Option do
     attribute :default, :string do
       public? true
     end
+
     attribute :path, {:array, :string} do
       public? true
     end
+
     attribute :order, :integer do
       public? true
       allow_nil? false

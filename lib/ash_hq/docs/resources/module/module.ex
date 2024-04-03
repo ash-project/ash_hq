@@ -108,7 +108,6 @@ defmodule AshHq.Docs.Module do
     end
   end
 
-
   resource do
     description "Represents a module that has been exposed by a library"
   end
