@@ -30,7 +30,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
               Ash.Changeset.get_attribute(changeset, :name)
 
             changeset.resource == AshHq.Docs.Function ->
-              AshHq.Docs.get!(
+              Ash.get!(
                 AshHq.Docs.Module,
                 Ash.Changeset.get_attribute(changeset, :module_id)
               ).name
@@ -49,7 +49,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.Changes.RenderMarkdown do
               AshHq.Docs.Library
               |> Ash.Query.select(:name)
               |> Ash.Query.filter(versions.id == ^library_version_id)
-              |> AshHq.Docs.read_one!()
+              |> Ash.read_one!()
               |> Map.get(:name)
           end
 

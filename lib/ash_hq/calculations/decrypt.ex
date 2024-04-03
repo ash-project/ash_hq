@@ -1,6 +1,6 @@
 defmodule AshHq.Calculations.Decrypt do
   @moduledoc "Decrypts a given value on demand"
-  use Ash.Calculation
+  use Ash.Resource.Calculation
 
   def calculate(records, opts, _) do
     {:ok,
@@ -17,10 +17,6 @@ defmodule AshHq.Calculations.Decrypt do
            |> AshHq.Vault.decrypt!()
        end
      end)}
-  end
-
-  def select(_, opts, _) do
-    [opts[:field]]
   end
 
   def load(_, opts, _) do

@@ -4,9 +4,11 @@ defmodule AshHq.Discord.Channel do
   """
 
   use Ash.Resource,
+    domain: AshHq.Discord,
     data_layer: AshPostgres.DataLayer
 
   actions do
+    default_accept :*
     defaults [:create, :read, :update, :destroy]
 
     create :upsert do
@@ -18,16 +20,20 @@ defmodule AshHq.Discord.Channel do
     integer_primary_key :id, writable?: true, generated?: false
 
     attribute :name, :string do
+      public? true
       allow_nil? false
     end
 
     attribute :order, :integer do
+      public? true
       allow_nil? false
     end
   end
 
   relationships do
-    has_many :threads, AshHq.Discord.Thread
+    has_many :threads, AshHq.Discord.Thread do
+      public? true
+    end
   end
 
   postgres do
@@ -36,7 +42,6 @@ defmodule AshHq.Discord.Channel do
   end
 
   code_interface do
-    define_for AshHq.Discord
     define :read
     define :upsert
   end

@@ -1,10 +1,12 @@
 defmodule AshHq.Github.Contributor do
   @moduledoc "A contributor to any package deployed on Ash HQ."
   use Ash.Resource,
+    domain: AshHq.Github,
     data_layer: AshPostgres.DataLayer,
     extensions: [AshOban]
 
   actions do
+    default_accept :*
     defaults [:create, :read, :update, :destroy]
 
     read :in_order do
@@ -19,7 +21,7 @@ defmodule AshHq.Github.Contributor do
   end
 
   oban do
-    api AshHq.Github
+    domain AshHq.Github
 
     scheduled_actions do
       schedule :import, "0 */6 * * *" do
@@ -34,10 +36,10 @@ defmodule AshHq.Github.Contributor do
       writable? true
     end
 
-    attribute :login, :string, allow_nil?: false
-    attribute :avatar_url, :string, allow_nil?: false
-    attribute :html_url, :string, allow_nil?: false
-    attribute :order, :integer, allow_nil?: false
+    attribute :login, :string, allow_nil?: false, public?: true
+    attribute :avatar_url, :string, allow_nil?: false, public?: true
+    attribute :html_url, :string, allow_nil?: false, public?: true
+    attribute :order, :integer, allow_nil?: false, public?: true
   end
 
   postgres do
@@ -46,7 +48,6 @@ defmodule AshHq.Github.Contributor do
   end
 
   code_interface do
-    define_for AshHq.Github
 
     define :in_order
   end

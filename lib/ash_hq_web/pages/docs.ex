@@ -224,7 +224,7 @@ defmodule AshHqWeb.Pages.Docs do
       |> load_for_search()
 
     new_libraries =
-      AshHq.Docs.load!(socket.assigns.libraries, versions: [guides: guides_query])
+      Ash.load!(socket.assigns.libraries, versions: [guides: guides_query])
 
     assign(socket, :libraries, new_libraries)
   end
@@ -331,7 +331,7 @@ defmodule AshHqWeb.Pages.Docs do
         resource
         |> Ash.Query.select(field)
         |> Ash.Query.filter(id == ^record.id)
-        |> AshHq.Docs.read_one!()
+        |> Ash.read_one!()
         |> Map.get(field)
 
       Map.put(record, field, value)

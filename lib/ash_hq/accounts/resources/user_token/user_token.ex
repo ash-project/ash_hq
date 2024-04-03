@@ -2,27 +2,16 @@ defmodule AshHq.Accounts.UserToken do
   @moduledoc false
 
   use Ash.Resource,
+    domain: AshHq.Accounts,
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer]
 
   actions do
-    defaults [:read, :destroy]
-
-    read :email_token_for_user do
-      get? true
-
-      argument :user_id, :uuid do
-        allow_nil? false
-      end
-
-      prepare build(sort: [updated_at: :desc], limit: 1)
-
-      filter expr(purpose == "confirm" and not is_nil(extra_data[:email]))
-    end
+    defaults [:read]
   end
 
-  token do
-    api AshHq.Accounts
+  attributes do
+    uuid_primary_key :id
   end
 
   relationships do
@@ -32,8 +21,7 @@ defmodule AshHq.Accounts.UserToken do
   policies do
     policy always() do
       description """
-      There are currently no usages of user tokens resource that should be publicly
-      accessible, they should all be using authorize?: false.
+      There are currently no usages of user tokens resource that should be publicly accessible.
       """
 
       forbid_if always()
@@ -49,30 +37,9 @@ defmodule AshHq.Accounts.UserToken do
     end
   end
 
-  code_interface do
-    define_for AshHq.Accounts
-    define :destroy
-    define :email_token_for_user, args: [:user_id]
-  end
-
   resource do
     description """
     Represents a token allowing a user to log in, reset their password, or confirm their email.
     """
-  end
-
-  changes do
-    change fn changeset, _ ->
-             case changeset.context[:ash_authentication][:user] do
-               nil ->
-                 changeset
-
-               user ->
-                 Ash.Changeset.manage_relationship(changeset, :user, user,
-                   type: :append_and_remove
-                 )
-             end
-           end,
-           on: [:create]
   end
 end

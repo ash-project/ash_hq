@@ -1,10 +1,12 @@
 defmodule AshHq.Docs.Library do
   @moduledoc false
   use Ash.Resource,
+    domain: AshHq.Docs,
     data_layer: AshPostgres.DataLayer,
     extensions: [AshOban]
 
   actions do
+    default_accept :*
     defaults [:create, :update, :destroy]
 
     read :read do
@@ -31,6 +33,7 @@ defmodule AshHq.Docs.Library do
     end
 
     update :import do
+      require_atomic? false
       transaction? false
 
       argument :metadata, :map do
@@ -49,7 +52,7 @@ defmodule AshHq.Docs.Library do
   end
 
   oban do
-    api AshHq.Docs
+    domain AshHq.Docs
 
     triggers do
       trigger :import do
@@ -69,32 +72,42 @@ defmodule AshHq.Docs.Library do
     uuid_primary_key :id
 
     attribute :name, :string do
+      public? true
       allow_nil? false
     end
 
     attribute :display_name, :string do
+      public? true
       allow_nil? false
     end
 
     attribute :order, :integer do
+      public? true
       allow_nil? false
     end
 
-    attribute :description, :string
+    attribute :description, :string do
+      public? true
+    end
 
     attribute :repo_org, :string do
+      public? true
       allow_nil? false
       default "ash-project"
     end
 
     attribute :module_prefixes, {:array, :string} do
+      public? true
       allow_nil? false
       default []
     end
 
-    attribute :mix_project, :string
+    attribute :mix_project, :string do
+      public? true
+    end
 
     attribute :skip_versions, {:array, :string} do
+      public? true
       default []
       allow_nil? false
     end
@@ -103,9 +116,12 @@ defmodule AshHq.Docs.Library do
   end
 
   relationships do
-    has_many :versions, AshHq.Docs.LibraryVersion
+    has_many :versions, AshHq.Docs.LibraryVersion do
+      public? true
+    end
 
     has_one :latest_library_version, AshHq.Docs.LibraryVersion do
+      public? true
       sort version: :desc
       from_many? true
     end
@@ -119,8 +135,6 @@ defmodule AshHq.Docs.Library do
   end
 
   code_interface do
-    define_for AshHq.Docs
-
     define :read
     define :by_name, args: [:name], get?: true
     define :create

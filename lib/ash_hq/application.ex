@@ -7,6 +7,7 @@ defmodule AshHq.Application do
 
   @impl true
   def start(_type, _args) do
+    :erlang.system_flag(:backtrace_depth, 1000)
     Appsignal.Phoenix.LiveView.attach()
 
     # topologies = Application.get_env(:libcluster, :topologies) || []
@@ -48,8 +49,8 @@ defmodule AshHq.Application do
   end
 
   defp oban_worker do
-    apis = Application.fetch_env!(:ash_hq, :ash_apis)
+    domains = Application.fetch_env!(:ash_hq, :ash_domains)
     config = Application.fetch_env!(:ash_hq, Oban)
-    {Oban, AshOban.config(apis, config)}
+    {Oban, AshOban.config(domains, config)}
   end
 end

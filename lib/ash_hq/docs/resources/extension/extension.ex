@@ -2,9 +2,11 @@ defmodule AshHq.Docs.Extension do
   @moduledoc false
 
   use Ash.Resource,
+    domain: AshHq.Docs,
     data_layer: AshPostgres.DataLayer
 
   actions do
+    default_accept :*
     defaults [:update, :destroy]
 
     read :read do
@@ -33,18 +35,25 @@ defmodule AshHq.Docs.Extension do
   attributes do
     uuid_primary_key :id
 
-    attribute :module, :string
+    attribute :module, :string do
+      public? true
+    end
 
     timestamps()
   end
 
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
+      public? true
       allow_nil? true
     end
 
-    has_many :dsls, AshHq.Docs.Dsl
-    has_many :options, AshHq.Docs.Option
+    has_many :dsls, AshHq.Docs.Dsl do
+      public? true
+    end
+    has_many :options, AshHq.Docs.Option do
+      public? true
+    end
   end
 
   postgres do
@@ -57,7 +66,6 @@ defmodule AshHq.Docs.Extension do
   end
 
   code_interface do
-    define_for AshHq.Docs
 
     define :destroy
   end

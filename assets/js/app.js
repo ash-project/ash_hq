@@ -24,34 +24,43 @@ import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar";
 
 function setCookie(name, value) {
-  document.cookie = name + "=" + value + ";path=/;" + "expires=Fri, 31 Dec 9999 23:59:59 GMT;";
+  document.cookie =
+    name + "=" + value + ";path=/;" + "expires=Fri, 31 Dec 9999 23:59:59 GMT;";
 }
 
 function getCookie(name) {
-  const cookie = document.cookie.split("; ").find((row) => row.startsWith(name + "="))
+  const cookie = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith(name + "="));
   if (cookie) {
-    return cookie.split("=")[1]
+    return cookie.split("=")[1];
   }
 }
 
 function cookiesAreAllowed() {
-  return getCookie("cookieconsent_status") === "allow"
+  return getCookie("cookieconsent_status") === "allow";
 }
 
 function get_platform() {
   // 2022 way of detecting. Note : this userAgentData feature is available only in secure contexts (HTTPS)
-  if (typeof navigator.userAgentData !== 'undefined' && navigator.userAgentData != null) {
+  if (
+    typeof navigator.userAgentData !== "undefined" &&
+    navigator.userAgentData != null
+  ) {
     return navigator.userAgentData.platform;
   }
   // Deprecated but still works for most of the browser
-  if (typeof navigator.platform !== 'undefined') {
-    if (typeof navigator.userAgent !== 'undefined' && /android/.test(navigator.userAgent.toLowerCase())) {
+  if (typeof navigator.platform !== "undefined") {
+    if (
+      typeof navigator.userAgent !== "undefined" &&
+      /android/.test(navigator.userAgent.toLowerCase())
+    ) {
       // android device's navigator.platform is often set as 'linux', so let's use userAgent for them
-      return 'android';
+      return "android";
     }
     return navigator.platform;
   }
-  return 'unknown';
+  return "unknown";
 }
 
 let platform = get_platform();
@@ -110,13 +119,15 @@ let scrolled = false;
 
 Hooks.RightNav = {
   mounted() {
-    this.intersectionObserver =
-      new IntersectionObserver((entries) =>
-        this.onScrollChange(entries), { rootMargin: "-10% 0px -89% 0px" }
-      );
+    this.intersectionObserver = new IntersectionObserver(
+      (entries) => this.onScrollChange(entries),
+      { rootMargin: "-10% 0px -89% 0px" },
+    );
 
-    this.observeElements()
-    window.addEventListener("hashchange", (event) => { this.handleHashChange(); });
+    this.observeElements();
+    window.addEventListener("hashchange", (event) => {
+      this.handleHashChange();
+    });
   },
   updated() {
     this.intersectionObserver.disconnect();
@@ -129,7 +140,9 @@ Hooks.RightNav = {
   },
   onScrollChange(entries) {
     // Wait for scrolling from initial page load to complete
-    if (!scrolled) { return; }
+    if (!scrolled) {
+      return;
+    }
 
     for (entry of entries) {
       if (entry.isIntersecting) {
@@ -139,19 +152,21 @@ Hooks.RightNav = {
   },
   handleHashChange() {
     if (window.location.hash) {
-      this.setAriaCurrent(window.location.hash.substring(1))
+      this.setAriaCurrent(window.location.hash.substring(1));
 
       // Disable the insersection observer for 1s while the browser
       // scrolls the selected element to the top.
       scrolled = false;
-      setTimeout(() => { scrolled = true }, 1000);
+      setTimeout(() => {
+        scrolled = true;
+      }, 1000);
     }
   },
   setAriaCurrent(id) {
     const el = document.getElementById("right-nav-" + id);
     if (el) {
-      for (elem of document.querySelectorAll('#right-nav a[aria-current]')) {
-        elem.removeAttribute('aria-current');
+      for (elem of document.querySelectorAll("#right-nav a[aria-current]")) {
+        elem.removeAttribute("aria-current");
       }
       el.setAttribute("aria-current", "true");
     }
@@ -201,9 +216,9 @@ window.addEventListener("phx:page-loading-start", ({ detail }) => {
   scrolled = false;
 
   // close mobile sidebar on navigation
-  mobileSideBar = document.getElementById("mobile-sidebar-hide")
+  mobileSideBar = document.getElementById("mobile-sidebar-hide");
   if (mobileSideBar) {
-    mobileSideBar.click()
+    mobileSideBar.click();
   }
 
   if (!topBarScheduled) {
@@ -219,13 +234,17 @@ window.addEventListener("phx:page-loading-stop", ({ detail }) => {
   if (detail.kind === "initial" && window.location.hash) {
     scrollEl = document.getElementById(window.location.hash.substring(1));
   } else if (detail.kind == "patch" && !window.location.hash) {
-    scrollEl = document.querySelector("#docs-window .nav-anchor") || document.querySelector("#docs-window h1");
+    scrollEl =
+      document.querySelector("#docs-window .nav-anchor") ||
+      document.querySelector("#docs-window h1");
   }
   if (scrollEl) {
     Hooks.RightNav.setAriaCurrent(scrollEl.id);
     // Not using scroll polyfill here - doesn't respect scroll-padding-top CSS
-    scrollEl.scrollIntoView({ block: 'start' })
-    setTimeout(() => { scrolled = true; }, 1000);
+    scrollEl.scrollIntoView({ block: "start" });
+    setTimeout(() => {
+      scrolled = true;
+    }, 1000);
   } else {
     scrolled = true;
   }
@@ -243,13 +262,6 @@ window.addEventListener("phx:js:scroll-to", (e) => {
   });
 });
 
-window.addEventListener("phx:selected-types", (e) => {
-  if (cookiesAreAllowed()) {
-    const cookie = e.detail.types.join(",");
-    setCookies("selected_types", cookie)
-  }
-});
-
 window.addEventListener("keydown", (event) => {
   if ((event.metaKey || event.ctrlKey) && event.key === "k") {
     document.getElementById("search-button").click();
@@ -258,9 +270,11 @@ window.addEventListener("keydown", (event) => {
 });
 window.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
-    const closeSearchVersions = document.getElementById("close-search-versions");
+    const closeSearchVersions = document.getElementById(
+      "close-search-versions",
+    );
     if (closeSearchVersions && closeSearchVersions.offsetParent !== null) {
-      closeSearchVersions.click()
+      closeSearchVersions.click();
     } else {
       document.getElementById("close-search").click();
     }
@@ -288,7 +302,7 @@ liveSocket.connect();
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket;
 
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
   window.cookieconsent.initialise({
     content: {
       message:

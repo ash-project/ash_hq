@@ -1,9 +1,11 @@
 defmodule AshHq.Discord.Tag do
   @moduledoc "A tag that can be applied to a post. Currently uses CSV data layer and therefore is static"
   use Ash.Resource,
+    domain: AshHq.Discord,
     data_layer: AshPostgres.DataLayer
 
   actions do
+    default_accept :*
     defaults [:create, :read, :update, :destroy]
 
     create :upsert do
@@ -16,14 +18,15 @@ defmodule AshHq.Discord.Tag do
     integer_primary_key :id, generated?: false, writable?: true
 
     attribute :name, :ci_string do
+      public? true
       allow_nil? false
     end
   end
 
   relationships do
     belongs_to :channel, AshHq.Discord.Channel do
+      public? true
       attribute_type :integer
-      attribute_writable? true
     end
   end
 
@@ -33,7 +36,6 @@ defmodule AshHq.Discord.Tag do
   end
 
   code_interface do
-    define_for AshHq.Discord
     define :upsert, args: [:channel_id, :id, :name]
     define :read
     define :destroy

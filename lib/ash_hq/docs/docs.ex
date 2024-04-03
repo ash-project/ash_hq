@@ -2,13 +2,11 @@ defmodule AshHq.Docs do
   @moduledoc """
   Handles documentation data.
   """
-  use Ash.Api,
+  use Ash.Domain,
     extensions: [
-      AshGraphql.Api,
-      AshAdmin.Api
+      AshGraphql.Domain,
+      AshAdmin.Domain
     ]
-
-  use AshHq.ApiHelpers
 
   admin do
     show? true
@@ -20,6 +18,14 @@ defmodule AshHq.Docs do
   end
 
   resources do
-    registry AshHq.Docs.Registry
+    resource AshHq.Docs.Dsl
+    resource AshHq.Docs.Extension
+    resource AshHq.Docs.Function
+    resource AshHq.Docs.Guide
+    resource AshHq.Docs.Library
+    resource AshHq.Docs.LibraryVersion
+    resource AshHq.Docs.MixTask
+    resource AshHq.Docs.Module
+    resource AshHq.Docs.Option
   end
 end

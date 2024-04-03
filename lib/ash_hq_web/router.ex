@@ -10,12 +10,10 @@ defmodule AshHqWeb.Router do
     plug(:put_root_layout, {AshHqWeb.LayoutView, :root})
     plug(:protect_from_forgery)
     plug(AshHqWeb.SessionPlug)
-    plug(:load_from_session)
   end
 
   pipeline :api do
     plug(:accepts, ["json"])
-    plug(:load_from_bearer)
   end
 
   pipeline :admin_basic_auth do

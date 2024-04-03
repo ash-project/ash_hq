@@ -41,7 +41,6 @@ defmodule AshHqWeb.AppViewLive do
         uri={@uri}
         close={close_search()}
         libraries={@libraries}
-        selected_types={@selected_types}
         change_types="change-types"
         change_versions="change-versions"
         remove_version="remove_version"
@@ -158,23 +157,6 @@ defmodule AshHqWeb.AppViewLive do
     {:noreply, socket}
   end
 
-  def handle_event("change-types", %{"types" => types}, socket) do
-    types =
-      types
-      |> Enum.filter(fn {_, value} ->
-        value == "true"
-      end)
-      |> Enum.map(&elem(&1, 0))
-
-    {:noreply,
-     socket
-     |> assign(
-       :selected_types,
-       types
-     )
-     |> push_event("selected-types", %{types: types})}
-  end
-
   def handle_event("toggle_theme", _, socket) do
     theme =
       case socket.assigns.configured_theme do
@@ -206,19 +188,6 @@ defmodule AshHqWeb.AppViewLive do
 
     configured_theme = session["theme"] || "system"
 
-    all_types = AshHq.Docs.Extensions.Search.Types.types()
-
-    selected_types =
-      case session["selected_types"] do
-        nil ->
-          AshHq.Docs.Extensions.Search.Types.types()
-
-        types ->
-          types
-          |> String.split(",")
-          |> Enum.filter(&(&1 in all_types))
-      end
-
     versions_query =
       AshHq.Docs.LibraryVersion
       |> Ash.Query.sort(version: :desc)
@@ -228,12 +197,7 @@ defmodule AshHqWeb.AppViewLive do
     {:ok,
      socket
      |> assign(:libraries, libraries)
-     |> assign(
-       :selected_types,
-       selected_types
-     )
-     |> assign(configured_theme: configured_theme)
-     |> push_event("selected_types", %{types: selected_types})}
+     |> assign(configured_theme: configured_theme)}
   end
 
   def toggle_search(js \\ %JS{}) do

@@ -2,9 +2,9 @@ defmodule AshHqWeb.Schema do
   @moduledoc "The absinthe graphql schema"
   use Absinthe.Schema
 
-  @apis [AshHq.Docs]
+  @domains [AshHq.Docs]
 
-  use AshGraphql, apis: @apis
+  use AshGraphql, domains: @domains
 
   query do
   end

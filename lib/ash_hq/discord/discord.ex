@@ -1,6 +1,6 @@
 defmodule AshHq.Discord do
   @moduledoc "Discord api import & interactions"
-  use Ash.Api
+  use Ash.Domain
 
   resources do
     resource AshHq.Discord.Attachment

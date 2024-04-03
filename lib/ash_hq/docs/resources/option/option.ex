@@ -2,10 +2,12 @@ defmodule AshHq.Docs.Option do
   @moduledoc false
 
   use Ash.Resource,
+    domain: AshHq.Docs,
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
   actions do
+    default_accept :*
     defaults [:update, :destroy]
 
     read :read do
@@ -53,52 +55,70 @@ defmodule AshHq.Docs.Option do
     uuid_primary_key :id
 
     attribute :name, :string do
+      public? true
       allow_nil? false
     end
 
     attribute :type, :string do
+      public? true
       allow_nil? false
     end
 
     attribute :doc, :string do
+      public? true
       allow_nil? false
       constraints trim?: false, allow_empty?: true
       default ""
     end
 
     attribute :doc_html, :string do
+      public? true
       constraints trim?: false, allow_empty?: true
       writable? false
     end
 
     attribute :required, :boolean do
+      public? true
       allow_nil? false
       default false
     end
 
-    attribute :argument_index, :integer
+    attribute :argument_index, :integer do
+      public? true
+    end
 
     attribute :links, :map do
+      public? true
       default %{}
     end
 
-    attribute :default, :string
-    attribute :path, {:array, :string}
-    attribute :order, :integer, allow_nil?: false
+    attribute :default, :string do
+      public? true
+    end
+    attribute :path, {:array, :string} do
+      public? true
+    end
+    attribute :order, :integer do
+      public? true
+      allow_nil? false
+    end
 
     timestamps()
   end
 
   relationships do
     belongs_to :dsl, AshHq.Docs.Dsl do
+      public? true
       allow_nil? true
     end
 
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
+      public? true
       allow_nil? true
     end
 
     belongs_to :extension, AshHq.Docs.Extension do
+      public? true
       allow_nil? true
     end
   end
@@ -114,7 +134,6 @@ defmodule AshHq.Docs.Option do
   end
 
   code_interface do
-    define_for AshHq.Docs
     define :read
   end
 

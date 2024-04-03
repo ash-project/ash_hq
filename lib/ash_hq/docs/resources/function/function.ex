@@ -2,10 +2,12 @@ defmodule AshHq.Docs.Function do
   @moduledoc false
 
   use Ash.Resource,
+    domain: AshHq.Docs,
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
   actions do
+    default_accept :*
     defaults [:update, :destroy]
 
     read :read do
@@ -51,45 +53,58 @@ defmodule AshHq.Docs.Function do
     uuid_primary_key :id
 
     attribute :name, :string do
+      public? true
       allow_nil? false
     end
 
-    attribute :file, :string
-    attribute :line, :integer
+    attribute :file, :string do
+      public? true
+    end
+    attribute :line, :integer do
+      public? true
+    end
 
     attribute :arity, :integer do
+      public? true
       allow_nil? false
     end
 
     attribute :type, :atom do
+      public? true
       constraints one_of: [:function, :macro, :callback, :type]
       allow_nil? false
     end
 
     attribute :heads, {:array, :string} do
+      public? true
       default []
     end
 
     attribute :heads_html, {:array, :string} do
+      public? true
       default []
     end
 
     attribute :doc, :string do
+      public? true
       allow_nil? false
       constraints trim?: false, allow_empty?: true
       default ""
     end
 
     attribute :doc_html, :string do
+      public? true
       constraints trim?: false, allow_empty?: true
       writable? false
     end
 
     attribute :order, :integer do
+      public? true
       allow_nil? false
     end
 
     attribute :deprecated, :string do
+      public? true
       allow_nil? true
     end
 
@@ -98,10 +113,12 @@ defmodule AshHq.Docs.Function do
 
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
+      public? true
       allow_nil? true
     end
 
     belongs_to :module, AshHq.Docs.Module do
+      public? true
       allow_nil? true
     end
   end
@@ -115,9 +132,6 @@ defmodule AshHq.Docs.Function do
     end
   end
 
-  code_interface do
-    define_for AshHq.Docs
-  end
 
   resource do
     description "A function in a module exposed by an Ash library"

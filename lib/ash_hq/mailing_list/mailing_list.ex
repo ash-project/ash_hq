@@ -2,9 +2,9 @@ defmodule AshHq.MailingList do
   @moduledoc """
   Handles documentation data.
   """
-  use Ash.Api, otp_app: :ash_hq
+  use Ash.Domain, otp_app: :ash_hq
 
   resources do
-    registry AshHq.MailingList.Registry
+    resource AshHq.MailingList.Email
   end
 end

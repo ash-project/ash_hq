@@ -489,7 +489,6 @@ defmodule AshHqWeb.Pages.Home do
        contributors: contributors,
        email_form:
          AshPhoenix.Form.for_create(AshHq.MailingList.Email, :create,
-           api: AshHq.MailingList,
            upsert?: true,
            upsert_identity: :unique_email
          )
@@ -638,6 +637,7 @@ defmodule AshHqWeb.Pages.Home do
   @post_example """
                 defmodule Example.Post do
                   use Ash.Resource,
+                    domain: Example,
                     data_layer: AshPostgres.DataLayer
 
                   resource do

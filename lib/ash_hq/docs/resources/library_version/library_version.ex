@@ -2,10 +2,12 @@ defmodule AshHq.Docs.LibraryVersion do
   @moduledoc false
 
   use Ash.Resource,
+    domain: AshHq.Docs,
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
   actions do
+    default_accept :*
     defaults [:update, :destroy]
 
     read :read do
@@ -90,10 +92,12 @@ defmodule AshHq.Docs.LibraryVersion do
     uuid_primary_key :id
 
     attribute :version, :string do
+      public? true
       allow_nil? false
     end
 
     attribute :hydrated, :boolean do
+      public? true
       default false
       allow_nil? false
     end
@@ -103,13 +107,22 @@ defmodule AshHq.Docs.LibraryVersion do
 
   relationships do
     belongs_to :library, AshHq.Docs.Library do
+      public? true
       allow_nil? true
     end
 
-    has_many :extensions, AshHq.Docs.Extension
-    has_many :guides, AshHq.Docs.Guide
-    has_many :modules, AshHq.Docs.Module
-    has_many :mix_tasks, AshHq.Docs.MixTask
+    has_many :extensions, AshHq.Docs.Extension do
+      public? true
+    end
+    has_many :guides, AshHq.Docs.Guide do
+      public? true
+    end
+    has_many :modules, AshHq.Docs.Module do
+      public? true
+    end
+    has_many :mix_tasks, AshHq.Docs.MixTask do
+      public? true
+    end
   end
 
   postgres do
@@ -118,7 +131,6 @@ defmodule AshHq.Docs.LibraryVersion do
   end
 
   code_interface do
-    define_for AshHq.Docs
     define :build, args: [:library, :version]
     define :defined_for, args: [:library, :versions]
     define :by_version, args: [:library, :version]

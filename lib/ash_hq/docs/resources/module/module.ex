@@ -2,10 +2,12 @@ defmodule AshHq.Docs.Module do
   @moduledoc false
 
   use Ash.Resource,
+    domain: AshHq.Docs,
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
   actions do
+    default_accept :*
     defaults [:update, :destroy]
 
     read :read do
@@ -51,28 +53,35 @@ defmodule AshHq.Docs.Module do
     uuid_primary_key :id
 
     attribute :name, :string do
+      public? true
       allow_nil? false
     end
 
     attribute :category, :string do
+      public? true
       allow_nil? false
       default "Misc"
     end
 
-    attribute :file, :string
+    attribute :file, :string do
+      public? true
+    end
 
     attribute :doc, :string do
+      public? true
       allow_nil? false
       constraints trim?: false, allow_empty?: true
       default ""
     end
 
     attribute :doc_html, :string do
+      public? true
       constraints trim?: false, allow_empty?: true
       writable? false
     end
 
     attribute :order, :integer do
+      public? true
       allow_nil? false
     end
 
@@ -81,10 +90,13 @@ defmodule AshHq.Docs.Module do
 
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
+      public? true
       allow_nil? true
     end
 
-    has_many :functions, AshHq.Docs.Function
+    has_many :functions, AshHq.Docs.Function do
+      public? true
+    end
   end
 
   postgres do
@@ -96,9 +108,6 @@ defmodule AshHq.Docs.Module do
     end
   end
 
-  code_interface do
-    define_for AshHq.Docs
-  end
 
   resource do
     description "Represents a module that has been exposed by a library"

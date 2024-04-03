@@ -9,7 +9,7 @@ defmodule AshHqWeb.RedirectToHex do
     AshHq.Docs.Module
     |> Ash.Query.filter(name == ^dsl_target or sanitized_name == ^dsl_target)
     |> Ash.Query.load(to_load)
-    |> AshHq.Docs.read_one()
+    |> Ash.read_one()
     |> case do
       {:ok, module} when not is_nil(module) ->
         {:halt, redirect(socket, external: AshHqWeb.DocRoutes.doc_link(module))}
@@ -30,7 +30,7 @@ defmodule AshHqWeb.RedirectToHex do
     AshHq.Docs.MixTask
     |> Ash.Query.filter(name == ^mix_task or sanitized_name == ^mix_task)
     |> Ash.Query.load(to_load)
-    |> AshHq.Docs.read_one()
+    |> Ash.read_one()
     |> case do
       {:ok, module} when not is_nil(module) ->
         {:halt, redirect(socket, external: AshHqWeb.DocRoutes.doc_link(module))}
@@ -51,7 +51,7 @@ defmodule AshHqWeb.RedirectToHex do
     AshHq.Docs.Module
     |> Ash.Query.filter(name == ^module or sanitized_name == ^module)
     |> Ash.Query.load(to_load)
-    |> AshHq.Docs.read_one()
+    |> Ash.read_one()
     |> case do
       {:ok, module} when not is_nil(module) ->
         {:halt, redirect(socket, external: AshHqWeb.DocRoutes.doc_link(module))}
@@ -67,7 +67,7 @@ defmodule AshHqWeb.RedirectToHex do
     AshHq.Docs.Module
     |> Ash.Query.filter(name == ^module or sanitized_name == ^module)
     |> Ash.Query.load(to_load)
-    |> AshHq.Docs.read_one()
+    |> Ash.read_one()
     |> case do
       {:ok, module} when not is_nil(module) ->
         {:halt, redirect(socket, external: AshHqWeb.DocRoutes.doc_link(module))}

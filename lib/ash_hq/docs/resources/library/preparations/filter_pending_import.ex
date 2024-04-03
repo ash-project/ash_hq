@@ -5,10 +5,10 @@ defmodule AshHq.Docs.Library.Preparations.FilterPendingImport do
     query
     |> Ash.Query.ensure_selected([:name])
     |> Ash.Query.load(:latest_version)
-    |> Ash.Query.after_action(fn query, results ->
+    |> Ash.Query.after_action(fn _query, results ->
       pending_import =
         results
-        |> query.api.load!(:latest_version)
+        |> Ash.load!(:latest_version)
         |> Enum.flat_map(fn result ->
           hex_info =
             Finch.build(:get, "https://hex.pm/api/packages/#{result.name}")

@@ -3,6 +3,7 @@ defmodule AshHq.Discord.Message do
   Discord messages synchronized by the discord bot
   """
   use Ash.Resource,
+    domain: AshHq.Discord,
     data_layer: AshPostgres.DataLayer,
     extensions: [
       AshHq.Docs.Extensions.RenderMarkdown,
@@ -10,6 +11,8 @@ defmodule AshHq.Discord.Message do
     ]
 
   actions do
+    default_accept :*
+
     defaults [:read, :destroy]
 
     create :create do
@@ -25,6 +28,7 @@ defmodule AshHq.Discord.Message do
     end
 
     update :update do
+      require_atomic? false
       primary? true
       argument :attachments, {:array, :map}
       argument :reactions, {:array, :map}
@@ -59,25 +63,37 @@ defmodule AshHq.Discord.Message do
     integer_primary_key :id, generated?: false, writable?: true
 
     attribute :author, :string do
+      public? true
       allow_nil? false
     end
 
-    attribute :content, :string
-    attribute :content_html, :string
+    attribute :content, :string do
+      public? true
+    end
+    attribute :content_html, :string do
+      public? true
+    end
 
     attribute :timestamp, :utc_datetime do
+      public? true
       allow_nil? false
     end
   end
 
   relationships do
     belongs_to :thread, AshHq.Discord.Thread do
+      public? true
       attribute_type :integer
       allow_nil? false
     end
 
-    has_many :attachments, AshHq.Discord.Attachment
-    has_many :reactions, AshHq.Discord.Reaction
+    has_many :attachments, AshHq.Discord.Attachment do
+      public? true
+    end
+
+    has_many :reactions, AshHq.Discord.Reaction do
+      public? true
+    end
   end
 
   postgres do

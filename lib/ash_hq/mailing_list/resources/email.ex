@@ -2,10 +2,12 @@ defmodule AshHq.MailingList.Email do
   @moduledoc false
 
   use Ash.Resource,
+    domain: AshHq.MailingList,
     data_layer: AshPostgres.DataLayer,
     notifiers: AshHq.MailingList.EmailNotifier
 
   actions do
+    default_accept :*
     defaults [:create, :read]
   end
 
@@ -13,6 +15,7 @@ defmodule AshHq.MailingList.Email do
     uuid_primary_key :id
 
     attribute :email, :ci_string do
+      public? true
       allow_nil? false
     end
 
@@ -25,8 +28,6 @@ defmodule AshHq.MailingList.Email do
   end
 
   code_interface do
-    define_for AshHq.MailingList
-
     define :all, action: :read
   end
 

@@ -1,6 +1,7 @@
 defmodule AshHq.Blog.Post do
   @moduledoc "A blog post. Uses the AshBlog data layer and therefore is static"
   use Ash.Resource,
+    domain: AshHq.Blog,
     otp_app: :ash_hq,
     data_layer: AshBlog.DataLayer,
     extensions: [AshHq.Docs.Extensions.RenderMarkdown, AshAdmin.Resource]
@@ -22,6 +23,7 @@ defmodule AshHq.Blog.Post do
   end
 
   actions do
+    default_accept :*
     defaults [:create, :read, :update]
 
     read :published do
@@ -52,11 +54,13 @@ defmodule AshHq.Blog.Post do
     uuid_primary_key :id
 
     attribute :tag_line, :string do
+      public? true
       allow_nil? false
       constraints max_length: 250
     end
 
     attribute :tag_names, {:array, :ci_string} do
+      public? true
       constraints items: [
                     match: ~r/^[a-zA-Z]*$/,
                     casing: :lower
@@ -64,10 +68,12 @@ defmodule AshHq.Blog.Post do
     end
 
     attribute :author, :string do
+      public? true
       allow_nil? false
     end
 
     attribute :body_html, :string do
+      public? true
       writable? false
     end
 
@@ -76,6 +82,7 @@ defmodule AshHq.Blog.Post do
 
   relationships do
     has_many :tags, AshHq.Blog.Tag do
+      public? true
       manual fn posts, %{query: query} ->
         all_tags = Enum.flat_map(posts, &(&1.tag_names || []))
 
@@ -83,7 +90,7 @@ defmodule AshHq.Blog.Post do
           query
           |> Ash.Query.unset([:limit, :offset])
           |> Ash.Query.filter(name in ^all_tags)
-          |> AshHq.Blog.read!()
+          |> Ash.read!()
 
         {:ok,
          Map.new(posts, fn post ->
@@ -94,7 +101,6 @@ defmodule AshHq.Blog.Post do
   end
 
   code_interface do
-    define_for AshHq.Blog
     define :published
     define :by_slug, args: [:slug]
   end

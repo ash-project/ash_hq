@@ -2,13 +2,10 @@ defmodule AshHq.Accounts do
   @moduledoc """
   Handles user and user token related operations/state
   """
-  use Ash.Api, otp_app: :ash_hq
-
-  authorization do
-    authorize :by_default
-  end
+  use Ash.Domain, otp_app: :ash_hq
 
   resources do
-    registry AshHq.Accounts.Registry
+    resource AshHq.Accounts.User
+    resource AshHq.Accounts.UserToken
   end
 end

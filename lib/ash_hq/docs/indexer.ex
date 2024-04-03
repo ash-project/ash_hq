@@ -73,7 +73,7 @@ defmodule AshHq.Docs.Indexer do
       resource
       |> Ash.Query.filter(id in ^ids)
       |> Ash.Query.load(AshHq.Docs.Extensions.Search.load_for_search(resource))
-      |> AshHq.Docs.read!()
+      |> Ash.read!()
       |> Enum.map(fn item ->
         Ash.Resource.put_metadata(item, :search_score, scores[item.id])
       end)
@@ -125,7 +125,7 @@ defmodule AshHq.Docs.Indexer do
   defp dsls do
     AshHq.Docs.Dsl
     |> Ash.Query.load([:library_name, :extension_module])
-    |> AshHq.Docs.stream!()
+    |> Ash.stream!()
     |> Stream.map(fn dsl ->
       %{
         "id" => id("dsl", dsl.id),
@@ -140,7 +140,7 @@ defmodule AshHq.Docs.Indexer do
   defp guides do
     AshHq.Docs.Guide
     |> Ash.Query.load(library_version: :library)
-    |> AshHq.Docs.stream!()
+    |> Ash.stream!()
     |> Stream.map(fn guide ->
       %{
         "id" => id("guide", guide.id),
@@ -154,7 +154,7 @@ defmodule AshHq.Docs.Indexer do
   defp options do
     AshHq.Docs.Option
     |> Ash.Query.load([:library_name, :extension_module])
-    |> AshHq.Docs.stream!()
+    |> Ash.stream!()
     |> Stream.map(fn option ->
       %{
         "id" => id("option", option.id),
@@ -169,7 +169,7 @@ defmodule AshHq.Docs.Indexer do
   defp modules do
     AshHq.Docs.Module
     |> Ash.Query.load([:library_name])
-    |> AshHq.Docs.stream!()
+    |> Ash.stream!()
     |> Stream.map(fn module ->
       %{
         "id" => id("module", module.id),
@@ -184,7 +184,7 @@ defmodule AshHq.Docs.Indexer do
   defp mix_tasks do
     AshHq.Docs.MixTask
     |> Ash.Query.load([:library_name])
-    |> AshHq.Docs.stream!()
+    |> Ash.stream!()
     |> Stream.map(fn mix_task ->
       %{
         "id" => id("mix_task", mix_task.id),
@@ -199,7 +199,7 @@ defmodule AshHq.Docs.Indexer do
   defp functions do
     AshHq.Docs.Function
     |> Ash.Query.load([:library_name, :call_name])
-    |> AshHq.Docs.stream!()
+    |> Ash.stream!()
     |> Stream.map(fn function ->
       %{
         "id" => id("function", function.id),

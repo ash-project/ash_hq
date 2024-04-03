@@ -5,9 +5,8 @@ defmodule AshHq.Github.Contributor.Actions.Import do
 
   def run(_input, _, _) do
     AshHq.Docs.Library
-    |> AshHq.Docs.read!()
+    |> Ash.stream!()
     |> Stream.flat_map(fn library ->
-      :timer.sleep(1000)
       opts = []
 
       opts =
@@ -33,7 +32,7 @@ defmodule AshHq.Github.Contributor.Actions.Import do
       Map.put(contributor, "order", index)
     end)
     |> Stream.uniq_by(&Map.get(&1, "id"))
-    |> AshHq.Github.bulk_create(AshHq.Github.Contributor, :create,
+    |> Ash.bulk_create(AshHq.Github.Contributor, :create,
       upsert?: true,
       upsert_fields: [:order, :login, :avatar_url, :html_url],
       return_errors?: true,

@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" class="<%= "#{@configured_theme}" %>">
+<html lang="en" class={@configured_theme}>
   <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <%= csrf_meta_tag() %>
-    <%= live_title_tag assigns[:page_title] || "Ash Framework" %>
+    <.live_title>
+      <%= assigns[:page_title] || "Ash Framework" %>
+    </.live_title>
     <%= if Application.get_env(:ash_hq, :analytics?) do %>
       <script defer data-domain="ash-hq.org" src="https://plausible.io/js/plausible.js"></script>
     <% end %>
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.2/jquery.min.js"></script>
-    <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/assets/app.css") %>"/>
+    <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")}/>
   </head>
   <body class="h-full">
     <%= case live_flash(@flash, :info) do %>
@@ -34,6 +36,6 @@
     <%= if @live_action == :media do %>
       <script src="https://platform.twitter.com/widgets.js" charset="utf-8" ></script>
     <% end %>
-    <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/assets/app.js") %>"></script>
+    <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
   </body>
 </html>

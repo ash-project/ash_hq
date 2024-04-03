@@ -97,7 +97,7 @@ defmodule AshHqWeb.Pages.Forum do
       |> Ash.Query.filter(channel_id == ^socket.assigns.channel.id)
       |> Ash.Query.select(:name)
       |> Ash.Query.sort(:name)
-      |> AshHq.Discord.read!()
+      |> Ash.read!()
       |> Enum.map(&to_string(&1.name))
 
     assign(socket, :tags, tags)

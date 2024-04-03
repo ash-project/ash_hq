@@ -39,7 +39,8 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:ash, "~> 3.0.0-rc"},
+      # {:ash, "~> 3.0.0-rc"},
+      {:ash, path: "../../ash/ash", override: true},
       {:ash_postgres, "~> 2.0.0-rc"},
       {:ash_admin, "~> 0.10.10-rc"},
       {:ash_phoenix, "~> 2.0.0-rc"},
@@ -99,6 +100,7 @@ defmodule AshHq.MixProject do
       {:phoenix_html, "~> 4.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.18"},
+      {:html_entities, "~> 0.5"},
       # locked for compatibility
       {:finch, "~> 0.10"},
       {:floki, "~> 0.30"},

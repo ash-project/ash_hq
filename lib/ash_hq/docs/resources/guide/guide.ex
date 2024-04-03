@@ -1,6 +1,7 @@
 defmodule AshHq.Docs.Guide do
   @moduledoc false
   use Ash.Resource,
+    domain: AshHq.Docs,
     data_layer: AshPostgres.DataLayer,
     extensions: [
       AshHq.Docs.Extensions.Search,
@@ -10,6 +11,7 @@ defmodule AshHq.Docs.Guide do
     ]
 
   actions do
+    default_accept :*
     defaults [:create, :update, :destroy]
 
     read :read do
@@ -66,39 +68,47 @@ defmodule AshHq.Docs.Guide do
     uuid_primary_key :id
 
     attribute :order, :integer do
+      public? true
       allow_nil? false
     end
 
     attribute :name, :string do
+      public? true
       allow_nil? false
     end
 
     attribute :text, :string do
+      public? true
       allow_nil? false
       constraints trim?: false, allow_empty?: true
       default ""
     end
 
     attribute :text_html, :string do
+      public? true
       constraints trim?: false, allow_empty?: true
       writable? false
     end
 
     attribute :category, :string do
+      public? true
       default "Topics"
       allow_nil? false
     end
 
     attribute :route, :string do
+      public? true
       allow_nil? false
     end
 
     attribute :sanitized_route, :string do
+      public? true
       allow_nil? false
       writable? false
     end
 
     attribute :default, :boolean do
+      public? true
       default false
       allow_nil? false
     end
@@ -121,9 +131,6 @@ defmodule AshHq.Docs.Guide do
     end
   end
 
-  code_interface do
-    define_for AshHq.Docs
-  end
 
   resource do
     description "Represents a markdown guide exposed by a library"

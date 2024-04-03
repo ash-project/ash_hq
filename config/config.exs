@@ -25,7 +25,7 @@ config :ash_appsignal,
 config :appsignal, :config, revision: "test-4"
 
 config :ash_hq,
-  ash_apis: [
+  ash_domains: [
     AshHq.Accounts,
     AshHq.Blog,
     AshHq.Docs,
@@ -40,7 +40,6 @@ config :ash_hq, AshHq.Repo,
 
 config :spark, :formatter,
   remove_parens?: true,
-  "Ash.Registry": [],
   "Ash.Resource": [
     type: Ash.Resource,
     section_order: [

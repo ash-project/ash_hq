@@ -45,7 +45,6 @@ defmodule AshHq.Docs.Extensions.Search.Transformers.AddSearchStructure do
               Ash.Resource.Dsl,
               [:attributes],
               :attribute,
-              private?: true,
               name: config.sanitized_name_attribute,
               type: :string,
               allow_nil?: false

@@ -2,10 +2,12 @@ defmodule AshHq.Docs.Dsl do
   @moduledoc false
 
   use Ash.Resource,
+    domain: AshHq.Docs,
     data_layer: AshPostgres.DataLayer,
     extensions: [AshHq.Docs.Extensions.Search, AshHq.Docs.Extensions.RenderMarkdown]
 
   actions do
+    default_accept :*
     defaults [:update, :destroy]
 
     read :read do
@@ -57,39 +59,61 @@ defmodule AshHq.Docs.Dsl do
     uuid_primary_key :id
 
     attribute :name, :string do
+      public? true
       allow_nil? false
     end
 
-    attribute :requires_extension, :string
+    attribute :requires_extension, :string do
+      public? true
+    end
 
     attribute :doc, :string do
+      public? true
       allow_nil? false
       constraints trim?: false, allow_empty?: true
       default ""
     end
 
     attribute :doc_html, :string do
+      public? true
       constraints trim?: false, allow_empty?: true
       writable? false
     end
 
     attribute :imports, {:array, :string} do
+      public? true
       default []
     end
 
-    attribute :examples, {:array, :string}
-    attribute :args, {:array, :string}
+    attribute :examples, {:array, :string} do
+      public? true
+    end
+
+    attribute :args, {:array, :string} do
+      public? true
+    end
 
     attribute :optional_args, {:array, :string} do
+      public? true
       default []
     end
 
-    attribute :arg_defaults, :map
-    attribute :path, {:array, :string}
-    attribute :recursive_as, :string
-    attribute :order, :integer, allow_nil?: false
+    attribute :arg_defaults, :map do
+      public? true
+    end
+    attribute :path, {:array, :string} do
+      public? true
+    end
+    attribute :recursive_as, :string do
+      public? true
+    end
+    attribute :order, :integer do
+      public? true
+      allow_nil? false
+    end
 
     attribute :type, :atom do
+      public? true
       allow_nil? false
       constraints one_of: [:entity, :section]
     end
@@ -99,16 +123,24 @@ defmodule AshHq.Docs.Dsl do
 
   relationships do
     belongs_to :library_version, AshHq.Docs.LibraryVersion do
+      public? true
       allow_nil? true
     end
 
     belongs_to :extension, AshHq.Docs.Extension do
+      public? true
       allow_nil? true
     end
 
-    belongs_to :dsl, __MODULE__
-    has_many :options, AshHq.Docs.Option
-    has_many :dsls, __MODULE__
+    belongs_to :dsl, __MODULE__ do
+      public? true
+    end
+    has_many :options, AshHq.Docs.Option do
+      public? true
+    end
+    has_many :dsls, __MODULE__ do
+      public? true
+    end
   end
 
   postgres do
@@ -124,7 +156,6 @@ defmodule AshHq.Docs.Dsl do
   end
 
   code_interface do
-    define_for AshHq.Docs
     define :read
   end
 

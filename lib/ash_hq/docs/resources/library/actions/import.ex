@@ -75,7 +75,7 @@ defmodule AshHq.Docs.Library.Actions.Import do
 
     Logger.info("Starting import of #{name}: #{version}")
 
-    if AshHq.Docs.exists?(
+    if Ash.exists?(
          Ash.Query.for_read(AshHq.Docs.LibraryVersion, :read)
          |> Ash.Query.filter(library_id == ^library.id and version == ^version)
        ) do

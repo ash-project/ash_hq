@@ -1,7 +1,7 @@
 defmodule AshHq.Blog do
-  @moduledoc "An api for interacting with the blog"
-  use Ash.Api,
-    extensions: [AshAdmin.Api]
+  @moduledoc "A domain for interacting with the blog"
+  use Ash.Domain,
+    extensions: [AshAdmin.Domain]
 
   admin do
     show? true
@@ -9,6 +9,7 @@ defmodule AshHq.Blog do
   end
 
   resources do
-    registry AshHq.Blog.Registry
+    resource AshHq.Blog.Post
+    resource AshHq.Blog.Tag
   end
 end

@@ -1,9 +1,11 @@
 defmodule AshHq.Discord.ThreadTag do
   @moduledoc "Joins a thread to a tag"
   use Ash.Resource,
+    domain: AshHq.Discord,
     data_layer: AshPostgres.DataLayer
 
   actions do
+    default_accept :*
     defaults [:read, :destroy]
 
     create :tag do
@@ -13,16 +15,16 @@ defmodule AshHq.Discord.ThreadTag do
 
   relationships do
     belongs_to :thread, AshHq.Discord.Thread do
+      public? true
       primary_key? true
       allow_nil? false
-      attribute_writable? true
       attribute_type :integer
     end
 
     belongs_to :tag, AshHq.Discord.Tag do
+      public? true
       primary_key? true
       allow_nil? false
-      attribute_writable? true
       attribute_type :integer
     end
   end
@@ -33,7 +35,6 @@ defmodule AshHq.Discord.ThreadTag do
   end
 
   code_interface do
-    define_for AshHq.Discord
     define :tag, args: [:thread_id, :tag_id]
   end
 end
