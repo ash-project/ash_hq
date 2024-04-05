@@ -89,13 +89,13 @@ defmodule AshHq.Docs.Library.Actions.Import do
               library.id,
               version,
               %{
-                timeout: :infinity,
                 extensions: result[:extensions],
                 doc: result[:doc],
                 guides: result[:guides],
                 modules: result[:modules],
                 mix_tasks: result[:mix_tasks]
-              }
+              },
+              timeout: :infinity
             )
 
           delete_except(library_version.id, library.id)
