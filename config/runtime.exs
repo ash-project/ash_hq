@@ -101,7 +101,9 @@ if config_env() == :prod do
       "https://#{host}",
       "http://www.#{host}",
       "https://www.#{host}"
-    ],
+    ] |> Enum.flat_map(fn host ->
+      [host, String.replace(host, ~r/\.org$/, ".com")]
+    end),
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
