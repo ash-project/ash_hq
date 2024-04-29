@@ -41,7 +41,7 @@ config :nostrum,
 config :ash_hq, Oban,
   repo: AshHq.Repo,
   plugins: [
-    Oban.Plugins.Pruner,
+    {Oban.Plugins.Pruner, []},
     {Oban.Plugins.Cron, crontab: []}
   ],
   queues: [importer: [limit: 1, paused: not (periodic_imports? || config_env() == :prod)]]
@@ -96,14 +96,16 @@ if config_env() == :prod do
   config :ash_hq, AshHqWeb.Endpoint,
     server: true,
     url: [host: host, port: 80],
-    check_origin: [
-      "http://#{host}",
-      "https://#{host}",
-      "http://www.#{host}",
-      "https://www.#{host}"
-    ] |> Enum.flat_map(fn host ->
-      [host, String.replace(host, ~r/\.org$/, ".com")]
-    end),
+    check_origin:
+      [
+        "http://#{host}",
+        "https://#{host}",
+        "http://www.#{host}",
+        "https://www.#{host}"
+      ]
+      |> Enum.flat_map(fn host ->
+        [host, String.replace(host, ~r/\.org$/, ".com")]
+      end),
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
