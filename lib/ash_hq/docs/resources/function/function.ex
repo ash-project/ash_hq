@@ -82,6 +82,7 @@ defmodule AshHq.Docs.Function do
     end
 
     attribute :heads_html, {:array, :string} do
+      constraints remove_nil_items?: true
       public? true
       default []
     end

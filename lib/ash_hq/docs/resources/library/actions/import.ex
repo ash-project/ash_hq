@@ -90,7 +90,6 @@ defmodule AshHq.Docs.Library.Actions.Import do
               version,
               %{
                 extensions: result[:extensions],
-                doc: result[:doc],
                 guides: result[:guides],
                 modules: result[:modules],
                 mix_tasks: result[:mix_tasks]

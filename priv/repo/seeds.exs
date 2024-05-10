@@ -202,9 +202,23 @@ AshHq.Docs.Library.create!(
     name: "reactor",
     display_name: "Reactor",
     module_prefixes: ["Reactor"],
-    order: 90,
+    order: 91,
     description: """
     Reactor is a dynamic, concurrent, dependency resolving saga orchestrator.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "ash_cloak",
+    display_name: "AshCloak",
+    module_prefixes: ["AshCloak"],
+    order: 90,
+    description: """
+    An extension to seamlessly encrypt and decrypt resource attributes.
     """
   },
   upsert?: true,

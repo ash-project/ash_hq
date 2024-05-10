@@ -107,7 +107,6 @@ defmodule Utils do
   def build(extension, all_extensions, _order) do
     %{
       module: inspect(extension),
-      doc: module_docs(extension) || "No documentation",
       dsls: build_sections(extension.sections(), extension, all_extensions)
     }
   end
@@ -615,7 +614,13 @@ defmodule Utils do
           Path.extname(to_string(item)) != ".md"
         end)
         |> Stream.reject(fn {item, _} ->
+          to_string(item) == "CHANGELOG.md"
+        end)
+        |> Stream.reject(fn {item, _} ->
           String.contains?(to_string(item), "hexdocs")
+        end)
+        |> Stream.reject(fn {item, _} ->
+          String.starts_with?(item, "DSL:")
         end)
         |> Enum.reject(fn
           {_name, config} ->
@@ -669,6 +674,16 @@ defmodule Utils do
                 other ->
                   other
               end
+              |> case do
+                "About " <> _thing ->
+                  "About"
+
+                "Start Here" ->
+                  "Tutorials"
+
+                other ->
+                  other
+              end
 
             {file, name: title}
         end)
@@ -680,6 +695,18 @@ defmodule Utils do
 
       groups_for_extras
       |> Enum.reduce({extras, []}, fn {group, matcher}, {remaining_extras, acc} ->
+        group =
+          case group do
+            "About " <> _thing ->
+              "About"
+
+            "Start Here" ->
+              "Tutorials"
+
+            other ->
+              other
+          end
+
         matches_for_group =
           matcher
           |> List.wrap()
@@ -703,6 +730,11 @@ defmodule Utils do
             |> String.trim_leading(app_dir)
             |> String.trim_leading("/documentation/")
             |> String.trim_trailing(".md")
+            |> Path.split()
+            |> Enum.reverse()
+            |> Enum.take(2)
+            |> Enum.reverse()
+            |> Enum.join("/")
 
           config
           |> Map.new()
@@ -770,6 +802,7 @@ all_modules =
 
 acc =
   mix_project.project[:docs][:groups_for_modules]
+  |> Kernel.||([])
   |> Enum.reject(fn
     {"Internals", _} ->
       true

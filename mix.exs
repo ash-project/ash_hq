@@ -39,7 +39,7 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:ash, "~> 3.0.0-rc"},
+      {:ash, "~> 3.0"},
       {:ash_postgres, "~> 2.0.0-rc"},
       {:ash_admin, "~> 0.10.10-rc"},
       {:ash_phoenix, "~> 2.0.0-rc"},
@@ -136,7 +136,7 @@ defmodule AshHq.MixProject do
         "ash_postgres.migrate",
         "seed"
       ],
-      reset: ["drop", "setup"],
+      reset: ["ash.reset", "seed"],
       credo: "credo --strict",
       drop: ["ash_postgres.drop"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
