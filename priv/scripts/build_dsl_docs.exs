@@ -614,13 +614,16 @@ defmodule Utils do
           Path.extname(to_string(item)) != ".md"
         end)
         |> Stream.reject(fn {item, _} ->
-          to_string(item) == "CHANGELOG.md"
+          Path.basename(to_string(item)) == "CHANGELOG.md"
         end)
         |> Stream.reject(fn {item, _} ->
           String.contains?(to_string(item), "hexdocs")
         end)
         |> Stream.reject(fn {item, _} ->
-          String.starts_with?(item, "DSL:")
+          String.starts_with?(Path.basename(to_string(item)), "DSL:")
+        end)
+        |> Stream.reject(fn {item, _} ->
+          String.downcase(Path.basename(to_string(item))) == "README.md"
         end)
         |> Enum.reject(fn
           {_name, config} ->
@@ -674,16 +677,6 @@ defmodule Utils do
                 other ->
                   other
               end
-              |> case do
-                "About " <> _thing ->
-                  "About"
-
-                "Start Here" ->
-                  "Tutorials"
-
-                other ->
-                  other
-              end
 
             {file, name: title}
         end)
@@ -695,18 +688,6 @@ defmodule Utils do
 
       groups_for_extras
       |> Enum.reduce({extras, []}, fn {group, matcher}, {remaining_extras, acc} ->
-        group =
-          case group do
-            "About " <> _thing ->
-              "About"
-
-            "Start Here" ->
-              "Tutorials"
-
-            other ->
-              other
-          end
-
         matches_for_group =
           matcher
           |> List.wrap()
@@ -721,6 +702,18 @@ defmodule Utils do
       |> elem(1)
       |> Enum.reverse()
       |> Enum.flat_map(fn {category, matches} ->
+        category =
+          case to_string(category) do
+            "About " <> _thing ->
+              "About"
+
+            "Start Here" ->
+              "Tutorials"
+
+            other ->
+              other
+          end
+
         matches
         |> Enum.with_index()
         |> Enum.map(fn {{path, config}, index} ->
