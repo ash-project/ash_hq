@@ -623,7 +623,7 @@ defmodule Utils do
           String.starts_with?(Path.basename(to_string(item)), "DSL:")
         end)
         |> Stream.reject(fn {item, _} ->
-          String.downcase(Path.basename(to_string(item))) == "README.md"
+          String.downcase(Path.basename(to_string(item))) == "readme.md"
         end)
         |> Enum.reject(fn
           {_name, config} ->
