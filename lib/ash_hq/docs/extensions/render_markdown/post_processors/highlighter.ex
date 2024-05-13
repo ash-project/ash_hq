@@ -80,6 +80,9 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.Highlighter do
       {%{host: nil}, ["documentation", _type, guide]} ->
         github_guide_link(value, libraries, nil, current_library, guide)
 
+      {%{host: nil}, ["documentation", _type, _subtype, guide]} ->
+        github_guide_link(value, libraries, nil, current_library, guide)
+
       {%{host: nil}, [guide]} ->
         github_guide_link(value, libraries, nil, current_library, guide)
 
