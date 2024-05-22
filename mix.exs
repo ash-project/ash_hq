@@ -41,7 +41,7 @@ defmodule AshHq.MixProject do
     [
       {:ash, "~> 3.0"},
       {:ash_postgres, "~> 2.0.0-rc"},
-      {:ash_admin, "~> 0.10.10-rc"},
+      {:ash_admin, "~> 0.11.0"},
       {:ash_phoenix, "~> 2.0.0-rc"},
       {:ash_graphql, "~> 1.0.0-rc"},
       {:ash_json_api, "~> 1.0.0-rc"},
