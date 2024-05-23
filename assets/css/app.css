@@ -5,9 +5,6 @@
 
 @import "syntax.css";
 
-/* Import scoped CSS rules for components */
-@import "./_components.css";
-
 @layer components {
   .aspect-video {
     @apply max-w-lg
