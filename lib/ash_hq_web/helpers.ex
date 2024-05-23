@@ -34,7 +34,7 @@ defmodule AshHqWeb.Helpers do
   end
 
   def hex_link(%AshHq.Docs.Guide{route: route}, library, _library_version) do
-    name = route |> Path.split() |> List.last()
+    name = route |> Path.split() |> List.last() |> String.replace(".", "-")
     "https://hexdocs.pm/#{library.name}/#{name}.html"
   end
 end
