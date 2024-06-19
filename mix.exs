@@ -53,7 +53,7 @@ defmodule AshHq.MixProject do
       {:oban, "~> 2.16"},
       {:flame, "~> 0.2.0"},
       # HTTP calls
-      {:req, "~> 0.4.3"},
+      {:req, "~> 0.5.0"},
       # Appsignal
       {:appsignal_phoenix, "~> 2.0"},
       # Api Docs
