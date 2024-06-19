@@ -51,7 +51,7 @@ defmodule AshHq.MixProject do
       {:ash_oban, "~> 0.2.3-rc"},
       # Jobs
       {:oban, "~> 2.16"},
-      {:flame, "~> 0.1.4"},
+      {:flame, "~> 0.2.0"},
       # HTTP calls
       {:req, "~> 0.4.3"},
       # Appsignal
