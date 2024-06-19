@@ -115,7 +115,6 @@ defmodule AshHq.MixProject do
       {:credo, ">= 0.0.0", only: :dev, runtime: false},
       {:dialyxir, ">= 0.0.0", only: :dev, runtime: false},
       {:sobelow, ">= 0.0.0", only: :dev, runtime: false},
-      {:excoveralls, "~> 0.14", only: [:dev, :test]},
       {:eflame, "~> 1.0", only: [:dev, :test]},
       # Other
       {:absinthe_plug, "~> 1.5"}
