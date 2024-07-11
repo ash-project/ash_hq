@@ -40,11 +40,11 @@ defmodule AshHq.MixProject do
   defp deps do
     [
       {:ash, "~> 3.0"},
-      {:ash_postgres, "~> 2.0.0-rc"},
+      {:ash_postgres, "~> 2.1.1"},
       {:ash_admin, "~> 0.11.0"},
       {:ash_phoenix, "~> 2.0.0-rc"},
       {:ash_graphql, "~> 1.2.0"},
-      {:ash_json_api, "~> 1.2.0"},
+      {:ash_json_api, "~> 1.3.6"},
       {:ash_appsignal, "~> 0.1"},
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, "~> 0.9.7-rc"},
