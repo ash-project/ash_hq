@@ -42,16 +42,16 @@ defmodule AshHq.MixProject do
       {:ash, "~> 3.0"},
       {:ash_postgres, "~> 2.1.1"},
       {:ash_admin, "~> 0.11.0"},
-      {:ash_phoenix, "~> 2.0.0-rc"},
+      {:ash_phoenix, "~> 2.1.1"},
       {:ash_graphql, "~> 1.2.0"},
-      {:ash_json_api, "~> 1.3.6"},
+      {:ash_json_api, "~> 1.4.1"},
       {:ash_appsignal, "~> 0.1"},
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, "~> 0.9.7-rc"},
       {:ash_oban, "~> 0.2.3-rc"},
       # Jobs
       {:oban, "~> 2.16"},
-      {:flame, "~> 0.2.0"},
+      {:flame, "~> 0.3.0"},
       # HTTP calls
       {:req, "~> 0.5.0"},
       # Appsignal
