@@ -43,7 +43,7 @@ defmodule AshHq.MixProject do
       {:ash_postgres, "~> 2.1.1"},
       {:ash_admin, "~> 0.11.0"},
       {:ash_phoenix, "~> 2.1.1"},
-      {:ash_graphql, "~> 1.2.0"},
+      {:ash_graphql, "~> 1.3.1"},
       {:ash_json_api, "~> 1.4.1"},
       {:ash_appsignal, "~> 0.1"},
       {:ash_blog, github: "ash-project/ash_blog"},
