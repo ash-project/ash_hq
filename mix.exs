@@ -40,7 +40,7 @@ defmodule AshHq.MixProject do
   defp deps do
     [
       {:ash, "~> 3.0"},
-      {:ash_postgres, "~> 2.1.1"},
+      {:ash_postgres, "~> 2.2.0"},
       {:ash_admin, "~> 0.11.0"},
       {:ash_phoenix, "~> 2.1.1"},
       {:ash_graphql, "~> 1.3.1"},
