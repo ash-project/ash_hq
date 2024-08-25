@@ -39,16 +39,16 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:ash, "~> 3.0"},
-      {:ash_postgres, "~> 2.2.0"},
-      {:ash_admin, "~> 0.11.0"},
-      {:ash_phoenix, "~> 2.1.1"},
-      {:ash_graphql, "~> 1.3.1"},
-      {:ash_json_api, "~> 1.4.1"},
+      {:ash, "~> 3.3"},
+      {:ash_postgres, "~> 2.2"},
+      {:ash_admin, "~> 0.11"},
+      {:ash_phoenix, "~> 2.1"},
+      {:ash_graphql, "~> 1.3"},
+      {:ash_json_api, "~> 1.4"},
       {:ash_appsignal, "~> 0.1"},
       {:ash_blog, github: "ash-project/ash_blog"},
-      {:ash_csv, "~> 0.9.7-rc"},
-      {:ash_oban, "~> 0.2.3-rc"},
+      {:ash_csv, "~> 0.9"},
+      {:ash_oban, "~> 0.2"},
       # Jobs
       {:oban, "~> 2.16"},
       {:flame, "~> 0.3.0"},
@@ -60,14 +60,12 @@ defmodule AshHq.MixProject do
       {:open_api_spex, "~> 3.16"},
       # Discord
       {:nostrum, github: "zachdaniel/nostrum"},
-      {:cowlib, "~> 2.11", hex: :remedy_cowlib, override: true},
       # Search
       {:haystack, "~> 0.1.0"},
       # Clustering
       {:libcluster, "~> 3.3"},
       # UI
       {:tails, "~> 0.1"},
-      {:earmark, "~> 1.5.0-pre1", override: true},
       # Syntax Highlighting
       {:makeup, "~> 1.1"},
       {:makeup_elixir, "~> 0.16.0"},
@@ -92,7 +90,7 @@ defmodule AshHq.MixProject do
       # Phoenix/Core dependencies
       {:phoenix_html_helpers, "~> 1.0"},
       {:bandit, "~> 1.0"},
-      {:phoenix, "~> 1.7.0-rc.1", override: true},
+      {:phoenix, "~> 1.7"},
       {:phoenix_view, "~> 2.0"},
       {:ecto_sql, "~> 3.6"},
       {:postgrex, ">= 0.0.0"},
