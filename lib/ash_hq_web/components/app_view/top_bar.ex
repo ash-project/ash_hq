@@ -15,7 +15,7 @@ defmodule AshHqWeb.Components.AppView.TopBar do
       id="top-bar"
       class={classes([
 
-        "flex justify-between items-center py-4 px-4 h-20 top-0 z-40 2xl:w-[1500px] self-center",
+        "flex justify-between items-center py-4 px-4 h-20 top-0 z-40 2xl:w-[1500px] self-center w-full",
         sticky: @live_action == :docs_dsl,
         "border-b border-base-light-300 dark:border-base-dark-700 bg-white dark:bg-base-dark-850":
           @live_action == :docs_dsl
