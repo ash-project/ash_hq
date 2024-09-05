@@ -22,7 +22,7 @@ defmodule AshHqWeb.Pages.Home do
 
         <div class="flex flex-col space-y-4 md:space-x-4 md:space-y-0 md:flex-row items-center mt-8 mb-6 md:mb-10">
           <a
-            href="/docs/guides/ash/latest/tutorials/get-started"
+            href="https://hexdocs.pm/ash/readme.html"
             class="flex justify-center items-center w-full md:w-auto h-12 px-4 rounded-lg bg-primary-light-500 dark:bg-primary-dark-500 font-semibold dark:text-white dark:hover:bg-primary-dark-700 hover:bg-primary-light-700"
           >
             Get Started

@@ -40,9 +40,8 @@ defmodule AshHqWeb.Components.AppView.TopBar do
           <% end %>
 
         <.link
-          href="/docs/guides/ash/latest/tutorials/get-started"
+          href="https://hexdocs.pm/ash/readme.html"
           title="Documentation"
-          phx-click={DocSidebar.mark_active("get-started-guide")}
           class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700 hidden md:block"
         >
           Documentation
