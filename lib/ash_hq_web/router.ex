@@ -10,6 +10,7 @@ defmodule AshHqWeb.Router do
     plug(:put_root_layout, {AshHqWeb.LayoutView, :root})
     plug(:protect_from_forgery)
     plug(AshHqWeb.SessionPlug)
+    plug(AshHqWeb.RedirectToHex)
   end
 
   pipeline :api do
@@ -26,8 +27,7 @@ defmodule AshHqWeb.Router do
     live_session :main,
       on_mount: [
         {AshHqWeb.LiveUserAuth, :live_user_optional},
-        {AshHqWeb.InitAssigns, :default},
-        {AshHqWeb.RedirectToHex, :default}
+        {AshHqWeb.InitAssigns, :default}
       ],
       root_layout: {AshHqWeb.LayoutView, :root} do
       live("/", AppViewLive, :home)
