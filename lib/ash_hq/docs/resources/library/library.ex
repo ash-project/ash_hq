@@ -12,6 +12,8 @@ defmodule AshHq.Docs.Library do
     read :read do
       primary? true
 
+      pagination keyset?: true, required?: false
+
       argument :check_cache, :boolean do
         default true
       end
