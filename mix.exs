@@ -52,7 +52,7 @@ defmodule AshHq.MixProject do
       {:earmark, "== 1.5.0-pre1"},
       # Jobs
       {:oban, "~> 2.16"},
-      {:flame, "~> 0.4.2"},
+      {:flame, "~> 0.5.0"},
       # HTTP calls
       {:req, "~> 0.5.0"},
       # Appsignal
