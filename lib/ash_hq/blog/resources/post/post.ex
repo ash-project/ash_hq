@@ -29,6 +29,8 @@ defmodule AshHq.Blog.Post do
     read :published do
       argument :tag, :ci_string
 
+      prepare build(sort: [created_at: :desc])
+
       filter expr(
                state == :published and
                  if is_nil(^arg(:tag)) do
