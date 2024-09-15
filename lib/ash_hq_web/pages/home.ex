@@ -486,12 +486,7 @@ defmodule AshHqWeb.Pages.Home do
        socket,
        signed_up: false,
        contributor_count: Enum.count(contributors),
-       contributors: contributors,
-       email_form:
-         AshPhoenix.Form.for_create(AshHq.MailingList.Email, :create,
-           upsert?: true,
-           upsert_identity: :unique_email
-         )
+       contributors: contributors
      )}
   end
 
@@ -500,21 +495,6 @@ defmodule AshHqWeb.Pages.Home do
       {:noreply, assign(socket, :theme, :dark)}
     else
       {:noreply, assign(socket, :theme, :default)}
-    end
-  end
-
-  def handle_event("validate_email_form", %{"form" => form}, socket) do
-    {:noreply,
-     assign(socket, email_form: AshPhoenix.Form.validate(socket.assigns.email_form, form))}
-  end
-
-  def handle_event("submit_email_form", _, socket) do
-    case AshPhoenix.Form.submit(socket.assigns.email_form) do
-      {:ok, _} ->
-        {:noreply, assign(socket, :signed_up, true)}
-
-      {:error, form} ->
-        {:noreply, assign(socket, email_form: form)}
     end
   end
 
