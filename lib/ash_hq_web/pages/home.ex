@@ -302,6 +302,24 @@ defmodule AshHqWeb.Pages.Home do
           </div>
         </div>
 
+        <!-- will unhide this when we have more logos -->
+        <div class="hidden flex flex-col w-full dark:bg-none dark:bg-opacity-0 py-6">
+          <div class="flex flex-col w-full">
+            <div class="text-center w-full text-5xl font-bold text-black dark:text-white">
+              Trusted by <CalloutText.callout text="many" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 items-center align-middle justify-items-center justify-center mt-12 gap-4 gap-y-12 mx-auto">
+            <a class="block dark:hidden" href="www.plangora.com">
+              <img class="h-8" src="/images/plangora-logo-light.jpg">
+            </a>
+            <a class="hidden dark:block" href="www.plangora.com">
+              <img class="h-8" src="/images/plangora-logo-dark.png">
+            </a>
+          </div>
+        </div>
+
         <div
           id="testimonials"
           class="flex flex-col items-center content-center w-full lg:w-[28rem] px-4 md:px-8 lg:px-0"
