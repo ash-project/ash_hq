@@ -317,6 +317,9 @@ defmodule AshHqWeb.Pages.Home do
             <a class="hidden dark:block" href="www.plangora.com">
               <img class="h-8" src="/images/plangora-logo-dark.png">
             </a>
+            <a class="hidden" href="https://traveltechdeluxe.com">
+              <img class="h-8" src="/images/travel-tech-deluxe-logo.png">
+            </a>
           </div>
         </div>
 
