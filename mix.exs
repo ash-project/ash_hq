@@ -103,7 +103,7 @@ defmodule AshHq.MixProject do
       # locked for compatibility
       {:finch, "~> 0.10"},
       {:floki, "~> 0.30"},
-      {:esbuild, "~> 0.3", runtime: false},
+      {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},

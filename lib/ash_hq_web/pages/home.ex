@@ -255,10 +255,11 @@ defmodule AshHqWeb.Pages.Home do
           <div class="flex flex-row text-xl">
             <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6 text-center">
               <a href="https://alembic.com.au/contact"><CalloutText.callout text="Alembic" class="hover:opacity-70" /></a>
-              specializes in providing custom solutions that ensure the success of your Ash Framework projects.
-              Leveraging extensive knowledge of both Ash Framework and the broader Elixir ecosystem, our team is
-              well-equipped to craft personalized projects, implement innovative features, or optimize your existing codebases.
-              Reach out to learn more about how our tailored solutions can make your project excel.
+              specializes in providing Ash Framework consulting services. We offer custom development
+              solutions and implementation guidance through our <a href="https://ash.alembic.com.au/ash-premium-support">
+              <CalloutText.callout text="Ash Premium Support" class="hover:opacity-70" /></a> service.
+              With extensive knowledge of both Ash Framework and the broader Elixir ecosystem, our team of
+              Ash experts is well-equipped to make your project excel.
             </p>
           </div>
         </div>
