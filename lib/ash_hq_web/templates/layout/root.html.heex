@@ -33,9 +33,6 @@
     <% end %>
 
     <%= @inner_content %>
-    <%= if @live_action == :media do %>
-      <script src="https://platform.twitter.com/widgets.js" charset="utf-8" ></script>
-    <% end %>
     <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
   </body>
 </html>
