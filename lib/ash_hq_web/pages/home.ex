@@ -29,7 +29,7 @@ defmodule AshHqWeb.Pages.Home do
           </a>
           <div class="flex flex-col space-y-4 md:space-x-4 md:space-y-0 md:flex-row items-center rounded-lg mt-8 mb-6 md:mb-10 border border-primary-light-500 hover:bg-primary-light-500 dark:hover:bg-primary-dark-500 dark:border-primary-dark-500">
             <a
-              href="https://alembic.com.au/contact"
+              href="https://ash.alembic.com.au/ash-premium-support"
               class="flex justify-center items-center w-full md:w-auto h-12 px-4 rounded-lg font-semibold dark:text-white"
             >
               Talk to an expert
