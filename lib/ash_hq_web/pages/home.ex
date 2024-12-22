@@ -3,21 +3,21 @@ defmodule AshHqWeb.Pages.Home do
 
   use Phoenix.LiveComponent
 
-  alias AshHqWeb.Components.{CalloutText, CodeExample, Feature}
-  import AshHqWeb.Components.CodeExample, only: [to_code: 1]
+  alias AshHqWeb.Components.{CalloutText, Feature}
 
   def render(assigns) do
     ~H"""
     <div class="antialiased">
       <div class="my-2 mx-2 dark:bg-base-dark-850 flex flex-col items-center pt-4 md:pt-12">
         <div class="flex flex-col">
-          <img class="h-64" src="/images/ash-logo-side.svg">
+          <img class="h-64" src="/images/ash-logo-side.svg" />
         </div>
         <div class="text-3xl md:text-5xl px-4 md:px-12 font-bold max-w-5xl mx-auto mt-8 md:text-center">
           Model your domain, <CalloutText.callout text="derive the rest" />
         </div>
         <div class="text-2xl font-light text-base-dark-700 dark:text-base-light-100 max-w-4xl mx-auto px-4 md:px-0 mt-4 md:text-center">
-          Build <CalloutText.callout text="powerful Elixir applications" /> with a <CalloutText.callout text="flexible" /> toolchain.
+          Build <CalloutText.callout text="powerful Elixir applications" /> with a
+          <CalloutText.callout text="flexible" /> toolchain.
         </div>
 
         <div class="flex flex-col space-y-4 md:space-x-4 md:space-y-0 md:flex-row items-center mt-8 mb-6 md:mb-10">
@@ -38,7 +38,9 @@ defmodule AshHqWeb.Pages.Home do
         </div>
 
         <div class="mb-4 md:mb-8 hidden sm:block">
-          <span class="flex items-center justify-center h-full bg-base-light-100 dark:bg-base-dark-800 rounded-full overflow-hidden text-center font-bold p-4">OR</span>
+          <span class="flex items-center justify-center h-full bg-base-light-100 dark:bg-base-dark-800 rounded-full overflow-hidden text-center font-bold p-4">
+            OR
+          </span>
         </div>
 
         <div class="hidden sm:flex justify-center items-center gap-4">
@@ -46,7 +48,7 @@ defmodule AshHqWeb.Pages.Home do
             href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd"
             class="hover:scale-110 transition"
           >
-            <img src="https://livebook.dev/badge/v1/pink.svg" alt="Run in Livebook">
+            <img src="https://livebook.dev/badge/v1/pink.svg" alt="Run in Livebook" />
           </a>
           <div class="flex">
             <svg
@@ -56,7 +58,8 @@ defmodule AshHqWeb.Pages.Home do
               xmlns:xlink="http://www.w3.org/1999/xlink"
               xmlns:svgjs="http://svgjs.dev/svgjs"
               viewBox="50 300 650 200"
-            ><g
+            >
+              <g
                 stroke-width="11"
                 stroke="hsl(0, 0%, 75%)"
                 fill="none"
@@ -64,10 +67,14 @@ defmodule AshHqWeb.Pages.Home do
                 stroke-linejoin="round"
                 stroke-dasharray="19 30"
                 transform="matrix(-0.6293203910498373,0.777145961456971,-0.777145961456971,-0.6293203910498373,938.5865410027234,330.8697718371465)"
-              ><path
+              >
+                <path
                   d="M188.5 188.5Q415.5 590.5 400 400Q392.5 157.5 611.5 611.5"
                   marker-end="url(#SvgjsMarker5399)"
-                /></g><defs><marker
+                />
+              </g>
+              <defs>
+                <marker
                   markerWidth="5"
                   markerHeight="5"
                   refX="2.5"
@@ -75,15 +82,22 @@ defmodule AshHqWeb.Pages.Home do
                   viewBox="0 0 5 5"
                   orient="auto"
                   id="SvgjsMarker5399"
-                ><polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" fill="hsl(0, 0%, 75%)" /></marker></defs></svg>
-            <p class="italic text-sm max-w-[100px] text-center">Try our interactive tutorial with Livebook</p>
+                >
+                  <polygon points="0,5 1.6666666666666667,2.5 0,0 5,2.5" fill="hsl(0, 0%, 75%)" />
+                </marker>
+              </defs>
+            </svg>
+            <p class="italic text-sm max-w-[100px] text-center">
+              Try our interactive tutorial with Livebook
+            </p>
           </div>
         </div>
 
         <div class="grid justify-center grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 dark:bg-none dark:bg-opacity-0 py-6 text-center mx-8 gap-16 max-w-lg md:max-w-lg xl:max-w-4xl mt-2 pt-16">
           <Feature.feature name="Resources">
             <:description>
-              <CalloutText.callout text="Plug and play" /> building blocks that scale with the complexity of your application.
+              <CalloutText.callout text="Plug and play" />
+              building blocks that scale with the complexity of your application.
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -97,10 +111,18 @@ defmodule AshHqWeb.Pages.Home do
           </Feature.feature>
           <Feature.feature name="GraphQL" class="text-pink-700 dark:text-pink-500">
             <:description>
-              Easily create rich, customizable, full featured <CalloutText.callout text="GraphQL APIs" /> backed by Absinthe.
+              Easily create rich, customizable, full featured
+              <CalloutText.callout text="GraphQL APIs" /> backed by Absinthe.
             </:description>
             <:icon>
-              <svg role="img" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><title /><path d="M14.051 2.751l4.935 2.85c.816-.859 2.173-.893 3.032-.077.148.14.274.301.377.477.589 1.028.232 2.339-.796 2.928-.174.1-.361.175-.558.223v5.699c1.146.273 1.854 1.423 1.58 2.569-.048.204-.127.4-.232.581-.592 1.023-1.901 1.374-2.927.782-.196-.113-.375-.259-.526-.429l-4.905 2.832c.372 1.124-.238 2.335-1.361 2.706-.217.071-.442.108-.67.108-1.181.001-2.139-.955-2.14-2.136 0-.205.029-.41.088-.609l-4.936-2.847c-.816.854-2.171.887-3.026.07-.854-.816-.886-2.171-.07-3.026.283-.297.646-.506 1.044-.603l.001-5.699c-1.15-.276-1.858-1.433-1.581-2.584.047-.198.123-.389.224-.566.592-1.024 1.902-1.374 2.927-.782.177.101.339.228.48.377l4.938-2.85C9.613 1.612 10.26.423 11.39.088 11.587.029 11.794 0 12 0c1.181-.001 2.139.954 2.14 2.134.001.209-.03.418-.089.617zm-.515.877c-.019.021-.037.039-.058.058l6.461 11.19c.026-.009.056-.016.082-.023V9.146c-1.145-.283-1.842-1.442-1.558-2.588.006-.024.012-.049.019-.072l-4.946-2.858zm-3.015.059l-.06-.06-4.946 2.852c.327 1.135-.327 2.318-1.461 2.645-.026.008-.051.014-.076.021v5.708l.084.023 6.461-11.19-.002.001zm2.076.507c-.39.112-.803.112-1.192 0l-6.46 11.189c.294.283.502.645.6 1.041h12.911c.097-.398.307-.761.603-1.044L12.597 4.194zm.986 16.227l4.913-2.838c-.015-.047-.027-.094-.038-.142H5.542l-.021.083 4.939 2.852c.388-.404.934-.653 1.54-.653.627 0 1.19.269 1.583.698z" /></svg>
+              <svg
+                role="img"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <title /><path d="M14.051 2.751l4.935 2.85c.816-.859 2.173-.893 3.032-.077.148.14.274.301.377.477.589 1.028.232 2.339-.796 2.928-.174.1-.361.175-.558.223v5.699c1.146.273 1.854 1.423 1.58 2.569-.048.204-.127.4-.232.581-.592 1.023-1.901 1.374-2.927.782-.196-.113-.375-.259-.526-.429l-4.905 2.832c.372 1.124-.238 2.335-1.361 2.706-.217.071-.442.108-.67.108-1.181.001-2.139-.955-2.14-2.136 0-.205.029-.41.088-.609l-4.936-2.847c-.816.854-2.171.887-3.026.07-.854-.816-.886-2.171-.07-3.026.283-.297.646-.506 1.044-.603l.001-5.699c-1.15-.276-1.858-1.433-1.581-2.584.047-.198.123-.389.224-.566.592-1.024 1.902-1.374 2.927-.782.177.101.339.228.48.377l4.938-2.85C9.613 1.612 10.26.423 11.39.088 11.587.029 11.794 0 12 0c1.181-.001 2.139.954 2.14 2.134.001.209-.03.418-.089.617zm-.515.877c-.019.021-.037.039-.058.058l6.461 11.19c.026-.009.056-.016.082-.023V9.146c-1.145-.283-1.842-1.442-1.558-2.588.006-.024.012-.049.019-.072l-4.946-2.858zm-3.015.059l-.06-.06-4.946 2.852c.327 1.135-.327 2.318-1.461 2.645-.026.008-.051.014-.076.021v5.708l.084.023 6.461-11.19-.002.001zm2.076.507c-.39.112-.803.112-1.192 0l-6.46 11.189c.294.283.502.645.6 1.041h12.911c.097-.398.307-.761.603-1.044L12.597 4.194zm.986 16.227l4.913-2.838c-.015-.047-.027-.094-.038-.142H5.542l-.021.083 4.939 2.852c.388-.404.934-.653 1.54-.653.627 0 1.19.269 1.583.698z" />
+              </svg>
             </:icon>
           </Feature.feature>
           <Feature.feature name="JSON:API" class="text-green-700 dark:text-green-600">
@@ -108,7 +130,12 @@ defmodule AshHqWeb.Pages.Home do
               Create JSON:API spec compliant apis in <CalloutText.callout text="minutes," /> not days.
             </:description>
             <:icon>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 32 32" version="1.1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 32 32"
+                version="1.1"
+              >
                 <title>alt-curly</title>
                 <path d="M0 16q0 1.664 1.184 2.848t2.816 1.152q0.832 0 1.408 0.608t0.608 1.408v4q0 2.496 1.728 4.224t4.256 1.76v-4q-0.832 0-1.408-0.576t-0.576-1.408v-4q0-2.496-1.76-4.256t-4.256-1.76q2.496 0 4.256-1.76t1.76-4.224v-4q0-0.864 0.576-1.44t1.408-0.576v-4q-2.496 0-4.256 1.76t-1.728 4.256v4q0 0.832-0.608 1.408t-1.408 0.576q-1.664 0-2.816 1.184t-1.184 2.816zM14.016 16q0 0.832 0.576 1.44t1.408 0.576 1.408-0.576 0.608-1.44-0.608-1.408-1.408-0.576-1.408 0.576-0.576 1.408zM20 28v4q2.496 0 4.256-1.76t1.76-4.224v-4q0-0.864 0.576-1.44t1.408-0.576q1.664 0 2.816-1.152t1.184-2.848-1.184-2.816-2.816-1.184q-0.832 0-1.408-0.576t-0.576-1.408v-4q0-2.496-1.76-4.256t-4.256-1.76v4q0.832 0 1.408 0.608t0.608 1.408v4q0 2.496 1.728 4.224t4.256 1.76q-2.496 0-4.256 1.76t-1.728 4.256v4q0 0.832-0.608 1.408t-1.408 0.576z" />
               </svg>
@@ -116,7 +143,8 @@ defmodule AshHqWeb.Pages.Home do
           </Feature.feature>
           <Feature.feature name="Authentication" class="text-indigo-500 dark:text-indigo-400">
             <:description>
-              Effortless authentication with <CalloutText.callout text="magic link" /> and <CalloutText.callout text="social login" /> out of the box.
+              Effortless authentication with <CalloutText.callout text="magic link" /> and
+              <CalloutText.callout text="social login" /> out of the box.
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -130,7 +158,8 @@ defmodule AshHqWeb.Pages.Home do
           </Feature.feature>
           <Feature.feature name="Community" class="text-red-700 dark:text-red-500">
             <:description>
-              A thriving community of people <CalloutText.callout text="working together" /> to <CalloutText.callout text="build and learn." />
+              A thriving community of people <CalloutText.callout text="working together" /> to
+              <CalloutText.callout text="build and learn." />
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -140,7 +169,8 @@ defmodule AshHqWeb.Pages.Home do
           </Feature.feature>
           <Feature.feature name="Authorization" class="text-gray-700 dark:text-gray-400">
             <:description>
-              Add row and field level policies to <CalloutText.callout text="prohibit access" /> to data.
+              Add row and field level policies to <CalloutText.callout text="prohibit access" />
+              to data.
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -154,7 +184,8 @@ defmodule AshHqWeb.Pages.Home do
           </Feature.feature>
           <Feature.feature name="Multitenancy" class="text-black dark:text-white">
             <:description>
-              <CalloutText.callout text="Built in strategies" /> for splitting your application by tenant.
+              <CalloutText.callout text="Built in strategies" />
+              for splitting your application by tenant.
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -181,7 +212,8 @@ defmodule AshHqWeb.Pages.Home do
           </Feature.feature>
           <Feature.feature name="Admin" class="text-violet-700 dark:text-violet-400">
             <:description>
-              A <CalloutText.callout text="push-button admin interface" /> you can drop right into your application.
+              A <CalloutText.callout text="push-button admin interface" />
+              you can drop right into your application.
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -191,7 +223,8 @@ defmodule AshHqWeb.Pages.Home do
           </Feature.feature>
           <Feature.feature name="Extensions" class="text-red-700 dark:text-red-500">
             <:description>
-              A suite of tools for you to <CalloutText.callout text="build your own" /> extensions and DSLs.
+              A suite of tools for you to <CalloutText.callout text="build your own" />
+              extensions and DSLs.
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -205,7 +238,8 @@ defmodule AshHqWeb.Pages.Home do
           </Feature.feature>
           <Feature.feature name="Observability" class="text-green-700 dark:text-green-500">
             <:description>
-              Custom tracers and rich telemetry events allow you to export <CalloutText.callout text="high fidelity observability data." />
+              Custom tracers and rich telemetry events allow you to export
+              <CalloutText.callout text="high fidelity observability data." />
             </:description>
             <:icon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -219,7 +253,8 @@ defmodule AshHqWeb.Pages.Home do
           </Feature.feature>
           <Feature.feature name="Compatibility" class="text-purple-700 dark:text-purple-500">
             <:description>
-              Works great with <CalloutText.callout text="Phoenix, Ecto" /> and all the other <CalloutText.callout text="first rate tools" /> in the Elixir ecosystem.
+              Works great with <CalloutText.callout text="Phoenix, Ecto" /> and all the other
+              <CalloutText.callout text="first rate tools" /> in the Elixir ecosystem.
             </:description>
             <:icon>
               <svg
@@ -248,16 +283,21 @@ defmodule AshHqWeb.Pages.Home do
           <div class="flex flex-row justify-around mb-2">
             <p class="mt-4 text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50">
               <a href="https://alembic.com.au/contact">
-                <img class="h-12 hover:opacity-80 cursor-pointer" src="/images/alembic.svg">
+                <img class="h-12 hover:opacity-80 cursor-pointer" src="/images/alembic.svg" />
               </a>
             </p>
           </div>
           <div class="flex flex-row text-xl">
             <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6 text-center">
-              <a href="https://alembic.com.au/contact"><CalloutText.callout text="Alembic" class="hover:opacity-70" /></a>
+              <a href="https://alembic.com.au/contact">
+                <CalloutText.callout text="Alembic" class="hover:opacity-70" />
+              </a>
               specializes in providing Ash Framework consulting services. We offer custom development
-              solutions and implementation guidance through our <a href="https://ash.alembic.com.au/ash-premium-support">
-              <CalloutText.callout text="Ash Premium Support" class="hover:opacity-70" /></a> service.
+              solutions and implementation guidance through our
+              <a href="https://ash.alembic.com.au/ash-premium-support">
+                <CalloutText.callout text="Ash Premium Support" class="hover:opacity-70" />
+              </a>
+              service.
               With extensive knowledge of both Ash Framework and the broader Elixir ecosystem, our team of
               Ash experts is well-equipped to make your project excel.
             </p>
@@ -275,35 +315,34 @@ defmodule AshHqWeb.Pages.Home do
 
           <div class="grid grid-cols-1 md:grid-cols-3 items-center align-middle justify-items-center justify-center mt-12 gap-4 gap-y-12 mx-auto">
             <a class="block" href="https://coinbits.app/">
-              <img class="h-8" src="/images/coinbits-logo.png">
+              <img class="h-8" src="/images/coinbits-logo.png" />
             </a>
             <a class="block dark:hidden" href="https://www.wintermeyer-consulting.de/">
-              <img class="h-8" src="/images/wintermeyer-logo.svg">
+              <img class="h-8" src="/images/wintermeyer-logo.svg" />
             </a>
             <a class="hidden dark:block" href="https://www.wintermeyer-consulting.de/">
-              <img class="h-8" src="/images/wintermeyer-logo-dark.svg">
+              <img class="h-8" src="/images/wintermeyer-logo-dark.svg" />
             </a>
             <a class="block dark:hidden" href="https://www.heretask.com/">
-              <img class="h-8" src="/images/heretask-logo-light.svg">
+              <img class="h-8" src="/images/heretask-logo-light.svg" />
             </a>
             <a class="hidden dark:block" href="https://www.heretask.com/">
-              <img class="h-8" src="/images/heretask-logo-dark.svg">
+              <img class="h-8" src="/images/heretask-logo-dark.svg" />
             </a>
             <a class="block" href="https://www.groupflow.app">
-              <img class="h-8" src="/images/group-flow-logo.svg">
+              <img class="h-8" src="/images/group-flow-logo.svg" />
             </a>
-            <div class="hidden md:block">
-            </div>
+            <div class="hidden md:block"></div>
             <a class="block dark:hidden" href="https://www.zoonect.com/en/homepage">
-              <img class="h-8" src="/images/zoonect-light.svg">
+              <img class="h-8" src="/images/zoonect-light.svg" />
             </a>
             <a class="hidden dark:block" href="https://www.zoonect.com/en/homepage">
-              <img class="h-8" src="/images/zoonect-dark.svg">
+              <img class="h-8" src="/images/zoonect-dark.svg" />
             </a>
           </div>
         </div>
-
-        <!-- will unhide this when we have more logos -->
+        
+    <!-- will unhide this when we have more logos -->
         <div class="hidden flex flex-col w-full dark:bg-none dark:bg-opacity-0 py-6">
           <div class="flex flex-col w-full">
             <div class="text-center w-full text-5xl font-bold text-black dark:text-white">
@@ -313,13 +352,13 @@ defmodule AshHqWeb.Pages.Home do
 
           <div class="grid grid-cols-1 md:grid-cols-3 items-center align-middle justify-items-center justify-center mt-12 gap-4 gap-y-12 mx-auto">
             <a class="block dark:hidden" href="www.plangora.com">
-              <img class="h-8" src="/images/plangora-logo-light.jpg">
+              <img class="h-8" src="/images/plangora-logo-light.jpg" />
             </a>
             <a class="hidden dark:block" href="www.plangora.com">
-              <img class="h-8" src="/images/plangora-logo-dark.png">
+              <img class="h-8" src="/images/plangora-logo-dark.png" />
             </a>
             <a class="hidden" href="https://traveltechdeluxe.com">
-              <img class="h-8" src="/images/travel-tech-deluxe-logo.png">
+              <img class="h-8" src="/images/travel-tech-deluxe-logo.png" />
             </a>
           </div>
         </div>
@@ -372,14 +411,14 @@ defmodule AshHqWeb.Pages.Home do
 
         <div class="flex flex-col text-center items-center mt-24">
           <p class="mt-4 text-3xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50 mb-16">
-            It wouldn't be possible without our amazing community.<br>
+            It wouldn't be possible without our amazing community.<br />
             <CalloutText.callout text={"#{@contributor_count} contributors"} /> and counting!
           </p>
 
           <div class="grid mx-auto gap-3 grid-cols-6 sm:grid-cols-10 md:grid-cols-14">
             <%= for %{login: login, avatar_url: avatar_url, html_url: html_url} <- @contributors do %>
               <a href={html_url} class="flex flex-col items-center justify-center">
-                <img class="h-12 w-12 rounded-full" src={avatar_url} alt={login}>
+                <img class="h-12 w-12 rounded-full" src={avatar_url} alt={login} />
               </a>
             <% end %>
           </div>
@@ -406,73 +445,12 @@ defmodule AshHqWeb.Pages.Home do
             Once you've modelled your resources, you can derive GraphQL or JSON API external APIs from them.
           </p>
         </div>
-
-        <div class="pt-6 pb-6 w-full max-w-6xl">
-          <div class="flex flex-col lg:flex-row gap-10 mx-8 lg:mx-0">
-            <.live_component module={CodeExample}
-              id="define-a-resource"
-              class="grow w-full lg:w-min max-w-[1000px]"
-              code={post_example()}
-              title="Define a resource"
-            />
-            <div class="flex flex-col gap-10 w-full">
-              <div class="flex flex-col space-y-8">
-                <.live_component module={CodeExample}
-                  class="w-full"
-                  collapsible
-                  id="use-it-programmatically"
-                  code={changeset_example()}
-                  title="Use it programmatically"
-                />
-                <.live_component module={CodeExample}
-                  class="w-auto"
-                  collapsible
-                  id="graphql-interface"
-                  code={graphql_example()}
-                  title="Add a GraphQL interface"
-                />
-                <.live_component module={CodeExample}
-                  class="w-auto"
-                  collapsible
-                  start_collapsed
-                  id="authorization-policies"
-                  code={policies_example()}
-                  title="Add authorization policies"
-                />
-                <.live_component module={CodeExample}
-                  class="w-auto"
-                  collapsible
-                  start_collapsed
-                  id="aggregates"
-                  code={aggregate_example()}
-                  title="Define aggregates and calculations"
-                />
-                <.live_component module={CodeExample}
-                  class="w-auto"
-                  collapsible
-                  start_collapsed
-                  id="pubsub"
-                  code={notifier_example()}
-                  title="Broadcast changes over Phoenix PubSub"
-                />
-                <.live_component module={CodeExample}
-                  class="w-atuo"
-                  collapsible
-                  start_collapsed
-                  id="live-view"
-                  code={live_view_example()}
-                  title="Use it with Phoenix LiveView"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
     """
   end
 
-  attr(:class_overrides, :string, default: "")
+  attr :class_overrides, :string, default: ""
   attr :title, :string
   attr :author, :string
   attr :text, :string
@@ -486,15 +464,15 @@ defmodule AshHqWeb.Pages.Home do
       @class_overrides
     ]}>
       <p class="text-lg font-light text-base-light-700 dark:text-base-dark-50 break-words">
-        "<%= @text %>"
+        "{@text}"
       </p>
 
       <p class="font-bold text-primary-light-500 dark:text-primary-dark-400">
-        <%= @author %>
+        {@author}
       </p>
 
       <p class="text-base-light-700 dark:text-base-dark-200">
-        <%= @title %>
+        {@title}
       </p>
     </div>
     """
@@ -518,179 +496,5 @@ defmodule AshHqWeb.Pages.Home do
     else
       {:noreply, assign(socket, :theme, :default)}
     end
-  end
-
-  @changeset_example """
-                     post = Example.Post.create!(%{
-                       text: "Declarative programming is fun!"
-                     })
-
-                     Example.Post.react!(post, %{type: :like})
-
-                     Example.Post
-                     |> Ash.Query.filter(likes > 10)
-                     |> Ash.Query.sort(likes: :desc)
-                     |> Ash.read!()
-                     """
-                     |> to_code()
-
-  defp changeset_example do
-    @changeset_example
-  end
-
-  @live_view_example """
-                     def mount(_params, _session, socket) do
-                       form = AshPhoenix.Form.for_create(Example.Post, :create)
-
-                       {:ok, assign(socket, :form, form)}
-                     end
-
-                     def handle_event("validate", %{"form" => input}, socket) do
-                       form = AshPhoenix.Form.validate(socket.assigns.form, input)
-
-                       {:ok, assign(socket, :form, form)}
-                     end
-
-                     def handle_event("submit", _, socket) do
-                       case AshPhoenix.Form.submit(socket.assigns.form) do
-                         {:ok, post} ->
-                           {:ok, redirect_to_post(socket, post)}
-
-                         {:error, form_with_errors} ->
-                           {:noreply, assign(socket, :form, form_with_errors)}
-                       end
-                     end
-                     """
-                     |> to_code()
-  defp live_view_example do
-    @live_view_example
-  end
-
-  @graphql_example """
-                   graphql do
-                     type :post
-
-                     queries do
-                       get :get_post, :read
-                       list :feed, :read
-                     end
-
-                     mutations do
-                       create :create_post, :create
-                       update :react_to_post, :react
-                     end
-                   end
-                   """
-                   |> to_code()
-  defp graphql_example do
-    @graphql_example
-  end
-
-  @policies_example """
-                    policies do
-                      policy action_type(:read) do
-                        authorize_if expr(visibility == :everyone)
-                        authorize_if relates_to_actor_via([:author, :friends])
-                      end
-                    end
-                    """
-                    |> to_code()
-  defp policies_example do
-    @policies_example
-  end
-
-  @notifier_example """
-                    pub_sub do
-                      module ExampleEndpoint
-                      prefix "post"
-
-                      publish_all :create, ["created"]
-                      publish :react, ["reaction", :id] event: "reaction"
-                    end
-                    """
-                    |> to_code()
-  defp notifier_example do
-    @notifier_example
-  end
-
-  @aggregate_example """
-                     aggregates do
-                       count :likes, :reactions do
-                         filter expr(type == :like)
-                       end
-
-                       count :dislikes, :reactions do
-                         filter expr(type == :dislike)
-                       end
-                     end
-
-                     calculations do
-                       calculate :like_ratio, :float do
-                         expr(likes / (likes + dislikes))
-                       end
-                     end
-                     """
-                     |> to_code()
-
-  defp aggregate_example do
-    @aggregate_example
-  end
-
-  @post_example """
-                defmodule Example.Post do
-                  use Ash.Resource,
-                    domain: Example,
-                    data_layer: AshPostgres.DataLayer
-
-                  resource do
-                    description "A post is the primary sharable entity in our system"
-                  end
-
-                  postgres do
-                    table "posts"
-                    repo Example.Repo
-                  end
-
-                  attributes do
-                    attribute :text, :string do
-                      allow_nil? false
-                      description "The body of the text"
-                    end
-
-                    attribute :visibility, :atom do
-                      constraints [
-                        one_of: [:friends, :everyone]
-                      ]
-                      description "Which set of users this post should be visible to"
-                    end
-                  end
-
-                  actions do
-                    update :react do
-                      argument :type, Example.Types.ReactionType do
-                        allow_nil? false
-                      end
-
-                      change manage_relationship(
-                        :type,
-                        :reactions,
-                        type: :append
-                      )
-                    end
-                  end
-
-                  relationships do
-                    belongs_to :author, Example.User do
-                      allow_nil? true
-                    end
-
-                    has_many :reactions, Example.Reaction
-                  end
-                end
-                """
-                |> to_code()
-
-  defp post_example do
-    @post_example
   end
 end

@@ -5,7 +5,7 @@ defmodule AshHqWeb.Components.CodeExample do
   This is so stupid. Why is this a live component
   """
   use Phoenix.LiveComponent
-  import AshHqWeb.Tails
+  import Tails
 
   attr :code, :string, required: true
   attr :class, :any
@@ -15,23 +15,22 @@ defmodule AshHqWeb.Components.CodeExample do
 
   def render(assigns) do
     ~H"""
-    <div class={classes([
-
-      "rounded-xl bg-[#f3f4f6] dark:bg-[#22242D] border border-base-light-400 dark:border-base-dark-700 text-sm border-b",
-      @class
-    ])
+    <div class={
+      classes([
+        "rounded-xl bg-[#f3f4f6] dark:bg-[#22242D] border border-base-light-400 dark:border-base-dark-700 text-sm border-b",
+        @class
+      ])
     }>
-    <%= if @collapsible do %>
+      <%= if @collapsible do %>
         <button
           type="button"
           phx-click="fold"
           phx-target={@myself}
           class={
-          classes([
-
-            "flex flex-row rounded-t-xl w-full justify-between py-2 pl-2 pr-8 hover:bg-base-light-500 dark:hover:border-base-dark-600",
-            "border-base-light-400 dark:border-base-dark-700 border-b": !@collapsed
-          ])
+            classes([
+              "flex flex-row rounded-t-xl w-full justify-between py-2 pl-2 pr-8 hover:bg-base-light-500 dark:hover:border-base-dark-600",
+              "border-base-light-400 dark:border-base-dark-700 border-b": !@collapsed
+            ])
           }
         >
           <div class="flex flex-row justify-start space-x-1">
@@ -40,33 +39,34 @@ defmodule AshHqWeb.Components.CodeExample do
             <div class="w-3 h-3 bg-base-light-600 rounded-full" />
           </div>
           <%= if @title do %>
-            <h3 class="justify-self-end text-base-light-700 dark:text-white"><%= @title %></h3>
+            <h3 class="justify-self-end text-base-light-700 dark:text-white">{@title}</h3>
             <div>
               <%= if @collapsible do %>
                 <%= if @collapsed do %>
-                  <span class="hero-chevron-double-down-solid w-4 h-4"/>
+                  <span class="hero-chevron-double-down-solid w-4 h-4" />
                 <% else %>
-                  <span class="hero-chevron-double-up-solid w-4 h-4"/>
+                  <span class="hero-chevron-double-up-solid w-4 h-4" />
                 <% end %>
               <% end %>
             </div>
           <% end %>
         </button>
-    <% else %>
-        <div class={classes([
-          "flex flex-row justify-between py-2 pl-2 pr-8",
-          "border-base-light-400 dark:border-base-dark-700 border-b": !@collapsed
-        ])
+      <% else %>
+        <div class={
+          classes([
+            "flex flex-row justify-between py-2 pl-2 pr-8",
+            "border-base-light-400 dark:border-base-dark-700 border-b": !@collapsed
+          ])
         }>
           <div class="flex flex-row justify-start space-x-1 w-full">
             <div class="w-3 h-3 bg-base-light-600 rounded-full" />
             <div class="w-3 h-3 bg-base-light-600 rounded-full" />
             <div class="w-3 h-3 bg-base-light-600 rounded-full" />
             <div class="flex grow justify-center">
-          <%= if @title do %>
-            <h3 class="items-center text-base-light-700 dark:text-white"><%= @title %></h3>
-          <% end %>
-          </div>
+              <%= if @title do %>
+                <h3 class="items-center text-base-light-700 dark:text-white">{@title}</h3>
+              <% end %>
+            </div>
           </div>
         </div>
       <% end %>
@@ -77,14 +77,16 @@ defmodule AshHqWeb.Components.CodeExample do
               <%= for {_line, no} <- @code do %>
                 <pre><%= no %></pre>
               <% end %>
-              <% else %>
+            <% else %>
               <div class="invisible h-0">{to_string(List.last(@code) |> elem(0))}</div>
             <% end %>
           </div>
           <div>
             <%= for {line, _no} <- @code do %>
               <div class={classes(["flex flex-row mr-4", "invisible h-0": @collapsed])}>
-                <div class="sm:hidden md:block mr-8 text-base-light-600 font-mono" /><%= Phoenix.HTML.raw(line) %>
+                <div class="sm:hidden md:block mr-8 text-base-light-600 font-mono" />{Phoenix.HTML.raw(
+                  line
+                )}
               </div>
             <% end %>
           </div>

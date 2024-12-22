@@ -2,31 +2,31 @@ defmodule AshHqWeb.Components.AppView.TopBar do
   @moduledoc "The global top navigation bar"
   use AshHqWeb, :component
 
-  alias AshHqWeb.Components.{DocSidebar, SearchBar}
-  import AshHqWeb.Tails
+  alias AshHqWeb.Components.SearchBar
+
+  import Tails
 
   attr(:live_action, :atom, required: true)
   attr(:configured_theme, :string, required: true)
-  attr(:current_user, :any)
 
   def top_bar(assigns) do
     ~H"""
     <div
       id="top-bar"
-      class={classes([
-
-        "flex justify-between items-center py-4 px-4 h-20 top-0 z-40 2xl:w-[1500px] self-center w-full",
-        sticky: @live_action == :docs_dsl,
-        "border-b border-base-light-300 dark:border-base-dark-700 bg-white dark:bg-base-dark-850":
-          @live_action == :docs_dsl
-      ])
+      class={
+        classes([
+          "flex justify-between items-center py-4 px-4 h-20 top-0 z-40 2xl:w-[1500px] self-center w-full",
+          sticky: @live_action == :docs_dsl,
+          "border-b border-base-light-300 dark:border-base-dark-700 bg-white dark:bg-base-dark-850":
+            @live_action == :docs_dsl
+        ])
       }
     >
       <div class="flex flex-row align-baseline">
         <a href="/" class="mt-2">
-          <img class="h-10 hidden lg:dark:block" src="/images/ash-framework-dark.png">
-          <img class="h-10 hidden lg:block lg:dark:hidden" src="/images/ash-framework-light.png">
-          <img class="h-10 lg:hidden" src="/images/ash-logo.png">
+          <img class="h-10 hidden lg:dark:block" src="/images/ash-framework-dark.png" />
+          <img class="h-10 hidden lg:block lg:dark:hidden" src="/images/ash-framework-light.png" />
+          <img class="h-10 lg:hidden" src="/images/ash-logo.png" />
         </a>
       </div>
       <%= if @live_action in [:docs_dsl] do %>
@@ -34,10 +34,14 @@ defmodule AshHqWeb.Components.AppView.TopBar do
       <% end %>
       <div class="flex flex-row align-middle items-center space-x-2">
         <%= if @live_action == :docs_dsl do %>
-          <button class="block xl:hidden" type="button" phx-click={AshHqWeb.AppViewLive.toggle_search()}>
-            <span class="hero-magnifying-glass-solid w-6 h-6 dark:fill-base-dark-400 dark:hover:fill-base-dark-200 hover:fill-base-light-600"/>
+          <button
+            class="block xl:hidden"
+            type="button"
+            phx-click={AshHqWeb.AppViewLive.toggle_search()}
+          >
+            <span class="hero-magnifying-glass-solid w-6 h-6 dark:fill-base-dark-400 dark:hover:fill-base-dark-200 hover:fill-base-light-600" />
           </button>
-          <% end %>
+        <% end %>
 
         <.link
           href="https://hexdocs.pm/ash/readme.html"
@@ -78,7 +82,9 @@ defmodule AshHqWeb.Components.AppView.TopBar do
             xmlns="http://www.w3.org/2000/svg"
             class="w-6 h-6 dark:fill-base-dark-400 dark:hover:fill-base-dark-200 hover:fill-base-light-600"
             viewBox="0 0 24 24"
-          ><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg>
+          >
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+          </svg>
         </a>
         <a href="https://discord.gg/D7FNG2q" title="Discord" class="hidden md:block">
           <svg
@@ -99,23 +105,24 @@ defmodule AshHqWeb.Components.AppView.TopBar do
         </a>
         <a href="https://bsky.app/profile/ash-hq.org" title="Bluesky" class="hidden md:block">
           <svg
-          viewBox="0 0 568 501"
-          class="w-6 h-6 fill-black dark:fill-base-dark-400 dark:hover:fill-base-dark-200 hover:fill-base-light-600"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <path d="M123.121 33.6637C188.241 82.5526 258.281 181.681 284 234.873C309.719 181.681 379.759 82.5526 444.879 33.6637C491.866 -1.61183 568 -28.9064 568 57.9464C568 75.2916 558.055 203.659 552.222 224.501C531.947 296.954 458.067 315.434 392.347 304.249C507.222 323.8 536.444 388.56 473.333 453.32C353.473 576.312 301.061 422.461 287.631 383.039C285.169 375.812 284.017 372.431 284 375.306C283.983 372.431 282.831 375.812 280.369 383.039C266.939 422.461 214.527 576.312 94.6667 453.32C31.5556 388.56 60.7778 323.8 175.653 304.249C109.933 315.434 36.0535 296.954 15.7778 224.501C9.94525 203.659 0 75.2916 0 57.9464C0 -28.9064 76.1345 -1.61183 123.121 33.6637Z"/>
+            viewBox="0 0 568 501"
+            class="w-6 h-6 fill-black dark:fill-base-dark-400 dark:hover:fill-base-dark-200 hover:fill-base-light-600"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M123.121 33.6637C188.241 82.5526 258.281 181.681 284 234.873C309.719 181.681 379.759 82.5526 444.879 33.6637C491.866 -1.61183 568 -28.9064 568 57.9464C568 75.2916 558.055 203.659 552.222 224.501C531.947 296.954 458.067 315.434 392.347 304.249C507.222 323.8 536.444 388.56 473.333 453.32C353.473 576.312 301.061 422.461 287.631 383.039C285.169 375.812 284.017 372.431 284 375.306C283.983 372.431 282.831 375.812 280.369 383.039C266.939 422.461 214.527 576.312 94.6667 453.32C31.5556 388.56 60.7778 323.8 175.653 304.249C109.933 315.434 36.0535 296.954 15.7778 224.501C9.94525 203.659 0 75.2916 0 57.9464C0 -28.9064 76.1345 -1.61183 123.121 33.6637Z" />
           </svg>
         </a>
         <div class="hidden md:block">|</div>
         <button phx-click="toggle_theme">
           <%= case @configured_theme do %>
             <% "light" -> %>
-              <span class="hero-sun-solid w-6 h-6 hover:text-base-light-600"/>
+              <span class="hero-sun-solid w-6 h-6 hover:text-base-light-600" />
             <% "system" -> %>
-              <span class="hero-computer-desktop-solid w-6 h-6 fill-base-light-400 hover:fill-base-light-200 hover:text-base-light-200"/>
+              <span class="hero-computer-desktop-solid w-6 h-6 fill-base-light-400 hover:fill-base-light-200 hover:text-base-light-200" />
             <% _ -> %>
-              <span class="hero-moon-solid w-6 h-6 fill-base-light-400 hover:fill-base-light-200 hover:text-base-light-200"/>
-         <% end %>
+              <span class="hero-moon-solid w-6 h-6 fill-base-light-400 hover:fill-base-light-200 hover:text-base-light-200" />
+          <% end %>
         </button>
       </div>
     </div>

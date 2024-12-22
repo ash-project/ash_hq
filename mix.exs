@@ -51,6 +51,7 @@ defmodule AshHq.MixProject do
       {:ash_oban, "~> 0.2"},
       {:earmark, "== 1.5.0-pre1"},
       {:picosat_elixir, "~> 0.2.3"},
+      {:igniter, path: "../igniter", only: [:dev, :test], override: true},
       # Jobs
       {:oban, "~> 2.16"},
       {:flame, "~> 0.5.0"},
@@ -68,6 +69,8 @@ defmodule AshHq.MixProject do
       {:libcluster, "~> 3.3"},
       # UI
       {:tails, "~> 0.1"},
+      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
       # Syntax Highlighting
       {:makeup, "~> 1.1"},
       {:makeup_elixir, "~> 1.0.0"},
@@ -98,15 +101,14 @@ defmodule AshHq.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 4.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.18"},
+      {:phoenix_live_view, "~> 1.0"},
       {:html_entities, "~> 0.5"},
       # locked for compatibility
       {:finch, "~> 0.10"},
       {:floki, "~> 0.30"},
-      {:esbuild, "~> 0.3", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 0.18"},
+      {:gettext, "~> 0.26 and >= 0.26.1"},
       {:jason, "~> 1.2"},
       # Build/Check dependencies
       {:git_ops, "~> 2.5", only: :dev},
@@ -140,11 +142,9 @@ defmodule AshHq.MixProject do
       drop: ["ash_postgres.drop"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       sobelow: ["sobelow --skip -i Config.Headers,Config.CSRFRoute"],
-      "assets.deploy": [
-        "cmd --cd assets npm install && npm run deploy",
-        "esbuild default --minify",
-        "phx.digest"
-      ]
+      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
+      "assets.build": ["tailwind default", "esbuild default"],
+      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]
     ]
   end
 end

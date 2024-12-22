@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class={@configured_theme}>
+<html lang="en">
   <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -11,27 +11,9 @@
     <%= if Application.get_env(:ash_hq, :analytics?) do %>
       <script defer data-domain="ash-hq.org" src="https://plausible.io/js/plausible.js"></script>
     <% end %>
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
-    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.2/jquery.min.js"></script>
     <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")}/>
   </head>
-  <body class="h-full">
-    <%= case live_flash(@flash, :info) do %>
-      <% nil -> %>
-      <% flash -> %>
-        <p class="alert alert-info" role="alert" phx-click="lv:clear-flash" phx-value-key="info">
-          <%= flash %>
-        </p>
-    <% end %>
-    <%= case live_flash(@flash, :error) do %>
-      <% nil -> %>
-      <% flash -> %>
-        <p class="alert alert-danger" role="alert" phx-click="lv:clear-flash" phx-value-key="error">
-          <%= flash %>
-        </p>
-    <% end %>
-
+  <body class="bg-slate-950 text-white min-h-screen">
     <%= @inner_content %>
     <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
   </body>

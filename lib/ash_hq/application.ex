@@ -27,8 +27,8 @@ defmodule AshHq.Application do
         AshHqWeb.Endpoint,
         {AshHq.Docs.Library.Agent, nil},
         # {Cluster.Supervisor, [topologies, [name: AshHq.ClusterSupervisor]]},
-        {Haystack.Storage.ETS, storage: AshHq.Docs.Indexer.storage()},
-        AshHq.Docs.Indexer,
+        # {Haystack.Storage.ETS, storage: AshHq.Docs.Indexer.storage()},
+        # AshHq.Docs.Indexer,
         oban_worker(),
         Application.get_env(:ash_hq, :discord_bot) && AshHq.Discord.Supervisor
       ]

@@ -3,7 +3,7 @@ defmodule AshHqWeb.Pages.Docs do
   use Phoenix.LiveComponent
 
   import AshHqWeb.Helpers
-  import AshHqWeb.Tails
+  import Tails
 
   alias AshHqWeb.Components.DocSidebar
   alias AshHqWeb.DocRoutes
@@ -20,12 +20,12 @@ defmodule AshHqWeb.Pages.Docs do
     ~H"""
     <div class="flex flex-col xl:flex-row justify-center">
       <head>
-        <meta property="og:title" content={@title}>
-        <meta property="og:description" content={@description}>
+        <meta property="og:title" content={@title} />
+        <meta property="og:description" content={@description} />
       </head>
       <div class="xl:hidden sticky top-20 z-40 h-14 bg-white dark:bg-base-dark-850 flex flex-row justify-start w-full space-x-6 items-center border-b border-base-light-300 dark:border-base-dark-700 py-3">
         <button phx-click={show_sidebar()}>
-          <span class="hero-bars-3 w-8 h-8 ml-4"/>
+          <span class="hero-bars-3 w-8 h-8 ml-4" />
         </button>
         <button id={"#{@id}-hide"} class="hidden" phx-click={hide_sidebar()} />
       </div>
@@ -35,7 +35,8 @@ defmodule AshHqWeb.Pages.Docs do
           class="hidden fixed transition sidebar-container overflow-y-auto z-40 border-r border-b border-base-light-300 dark:border-base-dark-700"
           phx-click-away={hide_sidebar()}
         >
-          <.live_component module={DocSidebar}
+          <.live_component
+            module={DocSidebar}
             id="mobile-sidebar"
             class="max-w-sm p-2 pr-4"
             libraries={@libraries}
@@ -46,7 +47,8 @@ defmodule AshHqWeb.Pages.Docs do
       </span>
       <div class="grow w-full flex flex-row max-w-[1800px] justify-between md:space-x-12">
         <div class="sidebar-container sticky overflow-y-auto overflow-x-hidden shrink-0 top-20 xl:border-r xl:border-b xl:border-base-light-300 xl:dark:border-base-dark-700 lg:pr-2 lg:pt-4">
-          <.live_component module={DocSidebar}
+          <.live_component
+            module={DocSidebar}
             id="sidebar"
             class="hidden xl:block w-80"
             libraries={@libraries}
@@ -55,8 +57,8 @@ defmodule AshHqWeb.Pages.Docs do
           />
         </div>
         <div
-          id="docs-window"
           :if={@not_found}
+          id="docs-window"
           class="w-full shrink max-w-6xl prose prose-td:pl-0 bg-white dark:bg-base-dark-850 dark:prose-invert md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden"
         >
           <div class="w-full nav-anchor text-black dark:text-white relative py-4 md:py-auto">
@@ -64,16 +66,19 @@ defmodule AshHqWeb.Pages.Docs do
               We couldn't find that page.
             </p>
             <p>
-              A lot of our documentation has moved recently, if you can't find it here, look in the <a href="https://hexdocs.pm/ash/using-hexdocs.html">HexDocs</a>
+              A lot of our documentation has moved recently, if you can't find it here, look in the
+              <a href="https://hexdocs.pm/ash/using-hexdocs.html">HexDocs</a>
             </p>
           </div>
         </div>
         <div
-          id="docs-window"
           :if={!@not_found}
-          class={classes([
-            "w-full shrink max-w-6xl bg-white dark:bg-base-dark-850 md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden prose prose-td:pl-0 dark:prose-invert"
-          ])}
+          id="docs-window"
+          class={
+            classes([
+              "w-full shrink max-w-6xl bg-white dark:bg-base-dark-850 md:pr-8 md:mt-4 px-4 md:px-auto mx-auto overflow-x-auto overflow-y-hidden prose prose-td:pl-0 dark:prose-invert"
+            ])
+          }
         >
           <div
             id="module-docs"
@@ -101,11 +106,16 @@ defmodule AshHqWeb.Pages.Docs do
           <footer class="p-2 sm:justify-center">
             <div class="md:flex md:justify-around items-center">
               <.link href="/">
-                <img class="h-6 md:h-10 hidden dark:block" src="/images/ash-framework-dark.png">
-                <img class="h-6 md:h-10 dark:hidden" src="/images/ash-framework-light.png">
+                <img class="h-6 md:h-10 hidden dark:block" src="/images/ash-framework-dark.png" />
+                <img class="h-6 md:h-10 dark:hidden" src="/images/ash-framework-light.png" />
               </.link>
               <a href="https://github.com/ash-project" class="hover:underline">Source</a>
-              <a href="https://github.com/ash-project/ash_hq/issues/new/choose" class="hover:underline">Report an issue</a>
+              <a
+                href="https://github.com/ash-project/ash_hq/issues/new/choose"
+                class="hover:underline"
+              >
+                Report an issue
+              </a>
             </div>
           </footer>
         </div>
@@ -131,7 +141,7 @@ defmodule AshHqWeb.Pages.Docs do
         <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
       </svg>
       <span class="underline">View this guide on GitHub</span>
-      <span class="hero-link w-6 h-6 inline-block -mt-1"/>
+      <span class="hero-link w-6 h-6 inline-block -mt-1" />
     </a>
     """
   end
@@ -158,7 +168,7 @@ defmodule AshHqWeb.Pages.Docs do
         />
       </svg>
       <span class="underline">View this guide on Hex</span>
-      <span class="hero-link w-6 h-6 inline-block -mt-1"/>
+      <span class="hero-link w-6 h-6 inline-block -mt-1" />
     </a>
     """
   end
@@ -166,7 +176,7 @@ defmodule AshHqWeb.Pages.Docs do
   def docs(assigns) do
     ~H"""
     <div id="doc-text">
-      <%= Phoenix.HTML.raw(@docs) %>
+      {Phoenix.HTML.raw(@docs)}
     </div>
     """
   end

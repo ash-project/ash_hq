@@ -28,7 +28,10 @@ defmodule AshHqWeb do
       use Phoenix.Controller, namespace: AshHqWeb
 
       import Plug.Conn
-      import AshHqWeb.Gettext
+
+      use Gettext,
+        backend: AshHqWeb.Gettext
+
       alias AshHqWeb.Router.Helpers, as: Routes
     end
   end
@@ -68,7 +71,7 @@ defmodule AshHqWeb do
   def component do
     quote do
       use Phoenix.Component
-      import AshHqWeb.Tails
+      import Tails
 
       unquote(view_helpers())
     end
@@ -87,7 +90,9 @@ defmodule AshHqWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import AshHqWeb.Gettext
+
+      use Gettext,
+        backend: AshHqWeb.Gettext
     end
   end
 
@@ -106,7 +111,10 @@ defmodule AshHqWeb do
       import Phoenix.View
 
       import AshHqWeb.ErrorHelpers
-      import AshHqWeb.Gettext
+
+      use Gettext,
+        backend: AshHqWeb.Gettext
+
       alias AshHqWeb.Router.Helpers, as: Routes
       unquote(use_verified_routes())
     end

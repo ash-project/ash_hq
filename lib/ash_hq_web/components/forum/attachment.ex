@@ -10,11 +10,11 @@ defmodule AshHqWeb.Components.Forum.Attachment do
       <%= case video_type(@attachment.filename) do %>
         <% {:video, mime} -> %>
           <video controls width={@attachment.width} height={@attachment.height}>
-            <source src={@attachment.url} type={mime}>
+            <source src={@attachment.url} type={mime} />
           </video>
-          <% {:image, _mime} -> %>
-            <img src={@attachment.url} width={@attachment.width} height={@attachment.height}>
-          <% _ -> %>
+        <% {:image, _mime} -> %>
+          <img src={@attachment.url} width={@attachment.width} height={@attachment.height} />
+        <% _ -> %>
       <% end %>
     </div>
     """

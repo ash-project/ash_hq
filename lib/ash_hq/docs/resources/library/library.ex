@@ -2,8 +2,7 @@ defmodule AshHq.Docs.Library do
   @moduledoc false
   use Ash.Resource,
     domain: AshHq.Docs,
-    data_layer: AshPostgres.DataLayer,
-    extensions: [AshOban]
+    data_layer: AshPostgres.DataLayer
 
   actions do
     default_accept :*
@@ -50,23 +49,6 @@ defmodule AshHq.Docs.Library do
       end
 
       manual AshHq.Docs.Library.Actions.Import
-    end
-  end
-
-  oban do
-    domain AshHq.Docs
-
-    triggers do
-      trigger :import do
-        queue :importer
-        read_action :pending_import
-        action :import
-        scheduler_cron "0 */6 * * *"
-
-        read_metadata fn record ->
-          %{version: record.__metadata__.version}
-        end
-      end
     end
   end
 

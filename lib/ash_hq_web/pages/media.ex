@@ -68,10 +68,10 @@ defmodule AshHqWeb.Pages.Media do
         <%= for %{title: title, href: href, description: description} <- examples() do %>
           <div class="max-w-7xl px-4 sm:px-6 md:px-8 my-8 hidden sm:block">
             <h2 class="mt-8 font-semibold text-red-500 dark:text-red-400">
-              <a href={href}><%= title %></a>
+              <a href={href}>{title}</a>
             </h2>
             <p class="text-base-dark-500 dark:text-base-light-300 mt-4 max-w-3xl space-y-6">
-              <%= Phoenix.HTML.raw(description) %>
+              {Phoenix.HTML.raw(description)}
             </p>
           </div>
         <% end %>

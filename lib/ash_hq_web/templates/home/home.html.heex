@@ -1,0 +1,134 @@
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 backdrop-blur-lg bg-slate-950/50 border-b border-slate-500/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-around h-12 items-center">
+                <div class="absolute left-4">
+                    <img src="images/ash_logo_orange.svg" alt="Ash Framework" class="h-8">
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-white hover:text-primary-light-400 transition-colors">Documentation</a>
+                    <a href="#" class="text-white hover:text-primary-light-400 transition-colors">Blog</a>
+                    <a href="#" class="text-white hover:text-primary-light-400 transition-colors">Community</a>
+                    <a href="#" class="text-white hover:text-primary-light-400 transition-colors">Forum</a>
+                    <a href="#" class="text-white hover:text-primary-light-400 transition-colors">Media</a>
+                </div>
+
+                <a href="#" class="absolute right-4 text-primary-light-400 hover:text-primary-light-600 transition-colors">Premium Support</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <!-- Animated background -->
+      <div class="absolute inset-0 bg-gradient-to-b from-primary-light-900/20 via-primary-dark-900/10 to-primary-light-900/20 animate-gradient"></div>
+      
+      <!-- Grid pattern overlay -->
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(254,19,19,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(254,19,19,0.2)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,black,transparent)]"></div>
+
+      <!-- Perspective grid -->
+      <div class="absolute bottom-0 left-0 right-0 h-[40vh] bg-gradient-to-t from- to-transparent perspective-grid"></div>
+
+      <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-3xl">
+        <div class="animate-float">
+          <img src="/images/ash-logo-side.svg" alt="Ash Framework" class="w-96 mx-auto mb-8 drop-shadow-[0_0_15px_rgba(255, 87, 87, 0.5)]">
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
+          Model your domain,
+          <span class="bg-gradient-to-r from-primary-dark-500 to-primary-light-500 bg-clip-text text-transparent">derive the rest</span>
+        </h1>
+        <p class="text-xl sm:text-xl text-primary-light-200 mb-12">
+          The <a href="https://elixir-lang.org"><span class="text-primary-dark-400">Elixir</span></a> backend framework for <a href="https://hexdocs.pm/ash/what-is-ash.html#why-should-i-use-it"><span class="text-primary-dark-400">unparalleled productivity</span></a>.
+          <a href="https://hexdocs.pm/ash/design-principles.html"><span class="text-primary-dark-400">Declarative tools</span></a> that let you <a href="https://www.youtube.com/watch?v=vjnPjrCF4rs"><span class="text-primary-dark-400">stop wasting time and reinventing wheels</span></a>.
+          Use with <a href="https://phoenixframework.org"><span class="text-primary-dark-400">Phoenix LiveView</span></a> or build <a href="https://hexdocs.pm/ash_graphql/getting-started-with-graphql.html"><span class="text-primary-dark-400">APIs in minutes</span></a> to support your front-end of choice.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="#get-started2" class="inline-flex items-center px-8 py-3 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 animate-glow">
+            Get Started
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div id="get-started" class="relative bg-slate-950/50  py-24">
+      <div class="max-w-3xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+        <div class="relative p-8 rounded-2xl bg-gradient-to-b from-primary-light-900/30 to-transparent border border-primary-light-500/30 backdrop-blur-sm">
+          <h2 class="text-3xl font-bold mb-6 text-primary-light-200">Get Your Installer</h2>
+          <div class="grid grid-cols-4 my-6 text-primary-light-200">
+            <label :for={{value, name} <- [phoenix: "Phoenix", graphql: "GraphQL", postgres: "PostgreSQL", sqlite: "SQLite", password_auth: "Password Authentication", magic_link_auth: "Magic Link Auth", other_oauth: "Other OAuth2"] }>
+              <input type="checkbox" class="feature-checkbox" value={value} onchange="window.featureClicked(this)">
+              {name}
+            </label>
+          </div>
+          <input type="text" id="app-name" value="my_app" class="text-black" oninput="window.appNameChanged(this)">
+          <div class="my-6 text-primary-light-200 bg-gray-800 rounded-lg text-white py-4">
+            <pre id="selected-features" class="overflow-scroll text-left pl-8">
+              <%= {:safe, """
+              sh <(curl 'https://new.ash-hq.org/my_app?install=ash') && \\
+                  cd my_app
+              """ |> String.trim()} %></pre>
+          </div>
+          <div class="my-6 text-primary-light-200">- or -</div>
+          <h2 class="text-3xl font-bold mb-6 text-primary-light-200" id="get-started2">Try our interactive tutorial</h2>
+          <a href="#" class="inline-flex items-center px-6 py-3 rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 animate-glow">
+              Run in Livebook
+              <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="relative bg-black py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Resources -->
+                <div class="group relative p-8 rounded-2xl bg-gradient-to-b from-primary-light-900/30 to-transparent border border-primary-light-500/30 hover:border-primary-light-500/50 transition-all backdrop-blur-sm">
+                    <div class="absolute inset-0 bg-primary-light-500/5 rounded-2xl transform group-hover:scale-105 transition-transform"></div>
+                    <div class="relative">
+                        <div class="w-16 h-16 mb-6 text-primary-dark-500">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-primary-dark-400">Resources</h3>
+                        <p class="text-primary-light-200">Plug and play building blocks that scale with the complexity of your domain.</p>
+                    </div>
+                </div>
+
+                <!-- GraphQL -->
+                <div class="group relative p-8 rounded-2xl bg-gradient-to-b from-primary-dark-900/30 to-transparent border border-primary-dark-500/30 hover:border-primary-dark-500/50 transition-all backdrop-blur-sm">
+                    <div class="absolute inset-0 bg-primary-dark-500/5 rounded-2xl transform group-hover:scale-105 transition-transform"></div>
+                    <div class="relative">
+                        <div class="w-16 h-16 mb-6 text-primary-dark-500">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2l9 4.9v10.2l-9 4.9-9-4.9V6.9L12 2z"/>
+                                <path d="M12 22.2v-6.4"/>
+                                <path d="M12 8.2v-6"/>
+                                <path d="M2.3 6.9l9.7 5.3 9.7-5.3"/>
+                                <path d="M2.3 17.1l9.7-5.3 9.7 5.3"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-primary-dark-400">GraphQL</h3>
+                        <p class="text-primary-light-200">Easily create rich, customizable, full featured GraphQL APIs.</p>
+                    </div>
+                </div>
+
+                <!-- JSON:API -->
+                <div class="group relative p-8 rounded-2xl bg-gradient-to-b from-primary-light-900/30 to-transparent border border-primary-light-500/30 hover:border-primary-light-500/50 transition-all backdrop-blur-sm">
+                    <div class="absolute inset-0 bg-primary-light-500/5 rounded-2xl transform group-hover:scale-105 transition-transform"></div>
+                    <div class="relative">
+                        <div class="w-16 h-16 mb-6 text-primary-dark-500">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 12V8h-4V4h-4v4H8v4H4v4h4v4h4v-4h4v-4h4z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-primary-dark-400">JSON:API</h3>
+                        <p class="text-primary-light-200">Create JSON:API spec compliant apis in minutes, not months.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

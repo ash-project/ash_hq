@@ -6,7 +6,7 @@ defmodule AshHqWeb.Components.Search do
 
   alias AshHqWeb.Components.Icon
   alias AshHqWeb.DocRoutes
-  import AshHqWeb.Tails
+  import Tails
 
   attr(:libraries, :list, required: true)
   attr(:selected_types, :list, required: true)
@@ -27,20 +27,33 @@ defmodule AshHqWeb.Components.Search do
         phx-window-keydown="select-previous"
         phx-key="ArrowUp"
       >
-        <div id="search-body" class="h-full" phx-target={@myself} phx-window-keydown="select-next" phx-key="ArrowDown">
+        <div
+          id="search-body"
+          class="h-full"
+          phx-target={@myself}
+          phx-window-keydown="select-next"
+          phx-key="ArrowDown"
+        >
           <div class="p-6 h-full grid gap-6 grid-rows-[max-content_auto_max-content]">
             <button
               id="close-search"
               class="absolute top-6 right-6 h-6 w-6 cursor-pointer z-10 hover:text-base-light-400"
               phx-click={@close}
             >
-              <span class="hero-x-mark h-6 w-6"/>
+              <span class="hero-x-mark h-6 w-6" />
             </button>
             <div class="flex flex-col w-full sticky">
               <div class="w-full flex flex-row justify-start top-0">
-                <span class="hero-magnifying-glass h-6 w-6 mr-4"/>
+                <span class="hero-magnifying-glass h-6 w-6 mr-4" />
                 <div class="flex flex-row justify-between w-full mr-10 border-b border-base-light-600">
-                  <.form for={%{}} as={:search} phx-target={@myself} phx-change="search" phx-submit="go-to-doc" class="w-full">
+                  <.form
+                    for={%{}}
+                    as={:search}
+                    phx-target={@myself}
+                    phx-change="search"
+                    phx-submit="go-to-doc"
+                    class="w-full"
+                  >
                     <input
                       id="search-input"
                       name="search"
@@ -53,7 +66,7 @@ defmodule AshHqWeb.Components.Search do
               </div>
             </div>
             <div class="grid overflow-auto scroll-parent">
-              <%= render_items(assigns, @item_list) %>
+              {render_items(assigns, @item_list)}
             </div>
           </div>
         </div>
@@ -76,10 +89,10 @@ defmodule AshHqWeb.Components.Search do
             phx-click={@close}
           >
             <div class={
-            classes(
-              ["hover:bg-base-light-100 dark:hover:bg-base-dark-750 py-1 w-full",
-              "bg-base-light-200 dark:bg-base-dark-700": @selected_item.id == item.id]
-            )
+              classes([
+                "hover:bg-base-light-100 dark:hover:bg-base-dark-750 py-1 w-full",
+                "bg-base-light-200 dark:bg-base-dark-700": @selected_item.id == item.id
+              ])
             }>
               <div class="flex justify-start items-center space-x-2 pb-2 pl-2">
                 <div>
@@ -88,22 +101,21 @@ defmodule AshHqWeb.Components.Search do
                 <div class="flex flex-col">
                   <div class="text-primary-light-700 dark:text-primary-dark-300">
                     <span class="text-primary-light-700 dark:text-primary-dark-500">
-                      <%= item.library_name %>
+                      {item.library_name}
                     </span>
-                    <%= item_type(item) %>
+                    {item_type(item)}
                   </div>
                   <div class="flex flex-row flex-wrap items-center">
                     <div class="font-bold">
-                      <%= item_name(item) %>
+                      {item_name(item)}
                     </div>
                   </div>
                   <div>
-                    <%= first_sentence(item) %>
+                    {first_sentence(item)}
                   </div>
                 </div>
               </div>
-              <div>
-              </div>
+              <div></div>
             </div>
           </.link>
         <% else %>
@@ -113,10 +125,11 @@ defmodule AshHqWeb.Components.Search do
             id={"result-#{item.id}"}
             phx-click={@close}
           >
-            <div class={classes([
-              "hover:bg-base-light-100 dark:hover:bg-base-dark-750 py-1 w-full",
-              "bg-base-light-200 dark:bg-base-dark-700": @selected_item.id == item.id
-            ])
+            <div class={
+              classes([
+                "hover:bg-base-light-100 dark:hover:bg-base-dark-750 py-1 w-full",
+                "bg-base-light-200 dark:bg-base-dark-700": @selected_item.id == item.id
+              ])
             }>
               <div class="flex justify-start items-center space-x-2 pb-2 pl-2">
                 <div>
@@ -125,22 +138,21 @@ defmodule AshHqWeb.Components.Search do
                 <div class="flex flex-col">
                   <div class="text-primary-light-700 dark:text-primary-dark-300">
                     <span class="text-primary-light-700 dark:text-primary-dark-500">
-                      <%= item.library_name %>
+                      {item.library_name}
                     </span>
-                    <%= item_type(item) %>
+                    {item_type(item)}
                   </div>
                   <div class="flex flex-row flex-wrap items-center">
                     <div class="font-bold">
-                      <%= item_name(item) %>
+                      {item_name(item)}
                     </div>
                   </div>
                   <div>
-                    <%= first_sentence(item) %>
+                    {first_sentence(item)}
                   </div>
                 </div>
               </div>
-              <div>
-              </div>
+              <div></div>
             </div>
           </a>
         <% end %>

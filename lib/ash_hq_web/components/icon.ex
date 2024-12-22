@@ -3,7 +3,7 @@ defmodule AshHqWeb.Components.Icon do
   Defines icons for different types of resources.
   """
   use Phoenix.Component
-  import AshHqWeb.Tails
+  import Tails
 
   attr(:type, :string, required: true)
   attr(:classes, :string, required: false, default: "")
@@ -12,17 +12,17 @@ defmodule AshHqWeb.Components.Icon do
     case assigns.type do
       type when type in ["Dsl", "DSL"] ->
         ~H"""
-        <span class={classes(["hero-puzzle-piece", @classes])}/>
+        <span class={classes(["hero-puzzle-piece", @classes])} />
         """
 
       "Forum" ->
         ~H"""
-        <span class={classes(["hero-user-group", @classes])}/>
+        <span class={classes(["hero-user-group", @classes])} />
         """
 
       type when type in ["Guide", "Guides"] ->
         ~H"""
-        <span class={classes(["hero-book-open", @classes])}/>
+        <span class={classes(["hero-book-open", @classes])} />
         """
 
       type when type in ["Mix Task", "Mix Tasks"] ->
@@ -47,7 +47,7 @@ defmodule AshHqWeb.Components.Icon do
       _default ->
         # Includes the Code category
         ~H"""
-        <span class={classes(["hero-code-bracket", @classes])}/>
+        <span class={classes(["hero-code-bracket", @classes])} />
         """
     end
   end

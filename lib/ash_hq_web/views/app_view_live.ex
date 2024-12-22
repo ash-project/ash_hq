@@ -11,24 +11,24 @@ defmodule AshHqWeb.AppViewLive do
   alias Phoenix.LiveView.JS
   require Ash.Query
 
-  import AshHqWeb.Tails
+  import Tails
 
   def render(assigns) do
     ~H"""
-    <div id="app" class={classes("h-full font-sans": true)} phx-hook="ColorTheme">
+    <div id="app" class={classes("h-full font-sans": true)}>
       <head>
-        <meta property="og:type" content="text/html">
-        <meta property="og:image" content="https://ash-hq.org/images/ash-logo-side.png">
-        <meta property="og:url" content={to_string(@uri)}>
-        <meta property="og:site_name" content="Ash HQ">
-        <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:domain" content="ash-hq.org">
-        <meta property="twitter:site" content="@AshFramework">
+        <meta property="og:type" content="text/html" />
+        <meta property="og:image" content="https://ash-hq.org/images/ash-logo-side.png" />
+        <meta property="og:url" content={to_string(@uri)} />
+        <meta property="og:site_name" content="Ash HQ" />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content="ash-hq.org" />
+        <meta property="twitter:site" content="@AshFramework" />
         <!-- Need to adjust this for future blog writers -->
-        <meta property="twitter:creator" content="@ZachSDaniel1">
+        <meta property="twitter:creator" content="@ZachSDaniel1" />
 
         <%= if @live_action not in [:docs_dsl, :blog, :forum] do %>
-          <meta property="og:title" content="Ash Framework">
+          <meta property="og:title" content="Ash Framework" />
           <meta
             property="og:description"
             content="A declarative foundation for ambitious Elixir applications. Model your domain, derive the rest."
@@ -48,26 +48,27 @@ defmodule AshHqWeb.AppViewLive do
       <button id="search-button" class="hidden" phx-click={AshHqWeb.AppViewLive.toggle_search()} />
       <div
         id="main-container"
-        class={classes([
-          "w-full min-h-screen bg-white dark:bg-base-dark-850 dark:text-white flex flex-col items-stretch",
-          "h-screen overflow-y-auto": @live_action != :docs_dsl
-        ])
+        class={
+          classes([
+            "w-full min-h-screen bg-white dark:bg-base-dark-850 dark:text-white flex flex-col items-stretch",
+            "h-screen overflow-y-auto": @live_action != :docs_dsl
+          ])
         }
       >
         <TopBar.top_bar
           live_action={@live_action}
           configured_theme={@configured_theme}
-          current_user={@current_user}
         />
         <%= case @live_action do %>
           <% :home -> %>
-          <.live_component module={Home} id="home" device_brand={@device_brand} />
+            <.live_component module={Home} id="home" device_brand={@device_brand} />
           <% :blog -> %>
             <.live_component module={Blog} id="blog" params={@params} />
           <% :community -> %>
             <Community.community />
           <% :docs_dsl -> %>
-            <.live_component module={Docs}
+            <.live_component
+              module={Docs}
               id="docs"
               uri={@uri}
               params={@params}
@@ -86,19 +87,23 @@ defmodule AshHqWeb.AppViewLive do
             <div class="md:flex md:justify-around">
               <div class="flex justify-center flex-row mb-6 md:mb-0">
                 <a href="/" class="flex items-center">
-                  <img src="/images/ash-logo-side.svg" class="mr-3 h-32" alt="Ash Framework Logo">
+                  <img src="/images/ash-logo-side.svg" class="mr-3 h-32" alt="Ash Framework Logo" />
                 </a>
               </div>
 
               <div class="grid grid-cols-3 gap-8 sm:gap-6">
                 <div>
-                  <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Resources</h2>
+                  <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+                    Resources
+                  </h2>
                   <ul class="text-gray-600 dark:text-gray-400">
                     <li class="mb-4">
                       <a href="https://github.com/ash-project" class="hover:underline">Source</a>
                     </li>
                     <li class="mb-4">
-                      <a href="/docs/guides/ash/latest/tutorials/get-started" class="hover:underline">Get Started</a>
+                      <a href="/docs/guides/ash/latest/tutorials/get-started" class="hover:underline">
+                        Get Started
+                      </a>
                     </li>
                     <li class="mb-4">
                       <a href="/blog" class="hover:underline">Blog</a>
@@ -109,7 +114,9 @@ defmodule AshHqWeb.AppViewLive do
                   </ul>
                 </div>
                 <div>
-                  <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Community</h2>
+                  <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+                    Community
+                  </h2>
                   <ul class="text-gray-600 dark:text-gray-400">
                     <li class="mb-4">
                       <a href="https://twitter.com/AshFramework" class="hover:underline">Twitter</a>
@@ -120,16 +127,27 @@ defmodule AshHqWeb.AppViewLive do
                   </ul>
                 </div>
                 <div>
-                  <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Help Us</h2>
+                  <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
+                    Help Us
+                  </h2>
                   <ul class="text-gray-600 dark:text-gray-400">
                     <li class="mb-4">
-                      <a href="https://github.com/ash-project/ash_hq/issues/new/choose" class="hover:underline">Report an issue</a>
+                      <a
+                        href="https://github.com/ash-project/ash_hq/issues/new/choose"
+                        class="hover:underline"
+                      >
+                        Report an issue
+                      </a>
                     </li>
                     <li class="mb-4">
-                      <a href="https://ash-hq.appsignal-status.com" class="hover:underline">Status Page</a>
+                      <a href="https://ash-hq.appsignal-status.com" class="hover:underline">
+                        Status Page
+                      </a>
                     </li>
                     <li>
-                      <a href="/docs/guides/ash/latest/how_to/contribute" class="hover:underline">Contribute</a>
+                      <a href="/docs/guides/ash/latest/how_to/contribute" class="hover:underline">
+                        Contribute
+                      </a>
                     </li>
                   </ul>
                 </div>

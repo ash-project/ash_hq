@@ -11,7 +11,7 @@ defmodule AshHqWeb.Components.Blog.Tag do
       href={"#{@prefix}?tag=#{@tag}"}
       class="dark:bg-gray-700 bg-gray-300 rounded-lg px-2 text-lg max-w-min whitespace-nowrap"
     >
-      <%= @tag %>
+      {@tag}
     </.link>
     """
   end

@@ -4,8 +4,6 @@ USER root
 RUN apt-get update
 RUN apt-get install -y wget
 RUN apt-get install -y gnupg
-RUN wget https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb
-RUN dpkg -i erlang-solutions_2.0_all.deb
 RUN apt-get update
 RUN apt-get install -y git
 RUN apt-get install -y gcc
@@ -14,7 +12,6 @@ RUN apt-get install -y make
 RUN apt-get install -y curl
 RUN apt-get install -y build-essential
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get install -y esl-erlang
 RUN apt-get install -y apt-transport-https
 RUN apt-get install -y ca-certificates
 RUN apt-get install -y fuse3 libfuse3-dev libglib2.0-dev
@@ -27,7 +24,7 @@ RUN apt-get update
 RUN apt-get install -y nodejs
 RUN npm install --global yarn
 RUN mix local.hex --force && \
-  mix local.rebar --force
+    mix local.rebar --force
 ENV MIX_ENV=prod
 COPY ./assets/package.json assets/package.json
 COPY ./assets/package-lock.json assets/package-lock.json
@@ -36,7 +33,6 @@ COPY ./mix.exs .
 COPY ./mix.lock .
 COPY ./config/config.exs config/config.exs
 COPY ./config/prod.exs config/prod.exs
-COPY ./assets/tailwind.colors.json ./assets/tailwind.colors.json
 RUN mix deps.get
 RUN mix deps.compile
 COPY ./lib ./lib

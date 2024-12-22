@@ -6,7 +6,7 @@ defmodule AshHqWeb.Components.DocSidebar do
 
   alias AshHqWeb.Components.Icon
   alias Phoenix.LiveView.JS
-  import AshHqWeb.Tails
+  import Tails
 
   attr :libraries, :any
   attr :remove_version, :any
@@ -15,7 +15,11 @@ defmodule AshHqWeb.Components.DocSidebar do
 
   def render(assigns) do
     ~H"""
-    <aside id={@id} class={classes(["grid z-40 bg-white dark:bg-base-dark-850", @class])} aria-label="Sidebar">
+    <aside
+      id={@id}
+      class={classes(["grid z-40 bg-white dark:bg-base-dark-850", @class])}
+      aria-label="Sidebar"
+    >
       <div class="flex flex-col px-1">
         <ul class="ml-2 mt-4">
           <%= for {category, items} <- @sidebar_data do %>
@@ -25,12 +29,17 @@ defmodule AshHqWeb.Components.DocSidebar do
                 phx-click={collapse("#{@id}-guides-#{slug(category)}")}
               >
                 <div
-                  class={classes(["chevron mr-1.5 mt-1.5 origin-center", "rotate-[-90deg]": !has_active?(items)])}
+                  class={
+                    classes([
+                      "chevron mr-1.5 mt-1.5 origin-center",
+                      "rotate-[-90deg]": !has_active?(items)
+                    ])
+                  }
                   id={"#{@id}-guides-#{slug(category)}-chevron"}
                 >
-                  <span class="hero-chevron-down-solid w-3 h-3"/>
+                  <span class="hero-chevron-down-solid w-3 h-3" />
                 </div>
-                <span class="text-base-light-500 dark:text-base-dark-300 font-bold"><%= category %></span>
+                <span class="text-base-light-500 dark:text-base-dark-300 font-bold">{category}</span>
               </button>
 
               <ul
@@ -40,25 +49,29 @@ defmodule AshHqWeb.Components.DocSidebar do
               >
                 <%= for {library, items} <- items do %>
                   <li class="pt-1 pl-0.5" id={"#{@id}-guides-#{slug(category)}-#{slug(library)}"}>
-                    <span class="text-primary-dark-500 dark:text-primary-light-500 font-extrabold"><%= library %></span>
+                    <span class="text-primary-dark-500 dark:text-primary-light-500 font-extrabold">
+                      {library}
+                    </span>
 
                     <ul>
                       <%= for %{name: item_name, to: to, id: item_id, active?: active?} <- items do %>
                         <% id = id(category, library, item_name, "guides", item_id, @id) %>
                         <li
                           id={id}
-                          class={classes(
-                            ["first:rounded-t-lg last:rounded-b-lg p-[0.1rem] pl-1 hover:bg-base-light-100 dark:hover:bg-base-dark-750",
-                            "bg-base-light-200 dark:bg-base-dark-750 active-sidebar-nav": active?]
-                          )
+                          class={
+                            classes([
+                              "first:rounded-t-lg last:rounded-b-lg p-[0.1rem] pl-1 hover:bg-base-light-100 dark:hover:bg-base-dark-750",
+                              "bg-base-light-200 dark:bg-base-dark-750 active-sidebar-nav": active?
+                            ])
                           }
                         >
-                          <.link href={to}
+                          <.link
+                            href={to}
                             phx-click={mark_active(id)}
                             class="flex flex-row items-start w-full text-left text-base-light-900 dark:text-base-dark-100"
                           >
                             <Icon.icon type="Guides" classes="h-4 w-4 flex-none mt-1 mr-1.5" />
-                            <%= item_name %>
+                            {item_name}
                           </.link>
                         </li>
                       <% end %>

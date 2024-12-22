@@ -21,36 +21,35 @@ defmodule AshHqWeb.Router do
     plug(:basic_auth)
   end
 
+  scope "/", host: "new." do
+    get("/:name", AshHqWeb.NewController, :new)
+  end
+
+  scope "/new" do
+    get("/:name", AshHqWeb.NewController, :new)
+  end
+
   scope "/", AshHqWeb do
     pipe_through(:browser)
+    get "/", HomeController, :home
 
-    live_session :main,
-      on_mount: [
-        {AshHqWeb.LiveUserAuth, :live_user_optional},
-        {AshHqWeb.InitAssigns, :default}
-      ],
-      root_layout: {AshHqWeb.LayoutView, :root} do
-      live("/", AppViewLive, :home)
-      live("/media", AppViewLive, :media)
-      live("/blog", AppViewLive, :blog)
-      live("/blog/:slug", AppViewLive, :blog)
-      live("/community", AppViewLive, :community)
-      live("/docs/", AppViewLive, :docs_dsl)
-      live("/docs/guides/:library/:version/*guide", AppViewLive, :docs_dsl)
-      live("/docs/dsl/:dsl_target", AppViewLive, :docs_dsl)
-      live("/docs/dsl/:library/:version", AppViewLive, :docs_dsl)
-      live("/docs/dsl/:library/:version/:extension", AppViewLive, :docs_dsl)
-      live("/docs/module/:library/:version/:module", AppViewLive, :docs_dsl)
-      live("/docs/mix_task/:library/:version/:mix_task", AppViewLive, :docs_dsl)
-      live("/docs/:library/:version", AppViewLive, :docs_dsl)
+    live("/media", AppViewLive, :media)
+    live("/blog", AppViewLive, :blog)
+    live("/blog/:slug", AppViewLive, :blog)
+    live("/community", AppViewLive, :community)
+    live("/docs/", AppViewLive, :docs_dsl)
+    live("/docs/guides/:library/:version/*guide", AppViewLive, :docs_dsl)
+    live("/docs/dsl/:dsl_target", AppViewLive, :docs_dsl)
+    live("/docs/dsl/:library/:version", AppViewLive, :docs_dsl)
+    live("/docs/dsl/:library/:version/:extension", AppViewLive, :docs_dsl)
+    live("/docs/module/:library/:version/:module", AppViewLive, :docs_dsl)
+    live("/docs/mix_task/:library/:version/:mix_task", AppViewLive, :docs_dsl)
+    live("/docs/:library/:version", AppViewLive, :docs_dsl)
 
-      # for showing deprecated forum content
-      live("/forum", AppViewLive, :forum)
-      live("/forum/:channel", AppViewLive, :forum)
-      live("/forum/:channel/:id", AppViewLive, :forum)
-
-      get("/unsubscribe", MailingListController, :unsubscribe)
-    end
+    # for showing deprecated forum content
+    live("/forum", AppViewLive, :forum)
+    live("/forum/:channel", AppViewLive, :forum)
+    live("/forum/:channel/:id", AppViewLive, :forum)
   end
 
   get("/rss", AshHqWeb.RssController, :rss)

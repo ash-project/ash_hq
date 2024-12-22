@@ -16,7 +16,7 @@
     "priv/scripts/**/*.{ex,exs}",
     "{config,lib,test}/**/*.{ex,exs}"
   ],
-  plugins: [Spark.Formatter],
+  plugins: [Spark.Formatter, Phoenix.LiveView.HTMLFormatter],
   subdirectories: ["priv/*/migrations"],
   locals_without_parens: [
     has_name_attribute?: 1,

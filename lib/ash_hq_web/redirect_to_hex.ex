@@ -1,6 +1,5 @@
 defmodule AshHqWeb.RedirectToHex do
   @moduledoc "Sets the platform being used with liveview"
-  import Phoenix.LiveView
   require Ash.Query
   @behaviour Plug
 
