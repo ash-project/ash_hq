@@ -55,10 +55,7 @@ defmodule AshHqWeb.AppViewLive do
           ])
         }
       >
-        <TopBar.top_bar
-          live_action={@live_action}
-          configured_theme={@configured_theme}
-        />
+        <TopBar.top_bar live_action={@live_action} configured_theme={@configured_theme} />
         <%= case @live_action do %>
           <% :home -> %>
             <.live_component module={Home} id="home" device_brand={@device_brand} />

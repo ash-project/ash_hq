@@ -46,7 +46,7 @@ const features = {
     adds: ['ash_phoenix']
   },
   graphql: {
-    dependsOn: ['phoenix'],
+    requires: ['phoenix'],
     adds: ['ash_graphql']
   },
   postgres: {
@@ -60,59 +60,106 @@ const features = {
     adds: ['ash_money']
   },
   password_auth: {
-    dependsOn: ['phoenix'],
+    requires: ['phoenix'],
     adds: ['ash_authentication', 'ash_authentication_phoenix'],
     args: ['--auth-strategy password']
   },
   magic_link_auth: {
-    dependsOn: ['phoenix'],
+    requires: ['phoenix'],
     adds: ['ash_authentication', 'ash_authentication_phoenix'],
     args: ['--auth-strategy magic_link']
   },
   github_auth: {
-    dependsOn: ['phoenix'],
+    requires: ['phoenix'],
     adds: ['ash_authentication', 'ash_authentication_phoenix'],
     requiresSetup: {
-      name: "Set up Github Authentication",
+      name: "GitHub Auth",
       href: "https://hexdocs.pm/ash_authentication/github.html"
     }
   },
   auth0_auth: {
-    dependsOn: ['phoenix'],
+    requires: ['phoenix'],
     adds: ['ash_authentication', 'ash_authentication_phoenix'],
     requiresSetup: {
-      name: "Set up Auth0 Authentication",
+      name: "Auth0 Auth",
       href: "https://hexdocs.pm/ash_authentication/auth0.html"
     }
   },
   other_oauth: {
-    dependsOn: ['phoenix'],
+    requires: ['phoenix'],
     adds: ['ash_authentication', 'ash_authentication_phoenix'],
     requiresSetup: {
-      name: "Set up Oauth Authentication",
+      name: "Other OAuth",
       href: "https://hexdocs.pm/ash_authentication/auth0.html"
     }
   }
-
 }
 
 let appName = "my_app";
 
 function setUrl() {
+  var button = document.getElementById('copy-url-button');
+  var icon = document.getElementById('copy-url-button-icon');
+  var text = document.getElementById('copy-url-button-text');
+
+  text.innerHTML = "Copy"
+  icon.classList.remove("hero-check")
+  icon.classList.add("hero-clipboard")
+  button.classList.remove("was-clicked");
+
   let args = [];
   let packages = [];
+  let disabled = [];
+  let setups = [];
+
   for (var feature of Object.keys(features)) {
     const config = features[feature];
     if (config.checked) {
-      packages.push(...config.adds)
-      args.push(...(config.args || []))
+      (config.requires || []).forEach((requirement) => {
+        const requiredConfig = features[requirement]
+        packages.push(...requiredConfig.adds);
+        args.push(...(requiredConfig.args || []));
+
+        if (requiredConfig.requiresSetup) {
+          setups.push(`<a target="_blank" class="link" href="${requiredConfig.requiresSetup.href}">${requiredConfig.requiresSetup.name}</a>`)
+        }
+
+        const checkboxId = `feature-${requirement}`
+
+        const requiredCheckbox = document.getElementById(checkboxId)
+
+        requiredCheckbox.checked = true;
+        requiredCheckbox.disabled = true;
+        disabled.push(checkboxId)
+        features[feature].checked = true;
+      })
+
+      packages.push(...config.adds);
+      args.push(...(config.args || []));
+
+      if (config.requiresSetup) {
+        setups.push(`<a target="_blank" class="link" href="${config.requiresSetup.href}">${config.requiresSetup.name}</a>`)
+      }
     }
   }
+
+  [...document.querySelectorAll(".feature-checkbox:disabled")].forEach((el) => {
+    if (!disabled.includes(el.id)) {
+      el.disabled = false
+    }
+  })
+
   packages = [...new Set(packages)];
   args = [...new Set(args)];
+  setups = [...new Set(setups)];
+
+  let withParam = ""; 
+  if(features.phoenix.checked) {
+    withParam = "&with=phx.new"
+  }
 
   const argsString = args.join(" ")
-  let code = `sh <(curl 'https://new.ash-hq.org/${appName}?install=ash') && \\
+  let code = `sh <(curl 'https://new.ash-hq.org/${appName}?install=ash${withParam}') && \\
     cd ${appName}`
 
   if (packages.length !== 0) {
@@ -134,10 +181,20 @@ function setUrl() {
     code = code.substring(0, code.length - 1);
   }
 
+  const manualSetupBox = document.getElementById("manual-setup-box")
+
+  if (setups.length === 0) {
+    manualSetupBox.classList.add("hidden")
+  } else {
+    manualSetupBox.classList.remove("hidden")
+    const manualSetupLinks = document.getElementById("manual-setup-links")
+    setups.forEach((setup) => {
+      manualSetupLinks.innerHTML = setups.join("");
+    })
+  }
+
   const el = document.getElementById('selected-features')
-  console.log(el)
   el.innerHTML = code;
-  console.log(el)
 }
 
 window.featureClicked = function(el) {
@@ -151,6 +208,27 @@ window.appNameChanged = function(el) {
   appName = el.value;
 
   setUrl()
+}
+
+window.copyUrl = function(el) {
+  // Get the text field
+  var copyText = document.getElementById('selected-features').innerHTML;
+
+  copyText = copyText
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+
+  navigator.clipboard.writeText(copyText);
+
+  var button = document.getElementById('copy-url-button');
+  var icon = document.getElementById('copy-url-button-icon');
+  var text = document.getElementById('copy-url-button-text');
+
+  text.innerHTML = "Copied"
+  icon.classList.remove("hero-clipboard")
+  icon.classList.add("hero-check")
+  button.classList.add("was-clicked");
 }
 
 // connect if there are any LiveViews on the page

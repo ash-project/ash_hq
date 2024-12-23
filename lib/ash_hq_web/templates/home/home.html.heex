@@ -3,7 +3,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-around h-12 items-center">
                 <div class="absolute left-4">
-                    <img src="images/ash_logo_orange.svg" alt="Ash Framework" class="h-8">
+                  <img src="images/ash_logo_orange.svg" alt="Ash Framework" class="h-8">
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#" class="text-white hover:text-primary-light-400 transition-colors">Documentation</a>
@@ -43,20 +43,20 @@
           Use with <a href="https://phoenixframework.org"><span class="text-primary-dark-400">Phoenix LiveView</span></a> or build <a href="https://hexdocs.pm/ash_graphql/getting-started-with-graphql.html"><span class="text-primary-dark-400">APIs in minutes</span></a> to support your front-end of choice.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="#get-started2" class="inline-flex items-center px-8 py-3 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 animate-glow">
+          <a href="#get-started" class="inline-flex items-center px-8 py-3 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 animate-glow">
             Get Started
           </a>
         </div>
       </div>
     </div>
 
-    <div id="get-started" class="relative bg-slate-950/50  py-24">
+    <div class="relative bg-slate-950/50  py-24">
       <div class="max-w-3xl mx-auto text-center px-4 sm:px-6 lg:px-8">
         <div class="relative p-8 rounded-2xl bg-gradient-to-b from-primary-light-900/30 to-transparent border border-primary-light-500/30 backdrop-blur-sm">
-          <h2 class="text-3xl font-bold mb-6 text-primary-light-200">Get Your Installer</h2>
+          <h2 id="get-started" class="text-3xl font-bold mb-6 text-primary-light-200">Get Your Installer</h2>
           <div class="grid grid-cols-4 my-6 text-primary-light-200">
-            <label :for={{value, name} <- [phoenix: "Phoenix", graphql: "GraphQL", postgres: "PostgreSQL", sqlite: "SQLite", password_auth: "Password Authentication", magic_link_auth: "Magic Link Auth", other_oauth: "Other OAuth2"] }>
-              <input type="checkbox" class="feature-checkbox" value={value} onchange="window.featureClicked(this)">
+            <label :for={{value, name} <- [phoenix: "Phoenix", graphql: "GraphQL", postgres: "PostgreSQL", sqlite: "SQLite", password_auth: "Password Authentication", magic_link_auth: "Magic Link Auth", github_auth: "GitHub Auth", auth0_auth: "Auth0 Auth", other_oauth: "Other OAuth2"] }>
+              <input id={"feature-#{value}"} type="checkbox" class="feature-checkbox disabled:text-primary-dark-800" value={value} onchange="window.featureClicked(this)">
               {name}
             </label>
           </div>
@@ -68,13 +68,22 @@
                   cd my_app
               """ |> String.trim()} %></pre>
           </div>
+          <div id="manual-setup-box" class="flex flex-col hidden mb-8">
+          <h2 class="text-1xl font-bold mb-6 text-primary-light-200">Selected packages require manual setup</h2>
+          <div id="manual-setup-links" class="grid grid-cols-2 mx-[30%] gap-2">
+          </div>
+          </div>
+          <button id="copy-url-button" onclick="window.copyUrl()" class="inline-flex items-center px-6 py-3 rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 [&:not(.was-clicked)]:animate-glow transition-all duration-300 hover:bg-red-600 [&.was-clicked]:scale-95 [&.was-clicked]:bg-green-500">
+            <span id="copy-url-button-icon" class="hero-clipboard"></span>
+            <span id="copy-url-button-text" class="ml-2">
+              Copy
+            </span>
+          </button>
+
           <div class="my-6 text-primary-light-200">- or -</div>
-          <h2 class="text-3xl font-bold mb-6 text-primary-light-200" id="get-started2">Try our interactive tutorial</h2>
-          <a href="#" class="inline-flex items-center px-6 py-3 rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 animate-glow">
-              Run in Livebook
-              <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-              </svg>
+          <h2 class="text-3xl font-bold mb-6 text-primary-light-200">Try our interactive tutorial</h2>
+          <a href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd" class="cursor-pointer inline-flex items-center rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 animate-glow">
+            <img src="https://livebook.dev/badge/v1/pink.svg" alt="Run in Livebook" />
           </a>
         </div>
       </div>

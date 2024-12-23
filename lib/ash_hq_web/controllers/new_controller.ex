@@ -72,7 +72,7 @@ defmodule AshHqWeb.NewController do
     mix igniter.new "$app_name" --yes $cli_args <%= if @args do %><%= @args %><% end %>
     <% end %>
 
-    echo "Your app is ready at \`./$app_name\`"
+    echo "Your app is ready at \\`./$app_name\\`"
   }
 
   main "$@"
@@ -104,7 +104,10 @@ defmodule AshHqWeb.NewController do
         args -> args
       end
 
-    text = EEx.eval_string(@template, assigns: [with_phx_new: with_phx_new?, app_name: name, install: install, args: args])
+    text =
+      EEx.eval_string(@template,
+        assigns: [with_phx_new: with_phx_new?, app_name: name, install: install, args: args]
+      )
 
     conn
     |> put_resp_content_type("text/plain; charset=utf-8")

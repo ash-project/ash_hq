@@ -20,7 +20,7 @@ config :ash_appsignal,
     :action,
     :flow
   ]
-  
+
 config :esbuild,
   version: "0.17.11",
   default: [
