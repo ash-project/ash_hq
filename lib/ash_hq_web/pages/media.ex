@@ -102,7 +102,7 @@ defmodule AshHqWeb.Pages.Media do
         title: "Todoish",
         href: "https://github.com/brettkolodny/todoish",
         description: """
-        A bite sized Ash & LiveView application that lets you create and shate to-do lists.
+        A bite sized Ash & LiveView application that lets you create and share to-do lists.
         """
       }
     ]

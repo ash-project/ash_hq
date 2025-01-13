@@ -67,9 +67,9 @@ defmodule AshHqWeb.NewController do
     cli_args="$@"
 
     <%= if @install do %> echo_heading "Creating new Elixir project '$app_name' with the following packages: <%= @install %>"
-    mix igniter.new "$app_name" --yes --install "<%= @install %>" $cli_args <%= if @args do %><%= @args %><% end %>
+    mix igniter.new "$app_name" --yes-to-deps --install "<%= @install %>" $cli_args <%= if @args do %><%= @args %><% end %>
     <% else %> echo_heading "Creating new Elixir project '$app_name'..."
-    mix igniter.new "$app_name" --yes $cli_args <%= if @args do %><%= @args %><% end %>
+    mix igniter.new "$app_name" --yes-to-deps $cli_args <%= if @args do %><%= @args %><% end %>
     <% end %>
 
     echo "Your app is ready at \\`./$app_name\\`"
@@ -84,14 +84,12 @@ defmodule AshHqWeb.NewController do
       |> Kernel.||("")
       |> String.split(",", trim: true)
       |> Enum.map(&String.trim/1)
+      |> then(&Enum.concat(["ash"], &1))
       |> Enum.join(",")
-      |> case do
-        "" -> nil
-        install -> install
-      end
 
-    with_phx_new? =
-      params["with"] == "phx.new"
+    with_phx_new? = "phoenix" in install
+
+    install = install -- ["phoenix"]
 
     args =
       params

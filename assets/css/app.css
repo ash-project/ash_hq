@@ -144,18 +144,18 @@ html {
   }
 }
 
-/*.perspective-grid {*/
-/*  background-image: repeating-linear-gradient(90deg, rgba(188,19,254,0.1) 0%, rgba(188,19,254,0.1) 1%, transparent 1%, transparent 50%),*/
-/*                  repeating-linear-gradient(180deg, rgba(188,19,254,0.1) 0%, rgba(188,19,254,0.1) 1%, transparent 1%, transparent 50%);*/
-/*  background-size: 100px 100px;*/
-/*  transform: perspective(500px) rotateX(60deg);*/
-/*  transform-origin: bottom;*/
-/*}*/
-
 .perspective-grid {
   background-image: repeating-linear-gradient(90deg, rgba(200,50,50,0.2) 0%, rgba(200,50,50,0.2) 1%, transparent 1%, transparent 50%),
                   repeating-linear-gradient(180deg, rgba(200,50,50,0.2) 0%, rgba(200,50,50,0.2) 1%, transparent 1%, transparent 50%);
   background-size: 100px 100px;
   transform: perspective(500px) rotateX(60deg);
   transform-origin: bottom;
+}
+
+.perspective-grid-reverse {
+  background-image: repeating-linear-gradient(90deg, rgba(200, 50, 50, 0.2) 0%, rgba(200, 50, 50, 0.2) 1%, transparent 1%, transparent 50%),
+                    repeating-linear-gradient(180deg, rgba(200, 50, 50, 0.2) 0%, rgba(200, 50, 50, 0.2) 1%, transparent 1%, transparent 50%);
+  background-size: 100px 100px;
+  transform: perspective(500px) rotateX(-60deg); /* Changed from 60deg to -60deg */
+  transform-origin: top; /* Changed from bottom to top */
 }

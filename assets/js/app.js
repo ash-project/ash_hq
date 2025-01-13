@@ -18,6 +18,7 @@ import scrollIntoView from "smooth-scroll-into-view-if-needed";
 
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html";
+import tippy from 'tippy.js';
 // Establish Phoenix Socket and LiveView configuration.
 import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
@@ -40,62 +41,245 @@ let liveSocket = new LiveSocket("/live", Socket, {
   },
 });
 
+const quickstarts = {
+  live_view: {
+    tooltip: `
+    <p class="mb-2">
+    Full stack Elixir!
+    </p>
+    <p>
+    Perfect for the Elixir maximalist.
+    </p>
+    `,
+    features: ['phoenix', 'postgres', 'magic_link_auth', 'admin'],
+  },
+  graphql: {
+    features: ['phoenix', 'graphql', 'postgres', 'admin'],
+    tooltip: `
+    <p class="mb-2">
+    A GraphQL API, a database and a dream.
+    </p>
+    <p>
+    All the power of GraphQL, none of the boilerplate.
+    </p>
+    `
+  },
+  json_api: {
+    features: ['phoenix', 'json_api', 'postgres', 'admin'],
+    tooltip: `
+    <p class="mb-2">
+    JSON:API. Simple, battle-tested, effective.
+    </p>
+    <p>
+    Create a simple yet elegant REST API, complete with an Open API spec!
+    </p>
+    `
+  }
+}
+
 const features = {
-  // special case that this adds `with`
   phoenix: {
-    adds: ['ash_phoenix']
+    adds: ['phoenix', 'ash_phoenix'],
+    tooltip: `
+    <p class="mb-2">
+    Ash works seamlessly with Phoenix. 
+    </p>
+    <p>
+    Phoenix is your web layer, Ash is your application layer.
+    </p>
+    ` 
   },
   graphql: {
     requires: ['phoenix'],
-    adds: ['ash_graphql']
+    adds: ['ash_graphql'],
+    tooltip: `
+    <p class="mb-2">
+    Create a powerful and flexible GraphQL API directly from your resources.
+    </p>
+    <p>
+    Built on top of the excellent library Absinthe.
+    No need for writing data loaders, resolvers or middleware!
+    </p>
+    ` 
+  },
+  json_api: {
+    requires: ['phoenix'],
+    adds: ['ash_json_api'],
+    tooltip: `
+    <p class="mb-2">
+    Easily create a spec-compliant JSON:API, directly from your resources. 
+    </p>
+    <p>
+    Generates an OpenAPI specification automatically, allowing easy integration with all kinds of tools and services.
+    </p>
+    ` 
+
   },
   postgres: {
-    adds: ['ash_postgres']
+    adds: ['ash_postgres'],
+    tooltip: `
+    <p class="mb-2">
+    PostgreSQL
+    </p>
+    <p>
+    The swiss army knife of databases. Versatile, powerful, and battle-tested.
+    </p>
+    `
   },
   sqlite: {
-    adds: ['ash_sqlite']
-  },
-  money: {
-    after: ['postgres'],
-    adds: ['ash_money']
+    adds: ['ash_sqlite'],
+    tooltip: `
+    <p class="mb-2">
+    SQLite
+    </p>
+    <p>
+    Small, fast, and reliable. Perfect for lightweight apps or getting started quickly.
+    </p>
+    `
   },
   password_auth: {
     requires: ['phoenix'],
     adds: ['ash_authentication', 'ash_authentication_phoenix'],
-    args: ['--auth-strategy password']
+    args: ['--auth-strategy password'],
+    tooltip: `
+    <p class="mb-2">
+    Allow users to log in with email & password.
+    </p>
+    <p>
+    Ships with email confirmation, password resets, and registration out of the box!
+    </p>
+    `
   },
   magic_link_auth: {
     requires: ['phoenix'],
     adds: ['ash_authentication', 'ash_authentication_phoenix'],
-    args: ['--auth-strategy magic_link']
+    args: ['--auth-strategy magic_link'],
+    tooltip: `
+    <p class="mb-2">
+    Send users a link in their email to sign in and register.
+    </p>
+    <p>
+    Who needs the complexity of emails & passwords? Keep it simple with magic links.
+    </p>
+    `
   },
-  github_auth: {
+  oauth: {
     requires: ['phoenix'],
     adds: ['ash_authentication', 'ash_authentication_phoenix'],
     requiresSetup: {
-      name: "GitHub Auth",
-      href: "https://hexdocs.pm/ash_authentication/github.html"
-    }
+      name: "OAuth",
+      href: "https://hexdocs.pm/ash_authentication"
+    },
+    tooltip: `
+    <p class="mb-2">
+    Sign in using an external service.
+    </p>
+    <p>
+    Supports any OAuth2 provider with premade configurations for Apple, Google, Github, Auth0, Oidc, and Slack.
+    </p>
+    `
   },
-  auth0_auth: {
-    requires: ['phoenix'],
-    adds: ['ash_authentication', 'ash_authentication_phoenix'],
-    requiresSetup: {
-      name: "Auth0 Auth",
-      href: "https://hexdocs.pm/ash_authentication/auth0.html"
-    }
+  money: {
+    adds: ['ash_money'],
+    after: ['ash_postgres'],
+    tooltip: `
+    <p class="mb-2">
+    A data type for representing money $$$$.
+    </p>
+    <p>
+    Ships with a postgres datatype, and operator and function definitions!
+    </p>
+    `
   },
-  other_oauth: {
-    requires: ['phoenix'],
-    adds: ['ash_authentication', 'ash_authentication_phoenix'],
-    requiresSetup: {
-      name: "Other OAuth",
-      href: "https://hexdocs.pm/ash_authentication/auth0.html"
-    }
+  csv: {
+    adds: ['ash_csv'],
+    tooltip: `
+    <p class="mb-2">
+    Back resources with CSV files.
+    </p>
+    <p>
+    Easily interact with CSV files in code, or turn a CSV file into an API in minutes.
+    </p>
+    `
+  },
+  admin: {
+    adds: ['ash_admin'],
+    tooltip: `
+    <p class="mb-2">
+    A zero-config-necessary super admin UI.
+    </p>
+    <p>
+    Call any resource action from an automatically generated web UI
+    </p>
+    `
+  },
+  double_entry: {
+    requires: ['money'],
+    adds: ['ash_double_entry'],
+    tooltip: `
+    <p class="mb-2">
+    Moving money around? Need to track financial data?
+    </p>
+    <p>
+    Provides a data model for double entry accounting that can be extended to fit your own needs.
+    </p>
+    `
   }
 }
 
-let appName = "my_app";
+for (var quickstart of Object.keys(quickstarts)) {
+  const tooltip = quickstarts[quickstart].tooltip
+  if (tooltip) {
+    addTooltip(`#quickstart-${quickstart}`, tooltip)
+  }
+}
+
+for (var feature of Object.keys(features)) {
+  const tooltip = features[feature].tooltip
+
+  if (tooltip) {
+    addTooltip(`#feature-${feature}`, tooltip)
+  }
+}
+
+addTooltip("#advanced-help", `
+  <p class="mb-3">
+    Can't decide? Don't fret! 
+  </p>
+  <p>
+    Everything but Phoenix can be installed later when you need it.
+  </p>
+  `
+)
+
+function addTooltip(id, content) {
+  const div = document.createElement('div')
+  div.classList.add("bg-slate-800", "rounded-lg", "p-2", "border", "border-slate-950", "shadow-lg", "shadow-slate-950/80", "text-center");
+  div.innerHTML = content;
+  const boundary = document.getElementById("#installer-bounds")
+  tippy(id, {
+    content: div,
+    hideOnClick: false,
+    animation: false,
+    allowHTML: true,
+    delay: 0,
+    popperOptions: {
+      modifiers: [
+
+        {
+          name: 'flip',
+          options: {
+            padding: {
+              top: 64
+            }
+          },
+        },
+      ],
+    },
+  });
+}
+
+let appName = "awesome_app";
 
 function setUrl() {
   var button = document.getElementById('copy-url-button');
@@ -124,13 +308,17 @@ function setUrl() {
           setups.push(`<a target="_blank" class="link" href="${requiredConfig.requiresSetup.href}">${requiredConfig.requiresSetup.name}</a>`)
         }
 
-        const checkboxId = `feature-${requirement}`
+        const activeBox = document.getElementById(`feature-${requirement}-active`)
+        const inactiveBox = document.getElementById(`feature-${requirement}-inactive`)
 
-        const requiredCheckbox = document.getElementById(checkboxId)
+        activeBox.classList.remove("hidden")
+        inactiveBox.classList.add("hidden")
 
-        requiredCheckbox.checked = true;
-        requiredCheckbox.disabled = true;
-        disabled.push(checkboxId)
+        activeBox.classList.add("ring-2", "ring-primary-dark-800")
+
+        features[requirement].checked = true;
+        disabled.push(requirement)
+
         features[feature].checked = true;
       })
 
@@ -143,23 +331,27 @@ function setUrl() {
     }
   }
 
-  [...document.querySelectorAll(".feature-checkbox:disabled")].forEach((el) => {
-    if (!disabled.includes(el.id)) {
-      el.disabled = false
+
+  [...document.querySelectorAll(".active-feature")].forEach((el) => {
+    if (!disabled.includes(el.dataset.name)) {
+      el.classList.remove("ring-2", "ring-primary-dark-800")
     }
   })
+
 
   packages = [...new Set(packages)];
   args = [...new Set(args)];
   setups = [...new Set(setups)];
 
-  let withParam = ""; 
-  if(features.phoenix.checked) {
-    withParam = "&with=phx.new"
+  let base
+  if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+    base = "localhost:4000/new"
+  } else {
+    base = "https://new.ash-hq.org"
   }
 
   const argsString = args.join(" ")
-  let code = `sh <(curl 'https://new.ash-hq.org/${appName}?install=ash${withParam}') && \\
+  let code = `curl '${base}/${appName}' | sh < /dev/tty <&- && \\
     cd ${appName}`
 
   if (packages.length !== 0) {
@@ -197,10 +389,47 @@ function setUrl() {
   el.innerHTML = code;
 }
 
-window.featureClicked = function(el) {
-  const name = el.value;
-  const checked = el.checked;
+window.featureClicked = function(el, toggleTo, checked) {
+  const name = el.dataset.name;
   features[name].checked = checked;
+  el.classList.add("hidden")
+  document.getElementById(toggleTo).classList.remove("hidden")
+
+  setUrl()
+}
+
+window.quickStartClicked = function(el, toggleTo, checked) {
+  [...document.querySelectorAll(".active-quickstart")].forEach((el) => {
+    el.classList.add("hidden")
+  });
+
+  [...document.querySelectorAll(".inactive-quickstart")].forEach((el) => {
+    el.classList.remove("hidden")
+  });
+
+  [...document.querySelectorAll(".active-feature")].forEach((el) => {
+    el.classList.add("hidden")
+  });
+
+  [...document.querySelectorAll(".inactive-feature")].forEach((el) => {
+    el.classList.remove("hidden")
+  });
+
+  el.classList.add("hidden")
+  document.getElementById(toggleTo).classList.remove("hidden");
+
+  for (var feature of Object.keys(features)) {
+    features[feature].checked = false
+  }
+
+  const toClick = quickstarts[el.dataset.name].features;
+
+  if(checked) {
+    toClick.forEach((name) => {
+      document.getElementById(`feature-${name}-inactive`).click()
+    })
+  }
+
   setUrl()
 }
 
@@ -208,6 +437,24 @@ window.appNameChanged = function(el) {
   appName = el.value;
 
   setUrl()
+}
+
+window.showAdvancedFeatures = function() {
+  const chevron = document.getElementById("advanced-chevron");
+  const text = document.getElementById("advanced-text")
+  const advanced = document.getElementById("advanced-features")
+  console.log('advanced: ', advanced)
+  if (chevron.classList.contains("hero-chevron-down")) {
+    chevron.classList.remove("hero-chevron-down")
+    chevron.classList.add("hero-chevron-right")
+    text.innerHTML = "Show Advanced"
+    advanced.classList.add("hidden")
+  } else {
+    chevron.classList.remove("hero-chevron-right")
+    chevron.classList.add("hero-chevron-down")
+    text.innerHTML = "Hide Advanced"
+    advanced.classList.remove("hidden")
+  }
 }
 
 window.copyUrl = function(el) {
@@ -230,6 +477,7 @@ window.copyUrl = function(el) {
   icon.classList.add("hero-check")
   button.classList.add("was-clicked");
 }
+
 
 // connect if there are any LiveViews on the page
 liveSocket.connect();

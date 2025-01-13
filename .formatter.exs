@@ -14,7 +14,7 @@
     "priv/*/seeds.exs",
     "priv/repo/**/*.{ex,exs}",
     "priv/scripts/**/*.{ex,exs}",
-    "{config,lib,test}/**/*.{ex,exs}"
+    "{config,lib,test}/**/*.{ex,exs,heex}"
   ],
   plugins: [Spark.Formatter, Phoenix.LiveView.HTMLFormatter],
   subdirectories: ["priv/*/migrations"],

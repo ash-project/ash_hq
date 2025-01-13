@@ -10,8 +10,6 @@
 # See latest Elixir install.sh version at:
 # https://github.com/elixir-lang/elixir-lang.github.com/blob/main/install.sh
 
-curl new.ash-hq.org/my_app?install=ash,ash_postgres&example=true
-
 set -eu
 
 echo_heading() {
