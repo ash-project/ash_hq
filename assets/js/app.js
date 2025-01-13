@@ -253,8 +253,18 @@ addTooltip("#advanced-help", `
 )
 
 function addTooltip(id, content) {
-  const div = document.createElement('div')
-  div.classList.add("bg-slate-800", "rounded-lg", "p-2", "border", "border-slate-950", "shadow-lg", "shadow-slate-950/80", "text-center");
+  const div = document.createElement("div");
+  div.classList.add(
+    "rounded-lg",
+    "py-2",
+    "px-4",
+    "bg-black",
+    "border",
+    "border-primary-dark-500/40",
+    "shadow-lg",
+    "shadow-slate-950/80",
+    "text-center"
+  );
   div.innerHTML = content;
   const boundary = document.getElementById("#installer-bounds")
   tippy(id, {
@@ -314,7 +324,8 @@ function setUrl() {
         activeBox.classList.remove("hidden")
         inactiveBox.classList.add("hidden")
 
-        activeBox.classList.add("ring-2", "ring-primary-dark-800")
+        activeBox.classList.add("opacity-70", "cursor-not-allowed");
+        activeBox.classList.remove("cursor-pointer");
 
         features[requirement].checked = true;
         disabled.push(requirement)
@@ -334,7 +345,7 @@ function setUrl() {
 
   [...document.querySelectorAll(".active-feature")].forEach((el) => {
     if (!disabled.includes(el.dataset.name)) {
-      el.classList.remove("ring-2", "ring-primary-dark-800")
+      el.classList.remove("opacity-70", "cursor-not-allowed");
     }
   })
 
@@ -441,19 +452,17 @@ window.appNameChanged = function(el) {
 
 window.showAdvancedFeatures = function() {
   const chevron = document.getElementById("advanced-chevron");
-  const text = document.getElementById("advanced-text")
-  const advanced = document.getElementById("advanced-features")
-  console.log('advanced: ', advanced)
-  if (chevron.classList.contains("hero-chevron-down")) {
-    chevron.classList.remove("hero-chevron-down")
-    chevron.classList.add("hero-chevron-right")
-    text.innerHTML = "Show Advanced"
-    advanced.classList.add("hidden")
+  const text = document.getElementById("advanced-text");
+  const advanced = document.getElementById("advanced-features");
+  console.log("advanced: ", advanced);
+  if (chevron.classList.contains("rotate-90")) {
+    chevron.classList.remove("rotate-90");
+    text.innerHTML = "Show Advanced";
+    advanced.classList.add("hidden");
   } else {
-    chevron.classList.remove("hero-chevron-right")
-    chevron.classList.add("hero-chevron-down")
-    text.innerHTML = "Hide Advanced"
-    advanced.classList.remove("hidden")
+    chevron.classList.add("rotate-90");
+    text.innerHTML = "Hide Advanced";
+    advanced.classList.remove("hidden");
   }
 }
 

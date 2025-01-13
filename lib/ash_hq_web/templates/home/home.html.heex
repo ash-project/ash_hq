@@ -100,8 +100,7 @@
     id="get-started"
     class="max-w-5xl mx-auto text-center lg:px-8 backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-4"
   >
-
-    <h3 class="text-2xl font-bold text-primary-light-200">Get Your Installer</h3>
+    <h2 class="text-3xl font-bold text-primary-light-200 mb-3">Get Your Installer</h2>
 
     <input
       type="text"
@@ -110,13 +109,13 @@
       class="text-white bg-transparent mt-4 rounded-lg p-2 animate-glow ring-1 border-0 outline-none ring ring-[#FF5757]"
       oninput="window.appNameChanged(this)"
     />
-    <div id="quickstarts-list" class="flex flex-row flex-wrap gap-2 justify-center mt-4">
+    <div id="quickstarts-list" class="flex flex-row flex-wrap gap-2 justify-center my-6">
       <div class="flex flex-row flex-wrap justify-between gap-2">
         <label :for={{value, name} <- quickstarts()} id={"quickstart-#{value}"}>
           <span
             id={"quickstart-#{value}-inactive"}
             data-name={value}
-            class="inactive-quickstart text-xs rounded p-2 bg-gray-100 bg-opacity-10 hover:bg-opacity-20 cursor-pointer"
+            class="inactive-quickstart rounded px-4 py-2 border border-primary-dark-500/40 hover:bg-primary-dark-900/50 cursor-pointer"
             onclick={"window.quickStartClicked(this, 'quickstart-#{value}-active', true)"}
           >
             {name}
@@ -124,7 +123,7 @@
           <span
             id={"quickstart-#{value}-active"}
             data-name={value}
-            class="active-quickstart hidden text-xs rounded p-2 bg-primary-light-600 bg-opacity-50 hover:bg-opacity-20 cursor-pointer"
+            class="active-quickstart hidden rounded px-4 py-2 border border-primary-dark-500/40 bg-primary-dark-500/80 cursor-pointer"
             onclick={"window.quickStartClicked(this, 'quickstart-#{value}-inactive', false)"}
           >
             {name}
@@ -138,27 +137,39 @@
       onclick="window.showAdvancedFeatures()"
     >
       <div id="advanced-text" class="font-extralight text-sm">Show Advanced</div>
-      <div id="advanced-chevron" class="hero-chevron-right" />
+      <div id="advanced-chevron" class="hero-chevron-right-mini transition-transform" />
     </div>
-    <div id="advanced-features" class="hidden">
+    <div id="advanced-features" class="hidden mt-8">
       <h2 id="get-started" class="text-2xl font-bold text-primary-light-200">
         <div class="flex flex-row justify-center">
-        Choose Your Features 
-        <svg id="advanced-help" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-        </svg>
+          Choose Your Features
+          <svg
+            id="advanced-help"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-4 ml-1"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
+            />
+          </svg>
         </div>
       </h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div :for={{category, features} <- features()} class="p-4">
-          <h3 class="text-lg font-bold mb-2 text-primary-light-200">{category}</h3>
+      <div class="flex flex-wrap justify-center">
+        <div :for={{category, features} <- features()} class="p-4 md:w-1/2">
+          <h3 class="text-lg font-bold mb-4 text-primary-light-200">{category}</h3>
           <div class="flex flex-wrap gap-2 gap-y-4 justify-center">
-            <label :for={{value, name} <- features} id={"feature-#{value}"}>
+            <label :for={{value, name} <- features} id={"feature-#{value}"} class="feature">
               <span
                 id={"feature-#{value}-inactive"}
                 data-name={value}
-                class="inactive-feature text-xs rounded p-2 bg-gray-100 bg-opacity-10 hover:bg-opacity-20 cursor-pointer"
+                class="inactive-feature rounded px-4 py-2 border border-primary-dark-500/40 hover:bg-primary-dark-900/50 cursor-pointer"
                 onclick={"window.featureClicked(this, 'feature-#{value}-active', true)"}
               >
                 {name}
@@ -166,7 +177,7 @@
               <span
                 id={"feature-#{value}-active"}
                 data-name={value}
-                class="active-feature hidden text-xs rounded p-2 bg-primary-light-600 bg-opacity-50 hover:bg-opacity-20 cursor-pointer"
+                class="active-feature hidden rounded px-4 py-2 border border-primary-dark-500/40 bg-primary-dark-500/80 cursor-pointer"
                 onclick={"window.featureClicked(this, 'feature-#{value}-inactive', false)"}
               >
                 {name}
@@ -176,7 +187,7 @@
         </div>
       </div>
     </div>
-    <div class="my-4 text-primary-light-200 backdrop-blur-lg bg-slate-800/50 rounded-lg text-white py-4 flex justify-center">
+    <div class="my-4 text-primary-light-200 bg-slate-900/70 rounded-lg text-white py-4 flex justify-center">
       <pre id="selected-features" class="overflow-scroll text-left">
               <%= {:safe, """
               curl '#{@url_base}awesome_app' | sh < /dev/tty <&- && \\
