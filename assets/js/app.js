@@ -213,6 +213,31 @@ const features = {
     </p>
     `
   },
+  oban: {
+    adds: ['ash_oban'],
+    tooltip: `
+    <p class="mb-2">
+    Oban is a background job system backed by your own SQL database packed with enterprise grade features, real-time monitoring with Oban Web, and complex workflow management with Oban Pro.
+    </p>
+    <p class="mb-2">
+    Configure triggers directly in your resources or write fully custom Oban jobs.
+    </p>
+    <p>
+    Installer coming soon! Can be manually installed.
+    </p>
+    `
+  },
+  state_machine: {
+    adds: ['ash_state_machine'],
+    tooltip: `
+    <p class="mb-2">
+    Model complex workflows backed by your resource's persistence and actions.
+    </p>
+    <p>
+    You can even generate fancy mermaid flow charts!
+    </p>
+    `
+  },
   double_entry: {
     requires: ['money'],
     adds: ['ash_double_entry'],
@@ -222,6 +247,87 @@ const features = {
     </p>
     <p>
     Provides a data model for double entry accounting that can be extended to fit your own needs.
+    </p>
+    `
+  },
+  archival: {
+    adds: ['ash_archival'],
+    tooltip: `
+    <p class="mb-2">
+    A lightweight extension to ensure that data is only ever soft deleted.
+    </p>
+    <p>
+    One line of code is all it takes to ensure that it is impossible to delete records.
+    </p>
+    `
+  },
+  paper_trail: {
+    adds: ['ash_paper_trail'],
+    tooltip: `
+    <p class="mb-2">
+    Automatically track all changes to your resources. Track who did what and when.
+    </p>
+    <p>
+    Track just the changed values, the entire new state, or even a deep diff of changes.
+    </p>
+    `
+  },
+  cloak: {
+    adds: ['cloak', 'ash_cloak'],
+    tooltip: `
+    <p class="mb-2">
+    Easily encrypt and decrypt your attributes. 
+    </p>
+    <p>
+    You can even hook into decryption to track who is decrypting what and when?
+    </p>
+    `
+  },
+  appsignal: {
+    adds: ['appsignal', 'ash_appsignal'],
+    requiresSetup: {
+      name: "AppSignal",
+      href: "https://blog.appsignal.com/2023/02/28/an-introduction-to-test-factories-and-fixtures-for-elixir.html" 
+    },
+    tooltip: `
+    <p class="mb-2">
+    Track errors and monitor your application with appsignal.
+    </p>
+    <p class="mb-2">
+    Appsignal is a great way to get started with monitoring! Be sure to visit their website for setup instructions.
+    </p>
+    <p>
+    Installer coming soon! Can be manually installed.
+    </p>
+    `
+  },
+  smokestack: {
+    adds: ['smokestack'],
+    tooltip: `
+    <p class="mb-2">
+    Declarative test factories for your Ash resources!
+    </p>
+    <p>
+    A declarative wrapper around Ash's builtin data generator tooling designed for simplicity and readability.
+    </p>
+    `
+  },
+  opentelemetry: {
+    adds: ['opentelemetry', 'opentelemetry_ash'],
+    requiresSetup: {
+      name: "OpenTelemetry",
+      href: "https://blog.appsignal.com/2023/02/28/an-introduction-to-test-factories-and-fixtures-for-elixir.html" 
+    },
+    tooltip: `
+    <p class="mb-2">
+    High-quality, ubiquitous, and portable telemetry to enable effective observability.
+    </p>
+    <p>
+    OpenTelemetry is the state of the art observability system. Leverage first-class integration libraries for all 
+    your favorite Elixir libraries, including Ash!
+    </p>
+    <p class="mb-2">
+    Installer coming soon! Can be manually installed.
     </p>
     `
   }
@@ -289,7 +395,7 @@ function addTooltip(id, content) {
   });
 }
 
-let appName = "awesome_app";
+let appName = document.getElementById("app-name").value;
 
 function setUrl() {
   var button = document.getElementById('copy-url-button');
@@ -360,25 +466,38 @@ function setUrl() {
   } else {
     base = "https://new.ash-hq.org"
   }
+  const appNameSafe = appName.toLowerCase().replace(/[\s-]/g, '_').replace(/[^a-z_]/g, '').replace(/^_/, '');
 
   const argsString = args.join(" ")
-  let code = `curl '${base}/${appName}' | sh < /dev/tty <&- && \\
-    cd ${appName}`
+  let firstLine = `sh <(curl '${base}/${appNameSafe}') \\`
+  let code = `${firstLine}
+    && cd ${appNameSafe}`
 
   if (packages.length !== 0) {
-    code = code + ` && 
-    mix igniter.install \\`
+    code = code + ` \\
+    && mix igniter.install \\`
   }
 
-  packages.forEach((pack) => {
+  const limit = Math.max(firstLine.length - 2, 45)
+
+  let currentLine = ''
+  for (let i = 0; i < packages.length; i++) {
+    if ((currentLine + packages[i]).length > limit) {
+      code = code + `
+    ${currentLine.trim()} \\`
+      currentLine = ''
+    }
+    currentLine += packages[i] + ' '
+  }
+  if (currentLine.trim().length > 0) {
     code = code + `
-    ${pack} \\`
-  });
+    ${currentLine.trim()} \\`
+  }
 
   args.forEach((arg) => {
     code = code + `
     ${arg} \\`
-  });
+  })
 
   if (args.length !== 0 || packages.length !== 0) {
     code = code.substring(0, code.length - 1);
@@ -445,7 +564,7 @@ window.quickStartClicked = function(el, toggleTo, checked) {
 }
 
 window.appNameChanged = function(el) {
-  appName = el.value;
+  appName = el.value
 
   setUrl()
 }
@@ -454,14 +573,13 @@ window.showAdvancedFeatures = function() {
   const chevron = document.getElementById("advanced-chevron");
   const text = document.getElementById("advanced-text");
   const advanced = document.getElementById("advanced-features");
-  console.log("advanced: ", advanced);
   if (chevron.classList.contains("rotate-90")) {
     chevron.classList.remove("rotate-90");
-    text.innerHTML = "Show Advanced";
+    text.innerHTML = "Show all";
     advanced.classList.add("hidden");
   } else {
     chevron.classList.add("rotate-90");
-    text.innerHTML = "Hide Advanced";
+    text.innerHTML = "Hide";
     advanced.classList.remove("hidden");
   }
 }

@@ -14,6 +14,8 @@ defmodule AshHqWeb.HomeView do
     Phoenix.Controller.status_message_from_template(template)
   end
 
+  @coming_soon [:oban, :opentelemetry, :appsignal]
+
   defp features do
     [
       Web: [
@@ -37,9 +39,27 @@ defmodule AshHqWeb.HomeView do
       ],
       Admin: [
         admin: "Admin UI"
+      ],
+      Automation: [
+        oban: "Background Jobs",
+        state_machine: "State Machines"
+      ],
+      "Safety & Security": [
+        archival: "Archival",
+        paper_trail: "Paper Trail",
+        cloak: "Encryption"
+      ],
+      Observability: [
+        appsignal: "AppSignal",
+        opentelemetry: "OpenTelemetry"
+      ],
+      Testing: [
+        smokestack: "Factories"
       ]
     ]
   end
+
+  def coming_soon?(value), do: value in @coming_soon
 
   defp quickstarts do
     [live_view: "Phoenix LiveView", graphql: "GraphQL", json_api: "JSON:API"]

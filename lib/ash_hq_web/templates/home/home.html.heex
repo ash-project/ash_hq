@@ -6,19 +6,27 @@
         <img src="images/ash_logo_orange.svg" alt="Ash Framework" class="h-8" />
       </div>
       <div class="hidden md:flex items-center space-x-8">
-        <a href="#" class="text-white hover:text-primary-light-400 transition-colors">
+        <a
+          href="https://hexdocs.pm/ash"
+          class="text-white hover:text-primary-light-400 transition-colors"
+        >
           Documentation
         </a>
-        <a href="#" class="text-white hover:text-primary-light-400 transition-colors">Blog</a>
-        <a href="#" class="text-white hover:text-primary-light-400 transition-colors">
+        <%!-- <a href="/blog" class="text-white hover:text-primary-light-400 transition-colors">Blog</a> --%>
+        <a href="/community" class="text-white hover:text-primary-light-400 transition-colors">
           Community
         </a>
-        <a href="#" class="text-white hover:text-primary-light-400 transition-colors">Forum</a>
+        <a
+          href="https://elixirforum.com/c/ash-framework-forum/123"
+          class="text-white hover:text-primary-light-400 transition-colors"
+        >
+          Forum
+        </a>
         <a href="#" class="text-white hover:text-primary-light-400 transition-colors">Media</a>
       </div>
 
       <a
-        href="#"
+        href="https://ash.alembic.com.au/ash-premium-support"
         class="absolute right-4 text-primary-light-400 hover:text-primary-light-600 transition-colors"
       >
         Premium Support
@@ -67,14 +75,7 @@
       <a href="https://hexdocs.pm/ash_graphql/getting-started-with-graphql.html">
         <span class="text-primary-dark-400">APIs in minutes</span>
       </a>
-      to support your front-end of choice. <%!-- All of the --%>
-      <%!-- <a href="#"> --%>
-      <%!--   <span class="text-primary-dark-400">Power</span> --%>
-      <%!-- </a> --%>
-      <%!-- with none of the --%>
-      <%!-- <a href="#"> --%>
-      <%!--   <span class="text-primary-dark-400">boilerplate</span> --%>
-      <%!-- </a>. --%>
+      to support your front-end of choice.
     </p>
     <div class="flex flex-col sm:flex-row gap-4 justify-center">
       <a
@@ -84,9 +85,22 @@
         Get Started
       </a>
     </div>
-  </div>
-</div>
 
+    <div class="mt-8 text-center">
+      <a href="https://pragprog.com/titles/ldash/ash-framework/">
+        <img
+          src="images/book-beta.jpg"
+          alt="New Book Cover"
+          class="w-64 mx-auto mb-4 shadow-md rounded-2xl shadow-primary-light-700"
+        />
+        <h2 class="text-2xl sm:text-3xl font-bold mb-4 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
+          Get the book!
+        </h2>
+      </a>
+    </div>
+  </div>
+
+</div>
 <div class="relative py-24">
   <div class="absolute inset-0 bg-gradient-to-b from-primary-light-900/20 via-primary-dark-900/10 to-primary-light-900/20 animate-gradient">
   </div>
@@ -105,7 +119,7 @@
     <input
       type="text"
       id="app-name"
-      value="awesome_app"
+      value={@app_name}
       class="text-white bg-transparent mt-4 rounded-lg p-2 animate-glow ring-1 border-0 outline-none ring ring-[#FF5757]"
       oninput="window.appNameChanged(this)"
     />
@@ -136,7 +150,7 @@
       class="flex flex-row mt-4 justify-center items-center cursor-pointer"
       onclick="window.showAdvancedFeatures()"
     >
-      <div id="advanced-text" class="font-extralight text-sm">Show Advanced</div>
+      <div id="advanced-text" class="font-extralight text-sm">Show all</div>
       <div id="advanced-chevron" class="hero-chevron-right-mini transition-transform" />
     </div>
     <div id="advanced-features" class="hidden mt-8">
@@ -166,22 +180,32 @@
           <h3 class="text-lg font-bold mb-4 text-primary-light-200">{category}</h3>
           <div class="flex flex-wrap gap-2 gap-y-4 justify-center">
             <label :for={{value, name} <- features} id={"feature-#{value}"} class="feature">
-              <span
-                id={"feature-#{value}-inactive"}
-                data-name={value}
-                class="inactive-feature rounded px-4 py-2 border border-primary-dark-500/40 hover:bg-primary-dark-900/50 cursor-pointer"
-                onclick={"window.featureClicked(this, 'feature-#{value}-active', true)"}
-              >
-                {name}
-              </span>
-              <span
-                id={"feature-#{value}-active"}
-                data-name={value}
-                class="active-feature hidden rounded px-4 py-2 border border-primary-dark-500/40 bg-primary-dark-500/80 cursor-pointer"
-                onclick={"window.featureClicked(this, 'feature-#{value}-inactive', false)"}
-              >
-                {name}
-              </span>
+              <div class="flex flex-col">
+                <span
+                  id={"feature-#{value}-inactive"}
+                  data-name={value}
+                  class={"relative inactive-feature rounded px-4 py-2 border border-primary-dark-500/40 #{if coming_soon?(value), do: "bg-slate-700", else: "hover:bg-primary-dark-900/50 cursor-pointer"}"}
+                  onclick={
+                    if !coming_soon?(value),
+                      do: "window.featureClicked(this, 'feature-#{value}-active', true)"
+                  }
+                >
+                  {name}
+                </span>
+                <span
+                  id={"feature-#{value}-active"}
+                  data-name={value}
+                  class="relative active-feature hidden rounded px-4 py-2 border border-primary-dark-500/40 bg-primary-dark-500/80 cursor-pointer"
+                  onclick={"window.featureClicked(this, 'feature-#{value}-inactive', false)"}
+                >
+                  {name}
+                </span>
+                <%= if coming_soon?(value) do %>
+                  <span class="text-sm font-extralight">
+                    Coming Soon
+                  </span>
+                <% end %>
+              </div>
             </label>
           </div>
         </div>
@@ -190,8 +214,8 @@
     <div class="my-4 text-primary-light-200 bg-slate-900/70 rounded-lg text-white py-4 flex justify-center">
       <pre id="selected-features" class="overflow-scroll text-left">
               <%= {:safe, """
-              curl '#{@url_base}awesome_app' | sh < /dev/tty <&- && \\
-                  cd awesome_app
+              sh <(curl '#{@url_base}#{@safe_app_name}') \\
+                  && cd #{@safe_app_name}
               """ |> String.trim()} %></pre>
     </div>
     <div id="manual-setup-box" class="flex flex-col hidden mb-8">
