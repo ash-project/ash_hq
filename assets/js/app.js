@@ -42,6 +42,20 @@ let liveSocket = new LiveSocket("/live", Socket, {
 });
 
 const quickstarts = {
+  postgres: {
+    tooltip: `
+    <p class="mb-2">
+    Ash & PostgreSQL, a mach made in heaven.
+    </p>
+    <p>
+    Just Ash and a database is a great place to start if you're 
+    not sure what you're building or just want to play around. 
+    We suggest that you add Phoenix if you are building an API 
+    or a web app.
+    </p>
+    `,
+    features: ['postgres']
+  },
   live_view: {
     tooltip: `
     <p class="mb-2">
@@ -301,17 +315,6 @@ const features = {
     </p>
     `
   },
-  smokestack: {
-    adds: ['smokestack'],
-    tooltip: `
-    <p class="mb-2">
-    Declarative test factories for your Ash resources!
-    </p>
-    <p>
-    A declarative wrapper around Ash's builtin data generator tooling designed for simplicity and readability.
-    </p>
-    `
-  },
   opentelemetry: {
     adds: ['opentelemetry', 'opentelemetry_ash'],
     requiresSetup: {
@@ -347,16 +350,6 @@ for (var feature of Object.keys(features)) {
     addTooltip(`#feature-${feature}`, tooltip)
   }
 }
-
-addTooltip("#advanced-help", `
-  <p class="mb-3">
-    Can't decide? Don't fret! 
-  </p>
-  <p>
-    Everything but Phoenix can be installed later when you need it.
-  </p>
-  `
-)
 
 function addTooltip(id, content) {
   const div = document.createElement("div");
@@ -396,6 +389,11 @@ function addTooltip(id, content) {
 }
 
 let appName = document.getElementById("app-name").value;
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('quickstart-live_view-inactive').click();
+});
 
 function setUrl() {
   var button = document.getElementById('copy-url-button');
@@ -517,6 +515,35 @@ function setUrl() {
 
   const el = document.getElementById('selected-features')
   el.innerHTML = code;
+}
+
+window.cantDecide = function() {
+  document.getElementById("cant-decide").classList.add("hidden");
+
+  [...document.querySelectorAll(".feature-category")].forEach((el) => {
+    el.classList.add("hidden")
+  });
+
+  document.getElementById("show-options").classList.remove("hidden");
+  document.getElementById("dont-worry").classList.remove("hidden");
+}
+
+window.showAll = function() {
+  document.getElementById("cant-decide").classList.remove("hidden");
+
+  [...document.querySelectorAll(".feature-category")].forEach((el) => {
+    el.classList.remove("hidden")
+  });
+
+  document.getElementById("show-options").classList.add("hidden");
+  document.getElementById("dont-worry").classList.add("hidden");
+}
+
+window.clickOnPreset = function(name) {
+  var element = document.getElementById('quickstart-' + name + '-inactive');
+  if (element && element.style.display !== 'none') {
+    element.click();
+  }
 }
 
 window.featureClicked = function(el, toggleTo, checked) {

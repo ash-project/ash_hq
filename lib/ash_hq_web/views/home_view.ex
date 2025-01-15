@@ -23,22 +23,19 @@ defmodule AshHqWeb.HomeView do
         graphql: "GraphQL",
         json_api: "JSON:API"
       ],
-      Authentication: [
-        password_auth: "Password",
-        magic_link_auth: "Magic Link",
-        oauth: "OAuth2"
-      ],
       "Data Layers": [
         postgres: "PostgreSQL",
         sqlite: "SQLite",
         csv: "CSV"
       ],
+      Authentication: [
+        password_auth: "Password",
+        magic_link_auth: "Magic Link",
+        oauth: "OAuth2"
+      ],
       Finance: [
         money: "Money",
         double_entry: "Double Entry Accounting"
-      ],
-      Admin: [
-        admin: "Admin UI"
       ],
       Automation: [
         oban: "Background Jobs",
@@ -49,12 +46,10 @@ defmodule AshHqWeb.HomeView do
         paper_trail: "Paper Trail",
         cloak: "Encryption"
       ],
-      Observability: [
+      "Observability & Administration": [
+        admin: "Admin UI",
         appsignal: "AppSignal",
         opentelemetry: "OpenTelemetry"
-      ],
-      Testing: [
-        smokestack: "Factories"
       ]
     ]
   end
@@ -62,6 +57,11 @@ defmodule AshHqWeb.HomeView do
   def coming_soon?(value), do: value in @coming_soon
 
   defp quickstarts do
-    [live_view: "Phoenix LiveView", graphql: "GraphQL", json_api: "JSON:API"]
+    [
+      live_view: "Phoenix LiveView",
+      graphql: "GraphQL",
+      json_api: "JSON:API",
+      postgres: "PostgreSQL"
+    ]
   end
 end

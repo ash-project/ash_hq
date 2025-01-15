@@ -3,7 +3,9 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-around h-12 items-center">
       <div class="absolute left-4">
+        <a href="/">
         <img src="images/ash_logo_orange.svg" alt="Ash Framework" class="h-8" />
+        </a>
       </div>
       <div class="hidden md:flex items-center space-x-8">
         <a
@@ -46,7 +48,7 @@
   <div class="absolute bottom-0 left-0 right-0 h-[40vh] bg-gradient-to-t to-transparent perspective-grid">
   </div>
 
-  <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-3xl">
+  <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-3xl mt-24">
     <div class="animate-float">
       <img
         src="/images/ash-logo-side.svg"
@@ -60,7 +62,7 @@
         derive the rest
       </span>
     </h1>
-    <p class="text-xl sm:text-xl text-primary-light-200 mb-12">
+    <p class="text-xl sm:text-xl text-primary-light-200 mb-8">
       The <a href="https://elixir-lang.org"><span class="text-primary-dark-400">Elixir</span></a>
       backend framework for <a href="https://hexdocs.pm/ash/what-is-ash.html#why-should-i-use-it"><span class="text-primary-dark-400">unparalleled productivity</span></a>.
       <a href="https://hexdocs.pm/ash/design-principles.html">
@@ -79,7 +81,7 @@
     </p>
     <div class="flex flex-col sm:flex-row gap-4 justify-center">
       <a
-        href="#get-started"
+        href="#installer"
         class="inline-flex items-center px-8 py-3 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 animate-glow"
       >
         Get Started
@@ -91,7 +93,7 @@
         <img
           src="images/book-beta.jpg"
           alt="New Book Cover"
-          class="w-64 mx-auto mb-4 shadow-md rounded-2xl shadow-primary-light-700"
+          class="w-48 mx-auto mb-4 shadow-md rounded-2xl shadow-primary-light-700"
         />
         <h2 class="text-2xl sm:text-3xl font-bold mb-4 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
           Get the book!
@@ -99,7 +101,6 @@
       </a>
     </div>
   </div>
-
 </div>
 <div class="relative py-24">
   <div class="absolute inset-0 bg-gradient-to-b from-primary-light-900/20 via-primary-dark-900/10 to-primary-light-900/20 animate-gradient">
@@ -114,17 +115,30 @@
     id="get-started"
     class="max-w-5xl mx-auto text-center lg:px-8 backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-4"
   >
-    <h2 class="text-3xl font-bold text-primary-light-200 mb-3">Get Your Installer</h2>
+    <h2 class="text-3xl font-bold text-primary-light-200">Get Your Installer</h2>
+    <div id="installer" />
 
     <input
       type="text"
       id="app-name"
       value={@app_name}
-      class="text-white bg-transparent mt-4 rounded-lg p-2 animate-glow ring-1 border-0 outline-none ring ring-[#FF5757]"
+      class="text-white bg-transparent mt-4 rounded-lg p-2 animate-glow ring-1 border-0 outline-none ring ring-[#FF5757] mb-3"
       oninput="window.appNameChanged(this)"
     />
-    <div id="quickstarts-list" class="flex flex-row flex-wrap gap-2 justify-center my-6">
-      <div class="flex flex-row flex-wrap justify-between gap-2">
+
+    <div id="cant-decide" class="mb-2 mt-2">
+      <button class="text-lg underline" onclick="window.cantDecide()">
+        Feeling stuck? Can't decide?
+      </button>
+    </div>
+    <div id="show-options" class="hidden mt-2">
+      <button class="text-lg underline" onclick="window.showAll()">
+        Show all
+      </button>
+    </div>
+    <h2 id="presets-label" class="text-xl font-bold text-primary-light-200">Presets</h2>
+    <div id="quickstarts-list" class="flex flex-row flex-wrap gap-2 justify-center mt-6 mb-10">
+      <div class="flex flex-row flex-wrap justify-center gap-2 gap-x-2 gap-y-5">
         <label :for={{value, name} <- quickstarts()} id={"quickstart-#{value}"}>
           <span
             id={"quickstart-#{value}-inactive"}
@@ -146,45 +160,21 @@
       </div>
     </div>
 
-    <div
-      class="flex flex-row mt-4 justify-center items-center cursor-pointer"
-      onclick="window.showAdvancedFeatures()"
-    >
-      <div id="advanced-text" class="font-extralight text-sm">Show all</div>
-      <div id="advanced-chevron" class="hero-chevron-right-mini transition-transform" />
-    </div>
-    <div id="advanced-features" class="hidden mt-8">
-      <h2 id="get-started" class="text-2xl font-bold text-primary-light-200">
-        <div class="flex flex-row justify-center">
-          Choose Your Features
-          <svg
-            id="advanced-help"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="size-4 ml-1"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
-            />
-          </svg>
-        </div>
-      </h2>
-
-      <div class="flex flex-wrap justify-center">
-        <div :for={{category, features} <- features()} class="p-4 md:w-1/2">
-          <h3 class="text-lg font-bold mb-4 text-primary-light-200">{category}</h3>
+    <div id="advanced-features" class="border-t border-primary-dark-500/40 pt-4">
+      <div class="flex flex-wrap justify-center gap-2">
+        <div
+          :for={{category, features} <- features()}
+          data-category={category}
+          class="feature-category p-2"
+        >
+          <h3 class="text-lg font-bold mb-2 text-primary-light-200">{category}</h3>
           <div class="flex flex-wrap gap-2 gap-y-4 justify-center">
             <label :for={{value, name} <- features} id={"feature-#{value}"} class="feature">
               <div class="flex flex-col">
                 <span
                   id={"feature-#{value}-inactive"}
                   data-name={value}
-                  class={"relative inactive-feature rounded px-4 py-2 border border-primary-dark-500/40 #{if coming_soon?(value), do: "bg-slate-700", else: "hover:bg-primary-dark-900/50 cursor-pointer"}"}
+                  class={"relative inactive-feature rounded px-2 py-2 border border-primary-dark-500/40 #{if coming_soon?(value), do: "bg-slate-700", else: "hover:bg-primary-dark-900/50 cursor-pointer"}"}
                   onclick={
                     if !coming_soon?(value),
                       do: "window.featureClicked(this, 'feature-#{value}-active', true)"
@@ -195,7 +185,7 @@
                 <span
                   id={"feature-#{value}-active"}
                   data-name={value}
-                  class="relative active-feature hidden rounded px-4 py-2 border border-primary-dark-500/40 bg-primary-dark-500/80 cursor-pointer"
+                  class="relative active-feature hidden rounded px-2 py-2 border border-primary-dark-500/40 bg-primary-dark-500/80 cursor-pointer"
                   onclick={"window.featureClicked(this, 'feature-#{value}-inactive', false)"}
                 >
                   {name}
@@ -211,6 +201,40 @@
         </div>
       </div>
     </div>
+    <div id="dont-worry" class="mb-2 hidden flex flex-col gap-2">
+      <p class="text-lg">
+        Pick a preset and go. Everything but Phoenix can be <a class="text-primary-dark-400" href="#install-later">installed later.</a>
+      </p>
+      <p class="text-lg">
+        <ul>
+          <li>
+          All the presets use PostgreSQL, the best database around. <a href="https://www.postgresql.org/download/" class="text-primary-dark-400 underline">Easy to install, supported everywhere.</a>
+          </li>
+          <li>
+            Here to learn? Try just using <button onclick="window.clickOnPreset('postgres')" class="text-primary-dark-400">PostgreSQL.</button>
+          </li>
+          <li>
+            Excited about <button onclick="window.clickOnPreset('live_view')" class="text-primary-dark-400">Phoenix LiveView?</button>
+            Don't worry about the bells and whistles, dive in!
+          </li>
+          <li>
+            Building an API? Start with <button onclick="window.clickOnPreset('graphql')" class="text-primary-dark-400">GraphQL</button>
+            or <button onclick="window.clickOnPreset('json_api')" class="text-primary-dark-400" href="#install-later">JSON:API</button>
+          </li>
+        </ul>
+
+      </p>
+      <%!-- <p class="text-lg"> --%>
+      <%!--   Building a web app? Add Phoenix. --%>
+      <%!-- </p> --%>
+      <%!-- <p class="text-lg"> --%>
+      <%!--   Building an API? Try GraphQL or JSON:API. It's <a --%>
+      <%!--     class="text-primary-dark-400" --%>
+      <%!--     href="#install-later" --%>
+      <%!--   >easy to switch</a>. --%>
+      <%!-- </p> --%>
+    </div>
+
     <div class="my-4 text-primary-light-200 bg-slate-900/70 rounded-lg text-white py-4 flex justify-center">
       <pre id="selected-features" class="overflow-scroll text-left">
               <%= {:safe, """
