@@ -524,6 +524,14 @@ window.cantDecide = function() {
     el.classList.add("hidden")
   });
 
+  [...document.querySelectorAll(".active-quickstart")].forEach((el) => {
+    if(!el.classList.contains("hidden")) {
+      el.click();
+    }
+  });
+
+  document.getElementById("quickstart-live_view-inactive").click()
+
   document.getElementById("show-options").classList.remove("hidden");
   document.getElementById("dont-worry").classList.remove("hidden");
 }

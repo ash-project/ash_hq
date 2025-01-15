@@ -10,14 +10,6 @@ defmodule AshHqWeb.Pages.Community do
     <div class="container sm:mx-auto">
       <div class="flex flex-col w-full sm:flex-row sm:pt-12 sm:mx-32 min-h-screen">
         <div class="sm:w-9/12">
-          <head>
-            <meta property="og:title" content="Ash Framework Blog" />
-            <meta
-              property="og:description"
-              content="A declarative foundation for ambitious Elixir applications. Model your domain, derive the rest."
-            />
-          </head>
-
           <div class="px-4 md:px-12 max-w-5xl mx-auto mt-8 flex justify-center">
             <img class="h-32 md:h-64" src="/images/ash-logo-cropped.svg" />
           </div>

@@ -51,7 +51,6 @@ defmodule AshHq.MixProject do
       {:ash_oban, "~> 0.2"},
       {:earmark, "== 1.5.0-pre1"},
       {:picosat_elixir, "~> 0.2.3"},
-      {:igniter, path: "../igniter", only: [:dev, :test], override: true},
       # Jobs
       {:oban, "~> 2.16"},
       {:flame, "~> 0.5.0"},

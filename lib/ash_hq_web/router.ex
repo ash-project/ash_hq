@@ -25,26 +25,29 @@ defmodule AshHqWeb.Router do
     get("/:name", AshHqWeb.NewController, :new)
   end
 
-  scope "/new" do
-    get("/:name", AshHqWeb.NewController, :new)
+  if Mix.env() == :dev do
+    scope "/new" do
+      get("/:name", AshHqWeb.NewController, :new)
+    end
   end
 
   scope "/", AshHqWeb do
     pipe_through(:browser)
     get "/", HomeController, :home
+    get "/community", HomeController, :community
+    get "/media", HomeController, :media
 
-    live("/media", AppViewLive, :media)
     live("/blog", AppViewLive, :blog)
     live("/blog/:slug", AppViewLive, :blog)
-    live("/community", AppViewLive, :community)
-    live("/docs/", AppViewLive, :docs_dsl)
-    live("/docs/guides/:library/:version/*guide", AppViewLive, :docs_dsl)
-    live("/docs/dsl/:dsl_target", AppViewLive, :docs_dsl)
-    live("/docs/dsl/:library/:version", AppViewLive, :docs_dsl)
-    live("/docs/dsl/:library/:version/:extension", AppViewLive, :docs_dsl)
-    live("/docs/module/:library/:version/:module", AppViewLive, :docs_dsl)
-    live("/docs/mix_task/:library/:version/:mix_task", AppViewLive, :docs_dsl)
-    live("/docs/:library/:version", AppViewLive, :docs_dsl)
+    # live("/community", AppViewLive, :community)
+    # live("/docs/", AppViewLive, :docs_dsl)
+    # live("/docs/guides/:library/:version/*guide", AppViewLive, :docs_dsl)
+    # live("/docs/dsl/:dsl_target", AppViewLive, :docs_dsl)
+    # live("/docs/dsl/:library/:version", AppViewLive, :docs_dsl)
+    # live("/docs/dsl/:library/:version/:extension", AppViewLive, :docs_dsl)
+    # live("/docs/module/:library/:version/:module", AppViewLive, :docs_dsl)
+    # live("/docs/mix_task/:library/:version/:mix_task", AppViewLive, :docs_dsl)
+    # live("/docs/:library/:version", AppViewLive, :docs_dsl)
 
     # for showing deprecated forum content
     live("/forum", AppViewLive, :forum)

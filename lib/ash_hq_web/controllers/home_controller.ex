@@ -3,6 +3,20 @@ defmodule AshHqWeb.HomeController do
 
   @url_base if Mix.env() == :dev, do: "localhost:4000/new/", else: "https://new.ash-hq.org/"
 
+  def community(conn, _) do
+    contributors = AshHq.Github.Contributor.in_order!()
+
+    conn
+    |> assign(:contributor_count, Enum.count(contributors))
+    |> assign(:contributors, contributors)
+    |> render("community.html")
+  end
+
+  def media(conn, _) do
+    conn
+    |> render("media.html")
+  end
+
   def home(conn, _) do
     app_name = app_name()
 

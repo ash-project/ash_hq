@@ -6,7 +6,7 @@ const fs = require("fs")
 const path = require("path")
 
 module.exports = {
-  darkMode: "selector",
+  darkMode: "class",
   content: [
     "./js/**/*.js",
     "../lib/*_web/**/*.*ex",
