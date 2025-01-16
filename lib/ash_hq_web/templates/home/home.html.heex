@@ -81,13 +81,19 @@
     <h2 class="text-3xl font-bold text-primary-light-200">Get Your Installer</h2>
     <div id="installer" />
 
-    <input
-      type="text"
-      id="app-name"
-      value={@app_name}
-      class="text-white bg-transparent mt-4 rounded-lg p-2 animate-glow ring-1 border-0 outline-none ring ring-[#FF5757] mb-3"
-      oninput="window.appNameChanged(this)"
-    />
+    <div class="flex flex-col justify-center mt-2">
+      <label for="app-name">Project Name</label>
+      <div>
+      <input
+        type="text"
+        id="app-name"
+        value={@app_name}
+        class="text-white bg-transparent mt-1 w-64 rounded-lg p-2 animate-glow ring-1 border-0 outline-none ring ring-[#FF5757] mb-3 text-center"
+        placeholder="Project Name"
+        oninput="window.appNameChanged(this)"
+      />
+      </div>
+    </div>
 
     <div id="cant-decide" class="mb-2 mt-2">
       <button class="text-lg underline cursor-pointer" onclick="window.cantDecide()">
