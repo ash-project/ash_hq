@@ -29,10 +29,7 @@ defmodule AshHqWeb.AppViewLive do
 
         <%= if @live_action not in [:docs_dsl, :blog, :forum] do %>
           <meta property="og:title" content="Ash Framework" />
-          <meta
-            property="og:description"
-            content="A declarative foundation for ambitious Elixir applications. Model your domain, derive the rest."
-          />
+          <meta property="og:description" content="Model your domain, derive the rest." />
         <% end %>
       </head>
       <.live_component
