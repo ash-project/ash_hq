@@ -462,7 +462,7 @@ function setUrl() {
   if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
     base = "localhost:4000/new"
   } else {
-    base = "https://new.ash-hq.org"
+    base = "https://ash-hq.org/new"
   }
   const appNameSafe = appName.toLowerCase().replace(/[\s-]/g, '_').replace(/[^a-z_]/g, '').replace(/^_/, '');
 

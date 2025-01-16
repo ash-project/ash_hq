@@ -21,15 +21,16 @@ defmodule AshHqWeb.Router do
     plug(:basic_auth)
   end
 
-  scope "/", host: "new." do
+  # scope "/", host: "new." do
+  #   get("/:name", AshHqWeb.NewController, :new)
+  # end
+
+  # if Mix.env() == :dev do
+  scope "/new" do
     get("/:name", AshHqWeb.NewController, :new)
   end
 
-  if Mix.env() == :dev do
-    scope "/new" do
-      get("/:name", AshHqWeb.NewController, :new)
-    end
-  end
+  # end
 
   scope "/", AshHqWeb do
     pipe_through(:browser)
