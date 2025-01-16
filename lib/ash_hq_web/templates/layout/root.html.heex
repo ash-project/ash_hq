@@ -15,7 +15,6 @@
 
     <meta property="og:type" content="text/html" />
     <meta property="og:image" content="https://ash-hq.org/images/ash-logo-side.png" />
-    <meta property="og:url" content={to_string(@uri)} />
     <meta property="og:site_name" content="Ash HQ" />
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:domain" content="ash-hq.org" />
@@ -23,10 +22,8 @@
     <!-- Need to adjust this for future blog writers -->
     <meta property="twitter:creator" content="@ZachSDaniel1" />
 
-    <%= if @live_action not in [:docs_dsl, :blog, :forum] do %>
-      <meta property="og:title" content="Ash Framework" />
-      <meta property="og:description" content="Model your domain, derive the rest." />
-    <% end %>
+    <meta property="og:title" content="Ash Framework" />
+    <meta property="og:description" content="Model your domain, derive the rest." />
     <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")} />
     <script async defer src="https://buttons.github.io/buttons.js">
     </script>
