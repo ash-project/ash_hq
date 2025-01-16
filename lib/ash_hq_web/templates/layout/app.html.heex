@@ -1,6 +1,6 @@
 <nav class="fixed top-0 w-full z-50 backdrop-blur-lg bg-slate-950/50 border-b border-slate-500/20">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-around h-12 items-center">
+    <div class="flex md:justify-around justify-between h-12 justify-center items-center mx-auto">
       <div class="hidden md:absolute left-4">
         <a href="/" title="Home">
           <img src="images/ash_logo_orange.svg" alt="Ash Framework" class="h-8" />
@@ -27,11 +27,9 @@
         <a href="/media" class="hidden md:block text-white hover:text-primary-light-400 transition-colors" title="Media">Media</a>
       </div>
 
-      <div class="md:hidden left-4">
-        <a href="/" title="Home">
-          <img src="images/ash_logo_orange.svg" alt="Ash Framework" class="h-8" />
-        </a>
-      </div>
+      <a href="/" title="Home" class="md:hidden">
+        <img src="images/ash_logo_orange.svg" alt="Ash Framework" class="h-8" />
+      </a>
 
       <a
         href="https://hexdocs.pm/ash"
