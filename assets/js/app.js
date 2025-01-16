@@ -93,7 +93,7 @@ const quickstarts = {
 
 const features = {
   phoenix: {
-    adds: ['phoenix', 'ash_phoenix'],
+    adds: ['ash_phoenix'],
     tooltip: `
     <p class="mb-2">
     Ash works seamlessly with Phoenix. 
@@ -464,10 +464,17 @@ function setUrl() {
   } else {
     base = "https://ash-hq.org/new"
   }
+
+
   const appNameSafe = appName.toLowerCase().replace(/[\s-]/g, '_').replace(/[^a-z_]/g, '').replace(/^_/, '');
 
+  let installArg;
+  if (features.phoenix.checked) {
+    installArg = "?install=phoenix"
+  }
+
   const argsString = args.join(" ")
-  let firstLine = `sh <(curl '${base}/${appNameSafe}') \\`
+  let firstLine = `sh <(curl '${base}/${appNameSafe}${installArg}') \\`
   let code = `${firstLine}
     && cd ${appNameSafe}`
 
@@ -497,9 +504,9 @@ function setUrl() {
     ${arg} \\`
   })
 
-  if (args.length !== 0 || packages.length !== 0) {
-    code = code.substring(0, code.length - 1);
-  }
+    code = code + `
+      --yes
+    `
 
   const manualSetupBox = document.getElementById("manual-setup-box")
 
