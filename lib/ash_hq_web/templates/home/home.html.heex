@@ -137,7 +137,7 @@
                 <span
                   id={"feature-#{value}-inactive"}
                   data-name={value}
-                  class={"relative inactive-feature rounded px-2 py-2 border border-primary-dark-500/40 #{if coming_soon?(value), do: "bg-slate-700", else: "hover:bg-primary-dark-900/50 cursor-pointer"}"}
+                  class={"relative inactive-feature rounded px-2 py-2 border  #{if coming_soon?(value), do: "bg-slate-800/70 text-slate-300/70 border-slate-500/40", else: "hover:bg-primary-dark-900/50 cursor-pointer border-primary-dark-500/40"}"}
                   onclick={
                     if !coming_soon?(value),
                       do: "window.featureClicked(this, 'feature-#{value}-active', true)"
