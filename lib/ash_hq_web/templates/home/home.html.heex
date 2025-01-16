@@ -1,5 +1,5 @@
 <div class="relative min-h-screen flex items-center justify-center overflow-hidden">
-  <div class="absolute inset-0 bg-gradient-to-b from-primary-light-900/20 via-primary-dark-900/10 to-primary-light-900/20 animate-gradient">
+  <div class="absolute inset-0 bg-gradient-to-b from-primary-light-900/20 via-primary-dark-900/10 to-primary-light-900/20">
   </div>
 
   <div class="absolute inset-0 bg-[linear-gradient(rgba(254,19,19,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(254,19,19,0.2)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,black,transparent)]">
@@ -9,7 +9,7 @@
   </div>
 
   <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-3xl mt-24">
-    <div class="animate-float">
+    <div class="">
       <img
         src="/images/ash-logo-side.svg"
         alt="Ash Framework"
@@ -42,7 +42,7 @@
     <div class="flex flex-col sm:flex-row gap-4 justify-center">
       <a
         href="#installer"
-        class="inline-flex items-center px-8 py-3 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 animate-glow"
+        class="inline-flex items-center px-8 py-3 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
       >
         Get Started
       </a>
@@ -66,7 +66,7 @@
   </div>
 </div>
 <div class="relative py-24">
-  <div class="absolute inset-0 bg-gradient-to-b from-primary-light-900/20 via-primary-dark-900/10 to-primary-light-900/20 animate-gradient">
+  <div class="absolute inset-0 bg-gradient-to-b from-primary-light-900/20 via-primary-dark-900/10 to-primary-light-900/20">
   </div>
 
   <div class="absolute inset-0 bg-[linear-gradient(rgba(254,19,19,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(254,19,19,0.2)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,black,transparent)]">
@@ -88,7 +88,7 @@
         type="text"
         id="app-name"
         value={@app_name}
-        class="text-white bg-transparent mt-1 w-64 rounded-lg p-2 animate-glow ring-1 border-0 outline-none ring ring-[#FF5757] mb-3 text-center"
+        class="text-white bg-transparent mt-1 w-64 rounded-lg p-2 shadow-[0_0_20px_#FF5757] ring-1 border-0 outline-none ring ring-[#FF5757] mb-3 text-center"
         placeholder="Project Name"
         oninput="window.appNameChanged(this)"
       />
@@ -231,7 +231,7 @@
     <button
       id="copy-url-button"
       onclick="window.copyUrl()"
-      class="inline-flex items-center px-6 py-3 rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 [&:not(.was-clicked)]:animate-glow transition-all duration-300 hover:bg-red-600 [&.was-clicked]:scale-95 [&.was-clicked]:bg-green-500"
+      class="inline-flex items-center px-6 py-3 rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 [&:not(.was-clicked)]:shadow-[0_0_20px_#FF5757] transition-all duration-300 hover:bg-red-600 [&.was-clicked]:scale-95 [&.was-clicked]:bg-green-500"
     >
       <span id="copy-url-button-icon" class="hero-clipboard"></span>
       <span id="copy-url-button-text" class="ml-2">
@@ -243,7 +243,7 @@
     <h2 class="text-3xl font-bold mb-6 text-primary-light-200">Try our interactive tutorial</h2>
     <a
       href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd"
-      class="cursor-pointer inline-flex items-center rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 animate-glow"
+      class="cursor-pointer inline-flex items-center rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
     >
       <img src="https://livebook.dev/badge/v1/pink.svg" alt="Run in Livebook" />
     </a>
