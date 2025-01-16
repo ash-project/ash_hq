@@ -521,7 +521,7 @@ function setUrl() {
   }
 
   const el = document.getElementById('selected-features')
-  el.innerHTML = code;
+  el.innerHTML = code.trim();
 }
 
 window.cantDecide = function() {

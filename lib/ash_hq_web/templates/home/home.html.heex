@@ -210,7 +210,7 @@
     </div>
 
     <div class="my-4 text-primary-light-200 bg-slate-900/70 rounded-lg text-white py-4 flex justify-center">
-      <pre id="selected-features" class="overflow-scroll text-left">
+      <pre id="selected-features" class="overflow-auto text-left">
               <%= {:safe, """
               sh <(curl '#{@url_base}#{@safe_app_name}') \\
                   && cd #{@safe_app_name}
