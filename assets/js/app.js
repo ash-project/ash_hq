@@ -504,9 +504,9 @@ function setUrl() {
     ${arg} \\`
   })
 
-    code = code + `
-      --yes
-    `
+  code = code + `
+    --yes
+  `
 
   const manualSetupBox = document.getElementById("manual-setup-box")
 
