@@ -9,8 +9,15 @@
       {assigns[:page_title] || "Ash Framework"}
     </.live_title>
     <%= if Application.get_env(:ash_hq, :analytics?) do %>
-<script defer data-domain="ash-hq.org" src="https://plausible.io/js/script.outbound-links.js"></script>
-<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+      <script
+        defer
+        data-domain="ash-hq.org"
+        src="https://plausible.io/js/script.outbound-links.js"
+      >
+      </script>
+      <script>
+        window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }
+      </script>
     <% end %>
 
     <meta property="og:type" content="text/html" />

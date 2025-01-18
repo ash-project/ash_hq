@@ -84,14 +84,14 @@
     <div class="flex flex-col justify-center mt-2">
       <label for="app-name">Project Name</label>
       <div>
-      <input
-        type="text"
-        id="app-name"
-        value={@app_name}
-        class="text-white bg-transparent mt-1 w-64 rounded-lg p-2 shadow-[0_0_20px_#FF5757] ring-1 border-0 outline-none ring ring-[#FF5757] mb-3 text-center"
-        placeholder="Project Name"
-        oninput="window.appNameChanged(this)"
-      />
+        <input
+          type="text"
+          id="app-name"
+          value={@app_name}
+          class="text-white bg-transparent mt-1 w-64 rounded-lg p-2 shadow-[0_0_20px_#FF5757] ring-1 border-0 outline-none ring ring-[#FF5757] mb-3 text-center"
+          placeholder="Project Name"
+          oninput="window.appNameChanged(this)"
+        />
       </div>
     </div>
 
@@ -248,23 +248,33 @@
       <img src="https://livebook.dev/badge/v1/pink.svg" alt="Run in Livebook" />
     </a>
   </div>
-</div>
 
-<%!-- <div --%>
-<%!--   id="logos" --%>
-<%!--   class="max-w-5xl mx-auto text-center lg:px-8 backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-4" --%>
-<%!-- > --%>
-<%!--   <h2 class="text-3xl font-bold text-primary-light-200">Trusted in production!</h2> --%>
-<%!--   <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-6"> --%>
-<%!--     <img src="/images/company1-logo.svg" alt="Company 1" class="w-24 mx-auto" /> --%>
-<%!--     <img src="/images/company2-logo.svg" alt="Company 2" class="w-24 mx-auto" /> --%>
-<%!--     <img src="/images/company3-logo.svg" alt="Company 3" class="w-24 mx-auto" /> --%>
-<%!--     <img src="/images/company4-logo.svg" alt="Company 4" class="w-24 mx-auto" /> --%>
-<%!--     <img src="/images/company5-logo.svg" alt="Company 5" class="w-24 mx-auto" /> --%>
-<%!--     <img src="/images/company6-logo.svg" alt="Company 6" class="w-24 mx-auto" /> --%>
-<%!--     <img src="/images/company7-logo.svg" alt="Company 7" class="w-24 mx-auto" /> --%>
-<%!--     <img src="/images/company8-logo.svg" alt="Company 8" class="w-24 mx-auto" /> --%>
-<%!--     <img src="/images/company9-logo.svg" alt="Company 9" class="w-24 mx-auto" /> --%>
-<%!--     <img src="/images/company10-logo.svg" alt="Company 10" class="w-24 mx-auto" /> --%>
-<%!--   </div> --%>
-<%!-- </div> --%>
+  <div class="mt-12">
+    <div class="max-w-5xl mx-auto text-center">
+      <h1 class="text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
+        Trusted
+        <span class="bg-gradient-to-r from-primary-dark-500 to-primary-light-500 bg-clip-text text-transparent">
+          in production
+        </span>
+      </h1>
+      <div class="bg-slate-950/50 overflow-hidden sm:mx-0 sm:rounded-2xl md:grid-cols-4 backdrop-blur-lg">
+        <div class={"grid #{logos_grid()} gap-0.5 justify-center justify-items-center mt-12"}>
+          <%= for {name, %{href: href, src: src}} <- logos() do %>
+            <%= if name == :placeholder do %>
+              <div/>
+            <% else %>
+              <a
+                href={href}
+                title={name}
+                alt={name}
+                class="p-4"
+              >
+              <img class="h-8" src={src} />
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

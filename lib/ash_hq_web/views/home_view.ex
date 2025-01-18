@@ -16,6 +16,68 @@ defmodule AshHqWeb.HomeView do
 
   @coming_soon [:oban, :opentelemetry, :appsignal]
 
+  defp logos_grid, do: "grid-cols-3"
+
+  defp logos do
+    [
+      # Daylite: %{
+      #   href: "www.daylite.app",
+      #   src: "/images/daylite-logo.svg"
+      # },
+      Heretask: %{href: "https://www.heretask.com/", src: "/images/heretask-logo-light.svg"},
+      Alembic: %{href: "https://www.alembic.com.au", src: "images/alembic.svg"},
+      GroupFlow: %{href: "https://www.groupflow.app", src: "/images/group-flow-logo.svg"},
+      Zoonect: %{href: "https://www.zoonect.com/en/homepage", src: "/images/zoonect-dark.svg"},
+      Coinbits: %{href: "https://coinbits.app", src: "/images/coinbits-logo.png"},
+      "Wintermeyer Consulting": %{
+        href: "https://www.wintermeyer-consulting.de/",
+        src: "/images/wintermeyer-logo-dark.svg"
+      },
+      # placeholder: %{href: "", src: ""},
+      "Self Storage Leads": %{href: "#", src: "/images/self-storage-leads-logo-light.svg"}
+      # placeholder: %{href: "", src: ""}
+    ]
+    |> insert_placeholders(logos_grid())
+  end
+
+  defp insert_placeholders(items, class) do
+    count =
+      class
+      |> String.reverse()
+      |> Integer.parse()
+      |> elem(0)
+      |> Integer.digits()
+      |> Enum.reverse()
+      |> Enum.join("")
+      |> String.to_integer()
+
+    [first | rest] =
+      items
+      |> Enum.chunk_every(count)
+      |> Enum.reverse()
+
+    needed = count - Enum.count(first)
+
+    left = div(needed, 2)
+
+    right =
+      if rem(count, 2) == 1 do
+        left + 1
+      else
+        left
+      end
+
+    new_first =
+      Enum.concat([
+        Stream.duplicate({:placeholder, %{href: "", src: ""}}, left),
+        first,
+        Stream.duplicate({:placeholder, %{href: "", src: ""}}, right)
+      ])
+
+    Enum.reverse([new_first | rest])
+    |> List.flatten()
+  end
+
   defp features do
     [
       Web: [

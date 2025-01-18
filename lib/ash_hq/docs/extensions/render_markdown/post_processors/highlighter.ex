@@ -5,7 +5,7 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown.PostProcessors.Highlighter do
 
   use AshHqWeb, :verified_routes
 
-  def highlight(ast, libraries, current_library, _current_module) do
+  def highlight(ast, _libraries, _current_library, _current_module) do
     ast
   end
 end
