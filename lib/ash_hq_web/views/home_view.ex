@@ -28,7 +28,7 @@ defmodule AshHqWeb.HomeView do
       Alembic: %{href: "https://www.alembic.com.au", src: "images/alembic.svg"},
       Zoonect: %{href: "https://www.zoonect.com/en/homepage", src: "/images/zoonect-dark.svg"},
       GroupFlow: %{href: "https://www.groupflow.app", src: "/images/group-flow-logo.svg"},
-      Scribblevet: %{
+      ScribbleVet: %{
         href: "https://www.scribblevet.com/",
         src: "/images/scribble-vet-logo.png"
       },
