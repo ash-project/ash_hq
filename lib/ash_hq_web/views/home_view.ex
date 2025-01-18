@@ -26,13 +26,17 @@ defmodule AshHqWeb.HomeView do
       # },
       Heretask: %{href: "https://www.heretask.com/", src: "/images/heretask-logo-light.svg"},
       Alembic: %{href: "https://www.alembic.com.au", src: "images/alembic.svg"},
-      GroupFlow: %{href: "https://www.groupflow.app", src: "/images/group-flow-logo.svg"},
       Zoonect: %{href: "https://www.zoonect.com/en/homepage", src: "/images/zoonect-dark.svg"},
-      Coinbits: %{href: "https://coinbits.app", src: "/images/coinbits-logo.png"},
+      GroupFlow: %{href: "https://www.groupflow.app", src: "/images/group-flow-logo.svg"},
+      Scribblevet: %{
+        href: "https://www.scribblevet.com/",
+        src: "/images/scribble-vet-logo.png"
+      },
       "Wintermeyer Consulting": %{
         href: "https://www.wintermeyer-consulting.de/",
         src: "/images/wintermeyer-logo-dark.svg"
       },
+      Coinbits: %{href: "https://coinbits.app", src: "/images/coinbits-logo.png"},
       # placeholder: %{href: "", src: ""},
       "Self Storage Leads": %{href: "#", src: "/images/self-storage-leads-logo-light.svg"}
       # placeholder: %{href: "", src: ""}
