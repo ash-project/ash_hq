@@ -62,24 +62,31 @@ defmodule AshHqWeb.HomeView do
 
     needed = count - Enum.count(first)
 
-    left = div(needed, 2)
+    if needed == 1 do
+      {l, r} = Enum.split(first, div(count, 2))
 
-    right =
-      if rem(count, 2) == 1 do
-        left + 1
-      else
-        left
-      end
+      Enum.reverse([[l ++ [{:placeholder, %{href: "", src: ""}}] ++ r] | rest])
+      |> List.flatten()
+    else
+      left = div(needed, 2)
 
-    new_first =
-      Enum.concat([
-        Stream.duplicate({:placeholder, %{href: "", src: ""}}, left),
-        first,
-        Stream.duplicate({:placeholder, %{href: "", src: ""}}, right)
-      ])
+      right =
+        if rem(count, 2) == 1 do
+          left + 1
+        else
+          left
+        end
 
-    Enum.reverse([new_first | rest])
-    |> List.flatten()
+      new_first =
+        Enum.concat([
+          Stream.duplicate({:placeholder, %{href: "", src: ""}}, left),
+          first,
+          Stream.duplicate({:placeholder, %{href: "", src: ""}}, right)
+        ])
+
+      Enum.reverse([new_first | rest])
+      |> List.flatten()
+    end
   end
 
   defp features do
