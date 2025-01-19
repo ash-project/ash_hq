@@ -89,17 +89,7 @@
     id="get-started"
     class="max-w-5xl mx-auto text-center lg:px-8 backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-4"
   >
-    <h2 class="text-3xl font-bold mb-6 text-primary-light-200">Try our interactive tutorial</h2>
-    <a
-      href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd"
-      class="cursor-pointer inline-flex items-center rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
-    >
-      <img src="https://livebook.dev/badge/v1/pink.svg" alt="Run in Livebook" />
-    </a>
-
-    <div class="my-6 text-primary-light-200">- or -</div>
-
-    <h2 class="text-3xl font-bold text-primary-light-200">Get Started Now</h2>
+    <h2 class="text-3xl font-bold text-primary-light-200">Get Your Installer</h2>
     <div id="installer" />
 
     <div class="flex flex-col justify-center mt-2">
@@ -116,9 +106,14 @@
       </div>
     </div>
 
-    <div id="cant-decide" class="mb-2 mt-2">
+    <div id="cant-decide" class="mt-2">
       <button class="text-lg underline cursor-pointer" onclick="window.cantDecide()">
         Feeling stuck? Can't decide?
+      </button>
+    </div>
+    <div id="already-have-an-app" class="mb-2">
+      <button id="already-have-an-app-button" class="text-lg underline cursor-pointer" onclick="window.addingToApp()">
+        Already have an app?
       </button>
     </div>
     <div id="show-options" class="hidden mt-2">
@@ -127,7 +122,7 @@
       </button>
     </div>
     <h2 id="presets-label" class="text-xl font-bold text-primary-light-200">Presets</h2>
-    <div id="quickstarts-list" class="flex flex-row flex-wrap gap-2 justify-center mt-6 mb-10">
+    <div id="quickstarts-list" class="flex flex-row flex-wrap gap-2 justify-center mt-2 mb-4">
       <div class="flex flex-row flex-wrap justify-center gap-2 gap-x-2 gap-y-5">
         <label :for={{value, name} <- quickstarts()} id={"quickstart-#{value}"}>
           <span
@@ -150,7 +145,7 @@
       </div>
     </div>
 
-    <div id="advanced-features" class="border-t border-primary-dark-500/40 pt-4">
+    <div id="advanced-features" class="border-t border-primary-dark-500/40">
       <div class="flex flex-wrap justify-center gap-2">
         <div
           :for={{category, features} <- features()}
@@ -158,7 +153,7 @@
           class="feature-category p-2"
         >
           <h3 class="text-lg font-bold mb-2 text-primary-light-200">{category}</h3>
-          <div class="flex flex-wrap gap-2 gap-y-4 justify-center">
+          <div class="flex flex-wrap gap-2 gap-y-2 justify-center">
             <label :for={{value, name} <- features} id={"feature-#{value}"} class="feature">
               <div class="flex flex-col">
                 <span
@@ -194,7 +189,7 @@
     <div id="dont-worry" class="mb-2 hidden flex flex-col gap-2">
       <p class="text-lg">
         Pick a preset and go. Everything but Phoenix can be
-        <a class="text-primary-dark-400" href="#install-later">installed later.</a>
+        <a class="text-primary-dark-400 cursor-pointer" onclick="window.addingToApp()">installed later.</a>
       </p>
       <p class="text-lg">
         All the presets use PostgreSQL, the best database around.
@@ -259,6 +254,16 @@
         Copy
       </span>
     </button>
+
+    <div class="my-6 text-primary-light-200">- or -</div>
+
+    <h2 class="text-3xl font-bold mb-6 text-primary-light-200">Try our interactive tutorial</h2>
+    <a
+      href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd"
+      class="cursor-pointer inline-flex items-center rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
+    >
+      <img src="https://livebook.dev/badge/v1/pink.svg" alt="Run in Livebook" />
+    </a>
   </div>
 
   <div class="mt-12">

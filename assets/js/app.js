@@ -336,6 +336,30 @@ const features = {
   }
 }
 
+let addingToApp = false;
+
+window.addingToApp = function() {
+  if (addingToApp) {
+    addingToApp = false;
+
+    document.getElementById('feature-phoenix').classList.remove("hidden");
+    document.getElementById('quickstart-live_view').classList.remove("hidden");
+    document.getElementById('already-have-an-app-button').innerHTML = "Creating a new app?"
+  } else {
+    addingToApp = true;
+
+    const feature = document.getElementById('feature-phoenix-active')
+    if(!feature.classList.contains("hidden")) {
+      feature.click();
+    }
+    document.getElementById('feature-phoenix').classList.add("hidden");
+    document.getElementById('quickstart-live_view').classList.add("hidden");
+    document.getElementById('already-have-an-app-button').innerHTML = "Already have an app?"
+  }
+
+  setUrl()
+}
+
 for (var quickstart of Object.keys(quickstarts)) {
   const tooltip = quickstarts[quickstart].tooltip
   if (tooltip) {
@@ -389,7 +413,6 @@ function addTooltip(id, content) {
 }
 
 let appName = document.getElementById("app-name").value;
-
 
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('quickstart-live_view-inactive').click();
@@ -475,15 +498,22 @@ function setUrl() {
 
   const argsString = args.join(" ")
   let firstLine = `sh <(curl '${base}/${appNameSafe}${installArg}') \\`
+  let limit;
+
   let code = `${firstLine}
     && cd ${appNameSafe}`
 
-  if (packages.length !== 0) {
-    code = code + ` \\
-    && mix igniter.install \\`
-  }
+  if (addingToApp) {
+    code = "mix igniter.install ash \\"
+    limit = code.length + 20
+  } else {
+    if (packages.length !== 0) {
+      code = code + ` \\
+      && mix igniter.install \\`
+    }
 
-  const limit = Math.max(firstLine.length - 2, 45)
+    limit = Math.max(firstLine.length - 2, 45)
+  }
 
   let currentLine = ''
   for (let i = 0; i < packages.length; i++) {
