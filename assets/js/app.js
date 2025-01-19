@@ -534,7 +534,7 @@ function setUrl() {
     ${arg} \\`
   })
 
-  if (args.length == 0) {
+  if (args.length != 0) {
     code = code + `
       --yes
     `
