@@ -63,6 +63,17 @@
         </h2>
       </a>
     </div>
+
+    <div class="mt-8 text-center">
+      <div id="custom-substack-embed"></div>
+      <p class="mt-2 mb-3 text-sm tracking-wide text-center text-gray-400 rounded-lg ">
+        Stay up to date with our weekly 
+        <a href="https://ashweekly.substack.com" target="_blank" class="underline">newsletter</a>
+        <br />
+        Please remember to<!-- -->
+        <span class="font-bold">confirm your email!</span>
+      </p>
+    </div>
   </div>
 </div>
 <div class="relative py-24">
@@ -78,6 +89,14 @@
     id="get-started"
     class="max-w-5xl mx-auto text-center lg:px-8 backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-4"
   >
+    <h2 class="text-3xl font-bold mb-6 text-primary-light-200">Try our interactive tutorial</h2>
+    <a
+      href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd"
+      class="cursor-pointer inline-flex items-center rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
+    >
+      <img src="https://livebook.dev/badge/v1/pink.svg" alt="Run in Livebook" />
+    </a>
+
     <h2 class="text-3xl font-bold text-primary-light-200">Get Your Installer</h2>
     <div id="installer" />
 
@@ -238,15 +257,6 @@
         Copy
       </span>
     </button>
-
-    <div class="my-6 text-primary-light-200">- or -</div>
-    <h2 class="text-3xl font-bold mb-6 text-primary-light-200">Try our interactive tutorial</h2>
-    <a
-      href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd"
-      class="cursor-pointer inline-flex items-center rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
-    >
-      <img src="https://livebook.dev/badge/v1/pink.svg" alt="Run in Livebook" />
-    </a>
   </div>
 
   <div class="mt-12">
@@ -263,13 +273,8 @@
             <%= if name == :placeholder do %>
               <div />
             <% else %>
-              <a
-                href={href}
-                title={name}
-                alt={name}
-                class="content-center w-full py-2 max-w-36"
-              >
-              <img class="h-8 w-full object-contain" src={src} />
+              <a href={href} title={name} alt={name} class="content-center w-full py-2 max-w-36">
+                <img class="h-8 w-full object-contain" src={src} />
               </a>
             <% end %>
           <% end %>
