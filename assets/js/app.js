@@ -344,7 +344,7 @@ window.addingToApp = function() {
 
     document.getElementById('feature-phoenix').classList.remove("hidden");
     document.getElementById('quickstart-live_view').classList.remove("hidden");
-    document.getElementById('already-have-an-app-button').innerHTML = "Creating a new app?"
+    document.getElementById('already-have-an-app-button').innerHTML = "Already have an app?"
   } else {
     addingToApp = true;
 
@@ -354,7 +354,7 @@ window.addingToApp = function() {
     }
     document.getElementById('feature-phoenix').classList.add("hidden");
     document.getElementById('quickstart-live_view').classList.add("hidden");
-    document.getElementById('already-have-an-app-button').innerHTML = "Already have an app?"
+    document.getElementById('already-have-an-app-button').innerHTML = "Creating a new app?"
   }
 
   setUrl()
@@ -534,9 +534,12 @@ function setUrl() {
     ${arg} \\`
   })
 
-  code = code + `
-    --yes
-  `
+  if (args.length == 0) {
+    code = code + `
+      --yes
+    `
+  }
+
 
   const manualSetupBox = document.getElementById("manual-setup-box")
 
