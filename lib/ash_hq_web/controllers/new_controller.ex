@@ -107,7 +107,7 @@ defmodule AshHqWeb.NewController do
     with_arg =
       if with_phx_new?, do: "--with phx.new "
 
-    with_arg =
+    verbose_arg =
       if params["verbose"] == "true", do: "--verbose "
 
     text =
