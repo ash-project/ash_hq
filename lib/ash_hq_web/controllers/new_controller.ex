@@ -71,8 +71,6 @@ defmodule AshHqWeb.NewController do
     <% else %> echo_heading "Creating new Elixir project '$app_name'..."
     mix igniter.new "$app_name" <%= @with_arg %>--yes-to-deps --yes $cli_args <%= if @args do %><%= @args %><% end %>
     <% end %>
-
-    echo "Your app is ready at \\`./$app_name\\`"
   }
 
   main "$@"
