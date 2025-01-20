@@ -67,9 +67,9 @@ defmodule AshHqWeb.NewController do
     cli_args="$@"
 
     <%= if @install do %> echo_heading "Creating new Elixir project '$app_name' with the following packages: <%= @install %>"
-    mix igniter.new "$app_name" <%= @with_arg %>--yes-to-deps --yes --install "<%= @install %>" $cli_args <%= if @args do %><%= @args %><% end %>
+    mix igniter.new "$app_name" <%= @verbose_arg %><%= @with_arg %>--yes-to-deps --yes --install "<%= @install %>" $cli_args <%= if @args do %><%= @args %><% end %>
     <% else %> echo_heading "Creating new Elixir project '$app_name'..."
-    mix igniter.new "$app_name" <%= @with_arg %>--yes-to-deps --yes $cli_args <%= if @args do %><%= @args %><% end %>
+    mix igniter.new "$app_name" <%= @verbose_arg %><%= @with_arg %>--yes-to-deps --yes $cli_args <%= if @args do %><%= @args %><% end %>
     <% end %>
 
     echo "Your app is ready at \\`./$app_name\\`"
@@ -107,11 +107,15 @@ defmodule AshHqWeb.NewController do
     with_arg =
       if with_phx_new?, do: "--with phx.new "
 
+    with_arg =
+      if params["verbose"] == "true", do: "--verbose "
+
     text =
       EEx.eval_string(@template,
         assigns: [
           with_phx_new: with_phx_new?,
           with_arg: with_arg,
+          verbose_arg: verbose_arg,
           app_name: name,
           install: install,
           args: args
