@@ -509,7 +509,7 @@ function setUrl() {
   } else {
     if (packages.length !== 0) {
       code = code + ` \\
-      && mix igniter.install \\`
+    && mix igniter.install \\`
     }
 
     limit = Math.max(firstLine.length - 2, 45)
@@ -536,7 +536,7 @@ function setUrl() {
 
   if (args.length != 0 || packages.length != 0) {
     code = code + `
-      --yes
+    --yes
     `
   }
 
