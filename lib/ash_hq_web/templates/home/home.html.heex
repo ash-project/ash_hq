@@ -128,7 +128,7 @@
           <span
             id={"quickstart-#{value}-inactive"}
             data-name={value}
-            class="inactive-quickstart rounded px-4 py-2 border border-primary-dark-500/40 hover:bg-primary-dark-900/50 cursor-pointer"
+            class="inactive-quickstart relative rounded px-4 py-2 border border-primary-dark-500/40 hover:bg-primary-dark-900/50 cursor-pointer"
             onclick={"window.quickStartClicked(this, 'quickstart-#{value}-active', true)"}
           >
             {name}
@@ -136,7 +136,7 @@
           <span
             id={"quickstart-#{value}-active"}
             data-name={value}
-            class="active-quickstart hidden rounded px-4 py-2 border border-primary-dark-500/40 bg-primary-dark-500/80 cursor-pointer"
+            class="active-quickstart relative hidden rounded px-4 py-2 border border-primary-dark-500/40 bg-primary-dark-500/80 cursor-pointer"
             onclick={"window.quickStartClicked(this, 'quickstart-#{value}-inactive', false)"}
           >
             {name}
