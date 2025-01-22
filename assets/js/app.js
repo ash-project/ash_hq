@@ -45,7 +45,7 @@ const quickstarts = {
   postgres: {
     tooltip: `
     <p class="mb-2">
-    Ash & PostgreSQL, a mach made in heaven.
+    Ash & PostgreSQL, a match made in heaven.
     </p>
     <p>
     Just Ash and a database is a great place to start if you're 
