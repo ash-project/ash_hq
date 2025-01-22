@@ -494,6 +494,12 @@ function setUrl() {
   let installArg;
   if (features.phoenix.checked) {
     installArg = "?install=phoenix"
+    if (features.postgres.checked) {
+    } else if (features.sqlite.checked) {
+      installArg += `&with_args=--database%20sqlite`
+    } else {
+      installArg += `&with_args=--no-ecto`
+    }
   }
 
   const argsString = args.join(" ")
@@ -534,12 +540,18 @@ function setUrl() {
     ${arg} \\`
   })
 
-  if (args.length != 0 || packages.length != 0) {
+  if (features.postgres.checked || features.sqlite.checked) {
     code = code + `
-    --yes
+    --yes \
+    && mix ash.setup 
     `
+  } else {
+    if (args.length != 0 || packages.length != 0) {
+      code = code + `
+      --yes
+      `
+    }
   }
-
 
   const manualSetupBox = document.getElementById("manual-setup-box")
 
