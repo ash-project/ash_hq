@@ -34,14 +34,15 @@ defmodule AshHqWeb.Router do
     live("/blog", AppViewLive, :blog)
     live("/blog/:slug", AppViewLive, :blog)
     # live("/community", AppViewLive, :community)
-    # live("/docs/", AppViewLive, :docs_dsl)
-    # live("/docs/guides/:library/:version/*guide", AppViewLive, :docs_dsl)
-    # live("/docs/dsl/:dsl_target", AppViewLive, :docs_dsl)
-    # live("/docs/dsl/:library/:version", AppViewLive, :docs_dsl)
-    # live("/docs/dsl/:library/:version/:extension", AppViewLive, :docs_dsl)
-    # live("/docs/module/:library/:version/:module", AppViewLive, :docs_dsl)
-    # live("/docs/mix_task/:library/:version/:mix_task", AppViewLive, :docs_dsl)
-    # live("/docs/:library/:version", AppViewLive, :docs_dsl)
+    get "/docs/", HomeController, :home
+    get "/docs/guides/:library/:version/*guide", HomeController, :home
+    get "/docs/dsl/:dsl_target", HomeController, :home
+    get "/docs/dsl/:library/:version", HomeController, :home
+    get "/docs/dsl/:library/:version/:extension", HomeController, :home
+    get "/docs/module/:library/:version/:module", HomeController, :home
+    get "/docs/mix_task/:library/:version/:mix_task", HomeController, :home
+    get "/docs/:library/:version", HomeController, :home
+    get "/docs/*path", HomeController, :home
 
     # for showing deprecated forum content
     live("/forum", AppViewLive, :forum)
