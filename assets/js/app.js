@@ -506,20 +506,20 @@ function setUrl() {
   let firstLine = `sh <(curl '${base}/${appNameSafe}${installArg || ''}') \\`
   let limit;
 
-  let code = `${firstLine}
-    && cd ${appNameSafe}`
+  let code = firstLine
 
   if (addingToApp) {
-    code = "mix igniter.install ash \\"
+    packages.unshift(" mix igniter.install ash")
     limit = code.length + 20
   } else {
     if (packages.length !== 0) {
-      code = code + ` \\
-    && mix igniter.install \\`
+      packages.unshift("&& mix igniter.install")
     }
 
     limit = Math.max(firstLine.length - 2, 45)
   }
+
+  packages.unshift(`&& cd ${appNameSafe}`)
 
   args.forEach((arg) => {
     packages.push(arg)
