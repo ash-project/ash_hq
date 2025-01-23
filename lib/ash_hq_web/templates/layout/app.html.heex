@@ -1,4 +1,8 @@
 <nav class="fixed top-0 w-full z-50 backdrop-blur-lg bg-slate-950/50 border-b border-slate-500/20">
+  <div :if={@next_event} class="bg-fuchsia-900 w-full py-1 text-center">
+    <a class="font-bold mr-2" href={@next_event.href}>{@next_event[:cta]}&nbsp{@next_event.title}</a>{@next_event.date_in_english}
+    <a class="font-extralight" href="/#upcoming-events">&nbsp&nbsp|&nbsp&nbsp See all upcoming events</a>
+  </div>
   <div class="py-2 leading-loose px-4 sm:px-6 lg:px-8">
     <div class="hidden md:block relative">
       <a href="/" title="Home" class="absolute top-0 left-0">

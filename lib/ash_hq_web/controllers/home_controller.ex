@@ -7,6 +7,7 @@ defmodule AshHqWeb.HomeController do
     contributors = AshHq.Github.Contributor.in_order!()
 
     conn
+    |> assign_events()
     |> assign(:contributor_count, Enum.count(contributors))
     |> assign(:contributors, contributors)
     |> render("community.html")
@@ -14,6 +15,7 @@ defmodule AshHqWeb.HomeController do
 
   def media(conn, _) do
     conn
+    |> assign_events()
     |> render("media.html")
   end
 
@@ -23,8 +25,24 @@ defmodule AshHqWeb.HomeController do
     conn
     |> assign(:url_base, @url_base)
     |> assign(:app_name, app_name)
+    |> assign_events()
     |> assign(:safe_app_name, safe(app_name))
     |> render("home.html")
+  end
+
+  def events(conn, _) do
+    conn
+    |> assign_events()
+    |> render("events.html")
+  end
+
+  defp assign_events(conn) do
+    events = AshHq.Events.events()
+
+    conn
+    |> assign(:events_count, Enum.count(events))
+    |> assign(:next_event, Enum.at(events, 0))
+    |> assign(:events, events)
   end
 
   defp safe(name) do

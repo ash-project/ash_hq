@@ -11,6 +11,7 @@ defmodule AshHq.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
+      consolidate_protocols: Mix.env() != :dev,
       aliases: aliases(),
       deps: deps(),
       dialyzer: [
@@ -39,6 +40,8 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:timex, "~> 3.0"},
+      {:igniter, "~> 0.5", only: [:dev, :test]},
       {:ash, "~> 3.3"},
       {:ash_postgres, "~> 2.2"},
       {:ash_admin, "~> 0.11"},
