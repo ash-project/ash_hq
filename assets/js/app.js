@@ -503,7 +503,7 @@ function setUrl() {
   }
 
   const argsString = args.join(" ")
-  let firstLine = `sh <(curl '${base}/${appNameSafe}${installArg}') \\`
+  let firstLine = `sh <(curl '${base}/${appNameSafe}${installArg || ''}') \\`
   let limit;
 
   let code = `${firstLine}
@@ -521,6 +521,18 @@ function setUrl() {
     limit = Math.max(firstLine.length - 2, 45)
   }
 
+  args.forEach((arg) => {
+    packages.push(arg)
+  })
+
+  if (args.length != 0 || packages.length != 0) {
+    packages.push("--yes")
+  }
+
+  if (features.postgres.checked || features.sqlite.checked) {
+    packages.push("&& mix ash.setup")
+  }
+
   let currentLine = ''
   for (let i = 0; i < packages.length; i++) {
     if ((currentLine + packages[i]).length > limit) {
@@ -532,25 +544,7 @@ function setUrl() {
   }
   if (currentLine.trim().length > 0) {
     code = code + `
-    ${currentLine.trim()} \\`
-  }
-
-  args.forEach((arg) => {
-    code = code + `
-    ${arg} \\`
-  })
-
-  if (features.postgres.checked || features.sqlite.checked) {
-    code = code + `
-    --yes \
-    && mix ash.setup 
-    `
-  } else {
-    if (args.length != 0 || packages.length != 0) {
-      code = code + `
-      --yes
-      `
-    }
+    ${currentLine.trim()}`
   }
 
   const manualSetupBox = document.getElementById("manual-setup-box")
