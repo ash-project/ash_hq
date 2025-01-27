@@ -14,7 +14,7 @@ defmodule AshHqWeb.HomeView do
     Phoenix.Controller.status_message_from_template(template)
   end
 
-  @coming_soon [:oban, :opentelemetry, :appsignal]
+  @coming_soon [:opentelemetry, :appsignal]
 
   defp logos_grid, do: "grid-cols-3"
 
