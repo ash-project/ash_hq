@@ -236,9 +236,6 @@ const features = {
     <p class="mb-2">
     Configure triggers directly in your resources or write fully custom Oban jobs.
     </p>
-    <p>
-    Installer coming soon! Can be manually installed.
-    </p>
     `
   },
   state_machine: {
