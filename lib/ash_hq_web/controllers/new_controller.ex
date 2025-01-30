@@ -83,7 +83,6 @@ defmodule AshHqWeb.NewController do
       |> String.split(",", trim: true)
       |> Enum.map(&String.trim/1)
       |> then(&Enum.concat(["ash"], &1))
-      |> IO.inspect()
 
     with_phx_new? = "phoenix" in install
 

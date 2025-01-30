@@ -185,12 +185,8 @@ const features = {
   magic_link_auth: {
     requires: ['phoenix'],
     adds: ['ash_authentication', 'ash_authentication_phoenix'],
-    links: [
-      {
-        link: "https://hexdocs.pm/ash_authentication",
-        name: "AshAuthentication"
-      }
-    ],
+    link: "https://hexdocs.pm/ash_authentication",
+    linkName: "AshAuthentication",
     args: ['--auth-strategy magic_link'],
     tooltip: `
     <p class="mb-2">
@@ -274,6 +270,9 @@ const features = {
     <p class="mb-2">
     Configure triggers directly in your resources or write fully custom Oban jobs.
     </p>
+    <p>
+    Installer coming soon! Can be manually installed.
+    </p>
     `
   },
   state_machine: {
@@ -326,10 +325,11 @@ const features = {
     ],
     tooltip: `
     <p class="mb-2">
+    A zero-config-necessary super admin UI.
     Mishka Chelekom is a library offering various templates for components in Phoenix and Phoenix LiveView.
     </p>
     <p>
-    This project is not affiliated with the Ash, but their components are installed using Igniter, the tooling
+    This project is not affiliated with the Ash, but their components are installed using igniter, the tooling
     that powers this installer!
     </p>
     `
@@ -537,7 +537,6 @@ function setUrl() {
       packages.push(...config.adds);
       args.push(...(config.args || []));
 
-      console.log(config)
       console.log(config.links)
 
       config.links.forEach((link) => {

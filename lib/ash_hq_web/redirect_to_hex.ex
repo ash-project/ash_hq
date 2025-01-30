@@ -6,8 +6,6 @@ defmodule AshHqWeb.RedirectToHex do
   def init(opts), do: opts
 
   def call(conn, _) do
-    IO.inspect(conn.params)
-
     case conn.params do
       %{"dsl_target" => dsl_target} ->
         to_load = AshHq.Docs.Extensions.Search.load_for_search(AshHq.Docs.Module)
@@ -82,12 +80,9 @@ defmodule AshHqWeb.RedirectToHex do
         end
 
       %{"guide" => path, "library" => library} ->
-        IO.inspect("HERE")
         redirect_to_hex(conn, "https://hexdocs.pm/#{library}/#{List.last(path)}.html")
 
       stuff ->
-        IO.inspect(stuff)
-
         conn
     end
   end
