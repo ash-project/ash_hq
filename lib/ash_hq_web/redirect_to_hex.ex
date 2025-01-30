@@ -82,7 +82,7 @@ defmodule AshHqWeb.RedirectToHex do
       %{"guide" => path, "library" => library} ->
         redirect_to_hex(conn, "https://hexdocs.pm/#{library}/#{List.last(path)}.html")
 
-      stuff ->
+      _ ->
         conn
     end
   end

@@ -119,9 +119,9 @@ defmodule AshHqWeb.HomeView do
         paper_trail: "Paper Trail",
         cloak: "Encryption"
       ],
-      UI: [
-        mishka: "Mishka Chelekom"
-      ],
+      # "UI Components": [
+      #   mishka: "Mishka Chelekom"
+      # ],
       "Observability & Administration": [
         admin: "Admin UI",
         appsignal: "AppSignal",
