@@ -11,16 +11,21 @@
     <div class="grid grid-cols-2 gap-4">
       <div class="col-span-2 flex-col flex items-center">
         <div class="text-3xl font-bold mt-8 mb-8 text-center">Youtube</div>
-        <iframe
-          width="560"
-          height="315"
-          class="rounded-xl"
-          src="https://www.youtube.com/embed/videoseries?si=efbL8kHjj7GQjOav&amp;list=PLFiGINXG7oyFh5B_2SiHI9LtdQ_f1k7pz" 
-          title="YouTube video player"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        />
+        <div class="relative">
+          <iframe
+            width="560"
+            height="315"
+            class="rounded-xl"
+            src="https://www.youtube.com/embed/videoseries?si=efbL8kHjj7GQjOav&amp;list=PLFiGINXG7oyFh5B_2SiHI9LtdQ_f1k7pz"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          />
+          <span class="absolute top-4 -right-32 text-xs text-primary-dark-500 italic w-28">
+            <span class="hero-arrow-left size-4" /><br />(this is a whole playlist of videos!)
+          </span>
+        </div>
       </div>
       <div class="col-span-2 flex-col flex space-y-4 items-center justify-center">
         <div class="text-3xl font-bold mt-8 mb-8 text-center">Podcasts</div>
