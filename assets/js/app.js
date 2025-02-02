@@ -481,11 +481,15 @@ function addTooltip(id, content) {
   });
 }
 
-let appName = document.getElementById("app-name").value;
+let appNameComponent = document.getElementById("app-name")
 
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('quickstart-live_view-inactive').click();
-});
+let appName = (appName || {}).value;
+
+if(appNameComponent) {
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('quickstart-live_view-inactive').click();
+  });
+}
 
 function setUrl() {
   var button = document.getElementById('copy-url-button');
