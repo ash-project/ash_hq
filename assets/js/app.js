@@ -358,7 +358,7 @@ const features = {
     Easily encrypt and decrypt your attributes. 
     </p>
     <p>
-    You can even hook into decryption to track who is decrypting what and when?
+    You can even hook into decryption to track who is decrypting what and when!
     </p>
     `
   },
@@ -537,9 +537,6 @@ function setUrl() {
       packages.push(...config.adds);
       args.push(...(config.args || []));
 
-      console.log(config)
-      console.log(config.links)
-
       config.links.forEach((link) => {
         links.push(`<a target="_blank" class="link" href="${link.link}">${link.name}</a>`)
       })
@@ -585,23 +582,23 @@ function setUrl() {
   }
 
   const argsString = args.join(" ")
-  let firstLine = `sh <(curl '${base}/${appNameSafe}${installArg || ''}') \\`
+  let firstLine = `sh <(curl '${base}/${appNameSafe}${installArg || ''}')`
   let limit;
 
   let code = firstLine
 
   if (addingToApp) {
-    packages.unshift(" mix igniter.install ash")
-    limit = code.length + 20
+    code = "mix igniter.install"
+    packages.unshift("ash")
   } else {
     if (packages.length !== 0) {
       packages.unshift("&& mix igniter.install")
     }
 
-    limit = Math.max(firstLine.length - 2, 45)
+    packages.unshift(`&& cd ${appNameSafe}`)
   }
 
-  packages.unshift(`&& cd ${appNameSafe}`)
+    limit = Math.max(firstLine.length - 2, 45)
 
   args.forEach((arg) => {
     packages.push(arg)
@@ -615,7 +612,8 @@ function setUrl() {
     packages.push("&& mix ash.setup")
   }
 
-  let currentLine = ''
+  let currentLine = code
+  code = ''
   for (let i = 0; i < packages.length; i++) {
     if ((currentLine + packages[i]).length > limit) {
       code = code + `
