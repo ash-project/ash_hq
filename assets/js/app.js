@@ -595,7 +595,7 @@ function setUrl() {
   let code = firstLine
 
   if (addingToApp) {
-    code = "mix igniter.install"
+    code = "mix igniter.install "
     packages.unshift("ash")
   } else {
     if (packages.length !== 0) {
@@ -605,7 +605,7 @@ function setUrl() {
     packages.unshift(`&& cd ${appNameSafe}`)
   }
 
-    limit = Math.max(firstLine.length - 2, 45)
+  limit = Math.max(firstLine.length - 2, 45)
 
   args.forEach((arg) => {
     packages.push(arg)
