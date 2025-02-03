@@ -204,8 +204,12 @@ const features = {
   oauth: {
     requires: ['phoenix'],
     adds: ['ash_authentication', 'ash_authentication_phoenix'],
-    link: "https://hexdocs.pm/ash_authentication",
-    linkName: "AshAuthentication",
+    links: [
+      {
+        link: "https://hexdocs.pm/ash_authentication",
+        name: "AshAuthentication",
+      }
+    ],
     requiresSetup: {
       name: "OAuth",
       href: "https://hexdocs.pm/ash_authentication"
