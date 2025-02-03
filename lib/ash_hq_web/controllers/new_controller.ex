@@ -6,7 +6,7 @@ defmodule AshHqWeb.NewController do
   #
   # To run locally without | sh:
   #
-  #     $ curl -fsS -o myapp_new.sh https://new.ash-hq.org/myapp?install=list,of,packages
+  #     $ curl -fsS -o myapp_new.sh https://ash-hq.org/new/myapp?install=list,of,packages
   #     $ sh myapp_new.sh
   #
   # Installs Elixir from Elixir's official install.sh script, then runs igniter.new.

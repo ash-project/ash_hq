@@ -571,8 +571,7 @@ function setUrl() {
     base = "https://ash-hq.org/new"
   }
 
-
-  const appNameSafe = appName.toLowerCase().replace(/[\s-]/g, '_').replace(/[^a-z_]/g, '').replace(/^_/, '');
+  const appNameSafe = appNameComponent.value.toLowerCase().replace(/[\s-]/g, '_').replace(/[^a-z_]/g, '').replace(/^_/, '');
 
   let installArg;
   if (features.phoenix.checked) {
