@@ -582,7 +582,7 @@ function setUrl() {
     installArg = "?install=phoenix"
     if (features.postgres.checked) {
     } else if (features.sqlite.checked) {
-      installArg += `&with_args=--database%20sqlite`
+      installArg += `&with_args=--database%20sqlite3`
     } else {
       installArg += `&with_args=--no-ecto`
     }
