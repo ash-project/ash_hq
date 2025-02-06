@@ -78,7 +78,7 @@ defmodule AshHq.MixProject do
       {:makeup_elixir, "~> 1.0.0"},
       {:makeup_graphql, "~> 0.1.2"},
       {:makeup_erlang, "~> 1.0.0"},
-      {:makeup_eex, "~> 0.1.1"},
+      {:makeup_eex, "~> 2.0.0"},
       {:makeup_js, "~> 0.1.0"},
       {:makeup_sql, "~> 0.1.0"},
       # Emails
