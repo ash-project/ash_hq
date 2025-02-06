@@ -28,6 +28,7 @@ defmodule AshHqWeb.NewController do
     # Install Elixir if needed
     if command -v elixir >/dev/null 2>&1; then
       echo_heading "Elixir is already installed ✓"
+      with_args="<%= @with_args %>"
     else
       echo_heading "Installing Elixir..."
 
@@ -47,6 +48,7 @@ defmodule AshHqWeb.NewController do
       # Export the PATH so the current shell can find 'elixir' and 'mix'
       export PATH=$HOME/.elixir-install/installs/otp/$otp_version/bin:$PATH
       export PATH=$HOME/.elixir-install/installs/elixir/$elixir_version-otp-$elixir_otp_release/bin:$PATH
+      with_args="<%= @new_with_args %>"
     fi
 
     # Use 'mix' to install 'igniter_new' archive
@@ -67,9 +69,9 @@ defmodule AshHqWeb.NewController do
     cli_args="$@"
 
     <%= if @install do %> echo_heading "Creating new Elixir project '$app_name' with the following packages: <%= @install %>"
-    mix igniter.new "$app_name" <%= @with_arg %>--yes-to-deps --yes --install "<%= @install %>" $cli_args <%= if @args do %><%= @args %><% end %>
+    mix igniter.new "$app_name" --with-args=\"${with_args}\" <%= @with_arg %>--yes-to-deps --yes --install "<%= @install %>" $cli_args <%= if @args do %><%= @args %><% end %>
     <% else %> echo_heading "Creating new Elixir project '$app_name'..."
-    mix igniter.new "$app_name" <%= @with_arg %>--yes-to-deps --yes $cli_args <%= if @args do %><%= @args %><% end %>
+    mix igniter.new "$app_name" --with-args=\"${with_args}\" <%= @with_arg %>--yes-to-deps --yes $cli_args <%= if @args do %><%= @args %><% end %>
     <% end %>
   }
 
@@ -92,7 +94,7 @@ defmodule AshHqWeb.NewController do
 
     args =
       params
-      |> Map.drop(["name", "install"])
+      |> Map.drop(["name", "install", "with_args"])
       |> Enum.map_join(" ", fn {key, value} ->
         if value == "true" do
           "--#{String.replace(key, "_", "-")}"
@@ -105,6 +107,28 @@ defmodule AshHqWeb.NewController do
         args -> args
       end
 
+    new_with_args =
+      if with_args = params["with_args"] do
+        if with_phx_new? do
+          "--from-elixir-new #{escape_unescaped_quotes(with_args)}"
+        else
+          "#{escape_unescaped_quotes(with_args)}"
+        end
+      else
+        if with_phx_new? do
+          "--from-elixir-new"
+        else
+          ""
+        end
+      end
+
+    with_args =
+      if with_args = params["with_args"] do
+        "#{escape_unescaped_quotes(with_args)}"
+      else
+        ""
+      end
+
     with_arg =
       if with_phx_new?, do: "--with phx.new "
 
@@ -113,6 +137,8 @@ defmodule AshHqWeb.NewController do
         assigns: [
           with_phx_new: with_phx_new?,
           with_arg: with_arg,
+          with_args: with_args,
+          new_with_args: new_with_args,
           app_name: name,
           install: install,
           args: args
