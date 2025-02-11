@@ -27,7 +27,7 @@ defmodule AshHq.Events do
               """,
               date: ~D[2025-04-01],
               date_in_english: "April 1st, 2025",
-              href: "https://codebeamamerica.com/trainings/supercharge-your-elixir-apps-with-ash/"
+              href: "https://membrz.club/alchemyconf/events/supercharge-your-elixir-apps-with-ash"
             },
             %{
               title: "Talk @ GigCityElixir 2025",
