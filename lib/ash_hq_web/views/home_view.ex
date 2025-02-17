@@ -20,23 +20,23 @@ defmodule AshHqWeb.HomeView do
 
   defp logos do
     [
-      # Daylite: %{
-      #   href: "www.daylite.app",
-      #   src: "/images/daylite-logo.svg"
-      # },
-      Heretask: %{href: "https://www.heretask.com/", src: "/images/heretask-logo-light.svg"},
       Alembic: %{href: "https://www.alembic.com.au", src: "images/alembic.svg"},
-      Zoonect: %{href: "https://www.zoonect.com/en/homepage", src: "/images/zoonect-dark.svg"},
+      Daylite: %{
+        href: "www.daylite.app",
+        src: "/images/daylite-logo.svg"
+      },
+      Heretask: %{href: "https://www.heretask.com/", src: "/images/heretask-logo-light.svg"},
       GroupFlow: %{href: "https://www.groupflow.app", src: "/images/group-flow-logo.svg"},
+      Zoonect: %{href: "https://www.zoonect.com/en/homepage", src: "/images/zoonect-dark.svg"},
       ScribbleVet: %{
         href: "https://www.scribblevet.com/",
         src: "/images/scribble-vet-logo.png"
       },
+      Coinbits: %{href: "https://coinbits.app", src: "/images/coinbits-logo.png"},
       "Wintermeyer Consulting": %{
         href: "https://www.wintermeyer-consulting.de/",
         src: "/images/wintermeyer-logo-dark.svg"
       },
-      Coinbits: %{href: "https://coinbits.app", src: "/images/coinbits-logo.png"},
       # placeholder: %{href: "", src: ""},
       "Self Storage Leads": %{href: "#", src: "/images/self-storage-leads-logo-light.svg"}
       # placeholder: %{href: "", src: ""}
