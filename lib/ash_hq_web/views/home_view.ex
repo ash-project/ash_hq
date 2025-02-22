@@ -22,7 +22,7 @@ defmodule AshHqWeb.HomeView do
     [
       Alembic: %{href: "https://www.alembic.com.au", src: "images/alembic.svg"},
       Daylite: %{
-        href: "www.daylite.app",
+        href: "https://www.daylite.app",
         src: "/images/daylite-logo.svg"
       },
       Heretask: %{href: "https://www.heretask.com/", src: "/images/heretask-logo-light.svg"},
@@ -38,7 +38,10 @@ defmodule AshHqWeb.HomeView do
         src: "/images/wintermeyer-logo-dark.svg"
       },
       # placeholder: %{href: "", src: ""},
-      "Self Storage Leads": %{href: "#", src: "/images/self-storage-leads-logo-light.svg"}
+      "Boring Business Leads": %{
+        href: "https://boringbusinessleads.com",
+        src: "/images/self-storage-leads-logo-light.svg"
+      }
       # placeholder: %{href: "", src: ""}
     ]
     |> insert_placeholders(logos_grid())
