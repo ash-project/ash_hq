@@ -72,7 +72,7 @@ defmodule AshHq.MixProject do
       # UI
       {:tails, "~> 0.1"},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.3.1", runtime: Mix.env() == :dev},
       # Syntax Highlighting
       {:makeup, "~> 1.1"},
       {:makeup_elixir, "~> 1.0.0"},
