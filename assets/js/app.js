@@ -129,7 +129,7 @@ const features = {
       { link: "https://hexdocs.pm/beacon", name: "Beacon" },
       { link: "https://hexdocs.pm/beacon_live_admin", name: "Beacon Live Admin" }
     ],
-    args: ['--beacon.site cms', '--beacon.path /cms', '--beacon-live-admin.path /cms/admin'],
+    args: ['--beacon.site cms', '--beacon-live-admin.path /cms/admin'],
     tooltip: `
     <p class="mb-2">
     Open-source Content Management System (CMS) built with Phoenix LiveView. 
