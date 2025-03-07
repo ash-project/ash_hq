@@ -122,6 +122,9 @@ defmodule AshHqWeb.HomeView do
         paper_trail: "Paper Trail",
         cloak: "Encryption"
       ],
+      CMS: [
+        beacon: "Beacon"
+      ],
       # "UI Components": [
       #   mishka: "Mishka Chelekom"
       # ],
