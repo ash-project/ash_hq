@@ -44,6 +44,10 @@ defmodule AshHq.Application do
   # whenever the application is updated.
   @impl true
   def config_change(changed, _new, removed) do
+    :logger.add_handler(:my_sentry_handler, Sentry.LoggerHandler, %{
+      config: %{metadata: [:file, :line]}
+    })
+
     AshHqWeb.Endpoint.config_change(changed, removed)
     :ok
   end

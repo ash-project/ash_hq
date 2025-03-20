@@ -1,5 +1,12 @@
 import Config
 
+config :ash_hq,
+  dsn:
+    "https://4ec102312de77fc74c70ef6ea701fd96@o4509005493108736.ingest.us.sentry.io/4509005501366272",
+  environment_name: Mix.env(),
+  enable_source_code_context: true,
+  root_source_code_paths: [File.cwd!()]
+
 # For production, don't forget to configure the url host
 # to something meaningful, Phoenix uses this information
 # when generating URLs.

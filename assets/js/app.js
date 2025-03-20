@@ -97,6 +97,7 @@ const features = {
     links: [
       { link: "https://phoenixframework.org", name: "Phoenix" }
     ],
+    order: 0,
     tooltip: `
     <p class="mb-2">
     Ash works seamlessly with Phoenix. 
@@ -109,6 +110,7 @@ const features = {
   graphql: {
     requires: ['phoenix'],
     adds: ['ash_graphql'],
+    order: 1,
     links: [
       { link: "https://hexdocs.pm/ash_graphql", name: "AshGraphql" }
     ],
@@ -125,6 +127,7 @@ const features = {
   beacon: {
     requires: ['phoenix'],
     adds: ['beacon', 'beacon_live_admin'],
+    order: 1000,
     links: [
       { link: "https://hexdocs.pm/beacon", name: "Beacon" },
       { link: "https://hexdocs.pm/beacon_live_admin", name: "Beacon Live Admin" }
@@ -142,6 +145,7 @@ const features = {
   json_api: {
     requires: ['phoenix'],
     adds: ['ash_json_api'],
+    order: 3,
     links: [
       { link: "https://hexdocs.pm/ash_json_api", name: "AshJsonApi" }
     ],
@@ -160,6 +164,7 @@ const features = {
     links: [
       { link: "https://hexdocs.pm/ash_postgres", name: "AshPostgres" }
     ],
+    order: 4,
     tooltip: `
     <p class="mb-2">
     PostgreSQL
@@ -174,6 +179,7 @@ const features = {
     links: [
       { link: "https://hexdocs.pm/ash_sqlite", name: "AshSqlite" }
     ],
+    order: 5,
     tooltip: `
     <p class="mb-2">
     SQLite
@@ -189,6 +195,7 @@ const features = {
     links: [
       { link: "https://hexdocs.pm/ash_authentication", name: "AshAuthentication" }
     ],
+    order: 6,
     args: ['--auth-strategy password'],
     tooltip: `
     <p class="mb-2">
@@ -202,6 +209,7 @@ const features = {
   magic_link_auth: {
     requires: ['phoenix'],
     adds: ['ash_authentication', 'ash_authentication_phoenix'],
+    order: 7,
     links: [
       {
         link: "https://hexdocs.pm/ash_authentication",
@@ -221,6 +229,7 @@ const features = {
   oauth: {
     requires: ['phoenix'],
     adds: ['ash_authentication', 'ash_authentication_phoenix'],
+    order: 8,
     links: [
       {
         link: "https://hexdocs.pm/ash_authentication",
@@ -242,7 +251,7 @@ const features = {
   },
   money: {
     adds: ['ash_money'],
-    after: ['ash_postgres'],
+    order: 999,
     links: [
       { link: "https://hexdocs.pm/ash_money", name: "AshMoney" }
     ],
@@ -260,6 +269,7 @@ const features = {
     links: [
       { link: "https://hexdocs.pm/ash_csv", name: "AshCSV" }
     ],
+    order: 9,
     tooltip: `
     <p class="mb-2">
     Back resources with CSV files.
@@ -274,6 +284,7 @@ const features = {
     links: [
       { link: "https://hexdocs.pm/ash_admin", name: "AshAdmin" }
     ],
+    order: 10,
     tooltip: `
     <p class="mb-2">
     A zero-config-necessary super admin UI.
@@ -288,6 +299,7 @@ const features = {
     links: [
       { link: "https://hexdocs.pm/ash_oban", name: "AshOban" }
     ],
+    order: 11,
     tooltip: `
     <p class="mb-2">
     Oban is a background job system backed by your own SQL database packed with enterprise grade features, real-time monitoring with Oban Web, and complex workflow management with Oban Pro.
@@ -302,6 +314,7 @@ const features = {
     links: [
       { link: "https://hexdocs.pm/ash_state_machine", name: "AshStateMachine" }
     ],
+    order: 12,
     tooltip: `
     <p class="mb-2">
     Model complex workflows backed by your resource's persistence and actions.
@@ -314,6 +327,7 @@ const features = {
   double_entry: {
     requires: ['money'],
     adds: ['ash_double_entry'],
+    order: 13,
     links: [
       { link: "https://hexdocs.pm/ash_double_entry", name: "AshDoubleEntry" }
     ],
@@ -328,6 +342,7 @@ const features = {
   },
   archival: {
     adds: ['ash_archival'],
+    order: 14,
     links: [
       { link: "https://hexdocs.pm/ash_archival", name: "AshArchival" }
     ],
@@ -342,6 +357,7 @@ const features = {
   },
   mishka: {
     adds: ['mishka_chelekom'],
+    order: 15,
     links: [
       { link: "https://mishka.tools/chelekom", name: "Mishka Chelekom" }
     ],
@@ -357,6 +373,7 @@ const features = {
   },
   paper_trail: {
     adds: ['ash_paper_trail'],
+    order: 16,
     links: [
       { link: "https://hexdocs.pm/ash_paper_trail", name: "AshPaperTrail" }
     ],
@@ -374,6 +391,7 @@ const features = {
     links: [
       { link: "https://hexdocs.pm/ash_cloak", name: "AshCloak" }
     ],
+    order: 17,
     tooltip: `
     <p class="mb-2">
     Easily encrypt and decrypt your attributes. 
@@ -389,6 +407,7 @@ const features = {
       name: "AppSignal",
       href: "https://blog.appsignal.com/2023/02/28/an-introduction-to-test-factories-and-fixtures-for-elixir.html" 
     },
+    order: 18,
     linkName: "AppSignal",
     link: "https://hexdocs.pm/ash_appsignal",
     tooltip: `
@@ -409,6 +428,7 @@ const features = {
       name: "OpenTelemetry",
       href: "https://blog.appsignal.com/2023/02/28/an-introduction-to-test-factories-and-fixtures-for-elixir.html" 
     },
+    order: 19,
     links: [
       { link: "https://hexdocs.pm/opentelemetry_ash", name: "OpenTelemetryAsh" }
     ],
@@ -527,8 +547,11 @@ function setUrl() {
   let disabled = [];
   let setups = [];
   let links = [];
-
-  for (var feature of Object.keys(features)) {
+  for (var feature of Object.keys(features).sort((a, b) => {
+    const orderA = features[a].order || 0;
+    const orderB = features[b].order || 0;
+    return orderA - orderB;
+  })) {
     const config = features[feature];
     if (config.checked) {
       (config.requires || []).forEach((requirement) => {

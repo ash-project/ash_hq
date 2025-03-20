@@ -40,6 +40,8 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:hackney, "~> 1.8"},
+      {:sentry, "~> 10.8"},
       {:timex, "~> 3.0"},
       {:igniter, "~> 0.5", only: [:dev, :test]},
       {:ash, "~> 3.3"},
