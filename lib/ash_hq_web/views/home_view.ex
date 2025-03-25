@@ -15,6 +15,7 @@ defmodule AshHqWeb.HomeView do
   end
 
   @coming_soon [:opentelemetry, :appsignal]
+  @external [:oban, :mishka, :beacon]
 
   defp logos_grid, do: "grid-cols-3"
 
@@ -122,14 +123,14 @@ defmodule AshHqWeb.HomeView do
         paper_trail: "Paper Trail",
         cloak: "Encryption"
       ],
-      CMS: [
-        beacon: "Beacon"
+      "CMS & Admin": [
+        beacon: "Beacon CMS",
+        admin: "Admin UI"
       ],
-      # "UI Components": [
-      #   mishka: "Mishka Chelekom"
-      # ],
-      "Observability & Administration": [
-        admin: "Admin UI",
+      "UI Components": [
+        mishka: "Mishka Chelekom"
+      ],
+      Observability: [
         appsignal: "AppSignal",
         opentelemetry: "OpenTelemetry"
       ]
@@ -137,6 +138,7 @@ defmodule AshHqWeb.HomeView do
   end
 
   def coming_soon?(value), do: value in @coming_soon
+  def external?(value), do: value in @external
 
   defp quickstarts do
     [

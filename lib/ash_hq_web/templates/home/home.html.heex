@@ -165,7 +165,7 @@
                       do: "window.featureClicked(this, 'feature-#{value}-active', true)"
                   }
                 >
-                  {name}
+                  {name}<%= if external?(value) do %><sup>*</sup><% end %>
                 </span>
                 <span
                   id={"feature-#{value}-active"}
@@ -173,7 +173,7 @@
                   class="relative active-feature hidden rounded px-2 py-2 border border-primary-dark-500/40 bg-primary-dark-500/80 cursor-pointer"
                   onclick={"window.featureClicked(this, 'feature-#{value}-inactive', false)"}
                 >
-                  {name}
+                  {name}<%= if external?(value) do %><sup>*</sup><% end %>
                 </span>
                 <%= if coming_soon?(value) do %>
                   <span class="text-xs text-slate-400 font-extralight italic mt-1">
@@ -185,6 +185,9 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="text-xs text-slate-400 text-center mt-1 mb-2">
+      <sup>*</sup> Is or contains an external package, not maintained by the Ash team.
     </div>
     <div id="dont-worry" class="mb-2 hidden flex flex-col gap-2">
       <p class="text-lg">

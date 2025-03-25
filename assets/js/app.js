@@ -366,8 +366,7 @@ const features = {
     Mishka Chelekom is a library offering various templates for components in Phoenix and Phoenix LiveView.
     </p>
     <p>
-    This project is not affiliated with the Ash, but their components are installed using Igniter, the tooling
-    that powers this installer!
+    No installation or dependencies needed — everything is configured directly into your project by the CLI generator.
     </p>
     `
   },
