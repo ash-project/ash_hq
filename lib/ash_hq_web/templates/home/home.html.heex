@@ -111,14 +111,14 @@
         Feeling stuck? Can't decide?
       </button>
     </div>
-    <div id="already-have-an-app" class="mb-2">
-      <button id="already-have-an-app-button" class="text-lg underline cursor-pointer" onclick="window.addingToApp()">
-        Already have an app?
-      </button>
-    </div>
     <div id="show-options" class="hidden mt-2">
       <button class="text-lg underline cursor-pointer" onclick="window.showAll()">
         Show all
+      </button>
+    </div>
+    <div id="already-have-an-app" class="mb-2">
+      <button id="already-have-an-app-button" class="text-lg underline cursor-pointer" onclick="window.addingToApp()">
+        Already have an app?
       </button>
     </div>
     <h2 id="presets-label" class="text-xl font-bold text-primary-light-200">Presets</h2>
@@ -186,7 +186,7 @@
         </div>
       </div>
     </div>
-    <div class="text-xs text-slate-400 text-center mt-1 mb-2">
+    <div id="asterisk-warning" class="text-xs text-slate-400 text-center mt-1 mb-2">
       <sup>*</sup> Is or contains an external package, not maintained by the Ash team.
     </div>
     <div id="dont-worry" class="mb-2 hidden flex flex-col gap-2">

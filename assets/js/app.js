@@ -726,6 +726,7 @@ window.cantDecide = function() {
     }
   });
 
+  document.getElementById("asterisk-warning").classList.add("hidden");
   document.getElementById("quickstart-live_view-inactive").click()
 
   document.getElementById("show-options").classList.remove("hidden");
@@ -741,6 +742,7 @@ window.showAll = function() {
 
   document.getElementById("show-options").classList.add("hidden");
   document.getElementById("dont-worry").classList.add("hidden");
+  document.getElementById("asterisk-warning").classList.remove("hidden");
 }
 
 window.clickOnPreset = function(name) {
