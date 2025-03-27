@@ -15,7 +15,7 @@ defmodule AshHqWeb.HomeView do
   end
 
   @coming_soon [:opentelemetry, :appsignal]
-  @external [:oban, :mishka, :beacon]
+  @external [:oban, :mishka, :beacon, :live_debugger]
 
   defp logos_grid, do: "grid-cols-3"
 
@@ -126,6 +126,9 @@ defmodule AshHqWeb.HomeView do
       "CMS & Admin": [
         beacon: "Beacon CMS",
         admin: "Admin UI"
+      ],
+      "Dev Tools": [
+        live_debugger: "Live Debugger"
       ],
       "UI Components": [
         mishka: "Mishka Chelekom"

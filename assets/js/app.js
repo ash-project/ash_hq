@@ -65,7 +65,7 @@ const quickstarts = {
     Perfect for the Elixir maximalist.
     </p>
     `,
-    features: ['phoenix', 'postgres', 'magic_link_auth', 'admin'],
+    features: ['phoenix', 'postgres', 'magic_link_auth', 'admin', 'live_debugger'],
   },
   graphql: {
     features: ['phoenix', 'graphql', 'postgres', 'admin'],
@@ -355,9 +355,25 @@ const features = {
     </p>
     `
   },
+  live_debugger: {
+    adds: ['live_debugger'],
+    requires: ['phoenix'],
+    order: 15,
+    links: [
+      { link: "https://hexdocs.pm/live_debugger/readme.html", name: "Live Debugger" }
+    ],
+    tooltip: `
+    <p class="mb-2">
+    A tool for debugging LiveView applications in development.
+    </p>
+    <p>
+    Optimizes your development by offering detailed component tree views, assigns inspection, and callback execution tracing.
+    </p>
+    `
+  },
   mishka: {
     adds: ['mishka_chelekom'],
-    order: 15,
+    order: 16,
     links: [
       { link: "https://mishka.tools/chelekom", name: "Mishka Chelekom" }
     ],
@@ -372,7 +388,7 @@ const features = {
   },
   paper_trail: {
     adds: ['ash_paper_trail'],
-    order: 16,
+    order: 17,
     links: [
       { link: "https://hexdocs.pm/ash_paper_trail", name: "AshPaperTrail" }
     ],
@@ -390,7 +406,7 @@ const features = {
     links: [
       { link: "https://hexdocs.pm/ash_cloak", name: "AshCloak" }
     ],
-    order: 17,
+    order: 18,
     tooltip: `
     <p class="mb-2">
     Easily encrypt and decrypt your attributes. 
@@ -406,7 +422,7 @@ const features = {
       name: "AppSignal",
       href: "https://blog.appsignal.com/2023/02/28/an-introduction-to-test-factories-and-fixtures-for-elixir.html" 
     },
-    order: 18,
+    order: 19,
     linkName: "AppSignal",
     link: "https://hexdocs.pm/ash_appsignal",
     tooltip: `
@@ -427,7 +443,7 @@ const features = {
       name: "OpenTelemetry",
       href: "https://blog.appsignal.com/2023/02/28/an-introduction-to-test-factories-and-fixtures-for-elixir.html" 
     },
-    order: 19,
+    order: 20,
     links: [
       { link: "https://hexdocs.pm/opentelemetry_ash", name: "OpenTelemetryAsh" }
     ],
