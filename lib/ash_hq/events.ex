@@ -33,10 +33,10 @@ defmodule AshHq.Events do
               title: "Talk @ GigCityElixir 2025",
               description: """
               <p class="font-bold">
-                Ash, Igniter and the Middle Way
+                The Next Dimension of Developer Experience
               </p>
               <p>
-                Zach gives a talk on the future of Ash and Igniter, and a first foray into new concepts.
+                Zach gives a talk on Igniter and the massive improvement it can make to the Elixir DX!
               </p>
               """,
               date: ~D[2025-05-05],
