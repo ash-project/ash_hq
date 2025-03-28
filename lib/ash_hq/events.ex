@@ -64,7 +64,7 @@ defmodule AshHq.Events do
                 Talk title is a secret ;)
               </p>
               <p>
-                Hang out with Zach in Varberg, Sweden
+                Hang out with Zach, Rebecca and Barnabas from the Ash core team in Varberg, Sweden
               </p>
               """,
               date: ~D[2025-09-10],
