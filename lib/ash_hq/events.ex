@@ -30,6 +30,20 @@ defmodule AshHq.Events do
               href: "https://membrz.club/alchemyconf/events/supercharge-your-elixir-apps-with-ash"
             },
             %{
+              title: "Training @ GigCityElixir 2025",
+              description: """
+              <p class="font-bold">
+                Supercharge Your Elixir Apps with Ash
+              </p>
+              <p>
+                Level up on Ash and hang out with the Ash team at AlchemyConf in Braga Portugal!
+              </p>
+              """,
+              date: ~D[2025-05-08],
+              date_in_english: "May 8th, 2025",
+              href: "https://www.gigcityelixir.com"
+            },
+            %{
               title: "Talk @ GigCityElixir 2025",
               description: """
               <p class="font-bold">
@@ -39,8 +53,8 @@ defmodule AshHq.Events do
                 Zach gives a talk on Igniter and the massive improvement it can make to the Elixir DX!
               </p>
               """,
-              date: ~D[2025-05-05],
-              date_in_english: "May 5th, 2025",
+              date: ~D[2025-05-09],
+              date_in_english: "May 9th, 2025",
               href: "https://www.gigcityelixir.com"
             },
             %{
