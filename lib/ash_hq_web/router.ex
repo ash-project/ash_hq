@@ -25,6 +25,10 @@ defmodule AshHqWeb.Router do
     get("/:name", AshHqWeb.NewController, :new)
   end
 
+  scope "/install" do
+    get("/:name", AshHqWeb.NewController, :new_no_ash)
+  end
+
   scope "/", AshHqWeb do
     pipe_through(:browser)
     get "/", HomeController, :home

@@ -78,13 +78,23 @@ defmodule AshHqWeb.NewController do
   main "$@"
   """
 
+  def new_no_ash(conn, params) do
+    new(conn, Map.put(params, "no_ash", true))
+  end
+
   def new(conn, %{"name" => name} = params) do
     install =
       params["install"]
       |> Kernel.||("")
       |> String.split(",", trim: true)
       |> Enum.map(&String.trim/1)
-      |> then(&Enum.concat(["ash"], &1))
+      |> then(fn install -> 
+        if params["no_ash"] do
+          install
+        else
+          Enum.concat(["ash"], install)
+        end
+      end)
 
     with_phx_new? = "phoenix" in install
 
@@ -94,7 +104,7 @@ defmodule AshHqWeb.NewController do
 
     args =
       params
-      |> Map.drop(["name", "install", "with_args"])
+      |> Map.drop(["name", "install", "with_args", "no_ash"])
       |> Enum.map_join(" ", fn {key, value} ->
         if value == "true" do
           "--#{String.replace(key, "_", "-")}"

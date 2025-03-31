@@ -558,7 +558,7 @@ function setUrl() {
   button.classList.remove("was-clicked");
 
   let args = [];
-  let packages = [];
+  let packages = ['ash'];
   let disabled = [];
   let setups = [];
   let links = [];
@@ -625,9 +625,9 @@ function setUrl() {
 
   let base
   if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-    base = "localhost:4000/new"
+    base = "localhost:4000/install"
   } else {
-    base = "https://ash-hq.org/new"
+    base = "https://ash-hq.org/install"
   }
 
   const appNameSafe = appNameComponent.value.toLowerCase().replace(/[\s-]/g, '_').replace(/[^a-z_]/g, '').replace(/^_/, '');

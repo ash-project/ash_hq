@@ -1,7 +1,7 @@
 defmodule AshHqWeb.HomeController do
   use AshHqWeb, :controller
 
-  @url_base if Mix.env() == :dev, do: "localhost:4000/new/", else: "https://ash-hq.org/new/"
+  @url_base if Mix.env() == :dev, do: "localhost:4000/install/", else: "https://ash-hq.org/install/"
 
   def community(conn, _) do
     contributors = AshHq.Github.Contributor.in_order!()
