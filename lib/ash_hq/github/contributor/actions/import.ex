@@ -32,6 +32,7 @@ defmodule AshHq.Github.Contributor.Actions.Import do
       Map.put(contributor, "order", index)
     end)
     |> Stream.uniq_by(&Map.get(&1, "id"))
+    |> Stream.reject(&String.starts_with?(Map.get(&1, "login"), "dependabot"))
     |> Ash.bulk_create(AshHq.Github.Contributor, :create,
       upsert?: true,
       upsert_fields: [:order, :login, :avatar_url, :html_url],
