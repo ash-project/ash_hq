@@ -225,6 +225,20 @@ AshHq.Docs.Library.create!(
   upsert_identity: :unique_name
 )
 
+AshHq.Docs.Library.create!(
+  %{
+    name: "igniter",
+    display_name: "igniter",
+    module_prefixes: ["Igniter"],
+    order: 99,
+    description: """
+    A code generation and project patching framework.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
 # Always at the bottom
 AshHq.Docs.Library.create!(
   %{
