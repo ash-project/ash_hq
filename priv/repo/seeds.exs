@@ -14,6 +14,20 @@ AshHq.Docs.Library.create!(
 
 AshHq.Docs.Library.create!(
   %{
+    name: "igniter",
+    display_name: "igniter",
+    module_prefixes: ["Igniter"],
+    order: 1,
+    description: """
+    A code generation and project patching framework.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
     name: "ash_postgres",
     display_name: "AshPostgres",
     order: 10,
@@ -219,20 +233,6 @@ AshHq.Docs.Library.create!(
     order: 90,
     description: """
     An extension to seamlessly encrypt and decrypt resource attributes.
-    """
-  },
-  upsert?: true,
-  upsert_identity: :unique_name
-)
-
-AshHq.Docs.Library.create!(
-  %{
-    name: "igniter",
-    display_name: "igniter",
-    module_prefixes: ["Igniter"],
-    order: 99,
-    description: """
-    A code generation and project patching framework.
     """
   },
   upsert?: true,
