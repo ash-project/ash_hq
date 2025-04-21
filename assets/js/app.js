@@ -18,7 +18,7 @@ import scrollIntoView from "smooth-scroll-into-view-if-needed";
 
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html";
-import tippy from 'tippy.js';
+import tippy from "tippy.js";
 // Establish Phoenix Socket and LiveView configuration.
 import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
@@ -48,13 +48,13 @@ const quickstarts = {
     Ash & PostgreSQL, a match made in heaven.
     </p>
     <p>
-    Just Ash and a database is a great place to start if you're 
-    not sure what you're building or just want to play around. 
-    We suggest that you add Phoenix if you are building an API 
+    Just Ash and a database is a great place to start if you're
+    not sure what you're building or just want to play around.
+    We suggest that you add Phoenix if you are building an API
     or a web app.
     </p>
     `,
-    features: ['postgres']
+    features: ["postgres"],
   },
   live_view: {
     tooltip: `
@@ -65,10 +65,16 @@ const quickstarts = {
     Perfect for the Elixir maximalist.
     </p>
     `,
-    features: ['phoenix', 'postgres', 'magic_link_auth', 'admin', 'live_debugger'],
+    features: [
+      "phoenix",
+      "postgres",
+      "magic_link_auth",
+      "admin",
+      "live_debugger",
+    ],
   },
   graphql: {
-    features: ['phoenix', 'graphql', 'postgres', 'admin'],
+    features: ["phoenix", "graphql", "postgres", "admin"],
     tooltip: `
     <p class="mb-2">
     A GraphQL API, a database and a dream.
@@ -76,10 +82,10 @@ const quickstarts = {
     <p>
     All the power of GraphQL, none of the boilerplate.
     </p>
-    `
+    `,
   },
   json_api: {
-    features: ['phoenix', 'json_api', 'postgres', 'admin'],
+    features: ["phoenix", "json_api", "postgres", "admin"],
     tooltip: `
     <p class="mb-2">
     JSON:API. Simple, battle-tested, effective.
@@ -87,33 +93,29 @@ const quickstarts = {
     <p>
     Create a simple yet elegant REST API, complete with an Open API spec!
     </p>
-    `
-  }
-}
+    `,
+  },
+};
 
 const features = {
   phoenix: {
-    adds: ['ash_phoenix'],
-    links: [
-      { link: "https://phoenixframework.org", name: "Phoenix" }
-    ],
+    adds: ["ash_phoenix"],
+    links: [{ link: "https://phoenixframework.org", name: "Phoenix" }],
     order: 0,
     tooltip: `
     <p class="mb-2">
-    Ash works seamlessly with Phoenix. 
+    Ash works seamlessly with Phoenix.
     </p>
     <p>
     Phoenix is your web layer, Ash is your application layer.
     </p>
-    ` 
+    `,
   },
   graphql: {
-    requires: ['phoenix'],
-    adds: ['ash_graphql'],
+    requires: ["phoenix"],
+    adds: ["ash_graphql"],
     order: 1,
-    links: [
-      { link: "https://hexdocs.pm/ash_graphql", name: "AshGraphql" }
-    ],
+    links: [{ link: "https://hexdocs.pm/ash_graphql", name: "AshGraphql" }],
     tooltip: `
     <p class="mb-2">
     Create a powerful and flexible GraphQL API directly from your resources.
@@ -122,48 +124,46 @@ const features = {
     Built on top of the excellent library Absinthe.
     No need for writing data loaders, resolvers or middleware!
     </p>
-    ` 
+    `,
   },
   beacon: {
-    requires: ['phoenix'],
-    adds: ['beacon', 'beacon_live_admin'],
+    requires: ["phoenix"],
+    adds: ["beacon", "beacon_live_admin"],
     order: 1000,
     links: [
       { link: "https://hexdocs.pm/beacon", name: "Beacon" },
-      { link: "https://hexdocs.pm/beacon_live_admin", name: "Beacon Live Admin" }
+      {
+        link: "https://hexdocs.pm/beacon_live_admin",
+        name: "Beacon Live Admin",
+      },
     ],
-    args: ['--beacon.site cms', '--beacon-live-admin.path /cms/admin'],
+    args: ["--beacon.site cms", "--beacon-live-admin.path /cms/admin"],
     tooltip: `
     <p class="mb-2">
-    Open-source Content Management System (CMS) built with Phoenix LiveView. 
+    Open-source Content Management System (CMS) built with Phoenix LiveView.
     </p>
     <p>
-    Faster render times to boost SEO performance, even for the most content-heavy pages. 
+    Faster render times to boost SEO performance, even for the most content-heavy pages.
     </p>
-    ` 
+    `,
   },
   json_api: {
-    requires: ['phoenix'],
-    adds: ['ash_json_api'],
+    requires: ["phoenix"],
+    adds: ["ash_json_api"],
     order: 3,
-    links: [
-      { link: "https://hexdocs.pm/ash_json_api", name: "AshJsonApi" }
-    ],
+    links: [{ link: "https://hexdocs.pm/ash_json_api", name: "AshJsonApi" }],
     tooltip: `
     <p class="mb-2">
-    Easily create a spec-compliant JSON:API, directly from your resources. 
+    Easily create a spec-compliant JSON:API, directly from your resources.
     </p>
     <p>
     Generates an OpenAPI specification automatically, allowing easy integration with all kinds of tools and services.
     </p>
-    ` 
-
+    `,
   },
   postgres: {
-    adds: ['ash_postgres'],
-    links: [
-      { link: "https://hexdocs.pm/ash_postgres", name: "AshPostgres" }
-    ],
+    adds: ["ash_postgres"],
+    links: [{ link: "https://hexdocs.pm/ash_postgres", name: "AshPostgres" }],
     order: 4,
     tooltip: `
     <p class="mb-2">
@@ -172,13 +172,11 @@ const features = {
     <p>
     The swiss army knife of databases. Versatile, powerful, and battle-tested.
     </p>
-    `
+    `,
   },
   sqlite: {
-    adds: ['ash_sqlite'],
-    links: [
-      { link: "https://hexdocs.pm/ash_sqlite", name: "AshSqlite" }
-    ],
+    adds: ["ash_sqlite"],
+    links: [{ link: "https://hexdocs.pm/ash_sqlite", name: "AshSqlite" }],
     order: 5,
     tooltip: `
     <p class="mb-2">
@@ -187,16 +185,19 @@ const features = {
     <p>
     Small, fast, and reliable. Perfect for lightweight apps or getting started quickly.
     </p>
-    `
+    `,
   },
   password_auth: {
-    requires: ['phoenix'],
-    adds: ['ash_authentication', 'ash_authentication_phoenix'],
+    requires: ["phoenix"],
+    adds: ["ash_authentication", "ash_authentication_phoenix"],
     links: [
-      { link: "https://hexdocs.pm/ash_authentication", name: "AshAuthentication" }
+      {
+        link: "https://hexdocs.pm/ash_authentication",
+        name: "AshAuthentication",
+      },
     ],
     order: 6,
-    args: ['--auth-strategy password'],
+    args: ["--auth-strategy password"],
     tooltip: `
     <p class="mb-2">
     Allow users to log in with email & password.
@@ -204,19 +205,19 @@ const features = {
     <p>
     Ships with email confirmation, password resets, and registration out of the box!
     </p>
-    `
+    `,
   },
   magic_link_auth: {
-    requires: ['phoenix'],
-    adds: ['ash_authentication', 'ash_authentication_phoenix'],
+    requires: ["phoenix"],
+    adds: ["ash_authentication", "ash_authentication_phoenix"],
     order: 7,
     links: [
       {
         link: "https://hexdocs.pm/ash_authentication",
-        name: "AshAuthentication"
-      }
+        name: "AshAuthentication",
+      },
     ],
-    args: ['--auth-strategy magic_link'],
+    args: ["--auth-strategy magic_link"],
     tooltip: `
     <p class="mb-2">
     Send users a link in their email to sign in and register.
@@ -224,21 +225,21 @@ const features = {
     <p>
     Who needs the complexity of emails & passwords? Keep it simple with magic links.
     </p>
-    `
+    `,
   },
   oauth: {
-    requires: ['phoenix'],
-    adds: ['ash_authentication', 'ash_authentication_phoenix'],
+    requires: ["phoenix"],
+    adds: ["ash_authentication", "ash_authentication_phoenix"],
     order: 8,
     links: [
       {
         link: "https://hexdocs.pm/ash_authentication",
         name: "AshAuthentication",
-      }
+      },
     ],
     requiresSetup: {
       name: "OAuth",
-      href: "https://hexdocs.pm/ash_authentication"
+      href: "https://hexdocs.pm/ash_authentication",
     },
     tooltip: `
     <p class="mb-2">
@@ -247,14 +248,12 @@ const features = {
     <p>
     Supports any OAuth2 provider with premade configurations for Apple, Google, Github, Auth0, Oidc, and Slack.
     </p>
-    `
+    `,
   },
   money: {
-    adds: ['ash_money'],
+    adds: ["ash_money"],
     order: 999,
-    links: [
-      { link: "https://hexdocs.pm/ash_money", name: "AshMoney" }
-    ],
+    links: [{ link: "https://hexdocs.pm/ash_money", name: "AshMoney" }],
     tooltip: `
     <p class="mb-2">
     A data type for representing money $$$$.
@@ -262,13 +261,11 @@ const features = {
     <p>
     Ships with a postgres datatype, and operator and function definitions!
     </p>
-    `
+    `,
   },
   csv: {
-    adds: ['ash_csv'],
-    links: [
-      { link: "https://hexdocs.pm/ash_csv", name: "AshCSV" }
-    ],
+    adds: ["ash_csv"],
+    links: [{ link: "https://hexdocs.pm/ash_csv", name: "AshCSV" }],
     order: 9,
     tooltip: `
     <p class="mb-2">
@@ -277,13 +274,11 @@ const features = {
     <p>
     Easily interact with CSV files in code, or turn a CSV file into an API in minutes.
     </p>
-    `
+    `,
   },
   admin: {
-    adds: ['ash_admin'],
-    links: [
-      { link: "https://hexdocs.pm/ash_admin", name: "AshAdmin" }
-    ],
+    adds: ["ash_admin"],
+    links: [{ link: "https://hexdocs.pm/ash_admin", name: "AshAdmin" }],
     order: 10,
     tooltip: `
     <p class="mb-2">
@@ -292,13 +287,11 @@ const features = {
     <p>
     Call any resource action from an automatically generated web UI
     </p>
-    `
+    `,
   },
   oban: {
-    adds: ['ash_oban'],
-    links: [
-      { link: "https://hexdocs.pm/ash_oban", name: "AshOban" }
-    ],
+    adds: ["ash_oban", "oban_web"],
+    links: [{ link: "https://hexdocs.pm/ash_oban", name: "AshOban" }],
     order: 11,
     tooltip: `
     <p class="mb-2">
@@ -307,12 +300,12 @@ const features = {
     <p class="mb-2">
     Configure triggers directly in your resources or write fully custom Oban jobs.
     </p>
-    `
+    `,
   },
   state_machine: {
-    adds: ['ash_state_machine'],
+    adds: ["ash_state_machine"],
     links: [
-      { link: "https://hexdocs.pm/ash_state_machine", name: "AshStateMachine" }
+      { link: "https://hexdocs.pm/ash_state_machine", name: "AshStateMachine" },
     ],
     order: 12,
     tooltip: `
@@ -322,14 +315,14 @@ const features = {
     <p>
     You can even generate fancy mermaid flow charts!
     </p>
-    `
+    `,
   },
   double_entry: {
-    requires: ['money'],
-    adds: ['ash_double_entry'],
+    requires: ["money"],
+    adds: ["ash_double_entry"],
     order: 13,
     links: [
-      { link: "https://hexdocs.pm/ash_double_entry", name: "AshDoubleEntry" }
+      { link: "https://hexdocs.pm/ash_double_entry", name: "AshDoubleEntry" },
     ],
     tooltip: `
     <p class="mb-2">
@@ -338,14 +331,12 @@ const features = {
     <p>
     Provides a data model for double entry accounting that can be extended to fit your own needs.
     </p>
-    `
+    `,
   },
   archival: {
-    adds: ['ash_archival'],
+    adds: ["ash_archival"],
     order: 14,
-    links: [
-      { link: "https://hexdocs.pm/ash_archival", name: "AshArchival" }
-    ],
+    links: [{ link: "https://hexdocs.pm/ash_archival", name: "AshArchival" }],
     tooltip: `
     <p class="mb-2">
     A lightweight extension to ensure that data is only ever soft deleted.
@@ -353,14 +344,17 @@ const features = {
     <p>
     One line of code is all it takes to ensure that it is impossible to delete records.
     </p>
-    `
+    `,
   },
   live_debugger: {
-    adds: ['live_debugger'],
-    requires: ['phoenix'],
+    adds: ["live_debugger"],
+    requires: ["phoenix"],
     order: 15,
     links: [
-      { link: "https://hexdocs.pm/live_debugger/readme.html", name: "Live Debugger" }
+      {
+        link: "https://hexdocs.pm/live_debugger/readme.html",
+        name: "Live Debugger",
+      },
     ],
     tooltip: `
     <p class="mb-2">
@@ -369,14 +363,12 @@ const features = {
     <p>
     Optimizes your development by offering detailed component tree views, assigns inspection, and callback execution tracing.
     </p>
-    `
+    `,
   },
   mishka: {
-    adds: ['mishka_chelekom'],
+    adds: ["mishka_chelekom"],
     order: 16,
-    links: [
-      { link: "https://mishka.tools/chelekom", name: "Mishka Chelekom" }
-    ],
+    links: [{ link: "https://mishka.tools/chelekom", name: "Mishka Chelekom" }],
     tooltip: `
     <p class="mb-2">
     Mishka Chelekom is a library offering various templates for components in Phoenix and Phoenix LiveView.
@@ -384,13 +376,13 @@ const features = {
     <p>
     No installation or dependencies needed — everything is configured directly into your project by the CLI generator.
     </p>
-    `
+    `,
   },
   paper_trail: {
-    adds: ['ash_paper_trail'],
+    adds: ["ash_paper_trail"],
     order: 17,
     links: [
-      { link: "https://hexdocs.pm/ash_paper_trail", name: "AshPaperTrail" }
+      { link: "https://hexdocs.pm/ash_paper_trail", name: "AshPaperTrail" },
     ],
     tooltip: `
     <p class="mb-2">
@@ -399,28 +391,26 @@ const features = {
     <p>
     Track just the changed values, the entire new state, or even a deep diff of changes.
     </p>
-    `
+    `,
   },
   cloak: {
-    adds: ['cloak', 'ash_cloak'],
-    links: [
-      { link: "https://hexdocs.pm/ash_cloak", name: "AshCloak" }
-    ],
+    adds: ["cloak", "ash_cloak"],
+    links: [{ link: "https://hexdocs.pm/ash_cloak", name: "AshCloak" }],
     order: 18,
     tooltip: `
     <p class="mb-2">
-    Easily encrypt and decrypt your attributes. 
+    Easily encrypt and decrypt your attributes.
     </p>
     <p>
     You can even hook into decryption to track who is decrypting what and when!
     </p>
-    `
+    `,
   },
   appsignal: {
-    adds: ['appsignal', 'ash_appsignal'],
+    adds: ["appsignal", "ash_appsignal"],
     requiresSetup: {
       name: "AppSignal",
-      href: "https://blog.appsignal.com/2023/02/28/an-introduction-to-test-factories-and-fixtures-for-elixir.html" 
+      href: "https://blog.appsignal.com/2023/02/28/an-introduction-to-test-factories-and-fixtures-for-elixir.html",
     },
     order: 19,
     linkName: "AppSignal",
@@ -435,69 +425,74 @@ const features = {
     <p>
     Installer coming soon! Can be manually installed.
     </p>
-    `
+    `,
   },
   opentelemetry: {
-    adds: ['opentelemetry', 'opentelemetry_ash'],
+    adds: ["opentelemetry", "opentelemetry_ash"],
     requiresSetup: {
       name: "OpenTelemetry",
-      href: "https://blog.appsignal.com/2023/02/28/an-introduction-to-test-factories-and-fixtures-for-elixir.html" 
+      href: "https://blog.appsignal.com/2023/02/28/an-introduction-to-test-factories-and-fixtures-for-elixir.html",
     },
     order: 20,
     links: [
-      { link: "https://hexdocs.pm/opentelemetry_ash", name: "OpenTelemetryAsh" }
+      {
+        link: "https://hexdocs.pm/opentelemetry_ash",
+        name: "OpenTelemetryAsh",
+      },
     ],
     tooltip: `
     <p class="mb-2">
     High-quality, ubiquitous, and portable telemetry to enable effective observability.
     </p>
     <p>
-    OpenTelemetry is the state of the art observability system. Leverage first-class integration libraries for all 
+    OpenTelemetry is the state of the art observability system. Leverage first-class integration libraries for all
     your favorite Elixir libraries, including Ash!
     </p>
     <p class="mb-2">
     Installer coming soon! Can be manually installed.
     </p>
-    `
-  }
-}
+    `,
+  },
+};
 
 let addingToApp = false;
 
-window.addingToApp = function() {
+window.addingToApp = function () {
   if (addingToApp) {
     addingToApp = false;
 
-    document.getElementById('feature-phoenix').classList.remove("hidden");
-    document.getElementById('quickstart-live_view').classList.remove("hidden");
-    document.getElementById('already-have-an-app-button').innerHTML = "Already have an app?"
+    document.getElementById("feature-phoenix").classList.remove("hidden");
+    document.getElementById("quickstart-live_view").classList.remove("hidden");
+    document.getElementById("already-have-an-app-button").innerHTML =
+      "Already have an app?";
   } else {
     addingToApp = true;
 
-    const feature = document.getElementById('feature-phoenix-active')
-    if(!feature.classList.contains("hidden")) {
+    const feature = document.getElementById("feature-phoenix-active");
+    if (!feature.classList.contains("hidden")) {
       feature.click();
     }
-    document.getElementById('feature-phoenix').classList.add("hidden");
-    document.getElementById('quickstart-live_view').classList.add("hidden");
-    document.getElementById('already-have-an-app-button').innerHTML = "Creating a new app?"
+    document.getElementById("feature-phoenix").classList.add("hidden");
+    document.getElementById("quickstart-live_view").classList.add("hidden");
+    document.getElementById("already-have-an-app-button").innerHTML =
+      "Creating a new app?";
   }
 
-  setUrl()
-}
+  setUrl();
+};
 
 for (var quickstart of Object.keys(quickstarts)) {
-  const tooltip = quickstarts[quickstart].tooltip
+  const tooltip = quickstarts[quickstart].tooltip;
   if (tooltip) {
-    addTooltip(`#quickstart-${quickstart}`, tooltip)
+    addTooltip(`#quickstart-${quickstart}`, tooltip);
   }
 }
 
 for (var feature of Object.keys(features)) {
-  const tooltip = features[feature].tooltip
+  const tooltip = features[feature].tooltip;
 
   if (tooltip) {
-    addTooltip(`#feature-${feature}`, tooltip)
+    addTooltip(`#feature-${feature}`, tooltip);
   }
 }
 
@@ -512,10 +507,10 @@ function addTooltip(id, content) {
     "border-primary-dark-500/40",
     "shadow-lg",
     "shadow-slate-950/80",
-    "text-center"
+    "text-center",
   );
   div.innerHTML = content;
-  const boundary = document.getElementById("#installer-bounds")
+  const boundary = document.getElementById("#installer-bounds");
   tippy(id, {
     content: div,
     hideOnClick: false,
@@ -525,11 +520,11 @@ function addTooltip(id, content) {
     popperOptions: {
       modifiers: [
         {
-          name: 'flip',
+          name: "flip",
           options: {
             padding: {
-              top: 64
-            }
+              top: 64,
+            },
           },
         },
       ],
@@ -537,28 +532,28 @@ function addTooltip(id, content) {
   });
 }
 
-let appNameComponent = document.getElementById("app-name")
+let appNameComponent = document.getElementById("app-name");
 
 let appName = (appName || {}).value;
 
-if(appNameComponent) {
-  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('quickstart-live_view-inactive').click();
+if (appNameComponent) {
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("quickstart-live_view-inactive").click();
   });
 }
 
 function setUrl() {
-  var button = document.getElementById('copy-url-button');
-  var icon = document.getElementById('copy-url-button-icon');
-  var text = document.getElementById('copy-url-button-text');
+  var button = document.getElementById("copy-url-button");
+  var icon = document.getElementById("copy-url-button-icon");
+  var text = document.getElementById("copy-url-button-text");
 
-  text.innerHTML = "Copy"
-  icon.classList.remove("hero-check")
-  icon.classList.add("hero-clipboard")
+  text.innerHTML = "Copy";
+  icon.classList.remove("hero-check");
+  icon.classList.add("hero-clipboard");
   button.classList.remove("was-clicked");
 
   let args = [];
-  let packages = ['ash'];
+  let packages = ["ash"];
   let disabled = [];
   let setups = [];
   let links = [];
@@ -570,239 +565,257 @@ function setUrl() {
     const config = features[feature];
     if (config.checked) {
       (config.requires || []).forEach((requirement) => {
-        const requiredConfig = features[requirement]
+        const requiredConfig = features[requirement];
         packages.push(...requiredConfig.adds);
         args.push(...(requiredConfig.args || []));
 
         if (requiredConfig.requiresSetup) {
-          setups.push(`<a target="_blank" class="link" href="${requiredConfig.requiresSetup.href}">${requiredConfig.requiresSetup.name}</a>`)
+          setups.push(
+            `<a target="_blank" class="link" href="${requiredConfig.requiresSetup.href}">${requiredConfig.requiresSetup.name}</a>`,
+          );
         }
 
         requiredConfig.links.forEach((link) => {
-          links.push(`<a target="_blank" class="link" href="${link.link}">${link.name}</a>`)
-        })
+          links.push(
+            `<a target="_blank" class="link" href="${link.link}">${link.name}</a>`,
+          );
+        });
 
-        const activeBox = document.getElementById(`feature-${requirement}-active`)
-        const inactiveBox = document.getElementById(`feature-${requirement}-inactive`)
+        const activeBox = document.getElementById(
+          `feature-${requirement}-active`,
+        );
+        const inactiveBox = document.getElementById(
+          `feature-${requirement}-inactive`,
+        );
 
-        activeBox.classList.remove("hidden")
-        inactiveBox.classList.add("hidden")
+        activeBox.classList.remove("hidden");
+        inactiveBox.classList.add("hidden");
 
         activeBox.classList.add("opacity-70", "cursor-not-allowed");
         activeBox.classList.remove("cursor-pointer");
 
         features[requirement].checked = true;
-        disabled.push(requirement)
+        disabled.push(requirement);
 
         features[feature].checked = true;
-      })
+      });
 
       packages.push(...config.adds);
       args.push(...(config.args || []));
 
       config.links.forEach((link) => {
-        links.push(`<a target="_blank" class="link" href="${link.link}">${link.name}</a>`)
-      })
+        links.push(
+          `<a target="_blank" class="link" href="${link.link}">${link.name}</a>`,
+        );
+      });
 
       if (config.requiresSetup) {
-        setups.push(`<a target="_blank" class="link" href="${config.requiresSetup.href}">${config.requiresSetup.name}</a>`)
+        setups.push(
+          `<a target="_blank" class="link" href="${config.requiresSetup.href}">${config.requiresSetup.name}</a>`,
+        );
       }
     }
   }
-
 
   [...document.querySelectorAll(".active-feature")].forEach((el) => {
     if (!disabled.includes(el.dataset.name)) {
       el.classList.remove("opacity-70", "cursor-not-allowed");
     }
-  })
-
+  });
 
   packages = [...new Set(packages)];
   args = [...new Set(args)];
   setups = [...new Set(setups)];
   links = [...new Set(links)];
 
-  let base
+  let base;
   if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-    base = "localhost:4000/install"
+    base = "localhost:4000/install";
   } else {
-    base = "https://ash-hq.org/install"
+    base = "https://ash-hq.org/install";
   }
 
-  const appNameSafe = appNameComponent.value.toLowerCase().replace(/[\s-]/g, '_').replace(/[^a-z_]/g, '').replace(/^_/, '');
+  const appNameSafe = appNameComponent.value
+    .toLowerCase()
+    .replace(/[\s-]/g, "_")
+    .replace(/[^a-z_]/g, "")
+    .replace(/^_/, "");
 
   let installArg;
   if (features.phoenix.checked) {
-    installArg = "?install=phoenix"
+    installArg = "?install=phoenix";
     if (features.postgres.checked) {
     } else if (features.sqlite.checked) {
-      installArg += `&with_args=--database%20sqlite3`
+      installArg += `&with_args=--database%20sqlite3`;
     } else {
-      installArg += `&with_args=--no-ecto`
+      installArg += `&with_args=--no-ecto`;
     }
   }
 
-  const argsString = args.join(" ")
-  let firstLine = `sh <(curl '${base}/${appNameSafe}${installArg || ''}')`
+  const argsString = args.join(" ");
+  let firstLine = `sh <(curl '${base}/${appNameSafe}${installArg || ""}')`;
   let limit;
 
-  let code = firstLine
+  let code = firstLine;
 
   if (addingToApp) {
-    code = "mix igniter.install "
-    packages.unshift("ash")
+    code = "mix igniter.install ";
+    packages.unshift("ash");
   } else {
     if (packages.length !== 0) {
-      packages.unshift("&& mix igniter.install")
+      packages.unshift("&& mix igniter.install");
     }
 
-    packages.unshift(`&& cd ${appNameSafe}`)
+    packages.unshift(`&& cd ${appNameSafe}`);
   }
 
-  limit = Math.max(firstLine.length - 2, 45)
+  limit = Math.max(firstLine.length - 2, 45);
 
   args.forEach((arg) => {
-    packages.push(arg)
-  })
+    packages.push(arg);
+  });
 
   if (args.length != 0 || packages.length != 0) {
-    packages.push("--yes")
+    packages.push("--yes");
   }
 
   if (features.postgres.checked || features.sqlite.checked) {
-    packages.push("&& mix ash.setup")
+    packages.push("&& mix ash.setup");
   }
 
-  let currentLine = code
-  code = ''
+  let currentLine = code;
+  code = "";
   for (let i = 0; i < packages.length; i++) {
     if ((currentLine + packages[i]).length > limit) {
-      code = code + `
-    ${currentLine.trim()} \\`
-      currentLine = ''
+      code =
+        code +
+        `
+    ${currentLine.trim()} \\`;
+      currentLine = "";
     }
-    currentLine += packages[i] + ' '
+    currentLine += packages[i] + " ";
   }
   if (currentLine.trim().length > 0) {
-    code = code + `
-    ${currentLine.trim()}`
+    code =
+      code +
+      `
+    ${currentLine.trim()}`;
   }
 
-  const manualSetupBox = document.getElementById("manual-setup-box")
+  const manualSetupBox = document.getElementById("manual-setup-box");
 
   if (setups.length === 0) {
-    manualSetupBox.classList.add("hidden")
+    manualSetupBox.classList.add("hidden");
   } else {
-    manualSetupBox.classList.remove("hidden")
-    const manualSetupLinks = document.getElementById("manual-setup-links")
+    manualSetupBox.classList.remove("hidden");
+    const manualSetupLinks = document.getElementById("manual-setup-links");
     manualSetupLinks.innerHTML = setups.join("");
   }
 
-  const readMoreBox = document.getElementById("read-more-box")
+  const readMoreBox = document.getElementById("read-more-box");
 
   if (links.length === 0) {
-    readMoreBox.classList.add("hidden")
+    readMoreBox.classList.add("hidden");
   } else {
-    readMoreBox.classList.remove("hidden")
-    const readMoreLinks = document.getElementById("read-more-links")
+    readMoreBox.classList.remove("hidden");
+    const readMoreLinks = document.getElementById("read-more-links");
     readMoreLinks.innerHTML = links.join("");
   }
 
-  const el = document.getElementById('selected-features')
+  const el = document.getElementById("selected-features");
   el.innerHTML = code.trim();
 }
 
-window.cantDecide = function() {
+window.cantDecide = function () {
   document.getElementById("cant-decide").classList.add("hidden");
 
   [...document.querySelectorAll(".feature-category")].forEach((el) => {
-    el.classList.add("hidden")
+    el.classList.add("hidden");
   });
 
   [...document.querySelectorAll(".active-quickstart")].forEach((el) => {
-    if(!el.classList.contains("hidden")) {
+    if (!el.classList.contains("hidden")) {
       el.click();
     }
   });
 
   document.getElementById("asterisk-warning").classList.add("hidden");
-  document.getElementById("quickstart-live_view-inactive").click()
+  document.getElementById("quickstart-live_view-inactive").click();
 
   document.getElementById("show-options").classList.remove("hidden");
   document.getElementById("dont-worry").classList.remove("hidden");
-}
+};
 
-window.showAll = function() {
+window.showAll = function () {
   document.getElementById("cant-decide").classList.remove("hidden");
 
   [...document.querySelectorAll(".feature-category")].forEach((el) => {
-    el.classList.remove("hidden")
+    el.classList.remove("hidden");
   });
 
   document.getElementById("show-options").classList.add("hidden");
   document.getElementById("dont-worry").classList.add("hidden");
   document.getElementById("asterisk-warning").classList.remove("hidden");
-}
+};
 
-window.clickOnPreset = function(name) {
-  var element = document.getElementById('quickstart-' + name + '-inactive');
-  if (element && element.style.display !== 'none') {
+window.clickOnPreset = function (name) {
+  var element = document.getElementById("quickstart-" + name + "-inactive");
+  if (element && element.style.display !== "none") {
     element.click();
   }
-}
+};
 
-window.featureClicked = function(el, toggleTo, checked) {
+window.featureClicked = function (el, toggleTo, checked) {
   const name = el.dataset.name;
   features[name].checked = checked;
-  el.classList.add("hidden")
-  document.getElementById(toggleTo).classList.remove("hidden")
+  el.classList.add("hidden");
+  document.getElementById(toggleTo).classList.remove("hidden");
 
-  setUrl()
-}
+  setUrl();
+};
 
-window.quickStartClicked = function(el, toggleTo, checked) {
+window.quickStartClicked = function (el, toggleTo, checked) {
   [...document.querySelectorAll(".active-quickstart")].forEach((el) => {
-    el.classList.add("hidden")
+    el.classList.add("hidden");
   });
 
   [...document.querySelectorAll(".inactive-quickstart")].forEach((el) => {
-    el.classList.remove("hidden")
+    el.classList.remove("hidden");
   });
 
   [...document.querySelectorAll(".active-feature")].forEach((el) => {
-    el.classList.add("hidden")
+    el.classList.add("hidden");
   });
 
   [...document.querySelectorAll(".inactive-feature")].forEach((el) => {
-    el.classList.remove("hidden")
+    el.classList.remove("hidden");
   });
 
-  el.classList.add("hidden")
+  el.classList.add("hidden");
   document.getElementById(toggleTo).classList.remove("hidden");
 
   for (var feature of Object.keys(features)) {
-    features[feature].checked = false
+    features[feature].checked = false;
   }
 
   const toClick = quickstarts[el.dataset.name].features;
 
-  if(checked) {
+  if (checked) {
     toClick.forEach((name) => {
-      document.getElementById(`feature-${name}-inactive`).click()
-    })
+      document.getElementById(`feature-${name}-inactive`).click();
+    });
   }
 
-  setUrl()
-}
+  setUrl();
+};
 
-window.appNameChanged = function(el) {
-  appName = el.value
+window.appNameChanged = function (el) {
+  appName = el.value;
 
-  setUrl()
-}
+  setUrl();
+};
 
-window.showAdvancedFeatures = function() {
+window.showAdvancedFeatures = function () {
   const chevron = document.getElementById("advanced-chevron");
   const text = document.getElementById("advanced-text");
   const advanced = document.getElementById("advanced-features");
@@ -815,35 +828,34 @@ window.showAdvancedFeatures = function() {
     text.innerHTML = "Hide";
     advanced.classList.remove("hidden");
   }
-}
+};
 
-window.copyUrl = function(el) {
+window.copyUrl = function (el) {
   // Get the text field
-  var copyText = document.getElementById('selected-features').innerHTML;
+  var copyText = document.getElementById("selected-features").innerHTML;
 
   copyText = copyText
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&amp;/g, '&');
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&");
 
   navigator.clipboard.writeText(copyText);
 
-  var button = document.getElementById('copy-url-button');
-  var icon = document.getElementById('copy-url-button-icon');
-  var text = document.getElementById('copy-url-button-text');
+  var button = document.getElementById("copy-url-button");
+  var icon = document.getElementById("copy-url-button-icon");
+  var text = document.getElementById("copy-url-button-text");
 
-  text.innerHTML = "Copied"
-  icon.classList.remove("hero-clipboard")
-  icon.classList.add("hero-check")
+  text.innerHTML = "Copied";
+  icon.classList.remove("hero-clipboard");
+  icon.classList.add("hero-check");
   button.classList.add("was-clicked");
-}
-
+};
 
 // connect if there are any LiveViews on the page
 liveSocket.connect();
 
 // expose liveSocket on window for web console debug logs and latency simulation:
- liveSocket.disableDebug();
+liveSocket.disableDebug();
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket;
