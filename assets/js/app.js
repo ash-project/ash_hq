@@ -145,6 +145,9 @@ const features = {
     <p>
     Faster render times to boost SEO performance, even for the most content-heavy pages.
     </p>
+    <p class="text-red-400">
+    Does not support windows.
+    </p>
     `,
   },
   json_api: {
