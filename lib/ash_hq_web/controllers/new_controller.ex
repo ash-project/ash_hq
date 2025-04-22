@@ -120,13 +120,13 @@ defmodule AshHqWeb.NewController do
     new_with_args =
       if with_args = params["with_args"] do
         if with_phx_new? do
-          "--from-elixir-new #{escape_unescaped_quotes(with_args)}"
+          "--from-elixir-install #{escape_unescaped_quotes(with_args)}"
         else
           "#{escape_unescaped_quotes(with_args)}"
         end
       else
         if with_phx_new? do
-          "--from-elixir-new"
+          "--from-elixir-install"
         else
           ""
         end
