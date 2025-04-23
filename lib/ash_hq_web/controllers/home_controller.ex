@@ -36,6 +36,12 @@ defmodule AshHqWeb.HomeController do
     |> render("events.html")
   end
 
+  def book_errata(conn, _) do
+    conn
+    |> assign_events()
+    |> render("book_errata.html")
+  end
+
   defp assign_events(conn) do
     events = AshHq.Events.events()
 
