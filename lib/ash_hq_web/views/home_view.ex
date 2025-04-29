@@ -123,7 +123,7 @@ defmodule AshHqWeb.HomeView do
         paper_trail: "Paper Trail",
         cloak: "Encryption"
       ],
-      "CMS & Admin": [
+      Admin: [
         admin: "Admin UI"
       ],
       "Dev Tools": [
