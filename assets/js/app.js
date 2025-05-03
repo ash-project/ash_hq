@@ -432,6 +432,19 @@ const features = {
     </p>
     `,
   },
+  tidewave: {
+    adds: ["tidewave"],
+    order: 16,
+    links: [{ link: "https://tidewave.ai", name: "Tidewave" }],
+    tooltip: `
+    <p class="mb-2">
+    Speed up development with AI assistants that understand your web application, how it runs, and what it delivers.
+    </p>
+    <p>
+    Tidewave is an MCP server, served by your application, that gives your agentic development workflow super powers.
+    </p>
+    `,
+  },
 };
 
 let addingToApp = false;

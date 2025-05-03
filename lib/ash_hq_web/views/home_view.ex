@@ -15,7 +15,7 @@ defmodule AshHqWeb.HomeView do
   end
 
   @coming_soon [:opentelemetry, :appsignal]
-  @external [:oban, :mishka, :live_debugger]
+  @external [:oban, :mishka, :live_debugger, :tidewave]
 
   defp logos_grid, do: "grid-cols-3"
 
@@ -127,6 +127,7 @@ defmodule AshHqWeb.HomeView do
         admin: "Admin UI"
       ],
       "Dev Tools": [
+        tidewave: "Tidewave",
         live_debugger: "Live Debugger"
       ],
       "UI Components": [
