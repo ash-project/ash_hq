@@ -40,6 +40,7 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:tidewave, "~> 0.1", only: [:dev]},
       {:hackney, "~> 1.8"},
       {:sentry, "~> 10.8"},
       {:timex, "~> 3.0"},

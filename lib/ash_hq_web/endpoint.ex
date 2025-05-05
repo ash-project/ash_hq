@@ -25,6 +25,10 @@ defmodule AshHqWeb.Endpoint do
     gzip: false,
     only: AshHqWeb.static_paths()
 
+  if Code.ensure_loaded?(Tidewave) do
+    plug Tidewave
+  end
+
   # Need to figure out CSP yet
   # plug PlugContentSecurityPolicy
 

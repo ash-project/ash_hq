@@ -67,11 +67,13 @@
     <div class="mt-8 text-center">
       <div id="custom-substack-embed"></div>
       <p class="mt-2 mb-3 text-sm tracking-wide text-center text-gray-400 rounded-lg ">
-        Stay up to date with our weekly 
-        <a href="https://ashweekly.substack.com" target="_blank" class="underline">newsletter</a>
-        <br />
+        Stay up to date with our weekly newsletter. <br />
         Please remember to<!-- -->
         <span class="font-bold">confirm your email!</span>
+        <br />
+        <a href="https://ashweekly.substack.com" target="_blank" class="underline">
+          View Past Issues
+        </a>
       </p>
     </div>
   </div>
@@ -117,7 +119,11 @@
       </button>
     </div>
     <div id="already-have-an-app" class="mb-2">
-      <button id="already-have-an-app-button" class="text-lg underline cursor-pointer" onclick="window.addingToApp()">
+      <button
+        id="already-have-an-app-button"
+        class="text-lg underline cursor-pointer"
+        onclick="window.addingToApp()"
+      >
         Already have an app?
       </button>
     </div>
@@ -165,7 +171,10 @@
                       do: "window.featureClicked(this, 'feature-#{value}-active', true)"
                   }
                 >
-                  {name}<%= if external?(value) do %><sup>*</sup><% end %>
+                  {name}
+                  <%= if external?(value) do %>
+                    <sup>*</sup>
+                  <% end %>
                 </span>
                 <span
                   id={"feature-#{value}-active"}
@@ -173,7 +182,10 @@
                   class="relative active-feature hidden rounded px-2 py-2 border border-primary-dark-500/40 bg-primary-dark-500/80 cursor-pointer"
                   onclick={"window.featureClicked(this, 'feature-#{value}-inactive', false)"}
                 >
-                  {name}<%= if external?(value) do %><sup>*</sup><% end %>
+                  {name}
+                  <%= if external?(value) do %>
+                    <sup>*</sup>
+                  <% end %>
                 </span>
                 <%= if coming_soon?(value) do %>
                   <span class="text-xs text-slate-400 font-extralight italic mt-1">
@@ -192,7 +204,9 @@
     <div id="dont-worry" class="mb-2 hidden flex flex-col gap-2">
       <p class="text-lg">
         Pick a preset and go. Everything but Phoenix can be
-        <a class="text-primary-dark-400 cursor-pointer" onclick="window.addingToApp()">installed later.</a>
+        <a class="text-primary-dark-400 cursor-pointer" onclick="window.addingToApp()">
+          installed later.
+        </a>
       </p>
       <p class="text-lg">
         All the presets use PostgreSQL, the best database around.
@@ -245,13 +259,21 @@
       <h2 class="text-1xl font-bold mb-6 text-primary-light-200">
         Some selected features require manual setup:
       </h2>
-      <div id="manual-setup-links" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-[30%] gap-2"></div>
+      <div
+        id="manual-setup-links"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-[30%] gap-2"
+      >
+      </div>
     </div>
     <div id="read-more-box" class="flex flex-col hidden mb-8">
       <h2 class="text-1xl font-bold mb-6 text-primary-light-200">
         Read the docs:
       </h2>
-      <div id="read-more-links" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-[30%] gap-2"></div>
+      <div
+        id="read-more-links"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-[30%] gap-2"
+      >
+      </div>
     </div>
     <button
       id="copy-url-button"

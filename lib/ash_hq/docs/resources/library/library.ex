@@ -2,7 +2,8 @@ defmodule AshHq.Docs.Library do
   @moduledoc false
   use Ash.Resource,
     domain: AshHq.Docs,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    primary_read_warning?: false
 
   actions do
     default_accept :*

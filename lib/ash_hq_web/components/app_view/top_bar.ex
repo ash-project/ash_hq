@@ -64,12 +64,6 @@ defmodule AshHqWeb.Components.AppView.TopBar do
         >
           Community
         </.link>
-        <a
-          href="https://elixirforum.com/c/ash-framework-forum/123"
-          class="text-lg font-bold px-2 md:px-4 dark:hover:text-primary-dark-400 hover:text-primary-light-700 hidden lg:block"
-        >
-          Forum
-        </a>
         <.link
           href="/media"
           title="Media"

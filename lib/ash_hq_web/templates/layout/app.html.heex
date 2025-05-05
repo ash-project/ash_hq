@@ -2,7 +2,8 @@
   <div :if={@next_event} class="bg-fuchsia-900 w-full py-1 text-center">
     <a class="font-bold mr-2" href={@next_event.href} target="_blank">
       {@next_event[:cta]}&nbsp{@next_event.title}
-    </a>{@next_event.date_in_english}
+    </a>
+    {@next_event.date_in_english}
     <a class="font-extralight" href="/#upcoming-events">
       &nbsp&nbsp|&nbsp&nbsp See all upcoming events
     </a>
@@ -26,13 +27,6 @@
           title="Community"
         >
           Community
-        </a>
-        <a
-          href="https://elixirforum.com/c/ash-framework-forum/123"
-          class="text-white hover:text-primary-light-400 transition-colors"
-          title="Forum"
-        >
-          Forum
         </a>
         <a
           href="/media"
