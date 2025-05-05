@@ -78,7 +78,6 @@ config :ash_hq, AshHqWeb.Endpoint,
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/ash_hq_web/tails.ex",
       ~r"lib/ash_hq_web/(live|views|pages|components)/.*(ex)$",
       ~r"lib/ash_hq_web/templates/.*(eex)$"
     ]

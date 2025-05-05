@@ -33,6 +33,21 @@
         </a>
       </div>
       <div class="col-span-2 flex-col flex items-center">
+        <div class="text-3xl font-bold mt-8 mb-8 text-center">Case Studies & Blog Posts</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
+          <a
+            :for={post <- @blog_posts_and_case_studies}
+            href={post.url}
+            class="backdrop-blur-lg bg-slate-950/50 border border-slate-500/20 p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:bg-slate-900/60"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <h3 class="text-xl font-semibold mb-2 text-primary-light-500">{post.title}</h3>
+            <p class="text-sm text-white/80">{post.description}</p>
+          </a>
+        </div>
+      </div>
+      <div class="col-span-2 flex-col flex items-center">
         <div class="text-3xl font-bold mt-8 mb-8 text-center">Youtube</div>
         <div class="relative">
           <iframe

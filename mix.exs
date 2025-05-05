@@ -73,7 +73,6 @@ defmodule AshHq.MixProject do
       # Clustering
       {:libcluster, "~> 3.3"},
       # UI
-      {:tails, "~> 0.1"},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.3.1", runtime: Mix.env() == :dev},
       # Syntax Highlighting
