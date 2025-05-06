@@ -108,7 +108,7 @@ defmodule AshHqWeb.HomeView do
       Authentication: [
         password_auth: "Password",
         magic_link_auth: "Magic Link",
-        api_key_auth: "API Keys",
+        # api_key_auth: "API Keys",
         oauth: "OAuth2"
       ],
       Finance: [
@@ -117,7 +117,8 @@ defmodule AshHqWeb.HomeView do
       ],
       Automation: [
         oban: "Background Jobs",
-        state_machine: "State Machines"
+        state_machine: "State Machines",
+        ash_events: "Event Sourcing"
       ],
       "Safety & Security": [
         archival: "Archival",

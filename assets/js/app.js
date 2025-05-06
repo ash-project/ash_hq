@@ -209,7 +209,7 @@ const features = {
   api_key_auth: {
     requires: ["phoenix"],
     adds: ["ash_authentication"],
-    order: 7,
+    order: 7.5,
     links: [
       {
         link: "https://hexdocs.pm/ash_authentication",
@@ -314,6 +314,19 @@ const features = {
     </p>
     <p>
     You can even generate fancy mermaid flow charts!
+    </p>
+    `,
+  },
+  ash_events: {
+    adds: ["ash_events"],
+    links: [{ link: "https://hexdocs.pm/ash_events", name: "AshEvents" }],
+    order: 12.5,
+    tooltip: `
+    <p class="mb-2">
+    Tracks and persists events when actions are performed on your resources, providing a complete audit trail and event replay.
+    </p>
+    <p>
+    A declarative hybrid approach to event sourcing.
     </p>
     `,
   },
