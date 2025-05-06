@@ -206,6 +206,27 @@ const features = {
     </p>
     `,
   },
+  api_key_auth: {
+    requires: ["phoenix"],
+    adds: ["ash_authentication"],
+    order: 7,
+    links: [
+      {
+        link: "https://hexdocs.pm/ash_authentication",
+        name: "AshAuthentication",
+      },
+    ],
+    args: ["--auth-strategy api_key"],
+    tooltip: `
+    <p class="mb-2">
+    Generate and authenticate with API keys.
+    </p>
+    <p>
+    Built for compliance with secret scanning tools, using industry best practice for
+    generating and verifying API keys.
+    </p>
+    `,
+  },
   oauth: {
     requires: ["phoenix"],
     adds: ["ash_authentication", "ash_authentication_phoenix"],
