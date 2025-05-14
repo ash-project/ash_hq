@@ -111,6 +111,10 @@ defmodule AshHqWeb.HomeView do
         api_key_auth: "API Keys",
         oauth: "OAuth2"
       ],
+      AI: [
+        tidewave: "Tidewave",
+        ash_ai: "Ash AI"
+      ],
       Finance: [
         money: "Money",
         double_entry: "Double Entry Accounting"
@@ -125,17 +129,14 @@ defmodule AshHqWeb.HomeView do
         paper_trail: "Paper Trail",
         cloak: "Encryption"
       ],
-      Admin: [
-        admin: "Admin UI"
-      ],
-      "Dev Tools": [
-        tidewave: "Tidewave",
-        live_debugger: "Live Debugger"
+      "Admin & Debugging": [
+        admin: "Admin UI",
+        live_debugger: "Live Debugger",
       ],
       "UI Components": [
         mishka: "Mishka Chelekom"
       ],
-      Observability: [
+      "Observability": [
         appsignal: "AppSignal",
         opentelemetry: "OpenTelemetry"
       ]

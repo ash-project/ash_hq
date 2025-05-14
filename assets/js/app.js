@@ -479,6 +479,19 @@ const features = {
     </p>
     `,
   },
+  ash_ai: {
+    adds: ["ash_ai"],
+    order: 17,
+    links: [{ link: "https://hexdocs.pm/ash_ai", name: "Ash AI" }],
+    tooltip: `
+    <p class="mb-2">
+    First class support for a wide array of LLM tools.
+    </p>
+    <p>
+    Structured outputs, production and development MCP servers, agentic tool calling, a pre-built chat interface and more.
+    </p>
+    `,
+  },
 };
 
 let addingToApp = false;
