@@ -38,12 +38,14 @@ defmodule AshHqWeb.HomeView do
         href: "https://www.wintermeyer-consulting.de/",
         src: "/images/wintermeyer-logo-dark.svg"
       },
-      # placeholder: %{href: "", src: ""},
       "Boring Business Leads": %{
         href: "https://boringbusinessleads.com",
         src: "/images/self-storage-leads-logo-light.svg"
+      },
+      "Linguavid": %{
+        href: "https://linguavid.net",
+        src: "/images/linguavid-logo.png"
       }
-      # placeholder: %{href: "", src: ""}
     ]
     |> insert_placeholders(logos_grid())
   end
