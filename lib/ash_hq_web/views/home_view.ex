@@ -122,7 +122,7 @@ defmodule AshHqWeb.HomeView do
         double_entry: "Double Entry Accounting"
       ],
       Automation: [
-        oban: "Background Jobs",
+        oban: "Oban",
         state_machine: "State Machines",
         ash_events: "Event Sourcing"
       ],
