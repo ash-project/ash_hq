@@ -675,10 +675,11 @@ function setUrl() {
   }
 
   const appNameSafe = appNameComponent.value
-    .toLowerCase()
-    .replace(/[\s-]/g, "_")
-    .replace(/[^a-z_]/g, "")
-    .replace(/^_/, "");
+    .replace(/[^a-zA-Z0-9\s_-]/g, "")
+    .replace(/[\s-_]+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .replace(/^(\d)/, "app_$1")
+    .toLowerCase();
 
   let installArg;
   if (features.phoenix.checked) {
