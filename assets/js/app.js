@@ -365,7 +365,7 @@ const features = {
     order: 15,
     links: [
       {
-        link: "https://hexdocs.pm/live_debugger/readme.html",
+        link: "https://hexdocs.pm/live_debugger/",
         name: "Live Debugger",
       },
     ],
