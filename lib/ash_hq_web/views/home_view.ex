@@ -137,11 +137,11 @@ defmodule AshHqWeb.HomeView do
       ],
       "UI Components": [
         mishka: "Mishka Chelekom"
-      ],
-      "Observability": [
-        appsignal: "AppSignal",
-        opentelemetry: "OpenTelemetry"
       ]
+      # "Observability": [
+      #   appsignal: "AppSignal",
+      #   opentelemetry: "OpenTelemetry"
+      # ]
     ]
   end
 
