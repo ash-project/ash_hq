@@ -899,3 +899,1020 @@ liveSocket.disableDebug();
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket;
+
+// Ash Interactive Animation
+const AshAnimation = {
+  // Animation stages with code snippets
+  stages: [
+    {
+      name: "Pure Behavior",
+      code: `
+  actions do
+    action :reading_time, :integer do
+      argument :content, :string, allow_nil?: false
+
+      run fn input, _ ->
+        words =
+          input.arguments.content
+          |> String.split()
+          |> length()
+
+        {:ok, div(words, 200) + 1}
+      end
+    end
+  end
+end`,
+      visualizer: () => AshAnimation.createFunctionInterface(),
+    },
+    {
+      name: "Add Persistence",
+      code: `
+    data_layer: AshPostgres.DataLayer
+
+  postgres do
+    table "posts"
+    repo MyBlog.Repo
+  end
+
+  attributes do
+    uuid_primary_key :id
+    attribute :title, :string, allow_nil?: false
+    attribute :content, :string
+
+    timestamps()
+  end
+
+  actions do
+    defaults [:read, create: [:title, :content]]
+
+    update :rename do
+      accept [:title]
+    end
+
+    # ...
+  end`,
+      visualizer: () => AshAnimation.createPostgresTable(),
+    },
+    {
+      name: "Add GraphQL",
+      code: `
+    extensions: [AshGraphql.Resource]
+
+  graphql do
+    type :post
+
+    queries do
+      get :post, :read
+      list :posts, :read
+    end
+
+    mutations do
+      create :create_post, :create
+      update :update_post, :update
+      destroy :delete_post, :destroy
+    end
+  end
+
+  # ...`,
+      visualizer: () => AshAnimation.createGraphQLPanel(),
+    },
+    {
+      name: "Add Encryption",
+      code: `
+    extensions: [
+      AshGraphql.Resource,
+      AshCloak.Resource
+    ]
+
+  cloak do
+    vault MyBlog.Vault
+    # Encrypt the content attribute
+    attributes [:content]
+  end
+
+  # ...`,
+      visualizer: () => AshAnimation.createEncryptionFlow(),
+    },
+    {
+      name: "Add State Machine",
+      code: `
+    extensions: [
+      AshGraphql.Resource,
+      AshCloak.Resource,
+      AshStateMachine
+    ]
+
+  state_machine do
+    initial_states [:draft]
+    default_initial_state :draft
+
+    transitions do
+      transition :publish, from: :draft, to: :published
+      transition :unpublish, from: :published, to: :draft
+    end
+  end
+
+  # ...`,
+      visualizer: () => AshAnimation.createStateMachine(),
+    },
+  ],
+
+  // State
+  currentStage: 0,
+  typingInterval: null,
+  animationActive: false,
+  observer: null,
+  isPlaying: true,
+  playInterval: null,
+  hasBeenInitiated: false,
+
+  // Initialize the animation
+  init() {
+    console.log("AshAnimation.init() called");
+    const container = document.getElementById("ash-animation");
+    if (!container) {
+      console.log("Container not found!");
+      return;
+    }
+    console.log("Container found, setting up...");
+
+    // Add event listeners for navigation buttons
+    const prevBtn = document.getElementById("prev-stage");
+    const nextBtn = document.getElementById("next-stage");
+    const playPauseBtn = document.getElementById("play-pause");
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => this.previousStage());
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => this.nextStage());
+    }
+    if (playPauseBtn) {
+      playPauseBtn.addEventListener("click", () => this.togglePlayPause());
+    }
+
+    // Set up intersection observer to start animation when visible
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (
+            entry.isIntersecting &&
+            entry.intersectionRatio > 0.5 &&
+            !this.hasBeenInitiated
+          ) {
+            console.log("Animation visible, starting...");
+            this.hasBeenInitiated = true;
+            this.start();
+          }
+        });
+      },
+      { threshold: 0.5 },
+    );
+
+    this.observer.observe(container);
+
+    // Set initial play/pause button state
+    const playIcon = document.getElementById("play-icon");
+    const pauseIcon = document.getElementById("pause-icon");
+    if (playIcon) playIcon.classList.add("hidden");
+    if (pauseIcon) pauseIcon.classList.remove("hidden");
+  },
+
+  // Navigate to previous stage
+  previousStage() {
+    if (this.currentStage > 0) {
+      this.pause();
+      this.currentStage--;
+      this.showStageProgressive(this.currentStage);
+      this.updatePlayPauseButton(false);
+    }
+  },
+
+  // Navigate to next stage
+  nextStage() {
+    if (this.currentStage < this.stages.length - 1) {
+      this.pause();
+      this.currentStage++;
+      this.showStageProgressive(this.currentStage);
+      this.updatePlayPauseButton(false);
+    }
+  },
+
+  // Show stage for manual navigation (clears and rebuilds)
+  showStageManual(stageIndex) {
+    console.log("showStageManual called for stage:", stageIndex);
+    this.currentStage = stageIndex;
+    this.updateNavigationButtons();
+    this.updateProgressDots();
+
+    // Clear all visualizations and rebuild up to current stage
+    this.clearAllVisualizations();
+
+    const stage = this.stages[stageIndex];
+    const codeDisplay = document.getElementById("code-display");
+
+    // Set base content
+    if (stageIndex === 0) {
+      codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">MyBlog.Post</span> <span class="text-pink-400">do</span>
+  <span class="text-pink-400">use</span> <span class="text-blue-400">Ash.Resource</span>
+  `;
+    } else {
+      codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">MyBlog.Post</span> <span class="text-pink-400">do</span>
+  <span class="text-pink-400">use</span> <span class="text-blue-400">Ash.Resource</span>,`;
+    }
+
+    // Add stage-specific content
+    const tokens = this.parseElixirTokens(stage.code);
+    tokens.forEach((token) => {
+      const span = document.createElement("span");
+      span.className = token.className;
+      span.textContent = token.text;
+      codeDisplay.appendChild(span);
+    });
+
+    // Build up all visualizations through current stage
+    for (let i = 0; i <= stageIndex; i++) {
+      this.addVisualization(this.stages[i].visualizer(), i);
+    }
+  },
+
+  // Show a specific stage for initial load
+  showStage(stageIndex) {
+    console.log("showStage called for stage:", stageIndex);
+    this.showStageProgressive(stageIndex);
+  },
+
+  // Show stage with progressive accumulation (for both manual nav and initial load)
+  showStageProgressive(stageIndex) {
+    this.currentStage = stageIndex;
+    this.updateNavigationButtons();
+    this.updateProgressDots();
+
+    // Always clear and rebuild to ensure clean state
+    this.clearAllVisualizations();
+
+    const stage = this.stages[stageIndex];
+    const codeDisplay = document.getElementById("code-display");
+
+    // Set base content
+    if (stageIndex === 0) {
+      codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">MyBlog.Post</span> <span class="text-pink-400">do</span>
+  <span class="text-pink-400">use</span> <span class="text-blue-400">Ash.Resource</span>
+  `;
+    } else {
+      codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">MyBlog.Post</span> <span class="text-pink-400">do</span>
+  <span class="text-pink-400">use</span> <span class="text-blue-400">Ash.Resource</span>,`;
+    }
+
+    // Add stage-specific content
+    const tokens = this.parseElixirTokens(stage.code);
+    tokens.forEach((token) => {
+      const span = document.createElement("span");
+      span.className = token.className;
+      span.textContent = token.text;
+      codeDisplay.appendChild(span);
+    });
+
+    // Build up all visualizations through current stage progressively
+    this.buildProgressiveVisualizations(stageIndex);
+  },
+
+  // Build visualizations progressively showing accumulation
+  buildProgressiveVisualizations(targetStage) {
+    // Add each stage's visualization in sequence
+    for (let i = 0; i <= targetStage; i++) {
+      setTimeout(() => {
+        if (i < targetStage) {
+          // Add previous stages as summaries
+          const summaryContent = this.createSummaryForStage(i);
+          this.addSummaryToGrid(summaryContent, i);
+        } else {
+          // Add current stage as full visualization
+          this.addVisualization(this.stages[i].visualizer(), i);
+        }
+      }, i * 100); // Stagger the animations slightly
+    }
+  },
+
+  // Add summary directly to grid
+  addSummaryToGrid(summaryContent, stageIndex) {
+    const panel = document.getElementById("visualization-panel");
+
+    // Create or get summary grid
+    let summaryGrid = document.getElementById("summary-grid");
+    if (!summaryGrid) {
+      summaryGrid = document.createElement("div");
+      summaryGrid.id = "summary-grid";
+      summaryGrid.className = "grid gap-4 mb-4";
+      panel.appendChild(summaryGrid);
+    }
+
+    // Update grid columns
+    const currentSummaries = summaryGrid.children.length;
+    const cols = Math.min(currentSummaries + 1, 4);
+    summaryGrid.className = `grid grid-cols-${cols} gap-4 mb-8`;
+
+    // Create summary container
+    const summaryContainer = document.createElement("div");
+    summaryContainer.id = `stage-${stageIndex}`;
+    summaryContainer.className =
+      "stage-visualization stage-summary transition-all duration-300 ease-in-out";
+    summaryContainer.innerHTML = summaryContent;
+
+    // Add with animation
+    summaryContainer.style.opacity = "0";
+    summaryContainer.style.transform = "translateY(10px)";
+    summaryGrid.appendChild(summaryContainer);
+
+    setTimeout(() => {
+      summaryContainer.style.opacity = "1";
+      summaryContainer.style.transform = "translateY(0)";
+    }, 50);
+  },
+
+  // Start the animation with typing
+  start() {
+    console.log("Animation start() called");
+    if (this.animationActive) return;
+    this.animationActive = true;
+    this.animate();
+  },
+
+  // Main animation loop with typing
+  animate() {
+    console.log("animate() called for stage:", this.currentStage);
+    if (!this.animationActive) return;
+
+    const stage = this.stages[this.currentStage];
+    const codeDisplay = document.getElementById("code-display");
+
+    // Reset to base content when starting new stage
+    if (this.currentStage === 0) {
+      codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">MyBlog.Post</span> <span class="text-pink-400">do</span>
+  <span class="text-pink-400">use</span> <span class="text-blue-400">Ash.Resource</span>
+  <span id="typing-cursor" class="inline-block w-2 h-[1em] bg-primary-light-500 animate-pulse"></span>`;
+    } else {
+      codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">MyBlog.Post</span> <span class="text-pink-400">do</span>
+  <span class="text-pink-400">use</span> <span class="text-blue-400">Ash.Resource</span>,
+<span id="typing-cursor" class="inline-block w-2 h-[1em] bg-primary-light-500 animate-pulse"></span>`;
+    }
+    this.updateProgressDots();
+
+    // Clear all visualizations only when restarting (stage 0)
+    if (this.currentStage === 0) {
+      this.clearAllVisualizations();
+    }
+
+    // Transition previous stages to summary immediately when typing starts
+    this.transitionPreviousStagesToSummary(this.currentStage);
+
+    // Add new visualization immediately when typing starts
+    setTimeout(() => {
+      console.log(
+        "AUTOPLAY: Adding visualization for stage:",
+        this.currentStage,
+      );
+      this.addVisualization(stage.visualizer(), this.currentStage);
+    }, 200);
+
+    // Type the code (trim leading newline for stages 2+ to prevent extra blank line)
+    const codeToType =
+      this.currentStage >= 1 ? stage.code.replace(/^\n/, "") : stage.code;
+    this.typeCode(codeToType, () => {
+      console.log("typeCode callback for stage:", this.currentStage);
+      // Hide cursor after typing
+      const cursor = document.getElementById("typing-cursor");
+      if (cursor) {
+        cursor.style.display = "none";
+      }
+
+      // Wait before moving to next stage
+      setTimeout(() => {
+        this.currentStage = (this.currentStage + 1) % this.stages.length;
+        console.log("Moving to next stage:", this.currentStage);
+
+        // Update navigation buttons after stage change
+        this.updateNavigationButtons();
+
+        // Continue animation if active
+        if (this.animationActive) {
+          this.animate();
+        }
+      }, 4000);
+    });
+  },
+
+  // Toggle autoplay
+  togglePlayPause() {
+    if (this.isPlaying) {
+      this.pause();
+      this.updatePlayPauseButton(false);
+    } else {
+      this.isPlaying = true;
+      this.animationActive = true;
+      this.updatePlayPauseButton(true);
+      this.animate();
+    }
+  },
+
+  // Update play/pause button visual state
+  updatePlayPauseButton(isPlaying) {
+    const playIcon = document.getElementById("play-icon");
+    const pauseIcon = document.getElementById("pause-icon");
+
+    if (isPlaying) {
+      if (playIcon) playIcon.classList.add("hidden");
+      if (pauseIcon) pauseIcon.classList.remove("hidden");
+    } else {
+      if (playIcon) playIcon.classList.remove("hidden");
+      if (pauseIcon) pauseIcon.classList.add("hidden");
+    }
+  },
+
+  // Start autoplay
+  play() {
+    this.isPlaying = true;
+    this.animationActive = true;
+    this.animate();
+  },
+
+  // Stop autoplay
+  pause() {
+    this.isPlaying = false;
+    this.animationActive = false;
+    if (this.typingInterval) {
+      clearInterval(this.typingInterval);
+      this.typingInterval = null;
+    }
+  },
+
+  // Update navigation button states
+  updateNavigationButtons() {
+    const prevBtn = document.getElementById("prev-stage");
+    const nextBtn = document.getElementById("next-stage");
+
+    if (prevBtn) {
+      prevBtn.disabled = this.currentStage === 0;
+    }
+    if (nextBtn) {
+      nextBtn.disabled = this.currentStage === this.stages.length - 1;
+    }
+  },
+
+  // Type code character by character
+  typeCode(code, callback) {
+    const codeDisplay = document.getElementById("code-display");
+
+    // Check if elements exist
+    if (!codeDisplay) {
+      console.error("Code display element not found");
+      callback();
+      return;
+    }
+
+    // Parse the code into tokens first
+    const tokens = this.parseElixirTokens(code);
+    let tokenIndex = 0;
+    let charInToken = 0;
+
+    const type = () => {
+      if (!this.animationActive) return;
+
+      // Get cursor each time since it may be recreated
+      const cursor = document.getElementById("typing-cursor");
+      if (!cursor) {
+        console.error("Cursor not found");
+        callback();
+        return;
+      }
+
+      if (tokenIndex < tokens.length) {
+        const token = tokens[tokenIndex];
+
+        if (charInToken === 0) {
+          // Starting a new token, create the span
+          const span = document.createElement("span");
+          span.className = token.className;
+          span.textContent = "";
+          // Insert before cursor
+          codeDisplay.insertBefore(span, cursor);
+        }
+
+        // Add one character to the current token
+        const spans = codeDisplay.querySelectorAll("span:not(#typing-cursor)");
+        const currentSpan = spans[spans.length - 1];
+        if (currentSpan) {
+          currentSpan.textContent += token.text[charInToken];
+        }
+
+        charInToken++;
+
+        if (charInToken >= token.text.length) {
+          // Move to next token
+          tokenIndex++;
+          charInToken = 0;
+        }
+
+        // Removed scrollIntoView to prevent interference with page scrolling
+
+        // Variable typing speed
+        const char = token.text[charInToken - 1];
+        const delay =
+          char === "\n" ? 150 : char === " " ? 30 : 40 + Math.random() * 20;
+        setTimeout(type, delay);
+      } else {
+        callback();
+      }
+    };
+
+    type();
+  },
+
+  // Parse Elixir code into tokens with their CSS classes
+  parseElixirTokens(code) {
+    const tokens = [];
+    const keywords =
+      /\b(defmodule|def|do|end|use|import|alias|require|case|cond|if|unless|when|fn|with)\b/g;
+    const booleans = /\b(true|false|nil)\b/g;
+    const atoms = /(:\w+)/g;
+    const strings = /("[^"]*")/g;
+    const comments = /(#[^\n]*)/g;
+    const modules = /\b([A-Z]\w*(\.\w+)*)\b/g;
+    const pipes = /(\|>)/g;
+    const arrows = /(->)/g;
+
+    let lastIndex = 0;
+    const allMatches = [];
+
+    // Collect all matches with their positions
+    let match;
+    while ((match = keywords.exec(code)) !== null) {
+      allMatches.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        text: match[0],
+        className: "text-pink-400",
+      });
+    }
+    while ((match = booleans.exec(code)) !== null) {
+      allMatches.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        text: match[0],
+        className: "text-purple-400",
+      });
+    }
+    while ((match = atoms.exec(code)) !== null) {
+      allMatches.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        text: match[0],
+        className: "text-cyan-400",
+      });
+    }
+    while ((match = strings.exec(code)) !== null) {
+      allMatches.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        text: match[0],
+        className: "text-yellow-400",
+      });
+    }
+    while ((match = comments.exec(code)) !== null) {
+      allMatches.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        text: match[0],
+        className: "text-gray-500",
+      });
+    }
+    while ((match = modules.exec(code)) !== null) {
+      allMatches.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        text: match[0],
+        className: "text-blue-400",
+      });
+    }
+    while ((match = pipes.exec(code)) !== null) {
+      allMatches.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        text: match[0],
+        className: "text-pink-400",
+      });
+    }
+    while ((match = arrows.exec(code)) !== null) {
+      allMatches.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        text: match[0],
+        className: "text-pink-400",
+      });
+    }
+
+    // Sort by position
+    allMatches.sort((a, b) => a.start - b.start);
+
+    // Build tokens
+    lastIndex = 0;
+    for (const match of allMatches) {
+      // Add plain text before this match
+      if (match.start > lastIndex) {
+        const plainText = code.substring(lastIndex, match.start);
+        if (plainText) {
+          tokens.push({ text: plainText, className: "text-gray-300" });
+        }
+      }
+
+      // Add the highlighted match
+      tokens.push({ text: match.text, className: match.className });
+      lastIndex = match.end;
+    }
+
+    // Add remaining plain text
+    if (lastIndex < code.length) {
+      const remainingText = code.substring(lastIndex);
+      if (remainingText) {
+        tokens.push({ text: remainingText, className: "text-gray-300" });
+      }
+    }
+
+    return tokens;
+  },
+
+  // Update progress dots
+  updateProgressDots() {
+    const dots = document.querySelectorAll(".stage-dot");
+    dots.forEach((dot, index) => {
+      if (index === this.currentStage) {
+        dot.classList.add("bg-primary-light-500");
+        dot.classList.remove("bg-primary-dark-500/30");
+      } else if (index < this.currentStage) {
+        dot.classList.add("bg-primary-dark-500");
+        dot.classList.remove("bg-primary-dark-500/30", "bg-primary-light-500");
+      } else {
+        dot.classList.remove("bg-primary-light-500", "bg-primary-dark-500");
+        dot.classList.add("bg-primary-dark-500/30");
+      }
+    });
+  },
+
+  // Add new visualization element with transition
+  addVisualization(content, stageIndex) {
+    const panel = document.getElementById("visualization-panel");
+    console.log(
+      "addVisualization called for stage",
+      stageIndex,
+      "panel has",
+      panel.children.length,
+      "children",
+    );
+
+    // Create container for this stage
+    const stageContainer = document.createElement("div");
+    stageContainer.id = `stage-${stageIndex}`;
+    stageContainer.className =
+      "stage-visualization transition-all duration-500 ease-in-out";
+    stageContainer.innerHTML = content;
+
+    // Initially hidden for animation
+    stageContainer.style.opacity = "0";
+    stageContainer.style.transform = "translateY(20px)";
+
+    panel.appendChild(stageContainer);
+    console.log(
+      "Panel after adding stage",
+      stageIndex,
+      ":",
+      panel.children.length,
+      "children",
+    );
+
+    // Animate in
+    setTimeout(() => {
+      stageContainer.style.opacity = "1";
+      stageContainer.style.transform = "translateY(0)";
+    }, 100);
+  },
+
+  // Transition previous stages to summary versions
+  transitionPreviousStagesToSummary(currentStage) {
+    const panel = document.getElementById("visualization-panel");
+
+    // Ensure summary grid exists
+    let summaryGrid = document.getElementById("summary-grid");
+    if (!summaryGrid && currentStage > 0) {
+      summaryGrid = document.createElement("div");
+      summaryGrid.id = "summary-grid";
+      summaryGrid.className = "grid gap-4 mb-8";
+      panel.insertBefore(summaryGrid, panel.firstChild);
+    }
+
+    for (let i = 0; i < currentStage; i++) {
+      const prevStage = document.getElementById(`stage-${i}`);
+      if (prevStage && !prevStage.classList.contains("stage-summary")) {
+        // Create summary version
+        const summaryContent = this.createSummaryForStage(i);
+
+        // Animate transition and move to grid
+        prevStage.style.transition = "all 0.5s ease-in-out";
+        prevStage.style.transform = "scale(0.8)";
+        prevStage.style.opacity = "0.7";
+
+        setTimeout(() => {
+          // Remove from current location
+          prevStage.remove();
+
+          // Add to summary grid
+          this.addSummaryToGrid(summaryContent, i);
+        }, 250);
+      }
+    }
+
+    // Update grid layout after all summaries are processed
+    if (summaryGrid && currentStage > 0) {
+      const cols = Math.min(currentStage, 4);
+      summaryGrid.className = `grid grid-cols-${cols} gap-4 mb-4`;
+    }
+  },
+
+  // Update grid layout based on number of summary items
+  updateGridLayout(currentStage) {
+    const panel = document.getElementById("visualization-panel");
+
+    if (currentStage > 0) {
+      // Create or update summary grid container
+      let summaryGrid = document.getElementById("summary-grid");
+      if (!summaryGrid) {
+        summaryGrid = document.createElement("div");
+        summaryGrid.id = "summary-grid";
+        summaryGrid.className = "grid gap-3 mb-6";
+        panel.insertBefore(summaryGrid, panel.firstChild);
+      }
+
+      // Update grid columns based on number of summaries
+      const cols = Math.min(currentStage, 4); // Max 4 columns
+      summaryGrid.className = `grid grid-cols-${cols} gap-4 mb-8`;
+
+      // Move existing summaries to grid
+      const summaries = panel.querySelectorAll(".stage-summary");
+      summaries.forEach((summary) => {
+        if (summary.parentNode !== summaryGrid) {
+          summaryGrid.appendChild(summary);
+        }
+      });
+    }
+  },
+
+  // Create summary version for a specific stage
+  createSummaryForStage(stageIndex) {
+    switch (stageIndex) {
+      case 0:
+        return `
+          <div class="bg-slate-900/80 rounded-lg p-3 border border-primary-dark-500/20">
+            <div class="flex items-center gap-2 mb-1">
+              <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+              </svg>
+              <h3 class="text-primary-light-400 font-semibold text-sm">Function</h3>
+            </div>
+            <div class="text-xs text-gray-400">
+              <span class="text-primary-light-300">reading_time/1</span>
+            </div>
+          </div>
+        `;
+      case 1:
+        return `
+          <div class="bg-slate-900/80 rounded-lg p-3 border border-primary-dark-500/20">
+            <div class="flex items-center gap-2 mb-1">
+              <svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+              </svg>
+              <h3 class="text-primary-light-400 font-semibold text-sm">PostgreSQL</h3>
+            </div>
+            <div class="text-xs text-gray-400">Table: posts</div>
+          </div>
+        `;
+      case 2:
+        return `
+          <div class="bg-slate-900/80 rounded-lg p-3 border border-primary-dark-500/20">
+            <div class="flex items-center gap-2 mb-1">
+              <svg class="w-4 h-4 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12,2 L2,7 L12,12 L22,7 L12,2 Z M2,17 L12,22 L22,17 L22,7 L12,12 L2,7 L2,17 Z"/>
+              </svg>
+              <h3 class="text-primary-light-400 font-semibold text-sm">GraphQL</h3>
+            </div>
+            <div class="text-xs text-gray-400">API + Mutations</div>
+          </div>
+        `;
+      case 3:
+        return `
+          <div class="bg-slate-900/80 rounded-lg p-3 border border-primary-dark-500/20">
+            <div class="flex items-center gap-2 mb-1">
+              <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+              <h3 class="text-primary-light-400 font-semibold text-sm">Encrypted</h3>
+            </div>
+            <div class="text-xs text-gray-400">Content field</div>
+          </div>
+        `;
+      default:
+        return "";
+    }
+  },
+
+  // Clear all visualizations (for restart)
+  clearAllVisualizations() {
+    const panel = document.getElementById("visualization-panel");
+    console.log(
+      "clearAllVisualizations called - panel had",
+      panel.children.length,
+      "children",
+    );
+    console.trace("clearAllVisualizations called from:");
+    panel.innerHTML = "";
+  },
+
+  // Visualization creators
+  createFunctionInterface() {
+    return `
+      <div class="w-full">
+        <div class="bg-slate-900/80 rounded-lg p-6 border border-primary-dark-500/20">
+          <h3 class="text-primary-light-400 font-semibold mb-4">Functional Interface</h3>
+          <div class="text-center mb-6">
+            <div class="bg-slate-800/70 rounded-lg p-4 font-mono">
+              <span class="text-blue-400">MyBlog.Post</span>.<span class="text-primary-light-300">reading_time</span>(<span class="text-yellow-400">"content string"</span>)
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div class="bg-slate-800/50 rounded p-3">
+              <p class="text-gray-400 mb-2">Takes:</p>
+              <p class="text-primary-light-300 font-mono">content: String</p>
+            </div>
+            <div class="bg-slate-800/50 rounded p-3">
+              <p class="text-gray-400 mb-2">Returns:</p>
+              <p class="text-primary-light-300 font-mono">Integer (minutes)</p>
+            </div>
+          </div>
+          <div class="mt-4 p-4 bg-green-900/20 rounded border border-green-700/30">
+            <p class="text-sm text-green-300 mb-1">Example:</p>
+            <pre class="text-xs text-green-200 font-mono">reading_time("A long blog post...") → 3</pre>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  createPostgresTable() {
+    return `
+      <div class="w-full space-y-4">
+        <div class="bg-slate-900/80 rounded-lg p-6 border border-primary-dark-500/20">
+          <div class="flex items-center gap-2 mb-4">
+            <svg class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+            </svg>
+            <h3 class="text-primary-light-400 font-semibold">PostgreSQL Table: posts</h3>
+          </div>
+          <div class="overflow-hidden rounded border border-primary-dark-500/20">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-slate-800/50">
+                  <th class="px-4 py-2 text-left text-gray-400">Column</th>
+                  <th class="px-4 py-2 text-left text-gray-400">Type</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-primary-dark-500/10">
+                <tr><td class="px-4 py-2 text-primary-light-300">id</td><td class="px-4 py-2 text-gray-500">uuid</td></tr>
+                <tr><td class="px-4 py-2 text-primary-light-300">title</td><td class="px-4 py-2 text-gray-500">string</td></tr>
+                <tr><td class="px-4 py-2 text-primary-light-300">content</td><td class="px-4 py-2 text-gray-500">text</td></tr>
+                <tr><td class="px-4 py-2 text-primary-light-300">created_at</td><td class="px-4 py-2 text-gray-500">timestamp</td></tr>
+                <tr><td class="px-4 py-2 text-primary-light-300">updated_at</td><td class="px-4 py-2 text-gray-500">timestamp</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  createGraphQLPanel() {
+    return `
+      <div class="w-full">
+        <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20">
+          <div class="flex items-center gap-2 mb-3">
+            <svg class="w-6 h-6 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12,2 L2,7 L12,12 L22,7 L12,2 Z M2,17 L12,22 L22,17 L22,7 L12,12 L2,7 L2,17 Z"/>
+            </svg>
+            <h3 class="text-primary-light-400 font-semibold">GraphQL API</h3>
+          </div>
+          <div class="space-y-3">
+            <div class="p-3 bg-slate-800/50 rounded">
+              <p class="text-sm text-gray-400 mb-1">Query</p>
+              <pre class="text-xs text-primary-light-300">query GetPost($id: ID!) {
+  post(id: $id) {
+    id
+    title
+    content
+  }
+}</pre>
+            </div>
+            <div class="p-3 bg-slate-800/50 rounded">
+              <p class="text-sm text-gray-400 mb-1">Mutation</p>
+              <pre class="text-xs text-primary-light-300">mutation CreatePost($input: CreatePostInput!) {
+  createPost(input: $input) {
+    id
+    title
+  }
+}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  createEncryptionFlow() {
+    return `
+      <div class="w-full space-y-4">
+        <div class="bg-slate-900/80 rounded-lg p-6 border border-primary-dark-500/20">
+          <div class="flex items-center gap-2 mb-4">
+            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+            <h3 class="text-primary-light-400 font-semibold">Encryption at Rest</h3>
+          </div>
+          <div class="flex items-center justify-between gap-4">
+            <div class="flex-1 text-center">
+              <div class="p-4 bg-slate-800/50 rounded">
+                <p class="text-sm text-gray-400 mb-2">Application</p>
+                <p class="text-primary-light-300 font-mono text-sm">"Hello World"</p>
+              </div>
+            </div>
+            <svg class="w-8 h-8 text-primary-dark-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+            <div class="flex-1 text-center">
+              <div class="p-4 bg-slate-800/50 rounded">
+                <p class="text-sm text-gray-400 mb-2">Database</p>
+                <p class="text-green-400 font-mono text-xs">AES256:B64:IV...</p>
+              </div>
+            </div>
+          </div>
+          <p class="text-sm text-gray-500 text-center mt-4">Content field automatically encrypted/decrypted</p>
+        </div>
+      </div>
+    `;
+  },
+
+  createStateMachine() {
+    return `
+      <div class="w-full space-y-4">
+        <div class="bg-slate-900/80 rounded-lg p-6 border border-primary-dark-500/20">
+          <div class="flex items-center gap-2 mb-4">
+            <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+            </svg>
+            <h3 class="text-primary-light-400 font-semibold">State Machine</h3>
+          </div>
+          <div class="flex items-center justify-center gap-8">
+            <div class="text-center">
+              <div class="w-24 h-24 rounded-full bg-yellow-500/20 border-2 border-yellow-500 flex items-center justify-center">
+                <span class="text-yellow-400 font-semibold">Draft</span>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center gap-2">
+                <svg class="w-8 h-6 text-primary-dark-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+                <span class="text-xs text-gray-400">publish</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <svg class="w-8 h-6 text-primary-dark-500 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+                <span class="text-xs text-gray-400">unpublish</span>
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="w-24 h-24 rounded-full bg-green-500/20 border-2 border-green-500 flex items-center justify-center">
+                <span class="text-green-400 font-semibold">Published</span>
+              </div>
+            </div>
+          </div>
+          <div class="mt-6 text-center">
+            <p class="text-sm text-gray-500">Transitions automatically exposed as GraphQL mutations</p>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+};
+
+// Initialize animation when DOM is ready
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM loaded, initializing AshAnimation...");
+  AshAnimation.init();
+});

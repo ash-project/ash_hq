@@ -47,7 +47,75 @@
         Get Started
       </a>
     </div>
+  </div>
+</div>
 
+<!-- Interactive Animation Section -->
+<div id="ash-animation" class="relative py-16">
+  <div class="absolute inset-0 bg-gradient-to-b from-primary-light-900/20 via-primary-dark-900/10 to-primary-light-900/20">
+  </div>
+  
+  <div class="absolute inset-0 bg-[linear-gradient(rgba(254,19,19,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(254,19,19,0.2)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,black,transparent)]">
+  </div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-8">
+      <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent">
+        See Ash in Action
+      </h2>
+      <div class="grid lg:grid-cols-2 gap-8">
+        <!-- Code Editor -->
+        <div class="relative">
+          <div class="bg-slate-900/80 rounded-lg p-4 font-mono text-sm overflow-x-auto border border-primary-dark-500/20 h-[500px]">
+            <div class="flex items-center gap-2 mb-4 pb-4 border-b border-primary-dark-500/20">
+              <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+              <span class="ml-2 text-gray-500 text-xs">lib/my_blog/post.ex</span>
+            </div>
+            <pre id="code-display" class="text-gray-300"><code></code></pre>
+          </div>
+        </div>
+        <!-- Visualization Panel -->
+        <div id="visualization-panel" class="relative min-h-[400px]">
+        </div>
+      </div>
+      <!-- Progress indicator and controls -->
+      <div class="mt-6 flex items-center justify-center gap-4">
+        <button id="prev-stage" class="p-2 rounded-full bg-primary-dark-600 hover:bg-primary-dark-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all" disabled>
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <button id="play-pause" class="p-2 rounded-full bg-green-600 hover:bg-green-700 transition-all">
+          <svg id="play-icon" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <svg id="pause-icon" class="w-5 h-5 text-white hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </button>
+        <div class="flex gap-2">
+          <div class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="1"></div>
+          <div class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="2"></div>
+          <div class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="3"></div>
+          <div class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="4"></div>
+          <div class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="5"></div>
+        </div>
+        <button id="next-stage" class="p-2 rounded-full bg-primary-dark-600 hover:bg-primary-dark-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Book and Newsletter Section (moved) -->
+<div class="relative py-12">
+  <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto">
     <div class="mt-8 text-center">
       <a
         href="https://pragprog.com/titles/ldash/ash-framework/"
