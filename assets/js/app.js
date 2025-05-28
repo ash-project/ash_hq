@@ -763,7 +763,9 @@ function setUrl() {
   }
 
   const readMoreBox = document.getElementById("read-more-box");
-  const advancedFeaturesVisible = !document.getElementById("advanced-features").classList.contains("hidden");
+  const advancedFeaturesVisible = !document
+    .getElementById("advanced-features")
+    .classList.contains("hidden");
 
   if (links.length === 0) {
     readMoreBox.classList.add("hidden");
@@ -2424,7 +2426,7 @@ end`,
                 <div class="w-3 h-3 bg-orange-600 rounded-full"></div>
                 <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-orange-600 dark:group-hover:text-orange-400">AshPhoenix</span>
               </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">Phoenix LiveView integration</p>
+              <p class="text-xs text-gray-600 dark:text-gray-400">Phoenix integration</p>
             </a>
 
             <a href="https://hexdocs.pm/ash_graphql/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-pink-300 dark:hover:border-pink-600 transition-all cursor-pointer group">
@@ -2458,7 +2460,7 @@ end`,
                 <div class="w-3 h-3 bg-red-600 rounded-full"></div>
                 <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-red-600 dark:group-hover:text-red-400">AshAuthentication</span>
               </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">Authentication framework</p>
+              <p class="text-xs text-gray-600 dark:text-gray-400">Authentication</p>
             </a>
 
             <!-- Admin & UI -->
