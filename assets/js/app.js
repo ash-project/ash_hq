@@ -2399,11 +2399,20 @@ end`,
       <div class="w-full">
         <div class="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg p-6 border border-purple-200 dark:border-purple-700 max-h-[600px]">
           <div class="text-center mb-6">
-            <h3 class="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-2">Ash Ecosystem Extensions</h3>
+            <h3 class="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-2">The Ash Ecosystem</h3>
             <p class="text-lg text-gray-600 dark:text-gray-400">Powerful extensions that integrate seamlessly with your resources</p>
           </div>
 
           <div class="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+            <!-- Ash Core -->
+            <a href="https://hexdocs.pm/ash/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-red-300 dark:hover:border-red-600 transition-all cursor-pointer group">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-red-600 dark:group-hover:text-red-400">Ash</span>
+              </div>
+              <p class="text-xs text-gray-600 dark:text-gray-400">Core framework</p>
+            </a>
+
             <!-- Core Extensions -->
             <a href="https://hexdocs.pm/ash_postgres/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-600 transition-all cursor-pointer group">
               <div class="flex items-center gap-2 mb-2">
@@ -2503,7 +2512,7 @@ end`,
                 <div class="w-3 h-3 bg-emerald-600 rounded-full"></div>
                 <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400">AshCsv</span>
               </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">CSV import/export</p>
+              <p class="text-xs text-gray-600 dark:text-gray-400">CSV data layer</p>
             </a>
 
             <!-- Financial -->

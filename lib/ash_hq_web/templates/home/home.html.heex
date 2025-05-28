@@ -8,64 +8,60 @@
   <div class="absolute bottom-0 left-0 right-0 h-[40vh] bg-gradient-to-t to-transparent perspective-grid">
   </div>
 
-  <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-3xl mt-24 flex flex-col items-center">
+  <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-3xl mt-32 sm:mt-24 flex flex-col items-center">
     <div class="">
       <img
         src="/images/ash-logo-side.svg"
         alt="Ash Framework"
-        class="w-96 mx-auto mb-8 drop-shadow-[0_0_15px_rgba(255, 87, 87, 0.5)]"
+        class="w-96 mx-auto mb-4 sm:mb-8 drop-shadow-[0_0_15px_rgba(255, 87, 87, 0.5)]"
       />
     </div>
-    <h1 class="text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
+    <h1 class="text-3xl sm:text-4xl font-bold mb-6 mt-4 sm:mt-8 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
       Model your domain,
       <span class="bg-gradient-to-r from-primary-dark-500 to-primary-light-500 bg-clip-text text-transparent">
         derive the rest
       </span>
     </h1>
-    <p class="text-xl sm:text-xl text-primary-light-200 mb-4">
-      The <a href="https://elixir-lang.org"><span class="text-primary-dark-400">Elixir</span></a>
-      backend framework for <a href="https://hexdocs.pm/ash/what-is-ash.html#why-should-i-use-it"><span class="text-primary-dark-400">unparalleled productivity</span></a>.
-      <a href="https://hexdocs.pm/ash/design-principles.html">
-        <span class="text-primary-dark-400">Declarative tools</span>
-      </a>
-      that let you <a href="https://www.youtube.com/watch?v=vjnPjrCF4rs"><span class="text-primary-dark-400">stop wasting time and reinventing wheels</span></a>.
+    <p class="text-base sm:text-xl text-primary-light-200 mb-4">
+      The <span class="text-orange-500">Elixir</span>
+      backend framework for <span class="text-orange-500">unparalleled productivity</span>.
+      <span class="text-orange-500">Declarative tools</span>
+      that let you <span class="text-orange-500">stop wasting time</span>.
       Use with
-      <a href="https://phoenixframework.org">
-        <span class="text-primary-dark-400">Phoenix LiveView</span>
-      </a>
+      <span class="text-orange-500">Phoenix LiveView</span>
       or build
-      <a href="https://hexdocs.pm/ash_graphql/getting-started-with-graphql.html">
-        <span class="text-primary-dark-400">APIs in minutes</span>
-      </a>
-      to support your front-end of choice.
+      <span class="text-orange-500">APIs in minutes</span>
+      for your front-end of choice.
     </p>
-    <div class="flex flex-col items-center gap-4 mt-4">
+    <div class="flex flex-col items-center gap-4 mt-2">
       <a id="github-stars-btn" href="https://github.com/ash-project/ash"
          class="inline-flex items-center gap-2 px-4 py-2 bg-transparent hover:bg-gray-700/30 border border-gray-600 rounded-lg text-white text-sm font-medium transition-colors"
          target="_blank" rel="noopener noreferrer">
         <span>GitHub</span>
       </a>
 
-      <div class="flex flex-col sm:flex-row gap-3 items-center justify-center">
-        <a
-          href="#get-started"
-          class="inline-flex justify-center items-center text-center px-6 py-3 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
-        >
-          Install Now
-        </a>
+      <div class="flex flex-col items-center gap-4">
+        <div class="flex flex-col sm:flex-row gap-3 items-center justify-center">
+          <a
+            href="#get-started"
+            class="inline-flex justify-center items-center text-center px-6 py-3 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
+          >
+            Install Now
+          </a>
 
-        <a
-          href="#ash-animation"
-          class="inline-flex justify-center items-center text-center px-6 py-3 rounded-full border border-primary-light-500 text-primary-light-400 font-medium hover:bg-primary-light-500/10 transition-all transform hover:scale-105"
-        >
-          Learn More
-        </a>
+          <a
+            href="#ash-animation"
+            class="inline-flex justify-center items-center text-center px-6 py-3 rounded-full border border-primary-light-500 text-primary-light-400 font-medium hover:bg-primary-light-500/10 transition-all transform hover:scale-105"
+          >
+            Learn More
+          </a>
+        </div>
 
         <a
           href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd"
-          class="inline-flex justify-center items-center text-center px-6 py-3 rounded-full bg-purple-600 text-white font-medium hover:bg-purple-700 transition-all transform hover:scale-105"
+          class="cursor-pointer inline-flex items-center rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757] hidden sm:inline-flex"
         >
-          LiveBook Tutorial
+          <img src="https://livebook.dev/badge/v1/pink.svg" alt="Run in Livebook" />
         </a>
       </div>
     </div>
@@ -76,6 +72,8 @@
 
 <!-- Interactive Animation Section -->
 <div id="ash-animation" class="relative py-16">
+  <!-- Desktop Animation Content -->
+  <div class="hidden lg:block">
   <div class="absolute inset-0 bg-gradient-to-b from-primary-light-900/20 via-primary-dark-900/10 to-primary-light-900/20">
   </div>
 
@@ -145,6 +143,33 @@
       </div>
     </div>
   </div>
+  </div>
+
+  <!-- Mobile CTA Content -->
+  <div class="lg:hidden">
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-8 text-center">
+        <h2 class="text-2xl font-bold text-primary-light-200 mb-4">
+          Discover the Power of Ash
+        </h2>
+        <p class="text-gray-300 mb-6 leading-relaxed">
+          Learn how Ash's declarative approach transforms the way you build Elixir applications.
+          From resources and actions to policies and pub/sub, discover what makes Ash unique.
+        </p>
+        <a
+          href="https://hexdocs.pm/ash/what-is-ash.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex justify-center items-center px-8 py-4 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
+        >
+          What is Ash?
+          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Book and Newsletter Section (moved) -->
@@ -194,33 +219,58 @@
     id="get-started"
     class="max-w-5xl mx-auto text-center lg:px-8 backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-4"
   >
-    <h2 class="text-3xl font-bold text-primary-light-200">Get Your Installer</h2>
-    <div id="installer" />
+    <div class="lg:hidden">
+      <h2 class="text-2xl font-bold text-primary-light-200 mb-4">
+        Ready to Get Started?
+      </h2>
+      <p class="text-gray-300 mb-6 leading-relaxed">
+        Follow our comprehensive getting started guide to build your first Ash application.
+        Learn the fundamentals and get up and running in minutes.
+      </p>
+      <a
+        href="https://hexdocs.pm/ash/get-started.html"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex justify-center items-center px-8 py-4 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
+      >
+        Get Started Guide
+        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+        </svg>
+      </a>
+    </div>
+    <!-- Desktop Installer -->
+    <div class="hidden lg:block">
+      <h2 class="text-3xl font-bold text-primary-light-200">Get Your Installer</h2>
+      <div id="installer" >
 
-    <div class="flex flex-col justify-center mt-2">
-      <label for="app-name">Project Name</label>
-      <div>
-        <input
-          type="text"
-          id="app-name"
-          value={@app_name}
-          class="text-white bg-transparent mt-1 w-64 rounded-lg p-2 shadow-[0_0_20px_#FF5757] ring-1 border-0 outline-none ring ring-[#FF5757] mb-3 text-center"
-          placeholder="Project Name"
-          oninput="window.appNameChanged(this)"
-        />
+      <div class="flex flex-col justify-center mt-2">
+        <label for="app-name">Project Name</label>
+        <div>
+          <input
+            type="text"
+            id="app-name"
+            value={@app_name}
+            class="text-white bg-transparent mt-1 w-64 rounded-lg p-2 shadow-[0_0_20px_#FF5757] ring-1 border-0 outline-none ring ring-[#FF5757] mb-3 text-center"
+            placeholder="Project Name"
+            oninput="window.appNameChanged(this)"
+          />
+        </div>
+      </div>
+
+      <div id="cant-decide" class="mt-2">
+        <button class="text-lg underline cursor-pointer" onclick="window.cantDecide()">
+          Feeling stuck? Can't decide?
+        </button>
+      </div>
+      <div id="show-options" class="hidden mt-2">
+        <button class="text-lg underline cursor-pointer" onclick="window.showAll()">
+          Show all
+        </button>
       </div>
     </div>
 
-    <div id="cant-decide" class="mt-2">
-      <button class="text-lg underline cursor-pointer" onclick="window.cantDecide()">
-        Feeling stuck? Can't decide?
-      </button>
-    </div>
-    <div id="show-options" class="hidden mt-2">
-      <button class="text-lg underline cursor-pointer" onclick="window.showAll()">
-        Show all
-      </button>
-    </div>
+    <!-- Mobile CTA -->
     <div id="already-have-an-app" class="mb-2">
       <button
         id="already-have-an-app-button"
@@ -368,7 +418,7 @@
       >
       </div>
     </div>
-    <div id="read-more-box" class="flex flex-col hidden mb-8">
+    <div id="read-more-box" class="flex flex-col mb-8">
       <h2 class="text-1xl font-bold mb-6 text-primary-light-200">
         Read the docs:
       </h2>
@@ -388,10 +438,11 @@
         Copy
       </span>
     </button>
+    </div>
   </div>
 
   <div class="mt-12">
-    <div class="max-w-5xl mx-auto text-center">
+    <div class="max-w-5xl mx-auto text-center px-4 sm:px-6 lg:px-8">
       <h1 class="text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
         Trusted
         <span class="bg-gradient-to-r from-primary-dark-500 to-primary-light-500 bg-clip-text text-transparent">
@@ -415,7 +466,7 @@
   </div>
 
   <div class="mt-6 z-10" id="upcoming-events">
-    <div class="max-w-3xl mx-auto">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1 class="text-center text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
         Upcoming
         <span class="bg-gradient-to-r from-primary-dark-500 to-primary-light-500 bg-clip-text text-transparent">
