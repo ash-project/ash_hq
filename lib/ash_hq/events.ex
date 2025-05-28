@@ -72,20 +72,6 @@ defmodule AshHq.Events do
               href: "https://www.elixirconf.eu"
             },
             %{
-              title: "Building on Bedrock: Elixir's Fundamental Design Advantage @ ElixirConf US",
-              description: """
-              <p class="font-bold">
-                Building on Bedrock: Elixir's Fundamental Design Advantage
-              </p>
-              <p>
-                Zach gives a talk about Elixir, exploring the small design choices underpinning Elixir that manifest in exponentially more efficient and understandable applications. Understanding why Elixir manages to be so productive and effective.
-              </p>
-              """,
-              date: ~D[2025-06-20],
-              date_in_english: "June 20th, 2025",
-              href: "https://sceniccitysummit.com"
-            },
-            %{
               title:
                 "Building on Bedrock: Elixir's Fundamental Design Advantage @ Scenic City Summit",
               description: """
@@ -102,7 +88,7 @@ defmodule AshHq.Events do
             },
             %{
               title:
-                "Building on Bedrock: Elixir's Fundamental Design Advantage @ Scenic City Summit",
+                "Building on Bedrock: Elixir's Fundamental Design Advantage @ Carolina Codes",
               description: """
               <p class="font-bold">
                 Building on Bedrock: Elixir's Fundamental Design Advantage
