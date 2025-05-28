@@ -258,28 +258,39 @@
         </div>
       </div>
 
-      <div id="cant-decide" class="mt-2">
-        <button class="text-lg underline cursor-pointer" onclick="window.cantDecide()">
-          Feeling stuck? Can't decide?
-        </button>
-      </div>
-      <div id="show-options" class="hidden mt-2">
-        <button class="text-lg underline cursor-pointer" onclick="window.showAll()">
-          Show all
-        </button>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center items-center mt-4 mb-4">
+        <div id="show-advanced">
+          <button class="inline-flex items-center px-4 py-2 rounded-lg bg-slate-700/50 text-primary-light-200 font-medium hover:bg-slate-600/60 transition-all duration-200 border border-slate-600/40 hover:border-slate-500/60" onclick="window.showAdvanced()">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+          Advanced Options
+          </button>
+        </div>
+        <div id="hide-advanced" class="hidden">
+          <button class="inline-flex items-center px-4 py-2 rounded-lg bg-slate-700/50 text-primary-light-200 font-medium hover:bg-slate-600/60 transition-all duration-200 border border-slate-600/40 hover:border-slate-500/60" onclick="window.hideAdvanced()">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path>
+            </svg>
+            Simple Options
+          </button>
+        </div>
+        <div id="already-have-an-app">
+          <button
+            id="already-have-an-app-button"
+            class="inline-flex items-center px-4 py-2 rounded-lg bg-primary-dark-600/40 text-primary-light-300 font-medium hover:bg-primary-dark-500/50 transition-all duration-200 border border-primary-dark-500/30 hover:border-primary-dark-400/50"
+            onclick="window.addingToApp()"
+          >
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+            </svg>
+            Already have an app?
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- Mobile CTA -->
-    <div id="already-have-an-app" class="mb-2">
-      <button
-        id="already-have-an-app-button"
-        class="text-lg underline cursor-pointer"
-        onclick="window.addingToApp()"
-      >
-        Already have an app?
-      </button>
-    </div>
     <h2 id="presets-label" class="text-xl font-bold text-primary-light-200">Presets</h2>
     <div id="quickstarts-list" class="flex flex-row flex-wrap gap-2 justify-center mt-2 mb-4">
       <div class="flex flex-row flex-wrap justify-center gap-2 gap-x-2 gap-y-5">
@@ -304,7 +315,7 @@
       </div>
     </div>
 
-    <div id="advanced-features" class="border-t border-primary-dark-500/40">
+    <div id="advanced-features" class="hidden border-t border-primary-dark-500/40">
       <div class="flex flex-wrap justify-center gap-2">
         <div
           :for={{category, features} <- features()}
@@ -351,53 +362,13 @@
         </div>
       </div>
     </div>
-    <div id="asterisk-warning" class="text-xs text-slate-400 text-center mt-1 mb-2">
+    <div id="asterisk-warning" class="hidden text-xs text-slate-400 text-center mt-1 mb-2">
       <sup>*</sup> Is or contains an external package, not maintained by the Ash team.
     </div>
-    <div id="dont-worry" class="mb-2 hidden flex flex-col gap-2">
-      <p class="text-lg">
-        Pick a preset and go. Everything but Phoenix can be
-        <a class="text-primary-dark-400 cursor-pointer" onclick="window.addingToApp()">
-          installed later.
-        </a>
-      </p>
-      <p class="text-lg">
-        All the presets use PostgreSQL, the best database around.
-        <a href="https://www.postgresql.org/download/" class="text-primary-dark-400 underline">
-          Easy to install, supported everywhere.
-        </a>
-      </p>
-      <p class="text-lg">
-        <ul>
-          <li></li>
-          <li>
-            Want to learn about Ash? Try just using
-            <button onclick="window.clickOnPreset('postgres')" class="text-primary-dark-400">
-              PostgreSQL.
-            </button>
-          </li>
-          <li>
-            Excited about
-            <button onclick="window.clickOnPreset('live_view')" class="text-primary-dark-400">
-              Phoenix LiveView?
-            </button>
-            Don't worry about the bells and whistles, dive in!
-          </li>
-          <li>
-            Building an API? Start with
-            <button onclick="window.clickOnPreset('graphql')" class="text-primary-dark-400">
-              GraphQL
-            </button>
-            or
-            <button
-              onclick="window.clickOnPreset('json_api')"
-              class="text-primary-dark-400"
-              href="#install-later"
-            >
-              JSON:API
-            </button>
-          </li>
-        </ul>
+
+    <div id="igniter-instruction" class="hidden text-center mb-4">
+      <p class="text-primary-light-200">
+        Uses <a href="https://hexdocs.pm/igniter" class="text-primary-dark-400 underline hover:text-primary-dark-300">igniter</a> to install Ash into your application
       </p>
     </div>
 
@@ -418,7 +389,7 @@
       >
       </div>
     </div>
-    <div id="read-more-box" class="flex flex-col mb-8">
+    <div id="read-more-box" class="hidden flex flex-col mb-8">
       <h2 class="text-1xl font-bold mb-6 text-primary-light-200">
         Read the docs:
       </h2>

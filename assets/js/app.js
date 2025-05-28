@@ -502,8 +502,13 @@ window.addingToApp = function () {
 
     document.getElementById("feature-phoenix").classList.remove("hidden");
     document.getElementById("quickstart-live_view").classList.remove("hidden");
-    document.getElementById("already-have-an-app-button").innerHTML =
-      "Already have an app?";
+    document.getElementById("igniter-instruction").classList.add("hidden");
+    const button = document.getElementById("already-have-an-app-button");
+    button.innerHTML = `
+      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+      </svg>
+      Already have an app?`;
   } else {
     addingToApp = true;
 
@@ -513,8 +518,13 @@ window.addingToApp = function () {
     }
     document.getElementById("feature-phoenix").classList.add("hidden");
     document.getElementById("quickstart-live_view").classList.add("hidden");
-    document.getElementById("already-have-an-app-button").innerHTML =
-      "Creating a new app?";
+    document.getElementById("igniter-instruction").classList.remove("hidden");
+    const button = document.getElementById("already-have-an-app-button");
+    button.innerHTML = `
+      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      </svg>
+      Creating a new app?`;
   }
 
   setUrl();
@@ -753,49 +763,36 @@ function setUrl() {
   }
 
   const readMoreBox = document.getElementById("read-more-box");
+  const advancedFeaturesVisible = !document.getElementById("advanced-features").classList.contains("hidden");
 
   if (links.length === 0) {
     readMoreBox.classList.add("hidden");
-  } else {
+  } else if (advancedFeaturesVisible) {
     readMoreBox.classList.remove("hidden");
     const readMoreLinks = document.getElementById("read-more-links");
     readMoreLinks.innerHTML = links.join("");
+  } else {
+    readMoreBox.classList.add("hidden");
   }
 
   const el = document.getElementById("selected-features");
   el.innerHTML = code.trim();
 }
 
-window.cantDecide = function () {
-  document.getElementById("cant-decide").classList.add("hidden");
-
-  [...document.querySelectorAll(".feature-category")].forEach((el) => {
-    el.classList.add("hidden");
-  });
-
-  [...document.querySelectorAll(".active-quickstart")].forEach((el) => {
-    if (!el.classList.contains("hidden")) {
-      el.click();
-    }
-  });
-
-  document.getElementById("asterisk-warning").classList.add("hidden");
-  document.getElementById("quickstart-live_view-inactive").click();
-
-  document.getElementById("show-options").classList.remove("hidden");
-  document.getElementById("dont-worry").classList.remove("hidden");
+window.showAdvanced = function () {
+  document.getElementById("show-advanced").classList.add("hidden");
+  document.getElementById("hide-advanced").classList.remove("hidden");
+  document.getElementById("advanced-features").classList.remove("hidden");
+  document.getElementById("asterisk-warning").classList.remove("hidden");
+  document.getElementById("read-more-box").classList.remove("hidden");
 };
 
-window.showAll = function () {
-  document.getElementById("cant-decide").classList.remove("hidden");
-
-  [...document.querySelectorAll(".feature-category")].forEach((el) => {
-    el.classList.remove("hidden");
-  });
-
-  document.getElementById("show-options").classList.add("hidden");
-  document.getElementById("dont-worry").classList.add("hidden");
-  document.getElementById("asterisk-warning").classList.remove("hidden");
+window.hideAdvanced = function () {
+  document.getElementById("show-advanced").classList.remove("hidden");
+  document.getElementById("hide-advanced").classList.add("hidden");
+  document.getElementById("advanced-features").classList.add("hidden");
+  document.getElementById("asterisk-warning").classList.add("hidden");
+  document.getElementById("read-more-box").classList.add("hidden");
 };
 
 window.clickOnPreset = function (name) {
