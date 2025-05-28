@@ -39,14 +39,38 @@
       </a>
       to support your front-end of choice.
     </p>
-    <div class="flex flex-col sm:flex-row gap-4 justify-center mt-4">
-      <a
-        href="#installer"
-        class="inline-flex justify-center items-center text-center px-8 py-3 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
-      >
-        Get Started
+    <div class="flex flex-col items-center gap-4 mt-4">
+      <a id="github-stars-btn" href="https://github.com/ash-project/ash"
+         class="inline-flex items-center gap-2 px-4 py-2 bg-transparent hover:bg-gray-700/30 border border-gray-600 rounded-lg text-white text-sm font-medium transition-colors"
+         target="_blank" rel="noopener noreferrer">
+        <span>GitHub</span>
       </a>
+
+      <div class="flex flex-col sm:flex-row gap-3 items-center justify-center">
+        <a
+          href="#get-started"
+          class="inline-flex justify-center items-center text-center px-6 py-3 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
+        >
+          Install Now
+        </a>
+
+        <a
+          href="#ash-animation"
+          class="inline-flex justify-center items-center text-center px-6 py-3 rounded-full border border-primary-light-500 text-primary-light-400 font-medium hover:bg-primary-light-500/10 transition-all transform hover:scale-105"
+        >
+          Learn More
+        </a>
+
+        <a
+          href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd"
+          class="inline-flex justify-center items-center text-center px-6 py-3 rounded-full bg-purple-600 text-white font-medium hover:bg-purple-700 transition-all transform hover:scale-105"
+        >
+          LiveBook Tutorial
+        </a>
+      </div>
     </div>
+
+
   </div>
 </div>
 
@@ -54,24 +78,29 @@
 <div id="ash-animation" class="relative py-16">
   <div class="absolute inset-0 bg-gradient-to-b from-primary-light-900/20 via-primary-dark-900/10 to-primary-light-900/20">
   </div>
-  
+
   <div class="absolute inset-0 bg-[linear-gradient(rgba(254,19,19,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(254,19,19,0.2)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,black,transparent)]">
   </div>
 
   <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-8">
-      <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent">
-        See Ash in Action
-      </h2>
-      <div class="grid lg:grid-cols-2 gap-8">
+
+      <!-- Main Content Container with Fixed Height -->
+      <div class="h-[650px]">
+        <!-- Stage Description Panel -->
+        <div id="stage-description" class="mb-6 mx-0 lg:mx-16 xl:mx-24 p-4 bg-slate-800/50 rounded-lg border border-primary-dark-500/20 transition-all duration-500 ease-in-out h-[130px]" style="display: none;">
+          <h3 id="stage-title" class="text-lg font-semibold text-primary-light-400 mb-2"></h3>
+          <p id="stage-text" class="text-sm text-gray-300 leading-relaxed overflow-hidden"></p>
+        </div>
+        <div class="grid lg:grid-cols-2 gap-8">
         <!-- Code Editor -->
         <div class="relative">
-          <div class="bg-slate-900/80 rounded-lg p-4 font-mono text-sm overflow-x-auto border border-primary-dark-500/20 h-[500px]">
-            <div class="flex items-center gap-2 mb-4 pb-4 border-b border-primary-dark-500/20">
+          <div class="bg-slate-900/80 rounded-lg p-4 font-mono text-sm lg:text-xs xl:text-sm overflow-x-auto border border-primary-dark-500/20 h-[492px]">
+            <div class="flex items-center gap-2 mb-2 pb-2 border-b border-primary-dark-500/20">
               <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
               <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
               <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
-              <span class="ml-2 text-gray-500 text-xs">lib/my_blog/post.ex</span>
+              <span class="ml-2 text-gray-500 text-xs">lib/my_app/blog/post.ex</span>
             </div>
             <pre id="code-display" class="text-gray-300"><code></code></pre>
           </div>
@@ -79,6 +108,7 @@
         <!-- Visualization Panel -->
         <div id="visualization-panel" class="relative min-h-[400px]">
         </div>
+      </div>
       </div>
       <!-- Progress indicator and controls -->
       <div class="mt-6 flex items-center justify-center gap-4">
@@ -102,6 +132,10 @@
           <div class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="3"></div>
           <div class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="4"></div>
           <div class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="5"></div>
+          <div class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="6"></div>
+          <div class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="7"></div>
+          <div class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="8"></div>
+          <div class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="9"></div>
         </div>
         <button id="next-stage" class="p-2 rounded-full bg-primary-dark-600 hover:bg-primary-dark-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all">
           <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,7 +165,6 @@
         </h2>
       </a>
 
-      <a class="github-button" href="https://github.com/ash-project/ash" data-color-scheme="no-preference: light; light: light; dark: dark;" data-size="large" data-show-count="true" aria-label="Star ash-project/ash on GitHub" data-text="GitHub"></a>
     </div>
 
     <div class="mt-8 text-center">
@@ -355,16 +388,6 @@
         Copy
       </span>
     </button>
-
-    <div class="my-6 text-primary-light-200">- or -</div>
-
-    <h2 class="text-3xl font-bold mb-6 text-primary-light-200">Try our interactive tutorial</h2>
-    <a
-      href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd"
-      class="cursor-pointer inline-flex items-center rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
-    >
-      <img src="https://livebook.dev/badge/v1/pink.svg" alt="Run in Livebook" />
-    </a>
   </div>
 
   <div class="mt-12">

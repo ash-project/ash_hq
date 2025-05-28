@@ -187,6 +187,7 @@ html {
   white-space: pre;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
   line-height: 1.5;
+  overflow-y: hidden;
 }
 
 /* Syntax highlighting for Elixir code */
