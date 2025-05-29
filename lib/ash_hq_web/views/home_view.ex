@@ -33,6 +33,7 @@ defmodule AshHqWeb.HomeView do
         href: "https://www.scribblevet.com/",
         src: "/images/scribble-vet-logo.png"
       },
+      Plangora: %{href: "https://www.plangora.com", src: "images/plangora-logo-dark.png"},
       Coinbits: %{href: "https://coinbits.app", src: "/images/coinbits-logo.png"},
       "Wintermeyer Consulting": %{
         href: "https://www.wintermeyer-consulting.de/",
@@ -42,7 +43,7 @@ defmodule AshHqWeb.HomeView do
         href: "https://boringbusinessleads.com",
         src: "/images/self-storage-leads-logo-light.svg"
       },
-      "Linguavid": %{
+      Linguavid: %{
         href: "https://linguavid.net",
         src: "/images/linguavid-logo.png"
       }
@@ -133,7 +134,7 @@ defmodule AshHqWeb.HomeView do
       ],
       "Admin & Debugging": [
         admin: "Admin UI",
-        live_debugger: "Live Debugger",
+        live_debugger: "Live Debugger"
       ],
       "UI Components": [
         mishka: "Mishka Chelekom"
