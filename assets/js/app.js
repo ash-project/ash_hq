@@ -1058,10 +1058,7 @@ end`,
         "Add a proper state machine to model valid states and transitions. Your posts now have declarative state validations and transitions. Notice how each extension builds upon the previous ones without requiring changes to existing functionality.",
       code: `
     extensions: [
-      AshGraphql.Resource,
-      AshJsonApi.Resource,
-      AshCloak.Resource,
-      AshAi,
+      # ...
       AshStateMachine
     ]
 
@@ -1101,11 +1098,31 @@ end`,
       visualizer: () => AshAnimation.createAuthenticationPanel(),
     },
     {
-      name: "And Much More...",
+      name: "Background Jobs",
       module: "MyApp.Blog.Post",
-      description: "",
-      code: "",
-      visualizer: () => AshAnimation.createExtensionsShowcase(),
+      description:
+        "Add background job processing with AshOban. Define triggers that run periodically for records matching conditions, and scheduled actions that run on cron schedules. Perfect for notifications, data processing, and maintenance tasks.",
+      code: `
+    extensions: [
+      # ...
+      AshOban
+    ]
+
+  oban do
+    triggers do
+      trigger :send_published_notification do
+        action :send_notification
+        where expr(state == :published and needs_notification)
+        scheduler_cron "@hourly"
+      end
+    end
+    scheduled_actions do
+      schedule :cleanup_old_drafts, "@daily"
+    end
+  end
+  # ...
+end`,
+      visualizer: () => AshAnimation.createObanPanel(),
     },
   ],
 
@@ -1169,6 +1186,21 @@ end`,
 
     this.observer.observe(container);
 
+    // Show first stage description and visualization immediately on page load
+    console.log("INIT: Adding initial visualization");
+    this.updateDescription(0);
+    this.addVisualization(this.stages[0].visualizer(), 0);
+    this.updateProgressDots();
+
+    // Check immediately if element is already visible
+    const rect = container.getBoundingClientRect();
+    const isInView = rect.top < window.innerHeight && rect.bottom > 0;
+
+    if (isInView && !this.hasBeenInitiated) {
+      this.hasBeenInitiated = true;
+      this.start();
+    }
+
     // Set initial play/pause button state based on reduced motion preference
     const playIcon = document.getElementById("play-icon");
     const pauseIcon = document.getElementById("pause-icon");
@@ -1212,45 +1244,37 @@ end`,
     this.updateDescription(stageIndex);
 
     const stage = this.stages[stageIndex];
-    const isFinalStage = stageIndex === this.stages.length - 1;
 
     // Clear all visualizations
     this.clearAllVisualizations();
 
-    // Handle layout for final stage
-    this.updateLayoutForStage(isFinalStage);
+    // Handle layout for stage
+    this.updateLayoutForStage(false);
 
-    if (!isFinalStage) {
-      const codeDisplay = document.getElementById("code-display");
+    const codeDisplay = document.getElementById("code-display");
 
-      // Set base content
-      if (stageIndex === 0) {
-        codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">${stage.module}</span> <span class="text-pink-400">do</span>
+    // Set base content
+    if (stageIndex === 0) {
+      codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">${stage.module}</span> <span class="text-pink-400">do</span>
   <span class="text-pink-400">use</span> <span class="text-blue-400">Ash.Resource</span>
   `;
-      } else {
-        codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">${stage.module}</span> <span class="text-pink-400">do</span>
+    } else {
+      codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">${stage.module}</span> <span class="text-pink-400">do</span>
   <span class="text-pink-400">use</span> <span class="text-blue-400">Ash.Resource</span>,`;
-      }
-
-      // Add stage-specific content
-      const tokens = this.parseElixirTokens(stage.code);
-      tokens.forEach((token) => {
-        const span = document.createElement("span");
-        span.className = token.className;
-        span.textContent = token.text;
-        codeDisplay.appendChild(span);
-      });
     }
 
-    // Build up all visualizations through current stage (but not for final stage)
-    if (!isFinalStage) {
-      for (let i = 0; i <= stageIndex; i++) {
-        this.addVisualization(this.stages[i].visualizer(), i);
-      }
-    } else {
-      // For final stage, only add the ecosystem showcase
-      this.addVisualization(this.stages[stageIndex].visualizer(), stageIndex);
+    // Add stage-specific content
+    const tokens = this.parseElixirTokens(stage.code);
+    tokens.forEach((token) => {
+      const span = document.createElement("span");
+      span.className = token.className;
+      span.textContent = token.text;
+      codeDisplay.appendChild(span);
+    });
+
+    // Build up all visualizations through current stage
+    for (let i = 0; i <= stageIndex; i++) {
+      this.addVisualization(this.stages[i].visualizer(), i);
     }
   },
 
@@ -1267,53 +1291,40 @@ end`,
     this.updateDescription(stageIndex);
 
     const stage = this.stages[stageIndex];
-    const isFinalStage = stageIndex === this.stages.length - 1;
 
     // Always clear and rebuild to ensure clean state
     this.clearAllVisualizations();
 
-    // Handle layout for final stage
-    this.updateLayoutForStage(isFinalStage);
+    // Handle layout for stage
+    this.updateLayoutForStage(false);
 
-    if (!isFinalStage) {
-      const codeDisplay = document.getElementById("code-display");
+    const codeDisplay = document.getElementById("code-display");
 
-      // Set base content
-      if (stageIndex === 0) {
-        codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">${stage.module}</span> <span class="text-pink-400">do</span>
+    // Set base content
+    if (stageIndex === 0) {
+      codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">${stage.module}</span> <span class="text-pink-400">do</span>
   <span class="text-pink-400">use</span> <span class="text-blue-400">Ash.Resource</span>
   `;
-      } else {
-        codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">${stage.module}</span> <span class="text-pink-400">do</span>
+    } else {
+      codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">${stage.module}</span> <span class="text-pink-400">do</span>
   <span class="text-pink-400">use</span> <span class="text-blue-400">Ash.Resource</span>,`;
-      }
-
-      // Add stage-specific content without typing animation
-      const tokens = this.parseElixirTokens(stage.code);
-      tokens.forEach((token) => {
-        const span = document.createElement("span");
-        span.className = token.className;
-        span.textContent = token.text;
-        codeDisplay.appendChild(span);
-      });
     }
+
+    // Add stage-specific content without typing animation
+    const tokens = this.parseElixirTokens(stage.code);
+    tokens.forEach((token) => {
+      const span = document.createElement("span");
+      span.className = token.className;
+      span.textContent = token.text;
+      codeDisplay.appendChild(span);
+    });
 
     // Build progressive visualizations (cumulative from start to current stage)
-    if (!isFinalStage) {
-      this.buildProgressiveVisualizations(stageIndex);
-    } else {
-      // For final stage, only show the ecosystem showcase
-      this.addVisualization(this.stages[stageIndex].visualizer(), stageIndex);
-    }
+    this.buildProgressiveVisualizations(stageIndex);
   },
 
   // Build visualizations progressively showing accumulation
   buildProgressiveVisualizations(targetStage) {
-    // Skip progressive visualization for final stage
-    if (targetStage === this.stages.length - 1) {
-      return;
-    }
-
     const animationId = this.currentAnimationId;
 
     // Add all summary stages immediately
@@ -1367,6 +1378,7 @@ end`,
 
   // Start the animation with typing
   start() {
+    console.log("START: Called");
     if (this.animationActive) return;
 
     // Don't auto-start if user prefers reduced motion, but show initial content
@@ -1377,6 +1389,7 @@ end`,
       return;
     }
 
+    this.isPlaying = true;
     this.animationActive = true;
     this.animate();
   },
@@ -1386,52 +1399,64 @@ end`,
     if (!this.animationActive) return;
 
     const stage = this.stages[this.currentStage];
-    const isFinalStage = this.currentStage === this.stages.length - 1;
 
-    // Handle layout for final stage
-    this.updateLayoutForStage(isFinalStage);
+    // Handle layout for stage
+    this.updateLayoutForStage(false);
 
-    if (!isFinalStage) {
-      const codeDisplay = document.getElementById("code-display");
+    const codeDisplay = document.getElementById("code-display");
 
-      // Reset to base content when starting new stage
-      if (this.currentStage === 0) {
-        codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">${stage.module}</span> <span class="text-pink-400">do</span>
+    // Reset to base content when starting new stage
+    if (this.currentStage === 0) {
+      codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">${stage.module}</span> <span class="text-pink-400">do</span>
   <span class="text-pink-400">use</span> <span class="text-blue-400">Ash.Resource</span>
   <span id="typing-cursor" class="inline-block w-2 h-[1em] bg-primary-light-500 animate-pulse"></span>`;
-      } else {
-        codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">${stage.module}</span> <span class="text-pink-400">do</span>
+    } else {
+      codeDisplay.innerHTML = `<span class="text-pink-400">defmodule</span> <span class="text-blue-400">${stage.module}</span> <span class="text-pink-400">do</span>
   <span class="text-pink-400">use</span> <span class="text-blue-400">Ash.Resource</span>,
 <span id="typing-cursor" class="inline-block w-2 h-[1em] bg-primary-light-500 animate-pulse"></span>`;
-      }
     }
 
     this.updateProgressDots();
 
     // Clear all visualizations only when restarting (stage 0)
     if (this.currentStage === 0) {
+      console.log("ANIMATE: Stage 0, clearing visualizations");
       this.clearAllVisualizations();
-    }
-
-    // Transition previous stages to summary immediately when typing starts (skip for final stage)
-    if (!isFinalStage) {
-      this.transitionPreviousStagesToSummary(this.currentStage);
-    }
-
-    // Update description and add new visualization immediately when typing starts
-    this.updateDescription(this.currentStage);
-    const visualizationTimeoutId = setTimeout(() => {
-      // Check if this animation is still current
-      if (isFinalStage ? this.currentStage === this.stages.length - 1 : true) {
-        this.addVisualization(stage.visualizer(), this.currentStage);
+      this.updateDescription(0);
+      // Only add visualization if stage-0 doesn't already exist
+      const existing = document.getElementById("stage-0");
+      console.log("ANIMATE: Stage-0 exists?", !!existing);
+      if (!existing) {
+        console.log("ANIMATE: Adding stage-0 visualization");
+        this.addVisualization(stage.visualizer(), 0);
       }
-    }, 200);
-    this.pendingTimeouts.push(visualizationTimeoutId);
-
-    if (isFinalStage) {
-      // For final stage, clear all previous summaries and skip typing
+    } else {
+      // For non-first stages, always clear and add new content
       this.clearAllVisualizations();
-      const finalStageTimeoutId = setTimeout(() => {
+
+      // Transition previous stages to summary immediately when typing starts
+      this.transitionPreviousStagesToSummary(this.currentStage);
+
+      // Update description and add new visualization with delay for non-first stages
+      this.updateDescription(this.currentStage);
+      const visualizationTimeoutId = setTimeout(() => {
+        this.addVisualization(stage.visualizer(), this.currentStage);
+      }, 200);
+      this.pendingTimeouts.push(visualizationTimeoutId);
+    }
+
+    // Type the code (trim leading newline for stages 2+ to prevent extra blank line)
+    const codeToType =
+      this.currentStage >= 1 ? stage.code.replace(/^\n/, "") : stage.code;
+    this.typeCode(codeToType, () => {
+      // Hide cursor after typing
+      const cursor = document.getElementById("typing-cursor");
+      if (cursor) {
+        cursor.style.display = "none";
+      }
+
+      // Wait before moving to next stage
+      const nextStageTimeoutId = setTimeout(() => {
         this.currentStage = (this.currentStage + 1) % this.stages.length;
 
         // Update navigation buttons after stage change
@@ -1441,34 +1466,9 @@ end`,
         if (this.animationActive) {
           this.animate();
         }
-      }, 6000); // Give more time to view the ecosystem showcase
-      this.pendingTimeouts.push(finalStageTimeoutId);
-    } else {
-      // Type the code (trim leading newline for stages 2+ to prevent extra blank line)
-      const codeToType =
-        this.currentStage >= 1 ? stage.code.replace(/^\n/, "") : stage.code;
-      this.typeCode(codeToType, () => {
-        // Hide cursor after typing
-        const cursor = document.getElementById("typing-cursor");
-        if (cursor) {
-          cursor.style.display = "none";
-        }
-
-        // Wait before moving to next stage
-        const nextStageTimeoutId = setTimeout(() => {
-          this.currentStage = (this.currentStage + 1) % this.stages.length;
-
-          // Update navigation buttons after stage change
-          this.updateNavigationButtons();
-
-          // Continue animation if active
-          if (this.animationActive) {
-            this.animate();
-          }
-        }, 4000);
-        this.pendingTimeouts.push(nextStageTimeoutId);
-      });
-    }
+      }, 4000);
+      this.pendingTimeouts.push(nextStageTimeoutId);
+    });
   },
 
   // Cancel all pending operations to prevent stage confusion
@@ -1859,28 +1859,20 @@ end`,
     const titleElement = document.getElementById("stage-title");
     const textElement = document.getElementById("stage-text");
 
-    // Check if this is the final stage (ecosystem showcase)
-    const isFinalStage = stageIndex === this.stages.length - 1;
-
     if (descriptionPanel && titleElement && textElement) {
-      if (isFinalStage) {
-        // Hide description panel for final stage
-        descriptionPanel.style.display = "none";
-      } else {
-        // Show description panel for other stages
-        titleElement.textContent = stage.name;
-        textElement.textContent = stage.description;
-        descriptionPanel.style.display = "block";
+      // Show description panel for all stages
+      titleElement.textContent = stage.name;
+      textElement.textContent = stage.description;
+      descriptionPanel.style.display = "block";
 
-        // Apply fade transition (skip if reduced motion)
-        if (this.prefersReducedMotion) {
+      // Apply fade transition (skip if reduced motion or first stage)
+      if (this.prefersReducedMotion || stageIndex === 0) {
+        descriptionPanel.style.opacity = "1";
+      } else {
+        descriptionPanel.style.opacity = "0";
+        setTimeout(() => {
           descriptionPanel.style.opacity = "1";
-        } else {
-          descriptionPanel.style.opacity = "0";
-          setTimeout(() => {
-            descriptionPanel.style.opacity = "1";
-          }, 50);
-        }
+        }, 50);
       }
     }
 
@@ -1903,8 +1895,8 @@ end`,
       "stage-visualization transition-all duration-500 ease-in-out";
     stageContainer.innerHTML = content;
 
-    // Initially hidden for animation (skip if reduced motion)
-    if (this.prefersReducedMotion) {
+    // Initially hidden for animation (skip if reduced motion or first stage)
+    if (this.prefersReducedMotion || stageIndex === 0) {
       stageContainer.style.opacity = "1";
       stageContainer.style.transform = "translateY(0)";
     } else {
@@ -1914,8 +1906,8 @@ end`,
 
     panel.appendChild(stageContainer);
 
-    // Animate in (skip if reduced motion)
-    if (!this.prefersReducedMotion) {
+    // Animate in (skip if reduced motion or first stage)
+    if (!this.prefersReducedMotion && stageIndex !== 0) {
       setTimeout(() => {
         stageContainer.style.opacity = "1";
         stageContainer.style.transform = "translateY(0)";
@@ -1925,11 +1917,6 @@ end`,
 
   // Transition previous stages to summary versions
   transitionPreviousStagesToSummary(currentStage) {
-    // Skip for final stage
-    if (currentStage === this.stages.length - 1) {
-      return;
-    }
-
     const panel = document.getElementById("visualization-panel");
 
     // Ensure summary grid exists
@@ -2393,6 +2380,64 @@ end`,
     `;
   },
 
+  createObanPanel() {
+    return `
+      <div class="w-full">
+        <div class="bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-lg p-4 border border-orange-200 dark:border-orange-700">
+          <div class="text-center mb-3">
+            <h3 class="text-xl font-bold text-orange-700 dark:text-orange-300 mb-0">Background Job Processing</h3>
+            <p class="text-base text-gray-600 dark:text-gray-400">Reliable background jobs with triggers and scheduled actions</p>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <!-- Triggers Panel -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-orange-200 dark:border-orange-700">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                <h4 class="font-semibold text-sm text-orange-700 dark:text-orange-300">Triggers</h4>
+              </div>
+              <p class="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                Run actions for records matching conditions on a schedule
+              </p>
+              <div class="space-y-1">
+                <div class="bg-orange-50 dark:bg-orange-900/20 rounded p-2 text-xs">
+                  <div class="text-orange-700 dark:text-orange-300 font-mono text-xs">send_published_notification</div>
+                  <div class="text-gray-600 dark:text-gray-400 text-xs">Runs hourly for published posts without notifications</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Scheduled Actions Panel -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-yellow-200 dark:border-yellow-700">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                <h4 class="font-semibold text-sm text-yellow-700 dark:text-yellow-300">Scheduled Actions</h4>
+              </div>
+              <p class="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                Run generic actions on cron schedules
+              </p>
+              <div class="space-y-1">
+                <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded p-2 text-xs">
+                  <div class="text-yellow-700 dark:text-yellow-300 font-mono text-xs">cleanup_old_drafts</div>
+                  <div class="text-gray-600 dark:text-gray-400 text-xs">Runs daily to clean up old draft posts</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-2 text-center">
+            <div class="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-orange-100 to-yellow-100 dark:from-orange-800 dark:to-yellow-800 rounded-full">
+              <span class="text-xs font-medium text-orange-700 dark:text-orange-300">Powered by Oban</span>
+              <svg class="w-3 h-3 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
   createExtensionsShowcase() {
     return `
       <div class="w-full">
@@ -2627,19 +2672,4 @@ end`,
 // Initialize animation when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
   AshAnimation.init();
-  
-  // Safari fallback - check if animation should start after a delay
-  setTimeout(() => {
-    if (!AshAnimation.hasBeenInitiated) {
-      const container = document.getElementById("ash-animation");
-      if (container) {
-        const rect = container.getBoundingClientRect();
-        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-        if (isVisible) {
-          AshAnimation.hasBeenInitiated = true;
-          AshAnimation.start();
-        }
-      }
-    }
-  }, 500);
 });
