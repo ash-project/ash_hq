@@ -1139,6 +1139,8 @@ end`,
   pendingTimeouts: [],
   currentAnimationId: 0,
   prefersReducedMotion: false,
+  initialSetupDone: false,
+  loadedFromHash: false,
 
   // Initialize the animation
   init() {
@@ -1167,6 +1169,11 @@ end`,
       playPauseBtn.addEventListener("click", () => this.togglePlayPause());
     }
 
+    const linkBtn = document.getElementById("link-stage");
+    if (linkBtn) {
+      linkBtn.addEventListener("click", () => this.copyStageLink());
+    }
+
     // Set up intersection observer to start animation when visible
     this.observer = new IntersectionObserver(
       (entries) => {
@@ -1186,17 +1193,23 @@ end`,
 
     this.observer.observe(container);
 
-    // Show first stage description and visualization immediately on page load
-    console.log("INIT: Adding initial visualization");
-    this.updateDescription(0);
-    this.addVisualization(this.stages[0].visualizer(), 0);
-    this.updateProgressDots();
+    // Check URL hash for specific stage first
+    const hasHash = this.handleUrlHash();
+    
+    // Only show initial stage if no hash was processed
+    if (!hasHash) {
+      this.updateDescription(0);
+      this.addVisualization(this.stages[0].visualizer(), 0);
+      this.updateProgressDots();
+    }
+    
+    this.initialSetupDone = true;
 
     // Check immediately if element is already visible
     const rect = container.getBoundingClientRect();
     const isInView = rect.top < window.innerHeight && rect.bottom > 0;
 
-    if (isInView && !this.hasBeenInitiated) {
+    if (isInView && !this.hasBeenInitiated && this.initialSetupDone) {
       this.hasBeenInitiated = true;
       this.start();
     }
@@ -1220,7 +1233,7 @@ end`,
     if (this.currentStage > 0) {
       this.pause();
       this.currentStage--;
-      this.showStageProgressive(this.currentStage);
+      this.showStageManual(this.currentStage);
       this.updatePlayPauseButton(false);
     }
   },
@@ -1230,7 +1243,7 @@ end`,
     if (this.currentStage < this.stages.length - 1) {
       this.pause();
       this.currentStage++;
-      this.showStageProgressive(this.currentStage);
+      this.showStageManual(this.currentStage);
       this.updatePlayPauseButton(false);
     }
   },
@@ -1272,10 +1285,14 @@ end`,
       codeDisplay.appendChild(span);
     });
 
-    // Build up all visualizations through current stage
-    for (let i = 0; i <= stageIndex; i++) {
-      this.addVisualization(this.stages[i].visualizer(), i);
+    // Add summaries for previous stages
+    for (let i = 0; i < stageIndex; i++) {
+      const summaryContent = this.createSummaryForStage(i);
+      this.addSummaryToGrid(summaryContent, i);
     }
+
+    // Add current stage visualization
+    this.addVisualization(this.stages[stageIndex].visualizer(), stageIndex);
   },
 
   // Show a specific stage for initial load
@@ -1319,9 +1336,18 @@ end`,
       codeDisplay.appendChild(span);
     });
 
-    // Build progressive visualizations (cumulative from start to current stage)
-    this.buildProgressiveVisualizations(stageIndex);
+    // Add all stages as full visualizations first (including previous ones)
+    for (let i = 0; i <= stageIndex; i++) {
+      this.addVisualization(this.stages[i].visualizer(), i);
+    }
+
+    // Convert previous stages to summaries
+    if (stageIndex > 0) {
+      this.transitionPreviousStagesToSummary(stageIndex);
+    }
   },
+
+
 
   // Build visualizations progressively showing accumulation
   buildProgressiveVisualizations(targetStage) {
@@ -1378,7 +1404,6 @@ end`,
 
   // Start the animation with typing
   start() {
-    console.log("START: Called");
     if (this.animationActive) return;
 
     // Don't auto-start if user prefers reduced motion, but show initial content
@@ -1396,7 +1421,7 @@ end`,
 
   // Main animation loop with typing
   animate() {
-    if (!this.animationActive) return;
+    if (!this.animationActive || this.loadedFromHash) return;
 
     const stage = this.stages[this.currentStage];
 
@@ -1420,22 +1445,22 @@ end`,
 
     // Clear all visualizations only when restarting (stage 0)
     if (this.currentStage === 0) {
-      console.log("ANIMATE: Stage 0, clearing visualizations");
       this.clearAllVisualizations();
       this.updateDescription(0);
       // Only add visualization if stage-0 doesn't already exist
       const existing = document.getElementById("stage-0");
-      console.log("ANIMATE: Stage-0 exists?", !!existing);
       if (!existing) {
-        console.log("ANIMATE: Adding stage-0 visualization");
         this.addVisualization(stage.visualizer(), 0);
       }
     } else {
       // For non-first stages, always clear and add new content
       this.clearAllVisualizations();
-
-      // Transition previous stages to summary immediately when typing starts
-      this.transitionPreviousStagesToSummary(this.currentStage);
+      
+      // Add summaries for previous stages
+      for (let i = 0; i < this.currentStage; i++) {
+        const summaryContent = this.createSummaryForStage(i);
+        this.addSummaryToGrid(summaryContent, i);
+      }
 
       // Update description and add new visualization with delay for non-first stages
       this.updateDescription(this.currentStage);
@@ -1501,6 +1526,7 @@ end`,
     } else {
       this.isPlaying = true;
       this.animationActive = true;
+      this.loadedFromHash = false;
       this.updatePlayPauseButton(true);
       this.animate();
     }
@@ -2438,238 +2464,118 @@ end`,
     `;
   },
 
-  createExtensionsShowcase() {
-    return `
-      <div class="w-full">
-        <div class="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg p-6 border border-purple-200 dark:border-purple-700 max-h-[600px]">
-          <div class="text-center mb-6">
-            <h3 class="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-2">The Ash Ecosystem</h3>
-            <p class="text-lg text-gray-600 dark:text-gray-400">Powerful extensions that integrate seamlessly with your resources</p>
-          </div>
+  // Generate URL slug from stage name
+  getStageSlug(stageIndex) {
+    const stage = this.stages[stageIndex];
+    return stage.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+  },
 
-          <div class="grid grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
-            <!-- Ash Core -->
-            <a href="https://hexdocs.pm/ash/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-red-300 dark:hover:border-red-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-red-500 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-red-600 dark:group-hover:text-red-400">Ash</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">Core framework</p>
-            </a>
+  // Get stage index from URL slug
+  getStageFromSlug(slug) {
+    for (let i = 0; i < this.stages.length; i++) {
+      if (this.getStageSlug(i) === slug) {
+        return i;
+      }
+    }
+    return 0; // Default to first stage if not found
+  },
 
-            <!-- Core Extensions -->
-            <a href="https://hexdocs.pm/ash_postgres/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-blue-600 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">AshPostgres</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">PostgreSQL data layer</p>
-            </a>
+  // Copy link to current stage
+  copyStageLink() {
+    // Pause the animation
+    this.pause();
+    this.updatePlayPauseButton(false);
+    
+    const slug = this.getStageSlug(this.currentStage);
+    const url = `${window.location.origin}${window.location.pathname}#ash-animation-${slug}`;
+    
 
-            <a href="https://hexdocs.pm/ash_phoenix/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-orange-300 dark:hover:border-orange-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-orange-600 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-orange-600 dark:group-hover:text-orange-400">AshPhoenix</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">Phoenix integration</p>
-            </a>
+    
+    navigator.clipboard.writeText(url).then(() => {
+      // Show feedback that link was copied
+      const linkBtn = document.getElementById("link-stage");
+      if (linkBtn) {
+        const originalHTML = linkBtn.innerHTML;
+        
+        // Change to checkmark icon and green background
+        linkBtn.style.backgroundColor = "#10b981"; // green
+        linkBtn.innerHTML = `
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+        `;
+        
+        // Create and show tooltip
+        const tooltip = document.createElement('div');
+        tooltip.textContent = 'Link copied!';
+        tooltip.style.cssText = `
+          position: absolute;
+          top: 50%;
+          right: -120px;
+          transform: translateY(-50%);
+          background: #10b981;
+          color: white;
+          padding: 8px 12px;
+          border-radius: 6px;
+          font-size: 14px;
+          font-weight: 500;
+          z-index: 1000;
+          white-space: nowrap;
+          animation: fadeIn 0.2s ease-in;
+        `;
+        linkBtn.style.position = 'relative';
+        linkBtn.appendChild(tooltip);
+        
+        setTimeout(() => {
+          linkBtn.style.backgroundColor = ""; // reset
+          linkBtn.innerHTML = originalHTML; // restore original icon
+          if (tooltip.parentElement) {
+            tooltip.parentElement.removeChild(tooltip);
+          }
+        }, 2000);
+      }
+    }).catch(() => {
+      // Fallback for older browsers
+      prompt("Copy this link:", url);
+    });
+  },
 
-            <a href="https://hexdocs.pm/ash_graphql/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-pink-300 dark:hover:border-pink-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-pink-600 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-pink-600 dark:group-hover:text-pink-400">AshGraphQL</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">GraphQL API extension</p>
-            </a>
-
-            <a href="https://hexdocs.pm/ash_json_api/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-green-300 dark:hover:border-green-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-green-600 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-green-600 dark:group-hover:text-green-400">AshJsonApi</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">JSON:API extension</p>
-            </a>
-
-            <!-- Workflows & Orchestration -->
-            <a href="https://hexdocs.pm/reactor/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">Reactor</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">Workflows & Sagas</p>
-            </a>
-
-            <!-- Authentication -->
-            <a href="https://hexdocs.pm/ash_authentication/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-red-300 dark:hover:border-red-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-red-600 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-red-600 dark:group-hover:text-red-400">AshAuthentication</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">Authentication</p>
-            </a>
-
-            <!-- Admin & UI -->
-            <a href="https://hexdocs.pm/ash_admin/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-purple-300 dark:hover:border-purple-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-purple-600 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-purple-600 dark:group-hover:text-purple-400">AshAdmin</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">Admin interface</p>
-            </a>
-
-            <!-- Data Processing -->
-            <a href="https://hexdocs.pm/ash_oban/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-indigo-300 dark:hover:border-indigo-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-indigo-600 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">AshOban</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">Background jobs</p>
-            </a>
-
-            <a href="https://hexdocs.pm/ash_state_machine/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-teal-300 dark:hover:border-teal-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-teal-600 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-teal-600 dark:group-hover:text-teal-400">AshStateMachine</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">State machines</p>
-            </a>
-
-            <!-- Data Management -->
-            <a href="https://hexdocs.pm/ash_archival/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-yellow-300 dark:hover:border-yellow-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-yellow-600 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-yellow-600 dark:group-hover:text-yellow-400">AshArchival</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">Soft deletion</p>
-            </a>
-
-            <a href="https://hexdocs.pm/ash_paper_trail/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-gray-300 dark:hover:border-gray-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-gray-600 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-gray-600 dark:group-hover:text-gray-400">AshPaperTrail</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">Audit logs</p>
-            </a>
-
-            <a href="https://hexdocs.pm/ash_csv/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-emerald-300 dark:hover:border-emerald-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-emerald-600 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400">AshCsv</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">CSV data layer</p>
-            </a>
-
-            <!-- Financial -->
-            <a href="https://hexdocs.pm/ash_money/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-green-300 dark:hover:border-green-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-green-700 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-green-600 dark:group-hover:text-green-400">AshMoney</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">Financial data types</p>
-            </a>
-
-            <a href="https://hexdocs.pm/ash_double_entry/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-lime-300 dark:hover:border-lime-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-lime-600 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-lime-600 dark:group-hover:text-lime-400">AshDoubleEntry</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">Double-entry accounting</p>
-            </a>
-
-            <!-- Security -->
-            <a href="https://hexdocs.pm/ash_cloak/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-slate-600 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-slate-600 dark:group-hover:text-slate-400">AshCloak</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">Encryption</p>
-            </a>
-
-
-
-            <!-- Data Layers -->
-            <a href="https://hexdocs.pm/ash_sqlite/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-sky-300 dark:hover:border-sky-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-sky-600 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-sky-600 dark:group-hover:text-sky-400">AshSqlite</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">SQLite data layer</p>
-            </a>
-
-            <a href="https://hexdocs.pm/ash_cubdb/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-amber-300 dark:hover:border-amber-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-amber-600 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-amber-600 dark:group-hover:text-amber-400">AshCubDB</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">CubDB data layer</p>
-            </a>
-
-            <!-- Geospatial -->
-            <a href="https://hexdocs.pm/ash_geo/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-teal-300 dark:hover:border-teal-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-teal-700 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-teal-600 dark:group-hover:text-teal-400">AshGeo</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">Geospatial data</p>
-            </a>
-
-            <!-- AI & Machine Learning -->
-            <a href="https://hexdocs.pm/ash_ai/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-violet-300 dark:hover:border-violet-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-violet-600 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-violet-600 dark:group-hover:text-violet-400">AshAi</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">LLM features</p>
-            </a>
-
-
-
-            <!-- Monitoring -->
-            <a href="https://hexdocs.pm/ash_appsignal/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-purple-300 dark:hover:border-purple-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-purple-600 dark:group-hover:text-purple-400">AshAppSignal</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">APM monitoring</p>
-            </a>
-
-            <a href="https://hexdocs.pm/opentelemetry_ash/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-indigo-300 dark:hover:border-indigo-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-indigo-500 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">OpentelemetryAsh</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">Telemetry tracing</p>
-            </a>
-
-
-
-            <!-- Event Sourcing -->
-            <a href="https://hexdocs.pm/ash_events/" target="_blank" class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-emerald-300 dark:hover:border-emerald-600 transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400">AshEvents</span>
-              </div>
-              <p class="text-xs text-gray-600 dark:text-gray-400">Event sourcing</p>
-            </a>
-
-
-          </div>
-
-          <div class="mt-8 text-center">
-            <a href="https://hex.pm/packages?search=depends%3Ahexpm%3Aash&sort=total_downloads" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-800 dark:to-blue-800 rounded-full">
-              <span class="text-lg font-semibold text-purple-700 dark:text-purple-300">And many more on Hex.pm!</span>
-              <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-    `;
+  // Check URL hash and jump to stage if specified
+  handleUrlHash() {
+    const hash = window.location.hash;
+    if (hash.startsWith('#ash-animation-')) {
+      const slug = hash.replace('#ash-animation-', '');
+      const stageIndex = this.getStageFromSlug(slug);
+      if (stageIndex !== this.currentStage) {
+        this.currentStage = stageIndex;
+        this.cancelPendingOperations();
+        this.pause();
+        this.animationActive = false;
+        this.isPlaying = false;
+        this.loadedFromHash = true;
+        this.showStageProgressive(stageIndex);
+        
+        // Complete any typing to show all text
+        setTimeout(() => {
+          this.completeCurrentTyping();
+          this.updatePlayPauseButton(false);
+        }, 100);
+      }
+      return true; // Hash was processed
+    }
+    return false; // No hash processed
   },
 };
 
 // Initialize animation when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
   AshAnimation.init();
+});
+
+// Handle URL hash changes
+window.addEventListener("hashchange", () => {
+  AshAnimation.handleUrlHash();
 });
