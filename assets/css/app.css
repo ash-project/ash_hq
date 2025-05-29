@@ -11,6 +11,22 @@
   }
 }
 
+/* Make code blocks smaller on mobile */
+@media (max-width: 768px) {
+  .prose pre {
+    font-size: 0.75rem;
+  }
+  
+  .prose code {
+    font-size: 0.75rem;
+  }
+  
+  /* Also make CodeExample component font smaller */
+  .font-mono {
+    font-size: 0.75rem;
+  }
+}
+
 .aspect-video {
   max-width: 500px;
 }

@@ -911,7 +911,8 @@ const AshAnimation = {
       code: `
   actions do
     action :reading_time, :integer do
-      argument :content, :string, allow_nil?: false
+      argument :content, :string,
+        allow_nil?: false
 
       run fn input, _ ->
         words =
@@ -941,10 +942,13 @@ end`,
 
   attributes do
     uuid_primary_key :id
-    attribute :title, :string, allow_nil?: false
+    attribute :title, :string,
+      allow_nil?: false
     attribute :content, :string
     attribute :state, :atom,
-      constraints: [one_of: [:draft, :published]]
+      constraints: [
+        one_of: [:draft, :published]
+      ]
 
     timestamps()
   end
@@ -1018,7 +1022,7 @@ end`,
 
   cloak do
     vault MyApp.Vault
-    # Automatically encrypt the content attribute
+    # Automatically encrypt content
     attributes [:content]
   end
   # ...
@@ -1037,11 +1041,17 @@ end`,
     ]
 
   actions do
-    # AI-powered action that analyzes post sentiment
-    action :analyze_sentiment, MyApp.Types.Sentiment do
-      argument :content, :string, allow_nil?: false
+    # AI-powered action
+    action :analyze_sentiment, :atom do
+      constraints [
+        one_of: [:positive, :negative]
+      ]
+
+      argument :content, :string,
+        allow_nil?: false
+
       run prompt(
-        LangChain.ChatModels.ChatOpenAI.new!(
+        ChatOpenAI.new!(
           %{model: "gpt-4o"}
         )
       )
@@ -1066,8 +1076,13 @@ end`,
     initial_states [:draft]
 
     transitions do
-      transition :publish, from: :draft, to: :published
-      transition :unpublish, from: :published, to: :draft
+      transition :publish,
+        from: :draft,
+        to: :published
+
+      transition :unpublish,
+        from: :published,
+        to: :draft
     end
   end
   # ...
@@ -1110,14 +1125,14 @@ end`,
 
   oban do
     triggers do
-      trigger :send_published_notification do
-        action :send_notification
-        where expr(state == :published and needs_notification)
+      trigger :publish do
+        where expr(state == :pending)
         scheduler_cron "@hourly"
       end
     end
     scheduled_actions do
-      schedule :cleanup_old_drafts, "@daily"
+      schedule :cleanup_old_drafts,
+        "@daily"
     end
   end
   # ...
@@ -1199,14 +1214,14 @@ end`,
 
     // Check URL hash for specific stage first
     const hasHash = this.handleUrlHash();
-    
+
     // Only show initial stage if no hash was processed
     if (!hasHash) {
       this.updateDescription(0);
       this.addVisualization(this.stages[0].visualizer(), 0);
       this.updateProgressDots();
     }
-    
+
     this.initialSetupDone = true;
 
     // Check immediately if element is already visible
@@ -1257,43 +1272,56 @@ end`,
       let currentX = 0;
       let isDragging = false;
 
-      track.addEventListener("touchstart", (e) => {
-        startX = e.touches[0].clientX;
-        isDragging = true;
-      }, { passive: true });
+      track.addEventListener(
+        "touchstart",
+        (e) => {
+          startX = e.touches[0].clientX;
+          isDragging = true;
+        },
+        { passive: true },
+      );
 
-      track.addEventListener("touchmove", (e) => {
-        if (!isDragging) return;
-        currentX = e.touches[0].clientX;
-      }, { passive: true });
+      track.addEventListener(
+        "touchmove",
+        (e) => {
+          if (!isDragging) return;
+          currentX = e.touches[0].clientX;
+        },
+        { passive: true },
+      );
 
-      track.addEventListener("touchend", () => {
-        if (!isDragging) return;
-        isDragging = false;
-        
-        const diff = startX - currentX;
-        if (Math.abs(diff) > 50) { // Minimum swipe distance
-          if (diff > 0) {
-            this.mobileNextStage();
-          } else {
-            this.mobilePrevStage();
+      track.addEventListener(
+        "touchend",
+        () => {
+          if (!isDragging) return;
+          isDragging = false;
+
+          const diff = startX - currentX;
+          if (Math.abs(diff) > 50) {
+            // Minimum swipe distance
+            if (diff > 0) {
+              this.mobileNextStage();
+            } else {
+              this.mobilePrevStage();
+            }
           }
-        }
-      }, { passive: true });
+        },
+        { passive: true },
+      );
     }
 
     // Check if there's a hash in the URL and set mobile stage accordingly
     const hash = window.location.hash;
-    if (hash.startsWith('#ash-animation-')) {
-      const slug = hash.replace('#ash-animation-', '');
+    if (hash.startsWith("#ash-animation-")) {
+      const slug = hash.replace("#ash-animation-", "");
       const stageIndex = this.getStageFromSlug(slug);
       if (stageIndex >= 0 && stageIndex < this.mobileStageCount) {
         this.mobileCurrentStage = stageIndex;
       }
     }
-    
+
     this.updateMobileStage();
-    
+
     // Initialize mobile stage content on load
     this.updateMobileStageContent();
   },
@@ -1330,7 +1358,7 @@ end`,
     const track = document.getElementById("mobile-stage-track");
     const prevBtn = document.getElementById("mobile-prev");
     const nextBtn = document.getElementById("mobile-next");
-    
+
     if (track) {
       const translateX = -this.mobileCurrentStage * 100;
       track.style.transform = `translateX(${translateX}%)`;
@@ -1362,31 +1390,35 @@ end`,
 
   // Update mobile stage content using the same stages data as desktop
   updateMobileStageContent() {
-    const stageElement = document.querySelector(`[data-mobile-stage="${this.mobileCurrentStage}"]`);
+    const stageElement = document.querySelector(
+      `[data-mobile-stage="${this.mobileCurrentStage}"]`,
+    );
     if (!stageElement || !this.stages[this.mobileCurrentStage]) return;
 
     const stage = this.stages[this.mobileCurrentStage];
-    
+
     // Update title
-    const titleElement = stageElement.querySelector('.mobile-stage-title');
+    const titleElement = stageElement.querySelector(".mobile-stage-title");
     if (titleElement) {
       titleElement.textContent = stage.name;
     }
 
     // Update description
-    const descriptionElement = stageElement.querySelector('.mobile-stage-description');
+    const descriptionElement = stageElement.querySelector(
+      ".mobile-stage-description",
+    );
     if (descriptionElement) {
       descriptionElement.textContent = stage.description;
     }
 
     // Update code display
-    const codeElement = stageElement.querySelector('.mobile-code-display code');
+    const codeElement = stageElement.querySelector(".mobile-code-display code");
     if (codeElement && stage.code) {
       codeElement.innerHTML = this.renderMobileCode(stage.code, stage.module);
     }
 
     // Update summary (extract from description or use existing)
-    const summaryElement = stageElement.querySelector('.mobile-stage-summary');
+    const summaryElement = stageElement.querySelector(".mobile-stage-summary");
     if (summaryElement) {
       // Keep existing summary content as it's stage-specific
     }
@@ -1396,21 +1428,22 @@ end`,
   renderMobileCode(code, module) {
     // Prepare the full code with module wrapper like desktop version
     const fullCode = `defmodule ${module} do
-  use Ash.Resource${code}
-end`;
+  use Ash.Resource${code}`;
 
     // Parse and highlight the code
     const tokens = this.parseElixirTokens(fullCode);
-    
+
     // Convert tokens to HTML
-    return tokens.map(token => {
-      return `<span class="${token.className}">${this.escapeHtml(token.text)}</span>`;
-    }).join('');
+    return tokens
+      .map((token) => {
+        return `<span class="${token.className}">${this.escapeHtml(token.text)}</span>`;
+      })
+      .join("");
   },
 
   // Helper function to escape HTML
   escapeHtml(text) {
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
   },
@@ -1534,8 +1567,6 @@ end`;
     }
   },
 
-
-
   // Build visualizations progressively showing accumulation
   buildProgressiveVisualizations(targetStage) {
     const animationId = this.currentAnimationId;
@@ -1642,7 +1673,7 @@ end`;
     } else {
       // For non-first stages, always clear and add new content
       this.clearAllVisualizations();
-      
+
       // Add summaries for previous stages
       for (let i = 0; i < this.currentStage; i++) {
         const summaryContent = this.createSummaryForStage(i);
@@ -2599,7 +2630,6 @@ end`;
         <div class="bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-lg p-4 border border-orange-200 dark:border-orange-700">
           <div class="text-center mb-3">
             <h3 class="text-xl font-bold text-orange-700 dark:text-orange-300 mb-0">Background Job Processing</h3>
-            <p class="text-base text-gray-600 dark:text-gray-400">Reliable background jobs with triggers and scheduled actions</p>
           </div>
 
           <div class="grid md:grid-cols-2 gap-4">
@@ -2674,27 +2704,27 @@ end`;
   copyStageLink() {
     const slug = this.getStageSlug(this.currentStage);
     const url = `${window.location.origin}${window.location.pathname}#ash-animation-${slug}`;
-    
 
-    
-    navigator.clipboard.writeText(url).then(() => {
-      // Show feedback that link was copied
-      const linkBtn = document.getElementById("link-stage");
-      if (linkBtn) {
-        const originalHTML = linkBtn.innerHTML;
-        
-        // Change to checkmark icon and green background
-        linkBtn.style.backgroundColor = "#10b981"; // green
-        linkBtn.innerHTML = `
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        // Show feedback that link was copied
+        const linkBtn = document.getElementById("link-stage");
+        if (linkBtn) {
+          const originalHTML = linkBtn.innerHTML;
+
+          // Change to checkmark icon and green background
+          linkBtn.style.backgroundColor = "#10b981"; // green
+          linkBtn.innerHTML = `
           <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
           </svg>
         `;
-        
-        // Create and show tooltip
-        const tooltip = document.createElement('div');
-        tooltip.textContent = 'Link copied!';
-        tooltip.style.cssText = `
+
+          // Create and show tooltip
+          const tooltip = document.createElement("div");
+          tooltip.textContent = "Link copied!";
+          tooltip.style.cssText = `
           position: absolute;
           top: 50%;
           right: -120px;
@@ -2709,36 +2739,40 @@ end`;
           white-space: nowrap;
           animation: fadeIn 0.2s ease-in;
         `;
-        linkBtn.style.position = 'relative';
-        linkBtn.appendChild(tooltip);
-        
-        setTimeout(() => {
-          linkBtn.style.backgroundColor = ""; // reset
-          linkBtn.innerHTML = originalHTML; // restore original icon
-          if (tooltip.parentElement) {
-            tooltip.parentElement.removeChild(tooltip);
-          }
-        }, 2000);
-      }
-    }).catch(() => {
-      // Fallback for older browsers
-      prompt("Copy this link:", url);
-    });
+          linkBtn.style.position = "relative";
+          linkBtn.appendChild(tooltip);
+
+          setTimeout(() => {
+            linkBtn.style.backgroundColor = ""; // reset
+            linkBtn.innerHTML = originalHTML; // restore original icon
+            if (tooltip.parentElement) {
+              tooltip.parentElement.removeChild(tooltip);
+            }
+          }, 2000);
+        }
+      })
+      .catch(() => {
+        // Fallback for older browsers
+        prompt("Copy this link:", url);
+      });
   },
 
   // Check URL hash and jump to stage if specified
   handleUrlHash() {
     const hash = window.location.hash;
-    if (hash.startsWith('#ash-animation-')) {
-      const slug = hash.replace('#ash-animation-', '');
+    if (hash.startsWith("#ash-animation-")) {
+      const slug = hash.replace("#ash-animation-", "");
       const stageIndex = this.getStageFromSlug(slug);
       if (stageIndex !== this.currentStage) {
         this.currentStage = stageIndex;
-        
+
         // Check if we're on mobile (lg:hidden is active)
         const mobileContainer = document.getElementById("mobile-stages");
-        const isMobile = mobileContainer && window.getComputedStyle(mobileContainer.parentElement).display !== 'none';
-        
+        const isMobile =
+          mobileContainer &&
+          window.getComputedStyle(mobileContainer.parentElement).display !==
+            "none";
+
         if (isMobile) {
           // Handle mobile navigation
           this.mobileCurrentStage = stageIndex;
@@ -2751,14 +2785,14 @@ end`;
           this.isPlaying = false;
           this.loadedFromHash = true;
           this.showStageProgressive(stageIndex);
-          
+
           // Complete any typing to show all text
           setTimeout(() => {
             this.completeCurrentTyping();
             this.updatePlayPauseButton(false);
           }, 100);
         }
-        
+
         // Scroll to animation container if not in view and start animation
         this.scrollToAnimationIfNeeded();
       }
@@ -2774,10 +2808,10 @@ end`;
 
     const rect = container.getBoundingClientRect();
     const isInView = rect.top >= 0 && rect.bottom <= window.innerHeight;
-    
+
     if (!isInView) {
-      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      
+      container.scrollIntoView({ behavior: "smooth", block: "start" });
+
       // Manually trigger animation start after scroll
       setTimeout(() => {
         if (!this.hasBeenInitiated) {
