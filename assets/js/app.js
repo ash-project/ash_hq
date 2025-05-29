@@ -1315,7 +1315,7 @@ end`,
     if (hash.startsWith("#ash-animation-")) {
       const slug = hash.replace("#ash-animation-", "");
       const stageIndex = this.getStageFromSlug(slug);
-      if (stageIndex >= 0 && stageIndex < this.mobileStageCount) {
+      if (stageIndex >= 0 && stageIndex < this.stages.length) {
         this.mobileCurrentStage = stageIndex;
       }
     }
@@ -2768,15 +2768,13 @@ end`,
 
         // Check if we're on mobile (lg:hidden is active)
         const mobileContainer = document.getElementById("mobile-stages");
-        const isMobile =
-          mobileContainer &&
-          window.getComputedStyle(mobileContainer.parentElement).display !==
-            "none";
+        const isMobile = mobileContainer && window.innerWidth < 1024; // lg breakpoint
 
         if (isMobile) {
           // Handle mobile navigation
           this.mobileCurrentStage = stageIndex;
           this.updateMobileStage();
+          this.updateMobileStageContent();
         } else {
           // Handle desktop navigation
           this.cancelPendingOperations();
@@ -2793,7 +2791,7 @@ end`,
           }, 100);
         }
 
-        // Scroll to animation container if not in view and start animation
+        // Scroll to animation container and start animation
         this.scrollToAnimationIfNeeded();
       }
       return true; // Hash was processed
@@ -2806,20 +2804,16 @@ end`,
     const container = document.getElementById("ash-animation");
     if (!container) return;
 
-    const rect = container.getBoundingClientRect();
-    const isInView = rect.top >= 0 && rect.bottom <= window.innerHeight;
+    // Always scroll to container when hash is present
+    container.scrollIntoView({ behavior: "smooth", block: "start" });
 
-    if (!isInView) {
-      container.scrollIntoView({ behavior: "smooth", block: "start" });
-
-      // Manually trigger animation start after scroll
-      setTimeout(() => {
-        if (!this.hasBeenInitiated) {
-          this.hasBeenInitiated = true;
-          this.start();
-        }
-      }, 500);
-    }
+    // Manually trigger animation start after scroll
+    setTimeout(() => {
+      if (!this.hasBeenInitiated) {
+        this.hasBeenInitiated = true;
+        this.start();
+      }
+    }, 500);
   },
 };
 
