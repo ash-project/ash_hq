@@ -32,32 +32,32 @@
       for your front-end of choice.
     </p>
     <div class="flex flex-col items-center gap-4 mt-2">
-      <a
-        id="github-stars-btn"
-        href="https://github.com/ash-project/ash"
-        class="inline-flex items-center gap-2 px-4 py-2 bg-transparent hover:bg-gray-700/30 border border-gray-600 rounded-lg text-white text-sm font-medium transition-colors"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <span>GitHub</span>
-      </a>
+    <a
+      id="github-stars-btn"
+      href="https://github.com/ash-project/ash"
+      class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-gray-500 text-gray-300 font-medium hover:bg-gray-700/30 hover:border-gray-400 hover:text-white transition-all transform hover:scale-105"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <span>GitHub</span>
+    </a>
 
-      <div class="flex flex-col items-center gap-4">
-        <div class="flex flex-col sm:flex-row gap-3 items-center justify-center">
-          <a
-            href="#ash-animation"
-            class="inline-flex justify-center items-center text-center px-6 py-3 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
-          >
-            Learn More
-          </a>
+    <div class="flex flex-col items-center gap-4">
+      <div class="flex flex-col sm:flex-row gap-3 items-center justify-center">
+        <a
+          href="#ash-animation"
+          class="inline-flex justify-center items-center text-center px-6 py-3 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
+        >
+          Learn More
+        </a>
 
-          <a
-            href="#get-started"
-            class="inline-flex justify-center items-center text-center px-6 py-3 rounded-full border border-primary-light-500 text-primary-light-400 font-medium hover:bg-primary-light-500/10 transition-all transform hover:scale-105"
-          >
-            Install Now
-          </a>
-        </div>
+        <a
+          href="#get-started"
+          class="inline-flex justify-center items-center text-center px-6 py-3 rounded-full border border-primary-light-500 text-primary-light-400 font-medium hover:bg-primary-light-500/10 hover:border-primary-light-400 hover:text-primary-light-300 transition-all transform hover:scale-105"
+        >
+          Install Now
+        </a>
+      </div>
 
         <a
           href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd"
@@ -664,12 +664,12 @@
 
         <div class="bg-slate-800/50 rounded-lg border border-primary-dark-500/20 p-6">
           <div id="custom-substack-embed"></div>
-          <p class="mt-2 mb-3 text-sm tracking-wide text-center text-gray-400">
+          <p class="mt-2 mb-3 text-sm tracking-wide text-center text-gray-300">
             Stay up to date with our weekly newsletter. <br />
             Please remember to<!-- -->
-            <span class="font-bold">confirm your email!</span>
+            <span class="font-bold text-primary-light-300">confirm your email!</span>
             <br />
-            <a href="https://ashweekly.substack.com" target="_blank" class="underline">
+            <a href="https://ashweekly.substack.com" target="_blank" class="underline text-primary-light-400 hover:text-primary-light-300 transition-colors">
               View Past Issues
             </a>
           </p>
@@ -1197,7 +1197,7 @@
             <span
               id={"quickstart-#{value}-inactive"}
               data-name={value}
-              class="inactive-quickstart relative rounded px-4 py-2 border border-primary-dark-500/40 hover:bg-primary-dark-900/50 cursor-pointer"
+              class="inactive-quickstart relative rounded px-4 py-2 border border-primary-dark-500/40 hover:bg-primary-dark-900/50 hover:border-primary-dark-400/60 hover:text-primary-light-300 cursor-pointer transition-all duration-200"
               onclick={"window.quickStartClicked(this, 'quickstart-#{value}-active', true)"}
             >
               {name}
@@ -1205,7 +1205,7 @@
             <span
               id={"quickstart-#{value}-active"}
               data-name={value}
-              class="active-quickstart relative hidden rounded px-4 py-2 border border-primary-dark-500/40 bg-primary-dark-500/80 cursor-pointer"
+              class="active-quickstart relative hidden rounded px-4 py-2 border border-primary-dark-500/40 bg-primary-dark-500/80 hover:bg-primary-dark-400/80 cursor-pointer transition-all duration-200"
               onclick={"window.quickStartClicked(this, 'quickstart-#{value}-inactive', false)"}
             >
               {name}
@@ -1321,12 +1321,12 @@
 
   <div class="mt-12">
     <div class="max-w-5xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-      <h1 class="text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
         Trusted
         <span class="bg-gradient-to-r from-primary-dark-500 to-primary-light-500 bg-clip-text text-transparent">
           in production
         </span>
-      </h1>
+      </h2>
       <div class="bg-slate-950/50 overflow-hidden sm:mx-0 sm:rounded-2xl md:grid-cols-4 backdrop-blur-lg">
         <div class={"grid #{logos_grid()} gap-0.5 justify-center justify-items-center my-12"}>
           <%= for {name, %{href: href, src: src}} <- logos() do %>
@@ -1345,12 +1345,12 @@
 
   <div class="mt-6 z-10" id="upcoming-events">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="text-center text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
+      <h2 class="text-center text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
         Upcoming
         <span class="bg-gradient-to-r from-primary-dark-500 to-primary-light-500 bg-clip-text text-transparent">
           events
         </span>
-      </h1>
+      </h2>
       <ul class="divide-primary-light-500/30 divide-y relative">
         <li :for={event <- @events} class="py-4">
           <a
