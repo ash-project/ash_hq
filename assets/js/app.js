@@ -1142,6 +1142,10 @@ end`,
   initialSetupDone: false,
   loadedFromHash: false,
 
+  // Mobile stage navigation
+  mobileCurrentStage: 0,
+  mobileStageCount: 9,
+
   // Initialize the animation
   init() {
     // Detect user's motion preference
@@ -1226,6 +1230,189 @@ end`,
       if (playIcon) playIcon.classList.add("hidden");
       if (pauseIcon) pauseIcon.classList.remove("hidden");
     }
+
+    // Initialize mobile stage navigation
+    this.initMobileStages();
+  },
+
+  // Initialize mobile stage navigation
+  initMobileStages() {
+    const mobileContainer = document.getElementById("mobile-stages");
+    if (!mobileContainer) return;
+
+    const prevBtn = document.getElementById("mobile-prev");
+    const nextBtn = document.getElementById("mobile-next");
+    const track = document.getElementById("mobile-stage-track");
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => this.mobilePrevStage());
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => this.mobileNextStage());
+    }
+
+    // Touch/swipe support
+    if (track) {
+      let startX = 0;
+      let currentX = 0;
+      let isDragging = false;
+
+      track.addEventListener("touchstart", (e) => {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+      }, { passive: true });
+
+      track.addEventListener("touchmove", (e) => {
+        if (!isDragging) return;
+        currentX = e.touches[0].clientX;
+      }, { passive: true });
+
+      track.addEventListener("touchend", () => {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        const diff = startX - currentX;
+        if (Math.abs(diff) > 50) { // Minimum swipe distance
+          if (diff > 0) {
+            this.mobileNextStage();
+          } else {
+            this.mobilePrevStage();
+          }
+        }
+      }, { passive: true });
+    }
+
+    // Check if there's a hash in the URL and set mobile stage accordingly
+    const hash = window.location.hash;
+    if (hash.startsWith('#ash-animation-')) {
+      const slug = hash.replace('#ash-animation-', '');
+      const stageIndex = this.getStageFromSlug(slug);
+      if (stageIndex >= 0 && stageIndex < this.mobileStageCount) {
+        this.mobileCurrentStage = stageIndex;
+      }
+    }
+    
+    this.updateMobileStage();
+    
+    // Initialize mobile stage content on load
+    this.updateMobileStageContent();
+  },
+
+  // Navigate to previous mobile stage
+  mobilePrevStage() {
+    if (this.mobileCurrentStage > 0) {
+      this.mobileCurrentStage--;
+      this.updateMobileStage();
+      this.updateMobileUrlHash();
+    }
+  },
+
+  // Navigate to next mobile stage
+  mobileNextStage() {
+    if (this.mobileCurrentStage < this.mobileStageCount - 1) {
+      this.mobileCurrentStage++;
+      this.updateMobileStage();
+      this.updateMobileUrlHash();
+    }
+  },
+
+  // Update URL hash for mobile navigation
+  updateMobileUrlHash() {
+    const slug = this.getStageSlug(this.mobileCurrentStage);
+    const newHash = `#ash-animation-${slug}`;
+    if (window.location.hash !== newHash) {
+      history.replaceState(null, null, newHash);
+    }
+  },
+
+  // Update mobile stage display
+  updateMobileStage() {
+    const track = document.getElementById("mobile-stage-track");
+    const prevBtn = document.getElementById("mobile-prev");
+    const nextBtn = document.getElementById("mobile-next");
+    
+    if (track) {
+      const translateX = -this.mobileCurrentStage * 100;
+      track.style.transform = `translateX(${translateX}%)`;
+    }
+
+    // Update button states
+    if (prevBtn) {
+      prevBtn.disabled = this.mobileCurrentStage === 0;
+    }
+    if (nextBtn) {
+      nextBtn.disabled = this.mobileCurrentStage === this.mobileStageCount - 1;
+    }
+
+    // Update dots
+    const dots = document.querySelectorAll(".mobile-dot");
+    dots.forEach((dot, index) => {
+      if (index === this.mobileCurrentStage) {
+        dot.classList.remove("bg-primary-dark-500/30");
+        dot.classList.add("bg-primary-light-500");
+      } else {
+        dot.classList.remove("bg-primary-light-500");
+        dot.classList.add("bg-primary-dark-500/30");
+      }
+    });
+
+    // Update mobile stage content
+    this.updateMobileStageContent();
+  },
+
+  // Update mobile stage content using the same stages data as desktop
+  updateMobileStageContent() {
+    const stageElement = document.querySelector(`[data-mobile-stage="${this.mobileCurrentStage}"]`);
+    if (!stageElement || !this.stages[this.mobileCurrentStage]) return;
+
+    const stage = this.stages[this.mobileCurrentStage];
+    
+    // Update title
+    const titleElement = stageElement.querySelector('.mobile-stage-title');
+    if (titleElement) {
+      titleElement.textContent = stage.name;
+    }
+
+    // Update description
+    const descriptionElement = stageElement.querySelector('.mobile-stage-description');
+    if (descriptionElement) {
+      descriptionElement.textContent = stage.description;
+    }
+
+    // Update code display
+    const codeElement = stageElement.querySelector('.mobile-code-display code');
+    if (codeElement && stage.code) {
+      codeElement.innerHTML = this.renderMobileCode(stage.code, stage.module);
+    }
+
+    // Update summary (extract from description or use existing)
+    const summaryElement = stageElement.querySelector('.mobile-stage-summary');
+    if (summaryElement) {
+      // Keep existing summary content as it's stage-specific
+    }
+  },
+
+  // Render code for mobile display using same syntax highlighting as desktop
+  renderMobileCode(code, module) {
+    // Prepare the full code with module wrapper like desktop version
+    const fullCode = `defmodule ${module} do
+  use Ash.Resource${code}
+end`;
+
+    // Parse and highlight the code
+    const tokens = this.parseElixirTokens(fullCode);
+    
+    // Convert tokens to HTML
+    return tokens.map(token => {
+      return `<span class="${token.className}">${this.escapeHtml(token.text)}</span>`;
+    }).join('');
+  },
+
+  // Helper function to escape HTML
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   },
 
   // Navigate to previous stage
@@ -2485,10 +2672,6 @@ end`,
 
   // Copy link to current stage
   copyStageLink() {
-    // Pause the animation
-    this.pause();
-    this.updatePlayPauseButton(false);
-    
     const slug = this.getStageSlug(this.currentStage);
     const url = `${window.location.origin}${window.location.pathname}#ash-animation-${slug}`;
     
@@ -2551,18 +2734,30 @@ end`,
       const stageIndex = this.getStageFromSlug(slug);
       if (stageIndex !== this.currentStage) {
         this.currentStage = stageIndex;
-        this.cancelPendingOperations();
-        this.pause();
-        this.animationActive = false;
-        this.isPlaying = false;
-        this.loadedFromHash = true;
-        this.showStageProgressive(stageIndex);
         
-        // Complete any typing to show all text
-        setTimeout(() => {
-          this.completeCurrentTyping();
-          this.updatePlayPauseButton(false);
-        }, 100);
+        // Check if we're on mobile (lg:hidden is active)
+        const mobileContainer = document.getElementById("mobile-stages");
+        const isMobile = mobileContainer && window.getComputedStyle(mobileContainer.parentElement).display !== 'none';
+        
+        if (isMobile) {
+          // Handle mobile navigation
+          this.mobileCurrentStage = stageIndex;
+          this.updateMobileStage();
+        } else {
+          // Handle desktop navigation
+          this.cancelPendingOperations();
+          this.pause();
+          this.animationActive = false;
+          this.isPlaying = false;
+          this.loadedFromHash = true;
+          this.showStageProgressive(stageIndex);
+          
+          // Complete any typing to show all text
+          setTimeout(() => {
+            this.completeCurrentTyping();
+            this.updatePlayPauseButton(false);
+          }, 100);
+        }
       }
       return true; // Hash was processed
     }

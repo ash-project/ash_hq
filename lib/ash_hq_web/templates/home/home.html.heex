@@ -153,30 +153,222 @@
   </div>
   </div>
 
-  <!-- Mobile CTA Content -->
+  <!-- Mobile Swipeable Stages -->
   <div class="lg:hidden">
     <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6">
-      <div class="backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-8 text-center">
-        <h2 class="text-2xl font-bold text-primary-light-200 mb-4">
-          Discover the Power of Ash
+      <div class="backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-6">
+        <h2 class="text-2xl font-bold text-primary-light-200 mb-6 text-center">
+          Discover Ash Features
         </h2>
-        <p class="text-gray-300 mb-6 leading-relaxed">
-          Learn how Ash's declarative approach transforms the way you build Elixir applications.
-          From resources and actions to policies and pub/sub, discover what makes Ash unique.
-        </p>
-        <a
-          href="https://hexdocs.pm/ash/what-is-ash.html"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex justify-center items-center px-8 py-4 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
-        >
-          What is Ash?
-          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-          </svg>
-        </a>
-        <div class="text-xs text-gray-400 mt-2 text-center">
-          View on a larger screen for an interactive introduction to Ash
+
+        <!-- Mobile Stage Container -->
+        <div id="mobile-stages" class="relative overflow-hidden">
+          <!-- Swipe Container -->
+          <div id="mobile-stage-track" class="flex transition-transform duration-300 ease-out">
+
+            <!-- Stage 0: Resources & Actions -->
+            <div class="w-full flex-shrink-0 px-2" data-mobile-stage="0">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">Resources & Actions</h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">Actions are fully typed and introspectable. Extensions can automatically understand and build on top of them.</p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>Creates a functional interface that returns reading time in minutes
+                </div>
+              </div>
+            </div>
+
+            <!-- Stage 1: Persistence -->
+            <div class="w-full flex-shrink-0 px-2" data-mobile-stage="1">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">Persistence</h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">Add persistent storage while keeping existing behavior. Your resource combines behavior and state.</p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>Creates "posts" table with automatic migrations
+                </div>
+              </div>
+            </div>
+
+            <!-- Stage 2: GraphQL -->
+            <div class="w-full flex-shrink-0 px-2" data-mobile-stage="2">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg class="w-5 h-5 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12,2 L2,7 L12,12 L22,7 L12,2 Z M2,17 L12,22 L22,17 L22,7 L12,12 L2,7 L2,17 Z"/>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">GraphQL</h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">Add a full GraphQL API with minimal configuration. Automatically generates queries, mutations, and types.</p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>Full GraphQL API with introspectable schema
+                </div>
+              </div>
+            </div>
+
+            <!-- Stage 3: JSON:API -->
+            <div class="w-full flex-shrink-0 px-2" data-mobile-stage="3">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">JSON:API</h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">Add a REST JSON:API alongside GraphQL. Expose your domain through multiple API standards.</p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>REST endpoints at /posts with JSON:API format
+                </div>
+              </div>
+            </div>
+
+            <!-- Stage 4: Encryption -->
+            <div class="w-full flex-shrink-0 px-2" data-mobile-stage="4">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">Encryption</h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">Add encryption at rest with Cloak integration. Content is automatically encrypted when stored and decrypted when read.</p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>Transparent encryption - no API changes needed
+                </div>
+              </div>
+            </div>
+
+            <!-- Stage 5: AI Tools -->
+            <div class="w-full flex-shrink-0 px-2" data-mobile-stage="5">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg class="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">AI Tools</h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">Add AI-powered actions and expose your domain as tools for LLMs. Perfect for building AI features or MCP servers.</p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>Prompt-backed actions with LLM integration
+                </div>
+              </div>
+            </div>
+
+            <!-- Stage 6: State Machine -->
+            <div class="w-full flex-shrink-0 px-2" data-mobile-stage="6">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">State Machine</h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">Add declarative state validations and transitions. Each extension builds on previous ones seamlessly.</p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>Declarative state validations and transitions
+                </div>
+              </div>
+            </div>
+
+            <!-- Stage 7: Authentication -->
+            <div class="w-full flex-shrink-0 px-2" data-mobile-stage="7">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">Authentication</h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">Complete user authentication with password and OAuth strategies. Built-in support for multiple providers.</p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>Password, OAuth, magic links, and more
+                </div>
+              </div>
+            </div>
+
+            <!-- Stage 8: Background Jobs -->
+            <div class="w-full flex-shrink-0 px-2" data-mobile-stage="8">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">Background Jobs</h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">Add reliable background job processing with triggers and scheduled actions. Perfect for notifications and maintenance tasks.</p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>Powered by Oban for reliable job processing
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div class="flex items-center justify-center mt-6 gap-4">
+          <button id="mobile-prev" class="p-2 rounded-full bg-primary-dark-600 hover:bg-primary-dark-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+
+          <div class="flex gap-2">
+            <div class="mobile-dot w-2 h-2 rounded-full bg-primary-light-500 transition-all duration-300" data-stage="0"></div>
+            <div class="mobile-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="1"></div>
+            <div class="mobile-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="2"></div>
+            <div class="mobile-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="3"></div>
+            <div class="mobile-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="4"></div>
+            <div class="mobile-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="5"></div>
+            <div class="mobile-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="6"></div>
+            <div class="mobile-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="7"></div>
+            <div class="mobile-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300" data-stage="8"></div>
+          </div>
+
+          <button id="mobile-next" class="p-2 rounded-full bg-primary-dark-600 hover:bg-primary-dark-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="text-xs text-gray-400 mt-4 text-center">
+          View on a larger screen for an interactive introduction
         </div>
       </div>
     </div>
