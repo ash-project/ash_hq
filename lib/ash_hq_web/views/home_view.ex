@@ -103,7 +103,7 @@ defmodule AshHqWeb.HomeView do
         json_api: "JSON:API"
       ],
       "Data Layers": [
-        postgres: "PostgreSQL",
+        postgres: "Postgres",
         sqlite: "SQLite",
         csv: "CSV"
       ],
@@ -152,8 +152,7 @@ defmodule AshHqWeb.HomeView do
     [
       live_view: "Phoenix LiveView",
       graphql: "GraphQL",
-      json_api: "JSON:API",
-      postgres: "PostgreSQL"
+      json_api: "JSON:API"
     ]
   end
 end
