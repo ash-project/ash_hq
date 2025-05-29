@@ -2644,8 +2644,8 @@ end`,
               </p>
               <div class="space-y-1">
                 <div class="bg-orange-50 dark:bg-orange-900/20 rounded p-2 text-xs">
-                  <div class="text-orange-700 dark:text-orange-300 font-mono text-xs">send_published_notification</div>
-                  <div class="text-gray-600 dark:text-gray-400 text-xs">Runs hourly for published posts without notifications</div>
+                  <div class="text-orange-700 dark:text-orange-300 font-mono text-xs">publish</div>
+                  <div class="text-gray-600 dark:text-gray-400 text-xs">Runs hourly to publish pending posts</div>
                 </div>
               </div>
             </div>
@@ -2669,12 +2669,14 @@ end`,
           </div>
 
           <div class="mt-2 text-center">
-            <div class="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-orange-100 to-yellow-100 dark:from-orange-800 dark:to-yellow-800 rounded-full">
-              <span class="text-xs font-medium text-orange-700 dark:text-orange-300">Powered by Oban</span>
-              <svg class="w-3 h-3 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-              </svg>
-            </div>
+            <a href="https://getoban.pro" target="_blank" class="mt-2 text-center">
+              <div class="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-orange-100 to-yellow-100 dark:from-orange-800 dark:to-yellow-800 rounded-full">
+                <span class="text-xs font-medium text-orange-700 dark:text-orange-300">Powered by Oban</span>
+                <svg class="w-3 h-3 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+              </div>
+            </a>
           </div>
         </div>
       </div>

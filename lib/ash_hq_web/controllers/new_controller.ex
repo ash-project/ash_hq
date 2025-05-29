@@ -88,7 +88,7 @@ defmodule AshHqWeb.NewController do
       |> Kernel.||("")
       |> String.split(",", trim: true)
       |> Enum.map(&String.trim/1)
-      |> then(fn install -> 
+      |> then(fn install ->
         if params["no_ash"] do
           install
         else

@@ -1,23 +1,29 @@
 defmodule AshHqWeb.HomeController do
   use AshHqWeb, :controller
 
-  @url_base if Mix.env() == :dev, do: "localhost:4000/install/", else: "https://ash-hq.org/install/"
+  @url_base if Mix.env() == :dev,
+              do: "localhost:4000/install/",
+              else: "https://ash-hq.org/install/"
 
   def blog_posts_and_case_studies do
     [
       %{
         title: "Transforming Healthcare Communication",
-        description: "How Elixir and Ash Framework enabled a healthcare communication platform to scale and evolve.",
-        url: "https://alembic.com.au/case-studies/transforming-healthcare-communication-with-elixir-and-ash-framework"
+        description:
+          "How Elixir and Ash Framework enabled a healthcare communication platform to scale and evolve.",
+        url:
+          "https://alembic.com.au/case-studies/transforming-healthcare-communication-with-elixir-and-ash-framework"
       },
       %{
         title: "From Paper to Precision Workflows",
-        description: "A case study in digitizing and optimizing business workflows with modern technology.",
+        description:
+          "A case study in digitizing and optimizing business workflows with modern technology.",
         url: "https://alembic.com.au/case-studies/from-paper-to-precision-workflows"
       },
       %{
         title: "Ash Framework",
-        description: "An overview of Ash Framework and its capabilities for building robust applications.",
+        description:
+          "An overview of Ash Framework and its capabilities for building robust applications.",
         url: "https://alembic.com.au/ash-framework"
       },
       %{
