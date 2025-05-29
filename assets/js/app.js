@@ -2627,4 +2627,19 @@ end`,
 // Initialize animation when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
   AshAnimation.init();
+  
+  // Safari fallback - check if animation should start after a delay
+  setTimeout(() => {
+    if (!AshAnimation.hasBeenInitiated) {
+      const container = document.getElementById("ash-animation");
+      if (container) {
+        const rect = container.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        if (isVisible) {
+          AshAnimation.hasBeenInitiated = true;
+          AshAnimation.start();
+        }
+      }
+    }
+  }, 500);
 });
