@@ -108,7 +108,7 @@ defmodule AshHq.Events do
                 Ash AI Hackathon
               </p>
               <p>
-                Join us for an introduction to Ash AI followed by a free-form hackathon on AI apps with Ash. Trainers: Josh Price and Zach Daniel.
+                Join Zach & Josh for an introduction to Ash AI followed by a free-form hackathon on AI apps with Ash.
               </p>
               """,
               date: ~D[2025-08-27],

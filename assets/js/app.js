@@ -2758,10 +2758,34 @@ end`;
             this.updatePlayPauseButton(false);
           }, 100);
         }
+        
+        // Scroll to animation container if not in view and start animation
+        this.scrollToAnimationIfNeeded();
       }
       return true; // Hash was processed
     }
     return false; // No hash processed
+  },
+
+  // Scroll to animation container if it's not in view
+  scrollToAnimationIfNeeded() {
+    const container = document.getElementById("ash-animation");
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+    const isInView = rect.top >= 0 && rect.bottom <= window.innerHeight;
+    
+    if (!isInView) {
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      
+      // Manually trigger animation start after scroll
+      setTimeout(() => {
+        if (!this.hasBeenInitiated) {
+          this.hasBeenInitiated = true;
+          this.start();
+        }
+      }, 500);
+    }
   },
 };
 
