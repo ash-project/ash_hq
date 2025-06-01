@@ -126,6 +126,30 @@ const features = {
     </p>
     `,
   },
+  beacon: {
+    requires: ["phoenix"],
+    adds: ["beacon", "beacon_live_admin"],
+    order: 1000,
+    links: [
+      { link: "https://hexdocs.pm/beacon", name: "Beacon" },
+      {
+        link: "https://hexdocs.pm/beacon_live_admin",
+        name: "Beacon Live Admin",
+      },
+    ],
+    args: ["--beacon.site cms", "--beacon-live-admin.path /cms/admin"],
+    tooltip: `
+    <p class="mb-2">
+    Open-source Content Management System (CMS) built with Phoenix LiveView.
+    </p>
+    <p>
+    Faster render times to boost SEO performance, even for the most content-heavy pages.
+    </p>
+    <p class="text-red-400">
+    Does not support windows.
+    </p>
+    `,
+  },
   json_api: {
     requires: ["phoenix"],
     adds: ["ash_json_api"],
