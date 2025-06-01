@@ -72,13 +72,57 @@ defmodule AshHq.Events do
               href: "https://www.elixirconf.eu"
             },
             %{
+              title:
+                "Building on Bedrock: Elixir's Fundamental Design Advantage @ Scenic City Summit",
+              description: """
+              <p class="font-bold">
+                Building on Bedrock: Elixir's Fundamental Design Advantage
+              </p>
+              <p>
+                Zach gives a talk about Elixir, exploring the small design choices underpinning Elixir that manifest in exponentially more efficient and understandable applications. Understanding why Elixir manages to be so productive and effective.
+              </p>
+              """,
+              date: ~D[2025-06-20],
+              date_in_english: "June 20th, 2025",
+              href: "https://sceniccitysummit.com"
+            },
+            %{
+              title:
+                "Building on Bedrock: Elixir's Fundamental Design Advantage @ Carolina Codes",
+              description: """
+              <p class="font-bold">
+                Building on Bedrock: Elixir's Fundamental Design Advantage
+              </p>
+              <p>
+                Zach gives a talk about Elixir, exploring the small design choices underpinning Elixir that manifest in exponentially more efficient and understandable applications. Understanding why Elixir manages to be so productive and effective.
+              </p>
+              """,
+              date: ~D[2025-08-16],
+              date_in_english: "August 16th, 2025",
+              href: "https://blog.carolina.codes/p/announcing-our-2025-speakers"
+            },
+            %{
+              title: "Ash AI Hackathon @ ElixirConf US",
+              description: """
+              <p class="font-bold">
+                Ash AI Hackathon
+              </p>
+              <p>
+                Join Zach & Josh for an introduction to Ash AI followed by a free-form hackathon on AI apps with Ash.
+              </p>
+              """,
+              date: ~D[2025-08-27],
+              date_in_english: "August 27th, 2025",
+              href: "https://elixirconf.com/trainings/ash-ai-hackathon/"
+            },
+            %{
               title: "Talk @ GOATMIRE",
               description: """
               <p class="font-bold">
                 Talk title is a secret ;)
               </p>
               <p>
-                Hang out with Zach, Rebecca and Barnabas from the Ash core team in Varberg, Sweden
+                Hang out with Zach, Rebecca, Barnabas, James and Josh from the Ash core team in Varberg, Sweden
               </p>
               """,
               date: ~D[2025-09-10],

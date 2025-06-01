@@ -1,7 +1,48 @@
 defmodule AshHqWeb.HomeController do
   use AshHqWeb, :controller
 
-  @url_base if Mix.env() == :dev, do: "localhost:4000/install/", else: "https://ash-hq.org/install/"
+  @url_base if Mix.env() == :dev,
+              do: "localhost:4000/install/",
+              else: "https://ash-hq.org/install/"
+
+  def blog_posts_and_case_studies do
+    [
+      %{
+        title: "Transforming Healthcare Communication",
+        description:
+          "How Elixir and Ash Framework enabled a healthcare communication platform to scale and evolve.",
+        url:
+          "https://alembic.com.au/case-studies/transforming-healthcare-communication-with-elixir-and-ash-framework"
+      },
+      %{
+        title: "From Paper to Precision Workflows",
+        description:
+          "A case study in digitizing and optimizing business workflows with modern technology.",
+        url: "https://alembic.com.au/case-studies/from-paper-to-precision-workflows"
+      },
+      %{
+        title: "Ash Framework",
+        description:
+          "An overview of Ash Framework and its capabilities for building robust applications.",
+        url: "https://alembic.com.au/ash-framework"
+      },
+      %{
+        title: "Multitenancy in Ash Framework",
+        description: "A deep dive into implementing multitenancy solutions with Ash Framework.",
+        url: "https://alembic.com.au/blog/multitenancy-in-ash-framework"
+      },
+      %{
+        title: "Seeds with Ash Generators",
+        description: "Learn how to use Ash generators to seed your application data effectively.",
+        url: "https://alembic.com.au/blog/seeds-with-ash-generators-ashops"
+      },
+      %{
+        title: "Ash Framework Book in Beta",
+        description: "Explore the comprehensive guide to Ash Framework, now available in beta.",
+        url: "https://alembic.com.au/blog/ash-framework-book-in-beta"
+      }
+    ]
+  end
 
   def community(conn, _) do
     contributors = AshHq.Github.Contributor.in_order!()
@@ -16,6 +57,7 @@ defmodule AshHqWeb.HomeController do
   def media(conn, _) do
     conn
     |> assign_events()
+    |> assign(:blog_posts_and_case_studies, blog_posts_and_case_studies())
     |> render("media.html")
   end
 
@@ -34,6 +76,12 @@ defmodule AshHqWeb.HomeController do
     conn
     |> assign_events()
     |> render("events.html")
+  end
+
+  def book_errata(conn, _) do
+    conn
+    |> assign_events()
+    |> render("book_errata.html")
   end
 
   defp assign_events(conn) do

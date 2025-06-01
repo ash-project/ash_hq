@@ -10,6 +10,44 @@
   <div class="container sm:mx-auto mt-24 z-10">
     <div class="grid grid-cols-2 gap-4">
       <div class="col-span-2 flex-col flex items-center">
+        <div class="text-3xl font-bold mt-8 mb-8 text-center">Ash Weekly Newsletter</div>
+        <a
+          href="https://ashweekly.substack.com"
+          class="flex items-center justify-center px-6 py-3 bg-primary-dark-500 hover:bg-primary-dark-600 text-white rounded-lg shadow-md mb-8 transition-all duration-300 ease-in-out transform hover:scale-105"
+        >
+          <span class="mr-2">Past Issues</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 7l5 5m0 0l-5 5m5-5H6"
+            />
+          </svg>
+        </a>
+      </div>
+      <div class="col-span-2 flex-col flex items-center">
+        <div class="text-3xl font-bold mt-8 mb-8 text-center">Case Studies & Blog Posts</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
+          <a
+            :for={post <- @blog_posts_and_case_studies}
+            href={post.url}
+            class="backdrop-blur-lg bg-slate-950/50 border border-slate-500/20 p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:bg-slate-900/60"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <h3 class="text-xl font-semibold mb-2 text-primary-light-500">{post.title}</h3>
+            <p class="text-sm text-white/80">{post.description}</p>
+          </a>
+        </div>
+      </div>
+      <div class="col-span-2 flex-col flex items-center">
         <div class="text-3xl font-bold mt-8 mb-8 text-center">Youtube</div>
         <div class="relative">
           <iframe
@@ -24,13 +62,22 @@
           />
           <span class="absolute pt-4 pb-4 sm:pt-0 bottom:-32 right-0 sm:top-4 sm:-right-32 text-xs text-primary-dark-500 italic w-28">
             <span class="hero-arrow-left size-4 hidden sm:block" />
-            <span class="hero-arrow-up size-4 sm:hidden" /> 
+            <span class="hero-arrow-up size-4 sm:hidden" />
             <br />(this is a whole playlist of videos!)
           </span>
         </div>
       </div>
       <div class="col-span-2 flex-col flex space-y-4 items-center justify-center">
         <div class="text-3xl font-bold mt-8 mb-8 text-center">Podcasts</div>
+        <iframe
+          allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
+          frameborder="0"
+          height="175"
+          style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;"
+          sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+          src="https://embed.podcasts.apple.com/au/podcast/episode-90-josh-price-ash-and-the-greater-elixir-community/id1550737059?i=1000704496181"
+        >
+        </iframe>
         <iframe
           allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
           frameborder="0"

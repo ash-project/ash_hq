@@ -11,6 +11,22 @@
   }
 }
 
+/* Make code blocks smaller on mobile */
+@media (max-width: 768px) {
+  .prose pre {
+    font-size: 0.75rem;
+  }
+  
+  .prose code {
+    font-size: 0.75rem;
+  }
+  
+  /* Also make CodeExample component font smaller */
+  .font-mono {
+    font-size: 0.75rem;
+  }
+}
+
 .aspect-video {
   max-width: 500px;
 }
@@ -158,4 +174,116 @@ html {
   background-size: 100px 100px;
   transform: perspective(500px) rotateX(-60deg); /* Changed from 60deg to -60deg */
   transform-origin: top; /* Changed from bottom to top */
+}
+
+/* Ash Animation Styles */
+#typing-cursor {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+#visualization-panel {
+  /* Removed opacity transition to prevent interference with stage transitions */
+}
+
+.stage-dot {
+  transition: all 0.3s ease;
+}
+
+.stage-dot.bg-primary-light-500 {
+  box-shadow: 0 0 10px rgba(255, 87, 87, 0.5);
+}
+
+/* Code display styling */
+#code-display {
+  white-space: pre;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  line-height: 1.5;
+  overflow-y: hidden;
+}
+
+/* Syntax highlighting for Elixir code */
+#code-display .keyword { color: #ff79c6; }
+#code-display .function { color: #50fa7b; }
+#code-display .string { color: #f1fa8c; }
+#code-display .atom { color: #8be9fd; }
+#code-display .module { color: #bd93f9; }
+#code-display .comment { color: #6272a4; }
+
+/* Stage visualization transitions */
+.stage-visualization {
+  transition: all 0.5s ease-in-out;
+}
+
+.stage-summary {
+  transition: all 0.3s ease-in-out;
+}
+
+.stage-summary .bg-slate-900\/80 {
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.stage-summary h3 {
+  font-size: 0.75rem;
+}
+
+.stage-summary .text-sm {
+  font-size: 0.6rem;
+}
+
+/* Summary grid layout */
+#summary-grid {
+  transition: all 0.3s ease-in-out;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.2);
+}
+
+/* Ensure grid columns work properly */
+.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+/* Summary card styling */
+.stage-summary {
+  min-height: 80px;
+  width: 100%;
+}
+
+.stage-summary .bg-slate-900\/80 {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Animation container responsive adjustments */
+@media (max-width: 1024px) {
+  #ash-animation .grid {
+    grid-template-columns: 1fr;
+  }
+  
+  #visualization-panel {
+    min-height: 300px;
+  }
+  
+  .stage-summary {
+    transform: scale(0.9);
+  }
+  
+  #summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    margin-bottom: 0.75rem;
+  }
+  
+  .stage-summary {
+    min-height: 70px;
+    width: 100%;
+  }
 }

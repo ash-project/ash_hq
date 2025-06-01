@@ -40,6 +40,9 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:usage_rules, "~> 0.1", only: [:dev]},
+      {:ash_ai, "~> 0.1"},
+      {:tidewave, "~> 0.1", only: [:dev]},
       {:hackney, "~> 1.8"},
       {:sentry, "~> 10.8"},
       {:timex, "~> 3.0"},
@@ -72,7 +75,6 @@ defmodule AshHq.MixProject do
       # Clustering
       {:libcluster, "~> 3.3"},
       # UI
-      {:tails, "~> 0.1"},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.3.1", runtime: Mix.env() == :dev},
       # Syntax Highlighting

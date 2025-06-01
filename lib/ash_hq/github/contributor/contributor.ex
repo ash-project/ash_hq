@@ -26,6 +26,7 @@ defmodule AshHq.Github.Contributor do
     scheduled_actions do
       schedule :import, "0 */6 * * *" do
         queue :importer
+        worker_module_name AshHq.Github.Contributor.AshOban.ActionWorker.Import
       end
     end
   end

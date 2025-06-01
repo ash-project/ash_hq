@@ -8,74 +8,1109 @@
   <div class="absolute bottom-0 left-0 right-0 h-[40vh] bg-gradient-to-t to-transparent perspective-grid">
   </div>
 
-  <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-3xl mt-24">
+  <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-3xl mt-32 sm:mt-24 flex flex-col items-center">
     <div class="">
       <img
         src="/images/ash-logo-side.svg"
         alt="Ash Framework"
-        class="w-96 mx-auto mb-8 drop-shadow-[0_0_15px_rgba(255, 87, 87, 0.5)]"
+        class="w-96 mx-auto mb-4 sm:mb-8 drop-shadow-[0_0_15px_rgba(255, 87, 87, 0.5)]"
       />
     </div>
-    <h1 class="text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
+    <h1 class="text-3xl sm:text-4xl font-bold mb-6 mt-4 sm:mt-8 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
       Model your domain,
       <span class="bg-gradient-to-r from-primary-dark-500 to-primary-light-500 bg-clip-text text-transparent">
         derive the rest
       </span>
     </h1>
-    <p class="text-xl sm:text-xl text-primary-light-200 mb-8">
-      The <a href="https://elixir-lang.org"><span class="text-primary-dark-400">Elixir</span></a>
-      backend framework for <a href="https://hexdocs.pm/ash/what-is-ash.html#why-should-i-use-it"><span class="text-primary-dark-400">unparalleled productivity</span></a>.
-      <a href="https://hexdocs.pm/ash/design-principles.html">
-        <span class="text-primary-dark-400">Declarative tools</span>
-      </a>
-      that let you <a href="https://www.youtube.com/watch?v=vjnPjrCF4rs"><span class="text-primary-dark-400">stop wasting time and reinventing wheels</span></a>.
-      Use with
-      <a href="https://phoenixframework.org">
-        <span class="text-primary-dark-400">Phoenix LiveView</span>
-      </a>
-      or build
-      <a href="https://hexdocs.pm/ash_graphql/getting-started-with-graphql.html">
-        <span class="text-primary-dark-400">APIs in minutes</span>
-      </a>
-      to support your front-end of choice.
+    <p class="text-base sm:text-xl text-primary-light-200 mb-4">
+      The <span class="text-orange-500">Elixir</span>
+      backend framework for <span class="text-orange-500">unparalleled productivity</span>.
+      <span class="text-orange-500">Declarative tools</span>
+      that let you <span class="text-orange-500">stop wasting time</span>.
+      Use with <span class="text-orange-500">Phoenix LiveView</span>
+      or build <span class="text-orange-500">APIs in minutes</span>
+      for your front-end of choice.
     </p>
-    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-      <a
-        href="#installer"
-        class="inline-flex justify-center items-center text-center px-8 py-3 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
-      >
-        Get Started
-      </a>
-    </div>
+    <div class="flex flex-col items-center gap-4 mt-2">
+    <a
+      id="github-stars-btn"
+      href="https://github.com/ash-project/ash"
+      class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-gray-500 text-gray-300 font-medium hover:bg-gray-700/30 hover:border-gray-400 hover:text-white transition-all transform hover:scale-105"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <span>GitHub</span>
+    </a>
 
-    <div class="mt-8 text-center">
-      <a
-        href="https://pragprog.com/titles/ldash/ash-framework/"
-        class="w-48 mx-auto mb-4 flex flex-col justify-center"
-      >
-        <img
-          src="images/book-beta.jpg"
-          alt="New Book Cover"
-          class="w-48 shadow-[0_0_30px] rounded-2xl shadow-fuchsia-900"
-        />
-        <h2 class="text-2xl font-bold mb-4 bg-gradient-to-r from-purple-700 via-fuchsia-500 to-purple-700 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
-          Get the book!
-        </h2>
-      </a>
-    </div>
+    <div class="flex flex-col items-center gap-4">
+      <div class="flex flex-col sm:flex-row gap-3 items-center justify-center">
+        <a
+          href="#ash-animation"
+          class="inline-flex justify-center items-center text-center px-6 py-3 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
+        >
+          Learn More
+        </a>
 
-    <div class="mt-8 text-center">
-      <div id="custom-substack-embed"></div>
-      <p class="mt-2 mb-3 text-sm tracking-wide text-center text-gray-400 rounded-lg ">
-        Stay up to date with our weekly 
-        <a href="https://ashweekly.substack.com" target="_blank" class="underline">newsletter</a>
-        <br />
-        Please remember to<!-- -->
-        <span class="font-bold">confirm your email!</span>
-      </p>
+        <a
+          href="#get-started"
+          class="inline-flex justify-center items-center text-center px-6 py-3 rounded-full border border-primary-light-500 text-primary-light-400 font-medium hover:bg-primary-light-500/10 hover:border-primary-light-400 hover:text-primary-light-300 transition-all transform hover:scale-105"
+        >
+          Install Now
+        </a>
+      </div>
+
+        <a
+          href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd"
+          class="cursor-pointer items-center rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757] hidden sm:inline-flex"
+        >
+          <img src="https://livebook.dev/badge/v1/pink.svg" alt="Run in Livebook" />
+        </a>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- Interactive Animation Section -->
+<div id="ash-animation" class="relative py-16">
+  <!-- Desktop Animation Content -->
+  <div class="hidden lg:block">
+    <div class="absolute inset-0 bg-gradient-to-b from-primary-light-900/20 via-primary-dark-900/10 to-primary-light-900/20">
+    </div>
+
+    <div class="absolute inset-0 bg-[linear-gradient(rgba(254,19,19,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(254,19,19,0.2)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,black,transparent)]">
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-8">
+
+<!-- Main Content Container with Fixed Height -->
+        <div class="h-[650px]">
+          <!-- Stage Description Panel -->
+          <div
+            id="stage-description"
+            class="mb-6 mx-0 lg:mx-16 xl:mx-24 p-4 bg-slate-800/50 rounded-lg border border-primary-dark-500/20 transition-all duration-500 ease-in-out h-[130px]"
+            style="display: none;"
+          >
+            <h3 id="stage-title" class="text-lg font-semibold text-primary-light-400 mb-2"></h3>
+            <p id="stage-text" class="text-sm text-gray-300 leading-relaxed overflow-hidden"></p>
+          </div>
+          <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Code Editor -->
+            <div class="relative">
+              <div class="bg-slate-900/80 rounded-lg p-4 font-mono text-sm lg:text-xs xl:text-sm overflow-clip border border-primary-dark-500/20 h-[492px]">
+                <div class="flex items-center gap-2 mb-2 pb-2 border-b border-primary-dark-500/20">
+                  <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                  <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                  <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                  <span class="ml-2 text-gray-500 text-xs">lib/my_app/blog/post.ex</span>
+                </div>
+                <pre id="code-display" class="text-gray-300"><code></code></pre>
+              </div>
+            </div>
+            <!-- Visualization Panel -->
+            <div id="visualization-panel" class="relative min-h-[400px]"></div>
+          </div>
+        </div>
+        <!-- Progress indicator and controls -->
+        <div class="mt-6 flex items-center justify-center gap-4">
+          <button
+            id="prev-stage"
+            class="p-2 rounded-full bg-primary-dark-600 hover:bg-primary-dark-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            disabled
+          >
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              >
+              </path>
+            </svg>
+          </button>
+          <button
+            id="play-pause"
+            class="p-2 rounded-full bg-green-600 hover:bg-green-700 transition-all"
+          >
+            <svg
+              id="play-icon"
+              class="w-5 h-5 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+              >
+              </path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              >
+              </path>
+            </svg>
+            <svg
+              id="pause-icon"
+              class="w-5 h-5 text-white hidden"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              >
+              </path>
+            </svg>
+          </button>
+          <div class="flex gap-2">
+            <div
+              class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="1"
+            >
+            </div>
+            <div
+              class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="2"
+            >
+            </div>
+            <div
+              class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="3"
+            >
+            </div>
+            <div
+              class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="4"
+            >
+            </div>
+            <div
+              class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="5"
+            >
+            </div>
+            <div
+              class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="6"
+            >
+            </div>
+            <div
+              class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="7"
+            >
+            </div>
+            <div
+              class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="8"
+            >
+            </div>
+            <div
+              class="stage-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="9"
+            >
+            </div>
+          </div>
+          <button
+            id="next-stage"
+            class="p-2 rounded-full bg-primary-dark-600 hover:bg-primary-dark-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          >
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              >
+              </path>
+            </svg>
+          </button>
+
+          <button
+            id="link-stage"
+            class="p-2 rounded-full bg-gray-600 hover:bg-gray-700 transition-all ml-4"
+            title="Copy link to this stage"
+          >
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+              >
+              </path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Mobile Swipeable Stages -->
+  <div class="lg:hidden">
+    <div class="relative z-10 max-w-4xl mx-auto px-2 sm:px-6">
+      <div class="backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-2">
+        <h2 class="text-2xl font-bold text-primary-light-200 mb-6 text-center">
+          Discover Ash Features
+        </h2>
+
+<!-- Mobile Stage Container -->
+        <div id="mobile-stages" class="relative overflow-hidden h-[650px]">
+          <!-- Swipe Container -->
+          <div id="mobile-stage-track" class="flex transition-transform duration-300 ease-out h-full">
+
+<!-- Stage 0: Resources & Actions -->
+            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="0">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg
+                    class="w-5 h-5 text-purple-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                    >
+                    </path>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">
+                    Resources & Actions
+                  </h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">
+                  Actions are fully typed and introspectable. Extensions can automatically understand and build on top of them.
+                </p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>Creates a functional interface that returns reading time in minutes
+                </div>
+              </div>
+            </div>
+
+<!-- Stage 1: Persistence -->
+            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="1">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">
+                    Persistence
+                  </h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">
+                  Add persistent storage while keeping existing behavior. Your resource combines behavior and state.
+                </p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>Creates "posts" table with automatic migrations
+                </div>
+              </div>
+            </div>
+
+<!-- Stage 2: GraphQL -->
+            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="2">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg class="w-5 h-5 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12,2 L2,7 L12,12 L22,7 L12,2 Z M2,17 L12,22 L22,17 L22,7 L12,12 L2,7 L2,17 Z" />
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">
+                    GraphQL
+                  </h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">
+                  Add a full GraphQL API with minimal configuration. Automatically generates queries, mutations, and types.
+                </p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>Full GraphQL API with introspectable schema
+                </div>
+              </div>
+            </div>
+
+<!-- Stage 3: JSON:API -->
+            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="3">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg
+                    class="w-5 h-5 text-orange-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    >
+                    </path>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">
+                    JSON:API
+                  </h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">
+                  Add a REST JSON:API alongside GraphQL. Expose your domain through multiple API standards.
+                </p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>REST endpoints at /posts with JSON:API format
+                </div>
+              </div>
+            </div>
+
+<!-- Stage 4: Encryption -->
+            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="4">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg
+                    class="w-5 h-5 text-green-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    >
+                    </path>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">
+                    Encryption
+                  </h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">
+                  Add encryption at rest with Cloak integration. Content is automatically encrypted when stored and decrypted when read.
+                </p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>Transparent encryption - no API changes needed
+                </div>
+              </div>
+            </div>
+
+<!-- Stage 5: AI Tools -->
+            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="5">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg
+                    class="w-5 h-5 text-violet-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    >
+                    </path>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">
+                    AI Tools
+                  </h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">
+                  Add AI-powered actions and expose your domain as tools for LLMs. Perfect for building AI features or MCP servers.
+                </p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>Prompt-backed actions with LLM integration
+                </div>
+              </div>
+            </div>
+
+<!-- Stage 6: State Machine -->
+            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="6">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg
+                    class="w-5 h-5 text-teal-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    >
+                    </path>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">
+                    State Machine
+                  </h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">
+                  Add declarative state validations and transitions. Each extension builds on previous ones seamlessly.
+                </p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>Declarative state validations and transitions
+                </div>
+              </div>
+            </div>
+
+<!-- Stage 7: Authentication -->
+            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="7">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg
+                    class="w-5 h-5 text-blue-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    >
+                    </path>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">
+                    Authentication
+                  </h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">
+                  Complete user authentication with password and OAuth strategies. Built-in support for multiple providers.
+                </p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>Password, OAuth, magic links, and more
+                </div>
+              </div>
+            </div>
+
+<!-- Stage 8: Background Jobs -->
+            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="8">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg
+                    class="w-5 h-5 text-indigo-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    >
+                    </path>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">
+                    Background Jobs
+                  </h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">
+                  Add reliable background job processing with triggers and scheduled actions. Perfect for notifications and maintenance tasks.
+                </p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <a
+                  href="https://oban.pro"
+                  target="_blank"
+                  class="text-xs text-gray-400 mobile-stage-summary hover:text-primary-light-300 transition-colors block"
+                >
+                  <span class="text-primary-light-300">→ </span>Powered by
+                  <span class="text-primary-light-400 underline">Oban</span>
+                  for reliable job processing
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+<!-- Mobile Navigation -->
+        <div class="flex items-center justify-center mt-6 gap-4">
+          <button
+            id="mobile-prev"
+            class="p-2 rounded-full bg-primary-dark-600 hover:bg-primary-dark-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          >
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              >
+              </path>
+            </svg>
+          </button>
+
+          <div class="flex gap-2">
+            <div
+              class="mobile-dot w-2 h-2 rounded-full bg-primary-light-500 transition-all duration-300"
+              data-stage="0"
+            >
+            </div>
+            <div
+              class="mobile-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="1"
+            >
+            </div>
+            <div
+              class="mobile-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="2"
+            >
+            </div>
+            <div
+              class="mobile-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="3"
+            >
+            </div>
+            <div
+              class="mobile-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="4"
+            >
+            </div>
+            <div
+              class="mobile-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="5"
+            >
+            </div>
+            <div
+              class="mobile-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="6"
+            >
+            </div>
+            <div
+              class="mobile-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="7"
+            >
+            </div>
+            <div
+              class="mobile-dot w-2 h-2 rounded-full bg-primary-dark-500/30 transition-all duration-300"
+              data-stage="8"
+            >
+            </div>
+          </div>
+
+          <button
+            id="mobile-next"
+            class="p-2 rounded-full bg-primary-dark-600 hover:bg-primary-dark-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          >
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              >
+              </path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="text-xs text-gray-400 mt-4 text-center">
+          View on a larger screen for an interactive introduction
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Book and Newsletter Section -->
+  <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+    <div class="backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-8">
+      <div class="text-center">
+        <div class="mb-8">
+          <a href="https://pragprog.com/titles/ldash/ash-framework/" class="inline-block">
+            <img
+              src="images/book-beta.jpg"
+              alt="New Book Cover"
+              class="w-48 mx-auto shadow-[0_0_30px] rounded-2xl shadow-fuchsia-900"
+            />
+            <h2 class="text-2xl font-bold mt-4 bg-gradient-to-r from-purple-700 via-fuchsia-500 to-purple-700 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
+              Get the book!
+            </h2>
+          </a>
+        </div>
+
+        <div class="bg-slate-800/50 rounded-lg border border-primary-dark-500/20 p-6">
+          <div id="custom-substack-embed"></div>
+          <p class="mt-2 mb-3 text-sm tracking-wide text-center text-gray-300">
+            Stay up to date with our weekly newsletter. <br />
+            Please remember to<!-- -->
+            <span class="font-bold text-primary-light-300">confirm your email!</span>
+            <br />
+            <a href="https://ashweekly.substack.com" target="_blank" class="underline text-primary-light-400 hover:text-primary-light-300 transition-colors">
+              View Past Issues
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ash Ecosystem Section -->
+<div class="relative py-16">
+  <div class="absolute inset-0 bg-gradient-to-b from-primary-light-900/20 via-primary-dark-900/10 to-primary-light-900/20">
+  </div>
+
+  <div class="absolute inset-0 bg-[linear-gradient(rgba(254,19,19,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(254,19,19,0.2)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,black,transparent)]">
+  </div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
+        The Ash
+        <span class="bg-gradient-to-r from-primary-dark-500 to-primary-light-500 bg-clip-text text-transparent">
+          Ecosystem
+        </span>
+      </h2>
+      <p class="text-lg text-gray-300 max-w-3xl mx-auto">
+        Powerful extensions that integrate seamlessly with your resources. Build everything from APIs to admin interfaces with declarative configuration.
+      </p>
+    </div>
+
+    <div class="backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-8">
+      <div class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+        <!-- Ash Core -->
+        <a
+          href="https://hexdocs.pm/ash/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-red-300 dark:hover:border-red-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-red-600 dark:group-hover:text-red-400">
+              Ash
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Core framework</p>
+        </a>
+
+<!-- Core Extensions -->
+        <a
+          href="https://hexdocs.pm/ash_postgres/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-blue-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+              AshPostgres
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">PostgreSQL data layer</p>
+        </a>
+
+        <a
+          href="https://hexdocs.pm/ash_phoenix/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-orange-300 dark:hover:border-orange-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-orange-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-orange-600 dark:group-hover:text-orange-400">
+              AshPhoenix
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Phoenix integration</p>
+        </a>
+
+        <a
+          href="https://hexdocs.pm/ash_graphql/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-pink-300 dark:hover:border-pink-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-pink-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-pink-600 dark:group-hover:text-pink-400">
+              AshGraphQL
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">GraphQL API extension</p>
+        </a>
+
+        <a
+          href="https://hexdocs.pm/ash_json_api/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-green-300 dark:hover:border-green-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-green-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-green-600 dark:group-hover:text-green-400">
+              AshJsonApi
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">JSON:API extension</p>
+        </a>
+
+<!-- Workflows & Orchestration -->
+        <a
+          href="https://hexdocs.pm/reactor/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+              Reactor
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Workflows & Sagas</p>
+        </a>
+
+<!-- Authentication -->
+        <a
+          href="https://hexdocs.pm/ash_authentication/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-red-300 dark:hover:border-red-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-red-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-red-600 dark:group-hover:text-red-400">
+              AshAuthentication
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Authentication</p>
+        </a>
+
+<!-- Admin & UI -->
+        <a
+          href="https://hexdocs.pm/ash_admin/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-purple-300 dark:hover:border-purple-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-purple-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-purple-600 dark:group-hover:text-purple-400">
+              AshAdmin
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Admin interface</p>
+        </a>
+
+<!-- Data Processing -->
+        <a
+          href="https://hexdocs.pm/ash_oban/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-indigo-300 dark:hover:border-indigo-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-indigo-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+              AshOban
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Background jobs</p>
+        </a>
+
+        <a
+          href="https://hexdocs.pm/ash_state_machine/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-teal-300 dark:hover:border-teal-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-teal-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-teal-600 dark:group-hover:text-teal-400">
+              AshStateMachine
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">State machines</p>
+        </a>
+
+<!-- Data Management -->
+        <a
+          href="https://hexdocs.pm/ash_archival/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-yellow-300 dark:hover:border-yellow-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-yellow-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-yellow-600 dark:group-hover:text-yellow-400">
+              AshArchival
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Soft deletion</p>
+        </a>
+
+        <a
+          href="https://hexdocs.pm/ash_paper_trail/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-gray-300 dark:hover:border-gray-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-gray-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-gray-600 dark:group-hover:text-gray-400">
+              AshPaperTrail
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Audit logs</p>
+        </a>
+
+        <a
+          href="https://hexdocs.pm/ash_csv/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-emerald-300 dark:hover:border-emerald-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-emerald-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400">
+              AshCsv
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">CSV data layer</p>
+        </a>
+
+<!-- Financial -->
+        <a
+          href="https://hexdocs.pm/ash_money/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-green-300 dark:hover:border-green-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-green-700 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-green-600 dark:group-hover:text-green-400">
+              AshMoney
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Financial data types</p>
+        </a>
+
+        <a
+          href="https://hexdocs.pm/ash_double_entry/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-lime-300 dark:hover:border-lime-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-lime-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-lime-600 dark:group-hover:text-lime-400">
+              AshDoubleEntry
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Double-entry accounting</p>
+        </a>
+
+<!-- Security -->
+        <a
+          href="https://hexdocs.pm/ash_cloak/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-slate-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-slate-600 dark:group-hover:text-slate-400">
+              AshCloak
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Encryption</p>
+        </a>
+
+        <a
+          href="https://hexdocs.pm/ash_rate_limiter/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-slate-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-slate-600 dark:group-hover:text-slate-400">
+              AshRateLimiter
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Rate Limiting</p>
+        </a>
+
+<!-- Data Layers -->
+        <a
+          href="https://hexdocs.pm/ash_sqlite/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-sky-300 dark:hover:border-sky-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-sky-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-sky-600 dark:group-hover:text-sky-400">
+              AshSqlite
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">SQLite data layer</p>
+        </a>
+
+        <a
+          href="https://hexdocs.pm/ash_cubdb/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-amber-300 dark:hover:border-amber-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-amber-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-amber-600 dark:group-hover:text-amber-400">
+              AshCubDB
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">CubDB data layer</p>
+        </a>
+
+<!-- Geospatial -->
+        <a
+          href="https://hexdocs.pm/ash_geo/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-teal-300 dark:hover:border-teal-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-teal-700 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-teal-600 dark:group-hover:text-teal-400">
+              AshGeo
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Geospatial data</p>
+        </a>
+
+<!-- AI & Machine Learning -->
+        <a
+          href="https://hexdocs.pm/ash_ai/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-violet-300 dark:hover:border-violet-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-violet-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-violet-600 dark:group-hover:text-violet-400">
+              AshAi
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">LLM features</p>
+        </a>
+
+<!-- Monitoring -->
+        <a
+          href="https://hexdocs.pm/ash_appsignal/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-purple-300 dark:hover:border-purple-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-purple-600 dark:group-hover:text-purple-400">
+              AshAppSignal
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">APM monitoring</p>
+        </a>
+
+        <a
+          href="https://hexdocs.pm/opentelemetry_ash/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-indigo-300 dark:hover:border-indigo-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-indigo-500 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+              OpentelemetryAsh
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Telemetry tracing</p>
+        </a>
+
+<!-- Event Sourcing -->
+        <a
+          href="https://hexdocs.pm/ash_events/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-emerald-300 dark:hover:border-emerald-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-emerald-500 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400">
+              AshEvents
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Event sourcing</p>
+        </a>
+      </div>
+
+      <div class="mt-8 text-center">
+        <a
+          href="https://hex.pm/packages?search=depends%3Ahexpm%3Aash&sort=total_downloads"
+          target="_blank"
+          class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-800 dark:to-blue-800 rounded-full"
+        >
+          <span class="text-lg font-semibold text-purple-700 dark:text-purple-300">
+            And many more on Hex.pm!
+          </span>
+          <svg
+            class="w-5 h-5 text-purple-600 dark:text-purple-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+            >
+            </path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-8">
+    <h2 class="text-2xl font-bold text-primary-light-200 mb-4">
+      Looking for a tutorial?
+    </h2>
+
+    <div class="backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-8">
+      <p class="text-gray-300 mb-6 leading-relaxed">
+        Follow our comprehensive getting started guide to build your first Ash application.
+        Learn the fundamentals and get up and running in minutes.
+      </p>
+      <a
+        href="https://hexdocs.pm/ash/get-started.html"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex justify-center items-center px-8 py-4 rounded-full bg-gradient-to-r from-primary-light-600 to-primary-dark-600 text-white font-medium hover:from-primary-light-700 hover:to-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
+      >
+        Get Started Guide
+        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+          />
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+
 <div class="relative py-24">
   <div class="absolute inset-0 bg-gradient-to-b from-primary-light-900/20 via-primary-dark-900/10 to-primary-light-900/20">
   </div>
@@ -89,208 +1124,231 @@
     id="get-started"
     class="max-w-5xl mx-auto text-center lg:px-8 backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-4"
   >
-    <h2 class="text-3xl font-bold text-primary-light-200">Get Your Installer</h2>
-    <div id="installer" />
+    <div>
+      <h2 class="text-3xl font-bold text-primary-light-200">Get Your Installer</h2>
+      <div id="installer">
+        <div class="flex flex-col justify-center mt-2">
+          <label for="app-name">Project Name</label>
+          <div>
+            <input
+              type="text"
+              id="app-name"
+              value={@app_name}
+              class="text-white bg-transparent mt-1 w-64 rounded-lg p-2 shadow-[0_0_20px_#FF5757] ring-1 border-0 outline-none ring ring-[#FF5757] mb-3 text-center"
+              placeholder="Project Name"
+              oninput="window.appNameChanged(this)"
+            />
+          </div>
+        </div>
 
-    <div class="flex flex-col justify-center mt-2">
-      <label for="app-name">Project Name</label>
-      <div>
-        <input
-          type="text"
-          id="app-name"
-          value={@app_name}
-          class="text-white bg-transparent mt-1 w-64 rounded-lg p-2 shadow-[0_0_20px_#FF5757] ring-1 border-0 outline-none ring ring-[#FF5757] mb-3 text-center"
-          placeholder="Project Name"
-          oninput="window.appNameChanged(this)"
-        />
-      </div>
-    </div>
-
-    <div id="cant-decide" class="mt-2">
-      <button class="text-lg underline cursor-pointer" onclick="window.cantDecide()">
-        Feeling stuck? Can't decide?
-      </button>
-    </div>
-    <div id="show-options" class="hidden mt-2">
-      <button class="text-lg underline cursor-pointer" onclick="window.showAll()">
-        Show all
-      </button>
-    </div>
-    <div id="already-have-an-app" class="mb-2">
-      <button id="already-have-an-app-button" class="text-lg underline cursor-pointer" onclick="window.addingToApp()">
-        Already have an app?
-      </button>
-    </div>
-    <h2 id="presets-label" class="text-xl font-bold text-primary-light-200">Presets</h2>
-    <div id="quickstarts-list" class="flex flex-row flex-wrap gap-2 justify-center mt-2 mb-4">
-      <div class="flex flex-row flex-wrap justify-center gap-2 gap-x-2 gap-y-5">
-        <label :for={{value, name} <- quickstarts()} id={"quickstart-#{value}"}>
-          <span
-            id={"quickstart-#{value}-inactive"}
-            data-name={value}
-            class="inactive-quickstart relative rounded px-4 py-2 border border-primary-dark-500/40 hover:bg-primary-dark-900/50 cursor-pointer"
-            onclick={"window.quickStartClicked(this, 'quickstart-#{value}-active', true)"}
-          >
-            {name}
-          </span>
-          <span
-            id={"quickstart-#{value}-active"}
-            data-name={value}
-            class="active-quickstart relative hidden rounded px-4 py-2 border border-primary-dark-500/40 bg-primary-dark-500/80 cursor-pointer"
-            onclick={"window.quickStartClicked(this, 'quickstart-#{value}-inactive', false)"}
-          >
-            {name}
-          </span>
-        </label>
-      </div>
-    </div>
-
-    <div id="advanced-features" class="border-t border-primary-dark-500/40">
-      <div class="flex flex-wrap justify-center gap-2">
-        <div
-          :for={{category, features} <- features()}
-          data-category={category}
-          class="feature-category p-2"
-        >
-          <h3 class="text-lg font-bold mb-2 text-primary-light-200">{category}</h3>
-          <div class="flex flex-wrap gap-2 gap-y-2 justify-center">
-            <label :for={{value, name} <- features} id={"feature-#{value}"} class="feature">
-              <div class="flex flex-col">
-                <span
-                  id={"feature-#{value}-inactive"}
-                  data-name={value}
-                  class={"relative inactive-feature rounded px-2 py-2 border  #{if coming_soon?(value), do: "bg-slate-800/70 text-slate-300/70 border-slate-500/40", else: "hover:bg-primary-dark-900/50 cursor-pointer border-primary-dark-500/40"}"}
-                  onclick={
-                    if !coming_soon?(value),
-                      do: "window.featureClicked(this, 'feature-#{value}-active', true)"
-                  }
+        <div class="flex flex-col sm:flex-row gap-3 justify-center items-center mt-4 mb-4">
+          <div id="show-advanced">
+            <button
+              class="inline-flex items-center px-4 py-2 rounded-lg bg-slate-700/50 text-primary-light-200 font-medium hover:bg-slate-600/60 transition-all duration-200 border border-slate-600/40 hover:border-slate-500/60"
+              onclick="window.showAdvanced()"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
                 >
-                  {name}<%= if external?(value) do %><sup>*</sup><% end %>
-                </span>
-                <span
-                  id={"feature-#{value}-active"}
-                  data-name={value}
-                  class="relative active-feature hidden rounded px-2 py-2 border border-primary-dark-500/40 bg-primary-dark-500/80 cursor-pointer"
-                  onclick={"window.featureClicked(this, 'feature-#{value}-inactive', false)"}
+                </path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                 >
-                  {name}<%= if external?(value) do %><sup>*</sup><% end %>
-                </span>
-                <%= if coming_soon?(value) do %>
-                  <span class="text-xs text-slate-400 font-extralight italic mt-1">
-                    Coming Soon
-                  </span>
-                <% end %>
-              </div>
-            </label>
+                </path>
+              </svg>
+              Advanced Options
+            </button>
+          </div>
+          <div id="hide-advanced" class="hidden">
+            <button
+              class="inline-flex items-center px-4 py-2 rounded-lg bg-slate-700/50 text-primary-light-200 font-medium hover:bg-slate-600/60 transition-all duration-200 border border-slate-600/40 hover:border-slate-500/60"
+              onclick="window.hideAdvanced()"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h7"
+                >
+                </path>
+              </svg>
+              Simple Options
+            </button>
+          </div>
+          <div id="already-have-an-app">
+            <button
+              id="already-have-an-app-button"
+              class="inline-flex items-center px-4 py-2 rounded-lg bg-primary-dark-600/40 text-primary-light-300 font-medium hover:bg-primary-dark-500/50 transition-all duration-200 border border-primary-dark-500/30 hover:border-primary-dark-400/50"
+              onclick="window.addingToApp()"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                >
+                </path>
+              </svg>
+              Already have an app?
+            </button>
           </div>
         </div>
       </div>
-    </div>
-    <div id="asterisk-warning" class="text-xs text-slate-400 text-center mt-1 mb-2">
-      <sup>*</sup> Is or contains an external package, not maintained by the Ash team.
-    </div>
-    <div id="dont-worry" class="mb-2 hidden flex flex-col gap-2">
-      <p class="text-lg">
-        Pick a preset and go. Everything but Phoenix can be
-        <a class="text-primary-dark-400 cursor-pointer" onclick="window.addingToApp()">installed later.</a>
-      </p>
-      <p class="text-lg">
-        All the presets use PostgreSQL, the best database around.
-        <a href="https://www.postgresql.org/download/" class="text-primary-dark-400 underline">
-          Easy to install, supported everywhere.
-        </a>
-      </p>
-      <p class="text-lg">
-        <ul>
-          <li></li>
-          <li>
-            Want to learn about Ash? Try just using
-            <button onclick="window.clickOnPreset('postgres')" class="text-primary-dark-400">
-              PostgreSQL.
-            </button>
-          </li>
-          <li>
-            Excited about
-            <button onclick="window.clickOnPreset('live_view')" class="text-primary-dark-400">
-              Phoenix LiveView?
-            </button>
-            Don't worry about the bells and whistles, dive in!
-          </li>
-          <li>
-            Building an API? Start with
-            <button onclick="window.clickOnPreset('graphql')" class="text-primary-dark-400">
-              GraphQL
-            </button>
-            or
-            <button
-              onclick="window.clickOnPreset('json_api')"
-              class="text-primary-dark-400"
-              href="#install-later"
-            >
-              JSON:API
-            </button>
-          </li>
-        </ul>
-      </p>
-    </div>
 
-    <div class="my-4 text-primary-light-200 bg-slate-900/70 rounded-lg text-white py-4 flex justify-center">
-      <pre id="selected-features" class="overflow-auto text-left">
+      <h2 id="presets-label" class="text-xl font-bold text-primary-light-200">Presets</h2>
+      <div id="quickstarts-list" class="flex flex-row flex-wrap gap-2 justify-center mt-2 mb-4">
+        <div class="flex flex-row flex-wrap justify-center gap-2 gap-x-2 gap-y-5">
+          <label :for={{value, name} <- quickstarts()} id={"quickstart-#{value}"}>
+            <span
+              id={"quickstart-#{value}-inactive"}
+              data-name={value}
+              class="inactive-quickstart relative rounded px-4 py-2 border border-primary-dark-500/40 hover:bg-primary-dark-900/50 hover:border-primary-dark-400/60 hover:text-primary-light-300 cursor-pointer transition-all duration-200"
+              onclick={"window.quickStartClicked(this, 'quickstart-#{value}-active', true)"}
+            >
+              {name}
+            </span>
+            <span
+              id={"quickstart-#{value}-active"}
+              data-name={value}
+              class="active-quickstart relative hidden rounded px-4 py-2 border border-primary-dark-500/40 bg-primary-dark-500/80 hover:bg-primary-dark-400/80 cursor-pointer transition-all duration-200"
+              onclick={"window.quickStartClicked(this, 'quickstart-#{value}-inactive', false)"}
+            >
+              {name}
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div id="advanced-features" class="hidden border-t border-primary-dark-500/40">
+        <div class="flex flex-wrap justify-center gap-2">
+          <div
+            :for={{category, features} <- features()}
+            data-category={category}
+            class="feature-category p-2"
+          >
+            <h3 class="text-lg font-bold mb-2 text-primary-light-200">{category}</h3>
+            <div class="flex flex-wrap gap-2 gap-y-2 justify-center">
+              <label :for={{value, name} <- features} id={"feature-#{value}"} class="feature">
+                <div class="flex flex-col">
+                  <span
+                    id={"feature-#{value}-inactive"}
+                    data-name={value}
+                    class={"relative inactive-feature rounded px-2 py-2 border  #{if coming_soon?(value), do: "bg-slate-800/70 text-slate-300/70 border-slate-500/40", else: "hover:bg-primary-dark-900/50 cursor-pointer border-primary-dark-500/40"}"}
+                    onclick={
+                      if !coming_soon?(value),
+                        do: "window.featureClicked(this, 'feature-#{value}-active', true)"
+                    }
+                  >
+                    {name}
+                    <%= if external?(value) do %>
+                      <sup>*</sup>
+                    <% end %>
+                  </span>
+                  <span
+                    id={"feature-#{value}-active"}
+                    data-name={value}
+                    class="relative active-feature hidden rounded px-2 py-2 border border-primary-dark-500/40 bg-primary-dark-500/80 cursor-pointer"
+                    onclick={"window.featureClicked(this, 'feature-#{value}-inactive', false)"}
+                  >
+                    {name}
+                    <%= if external?(value) do %>
+                      <sup>*</sup>
+                    <% end %>
+                  </span>
+                  <%= if coming_soon?(value) do %>
+                    <span class="text-xs text-slate-400 font-extralight italic mt-1">
+                      Coming Soon
+                    </span>
+                  <% end %>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="asterisk-warning" class="hidden text-xs text-slate-400 text-center mt-1 mb-2">
+        <sup>*</sup> Is or contains an external package, not maintained by the Ash team.
+      </div>
+
+      <div id="igniter-instruction" class="hidden text-center mb-4">
+        <p class="text-primary-light-200">
+          Uses
+          <a
+            target="_blank"
+            href="https://hexdocs.pm/igniter"
+            class="text-primary-dark-400 underline hover:text-primary-dark-300"
+          >
+            igniter
+          </a>
+          to install Ash into your application
+        </p>
+      </div>
+
+      <div class="my-4 text-primary-light-200 bg-slate-900/70 rounded-lg text-white py-4 flex justify-center">
+        <pre id="selected-features" class="overflow-auto text-left">
               <%= {:safe, """
               sh <(curl '#{@url_base}#{@safe_app_name}') \\
                   && cd #{@safe_app_name}
               """ |> String.trim()} %></pre>
+      </div>
+      <div id="manual-setup-box" class="flex flex-col hidden mb-8">
+        <h2 class="text-1xl font-bold mb-6 text-primary-light-200">
+          Some selected features require manual setup:
+        </h2>
+        <div
+          id="manual-setup-links"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-[30%] gap-2"
+        >
+        </div>
+      </div>
+      <div id="read-more-box" class="hidden flex flex-col mb-8">
+        <h2 class="text-1xl font-bold mb-6 text-primary-light-200">
+          Read the docs:
+        </h2>
+        <div
+          id="read-more-links"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-[30%] gap-2"
+        >
+        </div>
+      </div>
+      <button
+        id="copy-url-button"
+        onclick="window.copyUrl()"
+        class="plausible-event-name=Install inline-flex items-center px-6 py-3 rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 [&:not(.was-clicked)]:shadow-[0_0_20px_#FF5757] transition-all duration-300 hover:bg-red-600 [&.was-clicked]:scale-95 [&.was-clicked]:bg-green-500"
+      >
+        <span id="copy-url-button-icon" class="hero-clipboard"></span>
+        <span id="copy-url-button-text" class="ml-2">
+          Copy
+        </span>
+      </button>
     </div>
-    <div id="manual-setup-box" class="flex flex-col hidden mb-8">
-      <h2 class="text-1xl font-bold mb-6 text-primary-light-200">
-        Some selected features require manual setup:
-      </h2>
-      <div id="manual-setup-links" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-[30%] gap-2"></div>
-    </div>
-    <div id="read-more-box" class="flex flex-col hidden mb-8">
-      <h2 class="text-1xl font-bold mb-6 text-primary-light-200">
-        Read the docs:
-      </h2>
-      <div id="read-more-links" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-[30%] gap-2"></div>
-    </div>
-    <button
-      id="copy-url-button"
-      onclick="window.copyUrl()"
-      class="plausible-event-name=Install inline-flex items-center px-6 py-3 rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 [&:not(.was-clicked)]:shadow-[0_0_20px_#FF5757] transition-all duration-300 hover:bg-red-600 [&.was-clicked]:scale-95 [&.was-clicked]:bg-green-500"
-    >
-      <span id="copy-url-button-icon" class="hero-clipboard"></span>
-      <span id="copy-url-button-text" class="ml-2">
-        Copy
-      </span>
-    </button>
-
-    <div class="my-6 text-primary-light-200">- or -</div>
-
-    <h2 class="text-3xl font-bold mb-6 text-primary-light-200">Try our interactive tutorial</h2>
-    <a
-      href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd"
-      class="cursor-pointer inline-flex items-center rounded-full bg-primary-dark-600 text-white font-medium hover:bg-primary-dark-700 transition-all transform hover:scale-105 shadow-[0_0_20px_#FF5757]"
-    >
-      <img src="https://livebook.dev/badge/v1/pink.svg" alt="Run in Livebook" />
-    </a>
   </div>
 
   <div class="mt-12">
-    <div class="max-w-5xl mx-auto text-center">
-      <h1 class="text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
+    <div class="max-w-5xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
         Trusted
         <span class="bg-gradient-to-r from-primary-dark-500 to-primary-light-500 bg-clip-text text-transparent">
           in production
         </span>
-      </h1>
+      </h2>
       <div class="bg-slate-950/50 overflow-hidden sm:mx-0 sm:rounded-2xl md:grid-cols-4 backdrop-blur-lg">
         <div class={"grid #{logos_grid()} gap-0.5 justify-center justify-items-center my-12"}>
           <%= for {name, %{href: href, src: src}} <- logos() do %>
             <%= if name == :placeholder do %>
               <div />
             <% else %>
-              <a href={href} title={name} alt={name} class="content-center w-full py-2 max-w-36">
-                <img class="w-full h-[90%] object-contain" src={src} />
+              <a href={href} class="content-center w-full py-2 max-w-36">
+                <img class="w-full h-[90%] object-contain" src={src} alt={name} title={name} />
               </a>
             <% end %>
           <% end %>
@@ -300,13 +1358,13 @@
   </div>
 
   <div class="mt-6 z-10" id="upcoming-events">
-    <div class="max-w-3xl mx-auto">
-      <h1 class="text-center text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-center text-3xl sm:text-4xl font-bold mb-6 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
         Upcoming
         <span class="bg-gradient-to-r from-primary-dark-500 to-primary-light-500 bg-clip-text text-transparent">
           events
         </span>
-      </h1>
+      </h2>
       <ul class="divide-primary-light-500/30 divide-y relative">
         <li :for={event <- @events} class="py-4">
           <a

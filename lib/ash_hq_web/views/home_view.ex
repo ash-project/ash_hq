@@ -15,7 +15,7 @@ defmodule AshHqWeb.HomeView do
   end
 
   @coming_soon [:opentelemetry, :appsignal]
-  @external [:oban, :mishka, :live_debugger]
+  @external [:oban, :mishka, :live_debugger, :tidewave]
 
   defp logos_grid, do: "grid-cols-3"
 
@@ -33,17 +33,20 @@ defmodule AshHqWeb.HomeView do
         href: "https://www.scribblevet.com/",
         src: "/images/scribble-vet-logo.png"
       },
+      Plangora: %{href: "https://www.plangora.com", src: "images/plangora-logo-dark.png"},
       Coinbits: %{href: "https://coinbits.app", src: "/images/coinbits-logo.png"},
       "Wintermeyer Consulting": %{
         href: "https://www.wintermeyer-consulting.de/",
         src: "/images/wintermeyer-logo-dark.svg"
       },
-      # placeholder: %{href: "", src: ""},
       "Boring Business Leads": %{
         href: "https://boringbusinessleads.com",
         src: "/images/self-storage-leads-logo-light.svg"
+      },
+      Linguavid: %{
+        href: "https://linguavid.net",
+        src: "/images/linguavid-logo.png"
       }
-      # placeholder: %{href: "", src: ""}
     ]
     |> insert_placeholders(logos_grid())
   end
@@ -101,41 +104,45 @@ defmodule AshHqWeb.HomeView do
         json_api: "JSON:API"
       ],
       "Data Layers": [
-        postgres: "PostgreSQL",
+        postgres: "Postgres",
         sqlite: "SQLite",
         csv: "CSV"
       ],
       Authentication: [
         password_auth: "Password",
         magic_link_auth: "Magic Link",
+        api_key_auth: "API Keys",
         oauth: "OAuth2"
+      ],
+      AI: [
+        tidewave: "Tidewave",
+        ash_ai: "Ash AI"
       ],
       Finance: [
         money: "Money",
         double_entry: "Double Entry Accounting"
       ],
       Automation: [
-        oban: "Background Jobs",
-        state_machine: "State Machines"
+        oban: "Oban",
+        state_machine: "State Machines",
+        ash_events: "Event Sourcing"
       ],
       "Safety & Security": [
         archival: "Archival",
         paper_trail: "Paper Trail",
         cloak: "Encryption"
       ],
-      "CMS & Admin": [
-        admin: "Admin UI"
-      ],
-      "Dev Tools": [
+      "Admin & Debugging": [
+        admin: "Admin UI",
         live_debugger: "Live Debugger"
       ],
       "UI Components": [
         mishka: "Mishka Chelekom"
-      ],
-      Observability: [
-        appsignal: "AppSignal",
-        opentelemetry: "OpenTelemetry"
       ]
+      # "Observability": [
+      #   appsignal: "AppSignal",
+      #   opentelemetry: "OpenTelemetry"
+      # ]
     ]
   end
 
@@ -146,8 +153,7 @@ defmodule AshHqWeb.HomeView do
     [
       live_view: "Phoenix LiveView",
       graphql: "GraphQL",
-      json_api: "JSON:API",
-      postgres: "PostgreSQL"
+      json_api: "JSON:API"
     ]
   end
 end

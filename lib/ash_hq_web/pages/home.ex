@@ -294,7 +294,7 @@ defmodule AshHqWeb.Pages.Home do
               </a>
               specializes in providing Ash Framework consulting services. We offer custom development
               solutions and implementation guidance through our
-              <a href="https://ash.alembic.com.au/ash-premium-support">
+              <a href="https://alembic.com.au/services/ash-framework-premium-support">
                 <CalloutText.callout text="Ash Premium Support" class="hover:opacity-70" />
               </a>
               service.
@@ -341,7 +341,7 @@ defmodule AshHqWeb.Pages.Home do
             </a>
           </div>
         </div>
-        
+
     <!-- will unhide this when we have more logos -->
         <div class="hidden flex flex-col w-full dark:bg-none dark:bg-opacity-0 py-6">
           <div class="flex flex-col w-full">

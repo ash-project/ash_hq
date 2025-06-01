@@ -35,6 +35,8 @@ defmodule AshHqWeb.Router do
     get "/community", HomeController, :community
     get "/media", HomeController, :media
 
+    get "/book-errata", HomeController, :book_errata
+
     live("/blog", AppViewLive, :blog)
     live("/blog/:slug", AppViewLive, :blog)
     # live("/community", AppViewLive, :community)
