@@ -734,7 +734,6 @@ function setUrl() {
 
   if (addingToApp) {
     code = "mix igniter.install ";
-    packages.unshift("ash");
   } else {
     if (packages.length !== 0) {
       packages.unshift("&& mix igniter.install");
