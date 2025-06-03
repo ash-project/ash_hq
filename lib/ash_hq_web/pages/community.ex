@@ -19,7 +19,7 @@ defmodule AshHqWeb.Pages.Community do
           <div class="text-2xl font-light text-base-dark-700 dark:text-base-light-100 max-w-4xl mx-auto px-4 md:px-0 mt-4 text-center">
             The Ash Framework has a thriving community ready to welcome developers at all skill levels. All questions, ideas and contributions are valuable, so please join in!
           </div>
-          <div class="grid justify-center grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 dark:bg-none dark:bg-opacity-0 py-6 text-center mx-8 gap-16  mt-2 border-t border-t-gray-600 pt-16">
+          <div class="grid justify-center grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 dark:bg-none dark:bg-opacity-0 py-6 text-center mx-8 gap-16  mt-2 border-t border-t-gray-600 pt-16 mb-16">
             <CommunityLink.link name="Discord" url="https://discord.gg/FmeMvFrw3j">
               <:description>
                 The Ash discord is where you'll find people sharing ideas, collaborating on code, and discussing the Elixir ecosystem.

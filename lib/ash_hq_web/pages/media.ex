@@ -63,7 +63,7 @@ defmodule AshHqWeb.Pages.Media do
         </div>
       </div>
 
-      <div class="text-2xl flex flex-col items-center justify-center text-center">
+      <div class="text-2xl flex flex-col items-center justify-center text-center mb-16">
         <div class="text-3xl font-bold mt-8 mb-8 text-center">Example Projects</div>
         <%= for %{title: title, href: href, description: description} <- examples() do %>
           <div class="max-w-7xl px-4 sm:px-6 md:px-8 my-8 hidden sm:block">
