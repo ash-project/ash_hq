@@ -54,8 +54,11 @@
     <script src="https://buttons.github.io/buttons.js">
     </script>
   </head>
-  <body class="bg-slate-950 text-white min-h-screen dark">
-    {@inner_content}
+  <body class="bg-slate-950 text-white min-h-screen dark flex flex-col">
+    <div class="flex-1">
+      {@inner_content}
+    </div>
+    <.footer />
     <script
       defer
       phx-track-static
