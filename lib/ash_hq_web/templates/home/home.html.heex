@@ -82,7 +82,7 @@
 
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-8">
-        
+
 <!-- Main Content Container with Fixed Height -->
         <div class="h-[650px]">
           <!-- Stage Description Panel -->
@@ -97,7 +97,7 @@
           <div class="grid lg:grid-cols-2 gap-8">
             <!-- Code Editor -->
             <div class="relative">
-              <div class="bg-slate-900/80 rounded-lg p-4 font-mono text-sm lg:text-xs xl:text-sm overflow-clip border border-primary-dark-500/20 h-[492px]">
+              <div class="bg-slate-900/80 rounded-lg p-4 font-mono text-sm lg:text-xs overflow-clip border border-primary-dark-500/20 h-[492px]">
                 <div class="flex items-center gap-2 mb-2 pb-2 border-b border-primary-dark-500/20">
                   <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
                   <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
@@ -251,7 +251,7 @@
       </div>
     </div>
   </div>
-  
+
 <!-- Mobile Swipeable Stages -->
   <div class="lg:hidden">
     <div class="relative z-10 max-w-4xl mx-auto px-2 sm:px-6">
@@ -259,7 +259,7 @@
         <h2 class="text-2xl font-bold text-primary-light-200 mb-6 text-center">
           Discover Ash Features
         </h2>
-        
+
 <!-- Mobile Stage Container -->
         <div id="mobile-stages" class="relative overflow-hidden h-[650px]">
           <!-- Swipe Container -->
@@ -267,7 +267,7 @@
             id="mobile-stage-track"
             class="flex transition-transform duration-300 ease-out h-full"
           >
-            
+
 <!-- Stage 0: Resources & Actions -->
             <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="0">
               <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
@@ -301,7 +301,7 @@
                 </div>
               </div>
             </div>
-            
+
 <!-- Stage 1: Persistence -->
             <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="1">
               <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
@@ -324,7 +324,7 @@
                 </div>
               </div>
             </div>
-            
+
 <!-- Stage 2: GraphQL -->
             <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="2">
               <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
@@ -347,7 +347,7 @@
                 </div>
               </div>
             </div>
-            
+
 <!-- Stage 3: JSON:API -->
             <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="3">
               <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
@@ -381,9 +381,43 @@
                 </div>
               </div>
             </div>
-            
-<!-- Stage 4: Encryption -->
+
+<!-- Stage 4: Policies -->
             <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="4">
+              <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
+                <div class="flex items-center gap-2 mb-3">
+                  <svg
+                    class="w-5 h-5 text-red-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12l2 2 4-4m5-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    >
+                    </path>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-primary-light-400 mobile-stage-title">
+                    Policies
+                  </h3>
+                </div>
+                <p class="text-sm text-gray-300 mb-3 mobile-stage-description">
+                  Add fine-grained authorization with policies. Control who can perform actions and filter data transparently.
+                </p>
+                <div class="bg-slate-800/70 rounded p-3 font-mono text-xs text-gray-300 mb-3">
+                  <pre class="mobile-code-display"><code></code></pre>
+                </div>
+                <div class="text-xs text-gray-400 mobile-stage-summary">
+                  <span class="text-primary-light-300">→ </span>Role-based access control with data filtering
+                </div>
+              </div>
+            </div>
+
+<!-- Stage 5: Encryption -->
+            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="5">
               <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
                 <div class="flex items-center gap-2 mb-3">
                   <svg
@@ -415,9 +449,9 @@
                 </div>
               </div>
             </div>
-            
-<!-- Stage 5: AI Tools -->
-            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="5">
+
+<!-- Stage 6: AI Tools -->
+            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="6">
               <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
                 <div class="flex items-center gap-2 mb-3">
                   <svg
@@ -449,9 +483,9 @@
                 </div>
               </div>
             </div>
-            
-<!-- Stage 6: State Machine -->
-            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="6">
+
+<!-- Stage 7: State Machine -->
+            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="7">
               <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
                 <div class="flex items-center gap-2 mb-3">
                   <svg
@@ -483,9 +517,9 @@
                 </div>
               </div>
             </div>
-            
-<!-- Stage 7: Authentication -->
-            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="7">
+
+<!-- Stage 8: Authentication -->
+            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="8">
               <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
                 <div class="flex items-center gap-2 mb-3">
                   <svg
@@ -517,9 +551,9 @@
                 </div>
               </div>
             </div>
-            
-<!-- Stage 8: Background Jobs -->
-            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="8">
+
+<!-- Stage 9: Background Jobs -->
+            <div class="w-full flex-shrink-0 px-1 h-full" data-mobile-stage="9">
               <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20 h-full flex flex-col justify-between">
                 <div class="flex items-center gap-2 mb-3">
                   <svg
@@ -559,7 +593,7 @@
             </div>
           </div>
         </div>
-        
+
 <!-- Mobile Navigation -->
         <div class="flex items-center justify-center mt-6 gap-4">
           <button
@@ -647,7 +681,7 @@
       </div>
     </div>
   </div>
-  
+
 <!-- Book and Newsletter Section -->
   <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
     <div class="backdrop-blur-lg bg-slate-950/50 rounded-2xl border border-primary-light-500/30 p-8">
@@ -723,7 +757,7 @@
           </div>
           <p class="text-xs text-gray-600 dark:text-gray-400">Core framework</p>
         </a>
-        
+
 <!-- Core Extensions -->
         <a
           href="https://hexdocs.pm/ash_postgres/"
@@ -780,7 +814,7 @@
           </div>
           <p class="text-xs text-gray-600 dark:text-gray-400">JSON:API extension</p>
         </a>
-        
+
 <!-- Workflows & Orchestration -->
         <a
           href="https://hexdocs.pm/reactor/"
@@ -795,7 +829,7 @@
           </div>
           <p class="text-xs text-gray-600 dark:text-gray-400">Workflows & Sagas</p>
         </a>
-        
+
 <!-- Authentication -->
         <a
           href="https://hexdocs.pm/ash_authentication/"
@@ -810,7 +844,7 @@
           </div>
           <p class="text-xs text-gray-600 dark:text-gray-400">Authentication</p>
         </a>
-        
+
 <!-- Admin & UI -->
         <a
           href="https://hexdocs.pm/ash_admin/"
@@ -825,7 +859,7 @@
           </div>
           <p class="text-xs text-gray-600 dark:text-gray-400">Admin interface</p>
         </a>
-        
+
 <!-- Data Processing -->
         <a
           href="https://hexdocs.pm/ash_oban/"
@@ -854,7 +888,7 @@
           </div>
           <p class="text-xs text-gray-600 dark:text-gray-400">State machines</p>
         </a>
-        
+
 <!-- Data Management -->
         <a
           href="https://hexdocs.pm/ash_archival/"
@@ -885,6 +919,20 @@
         </a>
 
         <a
+          href="https://hexdocs.pm/ash_rate_limiter/"
+          target="_blank"
+          class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-gray-300 dark:hover:border-gray-600 transition-all cursor-pointer group"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-3 h-3 bg-gray-600 rounded-full"></div>
+            <span class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-gray-600 dark:group-hover:text-gray-400">
+              AshRateLimiter
+            </span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">Audit logs</p>
+        </a>
+
+        <a
           href="https://hexdocs.pm/ash_csv/"
           target="_blank"
           class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-emerald-300 dark:hover:border-emerald-600 transition-all cursor-pointer group"
@@ -897,7 +945,7 @@
           </div>
           <p class="text-xs text-gray-600 dark:text-gray-400">CSV data layer</p>
         </a>
-        
+
 <!-- Financial -->
         <a
           href="https://hexdocs.pm/ash_money/"
@@ -926,7 +974,7 @@
           </div>
           <p class="text-xs text-gray-600 dark:text-gray-400">Double-entry accounting</p>
         </a>
-        
+
 <!-- Security -->
         <a
           href="https://hexdocs.pm/ash_cloak/"
@@ -955,7 +1003,7 @@
           </div>
           <p class="text-xs text-gray-600 dark:text-gray-400">Rate Limiting</p>
         </a>
-        
+
 <!-- Data Layers -->
         <a
           href="https://hexdocs.pm/ash_sqlite/"
@@ -984,7 +1032,7 @@
           </div>
           <p class="text-xs text-gray-600 dark:text-gray-400">CubDB data layer</p>
         </a>
-        
+
 <!-- Geospatial -->
         <a
           href="https://hexdocs.pm/ash_geo/"
@@ -999,7 +1047,7 @@
           </div>
           <p class="text-xs text-gray-600 dark:text-gray-400">Geospatial data</p>
         </a>
-        
+
 <!-- AI & Machine Learning -->
         <a
           href="https://hexdocs.pm/ash_ai/"
@@ -1014,7 +1062,7 @@
           </div>
           <p class="text-xs text-gray-600 dark:text-gray-400">LLM features</p>
         </a>
-        
+
 <!-- Monitoring -->
         <a
           href="https://hexdocs.pm/ash_appsignal/"
@@ -1043,7 +1091,7 @@
           </div>
           <p class="text-xs text-gray-600 dark:text-gray-400">Telemetry tracing</p>
         </a>
-        
+
 <!-- Event Sourcing -->
         <a
           href="https://hexdocs.pm/ash_events/"

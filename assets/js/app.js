@@ -1032,6 +1032,36 @@ end`,
       visualizer: () => AshAnimation.createJsonApiPanel(),
     },
     {
+      name: "Policies",
+      module: "MyApp.Support.Ticket",
+      description:
+        "Add fine-grained authorization with policies. Control who can perform which actions and which data they can see. Policies can forbid actions or filter data transparently for reads, preventing enumeration attacks.",
+      code: `
+    extensions: [
+      # ...
+    ],
+    authorizers: [Ash.Policy.Authorizer]
+
+  policies do
+    # Only admins can create tickets
+    policy action_type(:create) do
+      authorize_if expr(
+        ^actor(:role) == :admin
+      )
+    end
+
+    # Users can only read their own tickets
+    policy action_type(:read) do
+      authorize_if expr(
+        user_id == ^actor(:id)
+      )
+    end
+  end
+  # ...
+end`,
+      visualizer: () => AshAnimation.createPoliciesPanel(),
+    },
+    {
       name: "Encryption",
       module: "MyApp.Blog.Post",
       description:
@@ -1084,34 +1114,7 @@ end`,
 end`,
       visualizer: () => AshAnimation.createAiToolsPanel(),
     },
-    {
-      name: "State Machine",
-      module: "MyApp.Blog.Post",
-      description:
-        "Add a proper state machine to model valid states and transitions. Your posts now have declarative state validations and transitions. Notice how each extension builds upon the previous ones without requiring changes to existing functionality.",
-      code: `
-    extensions: [
-      # ...
-      AshStateMachine
-    ]
 
-  state_machine do
-    initial_states [:draft]
-
-    transitions do
-      transition :publish,
-        from: :draft,
-        to: :published
-
-      transition :unpublish,
-        from: :published,
-        to: :draft
-    end
-  end
-  # ...
-end`,
-      visualizer: () => AshAnimation.createStateMachine(),
-    },
     {
       name: "Authentication",
       module: "MyApp.Accounts.User",
@@ -2308,6 +2311,18 @@ end`,
         return `
           <div class="bg-slate-900/80 rounded-lg p-3 border border-primary-dark-500/20">
             <div class="flex items-center gap-2 mb-1">
+              <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <h3 class="text-primary-light-400 font-semibold text-sm">Policies</h3>
+            </div>
+            <div class="text-xs text-gray-400">Authorization</div>
+          </div>
+        `;
+      case 5:
+        return `
+          <div class="bg-slate-900/80 rounded-lg p-3 border border-primary-dark-500/20">
+            <div class="flex items-center gap-2 mb-1">
               <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
               </svg>
@@ -2316,7 +2331,7 @@ end`,
             <div class="text-xs text-gray-400">Content field</div>
           </div>
         `;
-      case 5:
+      case 6:
         return `
           <div class="bg-slate-900/80 rounded-lg p-3 border border-primary-dark-500/20">
             <div class="flex items-center gap-2 mb-1">
@@ -2326,18 +2341,6 @@ end`,
               <h3 class="text-primary-light-400 font-semibold text-sm">AI Tools</h3>
             </div>
             <div class="text-xs text-gray-400">LLM Actions</div>
-          </div>
-        `;
-      case 6:
-        return `
-          <div class="bg-slate-900/80 rounded-lg p-3 border border-primary-dark-500/20">
-            <div class="flex items-center gap-2 mb-1">
-              <svg class="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-              </svg>
-              <h3 class="text-primary-light-400 font-semibold text-sm">State Machine</h3>
-            </div>
-            <div class="text-xs text-gray-400">Draft/Published</div>
           </div>
         `;
       case 7:
@@ -2350,6 +2353,18 @@ end`,
               <h3 class="text-primary-light-400 font-semibold text-sm">Authentication</h3>
             </div>
             <div class="text-xs text-gray-400">Login/OAuth</div>
+          </div>
+        `;
+      case 8:
+        return `
+          <div class="bg-slate-900/80 rounded-lg p-3 border border-primary-dark-500/20">
+            <div class="flex items-center gap-2 mb-1">
+              <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <h3 class="text-primary-light-400 font-semibold text-sm">Background Jobs</h3>
+            </div>
+            <div class="text-xs text-gray-400">Triggers & Scheduled Actions</div>
           </div>
         `;
       default:
@@ -2541,6 +2556,54 @@ end`,
     `;
   },
 
+  createPoliciesPanel() {
+    return `
+      <div class="w-full">
+        <div class="bg-slate-900/80 rounded-lg p-4 border border-primary-dark-500/20">
+          <div class="flex items-center gap-2 mb-4">
+            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <h3 class="text-primary-light-400 font-semibold">Authorization Policies</h3>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-3 bg-slate-800/50 rounded">
+              <p class="text-xs text-gray-400 mb-2 font-semibold">Create Policy</p>
+              <pre class="text-xs text-primary-light-300">policy action_type(:create) do
+  authorize_if expr(
+    ^actor(:role) == :admin
+  )
+end</pre>
+            </div>
+            <div class="p-3 bg-red-900/30 rounded border border-red-500/30">
+              <p class="text-xs text-gray-400 mb-2 font-semibold">❌ Forbidden Action</p>
+              <pre class="text-xs text-red-300">MyApp.Support.open_ticket!(
+  actor: non_admin
+)
+# Forbidden</pre>
+            </div>
+            <div class="p-3 bg-slate-800/50 rounded">
+              <p class="text-xs text-gray-400 mb-2 font-semibold">Read Policy</p>
+              <pre class="text-xs text-primary-light-300">policy action_type(:read) do
+  authorize_if expr(
+    user_id == ^actor(:id)
+  )
+end</pre>
+            </div>
+            <div class="p-3 bg-blue-900/30 rounded border border-blue-500/30">
+              <p class="text-xs text-gray-400 mb-2 font-semibold">🔍 Filtered Read</p>
+              <pre class="text-xs text-blue-300">MyApp.Tickets.list_tickets(
+  actor: user
+)
+# SQL: SELECT * FROM tickets
+# WHERE user_id = $1</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
   createAuthenticationPanel() {
     return `
       <div class="w-full">
@@ -2598,50 +2661,6 @@ end`,
             </div>
           </div>
           <p class="text-sm text-gray-500 text-center mt-4">Content field automatically encrypted/decrypted</p>
-        </div>
-      </div>
-    `;
-  },
-
-  createStateMachine() {
-    return `
-      <div class="w-full space-y-4">
-        <div class="bg-slate-900/80 rounded-lg p-6 border border-primary-dark-500/20">
-          <div class="flex items-center gap-2 mb-4">
-            <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-            </svg>
-            <h3 class="text-primary-light-400 font-semibold">State Machine</h3>
-          </div>
-          <div class="flex items-center justify-center gap-8">
-            <div class="text-center">
-              <div class="w-24 h-24 rounded-full bg-yellow-500/20 border-2 border-yellow-500 flex items-center justify-center">
-                <span class="text-yellow-400 font-semibold">Draft</span>
-              </div>
-            </div>
-            <div class="flex flex-col gap-2">
-              <div class="flex items-center gap-2">
-                <svg class="w-8 h-6 text-primary-dark-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                </svg>
-                <span class="text-xs text-gray-400">publish</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <svg class="w-8 h-6 text-primary-dark-500 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                </svg>
-                <span class="text-xs text-gray-400">unpublish</span>
-              </div>
-            </div>
-            <div class="text-center">
-              <div class="w-24 h-24 rounded-full bg-green-500/20 border-2 border-green-500 flex items-center justify-center">
-                <span class="text-green-400 font-semibold">Published</span>
-              </div>
-            </div>
-          </div>
-          <div class="mt-6 text-center">
-            <p class="text-sm text-gray-500">Describe and validate state transitions</p>
-          </div>
         </div>
       </div>
     `;
