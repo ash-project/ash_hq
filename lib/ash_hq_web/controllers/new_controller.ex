@@ -62,7 +62,10 @@ defmodule AshHqWeb.NewController do
 
     echo_heading "Installing igniter_new archive..."
     mix archive.install hex igniter_new --force
-    <%= if @with_phx_new do %>mix archive.install hex phx_new --force<% end %>
+    <%= if @with_phx_new do %>
+    latest_version=$(mix hex.info phx_new | grep "Releases:" | sed 's/.*Releases: //' | sed 's/,.*//')
+    echo_heading "Installing Phoenix generator version $latest_version..."
+    mix archive.install hex phx_new $latest_version --force<% end %>
 
     app_name="<%= @app_name %>"
 
