@@ -341,7 +341,31 @@ defmodule AshHqWeb.Pages.Home do
             </a>
           </div>
         </div>
-        
+
+        <!-- Ash AI Launch Video Section -->
+        <div class="flex flex-col w-full dark:bg-none dark:bg-opacity-0 py-16">
+          <div class="flex flex-col w-full max-w-4xl mx-auto px-4">
+            <div class="text-center w-full text-4xl md:text-5xl font-bold text-black dark:text-white mb-4">
+              Introducing <CalloutText.callout text="Ash AI" />
+            </div>
+            <div class="text-center text-xl text-base-dark-700 dark:text-base-light-300 mb-8">
+              Watch the launch announcement for our exciting new AI capabilities
+            </div>
+            <div class="relative w-full aspect-video max-w-3xl mx-auto rounded-lg overflow-hidden shadow-2xl">
+              <iframe
+                class="w-full h-full"
+                src="https://www.youtube.com/embed/VIDEO_ID_HERE"
+                title="Ash AI Launch"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              >
+              </iframe>
+            </div>
+          </div>
+        </div>
+
     <!-- will unhide this when we have more logos -->
         <div class="hidden flex flex-col w-full dark:bg-none dark:bg-opacity-0 py-6">
           <div class="flex flex-col w-full">
