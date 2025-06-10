@@ -25,6 +25,25 @@ defmodule AshHqWeb.NewController do
     otp_version='27.1.2'
     root_dir="$HOME/.elixir-install"
 
+    # Check for Erlang 28 and require confirmation
+    if command -v erl >/dev/null 2>&1; then
+      erlang_version=$(erl -noshell -eval 'io:format("~s", [erlang:system_info(otp_release)]), halt().' 2>/dev/null || echo "unknown")
+      if [ "$erlang_version" = "28" ]; then
+        echo "\\n\\033[31m⚠️  WARNING: Erlang/OTP 28 is NOT officially supported ⚠️\\033[0m"
+        echo "\\033[31mMany packages are not compatible with Erlang/OTP 28 and may fail to work correctly.\\033[0m"
+        echo "\\033[33mWe recommend canceling this installation and using Erlang/OTP 27 instead.\\033[0m"
+        echo "\\033[33mYou can install Erlang 27 using asdf, mise, or your system package manager.\\033[0m\\n"
+        echo "\\033[1mDo you want to continue anyway? This is NOT recommended.\\033[0m"
+        printf "Type 'yes' to continue or anything else to cancel: "
+        read -r user_input
+        if [ "$user_input" != "yes" ]; then
+          echo "\\n\\033[32mGood choice! Please install Erlang/OTP 27 and try again.\\033[0m"
+          exit 0
+        fi
+        echo "\\n\\033[31mProceeding with unsupported Erlang/OTP 28... you're on your own! 🤞\\033[0m\\n"
+      fi
+    fi
+
     # Install Elixir if needed
     if command -v elixir >/dev/null 2>&1; then
       echo_heading "Elixir is already installed ✓"
