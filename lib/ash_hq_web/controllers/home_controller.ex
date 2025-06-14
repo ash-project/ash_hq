@@ -63,10 +63,12 @@ defmodule AshHqWeb.HomeController do
 
   def home(conn, _) do
     app_name = app_name()
+    phoenix_version = AshHq.HexClient.get_latest_phoenix_version()
 
     conn
     |> assign(:url_base, @url_base)
     |> assign(:app_name, app_name)
+    |> assign(:phoenix_version, phoenix_version)
     |> assign_events()
     |> assign(:safe_app_name, safe(app_name))
     |> render("home.html")

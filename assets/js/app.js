@@ -518,10 +518,11 @@ const features = {
   },
 };
 
-let installMode = "new-project"; // Default mode
+let projectMode = "new-project"; // Default mode
+let installElixir = true; // Default to installing Elixir
 
-window.setInstallMode = function (mode) {
-  installMode = mode;
+window.setProjectMode = function (mode) {
+  projectMode = mode;
 
   // Update button styles
   document.querySelectorAll(".mode-button").forEach((btn) => {
@@ -532,6 +533,14 @@ window.setInstallMode = function (mode) {
   const activeBtn = document.getElementById(`mode-${mode}`);
   activeBtn.classList.remove("text-primary-light-300", "hover:text-white");
   activeBtn.classList.add("bg-primary-dark-600", "text-white");
+
+  // Show/hide install Elixir option
+  const installElixirOption = document.getElementById("install-elixir-option");
+  if (mode === "new-project") {
+    installElixirOption.classList.remove("hidden");
+  } else {
+    installElixirOption.classList.add("hidden");
+  }
 
   // Handle mode-specific UI changes
   if (mode === "existing-app") {
@@ -570,10 +579,16 @@ window.setInstallMode = function (mode) {
   setUrl();
 };
 
+// Toggle Install Elixir checkbox
+window.toggleInstallElixir = function () {
+  installElixir = document.getElementById("install-elixir-checkbox").checked;
+  setUrl();
+};
+
 // Deprecated - kept for backward compatibility
 let addingToApp = false;
 window.addingToApp = function () {
-  window.setInstallMode("existing-app");
+  window.setProjectMode("existing-app");
 };
 
 for (var quickstart of Object.keys(quickstarts)) {
@@ -634,6 +649,8 @@ let appName = (appName || {}).value;
 if (appNameComponent) {
   document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("quickstart-live_view-inactive").click();
+    // Initialize with default mode
+    window.setProjectMode("new-project");
   });
 }
 
@@ -646,6 +663,12 @@ function setUrl() {
   icon.classList.remove("hero-check");
   icon.classList.add("hero-clipboard");
   button.classList.remove("was-clicked");
+
+  // Get Phoenix version from data attribute
+  const installerDiv = document.getElementById("installer");
+  const phoenixVersion = installerDiv
+    ? installerDiv.dataset.phoenixVersion
+    : null;
 
   let args = [];
   let packages = ["ash"];
@@ -754,13 +777,13 @@ function setUrl() {
   let limit;
 
   // Generate commands based on the selected mode
-  if (installMode === "existing-app") {
+  if (projectMode === "existing-app") {
     // Mode: Existing App - just igniter.install
     code = "mix igniter.install ";
     firstLine = code;
     limit = 45;
-  } else if (installMode === "no-elixir") {
-    // Mode: No Elixir Yet - use curl script
+  } else if (projectMode === "new-project" && installElixir) {
+    // Mode: New Project with Install Elixir - use curl script
     firstLine = `sh <(curl '${base}/${appNameSafe}${installArg || ""}')`;
     code = firstLine;
 
@@ -770,25 +793,17 @@ function setUrl() {
     packages.unshift(`&& cd ${appNameSafe}`);
     limit = Math.max(firstLine.length - 2, 45);
   } else {
-    // Mode: New Project (default) - two-step process
+    // Mode: New Project without Install Elixir - two-step process
     const archiveInstall = `mix archive.install hex igniter_new --force`;
-    let igniterNew = `mix igniter.new ${appNameSafe}`;
-
-    // Add --with phx.new if phoenix is selected
-    if (features.phoenix.checked) {
-      igniterNew += ` --with phx.new`;
-      if (features.postgres.checked) {
-        // Default database
-      } else if (features.sqlite.checked) {
-        igniterNew += ` --with-args "--database sqlite3"`;
-      } else {
-        igniterNew += ` --with-args "--no-ecto"`;
-      }
-    }
 
     // Format with proper line wrapping
     limit = 75; // Balanced limit for better spacing
     let lines = [archiveInstall];
+
+    // Add Phoenix archive install if Phoenix is selected and version is available
+    if (features.phoenix.checked && phoenixVersion) {
+      lines.push(`mix archive.install hex phx_new ${phoenixVersion} --force`);
+    }
 
     // Add empty line for spacing
     lines.push("");
@@ -849,7 +864,10 @@ function setUrl() {
   }
 
   // Add additional arguments and commands
-  if (installMode !== "new-project") {
+  if (
+    projectMode === "existing-app" ||
+    (projectMode === "new-project" && installElixir)
+  ) {
     // For curl and existing-app modes, use the old formatting logic
     args.forEach((arg) => {
       packages.push(arg);

@@ -1202,7 +1202,7 @@
   >
     <div>
       <h2 class="text-3xl font-bold text-primary-light-200">Get Your Installer</h2>
-      <div id="installer">
+      <div id="installer" data-phoenix-version={@phoenix_version}>
         <div class="flex flex-col justify-center mt-2">
           <label for="app-name">Project Name</label>
           <div>
@@ -1218,29 +1218,36 @@
         </div>
 
 <!-- Installation Mode Selector -->
-        <div class="flex justify-center mb-4">
+        <div class="flex flex-col items-center gap-3 mb-4">
           <div class="inline-flex rounded-lg border border-primary-dark-500/40 p-1 bg-slate-800/50">
             <button
               id="mode-new-project"
               class="mode-button px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 bg-primary-dark-600 text-white"
-              onclick="window.setInstallMode('new-project')"
+              onclick="window.setProjectMode('new-project')"
             >
               New Project
             </button>
             <button
               id="mode-existing-app"
               class="mode-button px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 text-primary-light-300 hover:text-white"
-              onclick="window.setInstallMode('existing-app')"
+              onclick="window.setProjectMode('existing-app')"
             >
               Existing App
             </button>
-            <button
-              id="mode-no-elixir"
-              class="mode-button px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 text-primary-light-300 hover:text-white"
-              onclick="window.setInstallMode('no-elixir')"
-            >
-              Install Elixir
-            </button>
+          </div>
+
+          <!-- Install Elixir Checkbox (only shown for new projects) -->
+          <div id="install-elixir-option" class="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="install-elixir-checkbox"
+              checked
+              class="w-4 h-4 text-primary-dark-600 bg-slate-800 border-primary-dark-500/40 rounded focus:ring-primary-dark-500 focus:ring-2"
+              onchange="window.toggleInstallElixir()"
+            />
+            <label for="install-elixir-checkbox" class="text-sm text-primary-light-300 cursor-pointer">
+              Install Elixir for me
+            </label>
           </div>
         </div>
 

@@ -26,6 +26,7 @@ defmodule AshHq.Application do
         # Start the Endpoint (http/https)
         AshHqWeb.Endpoint,
         {AshHq.Docs.Library.Agent, nil},
+        AshHq.HexClient,
         # {Cluster.Supervisor, [topologies, [name: AshHq.ClusterSupervisor]]},
         # {Haystack.Storage.ETS, storage: AshHq.Docs.Indexer.storage()},
         # AshHq.Docs.Indexer,
