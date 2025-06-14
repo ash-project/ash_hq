@@ -70,38 +70,40 @@
   </div>
 </div>
 
-  <!-- Ash AI Launch Video Section -->
-  <div class="relative py-16 bg-gradient-to-b from-primary-light-900/10 via-primary-dark-900/5 to-transparent">
+<!-- Ash AI Launch Video Section -->
+<div class="relative py-16 bg-gradient-to-b from-primary-light-900/10 via-primary-dark-900/5 to-transparent">
+  <div class="absolute inset-0 bg-gradient-to-b from-primary-light-900/20 via-primary-dark-900/10 to-primary-light-900/20">
+  </div>
 
-    <div class="absolute inset-0 bg-gradient-to-b from-primary-light-900/20 via-primary-dark-900/10 to-primary-light-900/20">
-    </div>
-
-    <div class="absolute inset-0 bg-[linear-gradient(rgba(254,19,19,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(254,19,19,0.2)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,black,transparent)]">
-    </div>
-    <div class="mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-center text-3xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
-        Introducing
-        <span class="bg-gradient-to-r from-primary-dark-500 to-primary-light-500 bg-clip-text text-transparent">
-          Ash AI
-        </span>
-      </h2>
-      <p class="text-center text-lg text-primary-light-200 mb-8">
-        Watch the launch announcement for our exciting new AI capabilities
-      </p>
-      <div class="relative w-full aspect-video mx-auto rounded-lg overflow-hidden shadow-2xl border border-primary-light-500/30" style="max-width: 60vw;">
-        <iframe
-          class="w-full h-full"
-          src="https://www.youtube.com/embed/PSrzruaby1M"
-          title="Ash AI Launch"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen
-        >
-        </iframe>
-      </div>
+  <div class="absolute inset-0 bg-[linear-gradient(rgba(254,19,19,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(254,19,19,0.2)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,black,transparent)]">
+  </div>
+  <div class="mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-center text-3xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-primary-light-400 via-primary-dark-500 to-primary-light-600 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,87,87,0.3)]">
+      Introducing
+      <span class="bg-gradient-to-r from-primary-dark-500 to-primary-light-500 bg-clip-text text-transparent">
+        Ash AI
+      </span>
+    </h2>
+    <p class="text-center text-lg text-primary-light-200 mb-8">
+      Watch the launch announcement for our exciting new AI capabilities
+    </p>
+    <div
+      class="relative w-full aspect-video mx-auto rounded-lg overflow-hidden shadow-2xl border border-primary-light-500/30"
+      style="max-width: 60vw;"
+    >
+      <iframe
+        class="w-full h-full"
+        src="https://www.youtube.com/embed/PSrzruaby1M"
+        title="Ash AI Launch"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      >
+      </iframe>
     </div>
   </div>
+</div>
 
 <!-- Interactive Animation Section -->
 <div id="ash-animation" class="relative py-16">
@@ -1215,6 +1217,33 @@
           </div>
         </div>
 
+<!-- Installation Mode Selector -->
+        <div class="flex justify-center mb-4">
+          <div class="inline-flex rounded-lg border border-primary-dark-500/40 p-1 bg-slate-800/50">
+            <button
+              id="mode-new-project"
+              class="mode-button px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 bg-primary-dark-600 text-white"
+              onclick="window.setInstallMode('new-project')"
+            >
+              New Project
+            </button>
+            <button
+              id="mode-existing-app"
+              class="mode-button px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 text-primary-light-300 hover:text-white"
+              onclick="window.setInstallMode('existing-app')"
+            >
+              Existing App
+            </button>
+            <button
+              id="mode-no-elixir"
+              class="mode-button px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 text-primary-light-300 hover:text-white"
+              onclick="window.setInstallMode('no-elixir')"
+            >
+              Install Elixir
+            </button>
+          </div>
+        </div>
+
         <div class="flex flex-col sm:flex-row gap-3 justify-center items-center mt-4 mb-4">
           <div id="show-advanced">
             <button
@@ -1255,24 +1284,6 @@
                 </path>
               </svg>
               Simple Options
-            </button>
-          </div>
-          <div id="already-have-an-app">
-            <button
-              id="already-have-an-app-button"
-              class="inline-flex items-center px-4 py-2 rounded-lg bg-primary-dark-600/40 text-primary-light-300 font-medium hover:bg-primary-dark-500/50 transition-all duration-200 border border-primary-dark-500/30 hover:border-primary-dark-400/50"
-              onclick="window.addingToApp()"
-            >
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                >
-                </path>
-              </svg>
-              Already have an app?
             </button>
           </div>
         </div>

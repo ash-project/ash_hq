@@ -518,40 +518,62 @@ const features = {
   },
 };
 
-let addingToApp = false;
+let installMode = "new-project"; // Default mode
 
-window.addingToApp = function () {
-  if (addingToApp) {
-    addingToApp = false;
+window.setInstallMode = function (mode) {
+  installMode = mode;
 
-    document.getElementById("feature-phoenix").classList.remove("hidden");
-    document.getElementById("quickstart-live_view").classList.remove("hidden");
-    document.getElementById("igniter-instruction").classList.add("hidden");
-    const button = document.getElementById("already-have-an-app-button");
-    button.innerHTML = `
-      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-      </svg>
-      Already have an app?`;
-  } else {
-    addingToApp = true;
+  // Update button styles
+  document.querySelectorAll(".mode-button").forEach((btn) => {
+    btn.classList.remove("bg-primary-dark-600", "text-white");
+    btn.classList.add("text-primary-light-300", "hover:text-white");
+  });
 
+  const activeBtn = document.getElementById(`mode-${mode}`);
+  activeBtn.classList.remove("text-primary-light-300", "hover:text-white");
+  activeBtn.classList.add("bg-primary-dark-600", "text-white");
+
+  // Handle mode-specific UI changes
+  if (mode === "existing-app") {
+    // Hide phoenix feature for existing apps
     const feature = document.getElementById("feature-phoenix-active");
-    if (!feature.classList.contains("hidden")) {
+    if (feature && !feature.classList.contains("hidden")) {
       feature.click();
     }
     document.getElementById("feature-phoenix").classList.add("hidden");
     document.getElementById("quickstart-live_view").classList.add("hidden");
     document.getElementById("igniter-instruction").classList.remove("hidden");
-    const button = document.getElementById("already-have-an-app-button");
-    button.innerHTML = `
-      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-      </svg>
-      Creating a new app?`;
+
+    // If live_view preset is active, switch to graphql preset
+    const liveViewActive = document.getElementById(
+      "quickstart-live_view-active",
+    );
+    if (liveViewActive && !liveViewActive.classList.contains("hidden")) {
+      const graphqlInactive = document.getElementById(
+        "quickstart-graphql-inactive",
+      );
+      if (graphqlInactive) {
+        graphqlInactive.click();
+      }
+    }
+  } else {
+    // Show phoenix feature for new projects
+    document.getElementById("feature-phoenix").classList.remove("hidden");
+    document.getElementById("quickstart-live_view").classList.remove("hidden");
+    if (mode === "new-project") {
+      document.getElementById("igniter-instruction").classList.add("hidden");
+    } else {
+      document.getElementById("igniter-instruction").classList.remove("hidden");
+    }
   }
 
   setUrl();
+};
+
+// Deprecated - kept for backward compatibility
+let addingToApp = false;
+window.addingToApp = function () {
+  window.setInstallMode("existing-app");
 };
 
 for (var quickstart of Object.keys(quickstarts)) {
@@ -727,52 +749,138 @@ function setUrl() {
   }
 
   const argsString = args.join(" ");
-  let firstLine = `sh <(curl '${base}/${appNameSafe}${installArg || ""}')`;
+  let firstLine;
+  let code = "";
   let limit;
 
-  let code = firstLine;
-
-  if (addingToApp) {
+  // Generate commands based on the selected mode
+  if (installMode === "existing-app") {
+    // Mode: Existing App - just igniter.install
     code = "mix igniter.install ";
-  } else {
+    firstLine = code;
+    limit = 45;
+  } else if (installMode === "no-elixir") {
+    // Mode: No Elixir Yet - use curl script
+    firstLine = `sh <(curl '${base}/${appNameSafe}${installArg || ""}')`;
+    code = firstLine;
+
     if (packages.length !== 0) {
       packages.unshift("&& mix igniter.install");
     }
-
     packages.unshift(`&& cd ${appNameSafe}`);
+    limit = Math.max(firstLine.length - 2, 45);
+  } else {
+    // Mode: New Project (default) - two-step process
+    const archiveInstall = `mix archive.install hex igniter_new --force`;
+    let igniterNew = `mix igniter.new ${appNameSafe}`;
+
+    // Add --with phx.new if phoenix is selected
+    if (features.phoenix.checked) {
+      igniterNew += ` --with phx.new`;
+      if (features.postgres.checked) {
+        // Default database
+      } else if (features.sqlite.checked) {
+        igniterNew += ` --with-args "--database sqlite3"`;
+      } else {
+        igniterNew += ` --with-args "--no-ecto"`;
+      }
+    }
+
+    // Format with proper line wrapping
+    limit = 75; // Balanced limit for better spacing
+    let lines = [archiveInstall];
+
+    // Add empty line for spacing
+    lines.push("");
+
+    // Build the command parts
+    let commandParts = [`mix igniter.new ${appNameSafe}`];
+
+    // Add --with phx.new if needed
+    if (features.phoenix.checked) {
+      commandParts.push(`--with phx.new`);
+      if (features.postgres.checked) {
+        // Default database
+      } else if (features.sqlite.checked) {
+        commandParts.push(`--with-args "--database sqlite3"`);
+      } else {
+        commandParts.push(`--with-args "--no-ecto"`);
+      }
+    }
+
+    // Split packages into chunks of 2-3 packages each for multiple --install flags
+    if (packages.length > 0) {
+      const chunkSize = 2;
+      for (let i = 0; i < packages.length; i += chunkSize) {
+        const chunk = packages.slice(i, i + chunkSize);
+        commandParts.push(`--install ${chunk.join(",")}`);
+      }
+    }
+
+    // Add additional args
+    if (args.length > 0) {
+      commandParts.push(...args);
+    }
+
+    commandParts.push(`--yes`);
+
+    // Build the igniter.new command with wrapping
+    let currentLine = commandParts[0];
+
+    for (let i = 1; i < commandParts.length; i++) {
+      if ((currentLine + " " + commandParts[i]).length > limit) {
+        lines.push(currentLine + " \\");
+        currentLine = "  " + commandParts[i];
+      } else {
+        currentLine += " " + commandParts[i];
+      }
+    }
+    lines.push(currentLine);
+
+    // Add setup command if database is selected
+    if (features.postgres.checked || features.sqlite.checked) {
+      lines.push("");
+      lines.push(`cd ${appNameSafe} && mix ash.setup`);
+    }
+
+    // Join with proper spacing
+    code = lines.join("\n");
+    firstLine = lines[0];
   }
 
-  limit = Math.max(firstLine.length - 2, 45);
+  // Add additional arguments and commands
+  if (installMode !== "new-project") {
+    // For curl and existing-app modes, use the old formatting logic
+    args.forEach((arg) => {
+      packages.push(arg);
+    });
 
-  args.forEach((arg) => {
-    packages.push(arg);
-  });
+    if (args.length != 0 || packages.length != 0) {
+      packages.push("--yes");
+    }
 
-  if (args.length != 0 || packages.length != 0) {
-    packages.push("--yes");
-  }
+    if (features.postgres.checked || features.sqlite.checked) {
+      packages.push("&& mix ash.setup");
+    }
 
-  if (features.postgres.checked || features.sqlite.checked) {
-    packages.push("&& mix ash.setup");
-  }
-
-  let currentLine = code;
-  code = "";
-  for (let i = 0; i < packages.length; i++) {
-    if ((currentLine + packages[i]).length > limit) {
+    let currentLine = code;
+    code = "";
+    for (let i = 0; i < packages.length; i++) {
+      if ((currentLine + packages[i]).length > limit) {
+        code =
+          code +
+          `
+    ${currentLine.trim()} \\`;
+        currentLine = "";
+      }
+      currentLine += packages[i] + " ";
+    }
+    if (currentLine.trim().length > 0) {
       code =
         code +
         `
-    ${currentLine.trim()} \\`;
-      currentLine = "";
-    }
-    currentLine += packages[i] + " ";
-  }
-  if (currentLine.trim().length > 0) {
-    code =
-      code +
-      `
     ${currentLine.trim()}`;
+    }
   }
 
   const manualSetupBox = document.getElementById("manual-setup-box");
