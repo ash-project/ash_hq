@@ -44,7 +44,7 @@ defmodule AshHq.MixProject do
       {:ash_ai, "~> 0.1"},
       {:tidewave, "~> 0.1", only: [:dev]},
       {:hackney, "~> 1.8"},
-      {:sentry, "~> 10.8"},
+      {:sentry, "~> 11.0"},
       {:timex, "~> 3.0"},
       {:igniter, "~> 0.5", only: [:dev, :test]},
       {:ash, "~> 3.3"},
