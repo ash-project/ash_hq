@@ -1094,7 +1094,7 @@ end`,
     attribute :title, :string,
       allow_nil?: false
     attribute :content, :string
-    attribute :state, :atom,
+    attribute :status, :atom,
       constraints: [
         one_of: [:draft, :published]
       ]
