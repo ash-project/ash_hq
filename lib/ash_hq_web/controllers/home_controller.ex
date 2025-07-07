@@ -105,20 +105,19 @@ defmodule AshHqWeb.HomeController do
 
   defp app_name() do
     Enum.random([
-      "Uber for Ice Cream",
       "Hairbnb",
       "Nietflix",
       "Lemonade Stand",
-      "Toothpaste Subscription",
       "Pet Rock Rental",
-      "Virtual Reality Yoga",
-      "AI Personal Chef",
-      "Drone Pizza Delivery",
-      "Smart Fridge Inventory",
       "Blockchain Coffee",
-      "Self-driving Lawn Mower",
       "Hamazon",
-      "Jose Valim is my Hero"
+      "Jose Valim is my Hero",
+      "phoenix.new is Sentient",
+      "Req is Love",
+      "Req is Life",
+      "Pimento Cheese",
+      "Vacuum Conf",
+      "Elixir Lizards"
     ])
   end
 end
