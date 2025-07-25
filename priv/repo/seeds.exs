@@ -28,12 +28,82 @@ AshHq.Docs.Library.create!(
 
 AshHq.Docs.Library.create!(
   %{
+    name: "ash_ai",
+    display_name: "AshAI",
+    module_prefixes: ["AshAI"],
+    order: 2,
+    description: """
+    AI utilities and integrations for Ash Framework.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "usage_rules",
+    display_name: "Usage Rules",
+    module_prefixes: ["UsageRules"],
+    order: 3,
+    description: """
+    Usage rules and guidelines for Ash Framework.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "ash_ops",
+    display_name: "AshOps",
+    module_prefixes: ["AshOps"],
+    order: 4,
+    description: """
+    Operations and deployment utilities for Ash applications.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "splode",
+    display_name: "Splode",
+    module_prefixes: ["Splode"],
+    order: 5,
+    description: """
+    Error handling and exception utilities.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
     name: "ash_postgres",
     display_name: "AshPostgres",
     order: 10,
     module_prefixes: ["AshPostgres"],
     description: """
     A PostgreSQL data layer for Ash resources, allowing for rich query capabilities and seamless persistence.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "ash_sql",
+    display_name: "AshSQL",
+    order: 15,
+    module_prefixes: ["AshSql"],
+    description: """
+    SQL utilities and shared functionality for SQL-based data layers.
     """
   },
   upsert?: true,
@@ -62,6 +132,20 @@ AshHq.Docs.Library.create!(
     order: 20,
     description: """
     Utilities for using Ash resources with Phoenix Framework, from building forms to running queries in sockets & LiveViews.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "ash_admin",
+    display_name: "AshAdmin",
+    module_prefixes: ["AshAdmin"],
+    order: 25,
+    description: """
+    A rich admin interface for Ash resources with minimal configuration.
     """
   },
   upsert?: true,
@@ -135,6 +219,90 @@ AshHq.Docs.Library.create!(
     order: 62,
     description: """
     An Ash.Resource extension for building finite state machines.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "ash_oban",
+    display_name: "AshOban",
+    module_prefixes: ["AshOban"],
+    order: 63,
+    description: """
+    Integration between Ash and Oban for background job processing.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "ash_rate_limiter",
+    display_name: "AshRateLimiter",
+    module_prefixes: ["AshRateLimiter"],
+    order: 64,
+    description: """
+    Rate limiting capabilities for Ash actions and resources.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "ash_slug",
+    display_name: "AshSlug",
+    module_prefixes: ["AshSlug"],
+    order: 65,
+    description: """
+    URL-friendly slug generation for Ash resources.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "ash_events",
+    display_name: "AshEvents",
+    module_prefixes: ["AshEvents"],
+    order: 66,
+    description: """
+    Event sourcing and event handling capabilities for Ash.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "ash_appsignal",
+    display_name: "AshAppsignal",
+    module_prefixes: ["AshAppsignal"],
+    order: 67,
+    description: """
+    AppSignal integration for monitoring Ash applications.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "opentelemetry_ash",
+    display_name: "OpenTelemetryAsh",
+    module_prefixes: ["OpenTelemetryAsh"],
+    order: 68,
+    description: """
+    OpenTelemetry integration for observability in Ash applications.
     """
   },
   upsert?: true,
@@ -219,6 +387,62 @@ AshHq.Docs.Library.create!(
     order: 91,
     description: """
     Reactor is a dynamic, concurrent, dependency resolving saga orchestrator.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "reactor_req",
+    display_name: "ReactorReq",
+    module_prefixes: ["ReactorReq"],
+    order: 92,
+    description: """
+    HTTP request steps for Reactor workflows.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "reactor_file",
+    display_name: "ReactorFile",
+    module_prefixes: ["ReactorFile"],
+    order: 93,
+    description: """
+    File system operations for Reactor workflows.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "reactor_process",
+    display_name: "ReactorProcess",
+    module_prefixes: ["ReactorProcess"],
+    order: 94,
+    description: """
+    Process management steps for Reactor workflows.
+    """
+  },
+  upsert?: true,
+  upsert_identity: :unique_name
+)
+
+AshHq.Docs.Library.create!(
+  %{
+    name: "iterex",
+    display_name: "Iterex",
+    module_prefixes: ["Iterex"],
+    order: 95,
+    description: """
+    Extended iteration utilities and helpers.
     """
   },
   upsert?: true,
