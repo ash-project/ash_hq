@@ -46,6 +46,10 @@ defmodule AshHqWeb.HomeView do
       Linguavid: %{
         href: "https://linguavid.net",
         src: "/images/linguavid-logo.png"
+      },
+      Communities: %{
+        href: "https://communities.support/",
+        src: "/images/communities-logo.svg"
       }
     ]
     |> insert_placeholders(logos_grid())
