@@ -341,7 +341,7 @@ defmodule AshHqWeb.Pages.Home do
             </a>
           </div>
         </div>
-
+        
     <!-- will unhide this when we have more logos -->
         <div class="hidden flex flex-col w-full dark:bg-none dark:bg-opacity-0 py-6">
           <div class="flex flex-col w-full">
