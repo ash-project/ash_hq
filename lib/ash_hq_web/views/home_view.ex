@@ -15,7 +15,8 @@ defmodule AshHqWeb.HomeView do
   end
 
   @coming_soon [:opentelemetry, :appsignal]
-  @external [:oban, :mishka, :beacon, :live_debugger, :tidewave]
+  # :beacon
+  @external [:oban, :mishka, :live_debugger, :tidewave]
 
   defp logos_grid, do: "grid-cols-3"
 
@@ -136,12 +137,12 @@ defmodule AshHqWeb.HomeView do
         paper_trail: "Paper Trail",
         cloak: "Encryption"
       ],
-      "CMS & Admin": [
-        beacon: "Beacon CMS",
-        admin: "Admin UI"
-      ],
+      # "CMS & Admin": [
+      # beacon: "Beacon CMS",
+      # ],
       "Dev Tools": [
-        live_debugger: "Live Debugger"
+        live_debugger: "Live Debugger",
+        admin: "Admin UI"
       ],
       "UI Components": [
         mishka: "Mishka Chelekom"
