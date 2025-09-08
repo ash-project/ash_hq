@@ -402,19 +402,19 @@ const features = {
     </p>
     `,
   },
-  mishka: {
-    adds: ["mishka_chelekom"],
-    order: 16,
-    links: [{ link: "https://mishka.tools/chelekom", name: "Mishka Chelekom" }],
-    tooltip: `
-    <p class="mb-2">
-    Mishka Chelekom is a library offering various templates for components in Phoenix and Phoenix LiveView.
-    </p>
-    <p>
-    No installation or dependencies needed — everything is configured directly into your project by the CLI generator.
-    </p>
-    `,
-  },
+  // mishka: {
+  //   adds: ["mishka_chelekom"],
+  //   order: 16,
+  //   links: [{ link: "https://mishka.tools/chelekom", name: "Mishka Chelekom" }],
+  //   tooltip: `
+  //   <p class="mb-2">
+  //   Mishka Chelekom is a library offering various templates for components in Phoenix and Phoenix LiveView.
+  //   </p>
+  //   <p>
+  //   No installation or dependencies needed — everything is configured directly into your project by the CLI generator.
+  //   </p>
+  //   `,
+  // },
   paper_trail: {
     adds: ["ash_paper_trail"],
     order: 17,
