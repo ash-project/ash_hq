@@ -76,7 +76,7 @@ defmodule AshHq.MixProject do
       {:libcluster, "~> 3.3"},
       # UI
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.3.1", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.4.0", runtime: Mix.env() == :dev},
       # Syntax Highlighting
       {:makeup, "~> 1.1"},
       {:makeup_elixir, "~> 1.0.0"},
