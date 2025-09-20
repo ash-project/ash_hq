@@ -73,6 +73,17 @@ const quickstarts = {
       "live_debugger",
     ],
   },
+  react: {
+    features: ["phoenix", "postgres", "ash_typescript", "magic_link_auth", "admin"],
+    tooltip: `
+    <p class="mb-2">
+    Phoenix + React with full type safety.
+    </p>
+    <p>
+    Build type-safe React applications with automatic TypeScript generation from your Ash resources. Never write API types manually again!
+    </p>
+    `,
+  },
   graphql: {
     features: ["phoenix", "graphql", "postgres", "admin"],
     tooltip: `
@@ -92,18 +103,6 @@ const quickstarts = {
     </p>
     <p>
     Create a simple yet elegant REST API, complete with an Open API spec!
-    </p>
-    `,
-  },
-  react: {
-    features: ["phoenix", "postgres", "ash_typescript", "magic_link_auth", "admin"],
-    tooltip: `
-    <p class="mb-2">
-    Phoenix + React with full stack type safety.
-    </p>
-    <p>
-    Build type-safe React applications with automatic type generation. 
-    One line of code connects your Ash actions to a fully typed generated RPC client.
     </p>
     `,
   },

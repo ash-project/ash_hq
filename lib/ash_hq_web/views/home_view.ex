@@ -161,9 +161,9 @@ defmodule AshHqWeb.HomeView do
   defp quickstarts do
     [
       live_view: "Phoenix LiveView",
+      react: "React + TypeScript",
       graphql: "GraphQL",
-      json_api: "JSON:API",
-      react: "React + TypeScript"
+      json_api: "JSON:API"
     ]
   end
 end
