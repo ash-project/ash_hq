@@ -106,7 +106,8 @@ defmodule AshHqWeb.HomeView do
       Web: [
         phoenix: "Phoenix",
         graphql: "GraphQL",
-        json_api: "JSON:API"
+        json_api: "JSON:API",
+        ash_typescript: "TypeScript"
       ],
       "Data Layers": [
         postgres: "Postgres",
@@ -161,7 +162,8 @@ defmodule AshHqWeb.HomeView do
     [
       live_view: "Phoenix LiveView",
       graphql: "GraphQL",
-      json_api: "JSON:API"
+      json_api: "JSON:API",
+      react: "React + TypeScript"
     ]
   end
 end

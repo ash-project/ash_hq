@@ -95,6 +95,18 @@ const quickstarts = {
     </p>
     `,
   },
+  react: {
+    features: ["phoenix", "postgres", "ash_typescript", "magic_link_auth", "admin"],
+    tooltip: `
+    <p class="mb-2">
+    Phoenix + React with full stack type safety.
+    </p>
+    <p>
+    Build type-safe React applications with automatic type generation. 
+    One line of code connects your Ash actions to a fully typed generated RPC client.
+    </p>
+    `,
+  },
 };
 
 const features = {
@@ -513,6 +525,20 @@ const features = {
     </p>
     <p>
     Structured outputs, production and development MCP servers, agentic tool calling, a pre-built chat interface and more.
+    </p>
+    `,
+  },
+  ash_typescript: {
+    adds: ["ash_typescript"],
+    order: 19,
+    args: ["--framework react"],
+    links: [{ link: "https://hexdocs.pm/ash_typescript", name: "AshTypescript" }],
+    tooltip: `
+    <p class="mb-2">
+    Automatic TypeScript type generation for Ash resources and actions.
+    </p>
+    <p>
+    Never write API types manually again! Get end-to-end type safety between your Elixir backend and TypeScript frontend with zero-config type generation.
     </p>
     `,
   },
