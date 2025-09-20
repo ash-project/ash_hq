@@ -77,10 +77,10 @@ const quickstarts = {
     features: ["phoenix", "postgres", "ash_typescript", "magic_link_auth", "admin"],
     tooltip: `
     <p class="mb-2">
-    Phoenix + React with full type safety.
+    Build a React frontend with full stack types!
     </p>
     <p>
-    Build type-safe React applications with automatic TypeScript generation from your Ash resources. Never write API types manually again!
+    All of the reliability and elegance of Elixir with a classic React frontend with a fully typed RPC server and client implementation provided out of the box.
     </p>
     `,
   },
