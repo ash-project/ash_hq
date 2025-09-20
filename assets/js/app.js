@@ -862,6 +862,7 @@ function setUrl() {
       commandParts.push(...args);
     }
 
+    commandParts.push(`--setup`);
     commandParts.push(`--yes`);
 
     // Build the igniter.new command with wrapping
@@ -876,12 +877,6 @@ function setUrl() {
       }
     }
     lines.push(currentLine);
-
-    // Add setup command if database is selected
-    if (features.postgres.checked || features.sqlite.checked) {
-      lines.push("");
-      lines.push(`cd ${appNameSafe} && mix ash.setup`);
-    }
 
     // Join with proper spacing
     code = lines.join("\n");
@@ -898,12 +893,10 @@ function setUrl() {
       packages.push(arg);
     });
 
+    packages.push("--setup");
+
     if (args.length != 0 || packages.length != 0) {
       packages.push("--yes");
-    }
-
-    if (features.postgres.checked || features.sqlite.checked) {
-      packages.push("&& mix ash.setup");
     }
 
     let currentLine = code;

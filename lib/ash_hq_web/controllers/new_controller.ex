@@ -91,9 +91,9 @@ defmodule AshHqWeb.NewController do
     cli_args="$@"
 
     <%= if @install do %> echo_heading "Creating new Elixir project '$app_name' with the following packages: <%= @install %>"
-    mix igniter.new "$app_name" --with-args=\"${with_args}\" <%= @with_arg %>--yes-to-deps --yes --install "<%= @install %>" $cli_args <%= if @args do %><%= @args %><% end %>
+    mix igniter.new "$app_name" --with-args=\"${with_args}\" <%= @with_arg %>--yes-to-deps --yes --setup --install "<%= @install %>" $cli_args <%= if @args do %><%= @args %><% end %>
     <% else %> echo_heading "Creating new Elixir project '$app_name'..."
-    mix igniter.new "$app_name" --with-args=\"${with_args}\" <%= @with_arg %>--yes-to-deps --yes $cli_args <%= if @args do %><%= @args %><% end %>
+    mix igniter.new "$app_name" --with-args=\"${with_args}\" <%= @with_arg %>--yes-to-deps --yes --setup $cli_args <%= if @args do %><%= @args %><% end %>
     <% end %>
   }
 
