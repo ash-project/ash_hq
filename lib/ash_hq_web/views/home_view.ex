@@ -144,10 +144,10 @@ defmodule AshHqWeb.HomeView do
       "Dev Tools": [
         live_debugger: "Live Debugger",
         admin: "Admin UI"
+      ],
+      "UI Components": [
+        mishka: "Mishka Chelekom"
       ]
-      # "UI Components": [
-      #   mishka: "Mishka Chelekom"
-      # ]
       # "Observability": [
       #   appsignal: "AppSignal",
       #   opentelemetry: "OpenTelemetry"
