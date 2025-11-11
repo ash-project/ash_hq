@@ -28,7 +28,7 @@ defmodule AshHqWeb.HomeView do
         src: "/images/daylite-logo.svg"
       },
       Heretask: %{href: "https://www.heretask.com/", src: "/images/heretask-logo-light.svg"},
-      GroupFlow: %{href: "https://www.groupflow.app", src: "/images/group-flow-logo.svg"},
+      GroupFlow: %{href: "https://www.groupflow.app/developers?utm_source=ash", src: "/images/groupflow-logo.svg"},
       Zoonect: %{href: "https://www.zoonect.com/en/homepage", src: "/images/zoonect-dark.svg"},
       ScribbleVet: %{
         href: "https://www.scribblevet.com/",
