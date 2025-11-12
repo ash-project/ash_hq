@@ -527,6 +527,19 @@ const features = {
     </p>
     `,
   },
+  usage_rules: {
+    adds: ["usage_rules"],
+    order: 18,
+    links: [{ link: "https://hexdocs.pm/usage_rules", name: "UsageRules" }],
+    tooltip: `
+    <p class="mb-2">
+    Supercharge your AGENTS.md!
+    </p>
+    <p>
+    Automatically collects documentation and best practices from packages that provide usage-rules.md files, helping prevent LLM hallucinations and ensuring consistent usage patterns.
+    </p>
+    `,
+  },
   ash_typescript: {
     adds: ["ash_typescript"],
     order: 19,

@@ -122,7 +122,8 @@ defmodule AshHqWeb.HomeView do
       ],
       AI: [
         tidewave: "Tidewave",
-        ash_ai: "Ash AI"
+        ash_ai: "Ash AI",
+        usage_rules: "Usage Rules"
       ],
       Finance: [
         money: "Money",
