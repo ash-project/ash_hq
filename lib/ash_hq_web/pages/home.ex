@@ -329,8 +329,8 @@ defmodule AshHqWeb.Pages.Home do
             <a class="hidden dark:block" href="https://www.heretask.com/">
               <img class="h-8" src="/images/heretask-logo-dark.svg" />
             </a>
-            <a class="block" href="https://www.groupflow.app">
-              <img class="h-8" src="/images/group-flow-logo.svg" />
+            <a class="block" href="https://www.groupflow.app/developers?utm_source=ash">
+              <img class="h-8" src="/images/groupflow-logo.svg" />
             </a>
             <div class="hidden md:block"></div>
             <a class="block dark:hidden" href="https://www.zoonect.com/en/homepage">
@@ -341,7 +341,7 @@ defmodule AshHqWeb.Pages.Home do
             </a>
           </div>
         </div>
-        
+
     <!-- will unhide this when we have more logos -->
         <div class="hidden flex flex-col w-full dark:bg-none dark:bg-opacity-0 py-6">
           <div class="flex flex-col w-full">
