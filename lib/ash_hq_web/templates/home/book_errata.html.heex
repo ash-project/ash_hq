@@ -7,13 +7,24 @@
 
   <div class="absolute bottom-0 left-0 right-0 h-[40vh] bg-gradient-to-t to-transparent perspective-grid">
   </div>
-  <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 mt-36">
-    <h1 class="text-3xl md:text-4xl px-4 md:px-12 pb-4 mb-12 font-bold mx-auto text-center border-b border-primary-dark-500">
+  <div class="relative w-4/5 z-10 px-4 sm:px-6 lg:px-8 mt-36">
+    <h1 class="text-3xl md:text-4xl px-4 md:px-12 pb-4 mb-4 font-bold mx-auto text-center border-b border-primary-dark-500">
       <.link href="https://pragprog.com/titles/ldash/ash-framework/">Ash Framework</.link>
       Book Errata
     </h1>
 
-    <p>If you're reading this, there are no reported errors in the book! Yay!</p>
+    <p class="text-sm text-primary-dark-200 text-center italic mb-8">Last updated: 10 January 2026</p>
+
+    <ul class="list-disc w-4/5 m-auto *:pb-4">
+      <li>On <strong class="text-primary-dark-300">page 64</strong> under the subheading "Searching from the Catalog", the reference to the <code>Tunez.Artists.IndexLive</code> should actually be <code>TunezWeb.Artists.IndexLive</code></li>
+      <li>On <strong class="text-primary-dark-300">page 109</strong> under the heading "Setting Up Password Authentication", the generator now adds <span class="italic">three</span> new attributes to the <code>Tunez.Accounts.User</code> resource, including a new <code>confirmed_at</code> attribute</li>
+      <li>On <strong class="text-primary-dark-300">page 113</strong>, you no longer need to manually add the Tailwind configuration to <code>assets/css/app.css</code> - Igniter will do this for you automatically.</li>
+      <li>On <strong class="text-primary-dark-300">page 126</strong>, the default AshAuthentication installer will no longer add a <code>policy always()</code> block to the <code>Tunez.Accounts.User</code> resource. It no longer needs to be removed before adding a new policy for the register/sign-in actions (<strong class="text-primary-dark-300">page 127</strong>).</li>
+      <li>On <strong class="text-primary-dark-300">page 130-131</strong>, you will no longer get an AshGraphql compilation error due to metadata on the <code>sign_in_with_password</code> action - the metadata will be dropped instead, similar to AshJsonApi.</li>
+      <li>On <strong class="text-primary-dark-300">page 139-140</strong>, the output of the policy breakdown is slightly different - the <code>authorize if: actor.role == :admin</code> line now has a ↓ instead of a 🔎, and the SAT solver statement is no longer printed.</li>
+      <li>On pages <strong class="text-primary-dark-300">142-144</strong> and <strong class="text-primary-dark-300">148-149</strong>, references to modules to update should use <code>TunezWeb</code>, not <code>Tunez</code>.</li>
+      <li>On <strong class="text-primary-dark-300">page 152</strong>, you no longer need to add an extra policy to make <code>relate_actor</code> work (but the policy still makes sense anyway!)</li>
+    </ul>
 
     <div class="mt-16 text-center">
       <a
