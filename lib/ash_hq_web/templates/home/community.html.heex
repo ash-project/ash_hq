@@ -232,6 +232,39 @@
           </div>
         </div>
 
+        <div class="flex flex-col text-center items-center mt-8">
+          <p class="text-2xl sm:text-4xl text-base-dark-900 font-extrabold tracking-tight dark:text-base-light-50 mb-8">
+            Core Team
+          </p>
+
+          <div class="grid mx-auto gap-6 grid-cols-3 sm:grid-cols-4 md:grid-cols-8 mb-16">
+            <%= for {name, github} <- [
+              {"Zach Daniel", "zachdaniel"},
+              {"James Harton", "jimsynz"},
+              {"Barnabas Jovanovics", "barnabasJ"},
+              {"Josh Price", "joshprice"},
+              {"Rebecca Le", "sevenseacat"},
+              {"Robert Graff", "rgraff"},
+              {"Torkild Gundersen Kjevik", "Torkan"},
+              {"Dmitry Maganov", "vonagam"}
+            ] do %>
+              <a
+                href={"https://github.com/#{github}"}
+                class="flex flex-col items-center gap-2 group"
+              >
+                <img
+                  class="h-16 w-16 rounded-full ring-2 ring-base-light-300 dark:ring-base-dark-600 group-hover:ring-primary-light-500 dark:group-hover:ring-primary-dark-400 transition-all"
+                  src={"https://avatars.githubusercontent.com/#{github}"}
+                  alt={name}
+                />
+                <span class="text-sm text-base-dark-700 dark:text-base-light-300 group-hover:text-primary-light-500 dark:group-hover:text-primary-dark-400 transition-colors">
+                  {name}
+                </span>
+              </a>
+            <% end %>
+          </div>
+        </div>
+
         <div class="flex flex-col text-center items-center">
           <a
             href="https://hexdocs.pm/ash/contributing-to-ash.html"
