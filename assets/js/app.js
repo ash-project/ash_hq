@@ -554,6 +554,20 @@ const features = {
     </p>
     `,
   },
+  cinder: {
+    adds: ["cinder"],
+    order: 20,
+    requires: ["phoenix"],
+    links: [{ link: "https://hexdocs.pm/cinder", name: "Cinder" }],
+    tooltip: `
+    <p class="mb-2">
+    A powerful data collection component for Ash resources in Phoenix LiveView.
+    </p>
+    <p>
+    Transform complex data table requirements into simple, declarative markup.
+    </p>
+    `,
+  },
 };
 
 let projectMode = "new-project"; // Default mode

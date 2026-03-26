@@ -147,7 +147,8 @@ defmodule AshHqWeb.HomeView do
         admin: "Admin UI"
       ],
       "UI Components": [
-        mishka: "Mishka Chelekom"
+        mishka: "Mishka Chelekom",
+        cinder: "Cinder"
       ]
       # "Observability": [
       #   appsignal: "AppSignal",
