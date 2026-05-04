@@ -51,6 +51,10 @@ defmodule AshHqWeb.HomeView do
       Communities: %{
         href: "https://communities.support/",
         src: "/images/communities-logo.svg"
+      },
+      Intcube: %{
+        href: "https://www.intcube.io/en",
+        src: "/images/intcube.svg"
       }
     ]
     |> insert_placeholders(logos_grid())
