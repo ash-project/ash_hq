@@ -22,6 +22,10 @@ defmodule AshHqWeb.HomeView do
 
   defp logos do
     [
+      Remedy: %{
+        href: "https://remedymeds.com/",
+        src: "/images/remedy.svg"
+      },
       Alembic: %{href: "https://www.alembic.com.au", src: "images/alembic.svg"},
       Daylite: %{
         href: "https://www.daylite.app",
@@ -55,6 +59,10 @@ defmodule AshHqWeb.HomeView do
       Intcube: %{
         href: "https://www.intcube.io/en",
         src: "/images/intcube.svg"
+      },
+      SalesHood: %{
+        href: "https://saleshood.com/",
+        src: "/images/saleshood.png"
       }
     ]
     |> insert_placeholders(logos_grid())

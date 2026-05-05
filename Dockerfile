@@ -2,20 +2,12 @@ FROM hexpm/elixir:1.18.3-erlang-27.3.4-ubuntu-noble-20250415.1
 
 # install build dependencies
 USER root
-RUN apt-get update
-RUN apt-get install -y wget
-RUN apt-get install -y gnupg
-RUN apt-get update
-RUN apt-get install -y git
-RUN apt-get install -y gcc
-RUN apt-get install -y g++
-RUN apt-get install -y make
-RUN apt-get install -y curl
-RUN apt-get install -y build-essential
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get install -y apt-transport-https
-RUN apt-get install -y ca-certificates
-RUN apt-get install -y fuse3 libfuse3-dev libglib2.0-dev
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      wget gnupg git gcc g++ make curl build-essential \
+      apt-transport-https ca-certificates \
+      fuse3 libfuse3-dev libglib2.0-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=flyio/litefs:0.5 /usr/local/bin/litefs /usr/local/bin/litefs
 
