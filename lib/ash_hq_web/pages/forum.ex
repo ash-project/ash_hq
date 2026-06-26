@@ -121,7 +121,7 @@ defmodule AshHqWeb.Pages.Forum do
       messages_query =
         AshHq.Discord.Message
         |> Ash.Query.sort(timestamp: :asc)
-        |> Ash.Query.deselect(:content)
+        |> Ash.Query.deselect([:content])
         |> Ash.Query.load(:attachments)
 
       assign(

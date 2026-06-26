@@ -1,4 +1,5 @@
 defmodule Tails do
+  @moduledoc false
   def classes(string) when is_binary(string) do
     string
   end

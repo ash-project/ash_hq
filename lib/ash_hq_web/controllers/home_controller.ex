@@ -103,7 +103,7 @@ defmodule AshHqWeb.HomeController do
     |> String.replace(~r/^_/, "")
   end
 
-  defp app_name() do
+  defp app_name do
     Enum.random([
       "Hairbnb",
       "Nietflix",

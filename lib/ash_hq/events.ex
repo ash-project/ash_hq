@@ -1,4 +1,5 @@
 defmodule AshHq.Events do
+  @moduledoc false
   @events [
             %{
               cta: "Tickets On Sale Now!",
