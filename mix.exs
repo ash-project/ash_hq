@@ -57,7 +57,7 @@ defmodule AshHq.MixProject do
       {:ash_blog, github: "ash-project/ash_blog"},
       {:ash_csv, "~> 0.9"},
       {:ash_oban, "~> 0.2"},
-      {:earmark, "== 1.5.0-pre1"},
+      {:mdex, "~> 0.13"},
       {:picosat_elixir, "~> 0.2.3"},
       # Jobs
       {:oban, "~> 2.16"},

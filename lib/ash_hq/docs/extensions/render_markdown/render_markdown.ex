@@ -29,6 +29,17 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
     sections: [@render_markdown],
     transformers: [AshHq.Docs.Extensions.RenderMarkdown.Transformers.AddRenderMarkdownStructure]
 
+  @markdown_options [
+    extension: [
+      table: true,
+      strikethrough: true,
+      tasklist: true,
+      autolink: true
+    ],
+    render: [unsafe: true],
+    syntax_highlight: nil
+  ]
+
   def render_attributes(resource) do
     Spark.Dsl.Extension.get_opt(resource, [:render_markdown], :render_attributes, [])
   end
@@ -41,10 +52,17 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
     Spark.Dsl.Extension.get_opt(resource, [:render_markdown], :table_of_contents?, [])
   end
 
-  def as_html(text, libraries, current_module, add_ids?, add_table_of_contents?)
+  def as_html(text, libraries, current_library, current_module, add_ids?, add_table_of_contents?)
       when is_list(text) do
     Enum.reduce_while(text, {:ok, [], []}, fn text, {:ok, list, errors} ->
-      case as_html(text, libraries, current_module, add_ids?, add_table_of_contents?) do
+      case as_html(
+             text,
+             libraries,
+             current_library,
+             current_module,
+             add_ids?,
+             add_table_of_contents?
+           ) do
         {:ok, text, new_errors} ->
           {:cont, {:ok, [text | list], errors ++ new_errors}}
 
@@ -66,10 +84,8 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
   end
 
   def as_html(text, libraries, current_library, current_module, add_ids?, add_table_of_contents?) do
-    text
-    |> Earmark.as_html()
-    |> case do
-      {:ok, html_doc, errors} ->
+    case MDEx.to_html(text, @markdown_options) do
+      {:ok, html_doc} ->
         processed_html =
           AshHq.Docs.Extensions.RenderMarkdown.PostProcessor.run(
             html_doc,
@@ -80,10 +96,10 @@ defmodule AshHq.Docs.Extensions.RenderMarkdown do
             add_table_of_contents?
           )
 
-        {:ok, processed_html, errors}
+        {:ok, processed_html, []}
 
-      {:error, html_doc, errors} ->
-        {:error, html_doc, errors}
+      {:error, error} ->
+        {:error, text, [error]}
     end
   end
 end
