@@ -32,18 +32,18 @@ jobs:
         ports: ["5432:5432"]
     steps:
       - run: sudo apt-get install --yes erlang-dev
-      - uses: actions/checkout@v2
-      - uses: erlef/setup-elixir@v1
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
         with:
           otp-version: ${{matrix.otp}}
           elixir-version: ${{matrix.elixir}}
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         id: cache-deps
         with:
           path: deps
           key: otp-${{matrix.otp}}-elixir-${{matrix.elixir}}-deps-2-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
           restore-keys: otp-${{matrix.otp}}-elixir-${{matrix.elixir}}-deps-2
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         id: cache-build
         with:
           path: _build
@@ -64,6 +64,6 @@ jobs:
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: flyctl deploy --remote-only
