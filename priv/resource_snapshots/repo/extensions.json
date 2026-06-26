@@ -1,9 +1,11 @@
 {
+  "ash_functions_version": 5,
   "installed": [
     "pg_trgm",
     "uuid-ossp",
     "citext",
     "pg_stat_statements",
-    "sslinfo"
+    "sslinfo",
+    "ash-functions"
   ]
 }
