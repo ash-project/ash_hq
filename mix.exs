@@ -40,11 +40,11 @@ defmodule AshHq.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:usage_rules, "~> 0.1", only: [:dev]},
+      {:usage_rules, "~> 1.2", only: [:dev]},
       {:ash_ai, "~> 0.1"},
       {:tidewave, "~> 0.1", only: [:dev]},
       {:hackney, "~> 1.8"},
-      {:sentry, "~> 11.0"},
+      {:sentry, "~> 13.5"},
       {:timex, "~> 3.0"},
       {:igniter, "~> 0.5", only: [:dev, :test]},
       {:ash, "~> 3.3"},
@@ -76,7 +76,7 @@ defmodule AshHq.MixProject do
       {:libcluster, "~> 3.3"},
       # UI
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.3.1", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.5.1", runtime: Mix.env() == :dev},
       # Syntax Highlighting
       {:makeup, "~> 1.1"},
       {:makeup_elixir, "~> 1.0.0"},
@@ -87,7 +87,7 @@ defmodule AshHq.MixProject do
       {:makeup_sql, "~> 0.1.0"},
       # Emails
       {:swoosh, "~> 1.3"},
-      {:premailex, "~> 0.3.0"},
+      {:premailex, "~> 1.0.0"},
       # Authentication
       {:bcrypt_elixir, "~> 3.0"},
       # Encryption
