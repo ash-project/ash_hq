@@ -129,6 +129,22 @@ defmodule AshHq.Events do
               date: ~D[2025-09-10],
               date_in_english: "September 10th, 2025",
               href: "https://goatmire.com"
+            },
+            %{
+              title: "Talks and Workshops @ Goatmire Elixir and AshConf",
+              description: """
+              <p class="font-bold">
+                Workshops: [Ash Demystified] and [Achieving Balance in the Workshop]<br />
+                Talks: [Time Travel for Normies], [Beam Bots: Robotics on the BEAM], and [Video Game Archaeology with Elixir]<br />
+                And a whole day of talks for AshConf!
+              </p>
+              <p>
+                Hang out with Zach, Rebecca, Barnabas, James and Josh from the Ash core team in Varberg, Sweden
+              </p>
+              """,
+              date: ~D[2026-09-28],
+              date_in_english: "September 28th to October 3rd, 2026",
+              href: "https://goatmire.com"
             }
           ]
           |> Enum.sort_by(& &1.date, Date)
