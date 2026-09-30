@@ -145,6 +145,35 @@ defmodule AshHq.Events do
               date: ~D[2026-09-28],
               date_in_english: "September 28th to October 3rd, 2026",
               href: "https://goatmire.com"
+            },
+            %{
+              title: "Talk @ Goatmire Elixir",
+              description: """
+              <p class="font-bold">
+                Time Travel for Normies
+              </p>
+              <p>
+                Catch Zach's talk at Goatmire Elixir in Varberg, Sweden!
+              </p>
+              """,
+              date: ~D[2026-10-02],
+              date_in_english: "October 2nd, 2026",
+              href: "https://goatmire.com/schedule"
+            },
+            %{
+              cta: "Register Now!",
+              title: "AshConf 2026",
+              description: """
+              <p class="font-bold">
+                A full day of Ash talks
+              </p>
+              <p>
+                A one day conference in Varberg, Sweden, featuring Ash core team members, key contributors and expert users. Free for EEF members, or with a donation to the Ash Project.
+              </p>
+              """,
+              date: ~D[2026-10-03],
+              date_in_english: "October 3rd, 2026",
+              href: "https://luma.com/wz4z0iz6"
             }
           ]
           |> Enum.sort_by(& &1.date, Date)
