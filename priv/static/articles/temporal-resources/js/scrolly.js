@@ -80,13 +80,12 @@ export function scrolly(section, view, states) {
     })
   }
 
-  // Steps snap to just below the visual when it's pinned above them. One that fits in the
-  // rest of the screen always does. One that doesn't only does while it's being scrolled down
-  // to, and stops once it's in place, so that it settles there but isn't pulled back to its
-  // top while you read the rest of it, or while you scroll back up past it. (Chrome picks
-  // where a mouse wheel scroll snaps to as it starts, so this goes by where the step is, and
-  // not just by which way you're scrolling.)
-  let fits = []
+  // Steps snap to just below the visual when it's pinned above them, but only one that you've
+  // stopped just short of while scrolling down. So the next step settles into place, but you
+  // aren't pulled onto it while still reading the one before, back to the top of one you're
+  // reading, or back down while scrolling up. (Chrome picks where a mouse wheel scroll snaps to
+  // as it starts, so this goes by where each step is, and not just by which way you're
+  // scrolling.)
   let lastY = window.scrollY
   let down = true
 
@@ -94,18 +93,17 @@ export function scrolly(section, view, states) {
     if (window.scrollY !== lastY) down = window.scrollY > lastY
     lastY = window.scrollY
     const snapLine = visual.getBoundingClientRect().bottom + 12
+    const range = (window.innerHeight - snapLine) * 0.4
 
-    steps.forEach((step, i) => {
-      const arriving = down && step.getBoundingClientRect().top > snapLine + 2
-      step.classList.toggle("is-snappable", fits[i] || arriving)
+    steps.forEach((step) => {
+      const short = step.getBoundingClientRect().top - snapLine
+      step.classList.toggle("is-snappable", down && short > 2 && short < range)
     })
   }
 
-  // So it's kept up to date on how tall the visual is, and which steps fit below it.
+  // It's kept up to date on how tall the visual is, which is how far below it steps settle.
   const measure = () => {
-    const below = window.innerHeight - visual.offsetHeight - 12
     section.style.setProperty("--visual-height", `${visual.offsetHeight}px`)
-    fits = steps.map((step) => step.offsetHeight <= below)
     snapping()
   }
 
