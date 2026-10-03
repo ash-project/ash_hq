@@ -31,11 +31,14 @@ defmodule AshHqWeb.Pages.Blog do
                     {@post.author}
                   </div>
                   <div>
-                    {@post.published_at |> DateTime.to_date()}
+                    <%!-- Staged posts can be previewed before they're published --%>
+                    {if @post.published_at,
+                      do: DateTime.to_date(@post.published_at),
+                      else: "Draft"}
                   </div>
                 </div>
               </div>
-              <div class="prose dark:prose-invert max-w-none mt-6">
+              <div class="prose dark:prose-invert max-w-none mt-6 prose-code:before:content-none prose-code:after:content-none">
                 {Phoenix.HTML.raw(@post.body_html)}
               </div>
             </div>

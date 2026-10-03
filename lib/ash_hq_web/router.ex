@@ -29,6 +29,9 @@ defmodule AshHqWeb.Router do
     get("/:name", AshHqWeb.NewController, :new_no_ash)
   end
 
+  # Blog posts that are articles of their own, ahead of the blog's own pages
+  get("/blog/introducing-temporal-resources", AshHqWeb.StaticPageController, :article)
+
   scope "/", AshHqWeb do
     pipe_through(:browser)
     get "/", HomeController, :home
@@ -57,6 +60,7 @@ defmodule AshHqWeb.Router do
   end
 
   get("/rss", AshHqWeb.RssController, :rss)
+  get("/talks/:talk", AshHqWeb.StaticPageController, :talk)
 
   ## Api routes
   scope "/" do

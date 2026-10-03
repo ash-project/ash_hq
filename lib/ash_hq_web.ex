@@ -131,7 +131,7 @@ defmodule AshHqWeb do
   end
 
   def static_paths do
-    ~w(assets fonts images favicon.ico robots.txt)
+    ~w(articles assets fonts images talks favicon.ico robots.txt)
   end
 
   @doc """

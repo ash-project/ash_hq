@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Introducing Temporal Resources · Ash Framework</title>
+    <meta name="description" content="Read and write your data at any point in time, past, present or future, with a single option." />
+    <meta property="og:title" content="Introducing Temporal Resources" />
+    <meta property="og:description" content="Read and write your data at any point in time, past, present or future, with a single option." />
+    <meta property="og:type" content="article" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/articles/temporal-resources/article.css" />
+    <script type="module" src="/articles/temporal-resources/js/main.js"></script>
+  </head>
+  <body>
+    <nav class="site-nav">
+      <a href="/" class="site-home"><img src="/images/ash-logo-cropped.svg" alt="" />Ash Framework</a>
+      <a href="https://ashchronicle.substack.com/">Ash Chronicle</a>
+    </nav>
+
+    <header class="hero">
+      <div id="hero-dial" class="hero-dial" aria-hidden="true"></div>
+      <div class="hero-text">
+        <p class="eyebrow">Introducing</p>
+        <h1>Temporal Resources</h1>
+        <p class="byline">Zach Daniel · October 2026</p>
+      </div>
+    </header>
+
+    <main>
+      <section id="reveal" class="reveal" aria-label="Every action takes actor, tenant, and now as_of">
+        <div class="reveal-stage">
+          <div class="reveal-card">
+            <div class="reveal-line">
+              <pre data-lang="elixir"><code>Canvas.paint_pixel!(x, y, color,</code></pre>
+            </div>
+            <div class="reveal-line" data-option="1">
+              <pre data-lang="elixir"><code>  actor: actor,</code></pre>
+              <span class="reveal-label">Authorization</span>
+            </div>
+            <div class="reveal-line" data-option="2">
+              <pre data-lang="elixir"><code>  tenant: tenant,</code></pre>
+              <span class="reveal-label">Multitenancy</span>
+            </div>
+            <div class="reveal-line is-new" data-option="3">
+              <pre data-lang="elixir"><code>  as_of: ~U[2026-09-30 09:25:00Z]</code></pre>
+              <span class="reveal-label">Time travel</span>
+            </div>
+            <div class="reveal-line">
+              <pre data-lang="elixir"><code>)</code></pre>
+            </div>
+          </div>
+          <p class="reveal-hint" aria-hidden="true">Scroll</p>
+        </div>
+      </section>
+
+      <article class="article">
+        <section class="prose">
+          <p class="lede">
+            Your standard application generally only tracks what is true <em>right now</em>. Updates overwrite
+            previous data, and asking questions about the past requires either introducing a mechanism to track
+            the previous state of your application (versions), or reshaping your entire mental model of
+            application development (event-driven/event-sourcing). Temporal resources are the answer.
+          </p>
+          <p>
+            Temporal resources are a new, experimental feature in <a href="/">Ash</a> that make dealing with changes over time
+            boring. You can read it as of any moment, write to it as of any moment (yes, including the future), without changing
+            how you use or write your application (almost) at all. Filters, relationships, aggregates, calculations.
+            All of it from one option, <code>as_of</code>.
+          </p>
+          <p>
+            I announced the new feature at <a href="https://goatmire.com">Goatmire Elixir</a> in a talk called
+            <em>Time Travel for Normies</em>, and I've rebuilt it here for the web. These pixel examples
+            are based on a live multi-player game that had the audience split into two teams, competing for
+            territory while traveling and using powerups that travelled through time. You had to be there for
+            that one.
+          </p>
+        </section>
+
+        <section class="prose">
+          <h2>How we keep history today</h2>
+          <p>There's no shortage of ways to keep history around. Lets compare what I would consider the "main four":</p>
+          <ul>
+            <li>
+              <strong>A paper trail</strong> copies each version of a record into a versions table as it changes.
+              <a href="https://hexdocs.pm/ash_paper_trail">AshPaperTrail</a> does this for you.
+            </li>
+            <li>
+              <strong>An event-driven design</strong> records what happened as events, alongside your regular
+              tables, typically driving other behavior in your application via events.
+            </li>
+            <li>
+              <strong>Event sourcing</strong> makes the events the source of truth, and works out the current state
+              from them.
+            </li>
+            <li>
+              <strong><a href="https://hexdocs.pm/ash_events">AshEvents</a></strong> sits somewhere in the middle:
+              every action is recorded as an event you can replay, while your tables stay the source of truth.
+            </li>
+          </ul>
+          <p>
+            They can all tell you what happened. Fewer make it easy to see what the world looked like at a given moment, 
+            none of them let you ask about the past with an ordinary query, and none of them let you make a change that only takes effect later.
+          </p>
+        </section>
+
+        <figure class="wide">
+          <div class="table-scroll">
+            <table id="comparison" class="comparison">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Paper trail</th>
+                  <th>Event driven</th>
+                  <th>Event sourcing</th>
+                  <th>AshEvents</th>
+                  <th class="is-temporal">Temporal resources</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Know what happened, and who did it</th>
+                  <td data-label="Paper trail" class="yes">✓</td><td data-label="Event driven" class="partly">◐</td><td data-label="Event sourcing" class="yes">✓</td><td data-label="AshEvents" class="yes">✓</td>
+                  <td data-label="Temporal resources" class="is-temporal yes" style="--row: 0">✓</td>
+                </tr>
+                <tr>
+                  <th>See the state of the world at a past time</th>
+                  <td data-label="Paper trail" class="partly">◐</td><td data-label="Event driven" class="no">✕</td><td data-label="Event sourcing" class="partly">◐</td><td data-label="AshEvents" class="partly">◐</td>
+                  <td data-label="Temporal resources" class="is-temporal yes" style="--row: 1">✓</td>
+                </tr>
+                <tr>
+                  <th>Ask about the past in simple queries</th>
+                  <td data-label="Paper trail" class="no">✕</td><td data-label="Event driven" class="no">✕</td><td data-label="Event sourcing" class="no">✕</td><td data-label="AshEvents" class="no">✕</td>
+                  <td data-label="Temporal resources" class="is-temporal yes" style="--row: 2">✓</td>
+                </tr>
+                <tr>
+                  <th>Make changes in the future</th>
+                  <td data-label="Paper trail" class="no">✕</td><td data-label="Event driven" class="no">✕</td><td data-label="Event sourcing" class="no">✕</td><td data-label="AshEvents" class="no">✕</td>
+                  <td data-label="Temporal resources" class="is-temporal yes" style="--row: 3">✓</td>
+                </tr>
+                <tr>
+                  <th>Current state lives in tables</th>
+                  <td data-label="Paper trail" class="yes">✓</td><td data-label="Event driven" class="yes">✓</td><td data-label="Event sourcing" class="partly">◐</td><td data-label="AshEvents" class="yes">✓</td>
+                  <td data-label="Temporal resources" class="is-temporal yes" style="--row: 4">✓</td>
+                </tr>
+                <tr>
+                  <th>Your app code stays “ordinary”</th>
+                  <td data-label="Paper trail" class="yes">✓</td><td data-label="Event driven" class="partly">◐</td><td data-label="Event sourcing" class="no">✕</td><td data-label="AshEvents" class="yes">✓</td>
+                  <td data-label="Temporal resources" class="is-temporal yes" style="--row: 5">✓</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <figcaption>✓ yes · ◐ sort of · ✕ no.</figcaption>
+        </figure>
+
+        <section class="prose">
+          <h2>Four lines of code</h2>
+          <p>To make a resource temporal, give it a <code>temporal</code> section:</p>
+        </section>
+
+        <figure class="code-card">
+          <figcaption>pixel.ex</figcaption>
+          <pre data-lang="elixir" data-highlight="5-8"><code>
+use Ash.Resource,
+  domain: TemporalDemo.Canvas,
+  data_layer: AshPostgres.DataLayer
+
+temporal do
+  strategy :context
+  attribute :valid_at
+end
+
+attributes do
+  uuid_primary_key :id
+  attribute :x, :integer, allow_nil?: false
+  attribute :y, :integer, allow_nil?: false
+  attribute :color, Color, default: :white
+end
+</code></pre>
+        </figure>
+
+        <section class="prose">
+          <p>
+            That's it. Every row now has a <em>period</em>, <code>valid_at</code>: the span of time
+            it's valid for, from one instant up to (but not including) another, or forever. Each record
+            is now split up across multiple rows, each row showing what the value of each column was for a
+            given span of time. The migration generator sets the table up so no two of them can overlap. 
+            You never have to set <code>valid_at</code> yourself.
+          </p>
+          <p>
+            To read or write it at any moment other than now, pass <code>as_of</code>. Leave it out and you're reading
+            and writing now, so code that doesn't care about time doesn't change at all.
+          </p>
+          <h2>Lets take a tour</h2>
+          <p>
+            Here is a small canvas that three people, Alice, Bob and Carol, have been painting
+            for the last hour. It's 09:45. Every paint is a dot on the timeline, and the white line shows
+            the time that we are reading at (the `as_of`).
+          </p>
+        </section>
+
+        <section id="tour" class="scrolly">
+          <div class="scrolly-visual">
+            <div class="visual-frame">
+              <div id="tour-visual"></div>
+              <button type="button" class="replay" data-replay>↻ Replay</button>
+            </div>
+          </div>
+
+          <div class="scrolly-steps">
+            <div class="step" data-states="start written">
+              <h3>Writing</h3>
+              <p>
+                A write without <code>as_of</code> happens now. Alice paints (4, 1) blue, and it lands on the
+                timeline at 09:45 like any other update. Nothing new.
+              </p>
+              <pre data-lang="elixir"><code>Canvas.paint_pixel!(4, 1, :blue, actor: alice)</code></pre>
+              <div class="returns">
+                <pre data-lang="elixir"><code>
+%Pixel{x: 4, y: 1, color: :blue, ...}</code></pre>
+              </div>
+            </div>
+
+            <div class="step" data-states="written past">
+              <h3>Writing the past</h3>
+              <p>
+                Carol remembers she painted (0, 4) yellow at 09:12, but never recorded it. Pass
+                <code>as_of</code>, and the paint lands at 09:12.
+              </p>
+              <pre data-lang="elixir"><code>
+Canvas.paint_pixel!(0, 4, :yellow,
+  actor: carol,
+  as_of: ~U[2026-09-30 09:12:00Z]
+)</code></pre>
+              <div class="returns">
+                <pre data-lang="elixir"><code>
+%Pixel{x: 0, y: 4, color: :yellow, ...}</code></pre>
+              </div>
+              <p>
+                We just rewrote history. Every moment from 09:12 onward now has a yellow pixel at (0, 4), including
+                now, so it shows up on the canvas straight away.
+              </p>
+            </div>
+
+            <div class="step" data-states="past future">
+              <h3>Writing the future</h3>
+              <p>
+                Bob wants (4, 1) to turn pink, but not until 09:50. We don't see it now, because it happens in the future 😎.
+              </p>
+              <pre data-lang="elixir"><code>
+Canvas.paint_pixel!(4, 1, :pink,
+  actor: bob,
+  as_of: ~U[2026-09-30 09:50:00Z]
+)</code></pre>
+              <div class="returns">
+                <pre data-lang="elixir"><code>
+%Pixel{x: 4, y: 1, color: :pink, ...}</code></pre>
+              </div>
+              <p>
+                The canvas doesn't change, and nothing has to run at 09:50 to make it happen. When 09:50 comes
+                around, reads simply start seeing pink.
+              </p>
+            </div>
+
+            <div class="step" data-states="future read">
+              <h3>Reading the past</h3>
+              <p>
+                Reads take <code>as_of</code> too. Ask for the canvas as of 09:25, and you get exactly what it looked
+                like then: Carol's yellow pixel from 09:12 is there, and nothing painted after 09:25 is.
+              </p>
+              <pre data-lang="elixir"><code>Canvas.canvas!(as_of: ~U[2026-09-30 09:25:00Z])</code></pre>
+              <div class="returns">
+                <pre data-lang="elixir"><code>
+[
+  %Pixel{x: 1, y: 1, color: :blue, ...},
+  %Pixel{x: 2, y: 1, color: :blue, ...},
+  %Pixel{x: 1, y: 2, color: :yellow, ...},
+  %Pixel{x: 2, y: 2, color: :blue, ...},
+  %Pixel{x: 0, y: 4, color: :yellow, ...},
+  # ...and the 31 still white
+]</code></pre>
+              </div>
+            </div>
+
+            <div class="step" data-states="read count">
+              <h3>Any query</h3>
+              <p>
+                It isn't just "get by id". Any query can run as of a moment, with filters, sorts and counts, so
+                asking how many pixels were blue at 09:25 is one line.
+              </p>
+              <pre data-lang="elixir"><code>
+Pixel
+|> Ash.Query.filter(color == :blue)
+|> Ash.count!(as_of: ~U[2026-09-30 09:25:00Z])</code></pre>
+              <div class="returns">
+                <pre data-lang="elixir"><code>
+3</code></pre>
+              </div>
+            </div>
+
+            <div class="step" data-states="read painters">
+              <h3>Relationships</h3>
+              <p>
+                <code>as_of</code> is passed down to all load statements, the way <code>tenant</code> is, so
+                related records come from the same moment. Load who painted each pixel, and you get who had painted
+                it as of 09:25.
+              </p>
+              <pre data-lang="elixir"><code>
+Canvas.canvas!(
+  as_of: ~U[2026-09-30 09:25:00Z],
+  load: [:painted_by]
+)</code></pre>
+              <div class="returns">
+                <pre data-lang="elixir"><code>
+[
+  %Pixel{x: 1, y: 1, painted_by: %User{name: "Alice"}, ...},
+  %Pixel{x: 2, y: 1, painted_by: %User{name: "Bob"}, ...},
+  %Pixel{x: 1, y: 2, painted_by: %User{name: "Carol"}, ...},
+  ...
+]</code></pre>
+              </div>
+            </div>
+
+            <div class="step" data-states="read leadersPast leadersNow">
+              <h3>Aggregates</h3>
+              <p>
+                Aggregates follow this pattern too. Count the pixels for each painter, and the
+                leaderboard as of 09:25 shows it. Leave out <code>as_of</code>, and it's the leaderboard now.
+              </p>
+              <pre data-lang="elixir"><code>
+count :pixels_owned, :pixels
+
+Accounts.leaderboard!(as_of: ~U[2026-09-30 09:25:00Z])</code></pre>
+              <div class="returns">
+                <pre data-lang="elixir"><code>
+[
+  %User{name: "Alice", pixels_owned: 2, ...},
+  %User{name: "Bob", pixels_owned: 1, ...},
+  %User{name: "Carol", pixels_owned: 2, ...}
+]</code></pre>
+              </div>
+            </div>
+
+            <div class="step" data-states="leadersNow activePast activeNow">
+              <h3>Calculations</h3>
+              <p>
+                Calculations run as of the moment, and inside them, <code>now()</code> and <code>ago()</code> mean
+                the moment you asked about rather than the wall clock. Someone is <code>active?</code> if they've
+                painted in the last ten minutes, so as of 09:25 that means since 09:15, and the window moves with
+                the moment.
+              </p>
+              <pre data-lang="elixir"><code>
+calculate :active?, :boolean,
+  expr(exists(pixels, updated_at > ago(10, :minute)))
+
+Accounts.leaderboard!(load: :active?,
+  as_of: ~U[2026-09-30 09:25:00Z])</code></pre>
+              <div class="returns">
+                <pre data-lang="elixir"><code>
+[
+  %User{name: "Alice", active?: true, ...},
+  %User{name: "Bob", active?: false, ...},
+  %User{name: "Carol", active?: false, ...}
+]</code></pre>
+              </div>
+            </div>
+
+            <div class="step" data-states="future historyNow historyPast">
+              <h3>History</h3>
+              <p>
+                Every period of a record is a version of it, so its history is already in the table. With
+                AshPaperTrail's temporal inline mode (more on that below), you can load it like any relationship,
+                and as of any moment, too.
+              </p>
+              <pre data-lang="elixir"><code>
+Canvas.get_pixel!(1, 1,
+  as_of: ~U[2026-09-30 09:25:00Z],
+  load: :paper_trail_versions
+)</code></pre>
+              <div class="returns">
+                <pre data-lang="elixir"><code>
+%Pixel{
+  x: 1,
+  y: 1,
+  paper_trail_versions: [
+    %Pixel{color: :white, ...},
+    %Pixel{color: :blue, ...}
+  ],
+  ...
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="prose">
+          <h2>How it works</h2>
+          <p>
+            PostgreSQL does the hard work for us. PostgreSQL 18 added the SQL:2011 building blocks for <em>application-time periods</em>, 
+            and PostgreSQL 19 will finish the job. Here's one pixel, at (3, 7), in the table underneath.
+          </p>
+        </section>
+
+        <section id="postgres" class="scrolly">
+          <div class="scrolly-visual">
+            <div class="visual-frame">
+              <p class="visual-caption">The rows for pixel <strong>(3, 7)</strong></p>
+              <div id="postgres-visual"></div>
+              <button type="button" class="replay" data-replay>↻ Replay</button>
+            </div>
+          </div>
+
+          <div class="scrolly-steps">
+            <div class="step" data-states="empty s0">
+              <h3>Periods and keys</h3>
+              <p>
+                <code>valid_at</code> is a range of timestamps. The primary key includes it
+                <code>WITHOUT OVERLAPS</code>, so a pixel can have many rows, but never two that are valid at the same time.
+              </p>
+              <pre data-lang="sql"><code>
+CREATE TABLE pixels (
+  id uuid NOT NULL,
+  x bigint NOT NULL,
+  y bigint NOT NULL,
+  color text NOT NULL,
+  valid_at tstzrange NOT NULL,
+  PRIMARY KEY (id, valid_at WITHOUT OVERLAPS)
+);</code></pre>
+              <p>Painting the pixel pink at 09:05 inserts a row that is valid from then on.</p>
+              <pre data-lang="sql"><code>
+INSERT INTO pixels (x, y, color, valid_at)
+  VALUES (3, 7, 'pink', '[09:05,)');</code></pre>
+            </div>
+
+            <div class="step" data-states="s0 s1">
+              <h3>FOR PORTION OF</h3>
+              <p>
+                Painting it blue at 10:12 doesn't overwrite that row. <code>UPDATE ... FOR PORTION OF</code> changes
+                only the part of the row's period from 10:12 onward, so Postgres splits it in two: pink until 10:12,
+                and blue from then on.
+              </p>
+              <pre data-lang="sql"><code>
+UPDATE pixels
+  FOR PORTION OF valid_at FROM '10:12' TO NULL
+  SET color = 'blue'
+  WHERE x = 3 AND y = 7;</code></pre>
+            </div>
+
+            <div class="step" data-states="s1 s2">
+              <h3>A portion in the middle</h3>
+              <p>
+                A portion doesn't have to run to infinity. Painting it yellow from 09:30 to 09:45 changes a piece out
+                of the middle of the pink row, and Postgres splits the original row into two around it.
+              </p>
+              <pre data-lang="sql"><code>
+UPDATE pixels
+  FOR PORTION OF valid_at FROM '09:30' TO '09:45'
+  SET color = 'yellow'
+  WHERE x = 3 AND y = 7;</code></pre>
+            </div>
+
+            <div class="step" data-states="s2 s3">
+              <h3>Deleting a portion</h3>
+              <p>
+                <code>DELETE</code> works the same way. Deleting 11:00 to 11:30 leaves a gap: the pixel doesn't exist
+                for those thirty minutes, and comes back after.
+              </p>
+              <pre data-lang="sql"><code>
+DELETE FROM pixels
+  FOR PORTION OF valid_at FROM '11:00' TO '11:30'
+  WHERE x = 3 AND y = 7;</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section class="prose">
+          <h2>Try it yourself</h2>
+          <p>
+            Reading is the easy part: as of a moment, it's whichever row's period contains that moment,
+            <code>valid_at @&gt; '10:00'</code>. Drag along the timeline to read the pixel as of any time. Then
+            change its history, and watch Postgres split the rows.
+          </p>
+        </section>
+
+        <figure id="playground" class="playground wide">
+          <div class="playground-grid">
+            <div class="playground-read">
+              <p class="playground-label">Read</p>
+              <pre class="playground-sql" data-select data-lang="sql"><code></code></pre>
+              <p class="playground-result" data-result aria-live="polite"></p>
+            </div>
+            <form class="playground-write">
+              <p class="playground-label">Write</p>
+              <div class="playground-controls">
+                <div class="segmented" role="radiogroup" aria-label="Statement">
+                  <label><input type="radio" name="type" value="update" checked /><span>UPDATE</span></label>
+                  <label><input type="radio" name="type" value="delete" /><span>DELETE</span></label>
+                </div>
+                <div class="chips" data-colors></div>
+                <label class="field">From <select name="from"></select></label>
+                <label class="field">To <select name="to"></select></label>
+              </div>
+              <pre class="playground-sql" data-preview data-lang="sql"><code></code></pre>
+              <p class="playground-invalid" data-invalid hidden>A portion has to end after it starts.</p>
+              <div class="playground-actions">
+                <button type="submit" class="button-primary">Run it</button>
+                <button type="button" class="button-quiet" data-reset>Reset</button>
+              </div>
+            </form>
+          </div>
+          <div
+            class="playground-view"
+            data-view
+            data-reader
+            tabindex="0"
+            role="slider"
+            aria-label="Read the pixel as of"
+            aria-valuemin="0"
+            aria-valuemax="179"
+          ></div>
+        </figure>
+
+        <section class="prose">
+          <p>
+            You won't write any of that SQL yourself. AshPostgres generates the period column,
+            <code>PRIMARY KEY (id, valid_at WITHOUT OVERLAPS)</code>, <code>PERIOD</code> foreign keys for
+            relationships between temporal resources, and identities that are unique at every instant rather than
+            across all of time. Writes automatically get <code>FOR PORTION OF</code> statements, and read actions
+            filter on the period.
+          </p>
+
+          <h2>AshPaperTrail: temporal inline mode</h2>
+          <p>
+            A temporal resource already keeps every version of every record, so a separate versions table would be 
+            an unnecessary copy. AshPaperTrail's new <code>:temporal_inline</code> mode records all of the same information
+            you might track in paper_trail, but on each temporal row itself.
+          </p>
+        </section>
+
+        <figure class="code-card">
+          <figcaption>subscription.ex</figcaption>
+          <pre data-lang="elixir"><code>
+temporal do
+  strategy :context
+  attribute :valid_at
+end
+
+paper_trail do
+  mode :temporal_inline
+  change_tracking_mode :previous_values
+  store_action_name? true
+
+  belongs_to_actor :user, MyApp.Accounts.User,
+    domain: MyApp.Accounts
+  metadata :reason_for_change, :string
+end
+</code></pre>
+        </figure>
+
+        <section class="prose">
+          <h2>Caveats</h2>
+          <p>This is experimental, and there are some sharp edges to know about.</p>
+          <ol class="caveats">
+            <li>
+              <strong>It needs PostgreSQL 19, which is still in beta.</strong>
+              Temporal writes are <code>UPDATE</code> and <code>DELETE ... FOR PORTION OF</code>, which are new in
+              19.
+            </li>
+            <li>
+              <strong>Every read is a single point in time.</strong>
+              There's no read across a range of times. Explaining why is complex but, put simply, there are weird
+              mind bending and complex timey-wimey things you'd have to do to model this correctly. Things we might
+              actually attempt at a later date.
+            </li>
+            <li>
+              <strong>No cascades on <code>PERIOD</code> foreign keys.</strong>
+              Postgres forbids <code>ON DELETE</code> and <code>ON UPDATE</code> actions on them, so you have to cascade 
+              in your application instead.
+            </li>
+            <li>
+              <strong>The actor is taken as it is.</strong>
+              You supply your actor, so anything in your policies that read from the actor (but not things that filter on the
+              data), don't know about the past or future. It is on you to provide actor data appropriate for the time that a change
+              is happening, or to write your policies to account for this. This is also something we may work on improving in later
+              versions.
+            </li>
+            <li>
+              <strong>Changes, validations and preparations must be temporal safe.</strong>
+              Anything that runs during a temporal action must explicitly indicate what changes and validations are safe to run with
+              a time that is anything other than "now". Ash's built-in ones are all temporal safe.
+            </li>
+          </ol>
+
+          <h2>Try it out</h2>
+          <p>
+            The <a href="https://hexdocs.pm/ash/temporal-resources.html">temporal resources guide</a> has more information.
+            Hop in the <a href="https://discord.gg/D7FNG2q">Discord</a> if you'd like to chat more.
+          </p>
+          <p>
+            Thanks to Mike Buhot, whose talk
+            <a href="https://elixir.sydney/events/july-2026"><em>It's time! PostgreSQL 19 for temporal data</em></a>
+            gave me the idea for mine. And if you'd like the whole talk's worth of slides, they're
+            <a href="/talks/time-travel-for-normies">all here</a>.
+          </p>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <a href="/">Ash Framework</a>
+      <a href="https://ashchronicle.substack.com/">Ash Chronicle</a>
+      <a href="https://github.com/ash-project">GitHub</a>
+    </footer>
+  </body>
+</html>

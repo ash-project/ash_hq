@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Time Travel for Normies</title>
+    <meta property="og:title" content="Time Travel for Normies" />
+    <meta property="og:description" content="Temporal resources in Ash Framework, the slides." />
+    <link rel="stylesheet" href="/talks/time-travel-for-normies/app.css" />
+    <style>
+      :root { --bar: 3rem; color-scheme: dark; }
+      html, body { margin: 0; height: 100%; overflow: hidden; background: #000; }
+      #deck { position: fixed; inset: 0 0 var(--bar) 0; }
+      #deck #slide { position: absolute; }
+      #deck #slide-frame { width: min(100vw, calc((100vh - var(--bar)) * 16 / 9)) !important; }
+      #deck-bar {
+        position: fixed; inset: auto 0 0 0; height: var(--bar);
+        display: flex; align-items: center; gap: 0.75rem; padding: 0 0.75rem;
+        background: #0b0b0d; border-top: 1px solid rgb(255 255 255 / 0.08);
+        font: 500 0.8125rem/1 ui-sans-serif, system-ui, sans-serif; color: #a1a1aa;
+      }
+      #deck-bar button {
+        display: inline-flex; align-items: center; gap: 0.4rem; height: 2rem; padding: 0 0.85rem;
+        border: 0; border-radius: 0.5rem; background: rgb(255 255 255 / 0.06); color: #f4f4f5;
+        font: inherit; cursor: pointer; transition: background 150ms, transform 150ms, opacity 150ms;
+      }
+      #deck-bar button:hover:not(:disabled) { background: rgb(255 255 255 / 0.12); }
+      #deck-bar button:active:not(:disabled) { transform: scale(0.96); }
+      #deck-bar button:disabled { opacity: 0.35; cursor: default; }
+      #deck-bar #deck-next { background: linear-gradient(90deg, #FF5757, #FF914D, #FFBD59); color: #18181b; font-weight: 600; }
+      #deck-bar #deck-next:hover:not(:disabled) { filter: brightness(1.08); }
+      #deck-progress { flex: 1; height: 0.25rem; border-radius: 9999px; background: rgb(255 255 255 / 0.08); overflow: hidden; }
+      #deck-progress span { display: block; height: 100%; background: linear-gradient(90deg, #FF5757, #FF914D, #FFBD59); transition: width 300ms ease; }
+      #deck-count { font-variant-numeric: tabular-nums; min-width: 4.5rem; text-align: right; }
+      #deck-fullscreen { padding: 0 0.6rem !important; }
+      #deck-open { color: #a1a1aa; text-decoration: none; white-space: nowrap; }
+      #deck-open:hover { color: #f4f4f5; }
+    </style>
+  </head>
+  <body>
+    <div id="deck" data-src="/talks/time-travel-for-normies/deck.json" data-base="/talks/time-travel-for-normies"></div>
+    <nav id="deck-bar">
+      <button id="deck-previous" type="button" aria-label="Previous">←</button>
+      <button id="deck-next" type="button">Next →</button>
+      <div id="deck-progress"><span></span></div>
+      <span id="deck-count"></span>
+      <a id="deck-open" href="/talks/time-travel-for-normies" target="_blank" rel="noopener" hidden>All slides ↗</a>
+      <button id="deck-fullscreen" type="button" aria-label="Fullscreen">⛶</button>
+    </nav>
+    <script src="/talks/time-travel-for-normies/deck.js"></script>
+  </body>
+</html>
