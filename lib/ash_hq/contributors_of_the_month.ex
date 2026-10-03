@@ -75,6 +75,16 @@ defmodule AshHq.ContributorsOfTheMonth do
   def month_name(%{month: nil}), do: nil
   def month_name(%{month: month}), do: Calendar.strftime(month, "%B %Y")
 
+  @doc "The certificate's image, for link previews, made by `mix ash_hq.certificate_images`."
+  def image_path(contributor), do: "/images/contributors-of-the-month/#{contributor.slug}.png"
+
+  def image?(contributor) do
+    :ash_hq
+    |> Application.app_dir("priv/static")
+    |> Path.join(image_path(contributor))
+    |> File.exists?()
+  end
+
   defp normalize(contributor) do
     Map.merge(%{github: nil, month: nil, reason: nil}, contributor)
     |> Map.update!(:reason, &(&1 && String.trim(&1)))

@@ -29,8 +29,11 @@
     <!-- Need to adjust this for future blog writers -->
     <meta property="twitter:creator" content="@ZachSDaniel1" />
 
-    <meta property="og:title" content="Ash Framework" />
-    <meta property="og:description" content="Model your domain, derive the rest." />
+    <meta property="og:title" content={assigns[:og_title] || "Ash Framework"} />
+    <meta
+      property="og:description"
+      content={assigns[:og_description] || "Model your domain, derive the rest."}
+    />
     <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")} />
     <script async defer src="https://buttons.github.io/buttons.js">
     </script>

@@ -3,9 +3,26 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{@contributor.name} · Ash Contributor of the Month</title>
-    <meta property="og:title" content={"#{@contributor.name} · Ash Contributor of the Month"} />
-    <meta property="og:image" content="https://ash-hq.org/images/ash-logo-side.png" />
+    <title>{@og_title}</title>
+    <meta name="description" content={@og_description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Ash Framework" />
+    <meta
+      property="og:url"
+      content={"https://ash-hq.org/community/contributors-of-the-month/#{@contributor.slug}"}
+    />
+    <meta property="og:title" content={@og_title} />
+    <meta property="og:description" content={@og_description} />
+    <meta property="og:image" content={@og_image} />
+    <meta
+      property="og:image:alt"
+      content={"#{@contributor.name}'s Contributor of the Month certificate"}
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@AshFramework" />
+    <meta name="twitter:title" content={@og_title} />
+    <meta name="twitter:description" content={@og_description} />
+    <meta name="twitter:image" content={@og_image} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -235,6 +252,11 @@
 
       .seal { width: 11cqw; }
 
+      body.image { padding: 0; display: block; overflow: hidden; }
+      body.image .toolbar { display: none; }
+      body.image .sheet { width: 100vw; }
+      body.image .certificate { box-shadow: none; }
+
       @media print {
         body { background: none; padding: 0; display: block; }
         .toolbar { display: none; }
@@ -243,7 +265,7 @@
       }
     </style>
   </head>
-  <body>
+  <body class={@image? && "image"}>
     <div class="toolbar">
       <a href="/community/contributors-of-the-month">&larr; All contributors of the month</a>
       <button type="button" onclick="window.print()">Print certificate</button>

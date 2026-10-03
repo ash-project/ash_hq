@@ -58,11 +58,16 @@ defmodule AshHqWeb.HomeController do
     conn
     |> assign_events()
     |> assign(:page_title, "Contributors of the Month")
+    |> assign(:og_title, "Ash Contributors of the Month")
+    |> assign(
+      :og_description,
+      "Each month we recognize folks who have gone above and beyond for the Ash community."
+    )
     |> assign(:contributors_of_the_month, AshHq.ContributorsOfTheMonth.all())
     |> render("contributors_of_the_month.html")
   end
 
-  def contributor_of_the_month_certificate(conn, %{"slug" => slug}) do
+  def contributor_of_the_month_certificate(conn, %{"slug" => slug} = params) do
     case AshHq.ContributorsOfTheMonth.get(slug) do
       nil ->
         send_resp(conn, 404, "Not found")
@@ -73,7 +78,24 @@ defmodule AshHqWeb.HomeController do
         |> put_root_layout(false)
         |> put_layout(false)
         |> assign(:contributor, contributor)
+        # Just the certificate, filling the window, for `mix ash_hq.certificate_images`
+        |> assign(:image?, params["image"] == "true")
+        |> assign(:og_title, "#{contributor.name} · Ash Contributor of the Month")
+        |> assign(
+          :og_description,
+          contributor.reason ||
+            "In recognition of their contributions to Ash Framework and their achievement in being an outstanding member of the community."
+        )
+        |> assign(:og_image, certificate_image_url(contributor))
         |> render("contributor_of_the_month_certificate.html")
+    end
+  end
+
+  defp certificate_image_url(contributor) do
+    if AshHq.ContributorsOfTheMonth.image?(contributor) do
+      "https://ash-hq.org#{AshHq.ContributorsOfTheMonth.image_path(contributor)}"
+    else
+      "https://ash-hq.org/images/ash-logo-side.png"
     end
   end
 
