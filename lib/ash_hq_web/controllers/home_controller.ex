@@ -54,6 +54,29 @@ defmodule AshHqWeb.HomeController do
     |> render("community.html")
   end
 
+  def contributors_of_the_month(conn, _) do
+    conn
+    |> assign_events()
+    |> assign(:page_title, "Contributors of the Month")
+    |> assign(:contributors_of_the_month, AshHq.ContributorsOfTheMonth.all())
+    |> render("contributors_of_the_month.html")
+  end
+
+  def contributor_of_the_month_certificate(conn, %{"slug" => slug}) do
+    case AshHq.ContributorsOfTheMonth.get(slug) do
+      nil ->
+        send_resp(conn, 404, "Not found")
+
+      contributor ->
+        # A standalone page, without the site's chrome, so that it prints cleanly
+        conn
+        |> put_root_layout(false)
+        |> put_layout(false)
+        |> assign(:contributor, contributor)
+        |> render("contributor_of_the_month_certificate.html")
+    end
+  end
+
   def media(conn, _) do
     conn
     |> assign_events()

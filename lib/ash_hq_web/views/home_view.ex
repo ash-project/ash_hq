@@ -172,6 +172,17 @@ defmodule AshHqWeb.HomeView do
     ]
   end
 
+  # The scalloped edge of the seal on contributor of the month certificates, centered on 0,0
+  defp seal_points(points \\ 32, outer \\ 50, inner \\ 45) do
+    0..(points * 2 - 1)
+    |> Enum.map_join(" ", fn i ->
+      radius = if rem(i, 2) == 0, do: outer, else: inner
+      angle = :math.pi() * i / points
+
+      "#{Float.round(radius * :math.cos(angle), 2)},#{Float.round(radius * :math.sin(angle), 2)}"
+    end)
+  end
+
   def coming_soon?(value), do: value in @coming_soon
   def external?(value), do: value in @external
 

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{@contributor.name} · Ash Contributor of the Month</title>
+    <meta property="og:title" content={"#{@contributor.name} · Ash Contributor of the Month"} />
+    <meta property="og:image" content="https://ash-hq.org/images/ash-logo-side.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Montserrat:wght@500;600;800&display=swap"
+    />
+    <style>
+      @page { size: 11in 8.5in; margin: 0; }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --red: #ff5757;
+        --orange: #ff914d;
+        --yellow: #ffbd59;
+        --ink: #1c1917;
+        --muted: #78716c;
+        --paper: #fffdf8;
+      }
+
+      body {
+        min-height: 100vh;
+        background: #0f172a radial-gradient(ellipse at top, #3b1d1d, #0f172a 70%);
+        font-family: "Montserrat", system-ui, sans-serif;
+        color: var(--ink);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .toolbar {
+        width: min(100%, 11in);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9rem;
+      }
+
+      .toolbar a { color: #fdba74; text-decoration: none; }
+      .toolbar a:hover { text-decoration: underline; }
+
+      .toolbar button {
+        font: inherit;
+        font-weight: 600;
+        color: white;
+        background: var(--red);
+        border: 0;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+      }
+
+      .toolbar button:hover { background: #e94848; }
+
+      /* Everything inside is sized in cqw, so it scales with the page on screen and in print */
+      .sheet {
+        width: min(100%, 11in);
+        container-type: inline-size;
+      }
+
+      .certificate {
+        position: relative;
+        aspect-ratio: 11 / 8.5;
+        overflow: hidden;
+        background:
+          radial-gradient(ellipse at center, transparent 55%, rgba(255, 145, 77, 0.07)),
+          var(--paper);
+        box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.5);
+      }
+
+      /* Shards in the corners, after the facets of the Ash logo */
+      .shard { position: absolute; }
+      .shard.tl-1 { top: 0; left: 0; width: 26cqw; height: 18cqw; background: var(--yellow); clip-path: polygon(0 0, 100% 0, 0 100%); }
+      .shard.tl-2 { top: 0; left: 0; width: 14cqw; height: 24cqw; background: var(--red); clip-path: polygon(0 0, 100% 0, 0 100%); opacity: 0.92; }
+      .shard.tl-3 { top: 0; left: 0; width: 9cqw; height: 9cqw; background: var(--orange); clip-path: polygon(0 0, 100% 0, 0 100%); }
+      .shard.br-1 { bottom: 0; right: 0; width: 26cqw; height: 18cqw; background: var(--orange); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+      .shard.br-2 { bottom: 0; right: 0; width: 14cqw; height: 24cqw; background: var(--red); clip-path: polygon(100% 0, 100% 100%, 0 100%); opacity: 0.92; }
+      .shard.br-3 { bottom: 0; right: 0; width: 9cqw; height: 9cqw; background: var(--yellow); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+
+      .frame {
+        position: absolute;
+        inset: 3.6cqw;
+        border: 0.3cqw solid var(--ink);
+        background: var(--paper);
+      }
+
+      .frame::after {
+        content: "";
+        position: absolute;
+        inset: 0.7cqw;
+        border: 0.1cqw solid var(--orange);
+      }
+
+      .watermark {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 44cqw;
+        transform: translate(-50%, -48%);
+        opacity: 0.045;
+      }
+
+      .content {
+        position: absolute;
+        inset: 3.6cqw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 3cqw 8cqw;
+      }
+
+      .title {
+        font-weight: 800;
+        font-size: 6.4cqw;
+        letter-spacing: 0.06em;
+        line-height: 1;
+      }
+
+      .subtitle {
+        font-weight: 500;
+        font-size: 2cqw;
+        letter-spacing: 0.55em;
+        margin-top: 1cqw;
+        margin-right: -0.55em;
+      }
+
+      .rule {
+        display: flex;
+        align-items: center;
+        gap: 1.2cqw;
+        margin-top: 2.4cqw;
+        color: var(--orange);
+      }
+
+      .rule::before,
+      .rule::after {
+        content: "";
+        width: 9cqw;
+        height: 0.12cqw;
+        background: linear-gradient(90deg, transparent, var(--orange));
+      }
+
+      .rule::after { transform: scaleX(-1); }
+
+      .rule span {
+        width: 0.9cqw;
+        height: 0.9cqw;
+        background: var(--red);
+        transform: rotate(45deg);
+      }
+
+      .awarded {
+        font-weight: 600;
+        font-size: 1.25cqw;
+        letter-spacing: 0.3em;
+        color: var(--muted);
+        margin-top: 2.4cqw;
+      }
+
+      .name {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-weight: 600;
+        font-size: 6.6cqw;
+        line-height: 1.1;
+        margin-top: 0.8cqw;
+        padding: 0 2cqw 0.6cqw;
+        border-bottom: 0.12cqw solid var(--ink);
+      }
+
+      .recognition {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-style: italic;
+        font-size: 1.85cqw;
+        line-height: 1.35;
+        max-width: 62cqw;
+        margin-top: 1.8cqw;
+      }
+
+      .reason {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.6cqw;
+        line-height: 1.4;
+        max-width: 60cqw;
+        margin-top: 1.4cqw;
+        color: #44403c;
+      }
+
+      .reason::before { content: "\201C"; color: var(--red); }
+      .reason::after { content: "\201D"; color: var(--red); }
+
+      .footer {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 4cqw;
+        width: 100%;
+        max-width: 66cqw;
+        margin-top: auto;
+      }
+
+      .signature { display: flex; flex-direction: column; align-items: center; }
+
+      .signature .value {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-style: italic;
+        font-weight: 500;
+        font-size: 2.3cqw;
+        min-width: 18cqw;
+        padding-bottom: 0.3cqw;
+        border-bottom: 0.12cqw solid var(--ink);
+      }
+
+      .signature .label {
+        font-weight: 600;
+        font-size: 1cqw;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-top: 0.6cqw;
+      }
+
+      .seal { width: 11cqw; }
+
+      @media print {
+        body { background: none; padding: 0; display: block; }
+        .toolbar { display: none; }
+        .sheet { width: 11in; }
+        .certificate { width: 11in; height: 8.5in; aspect-ratio: auto; box-shadow: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar">
+      <a href="/community/contributors-of-the-month">&larr; All contributors of the month</a>
+      <button type="button" onclick="window.print()">Print certificate</button>
+    </div>
+
+    <div class="sheet">
+      <div class="certificate">
+        <div class="shard tl-1"></div>
+        <div class="shard tl-2"></div>
+        <div class="shard tl-3"></div>
+        <div class="shard br-1"></div>
+        <div class="shard br-2"></div>
+        <div class="shard br-3"></div>
+
+        <div class="frame"></div>
+        <img class="watermark" src="/images/ash-logo-cropped.svg" alt="" />
+
+        <div class="content">
+          <div class="title">CONTRIBUTOR</div>
+          <div class="subtitle">OF THE MONTH</div>
+          <div class="rule"><span></span></div>
+
+          <div class="awarded">THIS CERTIFICATE IS AWARDED TO</div>
+          <div class="name">{@contributor.name}</div>
+
+          <p class="recognition">
+            In recognition of your contributions to Ash Framework and your achievement
+            in being an outstanding member of the community.
+          </p>
+          <p :if={@contributor.reason} class="reason">{@contributor.reason}</p>
+
+          <div class="footer">
+            <div class="signature">
+              <div class="value">Zach Daniel</div>
+              <div class="label">Ash Framework Creator</div>
+            </div>
+
+            <svg class="seal" viewBox="-60 -60 120 140" aria-hidden="true">
+              <defs>
+                <linearGradient id="seal-gold" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#ffd27a" />
+                  <stop offset="0.55" stop-color="#ffbd59" />
+                  <stop offset="1" stop-color="#ff914d" />
+                </linearGradient>
+              </defs>
+              <polygon points="-26,30 -42,78 -30,70 -22,84 -6,38" fill="#ff5757" />
+              <polygon points="26,30 42,78 30,70 22,84 6,38" fill="#ff914d" />
+              <polygon points={seal_points()} fill="url(#seal-gold)" />
+              <circle r="40" fill="none" stroke="#fffdf8" stroke-width="1.5" />
+              <circle r="34" fill="#fffdf8" />
+              <circle r="31" fill="none" stroke="#ff914d" stroke-width="0.8" />
+              <image href="/images/ash-logo-cropped.svg" x="-21" y="-19" width="42" height="34" />
+            </svg>
+
+            <%!-- Kept even when empty, so that the seal stays centered --%>
+            <div class="signature">
+              <%= if month = AshHq.ContributorsOfTheMonth.month_name(@contributor) do %>
+                <div class="value">{month}</div>
+                <div class="label">Awarded</div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

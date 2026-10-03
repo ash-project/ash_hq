@@ -36,6 +36,12 @@ defmodule AshHqWeb.Router do
     pipe_through(:browser)
     get "/", HomeController, :home
     get "/community", HomeController, :community
+    get "/community/contributors-of-the-month", HomeController, :contributors_of_the_month
+
+    get "/community/contributors-of-the-month/:slug",
+        HomeController,
+        :contributor_of_the_month_certificate
+
     get "/media", HomeController, :media
 
     get "/book-errata", HomeController, :book_errata
