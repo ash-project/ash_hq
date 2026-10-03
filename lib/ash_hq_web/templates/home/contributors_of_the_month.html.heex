@@ -45,7 +45,10 @@
         >
           {month}
         </span>
-        <span class="mt-4 text-sm text-primary-dark-400">View certificate &rarr;</span>
+        <p :if={contributor.reason} class="mt-4 text-sm text-base-light-300 leading-relaxed">
+          {contributor.reason}
+        </p>
+        <span class="mt-auto pt-4 text-sm text-primary-dark-400">View certificate &rarr;</span>
       </a>
     </div>
 
