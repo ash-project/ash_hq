@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--
+  The article's social card, 1200×630, the way the homepage's announcement card looks.
+  Rendered to og.png with a headless browser at that size.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #0a0a0d; }
+
+      .page {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        background:
+          radial-gradient(ellipse at 85% 50%, rgb(255 87 87 / 0.16), transparent 55%),
+          linear-gradient(rgb(254 19 19 / 0.14) 1px, transparent 1px),
+          linear-gradient(90deg, rgb(254 19 19 / 0.14) 1px, transparent 1px),
+          #0a0a0d;
+        background-size: auto, 40px 40px, 40px 40px, auto;
+      }
+
+      .card {
+        position: absolute;
+        inset: 40px;
+        overflow: hidden;
+        border-radius: 32px;
+        background: rgb(2 6 23 / 0.88);
+        box-shadow: 0 0 0 1.5px rgb(255 87 87 / 0.45), 0 0 80px rgb(255 87 87 / 0.18);
+      }
+
+      .dial { position: absolute; right: -170px; top: 50%; width: 700px; height: 700px; transform: translateY(-50%); }
+      .dial svg, .dial .hand { position: absolute; inset: 0; width: 100%; height: 100%; }
+      .glow { position: absolute; inset: 2%; border-radius: 9999px; background: conic-gradient(from -50deg, transparent 0deg, rgb(255 145 77 / 0.2) 50deg, transparent 50deg); }
+
+      .text { position: absolute; left: 72px; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; width: 640px; }
+
+      .brand { display: flex; align-items: center; gap: 14px; margin-bottom: 44px; font: 600 26px ui-sans-serif, system-ui, -apple-system, sans-serif; color: #f4f4f5; }
+      .brand img { width: 44px; height: 44px; }
+
+      .tag {
+        align-self: flex-start;
+        padding: 6px 18px;
+        border-radius: 9999px;
+        background: linear-gradient(90deg, #ff5757, #ff914d);
+        font: 700 22px ui-sans-serif, system-ui, -apple-system, sans-serif;
+        color: #fff;
+      }
+
+      h1 {
+        margin: 22px 0 0;
+        font: 300 104px/1 "Iowan Old Style", "New York", ui-serif, Georgia, serif;
+        letter-spacing: -0.02em;
+        background: linear-gradient(90deg, #ff5757, #ff914d, #ffbd59);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      p { max-width: 540px; margin: 26px 0 0; font: 400 30px/1.4 ui-sans-serif, system-ui, -apple-system, sans-serif; color: #fecaca; }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="card">
+        <div class="dial" id="dial"></div>
+        <div class="text">
+          <div class="brand"><img src="../../images/ash-logo-cropped.svg" alt="" />Ash Framework</div>
+          <span class="tag">New</span>
+          <h1>Temporal<br />Resources</h1>
+          <p>Read and write your data at any point in time, past, present or future.</p>
+        </div>
+      </div>
+    </div>
+    <script>
+      // The clock face from the homepage card, at a still moment.
+      const ticks = Array.from({length: 60}, (_, tick) => {
+        const long = tick % 5 === 0
+        return `<line x1="0" y1="-47.5" x2="0" y2="${long ? -43 : -45.5}" transform="rotate(${tick * 6})" stroke="#FF914D" stroke-opacity="${long ? 0.55 : 0.3}" stroke-width="${long ? 0.6 : 0.35}" stroke-linecap="round"/>`
+      }).join("")
+
+      const numerals = "XII I II III IV V VI VII VIII IX X XI".split(" ").map((numeral, index) =>
+        `<text transform="rotate(${index * 30 - 12}) translate(0 -34.5)" text-anchor="middle" dominant-baseline="middle" fill="#FFBD59" fill-opacity="0.45" font-size="4" font-family="ui-serif, Georgia, serif">${numeral}</text>`
+      ).join("")
+
+      document.getElementById("dial").innerHTML = `
+        <svg viewBox="-50 -50 100 100" style="transform: rotate(4deg)">
+          <circle r="49" fill="none" stroke="#FF914D" stroke-opacity="0.25" stroke-width="0.3"/>${ticks}
+        </svg>
+        <svg viewBox="-50 -50 100 100">
+          <circle r="39" fill="none" stroke="#FFBD59" stroke-opacity="0.18" stroke-width="0.25"/>${numerals}
+          <circle r="24" fill="none" stroke="#FF5757" stroke-opacity="0.3" stroke-width="0.3" stroke-dasharray="6 2 0.6 2"/>
+        </svg>
+        <div class="hand" style="transform: rotate(-38deg)">
+          <div class="glow"></div>
+          <svg viewBox="-50 -50 100 100">
+            <line x1="0" y1="3" x2="0" y2="-46" stroke="#FF914D" stroke-opacity="0.8" stroke-width="0.5" stroke-linecap="round"/>
+            <circle r="1.2" fill="#FF914D"/>
+          </svg>
+        </div>`
+    </script>
+  </body>
+</html>
