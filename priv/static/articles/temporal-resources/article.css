@@ -389,15 +389,16 @@ figcaption { margin-top: 0.85rem; font-size: 0.85rem; color: var(--faint); text-
   .step { margin-left: 0; margin-right: 0; }
 }
 
-/* With the visual pinned above the steps, each step settles just below it */
+/* With the visual pinned above the steps, each step settles just below it, as long as it
+   fits in what's left of the screen. One that doesn't scrolls freely, so all of it can be read. */
 @media (max-width: 1023px) {
   html { scroll-snap-type: y proximity; }
   .scrolly-visual .visual-frame { padding: 0.9rem; }
   .step {
-    margin-bottom: 28vh;
-    scroll-snap-align: start;
+    margin-bottom: 3rem;
     scroll-margin-top: calc(var(--visual-height, 50vh) + 0.75rem);
   }
+  .step.is-snappable { scroll-snap-align: start; }
   .step:first-child { margin-top: 1rem; }
   .step:last-child { margin-bottom: 30vh; }
 }
@@ -429,6 +430,11 @@ figcaption { margin-top: 0.85rem; font-size: 0.85rem; color: var(--faint); text-
 /* The tour */
 
 .tour-stage { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+
+/* Pinned above the steps, the canvas is kept from taking up most of the screen */
+@media (max-width: 1023px) {
+  .tour-stage { grid-template-columns: min(53%, 30vh) minmax(0, 1fr); }
+}
 
 .tour-canvas {
   display: grid;
