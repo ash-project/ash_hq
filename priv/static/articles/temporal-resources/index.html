@@ -407,8 +407,20 @@ Canvas.get_pixel!(1, 1,
         <section class="prose">
           <h2>How it works</h2>
           <p>
-            PostgreSQL does the hard work for us. PostgreSQL 18 added the SQL:2011 building blocks for <em>application-time periods</em>, 
-            and PostgreSQL 19 will finish the job. Here's one pixel, at (3, 7), in the table underneath.
+            PostgreSQL 18 added the SQL:2011 building blocks for <em>application-time periods</em>: periods in primary
+            keys and foreign keys. The standard's other half, <code>FOR PORTION OF</code>, is how a write changes only part
+            of a row's period.
+          </p>
+          <p>
+            <strong>Plot twist:</strong> <code>FOR PORTION OF</code> was supposed to come in PostgreSQL 19, and that's what I
+            built all of this on. Then we found that PostgreSQL had
+            <a href="https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=a4b26b8f7cd07a3e7f0cba550c30db142329e065">reverted it</a>
+            before release. Under <code>READ COMMITTED</code>. There were bugs w/ concurrent writes.
+          </p>
+          <p>
+            So now we've hand-rolled the following functionality. For the sake of the demo we're going to keep it
+            using <code>FOR PORTION OF</code> since those are the semantics we've copied. We will use <code>FOR PORTION OF</code>
+            when it releases.
           </p>
         </section>
 
@@ -447,7 +459,7 @@ INSERT INTO pixels (x, y, color, valid_at)
               <h3>FOR PORTION OF</h3>
               <p>
                 Painting it blue at 10:12 doesn't overwrite that row. <code>UPDATE ... FOR PORTION OF</code> changes
-                only the part of the row's period from 10:12 onward, so Postgres splits it in two: pink until 10:12,
+                only the part of the row's period from 10:12 onward, so the row splits in two: pink until 10:12,
                 and blue from then on.
               </p>
               <pre data-lang="sql"><code>
@@ -461,7 +473,7 @@ UPDATE pixels
               <h3>A portion in the middle</h3>
               <p>
                 A portion doesn't have to run to infinity. Painting it yellow from 09:30 to 09:45 changes a piece out
-                of the middle of the pink row, and Postgres splits the original row into two around it.
+                of the middle of the pink row, and the original row splits into two around it.
               </p>
               <pre data-lang="sql"><code>
 UPDATE pixels
@@ -489,7 +501,7 @@ DELETE FROM pixels
           <p>
             Reading is the easy part: as of a moment, it's whichever row's period contains that moment,
             <code>valid_at @&gt; '10:00'</code>. Drag along the timeline to read the pixel as of any time. Then
-            change its history, and watch Postgres split the rows.
+            change its history, and watch the rows split.
           </p>
         </section>
 
@@ -536,8 +548,7 @@ DELETE FROM pixels
             You won't write any of that SQL yourself. AshPostgres generates the period column,
             <code>PRIMARY KEY (id, valid_at WITHOUT OVERLAPS)</code>, <code>PERIOD</code> foreign keys for
             relationships between temporal resources, and identities that are unique at every instant rather than
-            across all of time. Writes automatically get <code>FOR PORTION OF</code> statements, and read actions
-            filter on the period.
+            across all of time. Writes split periods for you, and read actions filter on the period.
           </p>
 
           <h2>AshPaperTrail: temporal inline mode</h2>
@@ -573,9 +584,18 @@ end
           <p>This is experimental, and there are some sharp edges to know about.</p>
           <ol class="caveats">
             <li>
-              <strong>It needs PostgreSQL 19, which is still in beta.</strong>
-              Temporal writes are <code>UPDATE</code> and <code>DELETE ... FOR PORTION OF</code>, which are new in
-              19.
+              <strong>It needs PostgreSQL 18 or later.</strong>
+              That's where periods in primary and foreign keys arrived.
+            </li>
+            <li>
+              <strong>Our mechanism of getting this behavior is not perfect.</strong>
+              Its very very very unlikely to happen in practice, but the strategy that we took to simulate `FOR PORTION OF`
+              writes requires locking records and rechecking that no transaction modified the ranges of those records after
+              writing. If we do, we have to redo the original operation (just the data layer part). This means that we have
+              a "retry loop" built into temporal queries for the sake of consistency. It is capped at 25 retries, and while
+              simulating a whole bunch of writes against a single extremely hot record we had one write that took 3 attempts
+              to complete. So, probably fine, but there is a new theoretical "deadlock-like" error that can be emitted by
+              AshPostgres. This should go away when PostgreSQL actually releases <code>FOR PORTION OF</code>
             </li>
             <li>
               <strong>Every read is a single point in time.</strong>
