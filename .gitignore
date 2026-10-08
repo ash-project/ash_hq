@@ -1,0 +1,18 @@
+# Zola build output
+/public/
+
+# Generated at build time by scripts/fetch-contributors.sh
+/data/contributors.json
+
+# Netlify
+/.netlify/
+
+.DS_Store
+
+# Leftovers from the Phoenix app, if you switch between branches
+/_build/
+/deps/
+/assets/node_modules/
+/.elixir_ls/
+/.expert/
+erl_crash.dump
