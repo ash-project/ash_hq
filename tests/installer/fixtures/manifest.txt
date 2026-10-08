@@ -1,0 +1,15 @@
+01.sh /install/my_app
+02.sh /install/my_app?install=phoenix
+03.sh /install/my_app?install=phoenix&with_args=--database%20sqlite3
+04.sh /install/my_app?install=phoenix&with_args=--no-ecto
+05.sh /install/my_app?with_args=--no-ecto
+06.sh /install/my_app?install=ash_postgres,ash_phoenix
+07.sh /new/my_app
+08.sh /new/my_app?install=phoenix
+09.sh /new/my_app?install=phoenix&with_args=--database%20sqlite3
+10.sh /new/my_app?install=ash_postgres,ash_phoenix,phoenix
+11.sh /new/my_app?install=%20ash_postgres%20,,ash_json_api
+12.sh /new/my_app?install=ash_postgres&zeta=one&alpha=true&auth_strategy=magic_link
+13.sh /new/my_app?install=ash_postgres&with_args=--foo&example=true
+14.sh /new/my_app?no_ash=true&install=phoenix
+15.sh /install/my_app/

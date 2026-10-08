@@ -1,0 +1,33 @@
+[build]
+command = "zola build"
+publish = "public"
+
+[build.environment]
+ZOLA_VERSION = "0.23.6"
+
+# The installer scripts at /new/:name and /install/:name are served by
+# netlify/edge-functions/installer.js, which declares its own paths.
+
+# The feed used to be at /rss
+[[redirects]]
+from = "/rss"
+to = "/atom.xml"
+status = 301
+
+# An old slug of the 2.0 post. /blog/testing is a Zola alias, but one differing only by case
+# would collide with it on case-insensitive filesystems.
+[[redirects]]
+from = "/blog/Testing"
+to = "/blog/ash-framework-2-0-release/"
+status = 301
+
+# The old archive of Discord forum threads, which has been broken for a while
+[[redirects]]
+from = "/forum/*"
+to = "/community/"
+status = 301
+
+[[redirects]]
+from = "/forum"
+to = "/community/"
+status = 301
