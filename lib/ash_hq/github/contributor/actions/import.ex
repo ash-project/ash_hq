@@ -16,16 +16,9 @@ defmodule AshHq.Github.Contributor.Actions.Import do
           opts
         end
 
-      "https://api.github.com/repos/#{library.repo_org}/#{library.name}/contributors"
-      |> Req.get!(opts)
-      |> case do
-        %{status: 200, body: body} ->
-          Stream.map(body, &Map.take(&1, ["id", "avatar_url", "html_url", "login"]))
-
-        resp ->
-          Logger.error("Invalid response from GH: #{inspect(resp)}")
-          []
-      end
+      "https://api.github.com/repos/#{library.repo_org}/#{library.name}/contributors?per_page=100"
+      |> contributors(opts)
+      |> Stream.map(&Map.take(&1, ["id", "avatar_url", "html_url", "login"]))
     end)
     |> Stream.with_index()
     |> Stream.map(fn {contributor, index} ->
@@ -49,5 +42,30 @@ defmodule AshHq.Github.Contributor.Actions.Import do
     e ->
       Logger.error("Error while getting contributors: #{inspect(e)}")
       {:ok, :error}
+  end
+
+  # GitHub returns contributors a page at a time, linking to the next page in the `link` header
+  defp contributors(nil, _opts), do: []
+
+  defp contributors(url, opts) do
+    case Req.get!(url, opts) do
+      %{status: 200, body: body} = resp ->
+        body ++ contributors(next_page(resp), opts)
+
+      resp ->
+        Logger.error("Invalid response from GH: #{inspect(resp)}")
+        []
+    end
+  end
+
+  defp next_page(resp) do
+    resp
+    |> Req.Response.get_header("link")
+    |> Enum.find_value(fn link ->
+      case Regex.run(~r/<([^>]+)>;\s*rel="next"/, link) do
+        [_, url] -> url
+        _ -> nil
+      end
+    end)
   end
 end
