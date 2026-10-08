@@ -1,11 +1,20 @@
 # The URL the site will be built for
 base_url = "https://ash-hq.org"
+title = "Ash Framework"
+description = "Model your domain, derive the rest."
+default_language = "en"
 
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = false
 
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = false
+
+generate_feeds = true
+feed_filenames = ["atom.xml"]
+
+# Tags are shown on posts but don't get pages of their own (yet)
+taxonomies = [{ name = "tags", render = false }]
 
 [markdown]
 
@@ -14,3 +23,4 @@ theme = "catppuccin-mocha"
 
 [extra]
 # Put all your custom variables here
+og_image = "https://ash-hq.org/images/ash-logo-side.png"

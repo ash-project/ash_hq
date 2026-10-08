@@ -1,0 +1,5 @@
+<p class="post-meta">
+  {% if page.authors %}{{ page.authors | join(sep=", ") }} · {% endif %}
+  <time datetime="{{ page.date }}">{{ page.date | date(format="%-d %B %Y") }}</time>
+  {% if page.taxonomies.tags %} · {{ page.taxonomies.tags | join(sep=", ") }}{% endif %}
+</p>

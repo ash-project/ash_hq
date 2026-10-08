@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ section.title }}</h1>
+  <p><a href="{{ get_url(path='atom.xml', trailing_slash=false) }}">Subscribe via RSS</a></p>
+
+  <ol class="post-list">
+    {% for page in section.pages %}
+      <li>
+        <article>
+          <h2><a href="{{ page.permalink }}">{{ page.title | markdown(inline=true) | safe }}</a></h2>
+          {% include "blog/meta.html" %}
+          {% if page.description %}<p>{{ page.description }}</p>{% endif %}
+        </article>
+      </li>
+    {% endfor %}
+  </ol>
+{% endblock %}

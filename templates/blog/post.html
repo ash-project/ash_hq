@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <article class="post">
+    <header>
+      <h1>{{ page.title | markdown(inline=true) | safe }}</h1>
+      {% include "blog/meta.html" %}
+    </header>
+    {{ page.content | safe }}
+  </article>
+{% endblock %}

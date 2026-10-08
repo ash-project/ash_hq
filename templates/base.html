@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="{{ lang }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {#- Pages, sections and the 404 page each have different variables available #}
+    {%- set heading = config.title %}
+    {%- set description = config.description %}
+    {%- set og_type = "website" %}
+    {%- if page is defined %}
+      {%- set heading = page.title %}
+      {%- set og_type = "article" %}
+      {%- if page.description %}{% set description = page.description %}{% endif %}
+    {%- elif section is defined and section.title %}
+      {%- set heading = section.title %}
+      {%- if section.description %}{% set description = section.description %}{% endif %}
+    {%- endif %}
+    {%- set url = config.base_url %}
+    {%- if current_url is defined %}{% set url = current_url %}{% endif %}
+    <title>{% if heading == config.title %}{{ heading }}{% else %}{{ heading | striptags }} · {{ config.title }}{% endif %}</title>
+    <meta name="description" content="{{ description }}" />
+    <link rel="canonical" href="{{ url }}" />
+
+    <meta property="og:type" content="{{ og_type }}" />
+    <meta property="og:site_name" content="{{ config.title }}" />
+    <meta property="og:title" content="{{ heading }}" />
+    <meta property="og:description" content="{{ description }}" />
+    <meta property="og:url" content="{{ url }}" />
+    <meta property="og:image" content="{% block og_image %}{{ config.extra.og_image }}{% endblock %}" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="{{ get_url(path='favicon.ico') }}" />
+    <link rel="apple-touch-icon" href="{{ get_url(path='apple-touch-icon.png') }}" />
+    <link rel="alternate" type="application/atom+xml" title="{{ config.title }} Blog" href="{{ get_url(path='atom.xml', trailing_slash=false) }}" />
+    <link rel="stylesheet" href="{{ get_url(path='css/site.css', cachebust=true) }}" />
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="{{ get_url(path='') }}" class="site-logo">
+        <img src="{{ get_url(path='images/ash_logo_orange.svg') }}" alt="Ash Framework" />
+      </a>
+      <nav aria-label="Main">
+        <a href="https://hexdocs.pm/ash">Documentation</a>
+        <a href="{{ get_url(path='community/') }}">Community</a>
+        <a href="{{ get_url(path='media/') }}">Media</a>
+        <a href="{{ get_url(path='blog/') }}">Blog</a>
+        <a href="https://alembic.com.au/services/ash-framework-premium-support">Premium Support</a>
+      </nav>
+    </header>
+
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <p>A declarative, resource-oriented application framework for Elixir. Model your domain, derive the rest.</p>
+      <nav aria-label="Footer">
+        <a href="https://hexdocs.pm/ash/get-started.html">Getting Started</a>
+        <a href="https://hexdocs.pm/ash/readme.html">Guides</a>
+        <a href="https://hexdocs.pm/ash/Ash.html">API Reference</a>
+        <a href="https://github.com/ash-project/ash/issues/new?template=bug_report.md">Report a Bug</a>
+        <a href="https://github.com/ash-project/ash?tab=security-ov-file#readme">Security Policy</a>
+        <a href="https://github.com/ash-project/ash">GitHub</a>
+        <a href="https://bsky.app/profile/ash-hq.org">Bluesky</a>
+      </nav>
+      <p>© {{ now() | date(format="%Y") }} Ash Framework</p>
+    </footer>
+  </body>
+</html>
