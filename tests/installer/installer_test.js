@@ -1,7 +1,8 @@
 // Run with: deno test --allow-read tests/
 //
-// fixtures/ holds the scripts the Phoenix app served for the URLs in fixtures/manifest.txt,
-// fetched from ash-hq.org before the rebuild. The edge function must match them exactly.
+// fixtures/ holds the expected script for each URL in fixtures/manifest.txt. They started as the
+// scripts the Phoenix app served (see the commit that added them); later changes to the output
+// show up as diffs to these files.
 
 import handler from "../../netlify/edge-functions/installer.js";
 
@@ -16,7 +17,7 @@ const manifest = await Deno.readTextFile(new URL("manifest.txt", fixtures));
 for (const line of manifest.trim().split("\n")) {
   const [file, path] = line.split(" ");
 
-  Deno.test(`${path} matches the Phoenix app`, async () => {
+  Deno.test(`${path} matches ${file}`, async () => {
     const response = get(path);
     const expected = await Deno.readTextFile(new URL(file, fixtures));
 

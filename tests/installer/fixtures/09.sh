@@ -1,4 +1,4 @@
-# !/bin/sh
+#!/bin/sh
 #
 # To run locally without | sh:
 #
@@ -58,7 +58,6 @@ main() {
 
   echo_heading "Installing igniter_new archive..."
   mix archive.install hex igniter_new --force
-  
   latest_version=$(mix hex.info phx_new | grep "Releases:" | sed 's/.*Releases: //' | sed 's/,.*//')
   echo_heading "Installing Phoenix generator version $latest_version..."
   mix archive.install hex phx_new $latest_version --force
@@ -67,9 +66,8 @@ main() {
 
   cli_args="$@"
 
-   echo_heading "Creating new Elixir project '$app_name' with the following packages: ash"
-  mix igniter.new "$app_name" --with-args="${with_args}" --with phx.new --yes-to-deps --yes --setup --install "ash" $cli_args 
-  
+  echo_heading "Creating new Elixir project '$app_name' with the following packages: ash"
+  mix igniter.new "$app_name" --with-args="${with_args}" --with phx.new --yes-to-deps --yes --setup --install "ash" $cli_args
 }
 
 main "$@"

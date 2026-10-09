@@ -6,9 +6,10 @@
 // of packages, `with_args` is passed through to the project generator, and any other parameter
 // becomes a flag for `mix igniter.new` (`?example=true` → `--example`, `?foo=bar` → `--foo "bar"`).
 //
-// A port of the Phoenix app's NewController, producing exactly the same script for the same URL.
-// The script is run by the shell, so every value must match an allowlist; anything else gets a
-// script that prints an error and exits, rather than running code from a crafted URL.
+// A port of the Phoenix app's NewController. The script runs the same commands for the same URL;
+// tests/installer/fixtures/ holds the expected output. The script is run by the shell, so every
+// value must match an allowlist; anything else gets a script that prints an error and exits,
+// rather than running code from a crafted URL.
 
 export const config = { path: ["/new/*", "/install/*"], method: ["GET", "HEAD"] };
 
@@ -66,7 +67,19 @@ export function installerScript(appName, params, noAsh) {
   const withArgs = params.with_args === undefined ? "" : check(params.with_args, ARG_VALUE, "with_args");
   let newWithArgs = withArgs;
   if (withPhxNew) newWithArgs = withArgs === "" ? "--from-elixir-install" : `--from-elixir-install ${withArgs}`;
-  const withArg = withPhxNew ? "--with phx.new " : "";
+  const igniterNewFlags = [
+    withPhxNew && "--with phx.new",
+    "--yes-to-deps --yes --setup",
+    install && `--install "${install}"`,
+    "$cli_args",
+    args,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const creating = install
+    ? `Creating new Elixir project '$app_name' with the following packages: ${install}`
+    : "Creating new Elixir project '$app_name'...";
 
   const phxNew = withPhxNew
     ? `
@@ -75,7 +88,7 @@ export function installerScript(appName, params, noAsh) {
   mix archive.install hex phx_new $latest_version --force`
     : "";
 
-  return `# !/bin/sh
+  return `#!/bin/sh
 #
 # To run locally without | sh:
 #
@@ -134,16 +147,14 @@ main() {
   fi
 
   echo_heading "Installing igniter_new archive..."
-  mix archive.install hex igniter_new --force
-  ${phxNew}
+  mix archive.install hex igniter_new --force${phxNew}
 
   app_name="${appName}"
 
   cli_args="$@"
 
-   echo_heading "Creating new Elixir project '$app_name' with the following packages: ${install}"
-  mix igniter.new "$app_name" --with-args="\${with_args}" ${withArg}--yes-to-deps --yes --setup --install "${install}" $cli_args ${args}
-${"  "}
+  echo_heading "${creating}"
+  mix igniter.new "$app_name" --with-args="\${with_args}" ${igniterNewFlags}
 }
 
 main "$@"

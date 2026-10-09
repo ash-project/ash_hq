@@ -1,4 +1,4 @@
-# !/bin/sh
+#!/bin/sh
 #
 # To run locally without | sh:
 #
@@ -58,15 +58,13 @@ main() {
 
   echo_heading "Installing igniter_new archive..."
   mix archive.install hex igniter_new --force
-  
 
   app_name="my_app"
 
   cli_args="$@"
 
-   echo_heading "Creating new Elixir project '$app_name' with the following packages: ash,ash_postgres"
+  echo_heading "Creating new Elixir project '$app_name' with the following packages: ash,ash_postgres"
   mix igniter.new "$app_name" --with-args="${with_args}" --yes-to-deps --yes --setup --install "ash,ash_postgres" $cli_args --example
-  
 }
 
 main "$@"
