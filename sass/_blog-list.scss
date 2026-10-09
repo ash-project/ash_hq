@@ -6,10 +6,11 @@
   }
 
   .blog-list__author {
-    display: block;
-    margin-top: var(--space-3);
+    display: inline-flex;
+    gap: var(--space-3);
+    align-items: center;
+    margin-right: var(--space-2);
     color: var(--text-faint);
-    font: var(--type-small);
   }
 
   .blog-rss {

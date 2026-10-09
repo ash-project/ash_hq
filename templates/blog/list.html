@@ -21,14 +21,17 @@
 
       <ul class="list-rows">
         {%- for page in section.pages %}
-          {%- set lead %}
-            <time class="eyebrow eyebrow--muted" datetime="{{ page.date }}">{{ page.date | date(format="%-d %b %Y") }}</time>
-            <span class="blog-list__author">{{ page.authors | join(sep=", ") }}</span>
-          {%- endset %}
+          {%- set lead = <ui.date_badge date={page.date} /> %}
           {%- set arrow = <ui.icon name="arrow-right" /> %}
           {%- set tags = page.taxonomies.tags | default(value=[]) %}
           {%- set tag_slugs %}{% for tag in tags %}{{ tag | slugify }} {% endfor %}{% endset %}
-          {% <ui.list_row title={page.title} href={page.permalink} heading="h2" lead={lead} lead_width="160px" text={page.description} action={arrow} hide_action_mobile={true} data_tags={tag_slugs | trim}> %}
+          {% <ui.list_row title={page.title} href={page.permalink} heading="h2" lead={lead} lead_width="72px" text={page.description} action={arrow} hide_action_mobile={true} data_tags={tag_slugs | trim}> %}
+            <span class="blog-list__author">
+              {%- for author in page.authors %}
+                {%- if author in config.extra.authors %}{{ <ui.avatar name={author} github={config.extra.authors[author]} size={20} decorative={true} /> }}{% endif %}
+              {%- endfor %}
+              {{ page.authors | join(sep=", ") }}
+            </span>
             {%- if page.date | date(format="%s") | int > new_since %}{{ <ui.badge text="New" tone="accent" /> }}{% endif %}
             {%- for tag in tags %}{{ <ui.badge text={tag} /> }}{% endfor %}
           {% </ui.list_row> %}

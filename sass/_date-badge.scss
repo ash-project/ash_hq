@@ -1,0 +1,29 @@
+/* A date as a small calendar page (templates/components/date-badge.html) */
+@layer components {
+  .date-badge {
+    display: inline-grid;
+    gap: var(--space-2);
+    justify-items: center;
+    width: 72px;
+    padding: 10px 0;
+    border: 1px solid var(--border-default);
+    background: var(--surface-card);
+  }
+
+  .date-badge__month {
+    color: var(--accent-text);
+    font: var(--fw-medium) 0.75rem / 1 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .date-badge__day {
+    color: var(--text-strong);
+    font: var(--fw-semibold) 1.75rem / 1 var(--font-sans);
+  }
+
+  .date-badge__year {
+    color: var(--text-faint);
+    font: var(--fw-regular) 0.75rem / 1 var(--font-mono);
+  }
+}

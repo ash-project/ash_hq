@@ -1,0 +1,16 @@
+{#
+  A date as a small calendar page: month, day and year. Screen readers hear the full date instead
+  of the three parts.
+
+    {{ <ui.date_badge date={page.date} /> }}
+
+  date: anything Tera's date filter accepts, such as "2026-10-03" or a page's date
+#}
+{% component ui.date_badge(date: string) %}
+  <time class="date-badge" datetime="{{ date | date(format='%Y-%m-%d') }}">
+    <span class="date-badge__month" aria-hidden="true">{{ date | date(format="%b") }}</span>
+    <span class="date-badge__day" aria-hidden="true">{{ date | date(format="%d") }}</span>
+    <span class="date-badge__year" aria-hidden="true">{{ date | date(format="%Y") }}</span>
+    <span class="visually-hidden">{{ date | date(format="%-d %B %Y") }}</span>
+  </time>
+{%- endcomponent ui.date_badge %}
