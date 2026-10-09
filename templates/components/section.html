@@ -1,0 +1,60 @@
+{#
+  A page section. Every section of every page is one of these.
+
+    {% <ui.section title="Core Team" layout="split"> %}
+      …content…
+    {% </ui.section> %}
+
+  variant: "plain" (the default; unboxed content), "band" (full-bleed subtle surface: at most two
+           per page, never adjacent) or "accent" (the page's one key action)
+  layout:  "stack" (header above full-width content) or "split" (a sticky header column beside
+           the content)
+  title, eyebrow, description, size, heading: passed to ui.section_header. A page's opening
+           section takes size="lg" heading="h1".
+  actions: buttons beside or below the header, as HTML
+  id:      defaults to the title, slugified. The section is labelled by its title.
+#}
+{% component ui.section(title: string = "", eyebrow: string = "", description: string = "", actions: string = "", variant: string = "plain", layout: string = "stack", size: string = "sm", heading: string = "h2", id: string = "") %}
+  {%- set section_id = id -%}
+  {%- if not section_id and title %}{% set section_id = title | slugify %}{% endif -%}
+  <section class="section section--{{ variant }} section--{{ layout }}"
+    {%- if section_id %} id="{{ section_id }}"{% endif -%}
+    {%- if title %} aria-labelledby="{{ section_id }}-title"{% endif %}>
+    <div class="container section__inner">
+      {%- if title or eyebrow or actions %}
+        <div class="section__head">
+          {%- if title or eyebrow %}
+            {{ <ui.section_header title={title} eyebrow={eyebrow} description={description} size={size} heading={heading} id={section_id ~ "-title"} /> }}
+          {%- endif %}
+          {%- if actions %}
+            <div class="section__actions">{{ actions | safe }}</div>
+          {%- endif %}
+        </div>
+      {%- endif %}
+      {%- if body is defined and body | trim %}
+        <div class="section__body">
+          {{ body }}
+        </div>
+      {%- endif %}
+    </div>
+  </section>
+{%- endcomponent ui.section %}
+
+{#
+  A section's heading, with an optional eyebrow above and description below. Used by
+  ui.section, or on its own.
+
+  size:    "sm" (a section, the default) or "lg" (a page title)
+  heading: the heading element, "h1" to "h3"
+#}
+{% component ui.section_header(title: string, eyebrow: string = "", description: string = "", size: string = "sm", heading: string = "h2", id: string = "") %}
+  <div class="section-header section-header--{{ size }}">
+    {%- if eyebrow %}
+      <p class="section-header__eyebrow">{{ eyebrow }}</p>
+    {%- endif %}
+    <{{ heading }} class="section-header__title"{% if id %} id="{{ id }}"{% endif %}>{{ title }}</{{ heading }}>
+    {%- if description %}
+      <p class="section-header__description">{{ description }}</p>
+    {%- endif %}
+  </div>
+{%- endcomponent ui.section_header %}

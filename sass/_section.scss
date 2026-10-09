@@ -1,0 +1,118 @@
+/* Page sections and their headers (templates/components/section.html) */
+@layer components {
+  .section {
+    --section-pad-y: var(--section-pad-plain);
+  }
+
+  .section__inner {
+    display: grid;
+    gap: var(--space-8);
+    padding-block: var(--section-pad-y);
+  }
+
+  /* Consecutive plain sections are divided by a hairline, inset to the content width */
+  .section--plain + .section--plain .section__inner {
+    padding-top: 0;
+
+    &::before {
+      content: "";
+      height: 1px;
+      margin-bottom: calc(var(--section-pad-y) - var(--space-8));
+      background: var(--border-subtle);
+    }
+  }
+
+  .section--band,
+  .section--accent {
+    --section-pad-y: var(--section-pad);
+
+    border-block: 1px solid var(--border-subtle);
+  }
+
+  .section--band {
+    background: var(--bg-subtle);
+  }
+
+  .section--accent {
+    border-top: 2px solid var(--accent);
+    background: var(--surface-accent);
+  }
+
+  .section__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-7);
+    align-items: end;
+    justify-content: space-between;
+  }
+
+  .section__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .section__body {
+    min-width: 0;
+  }
+
+  /* Split: a sticky header column, a third of the width, beside the content */
+  .section--split .section__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: var(--space-9) var(--space-11);
+    align-items: start;
+  }
+
+  .section--split .section__head {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-8));
+    display: grid;
+    gap: var(--space-7);
+    align-content: start;
+  }
+
+  /* The divider spans both columns */
+  .section--plain + .section--plain.section--split .section__inner::before {
+    grid-column: 1 / -1;
+  }
+
+  @media (max-width: 860px) {
+    .section--split .section__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-7);
+    }
+
+    .section--split .section__head {
+      position: static;
+    }
+  }
+
+  .section-header {
+    display: grid;
+    gap: 14px;
+    max-width: 680px;
+  }
+
+  .section-header__eyebrow {
+    color: var(--accent-text);
+    font: var(--type-eyebrow);
+  }
+
+  .section-header__title {
+    font: var(--type-h2);
+    letter-spacing: var(--ls-display);
+    line-height: var(--lh-tight);
+  }
+
+  .section-header--lg .section-header__title {
+    font: var(--type-display);
+    letter-spacing: var(--ls-display);
+  }
+
+  .section-header__description {
+    color: var(--text-muted);
+    font: var(--type-body-lg);
+    text-wrap: pretty;
+  }
+}

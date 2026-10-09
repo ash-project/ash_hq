@@ -1,0 +1,22 @@
+{#
+  A small label, such as a post's tag or an event's type.
+
+    {{ <ui.badge text="release" /> }}
+    {{ <ui.badge text="New" tone="accent" /> }}
+
+  tone: "neutral" (the default) or "accent"
+#}
+{% component ui.badge(text: string, tone: string = "neutral") %}
+  <span class="badge badge--{{ tone }}">{{ text }}</span>
+{%- endcomponent ui.badge %}
+
+{#
+  A short metadata label: a date, a month, a show name, a step count. Sentence case.
+
+    {{ <ui.eyebrow text="September 2024" /> }}
+
+  tone: "muted" (the default), "faint" or "accent"
+#}
+{% component ui.eyebrow(text: string, tone: string = "muted") %}
+  <span class="eyebrow eyebrow--{{ tone }}">{{ text }}</span>
+{%- endcomponent ui.eyebrow %}

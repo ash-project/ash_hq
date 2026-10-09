@@ -1,0 +1,44 @@
+{#
+  One item in a list of things over time: blog posts, events, podcasts, contributors.
+  Rows go in a <ul class="list-rows">, and each is an <li>.
+
+    <ul class="list-rows">
+      {% <ui.list_row title="Ash Framework 3.0" href="/blog/ash-framework-30/" lead={date}> %}
+        {{ <ui.badge text="release" /> }}
+      {% </ui.list_row> %}
+    </ul>
+
+  title:   the item's name. With `href`, it's the link, and the whole row is clickable.
+  heading: the title's heading element, so screen reader users can jump between items
+  lead:    HTML for the left column, such as a date or an avatar. --lead-width sets its width.
+  eyebrow, text: a label above the title, and a description below it
+  action:  HTML on the right, such as a button. hide_action_mobile hides it on narrow screens,
+           for actions that are only decorative arrows.
+  The body, if any, is a row of metadata below the text (tags, a location).
+#}
+{% component ui.list_row(title: string, href: string = "", heading: string = "h3", lead: string = "", lead_width: string = "", eyebrow: string = "", text: string = "", action: string = "", hide_action_mobile: bool = false, title_size: string = "md") %}
+  <li class="list-row{% if href %} list-row--link{% endif %}{% if not lead %} list-row--no-lead{% endif %}"
+    {%- if lead_width %} style="--lead-width: {{ lead_width }}"{% endif %}>
+    {%- if lead %}
+      <div class="list-row__lead">{{ lead | safe }}</div>
+    {%- endif %}
+    <div class="list-row__content">
+      {%- if eyebrow %}
+        <p class="list-row__eyebrow">{{ eyebrow }}</p>
+      {%- endif %}
+      <{{ heading }} class="list-row__title list-row__title--{{ title_size }}">
+        {%- if href %}<a class="list-row__link" href="{{ href }}">{{ title }}</a>{% else %}{{ title }}{% endif -%}
+      </{{ heading }}>
+      {%- if text %}
+        <p class="list-row__text">{{ text }}</p>
+      {%- endif %}
+      {#- `body` is only defined when the component has content between its tags #}
+      {%- if body is defined and body | trim %}
+        <div class="list-row__meta">{{ body }}</div>
+      {%- endif %}
+    </div>
+    {%- if action %}
+      <div class="list-row__action{% if hide_action_mobile %} hide-mobile{% endif %}">{{ action | safe }}</div>
+    {%- endif %}
+  </li>
+{%- endcomponent ui.list_row %}

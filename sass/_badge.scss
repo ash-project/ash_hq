@@ -1,0 +1,36 @@
+/* Badges and eyebrows (templates/components/badge.html) */
+@layer components {
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 0 var(--space-3);
+    border: 1px solid var(--border-default);
+    background: var(--surface-raised);
+    color: var(--text-body);
+    font: var(--fw-medium) 0.75rem / 1 var(--font-mono);
+    white-space: nowrap;
+  }
+
+  .badge--accent {
+    border-color: rgb(255 145 77 / 35%);
+    background: var(--accent-wash);
+    color: var(--accent-text);
+  }
+
+  .eyebrow {
+    font: var(--type-eyebrow);
+  }
+
+  .eyebrow--muted {
+    color: var(--text-muted);
+  }
+
+  .eyebrow--faint {
+    color: var(--text-faint);
+  }
+
+  .eyebrow--accent {
+    color: var(--accent-text);
+  }
+}

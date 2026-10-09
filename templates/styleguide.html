@@ -5,12 +5,11 @@
   so it's only built locally: `zola serve --drafts`, then /styleguide/.
 #}
 {% block content %}
-  <div class="container styleguide">
-    <h1>{{ page.title }}</h1>
+  {% <ui.section title="Styleguide" size="lg" heading="h1" description="Every component in the design system. This page is a draft, so it's never published."> %}
+  {% </ui.section> %}
 
-    <section aria-labelledby="buttons">
-      <h2 id="buttons">Buttons</h2>
-
+  {% <ui.section title="Buttons"> %}
+    <div class="styleguide">
       {% for size in ["sm", "md", "lg"] %}
         <h3>Size: {{ size }}</h3>
         <div class="styleguide__row">
@@ -30,15 +29,54 @@
       <div class="styleguide__narrow">
         {{ <ui.button text="Copy Command" size="lg" full={true} data_copy="example" /> }}
       </div>
-    </section>
+    </div>
+  {% </ui.section> %}
 
-    <section aria-labelledby="icons">
-      <h2 id="icons">Icons</h2>
+  {% <ui.section title="Icons, Badges and Eyebrows"> %}
+    <div class="styleguide">
       <div class="styleguide__row">
-        {% for name in ["arrow-right", "arrow-left", "arrow-down", "arrow-up-right", "github", "menu", "x"] %}
+        {% for name in ["arrow-right", "arrow-left", "arrow-down", "arrow-up-right", "github", "menu", "x", "at-sign"] %}
           <span>{{ <ui.icon name={name} /> }} {{ name }}</span>
         {% endfor %}
       </div>
-    </section>
-  </div>
+      <div class="styleguide__row">
+        {{ <ui.badge text="release" /> }}
+        {{ <ui.badge text="elixir" /> }}
+        {{ <ui.badge text="New" tone="accent" /> }}
+      </div>
+      <div class="styleguide__row">
+        {{ <ui.eyebrow text="Muted: 15 September 2024" /> }}
+        {{ <ui.eyebrow text="Faint: Zach Daniel" tone="faint" /> }}
+        {{ <ui.eyebrow text="Accent: October 2026" tone="accent" /> }}
+      </div>
+    </div>
+  {% </ui.section> %}
+
+  {% set all_posts = <ui.button text="All posts" variant="link" icon_right="arrow-right" href="/blog/" /> %}
+  {% <ui.section title="List Rows" layout="split" description="A split section: the header column sticks while the rows scroll." actions={all_posts}> %}
+    <ul class="list-rows">
+      {% set lead %}{{ <ui.eyebrow text="15 Sep 2024" /> }}{% endset %}
+      {% set arrow %}{{ <ui.icon name="arrow-right" /> }}{% endset %}
+      {% <ui.list_row title="Ash Framework 3.0" href="/blog/ash-framework-30/" lead={lead} text="Released!" action={arrow} hide_action_mobile={true}> %}
+        {{ <ui.badge text="New" tone="accent" /> }}
+        {{ <ui.badge text="release" /> }}
+      {% </ui.list_row> %}
+      {{ <ui.list_row title="A row without a link, lead or metadata" text="Rows without a link don't react to hover." /> }}
+      {% set ticket = <ui.button text="Get Tickets" href="https://example.com" icon_right="arrow-up-right" /> %}
+      {{ <ui.list_row title="A row with a link and a button" href="#list-rows" eyebrow="Training" text="The button stays clickable above the row's link." action={ticket} /> }}
+    </ul>
+  {% </ui.section> %}
+
+  {% <ui.section title="A Band Section" variant="band" layout="split" eyebrow="Proud Partner" description="A full-bleed subtle surface, for a spotlight. At most two per page, never adjacent."> %}
+    <p>Band content.</p>
+  {% </ui.section> %}
+
+  {% set build = <ui.button text="Build your installer" icon_right="arrow-right" href="/installer/" /> %}
+  {% <ui.section title="An Accent Section" variant="accent" layout="split" description="For the page's one key action." actions={build}> %}
+    <p>Accent content.</p>
+  {% </ui.section> %}
+
+  {% <ui.section title="A Plain Section After an Accent"> %}
+    <p>No divider: only consecutive plain sections get one.</p>
+  {% </ui.section> %}
 {% endblock %}

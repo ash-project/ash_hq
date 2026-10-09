@@ -2,13 +2,7 @@
 @layer components {
   .styleguide {
     display: grid;
-    gap: var(--space-10);
-    padding-block: var(--section-pad);
-
-    section {
-      display: grid;
-      gap: var(--space-5);
-    }
+    gap: var(--space-5);
   }
 
   .styleguide__row {
