@@ -1,0 +1,62 @@
+# The Community page's channels and core team
+
+[[channels]]
+title = "Discord"
+icon = "message-circle"
+href = "https://discord.gg/w3AXeARR2p"
+description = "The Ash discord is where you'll find support, collaboration, and discussion about Ash."
+
+[[channels]]
+title = "Answer Overflow"
+icon = "search"
+href = "https://www.answeroverflow.com/c/711271361523351632"
+description = "A publicly accessible and searchable mirror of our discord #support, #today-i-learned, and #showcase forum channels."
+
+[[channels]]
+title = "GitHub"
+icon = "github"
+href = "https://github.com/ash-project/ash"
+description = "The Ash Project on GitHub is your one stop shop for all of the source code across the various Ash libraries."
+
+[[channels]]
+title = "ElixirForum"
+icon = "messages-square"
+href = "https://elixirforum.com/ash"
+description = "The Ash section on Elixir Forum is another great place to ask questions or see what other people have been building."
+
+# name and GitHub username
+[[core_team]]
+name = "Zach Daniel"
+github = "zachdaniel"
+
+[[core_team]]
+name = "James Harton"
+github = "jimsynz"
+
+[[core_team]]
+name = "Barnabas Jovanovics"
+github = "barnabasJ"
+
+[[core_team]]
+name = "Josh Price"
+github = "joshprice"
+
+[[core_team]]
+name = "Rebecca Le"
+github = "sevenseacat"
+
+[[core_team]]
+name = "Robert Graff"
+github = "rgraff"
+
+[[core_team]]
+name = "Torkild Gundersen Kjevik"
+github = "Torkan"
+
+[[core_team]]
+name = "Dmitry Maganov"
+github = "vonagam"
+
+[[core_team]]
+name = "Jonatan Männchen"
+github = "maennchen"

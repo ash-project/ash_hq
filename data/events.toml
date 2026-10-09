@@ -1,0 +1,120 @@
+# Events: talks, trainings and conferences with the Ash team.
+#
+# Upcoming events are listed on the Community page, and the next one is shown in a bar above the
+# header on every page. Past events are left out when the site is built, so there's no need to
+# remove them: the scheduled rebuilds keep the list current.
+#
+# date:         the first day, as YYYY-MM-DD
+# end_date:     the last day, for events over several days (optional)
+# date_label:   how the date is shown; defaults to the first day, e.g. "3 October 2026" (optional)
+# title, href:  the event's name and page
+# subtitle:     a talk or session title, or a one-line summary (HTML is allowed)
+# description:  a sentence or two about it
+# type:         e.g. "Talk", "Training", "Conference" (optional)
+# location:     e.g. "Varberg, Sweden" (optional)
+# cta:          the link's text (optional, defaults to "Details")
+#
+# Ported from the Phoenix app's lib/ash_hq/events.ex, with each description's two paragraphs as
+# the subtitle and description.
+
+[[events]]
+title = "Ash Training @ CodeBeam US"
+cta = "Tickets On Sale Now!"
+type = "Training"
+date = 2025-03-05
+href = "https://codebeamamerica.com/trainings/supercharge-your-elixir-apps-with-ash/"
+subtitle = "Supercharge Your Elixir Apps with Ash"
+description = "Level up on Ash and hang out with the Ash team at CodeBeam US in San Francisco CA!"
+
+[[events]]
+title = "Ash Training @ AlchemyConf"
+type = "Training"
+date = 2025-04-01
+href = "https://membrz.club/alchemyconf/events/supercharge-your-elixir-apps-with-ash"
+subtitle = "Supercharge Your Elixir Apps with Ash"
+description = "Level up on Ash and hang out with the Ash team at AlchemyConf in Braga Portugal!"
+
+[[events]]
+title = "Training @ GigCityElixir 2025"
+type = "Training"
+date = 2025-05-08
+href = "https://www.gigcityelixir.com"
+subtitle = "Supercharge Your Elixir Apps with Ash"
+description = "Level up on Ash and hang out with the Ash team at AlchemyConf in Braga Portugal!"
+
+[[events]]
+title = "Talk @ GigCityElixir 2025"
+type = "Talk"
+date = 2025-05-09
+href = "https://www.gigcityelixir.com"
+subtitle = "The Next Dimension of Developer Experience"
+description = "Zach gives a talk on Igniter and the massive improvement it can make to the Elixir DX!"
+
+[[events]]
+title = "Talk @ ElixirConf EU"
+type = "Talk"
+date = 2025-05-15
+href = "https://www.elixirconf.eu"
+subtitle = "The Next Dimension of Developer Experience"
+description = "Zach gives a talk on Igniter and the massive improvement it can make to the Elixir DX!"
+
+[[events]]
+title = "Building on Bedrock: Elixir's Fundamental Design Advantage @ Scenic City Summit"
+type = "Talk"
+date = 2025-06-20
+href = "https://sceniccitysummit.com"
+subtitle = "Building on Bedrock: Elixir's Fundamental Design Advantage"
+description = "Zach gives a talk about Elixir, exploring the small design choices underpinning Elixir that manifest in exponentially more efficient and understandable applications. Understanding why Elixir manages to be so productive and effective."
+
+[[events]]
+title = "Building on Bedrock: Elixir's Fundamental Design Advantage @ Carolina Codes"
+type = "Talk"
+date = 2025-08-16
+href = "https://blog.carolina.codes/p/announcing-our-2025-speakers"
+subtitle = "Building on Bedrock: Elixir's Fundamental Design Advantage"
+description = "Zach gives a talk about Elixir, exploring the small design choices underpinning Elixir that manifest in exponentially more efficient and understandable applications. Understanding why Elixir manages to be so productive and effective."
+
+[[events]]
+title = "Ash AI Hackathon @ ElixirConf US"
+type = "Hackathon"
+date = 2025-08-27
+href = "https://elixirconf.com/trainings/ash-ai-hackathon/"
+subtitle = "Ash AI Hackathon"
+description = "Join Zach & Josh for an introduction to Ash AI followed by a free-form hackathon on AI apps with Ash."
+
+[[events]]
+title = "Talk @ GOATMIRE"
+type = "Talk"
+date = 2025-09-10
+href = "https://goatmire.com"
+subtitle = "Talk title is a secret ;)"
+description = "Hang out with Zach, Rebecca, Barnabas, James and Josh from the Ash core team in Varberg, Sweden"
+
+[[events]]
+title = "Talks and Workshops @ Goatmire Elixir and AshConf"
+type = "Conference"
+date = 2026-09-28
+end_date = 2026-10-03
+date_label = "September 28th to October 3rd, 2026"
+href = "https://goatmire.com"
+subtitle = "Workshops: [Ash Demystified] and [Achieving Balance in the Workshop]<br />Talks: [Time Travel for Normies], [Beam Bots: Robotics on the BEAM], and [Video Game Archaeology with Elixir]<br />And a whole day of talks for AshConf!"
+description = "Hang out with Zach, Rebecca, Barnabas, James and Josh from the Ash core team in Varberg, Sweden"
+
+[[events]]
+title = "Talk @ Goatmire Elixir"
+type = "Talk"
+date = 2026-10-02
+location = "Varberg, Sweden"
+href = "https://goatmire.com/schedule"
+subtitle = "Time Travel for Normies"
+description = "Catch Zach's talk at Goatmire Elixir in Varberg, Sweden!"
+
+[[events]]
+title = "AshConf 2026"
+cta = "Register Now!"
+type = "Conference"
+date = 2026-10-03
+location = "Varberg, Sweden"
+href = "https://luma.com/wz4z0iz6"
+subtitle = "A full day of Ash talks"
+description = "A one day conference in Varberg, Sweden, featuring Ash core team members, key contributors and expert users. Free for EEF members, or with a donation to the Ash Project."

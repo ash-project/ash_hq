@@ -1,0 +1,38 @@
+# The repositories whose contributors are shown on the Community page, as org/name.
+# Read by scripts/fetch-contributors.sh. Order matters: contributors are listed in the order
+# they're first found.
+
+ash-project/ash
+ash-project/ash_admin
+ash-project/ash_ai
+ash-project/ash_appsignal
+ash-project/ash_archival
+ash-project/ash_cloak
+ash-project/ash_csv
+ash-project/ash_double_entry
+ash-project/ash_events
+ash-project/ash_graphql
+ash-project/ash_json_api
+ash-project/ash_money
+ash-project/ash_oban
+ash-project/ash_ops
+ash-project/ash_paper_trail
+ash-project/ash_phoenix
+ash-project/ash_postgres
+ash-project/ash_rate_limiter
+ash-project/ash_slug
+ash-project/ash_sql
+ash-project/ash_sqlite
+ash-project/ash_state_machine
+ash-project/igniter
+ash-project/iterex
+ash-project/opentelemetry_ash
+ash-project/reactor
+ash-project/reactor_file
+ash-project/reactor_process
+ash-project/reactor_req
+ash-project/spark
+ash-project/splode
+ash-project/usage_rules
+team-alembic/ash_authentication
+team-alembic/ash_authentication_phoenix
