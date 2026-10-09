@@ -1,0 +1,14 @@
+{
+  "$comment": "IEx sessions, for code blocks fenced as ```iex: the prompt is muted, everything else is highlighted as Elixir.",
+  "name": "iex",
+  "scopeName": "source.iex",
+  "patterns": [
+    {
+      "match": "^(?:iex|\\.\\.\\.)(?:\\([^)]*\\))?>",
+      "name": "punctuation.prompt.iex"
+    },
+    {
+      "include": "source.elixir"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+/* Highlighted code blocks. Zola's highlighter writes the colours to /giallo.css, from
+   highlighting/ash.json; these are the layout rules it needs. */
+@layer components {
+  .giallo-l {
+    display: inline-block;
+    width: 100%;
+    min-height: 1lh;
+  }
+
+  .giallo-ln {
+    display: inline-block;
+    min-width: 3ch;
+    margin-right: 0.4em;
+    padding-inline: 0.4em;
+    color: var(--text-faint);
+    text-align: right;
+    user-select: none;
+  }
+}

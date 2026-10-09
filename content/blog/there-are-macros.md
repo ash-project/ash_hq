@@ -111,7 +111,7 @@ For those not familiar with Ash, lets break it down.
 
 These are all macros! However, they again map to an introspectable structure, acting more as configuration than as a traditional macro.
 
-```elixir
+```iex
 iex(1)> Ash.Resource.Info.action(Twitter.Tweets.Tweet, :create)
 %Ash.Resource.Actions.Create{
   name: :create,

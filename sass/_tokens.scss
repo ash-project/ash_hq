@@ -84,7 +84,8 @@
     --danger-wash: rgb(240 82 79 / 12%);
     --info-wash: rgb(106 166 248 / 12%);
 
-    /* Syntax highlighting */
+    /* Syntax highlighting. Duplicated as hex in highlighting/ash.json, for Zola's highlighter:
+       keep the two in sync. */
     --syn-text: var(--ash-100);
     --syn-comment: var(--text-faint);
     --syn-keyword: var(--orange-400);
@@ -92,6 +93,7 @@
     --syn-string: var(--green-400);
     --syn-module: var(--blue-400);
     --syn-number: var(--amber-400);
+    --syn-attribute: var(--amber-400);
     --syn-punct: var(--ash-400);
 
     /* Type */

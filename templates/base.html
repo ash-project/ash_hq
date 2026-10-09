@@ -36,6 +36,8 @@
     <link rel="alternate" type="application/atom+xml" title="{{ config.title }} Blog" href="{{ get_url(path='atom.xml', trailing_slash=false) }}" />
     <link rel="preload" href="{{ get_url(path='fonts/instrument-sans.woff2') }}" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="{{ get_url(path='site.css', cachebust=true) }}" />
+    {#- Syntax highlighting colours, generated from highlighting/ash.json #}
+    <link rel="stylesheet" href="{{ get_url(path='giallo.css') }}" />
     {% block head %}{% endblock %}
   </head>
   <body>

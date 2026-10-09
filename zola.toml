@@ -19,7 +19,13 @@ taxonomies = [{ name = "tags", render = false }]
 [markdown]
 
 [markdown.highlighting]
-theme = "catppuccin-mocha"
+# The design system's syntax colours, as CSS classes in a generated /giallo.css. `zola serve`
+# doesn't watch highlighting/, so restart it after changing the theme.
+theme = "ash"
+extra_themes = ["highlighting/ash.json"]
+# ```iex code blocks: IEx sessions, with the prompt muted
+extra_grammars = ["highlighting/iex.json"]
+style = "class"
 
 [extra]
 og_image = "https://ash-hq.org/images/ash-logo-side.png"

@@ -1,0 +1,56 @@
+{
+  "$comment": "The design system's syntax colours as a VS Code theme, for Zola's highlighter. Theme files only take hex colours, so these duplicate the --syn-* tokens in sass/_tokens.scss: keep the two in sync. All are at least 4.5:1 on --surface-code.",
+  "name": "ash",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#100f0e",
+    "editor.foreground": "#edebe9"
+  },
+  "tokenColors": [
+    {
+      "name": "Comments",
+      "scope": ["comment", "punctuation.definition.comment"],
+      "settings": { "foreground": "#8a847e", "fontStyle": "italic" }
+    },
+    {
+      "name": "Keywords",
+      "scope": ["keyword", "storage", "keyword.control", "keyword.operator.word"],
+      "settings": { "foreground": "#ffa266" }
+    },
+    {
+      "name": "Atoms and keyword list keys",
+      "scope": ["constant.other.symbol", "constant.other.keywords", "constant.language"],
+      "settings": { "foreground": "#b48ef0" }
+    },
+    {
+      "name": "The colon of an atom, coloured with the atom rather than as punctuation",
+      "scope": ["constant.other.symbol punctuation", "punctuation.definition.constant"],
+      "settings": { "foreground": "#b48ef0" }
+    },
+    {
+      "name": "Modules and types. In `defmodule A.B do`, A is an inherited-class and the dots are only in meta.module, so both are included to colour the whole name.",
+      "scope": ["entity.name.type", "entity.name.class", "entity.other.inherited-class", "meta.module.elixir", "support.type", "support.class", "variable.other.constant"],
+      "settings": { "foreground": "#6aa6f8" }
+    },
+    {
+      "name": "Module attributes, including the @",
+      "scope": ["variable.other.readwrite.module", "variable.other.readwrite.module punctuation.definition.variable"],
+      "settings": { "foreground": "#f5b83d" }
+    },
+    {
+      "name": "Strings",
+      "scope": ["string", "punctuation.definition.string"],
+      "settings": { "foreground": "#4cc38a" }
+    },
+    {
+      "name": "Numbers",
+      "scope": ["constant.numeric"],
+      "settings": { "foreground": "#f5b83d" }
+    },
+    {
+      "name": "Punctuation",
+      "scope": ["punctuation", "keyword.operator"],
+      "settings": { "foreground": "#8f8983" }
+    }
+  ]
+}
