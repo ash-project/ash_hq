@@ -1,0 +1,22 @@
+{#
+  A set of mutually exclusive options shown as joined buttons: native radio buttons in a
+  fieldset, so they're announced as a group and arrow keys move between them.
+
+    {{ <ui.segmented name="tag" legend="Filter posts by tag" options={[["all", "All posts"], ["ash", "#ash"]]} value="all" /> }}
+
+  options: [value, label] pairs
+  value:   the selected option's value
+  Any other argument becomes an attribute of the fieldset, with _ in its name turned into -.
+#}
+{% component ui.segmented(name: string, legend: string, options: array, value: string = "", ...attrs) %}
+  <fieldset class="segmented"
+    {%- for attr, attr_value in attrs %} {{ attr | replace(from="_", to="-") }}="{{ attr_value }}"{% endfor %}>
+    <legend class="visually-hidden">{{ legend }}</legend>
+    {%- for option in options %}
+      <label class="segmented__option">
+        <input class="segmented__input" type="radio" name="{{ name }}" value="{{ option | first }}"{% if option | first == value %} checked{% endif %} />
+        <span>{{ option | last }}</span>
+      </label>
+    {%- endfor %}
+  </fieldset>
+{%- endcomponent ui.segmented %}

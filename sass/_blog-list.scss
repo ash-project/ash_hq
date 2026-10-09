@@ -1,0 +1,25 @@
+/* The blog's list of posts (templates/blog/list.html) */
+@layer components {
+  .blog-list {
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  .blog-list__author {
+    display: block;
+    margin-top: var(--space-3);
+    color: var(--text-faint);
+    font: var(--type-small);
+  }
+
+  .blog-rss {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    color: var(--text-muted);
+
+    &:hover {
+      color: var(--text-strong);
+    }
+  }
+}

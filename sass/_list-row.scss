@@ -19,6 +19,11 @@
     transition: border-color var(--dur-fast) var(--ease-out);
   }
 
+  /* Rows filtered out by a script */
+  .list-row[hidden] {
+    display: none;
+  }
+
   .list-row--no-lead {
     grid-template-columns: minmax(0, 1fr) auto;
   }
@@ -105,6 +110,24 @@
     display: flex;
     gap: var(--space-3);
     align-items: center;
+    color: var(--text-faint);
+    transition: color var(--dur-fast) var(--ease-out);
+
+    /* A bare arrow, rather than one inside a button */
+    > .icon {
+      --icon-size: 18px;
+
+      transition: transform var(--dur-fast) var(--ease-out);
+    }
+  }
+
+  /* The arrow follows the row's hover, like the title, and nudges the way it points */
+  .list-row--link:hover .list-row__action {
+    color: var(--accent-text);
+
+    > .icon {
+      transform: translateX(2px);
+    }
   }
 
   @media (max-width: 860px) {

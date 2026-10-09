@@ -33,6 +33,9 @@ github = "https://github.com/ash-project/ash"
 premium_support = "https://alembic.com.au/services/ash-framework-premium-support"
 discord = "https://discord.gg/D7FNG2q"
 
+# Blog posts published within this many days of a build are marked "New"
+new_post_days = 30
+
 # Blog authors' GitHub usernames, for their avatars
 [extra.authors]
 "Zach Daniel" = "zachdaniel"

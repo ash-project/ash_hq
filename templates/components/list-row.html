@@ -15,10 +15,12 @@
   action:  HTML on the right, such as a button. hide_action_mobile hides it on narrow screens,
            for actions that are only decorative arrows.
   The body, if any, is a row of metadata below the text (tags, a location).
+  Any other argument becomes an attribute of the <li>, with _ in its name turned into -.
 #}
-{% component ui.list_row(title: string, href: string = "", heading: string = "h3", lead: string = "", lead_width: string = "", eyebrow: string = "", text: string = "", action: string = "", hide_action_mobile: bool = false, title_size: string = "md") %}
+{% component ui.list_row(title: string, href: string = "", heading: string = "h3", lead: string = "", lead_width: string = "", eyebrow: string = "", text: string = "", action: string = "", hide_action_mobile: bool = false, title_size: string = "md", ...attrs) %}
   <li class="list-row{% if href %} list-row--link{% endif %}{% if not lead %} list-row--no-lead{% endif %}"
-    {%- if lead_width %} style="--lead-width: {{ lead_width }}"{% endif %}>
+    {%- if lead_width %} style="--lead-width: {{ lead_width }}"{% endif %}
+    {%- for attr, attr_value in attrs %} {{ attr | replace(from="_", to="-") }}="{{ attr_value }}"{% endfor %}>
     {%- if lead %}
       <div class="list-row__lead">{{ lead | safe }}</div>
     {%- endif %}
