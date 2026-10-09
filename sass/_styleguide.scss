@@ -1,0 +1,24 @@
+/* Layout for the styleguide page only (content/styleguide.md, a draft) */
+@layer components {
+  .styleguide {
+    display: grid;
+    gap: var(--space-10);
+    padding-block: var(--section-pad);
+
+    section {
+      display: grid;
+      gap: var(--space-5);
+    }
+  }
+
+  .styleguide__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  .styleguide__narrow {
+    max-width: 440px;
+  }
+}

@@ -1,0 +1,28 @@
+{#
+  A button, or a link styled as one: pass `href` for navigation, leave it out for an action.
+
+    {{ <ui.button text="Install Now" href="/installer/" size="lg" icon_right="arrow-right" /> }}
+    {{ <ui.button variant="secondary" icon="arrow-left" label="Previous step" data_tour="prev" /> }}
+
+  variant:  "primary" (the one main action in a section), "secondary", "ghost" or "link"
+  size:     "sm", "md" or "lg"
+  icon, icon_right: icon names, shown before and after the text
+  label:    the accessible name, required when the button shows only an icon
+  disabled: for buttons only; links can't be disabled
+  Any other argument becomes an attribute, with _ in its name turned into -.
+#}
+{% component ui.button(text: string = "", href: string = "", variant: string = "primary", size: string = "md", icon: string = "", icon_right: string = "", label: string = "", full: bool = false, disabled: bool = false, ...attrs) %}
+  {%- set class = "button button--" ~ variant ~ " button--" ~ size -%}
+  {%- if full %}{% set class = class ~ " button--full" %}{% endif -%}
+  {%- if href %}{% set tag = "a" %}{% else %}{% set tag = "button" %}{% endif -%}
+  <{{ tag }} class="{{ class }}"
+    {%- if href %} href="{{ href }}"{% else %} type="button"{% endif -%}
+    {%- if label %} aria-label="{{ label }}"{% endif -%}
+    {%- if disabled and not href %} disabled{% endif -%}
+    {%- for name, value in attrs %} {{ name | replace(from="_", to="-") }}="{{ value }}"{% endfor -%}
+  >
+    {%- if icon %}{{ <ui.icon name={icon} /> }}{% endif -%}
+    {%- if text %}<span>{{ text }}</span>{% endif -%}
+    {%- if icon_right %}{{ <ui.icon name={icon_right} /> }}{% endif -%}
+  </{{ tag }}>
+{%- endcomponent ui.button %}

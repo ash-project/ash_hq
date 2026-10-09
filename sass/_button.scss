@@ -1,0 +1,141 @@
+/* Buttons, and links styled as buttons.
+
+   primary:   the single main action in a section. Orange with dark ink, and a chamfered corner.
+   secondary: an alternative to the primary, outlined.
+   ghost:     toolbars and navigation, no outline until hovered.
+   link:      inline, text only. */
+@layer components {
+  .button {
+    --button-height: 40px;
+    --button-pad: var(--space-5);
+    --button-gap: var(--space-3);
+    --button-text: var(--text-strong);
+    --button-bg: transparent;
+    --button-border: transparent;
+    --icon-size: 16px;
+
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--button-gap);
+    min-height: var(--button-height);
+    padding: 0 var(--button-pad);
+    /* Transparent borders show up in forced-colors modes, outlining every button */
+    border: 1px solid var(--button-border);
+    border-radius: 0;
+    background: var(--button-bg);
+    color: var(--button-text);
+    font: var(--fw-semibold) 0.9375rem / 1 var(--font-sans);
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+
+    &:hover {
+      color: var(--button-text);
+      text-decoration: none;
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Arrows nudge in the direction they point */
+    .icon {
+      transition: transform var(--dur-fast) var(--ease-out);
+    }
+
+    &:hover:not(:disabled) > .icon:last-child:not(:first-child) {
+      transform: translateX(2px);
+    }
+  }
+
+  .button--sm {
+    --button-height: 32px;
+    --button-pad: var(--space-4);
+    --button-gap: 6px;
+    --icon-size: 15px;
+
+    font-size: var(--fs-small);
+  }
+
+  .button--lg {
+    --button-height: 48px;
+    --button-pad: 22px;
+    --button-gap: 10px;
+    --icon-size: 18px;
+
+    font-size: var(--fs-body);
+  }
+
+  .button--full {
+    display: flex;
+    width: 100%;
+  }
+
+  /* The chamfered fill is drawn behind the label, rather than clipping the button itself, so
+     the focus outline isn't clipped away with it */
+  .button--primary {
+    --button-text: var(--accent-ink);
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      z-index: -1;
+      background: var(--accent);
+      clip-path: var(--clip-chamfer-sm);
+      transition: background-color var(--dur-fast) var(--ease-out);
+    }
+
+    &:hover::before {
+      background: var(--accent-hover);
+    }
+
+    &:active::before {
+      background: var(--accent-press);
+    }
+  }
+
+  .button--secondary {
+    --button-border: var(--border-control);
+
+    &:hover:not(:disabled) {
+      --button-bg: var(--surface-raised);
+      --button-border: var(--ash-400);
+    }
+  }
+
+  .button--ghost {
+    --button-text: var(--text-body);
+
+    &:hover:not(:disabled) {
+      --button-bg: var(--surface-raised);
+      --button-text: var(--text-strong);
+    }
+  }
+
+  .button--link {
+    --button-text: var(--accent-text);
+    --button-pad: 0;
+
+    min-height: auto;
+
+    &:hover {
+      --button-text: var(--accent-hover);
+
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+}

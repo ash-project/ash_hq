@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{#
+  A catalogue of the design system's components, for checking changes to them. A draft page,
+  so it's only built locally: `zola serve --drafts`, then /styleguide/.
+#}
+{% block content %}
+  <div class="container styleguide">
+    <h1>{{ page.title }}</h1>
+
+    <section aria-labelledby="buttons">
+      <h2 id="buttons">Buttons</h2>
+
+      {% for size in ["sm", "md", "lg"] %}
+        <h3>Size: {{ size }}</h3>
+        <div class="styleguide__row">
+          {{ <ui.button text="Install Now" size={size} icon_right="arrow-right" /> }}
+          {{ <ui.button text="GitHub" variant="secondary" size={size} icon="github" href="https://github.com/ash-project/ash" /> }}
+          {{ <ui.button text="Back" variant="ghost" size={size} icon="arrow-left" /> }}
+          {{ <ui.button text="All packages" variant="link" size={size} icon_right="arrow-right" href="#buttons" /> }}
+        </div>
+      {% endfor %}
+
+      <h3>Icon only, disabled and full width</h3>
+      <div class="styleguide__row">
+        {{ <ui.button variant="secondary" size="sm" icon="arrow-left" label="Previous" /> }}
+        {{ <ui.button text="Next" variant="secondary" size="sm" icon_right="arrow-right" disabled={true} /> }}
+        {{ <ui.button text="Disabled" disabled={true} /> }}
+      </div>
+      <div class="styleguide__narrow">
+        {{ <ui.button text="Copy Command" size="lg" full={true} data_copy="example" /> }}
+      </div>
+    </section>
+
+    <section aria-labelledby="icons">
+      <h2 id="icons">Icons</h2>
+      <div class="styleguide__row">
+        {% for name in ["arrow-right", "arrow-left", "arrow-down", "arrow-up-right", "github", "menu", "x"] %}
+          <span>{{ <ui.icon name={name} /> }} {{ name }}</span>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+{% endblock %}

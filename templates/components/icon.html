@@ -1,0 +1,12 @@
+{#
+  An icon from icons/, which holds Lucide SVGs exactly as published (lucide.dev, ISC licence).
+
+  Icons are decorative and hidden from screen readers: the text beside them carries the meaning.
+  They take the text colour, and are sized by CSS (1em, or --icon-size).
+
+    {{ <ui.icon name="arrow-right" /> }}
+#}
+{% component ui.icon(name: string) %}
+  {%- set svg = load_data(path="icons/" ~ name ~ ".svg", format="plain") | split(pat="-->") | last -%}
+  {{- svg | trim | replace(from='class="lucide lucide-' ~ name ~ '"', to='class="icon" aria-hidden="true" focusable="false"') | safe -}}
+{% endcomponent ui.icon %}

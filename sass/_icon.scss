@@ -1,0 +1,10 @@
+/* Inline Lucide icons, sized relative to the surrounding text and coloured by it */
+@layer components {
+  .icon {
+    display: inline-block;
+    flex: none;
+    width: var(--icon-size, 1em);
+    height: var(--icon-size, 1em);
+    vertical-align: -0.125em;
+  }
+}
