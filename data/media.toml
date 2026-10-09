@@ -1,0 +1,98 @@
+# The Media page: case studies, posts, videos and podcasts about Ash
+
+# The YouTube playlist of Ash talks and videos
+youtube_playlist = "PLFiGINXG7oyFh5B_2SiHI9LtdQ_f1k7pz"
+
+# Case studies and articles, most of them on alembic.com.au. `kind` is "Case study" (highlighted),
+# "Overview" or "Blog".
+[[articles]]
+kind = "Case study"
+title = "Transforming Healthcare Communication"
+description = "How Elixir and Ash Framework enabled a healthcare communication platform to scale and evolve."
+url = "https://alembic.com.au/case-studies/transforming-healthcare-communication-with-elixir-and-ash-framework"
+
+[[articles]]
+kind = "Case study"
+title = "From Paper to Precision Workflows"
+description = "A case study in digitizing and optimizing business workflows with modern technology."
+url = "https://alembic.com.au/case-studies/from-paper-to-precision-workflows"
+
+[[articles]]
+kind = "Overview"
+title = "Ash Framework"
+description = "An overview of Ash Framework and its capabilities for building robust applications."
+url = "https://alembic.com.au/ash-framework"
+
+[[articles]]
+kind = "Blog"
+title = "Multitenancy in Ash Framework"
+description = "A deep dive into implementing multitenancy solutions with Ash Framework."
+url = "https://alembic.com.au/blog/multitenancy-in-ash-framework"
+
+[[articles]]
+kind = "Blog"
+title = "Seeds with Ash Generators"
+description = "Learn how to use Ash generators to seed your application data effectively."
+url = "https://alembic.com.au/blog/seeds-with-ash-generators-ashops"
+
+[[articles]]
+kind = "Blog"
+title = "Ash Framework Book in Beta"
+description = "Explore the comprehensive guide to Ash Framework, now available in beta."
+url = "https://alembic.com.au/blog/ash-framework-book-in-beta"
+
+# Podcast episodes, newest first, with their titles as published on Apple Podcasts
+[[podcasts]]
+show = "Beam Radio"
+title = "Episode 91: BeamRadio Talks Igniter with Zach Daniel"
+url = "https://podcasts.apple.com/us/podcast/episode-91-beamradio-talks-igniter-with-zach-daniel/id1550737059?i=1000710924911"
+
+[[podcasts]]
+show = "Beam Radio"
+title = "Episode 90: Josh Price: Ash and the Greater Elixir Community"
+url = "https://podcasts.apple.com/au/podcast/episode-90-josh-price-ash-and-the-greater-elixir-community/id1550737059?i=1000704496181"
+
+[[podcasts]]
+show = "Elixir Mentor"
+title = "Zach Daniel on Igniter"
+url = "https://podcasts.apple.com/au/podcast/zach-daniel-on-igniter/id1710056466?i=1000683583841"
+
+[[podcasts]]
+show = "Beam Radio"
+title = "Episode 81: The Power and Control of the Ash Framework with Zach Daniel and Rebecca Le"
+url = "https://podcasts.apple.com/au/podcast/episode-81-the-power-and-control-of-the/id1550737059?i=1000676793742"
+
+[[podcasts]]
+show = "Elixir Wizards"
+title = "Creating the Igniter Code Generation Framework with Zach Daniel"
+url = "https://podcasts.apple.com/au/podcast/creating-the-igniter-code-generation-framework-with/id1454287242?i=1000673425149"
+
+[[podcasts]]
+show = "Thinking Elixir Podcast"
+title = "194: Operational Elixir: Knowing When to Grow Up"
+url = "https://podcasts.apple.com/au/podcast/194-operational-elixir-knowing-when-to-grow-up/id1516100616?i=1000649690632"
+
+[[podcasts]]
+show = "Elixir Mix"
+title = "Streamlining Development with Ash Framework - EMx 236"
+url = "https://podcasts.apple.com/us/podcast/streamlining-development-with-ash-framework-emx-236/id1379029137?i=1000641182373"
+
+[[podcasts]]
+show = "Beam Radio"
+title = "Episode 61: Zach Daniel and the Ash Framework"
+url = "https://podcasts.apple.com/us/podcast/episode-61-zach-daniel-and-the-ash-framework/id1550737059?i=1000630232631"
+
+[[podcasts]]
+show = "Elixir Mix"
+title = "Creating Powerful Applications Using Ash Framework With Zach Daniel- EMx 198"
+url = "https://podcasts.apple.com/us/podcast/creating-powerful-applications-using-ash-framework/id1379029137?i=1000590178245"
+
+[[podcasts]]
+show = "Thinking Elixir Podcast"
+title = "123: Ash Framework Models Resources"
+url = "https://podcasts.apple.com/us/podcast/123-ash-framework-models-resources/id1516100616?i=1000584632201"
+
+[[podcasts]]
+show = "Thinking Elixir Podcast"
+title = "27: Ash Framework with Zach Daniel"
+url = "https://podcasts.apple.com/us/podcast/27-ash-framework-with-zach-daniel/id1516100616?i=1000503190100"

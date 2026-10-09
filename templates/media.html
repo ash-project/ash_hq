@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{#- The Media page. Its content is in data/media.toml. #}
+{% block content %}
+  {%- set media = load_data(path="data/media.toml") %}
+
+  {% <ui.section title={page.title} description={page.description} size="lg" heading="h1"> %}
+    {% <ui.tabs> %}
+      {% <ui.tab_panel label="Case Studies & Articles" id="articles"> %}
+        <ul class="cards grid" style="--min: 280px; --row-gap: var(--space-9)">
+          {%- for article in media.articles %}
+            {%- set tone = "neutral" %}
+            {%- if article.kind == "Case study" %}{% set tone = "accent" %}{% endif %}
+            {%- set kind = <ui.badge text={article.kind} tone={tone} /> %}
+            {{ <ui.card title={article.title} href={article.url} eyebrow={kind} text={article.description} /> }}
+          {%- endfor %}
+        </ul>
+      {% </ui.tab_panel> %}
+
+      {% <ui.tab_panel label="YouTube" id="youtube"> %}
+        {{ <ui.video title="Ash talks and videos, a YouTube playlist" playlist={media.youtube_playlist} caption="This is a whole playlist of videos!" /> }}
+      {% </ui.tab_panel> %}
+
+      {% <ui.tab_panel label="Podcasts" id="podcasts"> %}
+        <ul class="list-rows">
+          {%- for podcast in media.podcasts %}
+            {%- set show = <ui.eyebrow text={podcast.show} tone="faint" /> %}
+            {%- set play = <ui.icon name="play" /> %}
+            {{ <ui.list_row title={podcast.title} href={podcast.url} new_tab={true} lead={show} lead_width="200px" title_size="sm" action={play} hide_action_mobile={true} /> }}
+          {%- endfor %}
+        </ul>
+      {% </ui.tab_panel> %}
+    {% </ui.tabs> %}
+  {% </ui.section> %}
+
+  {% <ui.section title="Keep Reading" variant="band" layout="split"> %}
+    <ul class="cards grid" style="--min: 240px; --row-gap: var(--space-8)">
+      {{ <ui.card title="Ash Framework Book" href="https://pragprog.com/titles/ldash/ash-framework/" icon="book-open" text="Written by Rebecca Le and Zach Daniel, published by the Pragmatic Bookshelf." cta="Get the book!" /> }}
+      {{ <ui.card title="Ash Chronicle Newsletter" href="https://ashchronicle.substack.com" icon="newspaper" text="Releases, guides and community news." cta="Past issues" /> }}
+    </ul>
+  {% </ui.section> %}
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ get_url(path='js/tabs.js', cachebust=true) }}"></script>
+{% endblock %}

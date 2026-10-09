@@ -1,0 +1,109 @@
+/* Cards (templates/components/card.html): ruled items in a grid. Like a ListRow, only the title
+   is the link, stretched over the card. */
+@layer components {
+  .cards {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .card {
+    position: relative;
+    display: grid;
+    gap: var(--space-4);
+    align-content: start;
+    justify-items: start;
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--border-default);
+    transition: border-color var(--dur-base) var(--ease-out);
+  }
+
+  .card__title {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    font: var(--type-h3);
+    letter-spacing: var(--ls-heading);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  .card__icon {
+    display: flex;
+    color: var(--accent);
+    --icon-size: 20px;
+  }
+
+  .card__link {
+    color: inherit;
+    text-decoration: none;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
+
+    &:hover {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    &:focus-visible {
+      outline: none;
+
+      &::after {
+        outline: 2px solid var(--focus-ring);
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  .card__arrow {
+    display: flex;
+    margin-left: auto;
+    color: var(--text-faint);
+    transition: color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+    --icon-size: 16px;
+  }
+
+  .card__text {
+    color: var(--text-muted);
+    font: var(--type-small);
+    text-wrap: pretty;
+  }
+
+  .card__cta {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    color: var(--accent-text);
+    font: var(--fw-semibold) var(--fs-small) / 1 var(--font-sans);
+    --icon-size: 14px;
+
+    .icon {
+      transition: transform var(--dur-fast) var(--ease-out);
+    }
+  }
+
+  .card--link:hover {
+    border-top-color: var(--accent);
+
+    .card__title {
+      color: var(--accent-text);
+    }
+
+    .card__arrow {
+      color: var(--accent);
+      transform: translate(2px, 0);
+    }
+
+    .card__cta {
+      color: var(--accent-hover);
+
+      .icon {
+        transform: translateX(2px);
+      }
+    }
+  }
+}

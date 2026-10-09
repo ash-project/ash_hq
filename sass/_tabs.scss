@@ -1,0 +1,63 @@
+/* Tabs (templates/components/tabs.html, static/js/tabs.js). Without the script, panels stack
+   under their own headings. */
+@layer components {
+  .tabs {
+    display: grid;
+    gap: var(--space-10);
+  }
+
+  .tabs--enhanced {
+    gap: var(--space-8);
+  }
+
+  .tabs__panel {
+    display: grid;
+    gap: var(--space-7);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .tabs__heading {
+    font: var(--type-h2);
+    letter-spacing: var(--ls-heading);
+  }
+
+  .tabs__list {
+    display: flex;
+    gap: var(--space-7);
+    overflow-x: auto;
+    border-bottom: 1px solid var(--border-subtle);
+    scrollbar-width: none;
+  }
+
+  .tabs__tab {
+    flex: none;
+    min-height: 44px;
+    margin-bottom: -1px;
+    padding: 0;
+    border: 0;
+    /* The selected tab is marked by an underline as well as brighter text */
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--text-muted);
+    font: var(--fw-medium) var(--fs-small) / 1 var(--font-sans);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+
+    &:hover {
+      color: var(--text-strong);
+    }
+
+    &[aria-selected="true"] {
+      border-bottom-color: var(--accent);
+      color: var(--text-strong);
+    }
+
+    &:focus-visible {
+      outline-offset: -2px;
+    }
+  }
+}

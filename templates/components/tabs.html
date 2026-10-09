@@ -1,0 +1,23 @@
+{#
+  Tabbed panels. Without JavaScript, the panels are shown one after another, each under its own
+  heading. static/js/tabs.js turns the headings into a tab list (WAI-ARIA tabs pattern).
+
+    {% <ui.tabs> %}
+      {% <ui.tab_panel label="YouTube" id="youtube"> %}…{% </ui.tab_panel> %}
+      {% <ui.tab_panel label="Podcasts" id="podcasts"> %}…{% </ui.tab_panel> %}
+    {% </ui.tabs> %}
+
+  heading: the panels' heading element, when they're shown as sections
+#}
+{% component ui.tabs() %}
+  <div class="tabs" data-tabs>
+    {{ body }}
+  </div>
+{%- endcomponent ui.tabs %}
+
+{% component ui.tab_panel(label: string, id: string, heading: string = "h2") %}
+  <section class="tabs__panel" id="{{ id }}" aria-labelledby="{{ id }}-label">
+    <{{ heading }} class="tabs__heading" id="{{ id }}-label" data-tab-label>{{ label }}</{{ heading }}>
+    {{ body }}
+  </section>
+{%- endcomponent ui.tab_panel %}

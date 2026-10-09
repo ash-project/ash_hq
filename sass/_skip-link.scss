@@ -14,5 +14,16 @@
     &:hover {
       color: var(--accent-ink);
     }
+
+    /* Off screen until focused */
+    &:not(:focus) {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
   }
 }

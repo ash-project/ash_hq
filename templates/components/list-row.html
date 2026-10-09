@@ -9,6 +9,7 @@
     </ul>
 
   title:   the item's name. With `href`, it's the link, and the whole row is clickable.
+  new_tab: opens the link in a new tab, and tells screen reader users it will
   heading: the title's heading element, so screen reader users can jump between items
   lead:    HTML for the left column, such as a date or an avatar. --lead-width sets its width.
   eyebrow, text: a label above the title, and a description below it
@@ -17,7 +18,7 @@
   The body, if any, is a row of metadata below the text (tags, a location).
   Any other argument becomes an attribute of the <li>, with _ in its name turned into -.
 #}
-{% component ui.list_row(title: string, href: string = "", heading: string = "h3", lead: string = "", lead_width: string = "", eyebrow: string = "", text: string = "", action: string = "", hide_action_mobile: bool = false, title_size: string = "md", ...attrs) %}
+{% component ui.list_row(title: string, href: string = "", new_tab: bool = false, heading: string = "h3", lead: string = "", lead_width: string = "", eyebrow: string = "", text: string = "", action: string = "", hide_action_mobile: bool = false, title_size: string = "md", ...attrs) %}
   <li class="list-row{% if href %} list-row--link{% endif %}{% if not lead %} list-row--no-lead{% endif %}"
     {%- if lead_width %} style="--lead-width: {{ lead_width }}"{% endif %}
     {%- for attr, attr_value in attrs %} {{ attr | replace(from="_", to="-") }}="{{ attr_value }}"{% endfor %}>
@@ -29,7 +30,14 @@
         <p class="list-row__eyebrow">{{ eyebrow }}</p>
       {%- endif %}
       <{{ heading }} class="list-row__title list-row__title--{{ title_size }}">
-        {%- if href %}<a class="list-row__link" href="{{ href }}">{{ title }}</a>{% else %}{{ title }}{% endif -%}
+        {%- if href -%}
+          <a class="list-row__link" href="{{ href }}"{% if new_tab %} target="_blank" rel="noopener"{% endif %}>
+            {{- title -}}
+            {%- if new_tab %}<span class="visually-hidden"> (opens in a new tab)</span>{% endif -%}
+          </a>
+        {%- else -%}
+          {{ title }}
+        {%- endif -%}
       </{{ heading }}>
       {%- if text %}
         <p class="list-row__text">{{ text }}</p>

@@ -1,0 +1,36 @@
+{#
+  One of a set of things to browse: articles, channels, packages. Cards are ruled items, a hairline
+  above and no box, and each is an <li> in a <ul class="cards grid">.
+
+    <ul class="cards grid" style="--min: 280px">
+      {{ <ui.card title="Discord" href="https://discord.gg/…" icon="message-circle" text="…" /> }}
+    </ul>
+
+  title:   the card's name. With `href`, it's the link, and the whole card is clickable.
+  heading: the title's heading element
+  icon:    an icon name, shown in orange before the title
+  eyebrow: HTML above the title, such as a badge
+  text:    a short description
+  cta:     link text shown at the bottom, instead of the arrow beside the title
+#}
+{% component ui.card(title: string, href: string = "", heading: string = "h3", icon: string = "", eyebrow: string = "", text: string = "", cta: string = "") %}
+  {%- set external = href is starting_with(pat="http") -%}
+  <li class="card{% if href %} card--link{% endif %}">
+    {%- if eyebrow %}
+      <div class="card__eyebrow">{{ eyebrow | safe }}</div>
+    {%- endif %}
+    <{{ heading }} class="card__title">
+      {%- if icon %}<span class="card__icon">{{ <ui.icon name={icon} /> }}</span>{% endif -%}
+      {%- if href %}<a class="card__link" href="{{ href }}">{{ title }}</a>{% else %}{{ title }}{% endif -%}
+      {%- if href and not cta %}
+        <span class="card__arrow">{% if external %}{{ <ui.icon name="arrow-up-right" /> }}{% else %}{{ <ui.icon name="arrow-right" /> }}{% endif %}</span>
+      {%- endif -%}
+    </{{ heading }}>
+    {%- if text %}
+      <p class="card__text">{{ text }}</p>
+    {%- endif %}
+    {%- if cta %}
+      <span class="card__cta" aria-hidden="true">{{ cta }} {{ <ui.icon name="arrow-right" /> }}</span>
+    {%- endif %}
+  </li>
+{%- endcomponent ui.card %}

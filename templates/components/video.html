@@ -1,0 +1,24 @@
+{#
+  A YouTube video or playlist, embedded from youtube-nocookie.com, so viewers aren't tracked until
+  they play it. Loads lazily and never autoplays.
+
+    {{ <ui.video title="Ash talks and videos" playlist="PL…" caption="A whole playlist of videos" /> }}
+
+  title: names the embedded player for screen readers
+  Pass either `youtube` (a video ID) or `playlist` (a playlist ID).
+#}
+{% component ui.video(title: string, youtube: string = "", playlist: string = "", caption: string = "") %}
+  {%- if playlist -%}
+    {%- set src = "https://www.youtube-nocookie.com/embed/videoseries?list=" ~ playlist -%}
+  {%- else -%}
+    {%- set src = "https://www.youtube-nocookie.com/embed/" ~ youtube -%}
+  {%- endif -%}
+  <figure class="video">
+    <div class="video__frame">
+      <iframe src="{{ src }}" title="{{ title }}" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+    </div>
+    {%- if caption %}
+      <figcaption>{{ caption }}</figcaption>
+    {%- endif %}
+  </figure>
+{%- endcomponent ui.video %}

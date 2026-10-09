@@ -1,7 +1,7 @@
 /* Single-purpose helpers. The last layer, so they win over components. */
 @layer utilities {
   /* Hidden visually but still read by screen readers */
-  .visually-hidden:not(:focus-within, :active) {
+  .visually-hidden {
     position: absolute;
     width: 1px;
     height: 1px;
