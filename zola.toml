@@ -22,5 +22,32 @@ taxonomies = [{ name = "tags", render = false }]
 theme = "catppuccin-mocha"
 
 [extra]
-# Put all your custom variables here
 og_image = "https://ash-hq.org/images/ash-logo-side.png"
+github = "https://github.com/ash-project/ash"
+premium_support = "https://alembic.com.au/services/ash-framework-premium-support"
+
+# The main navigation. `path` links within the site (and marks the current section), `url` links
+# elsewhere.
+[[extra.nav]]
+label = "Docs"
+url = "https://hexdocs.pm/ash"
+
+[[extra.nav]]
+label = "Installer"
+path = "/installer/"
+
+[[extra.nav]]
+label = "Ecosystem"
+path = "/ecosystem/"
+
+[[extra.nav]]
+label = "Community"
+path = "/community/"
+
+[[extra.nav]]
+label = "Media"
+path = "/media/"
+
+[[extra.nav]]
+label = "Blog"
+path = "/blog/"

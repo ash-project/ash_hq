@@ -1,0 +1,190 @@
+/* The sticky site header. Below 860px the menu folds behind a toggle; the page's `js` class
+   (set in base.html) means the toggle script is running. */
+@layer components {
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    border-bottom: 1px solid var(--border-subtle);
+    background: color-mix(in srgb, var(--bg-page) 82%, transparent);
+    backdrop-filter: var(--blur-header);
+  }
+
+  .site-header__bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    min-height: var(--header-h);
+  }
+
+  /* Full header height, so the logo's row stays the same height when the mobile menu wraps
+     below it */
+  .site-header__logo {
+    display: flex;
+    flex: none;
+    align-items: center;
+    min-height: var(--header-h);
+
+    img {
+      width: auto;
+      height: 28px;
+    }
+  }
+
+  .site-header__menu {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  .site-nav__list {
+    display: flex;
+    gap: var(--space-7);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-nav__link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--header-h);
+    color: var(--text-muted);
+    font: var(--fw-medium) 0.9375rem / 1 var(--font-sans);
+    text-decoration: none;
+
+    &:hover,
+    &[aria-current] {
+      color: var(--text-strong);
+      text-decoration: none;
+    }
+
+    /* The current section is underlined, not just brighter */
+    &[aria-current]::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 -1px;
+      height: 2px;
+      background: var(--accent);
+    }
+  }
+
+  /* Arrows only show in the stacked mobile menu */
+  .site-nav__arrow {
+    display: none;
+  }
+
+  .site-header__actions {
+    display: flex;
+    gap: var(--space-3);
+    margin-left: auto;
+  }
+
+  .site-header__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin-left: auto;
+    padding: 0;
+    border: 1px solid var(--border-control);
+    background: transparent;
+    color: var(--text-strong);
+    cursor: pointer;
+    --icon-size: 20px;
+
+    &[hidden] {
+      display: none;
+    }
+
+    /* Out of inline layout, so the icon has no baseline gap beneath it */
+    .site-header__toggle-open,
+    .site-header__toggle-close {
+      display: flex;
+    }
+
+    &[aria-expanded="true"] .site-header__toggle-open,
+    &[aria-expanded="false"] .site-header__toggle-close {
+      display: none;
+    }
+  }
+
+  @media (min-width: 861px) {
+    .site-header__toggle {
+      display: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .site-header__bar {
+      flex-wrap: wrap;
+      align-content: flex-start;
+      column-gap: var(--space-5);
+    }
+
+    /* Stacked under the logo: always without JavaScript, when opened with it */
+    .site-header__menu {
+      flex-direction: column;
+      flex-basis: 100%;
+      align-items: stretch;
+      gap: var(--space-7);
+      padding-bottom: var(--space-8);
+    }
+
+    .js .site-header:not(.site-header--open) .site-header__menu {
+      display: none;
+    }
+
+    .site-header--open {
+      background: var(--bg-page);
+
+      .site-header__menu {
+        min-height: calc(100dvh - var(--header-h));
+        border-top: 1px solid var(--border-subtle);
+      }
+    }
+
+    .site-nav__list {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .site-nav__link {
+      min-height: 52px;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 1.0625rem;
+      --icon-size: 16px;
+
+      /* In the stacked menu the current section is marked by its arrow instead */
+      &[aria-current]::after {
+        display: none;
+      }
+
+      &[aria-current] .site-nav__arrow {
+        color: var(--accent);
+      }
+    }
+
+    .site-nav__arrow {
+      display: flex;
+      color: var(--text-faint);
+    }
+
+    .site-header__actions {
+      flex-direction: column-reverse;
+      gap: 10px;
+      margin-left: 0;
+
+      .button {
+        --button-height: 48px;
+
+        width: 100%;
+        font-size: var(--fs-body);
+      }
+    }
+  }
+}

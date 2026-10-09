@@ -1,0 +1,45 @@
+{#
+  The sticky site header. On narrow screens the menu folds behind a toggle button
+  (static/js/site-header.js); without JavaScript it stays open, stacked under the logo.
+#}
+<header class="site-header" data-site-header>
+  <div class="container site-header__bar">
+    <a class="site-header__logo" href="{{ get_url(path='') }}">
+      <img src="{{ get_url(path='images/ash_logo_orange.svg') }}" alt="Ash Framework" width="35" height="28" />
+    </a>
+
+    <button class="site-header__toggle" type="button" aria-expanded="false" aria-controls="site-menu" hidden>
+      <span class="site-header__toggle-open">{{ <ui.icon name="menu" /> }}</span>
+      <span class="site-header__toggle-close">{{ <ui.icon name="x" /> }}</span>
+      <span class="visually-hidden">Menu</span>
+    </button>
+
+    <div class="site-header__menu" id="site-menu">
+      <nav class="site-nav" aria-label="Main">
+        <ul class="site-nav__list">
+          {%- for item in config.extra.nav %}
+            <li>
+              {%- if item.path is defined %}
+                {%- set current = current_path is defined and current_path is starting_with(pat=item.path) %}
+                <a class="site-nav__link" href="{{ get_url(path=item.path, trailing_slash=true) }}"{% if current %} aria-current="page"{% endif %}>
+                  {{- item.label -}}
+                  <span class="site-nav__arrow">{{ <ui.icon name="arrow-right" /> }}</span>
+                </a>
+              {%- else %}
+                <a class="site-nav__link" href="{{ item.url }}">
+                  {{- item.label -}}
+                  <span class="site-nav__arrow">{{ <ui.icon name="arrow-up-right" /> }}</span>
+                </a>
+              {%- endif %}
+            </li>
+          {%- endfor %}
+        </ul>
+      </nav>
+
+      <div class="site-header__actions">
+        {{ <ui.button text="GitHub" href={config.extra.github} variant="ghost" size="sm" icon="github" /> }}
+        {{ <ui.button text="Premium Support" href={config.extra.premium_support} variant="secondary" size="sm" /> }}
+      </div>
+    </div>
+  </div>
+</header>

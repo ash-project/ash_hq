@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {#- Lets CSS tell whether scripts will run, before the page renders: see _site-header.scss #}
+    <script>document.documentElement.classList.add("js");</script>
     {#- Pages, sections and the 404 page each have different variables available #}
     {%- set heading = config.title %}
     {%- set description = config.description %}
@@ -39,35 +41,15 @@
   <body>
     <a href="#main" class="skip-link visually-hidden">Skip to content</a>
 
-    <header class="site-header">
-      <a href="{{ get_url(path='') }}" class="site-logo">
-        <img src="{{ get_url(path='images/ash_logo_orange.svg') }}" alt="Ash Framework" />
-      </a>
-      <nav aria-label="Main">
-        <a href="https://hexdocs.pm/ash">Documentation</a>
-        <a href="{{ get_url(path='community/') }}">Community</a>
-        <a href="{{ get_url(path='media/') }}">Media</a>
-        <a href="{{ get_url(path='blog/') }}">Blog</a>
-        <a href="https://alembic.com.au/services/ash-framework-premium-support">Premium Support</a>
-      </nav>
-    </header>
+    {% include "partials/site-header.html" %}
 
     <main id="main">
       {% block content %}{% endblock %}
     </main>
 
-    <footer class="site-footer">
-      <p>A declarative, resource-oriented application framework for Elixir. Model your domain, derive the rest.</p>
-      <nav aria-label="Footer">
-        <a href="https://hexdocs.pm/ash/get-started.html">Getting Started</a>
-        <a href="https://hexdocs.pm/ash/readme.html">Guides</a>
-        <a href="https://hexdocs.pm/ash/Ash.html">API Reference</a>
-        <a href="https://github.com/ash-project/ash/issues/new?template=bug_report.md">Report a Bug</a>
-        <a href="https://github.com/ash-project/ash?tab=security-ov-file#readme">Security Policy</a>
-        <a href="https://github.com/ash-project/ash">GitHub</a>
-        <a href="https://bsky.app/profile/ash-hq.org">Bluesky</a>
-      </nav>
-      <p>© {{ now() | date(format="%Y") }} Ash Framework</p>
-    </footer>
+    {% include "partials/site-footer.html" %}
+
+    <script type="module" src="{{ get_url(path='js/site-header.js', cachebust=true) }}"></script>
+    {% block scripts %}{% endblock %}
   </body>
 </html>
