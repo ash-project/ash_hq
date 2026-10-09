@@ -1,13 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <article class="container">
-    <header>
-      <h1>{{ page.title | markdown(inline=true) | safe }}</h1>
-      {% include "blog/meta.html" %}
+  <article class="container post">
+    <header class="post__header">
+      {%- if page.taxonomies.tags is defined %}
+        <ul class="post__tags" aria-label="Tags">
+          {%- for tag in page.taxonomies.tags %}
+            <li>{{ <ui.badge text={tag} /> }}</li>
+          {%- endfor %}
+        </ul>
+      {%- endif %}
+
+      <h1 class="post__title">{{ page.title | markdown(inline=true) | safe }}</h1>
+
+      <div class="post__byline">
+        {%- for author in page.authors %}
+          {%- if author in config.extra.authors %}
+            {{ <ui.avatar name={author} github={config.extra.authors[author]} size={36} decorative={true} /> }}
+          {%- endif %}
+        {%- endfor %}
+        <div class="post__byline-text">
+          <span class="post__author">{{ page.authors | join(sep=", ") }}</span>
+          <time datetime="{{ page.date }}">{{ page.date | date(format="%-d %B %Y") }}</time>
+        </div>
+      </div>
     </header>
-    <div class="prose">
+
+    {#- The page's title is its only h1, so headings in posts start at ## #}
+    <div class="prose post__body">
       {{ page.content | safe }}
     </div>
+
+    <footer class="post__footer">
+      <a href="{{ get_url(path='atom.xml', trailing_slash=false) }}">{{ <ui.icon name="rss" /> }} RSS</a>
+      <a href="{{ config.extra.discord }}">{{ <ui.icon name="message-circle" /> }} Discuss on Discord</a>
+    </footer>
   </article>
 {% endblock %}

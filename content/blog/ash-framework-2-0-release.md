@@ -9,11 +9,11 @@ aliases = ["/blog/testing/"]
 [taxonomies]
 tags = ["ash", "release", "elixir"]
 +++
-# Ash Framework
+## Ash Framework
 
 
 <div class="w-full flex justify-center">
-  <img src="/images/ash-logo-side.png" width="400" height="400"/>
+  <img src="/images/ash-logo-side.png" alt="" width="400" height="400"/>
 </div>
 
 ## What is Ash? 

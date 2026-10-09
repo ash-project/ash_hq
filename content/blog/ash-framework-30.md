@@ -7,11 +7,11 @@ authors = ["Zach Daniel"]
 [taxonomies]
 tags = ["ash", "elixir", "release"]
 +++
-# Ash Framework 3.0: Official Release!
+## Ash Framework 3.0: Official Release!
 
 I'm here with the fine folks at [Gig City Elixir](https://www.gigcityelixir.com), pushing the button live on stage 😎 
 
-<img src="/images/gig-city.jpg"></img>
+<img src="/images/gig-city.jpg" alt="Zach on stage at Gig City Elixir, in front of a waving, cheering audience"></img>
 
 The other packages around Ash will be updated with non-release candidate versions over the next few hours.
 
@@ -49,4 +49,4 @@ Ash 2.x will receive a **minimum** of 6 months of critical bug fixes and securit
 
 And don't forget, the Ash book is coming! Keep an eye out for updates 🥳. Thanks again to @sevenseacat for all her fine work on this book, its coming along spectacularly.
 
-<img src="/images/book-cover.jpg"></img>
+<img src="/images/book-cover.jpg" alt="The cover of Building Web Applications with Ash, by Rebecca Le and Zach Daniel"></img>

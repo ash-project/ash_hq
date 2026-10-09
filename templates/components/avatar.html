@@ -1,0 +1,18 @@
+{#
+  A square avatar: a GitHub user's picture, or the person's initials without one.
+
+    {{ <ui.avatar name="Zach Daniel" github="zachdaniel" size={36} /> }}
+
+  size:       in pixels
+  decorative: true when the person's name is shown beside the avatar, so screen readers don't
+              announce it twice
+#}
+{% component ui.avatar(name: string, github: string = "", size: integer = 40, decorative: bool = false) %}
+  <span class="avatar" style="--avatar-size: {{ size }}px"{% if decorative %} aria-hidden="true"{% endif %}>
+    {%- if github -%}
+      <img src="https://avatars.githubusercontent.com/{{ github }}?s={{ size * 2 }}" alt="{% if not decorative %}{{ name }}{% endif %}" width="{{ size }}" height="{{ size }}" loading="lazy" />
+    {%- else -%}
+      {%- for word in name | split(pat=" ") %}{% if loop.index <= 2 %}{{ word | truncate(length=1, end="") | upper }}{% endif %}{% endfor -%}
+    {%- endif -%}
+  </span>
+{%- endcomponent ui.avatar %}

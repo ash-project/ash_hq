@@ -31,6 +31,11 @@ style = "class"
 og_image = "https://ash-hq.org/images/ash-logo-side.png"
 github = "https://github.com/ash-project/ash"
 premium_support = "https://alembic.com.au/services/ash-framework-premium-support"
+discord = "https://discord.gg/D7FNG2q"
+
+# Blog authors' GitHub usernames, for their avatars
+[extra.authors]
+"Zach Daniel" = "zachdaniel"
 
 # The main navigation. `path` links within the site (and marks the current section), `url` links
 # elsewhere.

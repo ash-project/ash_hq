@@ -1,0 +1,67 @@
+/* A blog post (templates/blog/post.html) */
+@layer components {
+  .post {
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  .post__header {
+    display: grid;
+    gap: var(--space-6);
+    padding-bottom: var(--space-7);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .post__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .post__title {
+    max-width: 960px;
+    font: var(--type-display);
+    letter-spacing: var(--ls-display);
+  }
+
+  .post__byline {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .post__byline-text {
+    display: grid;
+    gap: var(--space-2);
+    color: var(--text-faint);
+    font: var(--type-small);
+  }
+
+  .post__author {
+    color: var(--text-strong);
+    font-weight: var(--fw-semibold);
+  }
+
+  .post__footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--border-subtle);
+    font: var(--type-small);
+
+    a {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      color: var(--text-muted);
+
+      &:hover {
+        color: var(--text-strong);
+      }
+    }
+  }
+}

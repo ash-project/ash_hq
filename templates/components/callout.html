@@ -1,0 +1,38 @@
+{#
+  A notice inside an article: a requirement, a deprecation, an important step. At most one or two
+  per article. Works the same in Markdown content as in templates:
+
+    {% <ui.callout tone="warning" title="Read the upgrade guide"> %}
+    You will need to go through it section by section.
+    {% </ui.callout> %}
+
+  In Markdown, the body is inserted as HTML, not parsed as Markdown, so use HTML for links or
+  emphasis inside it.
+
+  tone: "note" (the default), "tip", "warning", "danger" or "success". Screen readers hear the
+        tone as a prefix, so it isn't conveyed by colour and icon alone.
+#}
+{% component ui.callout(tone: string = "note", title: string = "") %}
+  {%- set tones = {
+    "note": ["info", "Note"],
+    "tip": ["lightbulb", "Tip"],
+    "warning": ["triangle-alert", "Warning"],
+    "danger": ["octagon-alert", "Danger"],
+    "success": ["circle-check", "Success"]
+  } -%}
+  {%- set icon = tones[tone] | first -%}
+  {%- set label = tones[tone] | last -%}
+  <div class="callout callout--{{ tone }}" role="note">
+    {{ <ui.icon name={icon} /> }}
+    <div class="callout__content">
+      {%- if title %}
+        <p class="callout__title"><span class="visually-hidden">{{ label }}: </span>{{ title }}</p>
+      {%- else %}
+        <span class="visually-hidden">{{ label }}: </span>
+      {%- endif %}
+      {%- if body is defined %}
+        <div class="callout__body">{{ body }}</div>
+      {%- endif %}
+    </div>
+  </div>
+{%- endcomponent ui.callout %}

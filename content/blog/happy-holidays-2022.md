@@ -8,7 +8,7 @@ authors = ["Zach Daniel"]
 tags = ["ash", "community", "elixir"]
 +++
 <div class="grid place-content-center text-center">
-  <img src="/images/three-trees.svg"></img>
+  <img src="/images/three-trees.svg" alt=""></img>
 </div>
 <div class="grid text-center font-heavy text-6xl mb-16">
   Happy Holidays!
@@ -16,10 +16,9 @@ tags = ["ash", "community", "elixir"]
 
 This year has been a wild ride 🎢. So much has gone into Ash Framework this year, and our user base has increased *massively* in that time frame, and there is *so much* more to come. We have some huge things just around the river bend 🎉, and I can't wait for you all to see it!
 
-<div class="dark:bg-primary-light-200 bg-primary-dark-200 dark:text-black p-4 rounded-xl">
-	<div class="font-bold">A strangely necessary foreword:</div>
-    This message was not built by or with the use of any ML algorithms. There is a place for generated content, but a thank you to my users and the community is not that place.
-</div>
+{% <ui.callout title="A strangely necessary foreword:"> %}
+This message was not built by or with the use of any ML algorithms. There is a place for generated content, but a thank you to my users and the community is not that place.
+{% </ui.callout> %}
 
 When I set out to build Ash, **it was about technology**💻. It was about what I felt was missing from the Elixir ecosystem and from the programming ecosystem in general. It was something I believed in, and something that I thought other people would want to use, but it was fundamentally about what I wanted. Then the users started trickling in, and **it became about a whole lot more**. This work has become so much more meaningful than I ever thought it could be and, perhaps a bit delusionally, I think this project can make a **real difference** on the lives and livelihoods of the people that I've come to care so deeply about. Just like the amazing people who built Elixir and its community up to what it is today. That is what this project is about for me now, and it is what keeps me going.
 
@@ -39,13 +38,13 @@ Another way that people contribute is by creating issues, making feature request
 
 <div class="w-full">
   <a class="flex flex-row h-36" href="https://alembic.com.au" >
-    <img  src="/images/alembic-logo.png"></img>
+    <img  src="/images/alembic-logo.png" alt="Alembic"></img>
   </a>
 </div>
 Last but not least, I'd like to thank my sponsors, the largest of which (if sponsor is even the correct term) is my employer [Alembic](https://alembic.com.au/). They were among the first to see the potential of what Ash could be and where it is headed. Thanks to them, I can work on or with Ash effectively full time, either by continuing to add to the framework or by helping with their various client projects using Ash. Their insight, input, and investment has been invaluable, and is absolutely the driving factor behind the Ash ecosystem. If you have any software projects that you'd like built at breakneck speed with the latest and greatest tools, if you have any stalled initiatives due to tech debt or lack of resources, if you are building with Ash and want the experts to help, contact us. I've worked with a lot of technical teams in the past, and the staff at Alembic is the most pragmatic, intelligent, and value-driven that I've ever had the pleasure of working with. Thank you to all of those at Alembic who have welcomed me and helped with Ash, and for all of your effort helping Ash become everything we know that it can be!
 <div class="w-full">
   <a class="flex flex-row h-36" href="https://coinbits.app">
-    <img src="/images/coinbits-logo.png"></img>
+    <img src="/images/coinbits-logo.png" alt="Coinbits"></img>
   </a>
 </div>
 
