@@ -38,6 +38,24 @@
     background: var(--surface-accent);
   }
 
+  /* At the top and bottom of a page: plain sections leave the space to .site-main, so it isn't
+     doubled, and bands and accents cancel it, to sit flush against the header and footer */
+  .site-main > .section--plain:first-child .section__inner {
+    padding-top: 0;
+  }
+
+  .site-main > .section--plain:last-child .section__inner {
+    padding-bottom: 0;
+  }
+
+  .site-main:has(> :is(.section--band, .section--accent):first-child) {
+    padding-top: 0;
+  }
+
+  .site-main:has(> :is(.section--band, .section--accent):last-child) {
+    padding-bottom: 0;
+  }
+
   .section__head {
     display: flex;
     flex-wrap: wrap;

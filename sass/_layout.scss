@@ -2,6 +2,11 @@
    breakpoint (custom properties can't be used in media queries, so it's repeated here).
    Configure them with the custom properties noted, not by overriding their grids. */
 @layer layout {
+  /* Space between the header, the page's content and the footer, on every page */
+  .site-main {
+    padding-block: var(--section-pad-plain);
+  }
+
   .container {
     width: 100%;
     max-width: var(--container-max);
