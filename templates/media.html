@@ -24,9 +24,8 @@
       {% <ui.tab_panel label="Podcasts" id="podcasts"> %}
         <ul class="list-rows">
           {%- for podcast in media.podcasts %}
-            {%- set show = <ui.eyebrow text={podcast.show} tone="faint" /> %}
             {%- set play = <ui.icon name="play" /> %}
-            {{ <ui.list_row title={podcast.title} href={podcast.url} new_tab={true} lead={show} lead_width="200px" title_size="sm" action={play} hide_action_mobile={true} /> }}
+            {{ <ui.list_row title={podcast.title} href={podcast.url} new_tab={true} eyebrow={podcast.show} title_size="sm" action={play} hide_action_mobile={true} /> }}
           {%- endfor %}
         </ul>
       {% </ui.tab_panel> %}

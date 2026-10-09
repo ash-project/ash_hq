@@ -1,0 +1,46 @@
+/* A link stretched over its item (a row, a card, a person), so the whole item is clickable while
+   the link's text stays short for screen readers. The item needs `position: relative`. Buttons
+   inside the item need `position: relative` too, to stay clickable above the link.
+
+     <li class="card"><h3><a class="stretched-link" href="…">Title</a></h3> …</li> */
+@layer components {
+  .stretched-link {
+    color: inherit;
+    text-decoration: none;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
+
+    &:hover {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* The focus outline goes around the whole item */
+    &:focus-visible {
+      outline: none;
+
+      &::after {
+        outline: 2px solid var(--focus-ring);
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  /* An icon and a short label, muted until hovered: RSS, Discord, social links */
+  .quiet-link {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    color: var(--text-muted);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--text-strong);
+      text-decoration: none;
+    }
+  }
+}

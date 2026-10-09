@@ -67,6 +67,22 @@
     </ul>
   {% </ui.section> %}
 
+  {% <ui.section title="Event Bar, People and Dates" description="The event bar normally shows above the header, for the next upcoming event. This one has sample data."> %}
+    <div class="styleguide">
+      {{ <ui.event_bar title="AshConf 2027" date="2 October 2027" location="Varberg, Sweden" href="#event-bar-people-and-dates" cta="Register Now!" /> }}
+      <ul class="people grid" style="--min: 220px; --row-gap: var(--space-7)">
+        {{ <ui.person name="Zach Daniel" github="zachdaniel" /> }}
+        {{ <ui.person name="Rebecca Le" github="sevenseacat" /> }}
+        {{ <ui.person name="Torkild Gundersen Kjevik" github="Torkan" /> }}
+      </ul>
+      <div class="styleguide__row">
+        {{ <ui.date_badge date="2026-10-03" /> }}
+        {{ <ui.date_badge date="2022-11-01" /> }}
+        {{ <ui.avatar name="Matt Beanland" size={56} /> }}
+      </div>
+    </div>
+  {% </ui.section> %}
+
   {% <ui.section title="A Band Section" variant="band" layout="split" eyebrow="Proud Partner" description="A full-bleed subtle surface, for a spotlight. At most two per page, never adjacent."> %}
     <p>Band content.</p>
   {% </ui.section> %}

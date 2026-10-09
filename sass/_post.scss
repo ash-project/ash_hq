@@ -52,16 +52,5 @@
     padding-top: var(--space-7);
     border-top: 1px solid var(--border-subtle);
     font: var(--type-small);
-
-    a {
-      display: inline-flex;
-      gap: 6px;
-      align-items: center;
-      color: var(--text-muted);
-
-      &:hover {
-        color: var(--text-strong);
-      }
-    }
   }
 }

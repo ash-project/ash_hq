@@ -14,11 +14,7 @@
       <h1 class="post__title">{{ page.title | markdown(inline=true) | safe }}</h1>
 
       <div class="post__byline">
-        {%- for author in page.authors %}
-          {%- if author in config.extra.authors %}
-            {{ <ui.avatar name={author} github={config.extra.authors[author]} size={36} decorative={true} /> }}
-          {%- endif %}
-        {%- endfor %}
+        {{ <ui.author_avatars authors={page.authors} size={36} /> }}
         <div class="post__byline-text">
           <span class="post__author">{{ page.authors | join(sep=", ") }}</span>
           <time datetime="{{ page.date }}">{{ page.date | date(format="%-d %B %Y") }}</time>
@@ -32,8 +28,8 @@
     </div>
 
     <footer class="post__footer">
-      <a href="{{ get_url(path='atom.xml', trailing_slash=false) }}">{{ <ui.icon name="rss" /> }} RSS</a>
-      <a href="{{ config.extra.discord }}">{{ <ui.icon name="message-circle" /> }} Discuss on Discord</a>
+      <a class="quiet-link" href="{{ get_url(path='atom.xml', trailing_slash=false) }}">{{ <ui.icon name="rss" /> }} RSS</a>
+      <a class="quiet-link" href="{{ config.extra.discord }}">{{ <ui.icon name="message-circle" /> }} Discuss on Discord</a>
     </footer>
   </article>
 {% endblock %}

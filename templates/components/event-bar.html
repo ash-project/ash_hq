@@ -1,0 +1,21 @@
+{#
+  A bar above the header, announcing an event. Rendered by partials/event-bar.html for the next
+  upcoming event in data/events.toml.
+
+    {{ <ui.event_bar title="AshConf 2026" date="3 October 2026" href="https://…" /> }}
+#}
+{% component ui.event_bar(title: string, date: string, href: string, location: string = "", cta: string = "Details") %}
+  <aside class="event-bar" aria-label="Upcoming event">
+    <div class="container event-bar__inner">
+      <a class="event-bar__link" href="{{ href }}">
+        <strong class="event-bar__title">{{ title }}</strong>
+        <span class="event-bar__date">{{ date }}</span>
+        {%- if location %}
+          <span class="event-bar__location hide-mobile">{{ location }}</span>
+        {%- endif %}
+        <span class="event-bar__cta">{{ cta }} {{ <ui.icon name="arrow-right" /> }}</span>
+      </a>
+      <a class="event-bar__all hide-mobile" href="/community/#upcoming-events">See all upcoming events</a>
+    </div>
+  </aside>
+{%- endcomponent ui.event_bar %}

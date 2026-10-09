@@ -21,7 +21,7 @@
     {%- endif %}
     <{{ heading }} class="card__title">
       {%- if icon %}<span class="card__icon">{{ <ui.icon name={icon} /> }}</span>{% endif -%}
-      {%- if href %}<a class="card__link" href="{{ href }}">{{ title }}</a>{% else %}{{ title }}{% endif -%}
+      {%- if href %}<a class="stretched-link" href="{{ href }}">{{ title }}</a>{% else %}{{ title }}{% endif -%}
       {%- if href and not cta %}
         <span class="card__arrow">{% if external %}{{ <ui.icon name="arrow-up-right" /> }}{% else %}{{ <ui.icon name="arrow-right" /> }}{% endif %}</span>
       {%- endif -%}

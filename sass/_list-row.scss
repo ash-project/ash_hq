@@ -1,6 +1,5 @@
 /* Lists of rows: posts, events, podcasts, contributors (templates/components/list-row.html).
-   A row with a link is clickable as a whole, but only its title is the link, so screen readers
-   announce a short link name rather than the whole row. */
+   A linked row's title is a .stretched-link, so the whole row is clickable. */
 @layer components {
   .list-rows {
     margin: 0;
@@ -17,11 +16,6 @@
     padding-block: var(--space-7);
     border-top: 1px solid var(--border-subtle);
     transition: border-color var(--dur-fast) var(--ease-out);
-  }
-
-  /* Rows filtered out by a script */
-  .list-row[hidden] {
-    display: none;
   }
 
   .list-row--no-lead {
@@ -52,33 +46,6 @@
   .list-row__title--sm {
     font: var(--fw-semibold) 0.9375rem / 1.35 var(--font-sans);
     letter-spacing: 0;
-  }
-
-  .list-row__link {
-    color: inherit;
-    text-decoration: none;
-
-    /* Stretches the link over the whole row */
-    &::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-    }
-
-    &:hover {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    /* The focus outline goes around the whole row */
-    &:focus-visible {
-      outline: none;
-
-      &::after {
-        outline: 2px solid var(--focus-ring);
-        outline-offset: 2px;
-      }
-    }
   }
 
   .list-row--link:hover {
@@ -130,11 +97,20 @@
     }
   }
 
+  /* On small screens the lead (a date or an avatar) stays beside the content, and an action
+     moves below it */
   @media (max-width: 860px) {
-    .list-row,
+    .list-row {
+      grid-template-columns: var(--lead-width, 140px) minmax(0, 1fr);
+      gap: var(--space-4) var(--space-5);
+    }
+
     .list-row--no-lead {
       grid-template-columns: minmax(0, 1fr);
-      gap: var(--space-4);
+    }
+
+    .list-row__action {
+      grid-column: -2;
     }
   }
 }

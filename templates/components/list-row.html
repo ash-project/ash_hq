@@ -11,7 +11,8 @@
   title:   the item's name. With `href`, it's the link, and the whole row is clickable.
   new_tab: opens the link in a new tab, and tells screen reader users it will
   heading: the title's heading element, so screen reader users can jump between items
-  lead:    HTML for the left column, such as a date or an avatar. --lead-width sets its width.
+  lead:    HTML for the left column: something narrow, such as a date or an avatar, as it stays
+           beside the content on small screens. --lead-width sets its width.
   eyebrow, text: a label above the title, and a description below it
   action:  HTML on the right, such as a button. hide_action_mobile hides it on narrow screens,
            for actions that are only decorative arrows.
@@ -31,7 +32,7 @@
       {%- endif %}
       <{{ heading }} class="list-row__title list-row__title--{{ title_size }}">
         {%- if href -%}
-          <a class="list-row__link" href="{{ href }}"{% if new_tab %} target="_blank" rel="noopener"{% endif %}>
+          <a class="stretched-link" href="{{ href }}"{% if new_tab %} target="_blank" rel="noopener"{% endif %}>
             {{- title -}}
             {%- if new_tab %}<span class="visually-hidden"> (opens in a new tab)</span>{% endif -%}
           </a>

@@ -1,26 +1,10 @@
 /* The blog's list of posts (templates/blog/list.html) */
 @layer components {
-  .blog-list {
-    display: grid;
-    gap: var(--space-8);
-  }
-
   .blog-list__author {
     display: inline-flex;
     gap: var(--space-3);
     align-items: center;
     margin-right: var(--space-2);
     color: var(--text-faint);
-  }
-
-  .blog-rss {
-    display: inline-flex;
-    gap: 6px;
-    align-items: center;
-    color: var(--text-muted);
-
-    &:hover {
-      color: var(--text-strong);
-    }
   }
 }

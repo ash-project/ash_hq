@@ -63,7 +63,7 @@
     border-top: 1px solid var(--border-subtle);
     color: var(--text-faint);
 
-    a {
+    p a {
       color: inherit;
 
       &:hover {
@@ -76,18 +76,12 @@
     display: flex;
     gap: var(--space-3);
 
+    /* .quiet-links, with room to tap */
     a {
-      display: flex;
-      align-items: center;
       justify-content: center;
       width: 32px;
       height: 32px;
-      color: var(--text-muted);
       --icon-size: 18px;
-
-      &:hover {
-        color: var(--text-strong);
-      }
     }
   }
 

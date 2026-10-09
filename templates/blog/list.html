@@ -2,47 +2,26 @@
 
 {% block content %}
   {%- set rss %}
-    <a class="blog-rss" href="{{ get_url(path='atom.xml', trailing_slash=false) }}">{{ <ui.icon name="rss" /> }} RSS</a>
+    <a class="quiet-link" href="{{ get_url(path='atom.xml', trailing_slash=false) }}">{{ <ui.icon name="rss" /> }} RSS</a>
   {%- endset %}
-  {% <ui.section title={section.extra.heading} description={section.description} size="lg" heading="h1" actions={rss}> %}
-    <div class="blog-list" data-tag-filter>
-      {#- Every tag, for the filter: [value, label] pairs #}
-      {%- set tag_options = [["all", "All posts"]] %}
-      {%- set tags_taxonomy = get_taxonomy(kind="tags") %}
-      {%- for tag in tags_taxonomy.items | sort(attribute="name") %}
-        {%- set_global tag_options = [...tag_options, [tag.slug, "#" ~ tag.name]] %}
+  {% <ui.section title={section.title} description={section.description} size="lg" heading="h1" actions={rss}> %}
+    {#- Posts newer than this, at build time, are marked New. The site rebuilds regularly, so the
+        badge drops off by itself. #}
+    {%- set new_since = now(timestamp=true) - config.extra.new_post_days * 86400 %}
+
+    <ul class="list-rows">
+      {%- for page in section.pages %}
+        {%- set lead = <ui.date_badge date={page.date} /> %}
+        {%- set arrow = <ui.icon name="arrow-right" /> %}
+        {% <ui.list_row title={page.title} href={page.permalink} heading="h2" lead={lead} lead_width="72px" text={page.description} action={arrow} hide_action_mobile={true}> %}
+          <span class="blog-list__author">
+            {{ <ui.author_avatars authors={page.authors} /> }}
+            {{ page.authors | join(sep=", ") }}
+          </span>
+          {%- if page.date | date(format="%s") | int > new_since %}{{ <ui.badge text="New" tone="accent" /> }}{% endif %}
+          {%- for tag in page.taxonomies.tags | default(value=[]) %}{{ <ui.badge text={tag} /> }}{% endfor %}
+        {% </ui.list_row> %}
       {%- endfor %}
-      {#- Hidden until static/js/tag-filter.js runs: without it, every post is listed #}
-      {{ <ui.segmented name="tag" legend="Show posts tagged" options={tag_options} value="all" hidden="" /> }}
-
-      {#- Posts newer than this, at build time, are marked New. The site rebuilds regularly, so
-          the badge drops off by itself. #}
-      {%- set new_since = now(timestamp=true) - config.extra.new_post_days * 86400 %}
-
-      <ul class="list-rows">
-        {%- for page in section.pages %}
-          {%- set lead = <ui.date_badge date={page.date} /> %}
-          {%- set arrow = <ui.icon name="arrow-right" /> %}
-          {%- set tags = page.taxonomies.tags | default(value=[]) %}
-          {%- set tag_slugs %}{% for tag in tags %}{{ tag | slugify }} {% endfor %}{% endset %}
-          {% <ui.list_row title={page.title} href={page.permalink} heading="h2" lead={lead} lead_width="72px" text={page.description} action={arrow} hide_action_mobile={true} data_tags={tag_slugs | trim}> %}
-            <span class="blog-list__author">
-              {%- for author in page.authors %}
-                {%- if author in config.extra.authors %}{{ <ui.avatar name={author} github={config.extra.authors[author]} size={20} decorative={true} /> }}{% endif %}
-              {%- endfor %}
-              {{ page.authors | join(sep=", ") }}
-            </span>
-            {%- if page.date | date(format="%s") | int > new_since %}{{ <ui.badge text="New" tone="accent" /> }}{% endif %}
-            {%- for tag in tags %}{{ <ui.badge text={tag} /> }}{% endfor %}
-          {% </ui.list_row> %}
-        {%- endfor %}
-      </ul>
-
-      <p class="visually-hidden" aria-live="polite" data-tag-filter-status></p>
-    </div>
+    </ul>
   {% </ui.section> %}
-{% endblock %}
-
-{% block scripts %}
-  <script type="module" src="{{ get_url(path='js/tag-filter.js', cachebust=true) }}"></script>
 {% endblock %}

@@ -1,0 +1,16 @@
+{#
+  The bar above the header, for the next upcoming event in data/events.toml, if there is one. An
+  event counts as upcoming until the end of its last day, at the time the site is built.
+#}
+{%- set event_data = load_data(path="data/events.toml") %}
+{%- set build_time = now(timestamp=true) %}
+{%- set next_event = none %}
+{%- for event in event_data.events | sort(attribute="date") %}
+  {%- set last_day = event.end_date | default(value=event.date) %}
+  {%- if next_event is none and last_day | date(format="%s") | int + 86400 > build_time %}
+    {%- set_global next_event = event %}
+  {%- endif %}
+{%- endfor %}
+{%- if next_event is not none %}
+  {{ <ui.event_bar title={next_event.title} date={next_event.date_label | default(value=next_event.date | date(format="%-d %B %Y"))} href={next_event.href} location={next_event.location | default(value="")} cta={next_event.cta | default(value="Details")} /> }}
+{%- endif %}
