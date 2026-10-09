@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <article class="post">
+  <article class="container">
     <header>
       <h1>{{ page.title | markdown(inline=true) | safe }}</h1>
       {% include "blog/meta.html" %}
     </header>
-    {{ page.content | safe }}
+    <div class="prose">
+      {{ page.content | safe }}
+    </div>
   </article>
 {% endblock %}

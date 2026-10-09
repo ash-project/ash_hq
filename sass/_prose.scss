@@ -1,0 +1,126 @@
+/* Long-form text: rendered Markdown in blog posts and other articles */
+@layer components {
+  .prose {
+    display: grid;
+    gap: var(--space-6);
+    max-width: var(--container-prose);
+    font: var(--type-body-lg);
+    color: var(--text-body);
+
+    > * {
+      margin: 0;
+    }
+
+    p {
+      text-wrap: pretty;
+    }
+
+    h1,
+    h2 {
+      margin-top: var(--space-7);
+      font: var(--type-h2);
+      letter-spacing: var(--ls-heading);
+    }
+
+    h3 {
+      margin-top: var(--space-4);
+      font: var(--type-h3);
+      letter-spacing: var(--ls-heading);
+    }
+
+    h4,
+    h5,
+    h6 {
+      margin-top: var(--space-3);
+      font: var(--type-h4);
+    }
+
+    strong {
+      font-weight: var(--fw-semibold);
+      color: var(--text-strong);
+    }
+
+    ul,
+    ol {
+      display: grid;
+      gap: var(--space-3);
+      margin: 0;
+      padding-left: 22px;
+      font: var(--type-body);
+    }
+
+    li > ul,
+    li > ol {
+      margin-top: var(--space-3);
+    }
+
+    li::marker {
+      color: var(--text-faint);
+    }
+
+    blockquote {
+      padding: var(--space-2) 0 var(--space-2) var(--space-6);
+      border-left: 2px solid var(--border-strong);
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    :not(pre) > code {
+      padding: 1px 6px;
+      background: var(--surface-raised);
+      border: 1px solid var(--border-subtle);
+      font: var(--fw-regular) 0.85em / 1.4 var(--font-mono);
+      color: var(--text-strong);
+    }
+
+    pre {
+      padding: var(--space-5) 18px;
+      overflow-x: auto;
+      background: var(--surface-code);
+      border: 1px solid var(--border-subtle);
+      font: var(--type-code);
+      color: var(--syn-text);
+    }
+
+    img {
+      border: 1px solid var(--border-subtle);
+      background: var(--surface-sunken);
+    }
+
+    figure {
+      display: grid;
+      gap: 10px;
+    }
+
+    figcaption {
+      font: var(--type-small);
+      color: var(--text-muted);
+    }
+
+    hr {
+      height: 0;
+      margin: var(--space-5) 0;
+      border: 0;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font: var(--type-small);
+    }
+
+    th {
+      padding: 0 var(--space-4) 10px 0;
+      border-bottom: 1px solid var(--border-default);
+      text-align: left;
+      font-weight: var(--fw-medium);
+      color: var(--text-muted);
+    }
+
+    td {
+      padding: 10px var(--space-4) 10px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+  }
+}

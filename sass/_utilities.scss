@@ -1,0 +1,24 @@
+/* Single-purpose helpers. The last layer, so they win over components. */
+@layer utilities {
+  /* Hidden visually but still read by screen readers */
+  .visually-hidden:not(:focus-within, :active) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 860px) {
+    .hide-mobile {
+      display: none;
+    }
+  }
+
+  @media (min-width: 861px) {
+    .only-mobile {
+      display: none;
+    }
+  }
+}

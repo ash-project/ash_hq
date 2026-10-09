@@ -1,0 +1,100 @@
+/* Layout primitives. Each collapses to a single column below 860px, the site's one mobile
+   breakpoint (custom properties can't be used in media queries, so it's repeated here).
+   Configure them with the custom properties noted, not by overriding their grids. */
+@layer layout {
+  .container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* A sticky header column beside the content, a third and two thirds */
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: var(--space-9) var(--space-11);
+    align-items: start;
+  }
+
+  .split__head {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-8));
+    display: grid;
+    gap: var(--space-7);
+    align-content: start;
+  }
+
+  /* A sticky navigation column beside the content. --sidebar sets its width. */
+  .sidebar {
+    display: grid;
+    grid-template-columns: var(--sidebar, 240px) minmax(0, 1fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  .sidebar__nav {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-6));
+  }
+
+  /* Content beside a sticky panel on the right. --aside sets the panel's width. */
+  .aside {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--aside, 400px);
+    gap: var(--space-9);
+    align-items: start;
+  }
+
+  .aside__panel {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-6));
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  /* Equal columns. --cols sets how many, --gap the gap. */
+  .cols {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+    gap: var(--gap, var(--space-8));
+  }
+
+  /* As many columns as fit. --min sets the narrowest column, --col-gap and --row-gap the gaps. */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(var(--min, 240px), 100%), 1fr));
+    column-gap: var(--col-gap, var(--space-8));
+    row-gap: var(--row-gap, 0);
+  }
+
+  /* Two panels side by side, such as code beside its result. Stacks below 1200px. */
+  .pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  @media (max-width: 1200px) {
+    .pair {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 860px) {
+    .split,
+    .sidebar,
+    .aside,
+    .cols {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-7);
+    }
+
+    .split__head,
+    .sidebar__nav,
+    .aside__panel {
+      position: static;
+    }
+  }
+}

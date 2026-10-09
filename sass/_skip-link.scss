@@ -1,0 +1,18 @@
+/* The first focusable element on every page: hidden until a keyboard user tabs to it */
+@layer components {
+  .skip-link {
+    position: absolute;
+    top: var(--space-3);
+    left: var(--space-3);
+    z-index: var(--z-pop);
+    padding: var(--space-4) var(--space-5);
+    background: var(--accent);
+    color: var(--accent-ink);
+    font: var(--fw-semibold) var(--fs-body) / 1 var(--font-sans);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--accent-ink);
+    }
+  }
+}

@@ -4,8 +4,8 @@ title = "Ash Framework"
 description = "Model your domain, derive the rest."
 default_language = "en"
 
-# Whether to automatically compile all Sass files in the sass directory
-compile_sass = false
+# Sass only bundles the plain CSS partials in sass/ into one stylesheet, /site.css
+compile_sass = true
 
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = false

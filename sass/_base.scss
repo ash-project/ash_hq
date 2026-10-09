@@ -1,0 +1,100 @@
+/* Element defaults */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* Anchored targets clear the sticky header */
+    scroll-padding-top: calc(var(--header-h) + var(--space-5));
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg-page);
+    color: var(--text-body);
+    font: var(--type-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  figure,
+  blockquote {
+    margin: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--text-strong);
+    text-wrap: balance;
+  }
+
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  a {
+    color: var(--accent-text);
+    text-decoration: underline;
+    text-decoration-color: rgb(255 145 77 / 40%);
+    text-underline-offset: 3px;
+    transition: color var(--dur-fast) var(--ease-out), text-decoration-color var(--dur-fast) var(--ease-out);
+
+    &:hover {
+      color: var(--accent-hover);
+      text-decoration-color: currentcolor;
+    }
+  }
+
+  code,
+  kbd,
+  pre,
+  samp {
+    font-family: var(--font-mono);
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  ::selection {
+    background: rgb(255 145 77 / 35%);
+    color: var(--text-strong);
+  }
+
+  /* A visible focus indicator on everything keyboard-focusable. An outline (not a box-shadow)
+     so it also shows in forced-colors modes. */
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

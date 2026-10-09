@@ -32,10 +32,13 @@
     <link rel="icon" href="{{ get_url(path='favicon.ico') }}" />
     <link rel="apple-touch-icon" href="{{ get_url(path='apple-touch-icon.png') }}" />
     <link rel="alternate" type="application/atom+xml" title="{{ config.title }} Blog" href="{{ get_url(path='atom.xml', trailing_slash=false) }}" />
-    <link rel="stylesheet" href="{{ get_url(path='css/site.css', cachebust=true) }}" />
+    <link rel="preload" href="{{ get_url(path='fonts/instrument-sans.woff2') }}" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="{{ get_url(path='site.css', cachebust=true) }}" />
     {% block head %}{% endblock %}
   </head>
   <body>
+    <a href="#main" class="skip-link visually-hidden">Skip to content</a>
+
     <header class="site-header">
       <a href="{{ get_url(path='') }}" class="site-logo">
         <img src="{{ get_url(path='images/ash_logo_orange.svg') }}" alt="Ash Framework" />
@@ -49,7 +52,7 @@
       </nav>
     </header>
 
-    <main>
+    <main id="main">
       {% block content %}{% endblock %}
     </main>
 

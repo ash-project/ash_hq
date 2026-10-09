@@ -1,0 +1,174 @@
+/* Design tokens, from the Ash HQ design system. Components use the semantic aliases, not the
+   raw ramps. The site is dark only. */
+@layer tokens {
+  :root {
+    color-scheme: dark;
+
+    /* Brand, sampled from the logo. Used together only in the logo itself. */
+    --brand-red: #ff5757;
+    --brand-orange: #ff914d;
+    --brand-amber: #ffbd59;
+
+    /* Orange ramp: 500 is the logo orange */
+    --orange-50: #fff4ec;
+    --orange-100: #ffe6d4;
+    --orange-200: #ffcda9;
+    --orange-300: #ffb37f;
+    --orange-400: #ffa266;
+    --orange-500: #ff914d;
+    --orange-600: #f0752c;
+    --orange-700: #c9581a;
+    --orange-800: #9c4316;
+    --orange-900: #7a3614;
+
+    /* Warm grey neutrals */
+    --ash-0: #fff;
+    --ash-50: #f7f6f5;
+    --ash-100: #edebe9;
+    --ash-200: #dad7d3;
+    --ash-300: #b9b4ae;
+    --ash-400: #8f8983;
+    --ash-500: #6b6661;
+    --ash-600: #4d4945;
+    --ash-700: #35322f;
+    --ash-800: #232120;
+    --ash-850: #1a1918;
+    --ash-900: #131211;
+    --ash-950: #0c0b0b;
+
+    /* Status and syntax hues */
+    --green-400: #4cc38a;
+    --amber-400: #f5b83d;
+    --red-400: #f0524f;
+    --blue-400: #6aa6f8;
+    --violet-400: #b48ef0;
+
+    /* Surfaces */
+    --bg-page: var(--ash-950);
+    --bg-subtle: var(--ash-900);
+    --surface-card: var(--ash-900);
+    --surface-raised: var(--ash-850);
+    --surface-sunken: #080707;
+    --surface-code: #100f0e;
+    --surface-accent: #1f130c; /* ember, for the one accent section per page */
+
+    /* Borders. Hairlines are decorative; --border-control meets the 3:1 contrast that form
+       controls need to be identifiable (WCAG 1.4.11). */
+    --border-subtle: var(--ash-800);
+    --border-default: var(--ash-700);
+    --border-strong: var(--ash-600);
+    --border-control: var(--ash-400);
+
+    /* Text. Every text colour is at least 4.5:1 on every surface above (WCAG AA). The design's
+       faint grey (ash-500, about 3.3:1) is lightened to pass. */
+    --text-strong: var(--ash-50);
+    --text-body: var(--ash-200);
+    --text-muted: var(--ash-400);
+    --text-faint: #8a847e;
+
+    /* Accent. Orange fills carry dark ink: white on this orange fails contrast. */
+    --accent: var(--orange-500);
+    --accent-hover: var(--orange-400);
+    --accent-press: var(--orange-600);
+    --accent-ink: var(--ash-950);
+    --accent-text: var(--orange-400);
+    --accent-wash: rgb(255 145 77 / 12%);
+    --focus-ring: var(--orange-400);
+
+    --success: var(--green-400);
+    --warning: var(--amber-400);
+    --danger: var(--red-400);
+    --info: var(--blue-400);
+    --success-wash: rgb(76 195 138 / 12%);
+    --warning-wash: rgb(245 184 61 / 12%);
+    --danger-wash: rgb(240 82 79 / 12%);
+    --info-wash: rgb(106 166 248 / 12%);
+
+    /* Syntax highlighting */
+    --syn-text: var(--ash-100);
+    --syn-comment: var(--text-faint);
+    --syn-keyword: var(--orange-400);
+    --syn-atom: var(--violet-400);
+    --syn-string: var(--green-400);
+    --syn-module: var(--blue-400);
+    --syn-number: var(--amber-400);
+    --syn-punct: var(--ash-400);
+
+    /* Type */
+    --font-sans: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: Menlo, Monaco, "SF Mono", Consolas, "Liberation Mono", "Courier New", monospace;
+
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+
+    --fs-hero: clamp(3.5rem, 8vw, 6.5rem);
+    --fs-display: 3.25rem;
+    --fs-h2: 1.875rem;
+    --fs-h3: 1.375rem;
+    --fs-h4: 1.125rem;
+    --fs-body-lg: 1.1875rem;
+    --fs-body: 1rem;
+    --fs-small: 0.875rem;
+    --fs-code: 0.875rem;
+
+    --lh-tight: 1.05;
+    --lh-snug: 1.2;
+    --lh-normal: 1.55;
+    --lh-code: 1.65;
+
+    --ls-display: -0.035em;
+    --ls-heading: -0.02em;
+
+    --type-display: var(--fw-semibold) var(--fs-display) / var(--lh-tight) var(--font-sans);
+    --type-h2: var(--fw-semibold) var(--fs-h2) / var(--lh-snug) var(--font-sans);
+    --type-h3: var(--fw-semibold) var(--fs-h3) / var(--lh-snug) var(--font-sans);
+    --type-h4: var(--fw-semibold) var(--fs-h4) / 1.3 var(--font-sans);
+    --type-body-lg: var(--fw-regular) var(--fs-body-lg) / var(--lh-normal) var(--font-sans);
+    --type-body: var(--fw-regular) var(--fs-body) / var(--lh-normal) var(--font-sans);
+    --type-small: var(--fw-regular) var(--fs-small) / var(--lh-normal) var(--font-sans);
+    --type-eyebrow: var(--fw-medium) var(--fs-small) / 1.3 var(--font-sans);
+    --type-code: var(--fw-regular) var(--fs-code) / var(--lh-code) var(--font-mono);
+
+    /* Spacing: a 4px base with a 2px half step */
+    --space-1: 2px;
+    --space-2: 4px;
+    --space-3: 8px;
+    --space-4: 12px;
+    --space-5: 16px;
+    --space-6: 20px;
+    --space-7: 24px;
+    --space-8: 32px;
+    --space-9: 40px;
+    --space-10: 48px;
+    --space-11: 64px;
+    --space-12: 80px;
+    --space-13: 96px;
+
+    --container-max: 1200px;
+    --container-prose: 720px;
+    --gutter: clamp(16px, 4vw, 24px);
+    --header-h: 64px;
+    --section-pad: clamp(48px, 7vw, 80px);
+    --section-pad-plain: clamp(40px, 6vw, 64px);
+
+    /* Shape. Corners are square; accent elements get a 45° chamfer, echoing the logo. */
+    --chamfer-sm: 6px;
+    --chamfer-md: 10px;
+    --clip-chamfer-sm: polygon(0 0, calc(100% - var(--chamfer-sm)) 0, 100% var(--chamfer-sm), 100% 100%, 0 100%);
+    --clip-chamfer-md: polygon(0 0, calc(100% - var(--chamfer-md)) 0, 100% var(--chamfer-md), 100% 100%, 0 100%);
+
+    /* Effects */
+    --shadow-pop: 0 12px 32px -8px rgb(0 0 0 / 55%), 0 0 0 1px var(--border-default);
+    --blur-header: saturate(140%) blur(12px);
+
+    /* Motion */
+    --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --dur-fast: 120ms;
+    --dur-base: 200ms;
+    --dur-slow: 320ms;
+
+    --z-header: 50;
+    --z-pop: 80;
+  }
+}
