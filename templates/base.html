@@ -33,7 +33,7 @@
     {%- endif %}
     {%- set url = config.base_url %}
     {%- if current_url is defined %}{% set url = current_url %}{% endif %}
-    <title>{% if heading == config.title %}{{ heading }}{% else %}{{ heading | striptags }} · {{ config.title }}{% endif %}</title>
+    <title>{% block title %}{% if heading == config.title %}{{ heading }}{% else %}{{ heading | striptags }} · {{ config.title }}{% endif %}{% endblock %}</title>
     <meta name="description" content="{{ description }}" />
     <link rel="canonical" href="{{ url }}" />
 

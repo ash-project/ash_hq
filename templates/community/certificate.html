@@ -1,14 +1,103 @@
 {% extends "base.html" %}
 
 {#-
-  A contributor of the month's certificate. A placeholder until the certificate layout is ported
-  from the Phoenix app: a standalone page, without the site's header and footer, that prints and
-  screenshots cleanly.
-#}
+  A contributor of the month's certificate, sized to print on US Letter, landscape. The artwork is
+  styled by sass/certificate.scss; printing hides the site around it.
+
+  With ?image=true it shows just the certificate, filling the window, for screenshotting the
+  link preview image at static/images/contributors-of-the-month/<slug>.png.
+-#}
+
+{% block title %}{{ page.title }} · Ash Contributor of the Month{% endblock %}
+
+{% block og_image -%}
+  {%- set preview = "images/contributors-of-the-month/" ~ page.slug ~ ".png" -%}
+  {%- if get_image_metadata(path=preview, allow_missing=true) %}{{ get_url(path=preview) }}{% else %}{{ config.extra.og_image }}{% endif -%}
+{%- endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ get_url(path='certificate.css', cachebust=true) }}" />
+  {#- Before the page renders, so the site around the certificate never flashes up #}
+  <script>if (new URLSearchParams(location.search).get("image") === "true") document.documentElement.classList.add("certificate-image");</script>
+{% endblock %}
+
 {% block content %}
-  {% <ui.section title={page.title} eyebrow={"Contributor of the Month, " ~ page.date | date(format="%B %Y")} size="lg" heading="h1"> %}
-    <div class="prose">
-      {{ page.content | safe }}
+  <div class="container certificate-page">
+    <div class="certificate-page__actions">
+      {#- Shown by the script below: printing needs JavaScript #}
+      {{ <ui.button text="Print certificate" variant="secondary" size="sm" icon="printer" data_print="" hidden="" /> }}
     </div>
-  {% </ui.section> %}
+
+    <div class="certificate-sheet">
+      <div class="certificate">
+        <div class="shard tl-1"></div>
+        <div class="shard tl-2"></div>
+        <div class="shard tl-3"></div>
+        <div class="shard br-1"></div>
+        <div class="shard br-2"></div>
+        <div class="shard br-3"></div>
+
+        <div class="frame"></div>
+        <img class="watermark" src="{{ get_url(path='images/ash-logo-cropped.svg') }}" alt="" />
+
+        <div class="content">
+          <h1 class="title">
+            <span class="title__main">Contributor</span>
+            <span class="title__sub">of the Month</span>
+          </h1>
+          <div class="rule" aria-hidden="true"><span></span></div>
+
+          <p class="awarded">This certificate is awarded to</p>
+          <p class="name">{{ page.title }}</p>
+
+          <p class="recognition">
+            In recognition of your contributions to Ash Framework and your achievement
+            in being an outstanding member of the community.
+          </p>
+          {%- if page.description %}
+            <p class="reason">{{ page.description }}</p>
+          {%- endif %}
+
+          <div class="footer">
+            <div class="signature">
+              <div class="value">Zach Daniel</div>
+              <div class="label">Ash Framework Creator</div>
+            </div>
+
+            {#- The seal's scalloped edge is 32 points, alternating between radius 50 and 45 around
+                0,0. Worked out once, as Tera has no trigonometry. #}
+            <svg class="seal" viewBox="-60 -60 120 140" aria-hidden="true">
+              <defs>
+                <linearGradient id="seal-gold" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#ffd27a" />
+                  <stop offset="0.55" stop-color="#ffbd59" />
+                  <stop offset="1" stop-color="#ff914d" />
+                </linearGradient>
+              </defs>
+              <polygon points="-26,30 -42,78 -30,70 -22,84 -6,38" fill="#ff5757" />
+              <polygon points="26,30 42,78 30,70 22,84 6,38" fill="#ff914d" />
+              <polygon points="50.0,0.0 44.78,4.41 49.04,9.75 43.06,13.06 46.19,19.13 39.69,21.21 41.57,27.78 34.79,28.55 35.36,35.36 28.55,34.79 27.78,41.57 21.21,39.69 19.13,46.19 13.06,43.06 9.75,49.04 4.41,44.78 0.0,50.0 -4.41,44.78 -9.75,49.04 -13.06,43.06 -19.13,46.19 -21.21,39.69 -27.78,41.57 -28.55,34.79 -35.36,35.36 -34.79,28.55 -41.57,27.78 -39.69,21.21 -46.19,19.13 -43.06,13.06 -49.04,9.75 -44.78,4.41 -50.0,0.0 -44.78,-4.41 -49.04,-9.75 -43.06,-13.06 -46.19,-19.13 -39.69,-21.21 -41.57,-27.78 -34.79,-28.55 -35.36,-35.36 -28.55,-34.79 -27.78,-41.57 -21.21,-39.69 -19.13,-46.19 -13.06,-43.06 -9.75,-49.04 -4.41,-44.78 0.0,-50.0 4.41,-44.78 9.75,-49.04 13.06,-43.06 19.13,-46.19 21.21,-39.69 27.78,-41.57 28.55,-34.79 35.36,-35.36 34.79,-28.55 41.57,-27.78 39.69,-21.21 46.19,-19.13 43.06,-13.06 49.04,-9.75 44.78,-4.41" fill="url(#seal-gold)" />
+              <circle r="40" fill="none" stroke="#fffdf8" stroke-width="1.5" />
+              <circle r="34" fill="#fffdf8" />
+              <circle r="31" fill="none" stroke="#ff914d" stroke-width="0.8" />
+              <image href="{{ get_url(path='images/ash-logo-cropped.svg') }}" x="-21" y="-19" width="42" height="34" />
+            </svg>
+
+            <div class="signature">
+              <div class="value">{{ page.date | date(format="%B %Y") }}</div>
+              <div class="label">Awarded</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    const print = document.querySelector("[data-print]");
+    print.hidden = false;
+    print.addEventListener("click", () => window.print());
+  </script>
 {% endblock %}

@@ -50,6 +50,11 @@
       cursor: not-allowed;
     }
 
+    /* For buttons that only work with JavaScript, shown by their script */
+    &[hidden] {
+      display: none;
+    }
+
     /* Arrows nudge in the direction they point */
     .icon {
       transition: transform var(--dur-fast) var(--ease-out);

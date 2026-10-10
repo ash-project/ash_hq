@@ -1,0 +1,306 @@
+// Contributor of the month certificates (templates/community/certificate.html), served as
+// /certificate.css alongside the site's stylesheet. The certificate keeps its own look, ported from
+// the Phoenix app: it's a printable document, sized for US Letter, landscape. Everything is scoped
+// to .certificate, apart from the page around it.
+
+@font-face {
+  font-family: "Montserrat";
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/montserrat.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("/fonts/cormorant-garamond.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: italic;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("/fonts/cormorant-garamond-italic.woff2") format("woff2");
+}
+
+@page {
+  size: 11in 8.5in;
+  margin: 0;
+}
+
+// The page around the certificate
+.certificate-page {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: center;
+}
+
+.certificate-page__actions {
+  display: flex;
+  justify-content: flex-end;
+  width: min(100%, 11in);
+}
+
+// Everything in the certificate is sized in cqw, so it scales with the page on screen and in print
+.certificate-sheet {
+  width: min(100%, 11in);
+  container-type: inline-size;
+}
+
+.certificate {
+  --red: #ff5757;
+  --orange: #ff914d;
+  --yellow: #ffbd59;
+  --ink: #1c1917;
+  --muted: #78716c;
+  --paper: #fffdf8;
+  --serif: "Cormorant Garamond", Georgia, serif;
+
+  position: relative;
+  aspect-ratio: 11 / 8.5;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at center, transparent 55%, rgb(255 145 77 / 7%)),
+    var(--paper);
+  color: var(--ink);
+  font-family: "Montserrat", system-ui, sans-serif;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+
+  // Shards in the corners, after the facets of the Ash logo
+  .shard {
+    position: absolute;
+
+    &.tl-1 { top: 0; left: 0; width: 26cqw; height: 18cqw; background: var(--yellow); clip-path: polygon(0 0, 100% 0, 0 100%); }
+    &.tl-2 { top: 0; left: 0; width: 14cqw; height: 24cqw; background: var(--red); clip-path: polygon(0 0, 100% 0, 0 100%); opacity: 0.92; }
+    &.tl-3 { top: 0; left: 0; width: 9cqw; height: 9cqw; background: var(--orange); clip-path: polygon(0 0, 100% 0, 0 100%); }
+    &.br-1 { right: 0; bottom: 0; width: 26cqw; height: 18cqw; background: var(--orange); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+    &.br-2 { right: 0; bottom: 0; width: 14cqw; height: 24cqw; background: var(--red); clip-path: polygon(100% 0, 100% 100%, 0 100%); opacity: 0.92; }
+    &.br-3 { right: 0; bottom: 0; width: 9cqw; height: 9cqw; background: var(--yellow); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+  }
+
+  .frame {
+    position: absolute;
+    inset: 3.6cqw;
+    border: 0.3cqw solid var(--ink);
+    background: var(--paper);
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0.7cqw;
+      border: 0.1cqw solid var(--orange);
+    }
+  }
+
+  .watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44cqw;
+    transform: translate(-50%, -48%);
+    opacity: 0.045;
+  }
+
+  .content {
+    position: absolute;
+    inset: 3.6cqw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3cqw 8cqw;
+    text-align: center;
+  }
+
+  // The heading is written in normal case and uppercased here, so screen readers say the words
+  .title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--ink);
+    text-transform: uppercase;
+  }
+
+  .title__main {
+    font-size: 6.4cqw;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.06em;
+  }
+
+  .title__sub {
+    margin-top: 1cqw;
+    margin-right: -0.55em;
+    font-size: 2cqw;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.55em;
+  }
+
+  .rule {
+    display: flex;
+    gap: 1.2cqw;
+    align-items: center;
+    margin-top: 2.4cqw;
+
+    &::before,
+    &::after {
+      content: "";
+      width: 9cqw;
+      height: 0.12cqw;
+      background: linear-gradient(90deg, transparent, var(--orange));
+    }
+
+    &::after {
+      transform: scaleX(-1);
+    }
+
+    span {
+      width: 0.9cqw;
+      height: 0.9cqw;
+      background: var(--red);
+      transform: rotate(45deg);
+    }
+  }
+
+  .awarded {
+    margin-top: 2.4cqw;
+    color: var(--muted);
+    font-size: 1.25cqw;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  .name {
+    margin-top: 0.8cqw;
+    padding: 0 2cqw 0.6cqw;
+    border-bottom: 0.12cqw solid var(--ink);
+    font-family: var(--serif);
+    font-size: 6.6cqw;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .recognition {
+    max-width: 62cqw;
+    margin-top: 1.8cqw;
+    font-family: var(--serif);
+    font-size: 1.85cqw;
+    font-style: italic;
+    line-height: 1.35;
+  }
+
+  .reason {
+    max-width: 60cqw;
+    margin-top: 1.4cqw;
+    color: #44403c;
+    font-family: var(--serif);
+    font-size: 1.6cqw;
+    line-height: 1.4;
+
+    &::before {
+      content: "\201C";
+      color: var(--red);
+    }
+
+    &::after {
+      content: "\201D";
+      color: var(--red);
+    }
+  }
+
+  .footer {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 4cqw;
+    align-items: center;
+    width: 100%;
+    max-width: 66cqw;
+    margin-top: auto;
+  }
+
+  .signature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .value {
+      min-width: 18cqw;
+      padding-bottom: 0.3cqw;
+      border-bottom: 0.12cqw solid var(--ink);
+      font-family: var(--serif);
+      font-size: 2.3cqw;
+      font-style: italic;
+      font-weight: 500;
+    }
+
+    .label {
+      margin-top: 0.6cqw;
+      color: var(--muted);
+      font-size: 1cqw;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+  }
+
+  .seal {
+    width: 11cqw;
+    height: auto;
+  }
+}
+
+// Just the certificate, edge to edge: when printing, and with ?image=true for link preview images
+@mixin certificate-only {
+  .skip-link,
+  .event-bar,
+  .site-header,
+  .site-footer,
+  .certificate-page__actions {
+    display: none;
+  }
+
+  .site-main,
+  .certificate-page {
+    padding: 0;
+  }
+
+  .certificate-page {
+    display: block;
+    max-width: none;
+  }
+}
+
+.certificate-image {
+  @include certificate-only;
+
+  body {
+    overflow: hidden;
+  }
+
+  .certificate-sheet {
+    width: 100vw;
+  }
+}
+
+@media print {
+  @include certificate-only;
+
+  body {
+    background: none;
+  }
+
+  .certificate-sheet {
+    width: 11in;
+  }
+
+  .certificate {
+    width: 11in;
+    height: 8.5in;
+    aspect-ratio: auto;
+  }
+}
