@@ -1,12 +1,23 @@
-[build]
+# Each deploy is built for its own address, as Zola writes absolute URLs, so links and assets on
+# test and preview deploys stay on that deploy:
+# - production deploys use the site's main address (URL, set by Netlify)
+# - deploy previews and branch deploys use theirs (DEPLOY_PRIME_URL, set by Netlify)
+# - ZOLA_BASE_URL overrides both: `/` gives root-relative URLs, for draft deploys, whose address
+#   isn't known until they're uploaded
+#
 # The contributors are optional: without them, the Community page leaves out its avatar wall. Set
 # GITHUB_TOKEN in the site's environment variables to avoid GitHub's rate limit for anonymous
 # requests, which Netlify's shared build servers can hit.
-#
-# Each deploy is built for its own URL (DEPLOY_PRIME_URL, set by Netlify), so links on test and
-# preview deploys stay on that deploy rather than going to ash-hq.org.
-command = "(sh scripts/fetch-contributors.sh || echo 'Skipping contributors') && zola build --base-url \"${DEPLOY_PRIME_URL:-https://ash-hq.org}\""
+
+[build]
+command = "(sh scripts/fetch-contributors.sh || echo 'Skipping contributors') && zola build --base-url \"${ZOLA_BASE_URL:-${URL:-https://ash-hq.org}}\""
 publish = "public"
+
+[context.deploy-preview]
+command = "(sh scripts/fetch-contributors.sh || echo 'Skipping contributors') && zola build --base-url \"${ZOLA_BASE_URL:-${DEPLOY_PRIME_URL:-https://ash-hq.org}}\""
+
+[context.branch-deploy]
+command = "(sh scripts/fetch-contributors.sh || echo 'Skipping contributors') && zola build --base-url \"${ZOLA_BASE_URL:-${DEPLOY_PRIME_URL:-https://ash-hq.org}}\""
 
 [build.environment]
 ZOLA_VERSION = "0.23.6"

@@ -258,15 +258,15 @@ The site isn't live yet. `netlify.toml` has the build settings: Netlify fetches 
 
 To deploy by hand, use the Netlify CLI from the repo root, with `--build`. That runs the build command from `netlify.toml` and bundles the edge functions; without it, the CLI only uploads `public/` as it is, with no edge functions.
 
-Zola writes absolute URLs, for the base URL it builds with, and the build command takes that from `DEPLOY_PRIME_URL`. Set it yourself for a local build, or links will point at ash-hq.org:
+Zola writes absolute URLs, for the base URL it builds with. The build command picks it for each kind of deploy (see the comments in `netlify.toml`): production deploys use the site's main address, and previews use their own.
 
 ```sh
-# The site's production address
-DEPLOY_PRIME_URL=https://your-site.netlify.app netlify deploy --build --prod
+# A production deploy
+netlify deploy --build --prod
 
-# A draft, to try something out: its address isn't known until it's uploaded, so use
+# A draft, to try something out: its address isn't known until it's uploaded, so build with
 # root-relative URLs
-DEPLOY_PRIME_URL=/ netlify deploy --build
+ZOLA_BASE_URL=/ netlify deploy --build
 ```
 
 Only use root-relative URLs (`/`) for drafts: canonical links, link previews and the feed need absolute URLs.
