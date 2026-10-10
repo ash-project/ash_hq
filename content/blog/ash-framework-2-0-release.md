@@ -12,9 +12,7 @@ tags = ["ash", "release", "elixir"]
 ## Ash Framework
 
 
-<div class="w-full flex justify-center">
-  <img src="/images/ash-logo-side.png" alt="" width="400" height="400"/>
-</div>
+{{ <ui.figure src="/images/ash-logo-side.png" alt="" size="small" /> }}
 
 ## What is Ash? 
 

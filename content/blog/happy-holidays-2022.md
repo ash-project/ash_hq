@@ -7,12 +7,9 @@ authors = ["Zach Daniel"]
 [taxonomies]
 tags = ["ash", "community", "elixir"]
 +++
-<div class="grid place-content-center text-center">
-  <img src="/images/three-trees.svg" alt=""></img>
-</div>
-<div class="grid text-center font-heavy text-6xl mb-16">
-  Happy Holidays!
-</div>
+{{ <ui.figure src="/images/three-trees.svg" alt="" size="small" /> }}
+
+## Happy Holidays!
 
 This year has been a wild ride 🎢. So much has gone into Ash Framework this year, and our user base has increased *massively* in that time frame, and there is *so much* more to come. We have some huge things just around the river bend 🎉, and I can't wait for you all to see it!
 
@@ -36,17 +33,11 @@ Another way that people contribute is by creating issues, making feature request
 
 ## Sponsors
 
-<div class="w-full">
-  <a class="flex flex-row h-36" href="https://alembic.com.au" >
-    <img  src="/images/alembic-logo.png" alt="Alembic"></img>
-  </a>
-</div>
+{{ <ui.figure src="/images/alembic-logo.png" alt="Alembic" size="small" href="https://alembic.com.au" /> }}
+
 Last but not least, I'd like to thank my sponsors, the largest of which (if sponsor is even the correct term) is my employer [Alembic](https://alembic.com.au/). They were among the first to see the potential of what Ash could be and where it is headed. Thanks to them, I can work on or with Ash effectively full time, either by continuing to add to the framework or by helping with their various client projects using Ash. Their insight, input, and investment has been invaluable, and is absolutely the driving factor behind the Ash ecosystem. If you have any software projects that you'd like built at breakneck speed with the latest and greatest tools, if you have any stalled initiatives due to tech debt or lack of resources, if you are building with Ash and want the experts to help, contact us. I've worked with a lot of technical teams in the past, and the staff at Alembic is the most pragmatic, intelligent, and value-driven that I've ever had the pleasure of working with. Thank you to all of those at Alembic who have welcomed me and helped with Ash, and for all of your effort helping Ash become everything we know that it can be!
-<div class="w-full">
-  <a class="flex flex-row h-36" href="https://coinbits.app">
-    <img src="/images/coinbits-logo.png" alt="Coinbits"></img>
-  </a>
-</div>
+
+{{ <ui.figure src="/images/coinbits-logo.png" alt="Coinbits" size="small" href="https://coinbits.app" /> }}
 
 In addition to Alembic, there are other sponsors who fund my work, both individuals and companies like [Coinbits](https://coinbits.app/). Ask anyone who knows, and they'll tell you that Ash is essentially two full time jobs for me, and these sponsorships are one of the ways that I manage the level of support and effort that I put into this project. Knowing that my work is impactful, to the point that you want to buy me a coffee (or more), is worth more than I can say. Thank you all for your support.
 
