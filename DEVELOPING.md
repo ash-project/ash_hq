@@ -256,22 +256,21 @@ Zola 0.23 uses Tera 2, which differs from Tera 1 and from most examples online. 
 
 The site isn't live yet. `netlify.toml` has the build settings: Netlify fetches the contributors, then builds with Zola, for each deploy's own URL (`DEPLOY_PRIME_URL`), so links on test deploys stay on them. Set `GITHUB_TOKEN` in the site's environment variables, as Netlify's shared build servers can hit GitHub's limit for anonymous requests.
 
-To deploy by hand, build first, then deploy from the repo root with the Netlify CLI, which also deploys the edge functions.
+To deploy by hand, use the Netlify CLI from the repo root, with `--build`. That runs the build command from `netlify.toml` and bundles the edge functions; without it, the CLI only uploads `public/` as it is, with no edge functions.
 
-Zola writes absolute URLs, for the base URL it builds with. A draft deploy gets a unique address that isn't known until it's uploaded, so for drafts, build with root-relative URLs instead:
+Zola writes absolute URLs, for the base URL it builds with, and the build command takes that from `DEPLOY_PRIME_URL`. Set it yourself for a local build, or links will point at ash-hq.org:
 
 ```sh
-# A draft, to try something out
-zola build --base-url /
-netlify deploy --dir public
-
 # The site's production address
-zola build --base-url https://your-site.netlify.app
-netlify deploy --dir public --prod
+DEPLOY_PRIME_URL=https://your-site.netlify.app netlify deploy --build --prod
+
+# A draft, to try something out: its address isn't known until it's uploaded, so use
+# root-relative URLs
+DEPLOY_PRIME_URL=/ netlify deploy --build
 ```
 
-Only use `--base-url /` for drafts: canonical links, link previews and the feed need absolute URLs.
+Only use root-relative URLs (`/`) for drafts: canonical links, link previews and the feed need absolute URLs.
 
-Don't deploy `public/` after only running `zola serve`: that serves pages from memory, and leaves just the static files in `public/`. Uploading the folder in Netlify's web interface doesn't deploy the edge functions either.
+Uploading `public/` some other way skips the edge functions, and after only `zola serve`, `public/` holds just the static files: `zola serve` serves pages from memory.
 
 Still to come: a scheduled rebuild every six hours, to keep the contributors and events current, and a CI workflow running the tests.

@@ -16,7 +16,7 @@
 
 import modules from "../../data/doc-modules.json" with { type: "json" };
 
-export const config = { path: ["/docs", "/docs/*"], method: ["GET", "HEAD"] };
+export const config = { path: ["/docs", "/docs/*"] };
 
 export default function handler(request) {
   const url = new URL(request.url);

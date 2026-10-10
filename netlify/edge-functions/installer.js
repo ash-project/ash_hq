@@ -11,7 +11,7 @@
 // value must match an allowlist; anything else gets a script that prints an error and exits,
 // rather than running code from a crafted URL.
 
-export const config = { path: ["/new/*", "/install/*"], method: ["GET", "HEAD"] };
+export const config = { path: ["/new/*", "/install/*"] };
 
 const APP_NAME = /^[A-Za-z][A-Za-z0-9_]*$/;
 const PACKAGE = /^[A-Za-z0-9_.@:\/+-]+$/;
