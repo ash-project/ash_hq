@@ -74,6 +74,8 @@ if (root) {
       installElixir: elixirCheckbox.checked,
       appName: nameInput.value,
       phoenixVersion: root.dataset.phoenixVersion,
+      // Wherever this page is served, so test deploys use their own installer
+      baseUrl: location.origin,
     });
     countEl.textContent = `· ${selected.size} ${selected.size === 1 ? "feature" : "features"}`;
     copyLabel.textContent = "Copy Command";

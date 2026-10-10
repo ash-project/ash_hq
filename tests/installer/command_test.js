@@ -34,6 +34,7 @@ for (const fixture of fixtures) {
       installElixir: fixture.installElixir,
       appName: fixture.appName,
       phoenixVersion: fixture.phoenixVersion,
+      baseUrl: "https://ash-hq.org",
     });
 
     if (command !== fixture.expected) {

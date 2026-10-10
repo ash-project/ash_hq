@@ -10,6 +10,7 @@
 // installElixir: for new projects, whether the command installs Elixir first
 // appName:       the project name as typed
 // phoenixVersion: the latest phx_new, for installing Phoenix's generator directly
+// baseUrl:       where the site is served, such as "https://ash-hq.org", for the curl command
 
 // Features picked, with the features they require
 export function selection(features, installOrder) {
@@ -31,7 +32,7 @@ export function safeAppName(name) {
     .toLowerCase();
 }
 
-export function buildCommand({ features, installOrder, mode, installElixir, appName, phoenixVersion }) {
+export function buildCommand({ features, installOrder, mode, installElixir, appName, phoenixVersion, baseUrl }) {
   let args = [];
   let packages = ["ash"];
 
@@ -73,7 +74,7 @@ export function buildCommand({ features, installOrder, mode, installElixir, appN
     code = "mix igniter.install ";
     limit = 45;
   } else if (installElixir) {
-    code = `sh <(curl 'https://ash-hq.org/install/${app}${installArg}')`;
+    code = `sh <(curl '${baseUrl}/install/${app}${installArg}')`;
     if (packages.length !== 0) packages.unshift("&& mix igniter.install");
     packages.unshift(`&& cd ${app}`);
     limit = Math.max(code.length - 2, 45);

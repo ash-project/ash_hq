@@ -70,8 +70,8 @@
           This installs Ash into a new app. Choosing presets and features needs JavaScript.
         </p>
 
-        {{ <ui.terminal code="sh <(curl 'https://ash-hq.org/install/my_app') \\
-    && cd my_app" data_installer_command="" /> }}
+        {{ <ui.terminal code={"sh <(curl '" ~ site_url ~ "/install/my_app') \\
+    && cd my_app"} data_installer_command="" /> }}
 
         {{ <ui.button text="Copy Command" size="lg" icon="clipboard" full={true} data_installer_copy="" hidden="" /> }}
         <p class="visually-hidden" aria-live="polite" data-installer-status></p>

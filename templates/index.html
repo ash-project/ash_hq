@@ -72,7 +72,7 @@
   {%- endset %}
   {% <ui.section title="One Command to a Working App" class="home-install" variant="accent" layout="split" description="Pick a preset or choose features one by one. The installer uses Igniter to set it all up."> %}
     <div class="home-install__body">
-      {{ <ui.terminal code="sh <(curl 'https://ash-hq.org/install/lemonade_stand') && cd lemonade_stand" /> }}
+      {{ <ui.terminal code={"sh <(curl '" ~ site_url ~ "/install/lemonade_stand') && cd lemonade_stand"} /> }}
       <div class="button-row">{{ install_actions }}</div>
     </div>
   {% </ui.section> %}

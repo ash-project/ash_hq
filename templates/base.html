@@ -12,6 +12,12 @@
     {%- set_global upcoming_events = [...upcoming_events, event] %}
   {%- endif %}
 {%- endfor -%}
+{#-
+  `site_url`: the site's address, for things that need a full URL, such as the install command.
+  Builds with root-relative URLs (`--base-url /`, for draft deploys) use ash-hq.org.
+#}
+{%- set site_url = "https://ash-hq.org" %}
+{%- if config.base_url is starting_with(pat="http") %}{% set site_url = config.base_url %}{% endif -%}
 <!doctype html>
 <html lang="{{ lang }}">
   <head>
