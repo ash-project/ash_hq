@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Fetches everyone who has contributed to the repositories in data/contributor-repos.txt, for the
+# Fetches everyone who has contributed to the repositories in data/libraries.txt, for the
 # Community page, and writes them to data/contributors.json. Run before `zola build`; the
 # scheduled rebuilds keep the list current.
 #
@@ -13,7 +13,7 @@ set -eu
 
 cd "$(dirname "$0")/.."
 
-repos=data/contributor-repos.txt
+repos=data/libraries.txt
 output=data/contributors.json
 pages=$(mktemp -d)
 trap 'rm -rf "$pages"' EXIT

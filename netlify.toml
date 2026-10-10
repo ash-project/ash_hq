@@ -1,12 +1,16 @@
 [build]
-command = "zola build"
+# The contributors are optional: without them, the Community page leaves out its avatar wall. Set
+# GITHUB_TOKEN in the site's environment variables to avoid GitHub's rate limit for anonymous
+# requests, which Netlify's shared build servers can hit.
+command = "(sh scripts/fetch-contributors.sh || echo 'Skipping contributors') && zola build"
 publish = "public"
 
 [build.environment]
 ZOLA_VERSION = "0.23.6"
 
-# The installer scripts at /new/:name and /install/:name are served by
-# netlify/edge-functions/installer.js, which declares its own paths.
+# Edge functions, in netlify/edge-functions/, declare their own paths:
+# - installer.js: the installer scripts at /new/:name and /install/:name
+# - docs-redirect.js: the old docs URLs under /docs, to hexdocs
 
 # The feed used to be at /rss
 [[redirects]]

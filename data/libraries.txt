@@ -1,6 +1,8 @@
-# The repositories whose contributors are shown on the Community page, as org/name.
-# Read by scripts/fetch-contributors.sh. Order matters: contributors are listed in the order
-# they're first found.
+# The Ash libraries, as their GitHub org/name (the name is also the Hex package's name).
+#
+# Read by scripts/fetch-contributors.sh, for the Community page's contributors (listed in the order
+# they're first found, so order matters), and scripts/fetch-doc-modules.sh, for redirecting the
+# old ash-hq.org docs URLs to hexdocs.
 
 ash-project/ash
 ash-project/ash_admin
