@@ -1,0 +1,12 @@
+{#
+  A shell command, in a code panel.
+
+    {{ <ui.terminal code="sh <(curl 'https://ash-hq.org/install/my_app') && cd my_app" /> }}
+
+  Any other argument becomes an attribute of the <code>, with _ in its name turned into -, such as
+  a data attribute for a script that updates it.
+#}
+{% component ui.terminal(code: string, ...attrs) %}
+  <pre class="terminal"><code
+    {%- for attr, attr_value in attrs %} {{ attr | replace(from="_", to="-") }}="{{ attr_value }}"{% endfor %}>{{ code }}</code></pre>
+{%- endcomponent ui.terminal %}

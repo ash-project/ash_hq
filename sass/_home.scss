@@ -1,0 +1,90 @@
+/* The home page (templates/index.html) */
+@layer components {
+  .home-hero .section__body {
+    display: grid;
+    gap: var(--space-8);
+    justify-items: start;
+  }
+
+  .home-hero__title {
+    font: var(--fw-semibold) var(--fs-hero) / 0.95 var(--font-sans);
+    letter-spacing: -0.045em;
+  }
+
+  .home-hero__accent {
+    color: var(--accent);
+  }
+
+  .home-hero__footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    align-items: end;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .home-hero__lede {
+    max-width: 560px;
+    color: var(--text-muted);
+    font: var(--type-body-lg);
+    text-wrap: pretty;
+  }
+
+  .home-hero__actions,
+  .home-install__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  /* The EEF's logo is dark; shown light on the band */
+  .home-eef .section-header__image {
+    filter: invert(1);
+  }
+
+  .home-eef__more {
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--border-subtle);
+    color: var(--text-faint);
+    font: var(--type-small);
+  }
+
+  .home-install__body {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .home-logos .section__body {
+    display: grid;
+    gap: var(--space-7);
+    justify-items: center;
+  }
+
+  .home-logos__heading {
+    color: var(--text-muted);
+    font: var(--type-eyebrow);
+  }
+
+  .home-logos__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-7) var(--space-10);
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    a {
+      display: block;
+    }
+
+    img {
+      width: auto;
+      max-width: 140px;
+      height: 32px;
+      object-fit: contain;
+    }
+  }
+}

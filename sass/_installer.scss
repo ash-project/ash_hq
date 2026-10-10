@@ -81,17 +81,6 @@
     font: var(--type-small);
   }
 
-  .installer__command {
-    margin: 0;
-    padding: var(--space-5);
-    overflow-x: auto;
-    border: 1px solid var(--border-subtle);
-    background: var(--surface-code);
-    color: var(--syn-text);
-    font: var(--type-code);
-    white-space: pre;
-  }
-
   .installer__docs {
     display: grid;
     gap: 10px;

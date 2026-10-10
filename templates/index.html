@@ -1,10 +1,68 @@
 {% extends "base.html" %}
 
-{# A placeholder until the home page is built #}
+{#-
+  The home page. Packages are in data/ecosystem.toml (the first eight are shown here), and the
+  customer logos in data/logos.toml.
+#}
 {% block content %}
-  <h1>Model your domain, derive the rest</h1>
-  <p>
-    The Elixir backend framework for unparalleled productivity.
-    <a href="{{ get_url(path='blog/', trailing_slash=true) }}">Read the blog</a>.
-  </p>
+  {%- set ecosystem = load_data(path="data/ecosystem.toml") %}
+  {%- set customers = load_data(path="data/logos.toml") %}
+
+  {% <ui.section class="home-hero"> %}
+    {{ <ui.announcement title="Temporal Resources" href="/blog/introducing-temporal-resources/" /> }}
+    <h1 class="home-hero__title">Model your domain,<br /><span class="home-hero__accent">derive the rest</span></h1>
+    <div class="home-hero__footer">
+      <p class="home-hero__lede">The Elixir backend framework for unparalleled productivity. Declarative tools that let you stop wasting time. Use with Phoenix LiveView or build APIs in minutes for your front-end of choice.</p>
+      <div class="home-hero__actions">
+        {{ <ui.button text="Install Now" href="/installer/" size="lg" icon_right="arrow-right" /> }}
+        {{ <ui.button text="Run in Livebook" href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd" variant="secondary" size="lg" icon_right="arrow-up-right" /> }}
+      </div>
+    </div>
+  {% </ui.section> %}
+
+  {#- The feature tour goes here (part 2) #}
+
+  {%- set all_packages = <ui.button text="All packages" href="/ecosystem/" variant="link" icon_right="arrow-right" /> %}
+  {% <ui.section title="The Ash Ecosystem" description="Powerful extensions that integrate seamlessly with your resources." actions={all_packages}> %}
+    <ul class="cards cards--compact grid">
+      {%- for package in ecosystem.packages %}
+        {%- if loop.index <= 8 %}
+          {{ <ui.card title={package.name} href={"https://hexdocs.pm/" ~ package.package ~ "/"} text={package.description} compact={true} new_tab={true} /> }}
+        {%- endif %}
+      {%- endfor %}
+    </ul>
+  {% </ui.section> %}
+
+  {%- set eef_actions %}
+    {{ <ui.button text="Donate to the EEF" href="https://www.every.org/erlang-ecosystem-foundation-inc" variant="secondary" icon_right="arrow-up-right" /> }}
+    {{ <ui.button text="Become a Member" href="https://members.erlef.org/join-us" variant="ghost" icon_right="arrow-up-right" /> }}
+  {%- endset %}
+  {% <ui.section title="Erlang Ecosystem Foundation" id="eef-partner" class="home-eef" variant="band" layout="split" eyebrow="Proud Partner" image="/images/eef-logo.svg" image_href="https://erlef.org/" description="The EEF is the 501(c)(3) non-profit that stewards the BEAM ecosystem we all build on. Their working groups make Elixir, Erlang, and the wider BEAM safer and more sustainable for everyone." actions={eef_actions}> %}
+    <ul class="list-rows">
+      {{ <ui.list_row title="Securing the Ecosystem" text="The EEF Security Working Group identifies vulnerabilities, publishes guidance, and funds independent audits — including the recent Hex.pm security audit that protects every package in the ecosystem, Ash included." /> }}
+      {{ <ui.list_row title="Supporting the Community" text="Working groups for build tools, observability, education, ML, and infrastructure — plus fellowships, stipends, conferences, and the documentation that newcomers and experts rely on every day." /> }}
+      {{ <ui.list_row title="Becoming a Member" text="Individuals and companies can join as members starting at modest annual dues. Membership funds the working groups directly, gives you a voice in governance, and keeps the BEAM independent and community-driven." /> }}
+    </ul>
+    <p class="home-eef__more">Learn more at <a href="https://erlef.org/">erlef.org</a> — every contribution and member helps secure and sustain the BEAM.</p>
+  {% </ui.section> %}
+
+  {%- set install_actions %}
+    {{ <ui.button text="Build your installer" href="/installer/" icon_right="arrow-right" /> }}
+    {{ <ui.button text="Get Started Guide" href="https://hexdocs.pm/ash/get-started.html" variant="secondary" icon="book-open" /> }}
+  {%- endset %}
+  {% <ui.section title="One Command to a Working App" class="home-install" variant="accent" layout="split" description="Pick a preset or choose features one by one. The installer uses Igniter to set it all up."> %}
+    <div class="home-install__body">
+      {{ <ui.terminal code="sh <(curl 'https://ash-hq.org/install/lemonade_stand') && cd lemonade_stand" /> }}
+      <div class="home-install__actions">{{ install_actions }}</div>
+    </div>
+  {% </ui.section> %}
+
+  {% <ui.section class="home-logos"> %}
+    <h2 class="home-logos__heading">Trusted in Production</h2>
+    <ul class="home-logos__list">
+      {%- for customer in customers.logos %}
+        <li><a href="{{ customer.href }}"><img src="{{ get_url(path='images/' ~ customer.src) }}" alt="{{ customer.name }}" title="{{ customer.name }}" loading="lazy" /></a></li>
+      {%- endfor %}
+    </ul>
+  {% </ui.section> %}
 {% endblock %}

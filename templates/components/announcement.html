@@ -1,0 +1,14 @@
+{#
+  A link announcing something new, such as a release. At most one per page, near the top.
+
+    {{ <ui.announcement title="Temporal Resources" href="/blog/introducing-temporal-resources/" /> }}
+
+  label: the tag before the title
+#}
+{% component ui.announcement(title: string, href: string, label: string = "New") %}
+  <a class="announcement" href="{{ href }}">
+    <span class="announcement__label">{{ label }}<span class="visually-hidden">:</span></span>
+    <span class="announcement__title">{{ title }}</span>
+    {{ <ui.icon name="arrow-right" /> }}
+  </a>
+{%- endcomponent ui.announcement %}

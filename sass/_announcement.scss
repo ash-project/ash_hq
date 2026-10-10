@@ -1,0 +1,50 @@
+/* An announcement link (templates/components/announcement.html) */
+@layer components {
+  .announcement {
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+    min-height: 34px;
+    padding: var(--space-2) var(--space-4) var(--space-2) var(--space-2);
+    border: 1px solid var(--border-default);
+    background: var(--surface-card);
+    color: var(--text-body);
+    font: var(--fw-medium) var(--fs-small) / 1 var(--font-sans);
+    text-decoration: none;
+    transition: border-color var(--dur-fast) var(--ease-out);
+    --icon-size: 14px;
+
+    .icon {
+      color: var(--text-muted);
+      transition: transform var(--dur-fast) var(--ease-out);
+    }
+
+    &:hover {
+      border-color: var(--border-strong);
+      color: var(--text-body);
+      text-decoration: none;
+
+      .icon {
+        transform: translateX(2px);
+      }
+    }
+  }
+
+  /* An accent element, so it gets the chamfered corner */
+  .announcement__label {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 9px;
+    background: var(--accent);
+    clip-path: var(--clip-chamfer-sm);
+    color: var(--accent-ink);
+    font: var(--fw-medium) 0.6875rem / 1 var(--font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .announcement__title {
+    color: var(--text-strong);
+  }
+}

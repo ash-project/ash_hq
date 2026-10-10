@@ -1,0 +1,77 @@
+# Companies using Ash in production, shown on the home page. `src` is an image in static/images/,
+# chosen to show on a dark background.
+
+[[logos]]
+name = "Remedy"
+href = "https://remedymeds.com/"
+src = "remedy.svg"
+
+[[logos]]
+name = "Alembic"
+href = "https://www.alembic.com.au"
+src = "alembic.svg"
+
+[[logos]]
+name = "Daylite"
+href = "https://www.daylite.app"
+src = "daylite-logo.svg"
+
+[[logos]]
+name = "Heretask"
+href = "https://www.heretask.com/"
+src = "heretask-logo-light.svg"
+
+[[logos]]
+name = "GroupFlow"
+href = "https://www.groupflow.app/developers?utm_source=ash"
+src = "groupflow-logo.svg"
+
+[[logos]]
+name = "Zoonect"
+href = "https://www.zoonect.com/en/homepage"
+src = "zoonect-dark.svg"
+
+[[logos]]
+name = "ScribbleVet"
+href = "https://www.scribblevet.com/"
+src = "scribble-vet-logo.png"
+
+[[logos]]
+name = "Plangora"
+href = "https://www.plangora.com"
+src = "plangora-logo-dark.png"
+
+[[logos]]
+name = "Coinbits"
+href = "https://coinbits.app"
+src = "coinbits-logo.png"
+
+[[logos]]
+name = "Wintermeyer Consulting"
+href = "https://www.wintermeyer-consulting.de/"
+src = "wintermeyer-logo-dark.svg"
+
+[[logos]]
+name = "Boring Business Leads"
+href = "https://boringbusinessleads.com"
+src = "self-storage-leads-logo-light.svg"
+
+[[logos]]
+name = "Linguavid"
+href = "https://linguavid.net"
+src = "linguavid-logo.png"
+
+[[logos]]
+name = "Communities"
+href = "https://communities.support/"
+src = "communities-logo.svg"
+
+[[logos]]
+name = "Intcube"
+href = "https://www.intcube.io/en"
+src = "intcube.svg"
+
+[[logos]]
+name = "SalesHood"
+href = "https://saleshood.com/"
+src = "saleshood.png"
