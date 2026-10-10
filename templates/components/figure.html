@@ -1,0 +1,18 @@
+{#
+  An image in an article, optionally linked and captioned. Works in Markdown content too.
+
+    {{ <ui.figure src="/images/book-beta.jpg" alt="The cover of …" size="small" href="https://…" /> }}
+
+  size:    "full" (the width of the text, the default) or "small" (a cover or logo, 240px wide)
+  href:    makes the image a link
+  caption: shown below the image
+#}
+{#- Trimmed at the start: in Markdown, an indented line after a list would join the list #}
+{% component ui.figure(src: string, alt: string, size: string = "full", href: string = "", caption: string = "") -%}
+  <figure class="figure figure--{{ size }}">
+    {%- if href %}<a href="{{ href }}">{% endif -%}
+    <img src="{{ src }}" alt="{{ alt }}" loading="lazy" />
+    {%- if href %}</a>{% endif -%}
+    {%- if caption %}<figcaption>{{ caption }}</figcaption>{% endif -%}
+  </figure>
+{%- endcomponent ui.figure %}

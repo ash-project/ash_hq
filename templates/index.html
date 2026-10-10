@@ -13,7 +13,7 @@
     <h1 class="home-hero__title">Model your domain,<br /><span class="home-hero__accent">derive the rest</span></h1>
     <div class="home-hero__footer">
       <p class="home-hero__lede">The Elixir backend framework for unparalleled productivity. Declarative tools that let you stop wasting time. Use with Phoenix LiveView or build APIs in minutes for your front-end of choice.</p>
-      <div class="home-hero__actions">
+      <div class="button-row">
         {{ <ui.button text="Install Now" href="/installer/" size="lg" icon_right="arrow-right" /> }}
         {{ <ui.button text="Run in Livebook" href="https://livebook.dev/run?url=https%3A%2F%2Fgithub.com%2Fash-project%2Fash_tutorial%2Fblob%2Fmaster%2Foverview.livemd" variant="secondary" size="lg" icon_right="arrow-up-right" /> }}
       </div>
@@ -73,7 +73,7 @@
   {% <ui.section title="One Command to a Working App" class="home-install" variant="accent" layout="split" description="Pick a preset or choose features one by one. The installer uses Igniter to set it all up."> %}
     <div class="home-install__body">
       {{ <ui.terminal code="sh <(curl 'https://ash-hq.org/install/lemonade_stand') && cd lemonade_stand" /> }}
-      <div class="home-install__actions">{{ install_actions }}</div>
+      <div class="button-row">{{ install_actions }}</div>
     </div>
   {% </ui.section> %}
 

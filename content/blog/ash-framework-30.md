@@ -49,4 +49,4 @@ Ash 2.x will receive a **minimum** of 6 months of critical bug fixes and securit
 
 And don't forget, the Ash book is coming! Keep an eye out for updates 🥳. Thanks again to @sevenseacat for all her fine work on this book, its coming along spectacularly.
 
-<img src="/images/book-cover.jpg" alt="The cover of Building Web Applications with Ash, by Rebecca Le and Zach Daniel"></img>
+{{ <ui.figure src="/images/book-cover.jpg" alt="The cover of Building Web Applications with Ash, by Rebecca Le and Zach Daniel" size="small" /> }}

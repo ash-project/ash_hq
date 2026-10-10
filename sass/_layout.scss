@@ -73,6 +73,13 @@
     row-gap: var(--row-gap, 0);
   }
 
+  /* Buttons side by side, wrapping onto more lines as needed */
+  .button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
   /* Two panels side by side, such as code beside its result. Stacks below 1200px. */
   .pair {
     display: grid;

@@ -1,0 +1,25 @@
+/* Images in articles (templates/components/figure.html) */
+@layer components {
+  .figure {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+
+    a {
+      display: block;
+    }
+
+    img {
+      width: 100%;
+    }
+
+    figcaption {
+      color: var(--text-muted);
+      font: var(--type-small);
+    }
+  }
+
+  .figure--small {
+    max-width: 240px;
+  }
+}

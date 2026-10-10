@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{#- A page of Markdown: its title and description as the heading, and its content as prose #}
+{% block content %}
+  {% <ui.section title={page.title} description={page.description | default(value="", boolean=true)} size="lg" heading="h1"> %}
+    <div class="prose">
+      {{ page.content | safe }}
+    </div>
+  {% </ui.section> %}
+{% endblock %}

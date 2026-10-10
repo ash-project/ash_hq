@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{#- Shown for pages that don't exist #}
+{% block title %}Page Not Found · {{ config.title }}{% endblock %}
+
+{% block content %}
+  {% <ui.section title="Page Not Found" description="There's nothing here. It may have moved, or the link may be wrong." size="lg" heading="h1"> %}
+    <div class="button-row">
+      {{ <ui.button text="Go to the home page" href="/" icon_right="arrow-right" /> }}
+      {{ <ui.button text="Read the docs" href="https://hexdocs.pm/ash" variant="secondary" icon_right="arrow-up-right" /> }}
+    </div>
+  {% </ui.section> %}
+{% endblock %}

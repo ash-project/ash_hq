@@ -31,13 +31,6 @@
     text-wrap: pretty;
   }
 
-  .home-hero__actions,
-  .home-install__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-4);
-  }
-
   /* The feature tour: each step's heading, with previous and next beside it, its description,
      then its code beside what it gives you */
   .home-tour .tabs__panel {
