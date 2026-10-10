@@ -1,0 +1,29 @@
+{#
+  A text input with its label.
+
+    {{ <ui.input label="Project name" id="app-name" value="lemonade_stand" mono={true} /> }}
+    {{ <ui.input label="Filter packages" id="package-filter" type="search" icon="search" hide_label={true} /> }}
+
+  label:      always given, as placeholders aren't labels. hide_label keeps it for screen readers
+              only, where the input's purpose is clear from what's around it.
+  icon:       an icon name, shown inside the input before the text
+  hint:       a short note below, linked to the input with aria-describedby
+  mono:       a monospaced value, for code-like input
+  Any other argument becomes an attribute of the <input>, with _ in its name turned into -.
+#}
+{% component ui.input(label: string, id: string, type: string = "text", value: string = "", placeholder: string = "", icon: string = "", hint: string = "", hide_label: bool = false, mono: bool = false, ...attrs) %}
+  <div class="input">
+    <label class="input__label{% if hide_label %} visually-hidden{% endif %}" for="{{ id }}">{{ label }}</label>
+    <div class="input__field">
+      {%- if icon %}{{ <ui.icon name={icon} /> }}{% endif %}
+      <input class="input__control{% if mono %} input__control--mono{% endif %}" id="{{ id }}" type="{{ type }}"
+        {%- if value %} value="{{ value }}"{% endif %}
+        {%- if placeholder %} placeholder="{{ placeholder }}"{% endif %}
+        {%- if hint %} aria-describedby="{{ id }}-hint"{% endif %}
+        {%- for attr, attr_value in attrs %} {{ attr | replace(from="_", to="-") }}="{{ attr_value }}"{% endfor %} />
+    </div>
+    {%- if hint %}
+      <p class="input__hint" id="{{ id }}-hint">{{ hint }}</p>
+    {%- endif %}
+  </div>
+{%- endcomponent ui.input %}

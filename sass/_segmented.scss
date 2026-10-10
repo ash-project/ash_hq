@@ -14,10 +14,6 @@
     border: 1px solid var(--border-subtle);
     background: var(--surface-sunken);
     scrollbar-width: none;
-
-    &[hidden] {
-      display: none;
-    }
   }
 
   /* The native radio, always hidden but still focusable and announced: its label is the button */

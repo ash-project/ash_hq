@@ -1,0 +1,9 @@
+{#
+  Tells screen reader users a link opens in a new tab. Goes inside the link, after its text, on
+  links with target="_blank".
+
+    <a href="…" target="_blank" rel="noopener">Podcast{{ <ui.new_tab_note /> }}</a>
+#}
+{% component ui.new_tab_note() %}
+  <span class="visually-hidden"> (opens in a new tab)</span>
+{%- endcomponent ui.new_tab_note %}

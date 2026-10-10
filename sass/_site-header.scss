@@ -97,10 +97,6 @@
     cursor: pointer;
     --icon-size: 20px;
 
-    &[hidden] {
-      display: none;
-    }
-
     /* Out of inline layout, so the icon has no baseline gap beneath it */
     .site-header__toggle-open,
     .site-header__toggle-close {

@@ -39,6 +39,12 @@
     text-wrap: balance;
   }
 
+  /* `hidden` always hides, even on components that set their own display. !important in this
+     early layer beats every later layer's display. */
+  [hidden] {
+    display: none !important;
+  }
+
   img,
   svg,
   video {

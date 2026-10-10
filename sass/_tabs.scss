@@ -13,10 +13,6 @@
   .tabs__panel {
     display: grid;
     gap: var(--space-7);
-
-    &[hidden] {
-      display: none;
-    }
   }
 
   .tabs__heading {

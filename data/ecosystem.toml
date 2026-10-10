@@ -1,0 +1,132 @@
+# Packages in the Ash ecosystem, for the Ecosystem page and the home page's preview (the first
+# eight). `package` is the Hex package name: each links to its docs on hexdocs.pm.
+
+[[packages]]
+name = "Ash"
+package = "ash"
+description = "Core framework"
+
+[[packages]]
+name = "AshPostgres"
+package = "ash_postgres"
+description = "PostgreSQL data layer"
+
+[[packages]]
+name = "AshPhoenix"
+package = "ash_phoenix"
+description = "Phoenix integration"
+
+[[packages]]
+name = "AshGraphQL"
+package = "ash_graphql"
+description = "GraphQL API extension"
+
+[[packages]]
+name = "AshJsonApi"
+package = "ash_json_api"
+description = "JSON:API extension"
+
+[[packages]]
+name = "Reactor"
+package = "reactor"
+description = "Workflows & Sagas"
+
+[[packages]]
+name = "AshAuthentication"
+package = "ash_authentication"
+description = "Authentication"
+
+[[packages]]
+name = "AshAdmin"
+package = "ash_admin"
+description = "Admin interface"
+
+[[packages]]
+name = "AshOban"
+package = "ash_oban"
+description = "Background jobs"
+
+[[packages]]
+name = "AshStateMachine"
+package = "ash_state_machine"
+description = "State machines"
+
+[[packages]]
+name = "AshArchival"
+package = "ash_archival"
+description = "Soft deletion"
+
+[[packages]]
+name = "AshPaperTrail"
+package = "ash_paper_trail"
+description = "Audit logs"
+
+[[packages]]
+name = "AshRateLimiter"
+package = "ash_rate_limiter"
+description = "Rate Limiting"
+
+[[packages]]
+name = "AshCsv"
+package = "ash_csv"
+description = "CSV data layer"
+
+[[packages]]
+name = "AshMoney"
+package = "ash_money"
+description = "Financial data types"
+
+[[packages]]
+name = "AshDoubleEntry"
+package = "ash_double_entry"
+description = "Double-entry accounting"
+
+[[packages]]
+name = "AshCloak"
+package = "ash_cloak"
+description = "Encryption"
+
+[[packages]]
+name = "AshSqlite"
+package = "ash_sqlite"
+description = "SQLite data layer"
+
+[[packages]]
+name = "AshCubDB"
+package = "ash_cubdb"
+description = "CubDB data layer"
+
+[[packages]]
+name = "AshGeo"
+package = "ash_geo"
+description = "Geospatial data"
+
+[[packages]]
+name = "AshAi"
+package = "ash_ai"
+description = "LLM features"
+
+[[packages]]
+name = "UsageRules"
+package = "usage_rules"
+description = "Usage guidelines"
+
+[[packages]]
+name = "AshTypescript"
+package = "ash_typescript"
+description = "TypeScript generation"
+
+[[packages]]
+name = "AshAppSignal"
+package = "ash_appsignal"
+description = "APM monitoring"
+
+[[packages]]
+name = "OpentelemetryAsh"
+package = "opentelemetry_ash"
+description = "Telemetry tracing"
+
+[[packages]]
+name = "AshEvents"
+package = "ash_events"
+description = "Event sourcing"

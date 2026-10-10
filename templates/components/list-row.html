@@ -34,7 +34,7 @@
         {%- if href -%}
           <a class="stretched-link" href="{{ href }}"{% if new_tab %} target="_blank" rel="noopener"{% endif %}>
             {{- title -}}
-            {%- if new_tab %}<span class="visually-hidden"> (opens in a new tab)</span>{% endif -%}
+            {%- if new_tab %}{{ <ui.new_tab_note /> }}{% endif -%}
           </a>
         {%- else -%}
           {{ title }}

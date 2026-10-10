@@ -48,6 +48,21 @@
     text-wrap: pretty;
   }
 
+  /* Packages: a monospaced name, tighter spacing and a smaller arrow */
+  .card--compact {
+    gap: 6px;
+    padding: var(--space-5) 0 var(--space-6);
+
+    .card__title {
+      font: var(--fw-medium) var(--fs-small) / 1.2 var(--font-mono);
+      letter-spacing: 0;
+    }
+
+    .card__arrow {
+      --icon-size: 14px;
+    }
+  }
+
   .card--link:hover {
     border-top-color: var(--accent);
 

@@ -12,16 +12,25 @@
   eyebrow: HTML above the title, such as a badge
   text:    a short description
   cta:     link text shown at the bottom, instead of the arrow beside the title
+  compact: a smaller card with a monospaced title, for packages
+  new_tab: opens the link in a new tab, and tells screen reader users it will
 #}
-{% component ui.card(title: string, href: string = "", heading: string = "h3", icon: string = "", eyebrow: string = "", text: string = "", cta: string = "") %}
+{% component ui.card(title: string, href: string = "", heading: string = "h3", icon: string = "", eyebrow: string = "", text: string = "", cta: string = "", compact: bool = false, new_tab: bool = false) %}
   {%- set external = href is starting_with(pat="http") -%}
-  <li class="card{% if href %} card--link{% endif %}">
+  <li class="card{% if href %} card--link{% endif %}{% if compact %} card--compact{% endif %}">
     {%- if eyebrow %}
       <div class="card__eyebrow">{{ eyebrow | safe }}</div>
     {%- endif %}
     <{{ heading }} class="card__title">
       {%- if icon %}<span class="card__icon">{{ <ui.icon name={icon} /> }}</span>{% endif -%}
-      {%- if href %}<a class="stretched-link" href="{{ href }}">{{ title }}</a>{% else %}{{ title }}{% endif -%}
+      {%- if href -%}
+        <a class="stretched-link" href="{{ href }}"{% if new_tab %} target="_blank" rel="noopener"{% endif %}>
+          {{- title -}}
+          {%- if new_tab %}{{ <ui.new_tab_note /> }}{% endif -%}
+        </a>
+      {%- else -%}
+        {{ title }}
+      {%- endif -%}
       {%- if href and not cta %}
         <span class="card__arrow">{% if external %}{{ <ui.icon name="arrow-up-right" /> }}{% else %}{{ <ui.icon name="arrow-right" /> }}{% endif %}</span>
       {%- endif -%}

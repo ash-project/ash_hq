@@ -1,0 +1,61 @@
+/* Text inputs (templates/components/input.html) */
+@layer components {
+  .input {
+    display: grid;
+    gap: 6px;
+  }
+
+  .input__label {
+    color: var(--text-muted);
+    font: var(--fw-medium) 0.8125rem / 1.2 var(--font-sans);
+  }
+
+  .input__field {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    min-height: 40px;
+    padding-inline: var(--space-4);
+    /* Meets the 3:1 contrast controls need to be identifiable */
+    border: 1px solid var(--border-control);
+    background: var(--surface-sunken);
+    color: var(--text-faint);
+    transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+
+    /* The focus ring is drawn on the field, around the icon too */
+    &:focus-within {
+      border-color: var(--focus-ring);
+      box-shadow: 0 0 0 3px var(--accent-wash);
+    }
+  }
+
+  .input__control {
+    flex: 1;
+    min-width: 0;
+    height: 38px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text-strong);
+    font: var(--type-body);
+
+    /* The field shows focus instead */
+    &:focus-visible {
+      outline: none;
+    }
+
+    &::placeholder {
+      color: var(--text-faint);
+      opacity: 1;
+    }
+  }
+
+  .input__control--mono {
+    font: var(--type-code);
+  }
+
+  .input__hint {
+    color: var(--text-faint);
+    font: var(--type-small);
+  }
+}

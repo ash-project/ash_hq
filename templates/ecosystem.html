@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{#- The Ecosystem page: every package in data/ecosystem.toml #}
+{% block content %}
+  {%- set ecosystem = load_data(path="data/ecosystem.toml") %}
+
+  {% <ui.section title={page.title} description={page.description} size="lg" heading="h1"> %}
+    <div class="ecosystem" data-filter-list data-filter-noun="packages">
+      {#- Hidden until static/js/filter-list.js runs: without it, every package is listed #}
+      <div class="ecosystem__filter" data-filter hidden>
+        {{ <ui.input label="Filter packages" id="package-filter" type="search" icon="search" placeholder="Filter packages" hide_label={true} autocomplete="off" /> }}
+      </div>
+
+      <ul class="cards grid" style="--min: 240px" data-filter-items>
+        {%- for package in ecosystem.packages %}
+          {{ <ui.card title={package.name} href={"https://hexdocs.pm/" ~ package.package ~ "/"} text={package.description} compact={true} new_tab={true} /> }}
+        {%- endfor %}
+      </ul>
+
+      <p class="ecosystem__empty" data-filter-empty hidden>No packages match.</p>
+      <p class="visually-hidden" aria-live="polite" data-filter-status></p>
+
+      {{ <ui.button text="And many more on Hex.pm!" href="https://hex.pm/packages?search=depends%3Ahexpm%3Aash&sort=total_downloads" variant="link" icon_right="arrow-up-right" new_tab={true} /> }}
+    </div>
+  {% </ui.section> %}
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ get_url(path='js/filter-list.js', cachebust=true) }}"></script>
+{% endblock %}

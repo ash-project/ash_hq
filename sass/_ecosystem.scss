@@ -1,0 +1,20 @@
+/* The Ecosystem page (templates/ecosystem.html) */
+@layer components {
+  .ecosystem {
+    display: grid;
+    gap: var(--space-8);
+    justify-items: start;
+
+    > .cards {
+      justify-self: stretch;
+    }
+  }
+
+  .ecosystem__filter {
+    width: min(100%, 360px);
+  }
+
+  .ecosystem__empty {
+    color: var(--text-muted);
+  }
+}
