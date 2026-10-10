@@ -10,7 +10,7 @@
   .list-row {
     position: relative;
     display: grid;
-    grid-template-columns: var(--lead-width, 140px) minmax(0, 1fr) auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     gap: var(--space-3) var(--space-8);
     align-items: start;
     padding-block: var(--space-7);
@@ -101,7 +101,7 @@
      moves below it */
   @media (max-width: 860px) {
     .list-row {
-      grid-template-columns: var(--lead-width, 140px) minmax(0, 1fr);
+      grid-template-columns: auto minmax(0, 1fr);
       gap: var(--space-4) var(--space-5);
     }
 

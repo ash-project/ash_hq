@@ -11,7 +11,7 @@
         {{ <ui.input label="Filter packages" id="package-filter" type="search" icon="search" placeholder="Filter packages" hide_label={true} autocomplete="off" /> }}
       </div>
 
-      <ul class="cards grid" style="--min: 240px" data-filter-items>
+      <ul class="cards cards--compact grid" data-filter-items>
         {%- for package in ecosystem.packages %}
           {{ <ui.card title={package.name} href={"https://hexdocs.pm/" ~ package.package ~ "/"} text={package.description} compact={true} new_tab={true} /> }}
         {%- endfor %}

@@ -1,20 +1,38 @@
-/* Square avatars (templates/components/avatar.html). --avatar-size sets the size. */
+/* Square avatars (templates/components/avatar.html), in named sizes */
 @layer components {
   .avatar {
+    --avatar-size: 40px;
+
     display: inline-grid;
     flex: none;
     place-items: center;
-    width: var(--avatar-size, 40px);
-    height: var(--avatar-size, 40px);
+    width: var(--avatar-size);
+    height: var(--avatar-size);
     overflow: hidden;
     background: var(--surface-raised);
     color: var(--text-muted);
-    font: var(--fw-semibold) calc(var(--avatar-size, 40px) * 0.36) / 1 var(--font-sans);
+    font: var(--fw-semibold) calc(var(--avatar-size) * 0.36) / 1 var(--font-sans);
 
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
+  }
+
+  .avatar--xs {
+    --avatar-size: 20px;
+  }
+
+  .avatar--sm {
+    --avatar-size: 36px;
+  }
+
+  .avatar--lg {
+    --avatar-size: 56px;
+  }
+
+  .avatar--xl {
+    --avatar-size: 88px;
   }
 }

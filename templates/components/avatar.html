@@ -1,16 +1,18 @@
 {#
   A square avatar: a GitHub user's picture, or the person's initials without one.
 
-    {{ <ui.avatar name="Zach Daniel" github="zachdaniel" size={36} /> }}
+    {{ <ui.avatar name="Zach Daniel" github="zachdaniel" size="sm" /> }}
 
-  size:       in pixels
+  size:       "xs" (20px), "sm" (36px), "md" (40px), "lg" (56px) or "xl" (88px)
   decorative: true when the person's name is shown beside the avatar, so screen readers don't
               announce it twice
 #}
-{% component ui.avatar(name: string, github: string = "", size: integer = 40, decorative: bool = false) %}
-  <span class="avatar" style="--avatar-size: {{ size }}px"{% if decorative %} aria-hidden="true"{% endif %}>
+{% component ui.avatar(name: string, github: string = "", size: string = "md", decorative: bool = false) %}
+  {%- set pixels = {"xs": 20, "sm": 36, "md": 40, "lg": 56, "xl": 88}[size] -%}
+  <span class="avatar avatar--{{ size }}"{% if decorative %} aria-hidden="true"{% endif %}>
     {%- if github -%}
-      <img src="https://avatars.githubusercontent.com/{{ github }}?s={{ size * 2 }}" alt="{% if not decorative %}{{ name }}{% endif %}" width="{{ size }}" height="{{ size }}" loading="lazy" />
+      {#- Twice the size, for high-density screens #}
+      <img src="https://avatars.githubusercontent.com/{{ github }}?s={{ pixels * 2 }}" alt="{% if not decorative %}{{ name }}{% endif %}" width="{{ pixels }}" height="{{ pixels }}" loading="lazy" />
     {%- else -%}
       {%- for word in name | split(pat=" ") %}{% if loop.index <= 2 %}{{ word | truncate(length=1, end="") | upper }}{% endif %}{% endfor -%}
     {%- endif -%}

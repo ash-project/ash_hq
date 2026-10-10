@@ -1,6 +1,10 @@
 /* People (templates/components/person.html) */
 @layer components {
+  /* A list of people, usually also a .grid */
   .people {
+    --min: 220px;
+    --row-gap: var(--space-7);
+
     margin: 0;
     padding: 0;
     list-style: none;

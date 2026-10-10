@@ -1,10 +1,25 @@
 /* Cards (templates/components/card.html): ruled items in a grid. A linked card's title is a
    .stretched-link, so the whole card is clickable. */
 @layer components {
+  /* A list of cards, usually also a .grid */
   .cards {
+    --min: 240px;
+    --row-gap: var(--space-8);
+
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  /* Wider cards, for longer titles and descriptions */
+  .cards--wide {
+    --min: 280px;
+    --row-gap: var(--space-9);
+  }
+
+  /* Compact cards sit right below each other: their rules divide them */
+  .cards--compact {
+    --row-gap: 0;
   }
 
   .card {

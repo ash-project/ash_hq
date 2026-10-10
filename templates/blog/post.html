@@ -14,7 +14,7 @@
       <h1 class="post__title">{{ page.title | markdown(inline=true) | safe }}</h1>
 
       <div class="post__byline">
-        {{ <ui.author_avatars authors={page.authors} size={36} /> }}
+        {{ <ui.author_avatars authors={page.authors} size="sm" /> }}
         <div class="post__byline-text">
           <span class="post__author">{{ page.authors | join(sep=", ") }}</span>
           <time datetime="{{ page.date }}">{{ page.date | date(format="%-d %B %Y") }}</time>

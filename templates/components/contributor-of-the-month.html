@@ -8,9 +8,9 @@
   featured: a larger avatar, for the latest contributor
 #}
 {% component ui.contributor_of_the_month(page: map, featured: bool = false) %}
-  {%- if featured %}{% set size = 88 %}{% else %}{% set size = 56 %}{% endif %}
+  {%- if featured %}{% set size = "xl" %}{% else %}{% set size = "lg" %}{% endif %}
   {%- set avatar = <ui.avatar name={page.title} github={page.extra.github | default(value="")} size={size} decorative={true} /> %}
-  {% <ui.list_row title={page.title} href={page.permalink} lead={avatar} lead_width={size ~ "px"} eyebrow={page.date | date(format="%B %Y")} text={page.description | default(value="", boolean=true)}> %}
+  {% <ui.list_row title={page.title} href={page.permalink} lead={avatar} eyebrow={page.date | date(format="%B %Y")} text={page.description | default(value="", boolean=true)}> %}
     <span class="cta-label" aria-hidden="true">View certificate {{ <ui.icon name="arrow-right" /> }}</span>
   {% </ui.list_row> %}
 {%- endcomponent ui.contributor_of_the_month %}

@@ -10,7 +10,7 @@
   {%- set community = load_data(path="data/community.toml") %}
 
   {% <ui.section title={section.title} description={section.description} size="lg" heading="h1"> %}
-    <ul class="cards grid" style="--min: 220px; --row-gap: var(--space-8)">
+    <ul class="cards grid">
       {%- for channel in community.channels %}
         {{ <ui.card title={channel.title} href={channel.href} icon={channel.icon} text={channel.description} /> }}
       {%- endfor %}
@@ -21,12 +21,12 @@
     <ul class="list-rows">
       {%- if upcoming_events | length == 0 %}
         {%- set calendar = <ui.icon name="calendar" /> %}
-        {{ <ui.list_row title="No upcoming events right now." title_size="sm" lead={calendar} lead_width="20px" /> }}
+        {{ <ui.list_row title="No upcoming events right now." title_size="sm" lead={calendar} /> }}
       {%- endif %}
       {%- for event in upcoming_events %}
         {%- set date = <ui.date_badge date={event.date} /> %}
         {%- set button = <ui.button text={event.cta | default(value="Details")} href={event.href} icon_right="arrow-up-right" /> %}
-        {% <ui.list_row title={event.title} lead={date} lead_width="72px" eyebrow={event.subtitle} text={event.description} action={button}> %}
+        {% <ui.list_row title={event.title} lead={date} eyebrow={event.subtitle} text={event.description} action={button}> %}
           {%- if event.date_label is defined %}<span>{{ event.date_label }}</span>{% endif %}
           {%- if event.type is defined %}{{ <ui.badge text={event.type} tone="accent" /> }}{% endif %}
           {%- if event.location is defined %}<span class="community__location">{{ <ui.icon name="map-pin" /> }} {{ event.location }}</span>{% endif %}
@@ -36,7 +36,7 @@
   {% </ui.section> %}
 
   {% <ui.section title="Core Team" layout="split"> %}
-    <ul class="people grid" style="--min: 220px; --row-gap: var(--space-7)">
+    <ul class="people grid">
       {%- for person in community.core_team %}
         {{ <ui.person name={person.name} github={person.github} /> }}
       {%- endfor %}
@@ -65,7 +65,7 @@
         <a class="skip-link skip-link--inline" href="#support">Skip past the contributors</a>
         <ul class="community__avatars">
           {%- for contributor in contributors %}
-            <li><a href="{{ contributor.html_url }}">{{ <ui.avatar name={contributor.login} github={contributor.login} size={40} /> }}</a></li>
+            <li><a href="{{ contributor.html_url }}">{{ <ui.avatar name={contributor.login} github={contributor.login} /> }}</a></li>
           {%- endfor %}
         </ul>
       {%- endif %}

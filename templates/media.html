@@ -7,7 +7,7 @@
   {% <ui.section title={page.title} description={page.description} size="lg" heading="h1"> %}
     {% <ui.tabs> %}
       {% <ui.tab_panel label="Case Studies & Articles" id="articles"> %}
-        <ul class="cards grid" style="--min: 280px; --row-gap: var(--space-9)">
+        <ul class="cards cards--wide grid">
           {%- for article in media.articles %}
             {%- set tone = "neutral" %}
             {%- if article.kind == "Case study" %}{% set tone = "accent" %}{% endif %}
@@ -33,7 +33,7 @@
   {% </ui.section> %}
 
   {% <ui.section title="Keep Reading" variant="band" layout="split"> %}
-    <ul class="cards grid" style="--min: 240px; --row-gap: var(--space-8)">
+    <ul class="cards grid">
       {{ <ui.card title="Ash Framework Book" href="https://pragprog.com/titles/ldash/ash-framework/" icon="book-open" text="Written by Rebecca Le and Zach Daniel, published by the Pragmatic Bookshelf." cta="Get the book!" /> }}
       {{ <ui.card title="Ash Chronicle Newsletter" href="https://ashchronicle.substack.com" icon="newspaper" text="Releases, guides and community news." cta="Past issues" /> }}
     </ul>

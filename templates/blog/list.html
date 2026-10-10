@@ -13,7 +13,7 @@
       {%- for page in section.pages %}
         {%- set lead = <ui.date_badge date={page.date} /> %}
         {%- set arrow = <ui.icon name="arrow-right" /> %}
-        {% <ui.list_row title={page.title} href={page.permalink} heading="h2" lead={lead} lead_width="72px" text={page.description} action={arrow} hide_action_mobile={true}> %}
+        {% <ui.list_row title={page.title} href={page.permalink} heading="h2" lead={lead} text={page.description} action={arrow} hide_action_mobile={true}> %}
           <span class="blog-list__author">
             {{ <ui.author_avatars authors={page.authors} /> }}
             {{ page.authors | join(sep=", ") }}

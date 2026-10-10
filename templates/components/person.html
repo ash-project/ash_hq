@@ -6,7 +6,7 @@
 #}
 {% component ui.person(name: string, github: string) %}
   <li class="person">
-    {{ <ui.avatar name={name} github={github} size={44} decorative={true} /> }}
+    {{ <ui.avatar name={name} github={github} decorative={true} /> }}
     <span class="person__text">
       <a class="person__name stretched-link" href="https://github.com/{{ github }}">{{ name }}</a>
       <span class="person__handle">@{{ github }}</span>

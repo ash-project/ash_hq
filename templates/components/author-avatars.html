@@ -2,9 +2,11 @@
   Decorative avatars for a post's authors, from their GitHub usernames in extra.authors in
   zola.toml. Authors without one are skipped: their names are shown beside the avatars anyway.
 
-    {{ <ui.author_avatars authors={page.authors} size={36} /> }}
+    {{ <ui.author_avatars authors={page.authors} size="sm" /> }}
+
+  size: as for ui.avatar
 #}
-{% component ui.author_avatars(authors: array, size: integer = 20, @config) %}
+{% component ui.author_avatars(authors: array, size: string = "xs", @config) %}
   {%- for author in authors %}
     {%- if author in config.extra.authors %}
       {{ <ui.avatar name={author} github={config.extra.authors[author]} size={size} decorative={true} /> }}
