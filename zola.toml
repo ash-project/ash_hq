@@ -20,7 +20,7 @@ taxonomies = [{ name = "tags", render = false }]
 
 [markdown.highlighting]
 # The design system's syntax colours, as CSS classes in a generated /giallo.css. `zola serve`
-# doesn't watch highlighting/, so restart it after changing the theme.
+# only picks up changes to highlighting/ with `--extra-watch-path highlighting`.
 theme = "ash"
 extra_themes = ["highlighting/ash.json"]
 # ```iex code blocks: IEx sessions, with the prompt muted
