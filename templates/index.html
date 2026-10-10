@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {#-
-  The home page. Packages are in data/ecosystem.toml (the first eight are shown here), and the
-  customer logos in data/logos.toml.
+  The home page. The feature tour is in data/tour.toml, packages in data/ecosystem.toml (the first
+  eight are shown here), and the customer logos in data/logos.toml.
 #}
 {% block content %}
   {%- set ecosystem = load_data(path="data/ecosystem.toml") %}
@@ -20,7 +20,27 @@
     </div>
   {% </ui.section> %}
 
-  {#- The feature tour goes here (part 2) #}
+  {#- One resource, built up stage by stage: data/tour.toml #}
+  {%- set tour = load_data(path="data/tour.toml") %}
+  {% <ui.section title="Discover Ash Features" id="features" class="home-tour"> %}
+    {% <ui.tabs variant="steps"> %}
+      {%- for stage in tour.stages %}
+        {#- MyApp.Blog.Post → lib/my_app/blog/post.ex #}
+        {%- set filename = "lib/" ~ stage.module | regex_replace(pattern="([a-z])([A-Z])", rep="${1}_${2}") | lower | replace(from=".", to="/") ~ ".ex" %}
+        {% <ui.tab_panel label={stage.name} id={stage.id} heading="h3" keep_heading={true}> %}
+          <div class="home-tour__nav">
+            {{ <ui.button variant="secondary" size="sm" icon="arrow-left" label="Previous step" data_tab_prev="" hidden="" /> }}
+            {{ <ui.button text="Next" variant="secondary" size="sm" icon_right="arrow-right" label="Next step" data_tab_next="" hidden="" /> }}
+          </div>
+          <p class="home-tour__description">{{ stage.description }}</p>
+          <div class="home-tour__pair pair">
+            {{ <ui.code_block code={stage.code} filename={filename} line_numbers={true} highlight={stage.highlight} /> }}
+            {{ <ui.tour_result panel={stage.panel} /> }}
+          </div>
+        {% </ui.tab_panel> %}
+      {%- endfor %}
+    {% </ui.tabs> %}
+  {% </ui.section> %}
 
   {%- set all_packages = <ui.button text="All packages" href="/ecosystem/" variant="link" icon_right="arrow-right" /> %}
   {% <ui.section title="The Ash Ecosystem" description="Powerful extensions that integrate seamlessly with your resources." actions={all_packages}> %}
@@ -65,4 +85,8 @@
       {%- endfor %}
     </ul>
   {% </ui.section> %}
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ get_url(path='js/tabs.js', cachebust=true) }}"></script>
 {% endblock %}

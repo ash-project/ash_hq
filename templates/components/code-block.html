@@ -1,0 +1,28 @@
+{#
+  A block of highlighted code, from a template rather than Markdown. Uses Zola's highlighter, so
+  it's coloured like code in posts.
+
+    {{ <ui.code_block code={stage.code} filename="lib/my_app/blog/post.ex" line_numbers={true} highlight="3-17" /> }}
+
+  language:     anything Zola's highlighter knows, such as elixir, json or graphql
+  filename:     shown in a bar above the code, with a file icon
+  label:        a short caption in the bar instead, for snippets that aren't files
+  line_numbers: numbers each line
+  highlight:    line ranges to highlight, 1-based, such as "3-5 9"
+#}
+{% component ui.code_block(code: string, language: string = "elixir", filename: string = "", label: string = "", line_numbers: bool = false, highlight: string = "") %}
+  {%- set options = language %}
+  {%- if line_numbers %}{% set options = options ~ ",linenos" %}{% endif %}
+  {%- if highlight %}{% set options = options ~ ",hl_lines=" ~ highlight %}{% endif %}
+  {%- set fence = "```" %}
+  {%- set trimmed = code | trim_end %}
+  {%- set markdown_source = fence ~ options ~ "\n" ~ trimmed ~ "\n" ~ fence %}
+  <figure class="code-block{% if filename %} code-block--file{% endif %}">
+    {%- if filename %}
+      <figcaption class="code-block__bar">{{ <ui.icon name="file-code" /> }} {{ filename }}</figcaption>
+    {%- elif label %}
+      <figcaption class="code-block__label">{{ label }}</figcaption>
+    {%- endif %}
+    {{ markdown_source | markdown | safe }}
+  </figure>
+{%- endcomponent ui.code_block %}

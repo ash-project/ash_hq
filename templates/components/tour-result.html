@@ -1,0 +1,89 @@
+{#
+  What a step of the home page's feature tour gives you: a titled panel of blocks, from a stage's
+  `panel` in data/tour.toml (where the block kinds are described).
+
+    {{ <ui.tour_result panel={stage.panel} /> }}
+#}
+{% component ui.tour_result(panel: map) %}
+  <div class="tour-result">
+    <p class="tour-result__title">{{ <ui.icon name={panel.icon} /> }} {{ panel.title }}</p>
+    <div class="tour-result__blocks{% if panel.grid is defined and panel.grid %} tour-result__blocks--grid{% endif %}">
+      {%- for block in panel.blocks %}
+        {%- if block.kind == "code" %}
+          {{ <ui.code_block code={block.code} language={block.language | default(value="elixir")} label={block.label | default(value="")} /> }}
+
+        {%- elif block.kind == "pairs" %}
+          <dl class="tour-result__pairs">
+            {%- for pair in block.items %}
+              <div class="tour-result__box">
+                <dt class="tour-result__label">{{ pair | first }}</dt>
+                <dd class="tour-result__value tour-result__value--accent">{{ pair | last }}</dd>
+              </div>
+            {%- endfor %}
+          </dl>
+
+        {%- elif block.kind == "table" %}
+          <table class="tour-result__table">
+            <thead><tr>{% for heading in block.head %}<th scope="col">{{ heading }}</th>{% endfor %}</tr></thead>
+            <tbody>
+              {%- for row in block.rows %}
+                <tr>{% for cell in row %}<td>{{ cell }}</td>{% endfor %}</tr>
+              {%- endfor %}
+            </tbody>
+          </table>
+
+        {%- elif block.kind == "endpoints" %}
+          <ul class="tour-result__endpoints">
+            {%- for endpoint in block.items %}
+              {%- set method = endpoint | first %}
+              <li><span class="tour-result__method tour-result__method--{{ method | lower }}">{{ method }}</span> {{ endpoint | last }}</li>
+            {%- endfor %}
+          </ul>
+
+        {%- elif block.kind == "chips" %}
+          <div class="tour-result__group">
+            <p class="tour-result__label">{{ block.label }}</p>
+            <ul class="tour-result__chips{% if block.mono is defined and block.mono %} tour-result__chips--mono{% endif %}">
+              {%- for item in block.items %}
+                <li>{% if block.icon is defined %}{{ <ui.icon name={block.icon} /> }}{% endif %}{{ item }}</li>
+              {%- endfor %}
+            </ul>
+          </div>
+
+        {%- elif block.kind == "flow" %}
+          <div class="tour-result__flow">
+            <div class="tour-result__box">
+              <span class="tour-result__label">{{ block.from | first }}</span>
+              <span class="tour-result__value">{{ block.from | last }}</span>
+            </div>
+            {{ <ui.icon name="arrow-right" /> }}
+            <div class="tour-result__box">
+              <span class="tour-result__label">{{ block.to | first }}</span>
+              <span class="tour-result__value tour-result__value--accent">{{ block.to | last }}</span>
+            </div>
+          </div>
+
+        {%- elif block.kind == "note" %}
+          <p class="tour-result__note">{{ block.text }}</p>
+
+        {%- elif block.kind == "jobs" %}
+          <div class="tour-result__jobs">
+            {%- for job in block.items %}
+              <div class="tour-result__box">
+                <p class="tour-result__job-title">{{ job | nth(n=0) }}</p>
+                <p class="tour-result__note">{{ job | nth(n=1) }}</p>
+                <p class="tour-result__job-run">
+                  <span class="tour-result__value tour-result__value--accent">{{ job | nth(n=2) }}</span>
+                  <span class="tour-result__note">{{ job | nth(n=3) }}</span>
+                </p>
+              </div>
+            {%- endfor %}
+          </div>
+
+        {%- elif block.kind == "link" %}
+          <div>{{ <ui.button text={block.label} href={block.href} variant="link" icon="zap" icon_right="arrow-up-right" /> }}</div>
+        {%- endif %}
+      {%- endfor %}
+    </div>
+  </div>
+{%- endcomponent ui.tour_result %}

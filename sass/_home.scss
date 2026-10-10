@@ -38,6 +38,39 @@
     gap: var(--space-4);
   }
 
+  /* The feature tour: each step's heading, with previous and next beside it, its description,
+     then its code beside what it gives you */
+  .home-tour .tabs__panel {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-5) var(--space-7);
+    align-items: center;
+
+    .tabs__heading {
+      font: var(--type-h3);
+      letter-spacing: var(--ls-heading);
+    }
+  }
+
+  .home-tour__nav {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  .home-tour__description,
+  .home-tour__pair {
+    grid-column: 1 / -1;
+  }
+
+  .home-tour__description {
+    max-width: 720px;
+    color: var(--text-muted);
+    text-wrap: pretty;
+  }
+
+  .home-tour__pair .code-block pre {
+    max-height: 520px;
+  }
+
   /* The EEF's logo is dark; shown light on the band */
   .home-eef .section-header__image {
     filter: invert(1);

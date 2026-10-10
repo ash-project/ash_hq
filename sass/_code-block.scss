@@ -1,0 +1,45 @@
+/* Code blocks from templates (templates/components/code-block.html), coloured by /giallo.css */
+@layer components {
+  .code-block {
+    display: grid;
+    min-width: 0;
+    margin: 0;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-code);
+
+    pre {
+      margin: 0;
+      padding: var(--space-5) 0;
+      overflow-x: auto;
+      font: var(--type-code);
+    }
+
+    /* Each line spans the block, so highlighted lines are marked edge to edge */
+    .giallo-l {
+      padding-inline: 18px;
+    }
+  }
+
+  .code-block__bar,
+  .code-block__label {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    min-height: 38px;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    font: var(--fw-regular) 0.75rem / 1 var(--font-mono);
+    --icon-size: 14px;
+  }
+
+  /* Lines added in this step: an orange wash, with a bar down the left edge */
+  .code-block .z-hl {
+    background: var(--accent-wash);
+    box-shadow: inset 3px 0 0 var(--accent);
+
+    .giallo-ln {
+      color: var(--accent);
+    }
+  }
+}

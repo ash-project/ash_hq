@@ -1,0 +1,198 @@
+/* A feature tour step's result panel (templates/components/tour-result.html) */
+@layer components {
+  .tour-result {
+    display: grid;
+    gap: var(--space-5);
+    align-content: start;
+    min-width: 0;
+    padding: 18px var(--space-6) var(--space-6);
+    border: 1px solid var(--border-subtle);
+    border-top: 2px solid var(--accent);
+    background: var(--surface-card);
+  }
+
+  .tour-result__title {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    color: var(--text-strong);
+    font: var(--fw-semibold) var(--fs-body) / 1.3 var(--font-sans);
+    --icon-size: 18px;
+
+    .icon {
+      color: var(--accent);
+    }
+  }
+
+  .tour-result__blocks {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .tour-result__blocks--grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+  }
+
+  /* A labelled value on a sunken box */
+  .tour-result__box {
+    display: grid;
+    gap: 6px;
+    align-content: start;
+    min-width: 0;
+    padding: var(--space-4) 14px;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-sunken);
+  }
+
+  .tour-result__label {
+    color: var(--text-muted);
+    font: var(--type-eyebrow);
+  }
+
+  .tour-result__value {
+    overflow: hidden;
+    color: var(--text-strong);
+    font: var(--fw-regular) 0.8125rem / 1.5 var(--font-mono);
+    text-overflow: ellipsis;
+  }
+
+  .tour-result__value--accent {
+    color: var(--accent-text);
+  }
+
+  .tour-result__note {
+    color: var(--text-muted);
+    font: var(--type-small);
+  }
+
+  .tour-result__pairs,
+  .tour-result__jobs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+    margin: 0;
+
+    dd {
+      margin: 0;
+    }
+  }
+
+  .tour-result__table {
+    width: 100%;
+    border-collapse: collapse;
+    font: var(--fw-regular) 0.8125rem / 1.5 var(--font-mono);
+
+    th {
+      padding: 0 var(--space-4) 10px 0;
+      border-bottom: 1px solid var(--border-default);
+      color: var(--text-muted);
+      font: var(--fw-medium) var(--fs-small) / 1.3 var(--font-sans);
+      text-align: left;
+    }
+
+    td {
+      padding: 9px var(--space-4) 9px 0;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-strong);
+
+      + td {
+        color: var(--text-muted);
+      }
+    }
+  }
+
+  .tour-result__endpoints {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font: var(--fw-regular) 0.8125rem / 1.5 var(--font-mono);
+
+    li {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-strong);
+    }
+  }
+
+  .tour-result__method {
+    color: var(--accent-text);
+    font-weight: var(--fw-semibold);
+  }
+
+  .tour-result__method--get {
+    color: var(--success);
+  }
+
+  .tour-result__group {
+    display: grid;
+    gap: 10px;
+  }
+
+  .tour-result__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 10px;
+      border: 1px solid var(--border-default);
+      background: var(--surface-sunken);
+      color: var(--text-strong);
+      font: var(--fw-medium) var(--fs-small) / 1 var(--font-sans);
+      --icon-size: 13px;
+
+      .icon {
+        color: var(--accent);
+      }
+    }
+  }
+
+  .tour-result__chips--mono li {
+    font: var(--fw-regular) 0.8125rem / 1 var(--font-mono);
+  }
+
+  .tour-result__flow {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+
+    > .tour-result__box {
+      flex: 1 1 0;
+    }
+
+    > .icon {
+      flex: none;
+      color: var(--accent);
+      --icon-size: 18px;
+    }
+  }
+
+  .tour-result__job-title {
+    color: var(--text-strong);
+    font: var(--fw-semibold) 0.9375rem / 1.3 var(--font-sans);
+  }
+
+  .tour-result__job-run {
+    display: grid;
+    gap: var(--space-2);
+    padding-top: 10px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  @media (max-width: 860px) {
+    .tour-result__pairs,
+    .tour-result__jobs {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}

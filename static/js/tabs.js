@@ -2,15 +2,21 @@
 // [data-tab-label] heading becomes a tab, arrow keys, Home and End move between tabs, and Tab moves
 // into the panel. Without this script the panels are shown in turn, under their headings.
 //
+// data-tabs-orientation="vertical" makes a vertical tab list, which up and down arrows also move
+// through. A heading with data-tab-keep-label stays visible; others are hidden, as the tab names
+// the panel. Buttons in a panel with data-tab-prev or data-tab-next step through the tabs.
+//
 // The selected tab is kept in the URL's hash (the panel's id), so it survives going back to the
 // page and can be linked to. It replaces the history entry rather than adding one, so Back leaves
 // the page instead of stepping through tabs.
 
 for (const container of document.querySelectorAll("[data-tabs]")) {
   const panels = [...container.querySelectorAll(":scope > .tabs__panel")];
+  const vertical = container.dataset.tabsOrientation === "vertical";
   const list = document.createElement("div");
   list.className = "tabs__list";
   list.setAttribute("role", "tablist");
+  if (vertical) list.setAttribute("aria-orientation", "vertical");
 
   const tabs = panels.map((panel) => {
     const label = panel.querySelector("[data-tab-label]");
@@ -22,8 +28,7 @@ for (const container of document.querySelectorAll("[data-tabs]")) {
     tab.setAttribute("role", "tab");
     tab.setAttribute("aria-controls", panel.id);
 
-    // The tab now names the panel, so its heading would only repeat it
-    label.hidden = true;
+    if (!("tabKeepLabel" in label.dataset)) label.hidden = true;
     panel.setAttribute("role", "tabpanel");
     panel.setAttribute("aria-labelledby", tab.id);
     panel.tabIndex = 0;
@@ -32,7 +37,10 @@ for (const container of document.querySelectorAll("[data-tabs]")) {
     return tab;
   });
 
+  let current = 0;
+
   const select = (index, { focus = false, updateUrl = true } = {}) => {
+    current = index;
     tabs.forEach((tab, i) => {
       const selected = i === index;
       tab.setAttribute("aria-selected", String(selected));
@@ -57,11 +65,14 @@ for (const container of document.querySelectorAll("[data-tabs]")) {
   });
 
   list.addEventListener("keydown", (event) => {
-    const current = tabs.indexOf(document.activeElement);
+    const focused = tabs.indexOf(document.activeElement);
     const last = tabs.length - 1;
+    const forward = focused === last ? 0 : focused + 1;
+    const back = focused === 0 ? last : focused - 1;
     const next = {
-      ArrowRight: current === last ? 0 : current + 1,
-      ArrowLeft: current === 0 ? last : current - 1,
+      ArrowRight: forward,
+      ArrowLeft: back,
+      ...(vertical && { ArrowDown: forward, ArrowUp: back }),
       Home: 0,
       End: last,
     }[event.key];
@@ -69,6 +80,22 @@ for (const container of document.querySelectorAll("[data-tabs]")) {
     if (next !== undefined) {
       event.preventDefault();
       select(next, { focus: true });
+    }
+  });
+
+  // Previous and next buttons, disabled at the ends. Focus moves to the same button in the newly
+  // shown panel, as the one pressed is hidden with its panel, or to the panel at either end.
+  panels.forEach((panel, i) => {
+    for (const [selector, step] of [["[data-tab-prev]", -1], ["[data-tab-next]", 1]]) {
+      const button = panel.querySelector(selector);
+      if (!button) continue;
+      button.hidden = false;
+      button.disabled = !panels[i + step];
+      button.addEventListener("click", () => {
+        select(current + step);
+        const same = panels[current].querySelector(selector);
+        (same && !same.disabled ? same : panels[current]).focus();
+      });
     }
   });
 

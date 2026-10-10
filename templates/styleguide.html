@@ -83,6 +83,20 @@
     </div>
   {% </ui.section> %}
 
+  {% <ui.section title="Code Blocks"> %}
+    <div class="styleguide">
+      {{ <ui.code_block code="defmodule MyApp.Blog.Post do
+  use Ash.Resource
+  actions do
+    defaults [:read]
+  end
+end" filename="lib/my_app/blog/post.ex" line_numbers={true} highlight="3-5" /> }}
+      {{ <ui.code_block code="query GetPost($id: ID!) {
+  post(id: $id) { id }
+}" language="graphql" label="Query" /> }}
+    </div>
+  {% </ui.section> %}
+
   {% <ui.section title="A Band Section" variant="band" layout="split" eyebrow="Proud Partner" description="A full-bleed subtle surface, for a spotlight. At most two per page, never adjacent."> %}
     <p>Band content.</p>
   {% </ui.section> %}

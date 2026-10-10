@@ -1,0 +1,470 @@
+# The home page's feature tour: one resource, built up stage by stage.
+#
+# name, module, description and code are from the live site's tour (AshAnimation.stages in the
+# Phoenix app's app.js); code shows the whole resource, as the live tour did. The highlighted
+# lines and result panels follow the design.
+#
+# id:        the stage's slug, used in the page's URL hash
+# highlight: line ranges added in this stage, 1-based, as Zola's hl_lines takes them
+# panel:     what the stage gives you. Each block has a kind:
+#            code (label, language, code), pairs (items: [label, value]), table (head, rows),
+#            endpoints (items: [method, path]), chips (label, icon, mono, items), flow (from, to:
+#            [label, value]), note (text), jobs (items: [title, description, name, schedule]),
+#            link (label, href)
+
+[[stages]]
+id = "resources-actions"
+name = "Resources & Actions"
+module = "MyApp.Blog.Post"
+description = "Resources & Actions are the core abstraction in Ash. Actions are fully typed and introspectable (your application can examine them at runtime). This means extensions can automatically understand and build on top of them."
+highlight = "3-17"
+code = '''
+defmodule MyApp.Blog.Post do
+  use Ash.Resource
+  actions do
+    action :reading_time, :integer do
+      argument :content, :string,
+        allow_nil?: false
+
+      run fn input, _ ->
+        words =
+          input.arguments.content
+          |> String.split()
+          |> length()
+
+        {:ok, div(words, 200) + 1}
+      end
+    end
+  end
+end
+'''
+
+[stages.panel]
+title = "Functional Interface"
+icon = "braces"
+
+[[stages.panel.blocks]]
+kind = "code"
+code = '''
+MyApp.Blog.Post.reading_time("content string")
+'''
+
+[[stages.panel.blocks]]
+kind = "pairs"
+items = [["Takes:", "content: String"], ["Returns:", "Integer (minutes)"]]
+
+[[stages.panel.blocks]]
+kind = "code"
+label = "Example:"
+code = '''
+reading_time("A long blog post...") → 3
+'''
+
+[[stages]]
+id = "persistence"
+name = "Persistence"
+module = "MyApp.Blog.Post"
+description = "Now let's add state to support persistent storage, while keeping our existing behavior. Your resource now combines behavior and state. The original action still works exactly the same, plus you can create and persist posts."
+highlight = "3-21"
+code = '''
+defmodule MyApp.Blog.Post do
+  use Ash.Resource
+    data_layer: AshPostgres.DataLayer
+
+  postgres do
+    table "posts"
+    repo MyApp.Repo
+  end
+
+  attributes do
+    uuid_primary_key :id
+    attribute :title, :string,
+      allow_nil?: false
+    attribute :content, :string
+    attribute :status, :atom,
+      constraints: [
+        one_of: [:draft, :published]
+      ]
+
+    timestamps()
+  end
+  # ...
+end
+'''
+
+[stages.panel]
+title = "PostgreSQL Table: posts"
+icon = "database"
+
+[[stages.panel.blocks]]
+kind = "table"
+head = ["Column", "Type"]
+rows = [["id", "uuid"], ["title", "text"], ["content", "text"], ["status", "text"], ["created_at", "timestamp"], ["updated_at", "timestamp"]]
+
+[[stages]]
+id = "graphql"
+name = "GraphQL"
+module = "MyApp.Blog.Post"
+description = "Add a full GraphQL API with minimal configuration. The extension automatically understands your existing actions and generates queries, mutations, and types."
+highlight = "3-18"
+code = '''
+defmodule MyApp.Blog.Post do
+  use Ash.Resource
+    extensions: [AshGraphql.Resource]
+
+  graphql do
+    type :post
+
+    queries do
+      get :post, :read
+      list :posts, :read
+    end
+
+    mutations do
+      create :create_post, :create
+      update :update_post, :update
+      destroy :delete_post, :destroy
+    end
+  end
+  # ...
+end
+'''
+
+[stages.panel]
+title = "GraphQL API"
+icon = "share-2"
+
+[[stages.panel.blocks]]
+kind = "code"
+label = "Query"
+language = "graphql"
+code = '''
+query GetPost($id: ID!) {
+  post(id: $id) {
+    id
+    title
+  }
+}
+'''
+
+[[stages.panel.blocks]]
+kind = "code"
+label = "Mutation"
+language = "graphql"
+code = '''
+mutation CreatePost($input: CreatePostInput!) {
+  createPost(input: $input) {
+    id
+    title
+  }
+}
+'''
+
+[[stages]]
+id = "json-api"
+name = "JSON:API"
+module = "MyApp.Blog.Post"
+description = "Add a REST JSON:API alongside your GraphQL API. All API extensions work on top of your resources and actions. Ash makes it trivial to expose your domain through multiple API standards, letting clients choose the interface that works best for them."
+highlight = "3-18"
+code = '''
+defmodule MyApp.Blog.Post do
+  use Ash.Resource
+    extensions: [
+      AshGraphql.Resource,
+      AshJsonApi.Resource
+    ]
+
+  json_api do
+    type "post"
+
+    routes do
+      base "/posts"
+      get :read
+      index :read
+      post :create
+      patch :update
+    end
+  end
+  # ...
+end
+'''
+
+[stages.panel]
+title = "JSON:API REST Endpoints"
+icon = "square-terminal"
+
+[[stages.panel.blocks]]
+kind = "endpoints"
+items = [["GET", "/posts"], ["GET", "/posts/:id"], ["POST", "/posts"], ["PATCH", "/posts/:id"]]
+
+[[stages.panel.blocks]]
+kind = "code"
+label = "Example Response"
+language = "json"
+code = '''
+{
+  "data": {
+    "type": "post",
+    "id": "123",
+    "attributes": {
+      "title": "My Post",
+      "content": "Post content..."
+    }
+  }
+}
+'''
+
+[[stages]]
+id = "policies"
+name = "Policies"
+module = "MyApp.Support.Ticket"
+description = "Add fine-grained authorization with policies. Control who can perform which actions and which data they can see. Policies can forbid actions or filter data transparently for reads, preventing enumeration attacks."
+highlight = "3 5-22"
+code = '''
+defmodule MyApp.Support.Ticket do
+  use Ash.Resource
+    extensions: [
+      # ...
+    ],
+    authorizers: [Ash.Policy.Authorizer]
+
+  policies do
+    # Only admins can create tickets
+    policy action_type(:create) do
+      authorize_if expr(
+        ^actor(:role) == :admin
+      )
+    end
+
+    # Users can only read their own tickets
+    policy action_type(:read) do
+      authorize_if expr(
+        user_id == ^actor(:id)
+      )
+    end
+  end
+  # ...
+end
+'''
+
+[stages.panel]
+title = "Authorization Policies"
+icon = "shield-check"
+grid = true
+
+[[stages.panel.blocks]]
+kind = "code"
+label = "Create Policy"
+language = "elixir"
+code = '''
+policy action_type(:create) do
+  authorize_if expr(
+    ^actor(:role) == :admin
+  )
+end
+'''
+
+[[stages.panel.blocks]]
+kind = "code"
+label = "Forbidden Action"
+language = "elixir"
+code = '''
+MyApp.Support.open_ticket!(
+  actor: non_admin
+)
+# Forbidden
+'''
+
+[[stages.panel.blocks]]
+kind = "code"
+label = "Read Policy"
+language = "elixir"
+code = '''
+policy action_type(:read) do
+  authorize_if expr(
+    user_id == ^actor(:id)
+  )
+end
+'''
+
+[[stages.panel.blocks]]
+kind = "code"
+label = "Filtered Read"
+language = "elixir"
+code = '''
+MyApp.Tickets.list_tickets(
+  actor: user
+)
+# SQL: SELECT * FROM tickets
+# WHERE user_id = $1
+'''
+
+[[stages]]
+id = "encryption"
+name = "Encryption"
+module = "MyApp.Blog.Post"
+description = "Add encryption at rest with our Cloak integration. Your post content is now automatically encrypted when stored and decrypted when read, with no changes to your existing API or business logic. The encryption is completely transparent to your application code."
+highlight = "3-13"
+code = '''
+defmodule MyApp.Blog.Post do
+  use Ash.Resource
+    extensions: [
+      AshGraphql.Resource,
+      AshJsonApi.Resource,
+      AshCloak.Resource
+    ]
+
+  cloak do
+    vault MyApp.Vault
+    # Automatically encrypt content
+    attributes [:content]
+  end
+  # ...
+end
+'''
+
+[stages.panel]
+title = "Encryption at Rest"
+icon = "lock"
+
+[[stages.panel.blocks]]
+kind = "flow"
+from = ["Application", "\"Hello World\""]
+to = ["Database", "AES256:B64:IV..."]
+
+[[stages.panel.blocks]]
+kind = "note"
+text = "Content field automatically encrypted/decrypted"
+
+[[stages]]
+id = "ai-tools"
+name = "AI Tools"
+module = "MyApp.Blog.Post"
+description = "Add AI-powered actions and expose your domain as tools for LLMs. Ash AI lets you create prompt-backed actions that delegate to AI models, and exposes your existing actions as tools that AI agents can use. Perfect for building AI-powered features or MCP (Model Context Protocol) servers."
+highlight = "3-24"
+code = '''
+defmodule MyApp.Blog.Post do
+  use Ash.Resource
+    extensions: [
+      #...,
+      AshAi
+    ]
+
+  actions do
+    # AI-powered action
+    action :analyze_sentiment, :atom do
+      constraints [
+        one_of: [:positive, :negative]
+      ]
+
+      argument :content, :string,
+        allow_nil?: false
+
+      run prompt(
+        ChatOpenAI.new!(
+          %{model: "gpt-4o"}
+        )
+      )
+    end
+  end
+  #...
+end
+'''
+
+[stages.panel]
+title = "AI-Powered Actions & Tools"
+icon = "lightbulb"
+
+[[stages.panel.blocks]]
+kind = "code"
+label = "Prompt-Backed Action"
+language = "elixir"
+code = '''
+analyze_sentiment(content: "Great post!")
+→ :positive
+'''
+
+[[stages.panel.blocks]]
+kind = "chips"
+label = "MCP Tools Exposed"
+icon = "wrench"
+mono = true
+items = ["create_post", "read_posts", "update_post", "analyze_sentiment"]
+
+[[stages]]
+id = "authentication"
+name = "Authentication"
+module = "MyApp.Accounts.User"
+description = "Add complete user authentication with password and OAuth strategies. AshAuthentication provides built-in support for password authentication, OAuth providers (GitHub, Google, etc.), magic links, and more."
+highlight = "3-7 9-11 13-15"
+code = '''
+defmodule MyApp.Accounts.User do
+  use Ash.Resource
+    extensions: [AshAuthentication]
+
+  authentication do
+    strategies do
+      password do
+        # ...
+      end
+
+      magic_link do
+        # ...
+      end
+    end
+  end
+  # ...
+end
+'''
+
+[stages.panel]
+title = "User Authentication"
+icon = "circle-check"
+
+[[stages.panel.blocks]]
+kind = "chips"
+label = "Authentication Strategies"
+items = ["Password", "Magic Link", "Api Key", "GitHub", "Google", "Slack", "Custom"]
+
+[[stages]]
+id = "background-jobs"
+name = "Background Jobs"
+module = "MyApp.Blog.Post"
+description = "Add background job processing with AshOban. Define triggers that run periodically for records matching conditions, and scheduled actions that run on cron schedules. Perfect for notifications, data processing, and maintenance tasks."
+highlight = "3 5-19"
+code = '''
+defmodule MyApp.Blog.Post do
+  use Ash.Resource
+    extensions: [
+      # ...
+      AshOban
+    ]
+
+  oban do
+    triggers do
+      trigger :publish do
+        where expr(state == :pending)
+        scheduler_cron "@hourly"
+      end
+    end
+    scheduled_actions do
+      schedule :cleanup_old_drafts,
+        "@daily"
+    end
+  end
+  # ...
+end
+'''
+
+[stages.panel]
+title = "Background Job Processing"
+icon = "zap"
+
+[[stages.panel.blocks]]
+kind = "jobs"
+items = [["Triggers", "Run actions for records matching conditions on a schedule", "publish", "Runs hourly to publish pending posts"], ["Scheduled Actions", "Run generic actions on cron schedules", "cleanup_old_drafts", "Runs daily to clean up old draft posts"]]
+
+[[stages.panel.blocks]]
+kind = "link"
+label = "Powered by Oban"
+href = "https://getoban.pro"

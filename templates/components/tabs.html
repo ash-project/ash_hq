@@ -7,17 +7,26 @@
       {% <ui.tab_panel label="Podcasts" id="podcasts"> %}…{% </ui.tab_panel> %}
     {% </ui.tabs> %}
 
-  heading: the panels' heading element, when they're shown as sections
+  variant: "underline" (a row of tabs above the panels, the default) or "steps" (a numbered
+           list beside them, for working through in order; a scrolling row on small screens)
+
+  Buttons inside a panel with data-tab-prev or data-tab-next step through the tabs; render them
+  hidden, and the script shows them.
 #}
-{% component ui.tabs() %}
-  <div class="tabs" data-tabs>
+{% component ui.tabs(variant: string = "underline") %}
+  <div class="tabs tabs--{{ variant }}" data-tabs{% if variant == "steps" %} data-tabs-orientation="vertical"{% endif %}>
     {{ body }}
   </div>
 {%- endcomponent ui.tabs %}
 
-{% component ui.tab_panel(label: string, id: string, heading: string = "h2") %}
+{#
+  heading:      the panel's heading element
+  keep_heading: keeps the heading visible when the panels become tabs, rather than letting the tab
+                name the panel alone
+#}
+{% component ui.tab_panel(label: string, id: string, heading: string = "h2", keep_heading: bool = false) %}
   <section class="tabs__panel" id="{{ id }}" aria-labelledby="{{ id }}-label">
-    <{{ heading }} class="tabs__heading" id="{{ id }}-label" data-tab-label>{{ label }}</{{ heading }}>
+    <{{ heading }} class="tabs__heading" id="{{ id }}-label" data-tab-label{% if keep_heading %} data-tab-keep-label{% endif %}>{{ label }}</{{ heading }}>
     {{ body }}
   </section>
 {%- endcomponent ui.tab_panel %}
