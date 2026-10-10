@@ -2,7 +2,10 @@
 # The contributors are optional: without them, the Community page leaves out its avatar wall. Set
 # GITHUB_TOKEN in the site's environment variables to avoid GitHub's rate limit for anonymous
 # requests, which Netlify's shared build servers can hit.
-command = "(sh scripts/fetch-contributors.sh || echo 'Skipping contributors') && zola build"
+#
+# Each deploy is built for its own URL (DEPLOY_PRIME_URL, set by Netlify), so links on test and
+# preview deploys stay on that deploy rather than going to ash-hq.org.
+command = "(sh scripts/fetch-contributors.sh || echo 'Skipping contributors') && zola build --base-url \"${DEPLOY_PRIME_URL:-https://ash-hq.org}\""
 publish = "public"
 
 [build.environment]

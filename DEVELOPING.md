@@ -254,6 +254,24 @@ Zola 0.23 uses Tera 2, which differs from Tera 1 and from most examples online. 
 
 ## Deploying
 
-The site isn't live yet. `netlify.toml` has the build settings: Netlify fetches the contributors, then builds with Zola. Set `GITHUB_TOKEN` in the site's environment variables, as Netlify's shared build servers can hit GitHub's limit for anonymous requests.
+The site isn't live yet. `netlify.toml` has the build settings: Netlify fetches the contributors, then builds with Zola, for each deploy's own URL (`DEPLOY_PRIME_URL`), so links on test deploys stay on them. Set `GITHUB_TOKEN` in the site's environment variables, as Netlify's shared build servers can hit GitHub's limit for anonymous requests.
+
+To deploy by hand, build first, then deploy from the repo root with the Netlify CLI, which also deploys the edge functions.
+
+Zola writes absolute URLs, for the base URL it builds with. A draft deploy gets a unique address that isn't known until it's uploaded, so for drafts, build with root-relative URLs instead:
+
+```sh
+# A draft, to try something out
+zola build --base-url /
+netlify deploy --dir public
+
+# The site's production address
+zola build --base-url https://your-site.netlify.app
+netlify deploy --dir public --prod
+```
+
+Only use `--base-url /` for drafts: canonical links, link previews and the feed need absolute URLs.
+
+Don't deploy `public/` after only running `zola serve`: that serves pages from memory, and leaves just the static files in `public/`. Uploading the folder in Netlify's web interface doesn't deploy the edge functions either.
 
 Still to come: a scheduled rebuild every six hours, to keep the contributors and events current, and a CI workflow running the tests.
