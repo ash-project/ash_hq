@@ -49,6 +49,15 @@
     gap: var(--space-3);
   }
 
+  /* Shown above the step's heading, but after it in the page, so the heading is read first */
+  .home-tour__count {
+    order: -1;
+    grid-column: 1 / -1;
+    margin-bottom: calc(-1 * var(--space-3));
+    color: var(--accent-text);
+    font: var(--fw-medium) 0.8125rem / 1 var(--font-mono);
+  }
+
   .home-tour__description,
   .home-tour__pair {
     grid-column: 1 / -1;

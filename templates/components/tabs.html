@@ -8,7 +8,9 @@
     {% </ui.tabs> %}
 
   variant: "underline" (a row of tabs above the panels, the default) or "steps" (a numbered
-           list beside them, for working through in order; a scrolling row on small screens)
+           list beside them, for working through in order). On small screens the steps' list is
+           hidden, so each panel needs its own heading (keep_heading), previous and next buttons,
+           and a step count.
 
   Buttons inside a panel with data-tab-prev or data-tab-next step through the tabs; render them
   hidden, and the script shows them.

@@ -28,6 +28,11 @@
         {#- MyApp.Blog.Post → lib/my_app/blog/post.ex #}
         {%- set filename = "lib/" ~ stage.module | regex_replace(pattern="([a-z])([A-Z])", rep="${1}_${2}") | lower | replace(from=".", to="/") ~ ".ex" %}
         {% <ui.tab_panel label={stage.name} id={stage.id} heading="h3" keep_heading={true}> %}
+          {#- On small screens, where the list of steps is hidden #}
+          <p class="home-tour__count only-mobile">
+            <span aria-hidden="true">{% if loop.index < 10 %}0{% endif %}{{ loop.index }} / {% if tour.stages | length < 10 %}0{% endif %}{{ tour.stages | length }}</span>
+            <span class="visually-hidden">Step {{ loop.index }} of {{ tour.stages | length }}</span>
+          </p>
           <div class="home-tour__nav">
             {{ <ui.button variant="secondary" size="sm" icon="arrow-left" label="Previous step" data_tab_prev="" hidden="" /> }}
             {{ <ui.button text="Next" variant="secondary" size="sm" icon_right="arrow-right" label="Next step" data_tab_next="" hidden="" /> }}
