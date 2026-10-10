@@ -1,4 +1,6 @@
-/* The first focusable element on every page: hidden until a keyboard user tabs to it */
+/* Links for keyboard users to skip past content, hidden until tabbed to. The page's "Skip to
+   content" link appears in the top left corner; .skip-link--inline ones appear where they are,
+   before a long run of links. */
 @layer components {
   .skip-link {
     position: absolute;
@@ -13,6 +15,11 @@
 
     &:hover {
       color: var(--accent-ink);
+    }
+
+    &.skip-link--inline {
+      position: static;
+      justify-self: start;
     }
 
     /* Off screen until focused */

@@ -30,6 +30,32 @@
     }
   }
 
+  /* "Read more →" text in a clickable item, for show: the item's stretched link is the real link,
+     so this is aria-hidden. It brightens and nudges when the item is hovered. */
+  .cta-label {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    color: var(--accent-text);
+    font: var(--fw-semibold) var(--fs-small) / 1 var(--font-sans);
+    transition: color var(--dur-fast) var(--ease-out);
+    --icon-size: 14px;
+
+    .icon {
+      transition: transform var(--dur-fast) var(--ease-out);
+    }
+
+  }
+
+  /* The clickable items a .cta-label can be in */
+  :is(.card--link, .list-row--link):hover .cta-label {
+    color: var(--accent-hover);
+
+    .icon {
+      transform: translateX(2px);
+    }
+  }
+
   /* An icon and a short label, muted until hovered: RSS, Discord, social links */
   .quiet-link {
     display: inline-flex;

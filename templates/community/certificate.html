@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{#-
+  A contributor of the month's certificate. A placeholder until the certificate layout is ported
+  from the Phoenix app: a standalone page, without the site's header and footer, that prints and
+  screenshots cleanly.
+#}
+{% block content %}
+  {% <ui.section title={page.title} eyebrow={"Contributor of the Month, " ~ page.date | date(format="%B %Y")} size="lg" heading="h1"> %}
+    <div class="prose">
+      {{ page.content | safe }}
+    </div>
+  {% </ui.section> %}
+{% endblock %}

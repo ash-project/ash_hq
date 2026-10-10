@@ -1,3 +1,17 @@
+{#-
+  `upcoming_events`: the events in data/events.toml that haven't finished at the time the site is
+  built, soonest first, for the event bar and the Community page. An event counts as upcoming
+  until the end of its last day. Set here because values set in an include don't outlive it.
+#}
+{%- set event_data = load_data(path="data/events.toml") %}
+{%- set build_time = now(timestamp=true) %}
+{%- set upcoming_events = [] %}
+{%- for event in event_data.events | sort(attribute="date") %}
+  {%- set last_day = event.end_date | default(value=event.date) %}
+  {%- if last_day | date(format="%s") | int + 86400 > build_time %}
+    {%- set_global upcoming_events = [...upcoming_events, event] %}
+  {%- endif %}
+{%- endfor -%}
 <!doctype html>
 <html lang="{{ lang }}">
   <head>

@@ -1,0 +1,31 @@
+/* The Community page (templates/community.html) */
+@layer components {
+  .community__location {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .community__contributors {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .community__avatars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    a {
+      display: block;
+    }
+  }
+
+  .community__support {
+    color: var(--text-faint);
+    font: var(--type-small);
+  }
+}

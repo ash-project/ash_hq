@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{#- Every contributor of the month, latest first: the pages in this section #}
+{% block content %}
+  {% <ui.section title={section.title} description={section.description} size="lg" heading="h1"> %}
+    <ul class="list-rows">
+      {%- for page in section.pages %}
+        {{ <ui.contributor_of_the_month page={page} featured={loop.first} /> }}
+      {%- endfor %}
+    </ul>
+  {% </ui.section> %}
+{% endblock %}

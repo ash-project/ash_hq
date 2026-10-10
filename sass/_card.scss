@@ -48,19 +48,6 @@
     text-wrap: pretty;
   }
 
-  .card__cta {
-    display: inline-flex;
-    gap: 6px;
-    align-items: center;
-    color: var(--accent-text);
-    font: var(--fw-semibold) var(--fs-small) / 1 var(--font-sans);
-    --icon-size: 14px;
-
-    .icon {
-      transition: transform var(--dur-fast) var(--ease-out);
-    }
-  }
-
   .card--link:hover {
     border-top-color: var(--accent);
 
@@ -71,14 +58,6 @@
     .card__arrow {
       color: var(--accent);
       transform: translate(2px, 0);
-    }
-
-    .card__cta {
-      color: var(--accent-hover);
-
-      .icon {
-        transform: translateX(2px);
-      }
     }
   }
 }
