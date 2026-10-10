@@ -1,0 +1,297 @@
+[
+  {
+    "name": "live_view, installing Elixir",
+    "checked": [
+      "phoenix",
+      "postgres",
+      "magic_link_auth",
+      "admin",
+      "live_debugger"
+    ],
+    "mode": "new",
+    "installElixir": true,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "sh <(curl 'https://ash-hq.org/install/jose_valim_is_my_hero?install=phoenix') \\\n    && cd jose_valim_is_my_hero && mix igniter.install ash ash_phoenix \\\n    ash_postgres ash_authentication ash_authentication_phoenix ash_admin \\\n    live_debugger --auth-strategy magic_link --setup --yes"
+  },
+  {
+    "name": "live_view, Elixir already installed",
+    "checked": [
+      "phoenix",
+      "postgres",
+      "magic_link_auth",
+      "admin",
+      "live_debugger"
+    ],
+    "mode": "new",
+    "installElixir": false,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "mix archive.install hex igniter_new --force\nmix archive.install hex phx_new 1.8.15 --force\n\nmix igniter.new jose_valim_is_my_hero --with phx.new \\\n  --install ash,ash_phoenix --install ash_postgres,ash_authentication \\\n  --install ash_authentication_phoenix,ash_admin --install live_debugger \\\n  --auth-strategy magic_link --setup --yes"
+  },
+  {
+    "name": "react, installing Elixir",
+    "checked": [
+      "phoenix",
+      "postgres",
+      "ash_typescript",
+      "magic_link_auth",
+      "admin"
+    ],
+    "mode": "new",
+    "installElixir": true,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "sh <(curl 'https://ash-hq.org/install/jose_valim_is_my_hero?install=phoenix') \\\n    && cd jose_valim_is_my_hero && mix igniter.install ash ash_phoenix \\\n    ash_postgres ash_authentication ash_authentication_phoenix ash_admin \\\n    ash_typescript --auth-strategy magic_link --framework react --setup --yes"
+  },
+  {
+    "name": "react, Elixir already installed",
+    "checked": [
+      "phoenix",
+      "postgres",
+      "ash_typescript",
+      "magic_link_auth",
+      "admin"
+    ],
+    "mode": "new",
+    "installElixir": false,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "mix archive.install hex igniter_new --force\nmix archive.install hex phx_new 1.8.15 --force\n\nmix igniter.new jose_valim_is_my_hero --with phx.new \\\n  --install ash,ash_phoenix --install ash_postgres,ash_authentication \\\n  --install ash_authentication_phoenix,ash_admin --install ash_typescript \\\n  --auth-strategy magic_link --framework react --setup --yes"
+  },
+  {
+    "name": "react, existing app",
+    "checked": [
+      "phoenix",
+      "postgres",
+      "ash_typescript",
+      "magic_link_auth",
+      "admin"
+    ],
+    "mode": "existing",
+    "installElixir": true,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "mix igniter.install ash ash_phoenix \\\n    ash_postgres ash_authentication \\\n    ash_authentication_phoenix ash_admin \\\n    ash_typescript --auth-strategy magic_link \\\n    --framework react --setup --yes"
+  },
+  {
+    "name": "graphql, installing Elixir",
+    "checked": [
+      "phoenix",
+      "graphql",
+      "postgres",
+      "admin"
+    ],
+    "mode": "new",
+    "installElixir": true,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "sh <(curl 'https://ash-hq.org/install/jose_valim_is_my_hero?install=phoenix') \\\n    && cd jose_valim_is_my_hero && mix igniter.install ash ash_phoenix \\\n    ash_graphql ash_postgres ash_admin --setup --yes"
+  },
+  {
+    "name": "graphql, Elixir already installed",
+    "checked": [
+      "phoenix",
+      "graphql",
+      "postgres",
+      "admin"
+    ],
+    "mode": "new",
+    "installElixir": false,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "mix archive.install hex igniter_new --force\nmix archive.install hex phx_new 1.8.15 --force\n\nmix igniter.new jose_valim_is_my_hero --with phx.new \\\n  --install ash,ash_phoenix --install ash_graphql,ash_postgres \\\n  --install ash_admin --setup --yes"
+  },
+  {
+    "name": "graphql, existing app",
+    "checked": [
+      "phoenix",
+      "graphql",
+      "postgres",
+      "admin"
+    ],
+    "mode": "existing",
+    "installElixir": true,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "mix igniter.install ash ash_phoenix \\\n    ash_graphql ash_postgres ash_admin --setup \\\n    --yes"
+  },
+  {
+    "name": "json_api, installing Elixir",
+    "checked": [
+      "phoenix",
+      "json_api",
+      "postgres",
+      "admin"
+    ],
+    "mode": "new",
+    "installElixir": true,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "sh <(curl 'https://ash-hq.org/install/jose_valim_is_my_hero?install=phoenix') \\\n    && cd jose_valim_is_my_hero && mix igniter.install ash ash_phoenix \\\n    ash_json_api ash_postgres ash_admin --setup --yes"
+  },
+  {
+    "name": "json_api, Elixir already installed",
+    "checked": [
+      "phoenix",
+      "json_api",
+      "postgres",
+      "admin"
+    ],
+    "mode": "new",
+    "installElixir": false,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "mix archive.install hex igniter_new --force\nmix archive.install hex phx_new 1.8.15 --force\n\nmix igniter.new jose_valim_is_my_hero --with phx.new \\\n  --install ash,ash_phoenix --install ash_json_api,ash_postgres \\\n  --install ash_admin --setup --yes"
+  },
+  {
+    "name": "json_api, existing app",
+    "checked": [
+      "phoenix",
+      "json_api",
+      "postgres",
+      "admin"
+    ],
+    "mode": "existing",
+    "installElixir": true,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "mix igniter.install ash ash_phoenix \\\n    ash_json_api ash_postgres ash_admin --setup \\\n    --yes"
+  },
+  {
+    "name": "nothing picked",
+    "checked": [],
+    "mode": "new",
+    "installElixir": true,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "sh <(curl 'https://ash-hq.org/install/jose_valim_is_my_hero') \\\n    && cd jose_valim_is_my_hero && mix igniter.install ash \\\n    --setup --yes"
+  },
+  {
+    "name": "nothing picked, Elixir already installed",
+    "checked": [],
+    "mode": "new",
+    "installElixir": false,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "mix archive.install hex igniter_new --force\n\nmix igniter.new jose_valim_is_my_hero --install ash --setup --yes"
+  },
+  {
+    "name": "nothing picked, existing app",
+    "checked": [],
+    "mode": "existing",
+    "installElixir": true,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "mix igniter.install ash --setup --yes"
+  },
+  {
+    "name": "a feature that requires another",
+    "checked": [
+      "double_entry"
+    ],
+    "mode": "new",
+    "installElixir": true,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "sh <(curl 'https://ash-hq.org/install/jose_valim_is_my_hero') \\\n    && cd jose_valim_is_my_hero && mix igniter.install ash \\\n    ash_money ash_double_entry --setup --yes"
+  },
+  {
+    "name": "graphql without picking phoenix",
+    "checked": [
+      "graphql"
+    ],
+    "mode": "new",
+    "installElixir": true,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "sh <(curl 'https://ash-hq.org/install/jose_valim_is_my_hero?install=phoenix&with_args=--no-ecto') \\\n    && cd jose_valim_is_my_hero && mix igniter.install ash ash_phoenix ash_graphql --setup --yes"
+  },
+  {
+    "name": "phoenix with sqlite",
+    "checked": [
+      "phoenix",
+      "sqlite"
+    ],
+    "mode": "new",
+    "installElixir": true,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "sh <(curl 'https://ash-hq.org/install/jose_valim_is_my_hero?install=phoenix&with_args=--database%20sqlite3') \\\n    && cd jose_valim_is_my_hero && mix igniter.install ash ash_phoenix ash_sqlite --setup --yes"
+  },
+  {
+    "name": "phoenix with sqlite, Elixir already installed",
+    "checked": [
+      "phoenix",
+      "sqlite"
+    ],
+    "mode": "new",
+    "installElixir": false,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "mix archive.install hex igniter_new --force\nmix archive.install hex phx_new 1.8.15 --force\n\nmix igniter.new jose_valim_is_my_hero --with phx.new \\\n  --with-args \"--database sqlite3\" --install ash,ash_phoenix \\\n  --install ash_sqlite --setup --yes"
+  },
+  {
+    "name": "phoenix with no data layer",
+    "checked": [
+      "phoenix"
+    ],
+    "mode": "new",
+    "installElixir": true,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "sh <(curl 'https://ash-hq.org/install/jose_valim_is_my_hero?install=phoenix&with_args=--no-ecto') \\\n    && cd jose_valim_is_my_hero && mix igniter.install ash ash_phoenix --setup --yes"
+  },
+  {
+    "name": "lots of features",
+    "checked": [
+      "phoenix",
+      "postgres",
+      "password_auth",
+      "api_key_auth",
+      "oauth",
+      "oban",
+      "ash_events",
+      "cloak",
+      "paper_trail",
+      "tidewave",
+      "ash_ai",
+      "usage_rules",
+      "money",
+      "double_entry",
+      "cinder",
+      "mishka"
+    ],
+    "mode": "new",
+    "installElixir": true,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "sh <(curl 'https://ash-hq.org/install/jose_valim_is_my_hero?install=phoenix') \\\n    && cd jose_valim_is_my_hero && mix igniter.install ash ash_phoenix \\\n    ash_postgres ash_authentication ash_authentication_phoenix ash_oban \\\n    oban_web ash_events ash_money ash_double_entry mishka_chelekom tidewave \\\n    ash_paper_trail ash_ai cloak ash_cloak usage_rules cinder \\\n    --auth-strategy password --auth-strategy api_key --setup --yes"
+  },
+  {
+    "name": "lots of features, Elixir already installed",
+    "checked": [
+      "phoenix",
+      "postgres",
+      "password_auth",
+      "api_key_auth",
+      "oauth",
+      "oban",
+      "ash_events",
+      "cloak",
+      "paper_trail",
+      "tidewave",
+      "ash_ai",
+      "usage_rules",
+      "money",
+      "double_entry",
+      "cinder",
+      "mishka"
+    ],
+    "mode": "new",
+    "installElixir": false,
+    "appName": "Jose Valim is my Hero!",
+    "phoenixVersion": "1.8.15",
+    "expected": "mix archive.install hex igniter_new --force\nmix archive.install hex phx_new 1.8.15 --force\n\nmix igniter.new jose_valim_is_my_hero --with phx.new \\\n  --install ash,ash_phoenix --install ash_postgres,ash_authentication \\\n  --install ash_authentication_phoenix,ash_oban \\\n  --install oban_web,ash_events --install ash_money,ash_double_entry \\\n  --install mishka_chelekom,tidewave --install ash_paper_trail,ash_ai \\\n  --install cloak,ash_cloak --install usage_rules,cinder \\\n  --auth-strategy password --auth-strategy api_key --setup --yes"
+  }
+]

@@ -1,0 +1,110 @@
+/* Toggle buttons for picking options, with tooltips (templates/components/option-chip.html) */
+@layer components {
+  .option-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .option-chip {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .option-chip__button {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    min-height: 32px;
+    padding: 0 var(--space-4);
+    /* Meets 3:1, so each option's edge is visible */
+    border: 1px solid var(--border-control);
+    background: transparent;
+    color: var(--text-body);
+    font: var(--fw-medium) var(--fs-small) / 1 var(--font-sans);
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+    --icon-size: 14px;
+
+    &:hover {
+      border-color: var(--ash-400);
+      background: var(--surface-raised);
+    }
+
+    /* Selected: an orange border and wash, and a check rather than a plus */
+    &[aria-pressed="true"] {
+      border-color: var(--accent);
+      background: var(--accent-wash);
+      color: var(--text-strong);
+    }
+
+    /* Selected because another option needs it, so it can't be turned off */
+    &[aria-disabled="true"] {
+      cursor: not-allowed;
+    }
+  }
+
+  .option-chip__icon {
+    display: none;
+    color: var(--text-faint);
+  }
+
+  .option-chip__button[aria-pressed="false"] .option-chip__icon--off,
+  .option-chip__button[aria-pressed="true"]:not([aria-disabled="true"]) .option-chip__icon--on,
+  .option-chip__button[aria-pressed="true"][aria-disabled="true"] .option-chip__icon--locked {
+    display: flex;
+  }
+
+  .option-chip__button[aria-pressed="true"] .option-chip__icon {
+    color: var(--accent);
+  }
+
+  .option-chip__external {
+    color: var(--text-faint);
+  }
+
+  /* Opens on hover and keyboard focus, and stays open while the pointer moves onto it */
+  .option-chip__tip {
+    position: absolute;
+    bottom: calc(100% + var(--space-3));
+    left: 0;
+    z-index: var(--z-pop);
+    display: none;
+    gap: var(--space-3);
+    width: max-content;
+    max-width: min(320px, 80vw);
+    padding: var(--space-4) 14px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface-raised);
+    box-shadow: var(--shadow-pop);
+    color: var(--text-body);
+    font: var(--type-small);
+    white-space: normal;
+
+    /* Bridges the gap to the button, so the pointer can move onto the tooltip */
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 100% 0 auto;
+      height: var(--space-3);
+    }
+  }
+
+  /* Keyboard focus only (:focus-visible), so clicking a chip doesn't leave its tooltip open */
+  .option-chip:is(:hover, :has(:focus-visible)):not(.option-chip--tip-dismissed) .option-chip__tip {
+    display: grid;
+  }
+
+  .option-chip__tip-paragraph:first-child:not(:last-of-type) {
+    color: var(--text-strong);
+    font-weight: var(--fw-semibold);
+  }
+
+  .option-chip__locked-note:empty {
+    display: none;
+  }
+}

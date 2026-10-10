@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{#-
+  The Installer page: pick a preset or features, and get the command that installs them. The
+  options are in data/installer.toml; static/js/installer.js builds the command from the data
+  attributes rendered here. Without JavaScript, the page shows a basic command instead.
+#}
+{% block content %}
+  {%- set installer = load_data(path="data/installer.toml") %}
+  {#- For the command that installs Phoenix's generator, when Elixir isn't installed for you #}
+  {%- set phx_new = load_data(url="https://hex.pm/api/packages/phx_new", format="json", required=false) %}
+  {%- set install_order %}{% for feature in installer.features %}{{ feature.key }} {% endfor %}{% endset %}
+
+  {% <ui.section title={page.title} description={page.description} size="lg" heading="h1"> %}
+    <div class="installer aside" data-installer
+      data-install-order="{{ install_order | trim }}"
+      data-app-names="{{ installer.app_names | join(sep='|') }}"
+      {%- if phx_new %} data-phoenix-version="{{ phx_new.latest_stable_version }}"{% endif %}>
+
+      {#- Hidden until static/js/installer.js runs: the options only work with it #}
+      <div class="installer__options" data-installer-options hidden>
+        <div class="installer__basics">
+          <div class="installer__name">
+            {{ <ui.input label="Project name" id="installer-name" value="my_app" mono={true} spellcheck="false" autocomplete="off" data_installer_name="" /> }}
+          </div>
+          {{ <ui.segmented name="installer-mode" legend="Install into" options={[["new", "New Project"], ["existing", "Existing App"]]} value="new" data_installer_mode="" /> }}
+          <label class="installer__checkbox" data-installer-elixir-option>
+            <input type="checkbox" checked data-installer-elixir />
+            Install Elixir for me
+          </label>
+        </div>
+
+        <section class="installer__group" aria-labelledby="installer-presets">
+          <h2 class="installer__heading" id="installer-presets">Presets</h2>
+          <div class="option-chips">
+            {%- for preset in installer.presets %}
+              {{ <ui.option_chip label={preset.label} id={"preset-" ~ preset.id} tip={preset.tip} data_preset={preset.id} data_features={preset.features | join(sep=" ")} /> }}
+            {%- endfor %}
+          </div>
+        </section>
+
+        <div class="installer__categories grid">
+          {%- for category in installer.categories %}
+            {%- set category_id = "installer-" ~ category.name | slugify %}
+            <section class="installer__group" aria-labelledby="{{ category_id }}">
+              <h2 class="installer__heading" id="{{ category_id }}">{{ category.name }}</h2>
+              <div class="option-chips">
+                {%- for key in category.features %}
+                  {%- for feature in installer.features %}
+                    {%- if feature.key == key %}
+                      {{ <ui.option_chip label={feature.label} id={"feature-" ~ feature.key} tip={feature.tip} external={feature.external | default(value=false)} data_feature={feature.key} data_label={feature.label} data_adds={feature.adds | join(sep=" ")} data_args={feature.args | default(value=[]) | join(sep="|")} data_requires={feature.requires | default(value=[]) | join(sep=" ")} /> }}
+                    {%- endif %}
+                  {%- endfor %}
+                {%- endfor %}
+              </div>
+            </section>
+          {%- endfor %}
+        </div>
+
+        <p class="installer__note">* Is or contains an external package, not maintained by the Ash team.</p>
+      </div>
+
+      <aside class="installer__panel aside__panel" aria-labelledby="installer-command-heading">
+        <h2 class="installer__panel-heading" id="installer-command-heading">
+          Your Install Command
+          <span class="installer__count" data-installer-count hidden></span>
+        </h2>
+
+        <p class="installer__fallback" data-installer-fallback>
+          This installs Ash into a new app. Choosing presets and features needs JavaScript.
+        </p>
+
+        <pre class="installer__command"><code data-installer-command>sh &lt;(curl 'https://ash-hq.org/install/my_app') \
+    &amp;&amp; cd my_app</code></pre>
+
+        {{ <ui.button text="Copy Command" size="lg" icon="clipboard" full={true} data_installer_copy="" hidden="" /> }}
+        <p class="visually-hidden" aria-live="polite" data-installer-status></p>
+
+        <div class="installer__docs" data-installer-docs hidden>
+          <h3 class="installer__docs-heading">Read the docs</h3>
+          <ul class="installer__links">
+            {%- for feature in installer.features %}
+              {%- for link in feature.links %}
+                <li data-for="{{ feature.key }}" hidden><a href="{{ link | last }}" target="_blank" rel="noopener">{{ link | first }}{{ <ui.new_tab_note /> }}</a></li>
+              {%- endfor %}
+            {%- endfor %}
+          </ul>
+          {%- for feature in installer.features %}
+            {%- if feature.setup is defined %}
+              <div data-for="{{ feature.key }}" hidden>
+                {% <ui.callout tone="note"> %}Requires setup: <a href="{{ feature.setup | last }}" target="_blank" rel="noopener">{{ feature.setup | first }}{{ <ui.new_tab_note /> }}</a>{% </ui.callout> %}
+              </div>
+            {%- endif %}
+          {%- endfor %}
+        </div>
+      </aside>
+    </div>
+  {% </ui.section> %}
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ get_url(path='js/installer.js', cachebust=true) }}"></script>
+{% endblock %}

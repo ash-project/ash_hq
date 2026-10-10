@@ -1,0 +1,115 @@
+/* The Installer page (templates/installer.html). Laid out with .aside: the options, beside a
+   sticky panel with the command. */
+@layer components {
+  .installer {
+    --aside: 440px;
+  }
+
+  .installer__options {
+    display: grid;
+    gap: var(--space-9);
+    min-width: 0;
+  }
+
+  .installer__basics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5) var(--space-7);
+    align-items: end;
+  }
+
+  .installer__name {
+    flex: 1 1 240px;
+    max-width: 320px;
+  }
+
+  .installer__checkbox {
+    display: inline-flex;
+    gap: var(--space-3);
+    align-items: center;
+    min-height: 40px;
+    color: var(--text-body);
+    font: var(--fw-medium) var(--fs-small) / 1 var(--font-sans);
+    cursor: pointer;
+
+    input {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      accent-color: var(--accent);
+    }
+  }
+
+  .installer__categories {
+    --min: 240px;
+    --row-gap: var(--space-7);
+  }
+
+  .installer__group {
+    display: grid;
+    gap: var(--space-4);
+    align-content: start;
+  }
+
+  .installer__heading {
+    font: var(--fw-semibold) var(--fs-small) / 1 var(--font-sans);
+  }
+
+  .installer__note {
+    color: var(--text-faint);
+    font: var(--type-small);
+  }
+
+  /* The command, the page's key action: an accent panel */
+  .installer__panel {
+    padding: var(--space-6);
+    border-top: 2px solid var(--accent);
+    background: var(--surface-accent);
+  }
+
+  .installer__panel-heading {
+    font: var(--fw-semibold) var(--fs-body) / 1.2 var(--font-sans);
+  }
+
+  .installer__count {
+    color: var(--text-muted);
+    font-weight: var(--fw-regular);
+  }
+
+  .installer__fallback {
+    color: var(--text-muted);
+    font: var(--type-small);
+  }
+
+  .installer__command {
+    margin: 0;
+    padding: var(--space-5);
+    overflow-x: auto;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-code);
+    color: var(--syn-text);
+    font: var(--type-code);
+    white-space: pre;
+  }
+
+  .installer__docs {
+    display: grid;
+    gap: 10px;
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border-subtle);
+    font: var(--type-small);
+  }
+
+  .installer__docs-heading {
+    font: var(--fw-semibold) var(--fs-small) / 1.2 var(--font-sans);
+  }
+
+  .installer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+}

@@ -1,0 +1,298 @@
+# The Installer page: presets, feature categories and features. Read by templates/installer.html,
+# which renders each feature's details as data attributes for static/js/installer.js.
+#
+# Ported from the Phoenix app's assets/js/app.js (the `features` and `quickstarts` objects) and
+# lib/ash_hq_web/views/home_view.ex (labels, categories, external packages). The Observability
+# features (AppSignal, OpenTelemetry) are left out until their installers exist, as on the live site.
+
+# One is picked at random as the project name, when the page loads
+app_names = [
+  "Hairbnb",
+  "Nietflix",
+  "Lemonade Stand",
+  "Pet Rock Rental",
+  "Blockchain Coffee",
+  "Hamazon",
+  "Jose Valim is my Hero",
+  "phoenix.new is Sentient",
+  "Req is Love",
+  "Req is Life",
+  "Pimento Cheese",
+  "Vacuum Conf",
+  "Elixir Lizards",
+]
+
+# The first preset is selected when the page loads
+[[presets]]
+id = "live_view"
+label = "Phoenix LiveView"
+features = ["phoenix", "postgres", "magic_link_auth", "admin", "live_debugger"]
+tip = ["Full stack Elixir!", "Perfect for the Elixir maximalist."]
+
+[[presets]]
+id = "react"
+label = "React + TypeScript"
+features = ["phoenix", "postgres", "ash_typescript", "magic_link_auth", "admin"]
+tip = ["Build a React frontend with full stack types!", "All of the reliability and elegance of Elixir with a classic React frontend with a fully typed RPC server and client implementation provided out of the box."]
+
+[[presets]]
+id = "graphql"
+label = "GraphQL"
+features = ["phoenix", "graphql", "postgres", "admin"]
+tip = ["A GraphQL API, a database and a dream.", "All the power of GraphQL, none of the boilerplate."]
+
+[[presets]]
+id = "json_api"
+label = "JSON:API"
+features = ["phoenix", "json_api", "postgres", "admin"]
+tip = ["JSON:API. Simple, battle-tested, effective.", "Create a simple yet elegant REST API, complete with an Open API spec!"]
+
+# How the features are grouped on the page
+[[categories]]
+name = "Web"
+features = ["phoenix", "graphql", "json_api", "ash_typescript"]
+
+[[categories]]
+name = "Data Layers"
+features = ["postgres", "sqlite", "csv"]
+
+[[categories]]
+name = "Authentication"
+features = ["password_auth", "magic_link_auth", "api_key_auth", "oauth"]
+
+[[categories]]
+name = "AI"
+features = ["tidewave", "ash_ai", "usage_rules"]
+
+[[categories]]
+name = "Finance"
+features = ["money", "double_entry"]
+
+[[categories]]
+name = "Automation"
+features = ["oban", "state_machine", "ash_events"]
+
+[[categories]]
+name = "Safety & Security"
+features = ["archival", "paper_trail", "cloak"]
+
+[[categories]]
+name = "Dev Tools"
+features = ["live_debugger", "admin"]
+
+[[categories]]
+name = "UI Components"
+features = ["mishka", "cinder"]
+
+# Every feature. They're listed in install order: the order their packages and arguments appear in
+# the generated command, so add a new one where it should be installed.
+#
+# key:      how presets and categories refer to it
+# label:    shown on its option
+# adds:     packages it installs
+# args:     extra arguments for the installers
+# requires: features it needs, selected along with it, and installed just before it
+# external: is or contains a package not maintained by the Ash team
+# links:    [name, url] pairs of docs, shown below the command
+# setup:    [name, url] of manual setup instructions, if it needs any
+# tip:      its tooltip, a paragraph per item
+
+[[features]]
+key = "phoenix"
+label = "Phoenix"
+adds = ["ash_phoenix"]
+links = [["Phoenix", "https://phoenixframework.org"]]
+tip = ["Ash works seamlessly with Phoenix.", "Phoenix is your web layer, Ash is your application layer."]
+
+[[features]]
+key = "graphql"
+label = "GraphQL"
+adds = ["ash_graphql"]
+requires = ["phoenix"]
+links = [["AshGraphql", "https://hexdocs.pm/ash_graphql"]]
+tip = ["Create a powerful and flexible GraphQL API directly from your resources.", "Built on top of the excellent library Absinthe. No need for writing data loaders, resolvers or middleware!"]
+
+[[features]]
+key = "json_api"
+label = "JSON:API"
+adds = ["ash_json_api"]
+requires = ["phoenix"]
+links = [["AshJsonApi", "https://hexdocs.pm/ash_json_api"]]
+tip = ["Easily create a spec-compliant JSON:API, directly from your resources.", "Generates an OpenAPI specification automatically, allowing easy integration with all kinds of tools and services."]
+
+[[features]]
+key = "postgres"
+label = "Postgres"
+adds = ["ash_postgres"]
+links = [["AshPostgres", "https://hexdocs.pm/ash_postgres"]]
+tip = ["PostgreSQL", "The swiss army knife of databases. Versatile, powerful, and battle-tested."]
+
+[[features]]
+key = "sqlite"
+label = "SQLite"
+adds = ["ash_sqlite"]
+links = [["AshSqlite", "https://hexdocs.pm/ash_sqlite"]]
+tip = ["SQLite", "Small, fast, and reliable. Perfect for lightweight apps or getting started quickly."]
+
+[[features]]
+key = "password_auth"
+label = "Password"
+adds = ["ash_authentication", "ash_authentication_phoenix"]
+args = ["--auth-strategy password"]
+requires = ["phoenix"]
+links = [["AshAuthentication", "https://hexdocs.pm/ash_authentication"]]
+tip = ["Allow users to log in with email & password.", "Ships with email confirmation, password resets, and registration out of the box!"]
+
+[[features]]
+key = "magic_link_auth"
+label = "Magic Link"
+adds = ["ash_authentication", "ash_authentication_phoenix"]
+args = ["--auth-strategy magic_link"]
+requires = ["phoenix"]
+links = [["AshAuthentication", "https://hexdocs.pm/ash_authentication"]]
+tip = ["Send users a link in their email to sign in and register.", "Who needs the complexity of emails & passwords? Keep it simple with magic links."]
+
+[[features]]
+key = "api_key_auth"
+label = "API Keys"
+adds = ["ash_authentication"]
+args = ["--auth-strategy api_key"]
+requires = ["phoenix"]
+links = [["AshAuthentication", "https://hexdocs.pm/ash_authentication"]]
+tip = ["Generate and authenticate with API keys.", "Built for compliance with secret scanning tools, using industry best practice for generating and verifying API keys."]
+
+[[features]]
+key = "oauth"
+label = "OAuth2"
+adds = ["ash_authentication", "ash_authentication_phoenix"]
+requires = ["phoenix"]
+links = [["AshAuthentication", "https://hexdocs.pm/ash_authentication"]]
+setup = ["OAuth", "https://hexdocs.pm/ash_authentication"]
+tip = ["Sign in using an external service.", "Supports any OAuth2 provider with premade configurations for Apple, Google, Github, Auth0, Oidc, and Slack."]
+
+[[features]]
+key = "csv"
+label = "CSV"
+adds = ["ash_csv"]
+links = [["AshCSV", "https://hexdocs.pm/ash_csv"]]
+tip = ["Back resources with CSV files.", "Easily interact with CSV files in code, or turn a CSV file into an API in minutes."]
+
+[[features]]
+key = "admin"
+label = "Admin UI"
+adds = ["ash_admin"]
+links = [["AshAdmin", "https://hexdocs.pm/ash_admin"]]
+tip = ["A zero-config-necessary super admin UI.", "Call any resource action from an automatically generated web UI"]
+
+[[features]]
+key = "oban"
+label = "Oban"
+adds = ["ash_oban", "oban_web"]
+external = true
+links = [["AshOban", "https://hexdocs.pm/ash_oban"]]
+tip = ["Oban is a background job system backed by your own SQL database packed with enterprise grade features, real-time monitoring with Oban Web, and complex workflow management with Oban Pro.", "Configure triggers directly in your resources or write fully custom Oban jobs."]
+
+[[features]]
+key = "state_machine"
+label = "State Machines"
+adds = ["ash_state_machine"]
+links = [["AshStateMachine", "https://hexdocs.pm/ash_state_machine"]]
+tip = ["Model complex workflows backed by your resource's persistence and actions.", "You can even generate fancy mermaid flow charts!"]
+
+[[features]]
+key = "ash_events"
+label = "Event Sourcing"
+adds = ["ash_events"]
+links = [["AshEvents", "https://hexdocs.pm/ash_events"]]
+tip = ["Tracks and persists events when actions are performed on your resources, providing a complete audit trail and event replay.", "A declarative hybrid approach to event sourcing."]
+
+[[features]]
+key = "double_entry"
+label = "Double Entry Accounting"
+adds = ["ash_double_entry"]
+requires = ["money"]
+links = [["AshDoubleEntry", "https://hexdocs.pm/ash_double_entry"]]
+tip = ["Moving money around? Need to track financial data?", "Provides a data model for double entry accounting that can be extended to fit your own needs."]
+
+[[features]]
+key = "archival"
+label = "Archival"
+adds = ["ash_archival"]
+links = [["AshArchival", "https://hexdocs.pm/ash_archival"]]
+tip = ["A lightweight extension to ensure that data is only ever soft deleted.", "One line of code is all it takes to ensure that it is impossible to delete records."]
+
+[[features]]
+key = "live_debugger"
+label = "Live Debugger"
+adds = ["live_debugger"]
+requires = ["phoenix"]
+external = true
+links = [["Live Debugger", "https://hexdocs.pm/live_debugger/"]]
+tip = ["A tool for debugging LiveView applications in development.", "Optimizes your development by offering detailed component tree views, assigns inspection, and callback execution tracing."]
+
+[[features]]
+key = "mishka"
+label = "Mishka Chelekom"
+adds = ["mishka_chelekom"]
+external = true
+links = [["Mishka Chelekom", "https://mishka.tools/chelekom"]]
+tip = ["Mishka Chelekom is a library offering various templates for components in Phoenix and Phoenix LiveView.", "No installation or dependencies needed — everything is configured directly into your project by the CLI generator."]
+
+[[features]]
+key = "tidewave"
+label = "Tidewave"
+adds = ["tidewave"]
+external = true
+links = [["Tidewave", "https://tidewave.ai"]]
+tip = ["Speed up development with AI assistants that understand your web application, how it runs, and what it delivers.", "Tidewave is an MCP server, served by your application, that gives your agentic development workflow super powers."]
+
+[[features]]
+key = "paper_trail"
+label = "Paper Trail"
+adds = ["ash_paper_trail"]
+links = [["AshPaperTrail", "https://hexdocs.pm/ash_paper_trail"]]
+tip = ["Automatically track all changes to your resources. Track who did what and when.", "Track just the changed values, the entire new state, or even a deep diff of changes."]
+
+[[features]]
+key = "ash_ai"
+label = "Ash AI"
+adds = ["ash_ai"]
+links = [["Ash AI", "https://hexdocs.pm/ash_ai"]]
+tip = ["First class support for a wide array of LLM tools.", "Structured outputs, production and development MCP servers, agentic tool calling, a pre-built chat interface and more."]
+
+[[features]]
+key = "cloak"
+label = "Encryption"
+adds = ["cloak", "ash_cloak"]
+links = [["AshCloak", "https://hexdocs.pm/ash_cloak"]]
+tip = ["Easily encrypt and decrypt your attributes.", "You can even hook into decryption to track who is decrypting what and when!"]
+
+[[features]]
+key = "usage_rules"
+label = "Usage Rules"
+adds = ["usage_rules"]
+links = [["UsageRules", "https://hexdocs.pm/usage_rules"]]
+tip = ["Supercharge your AGENTS.md!", "Automatically collects documentation and best practices from packages that provide usage-rules.md files, helping prevent LLM hallucinations and ensuring consistent usage patterns."]
+
+[[features]]
+key = "ash_typescript"
+label = "TypeScript"
+adds = ["ash_typescript"]
+args = ["--framework react"]
+links = [["AshTypescript", "https://hexdocs.pm/ash_typescript"]]
+tip = ["Automatic TypeScript type generation for Ash resources and actions.", "Never write API types manually again! Get end-to-end type safety between your Elixir backend and TypeScript frontend with zero-config type generation."]
+
+[[features]]
+key = "cinder"
+label = "Cinder"
+adds = ["cinder"]
+requires = ["phoenix"]
+links = [["Cinder", "https://hexdocs.pm/cinder"]]
+tip = ["A powerful data collection component for Ash resources in Phoenix LiveView.", "Transform complex data table requirements into simple, declarative markup."]
+
+[[features]]
+key = "money"
+label = "Money"
+adds = ["ash_money"]
+links = [["AshMoney", "https://hexdocs.pm/ash_money"]]
+tip = ["A data type for representing money $$$$.", "Ships with a postgres datatype, and operator and function definitions!"]

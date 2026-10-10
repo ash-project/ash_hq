@@ -1,0 +1,34 @@
+{#
+  A toggle button for picking options, with an optional tooltip.
+
+    {{ <ui.option_chip label="Postgres" id="feature-postgres" tip={["PostgreSQL", "The swiss army knife…"]} /> }}
+
+  id:       the button's id; the tooltip's is id ~ "-tip"
+  pressed:  whether it starts selected
+  external: marks it with an asterisk, for options with packages not maintained by the Ash team
+  tip:      the tooltip's paragraphs; the first is shown bold when there are several. It opens on
+            hover and keyboard focus, stays open while hovered, and closes with Escape (with
+            static/js/installer.js).
+  Any other argument becomes an attribute of the button, with _ in its name turned into -.
+#}
+{% component ui.option_chip(label: string, id: string, pressed: bool = false, external: bool = false, tip: array = [], ...attrs) %}
+  <span class="option-chip">
+    <button class="option-chip__button" id="{{ id }}" type="button" aria-pressed="{% if pressed %}true{% else %}false{% endif %}"
+      {%- if tip | length > 0 %} aria-describedby="{{ id }}-tip"{% endif %}
+      {%- for attr, attr_value in attrs %} {{ attr | replace(from="_", to="-") }}="{{ attr_value }}"{% endfor %}>
+      <span class="option-chip__icon option-chip__icon--off">{{ <ui.icon name="plus" /> }}</span>
+      <span class="option-chip__icon option-chip__icon--on">{{ <ui.icon name="check" /> }}</span>
+      <span class="option-chip__icon option-chip__icon--locked">{{ <ui.icon name="lock" /> }}</span>
+      {{ label }}
+      {%- if external %}<span class="option-chip__external" aria-hidden="true">*</span><span class="visually-hidden"> (external package)</span>{% endif %}
+    </button>
+    {%- if tip | length > 0 %}
+      <span class="option-chip__tip" id="{{ id }}-tip" role="tooltip">
+        {%- for paragraph in tip %}
+          <span class="option-chip__tip-paragraph">{{ paragraph }}</span>
+        {%- endfor %}
+        <span class="option-chip__locked-note" data-locked-note></span>
+      </span>
+    {%- endif %}
+  </span>
+{%- endcomponent ui.option_chip %}
