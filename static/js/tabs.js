@@ -8,8 +8,9 @@
 //
 // The selected tab is kept in the URL's hash (the panel's id), so it survives going back to the
 // page and can be linked to. It replaces the history entry rather than adding one, so Back leaves
-// the page instead of stepping through tabs. Scrolling the tabs out of view clears the hash, so a
-// reload or a shared link doesn't jump back to them, and scrolling back puts it back.
+// the page instead of stepping through tabs. Scrolling past the tabs, or back up nearer the top of
+// the page than to them, clears the hash, so a reload or a shared link doesn't jump back to them,
+// and scrolling back puts it back.
 
 for (const container of document.querySelectorAll("[data-tabs]")) {
   const panels = [...container.querySelectorAll(":scope > .tabs__panel")];
@@ -100,12 +101,17 @@ for (const container of document.querySelectorAll("[data-tabs]")) {
     }
   });
 
-  // Only once the tabs have been in view, so the hash isn't cleared before the browser scrolls to
-  // it, and only the hash this script set
+  // The hash is kept while the tabs are in view and the page is scrolled at least halfway from its
+  // top to theirs, and cleared otherwise. Only once that's been the case, so the hash isn't cleared
+  // before the browser scrolls to it, and only the hash this script set.
   let seen = false;
   let cleared = false;
-  new IntersectionObserver(([entry]) => {
-    if (entry.isIntersecting) {
+  let pending = false;
+  const updateHash = () => {
+    pending = false;
+    const { top, bottom } = container.getBoundingClientRect();
+    const inView = top < innerHeight && bottom > 0;
+    if (inView && scrollY >= (top + scrollY) / 2) {
       seen = true;
       if (cleared) {
         cleared = false;
@@ -115,7 +121,14 @@ for (const container of document.querySelectorAll("[data-tabs]")) {
       cleared = true;
       history.replaceState(history.state, "", location.pathname + location.search);
     }
-  }).observe(container);
+  };
+  const scheduleUpdate = () => {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(updateHash);
+  };
+  addEventListener("scroll", scheduleUpdate, { passive: true });
+  scheduleUpdate();
 
   container.prepend(list);
   container.classList.add("tabs--enhanced");
