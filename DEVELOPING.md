@@ -231,7 +231,7 @@ The newest is featured on the Community page. For the certificate's link preview
 
 ### Videos
 
-The Media page lists a selection of the videos in the YouTube playlist, from `videos` in `data/media.toml`. To add one, give its title as published, its ID (from `youtube.com/watch?v=<id>`) and the day it was uploaded. The page sorts them newest first and takes each thumbnail from YouTube by the ID.
+The Media page lists a selection of the videos in the YouTube playlist, from `videos` in `data/media.toml`. To add one, give its title as published, its ID (from `youtube.com/watch?v=<id>`) and the day it was uploaded. The page shows them in the order they're listed, and takes each thumbnail from YouTube by the ID.
 
 ### Syntax highlighting
 

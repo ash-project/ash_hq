@@ -18,10 +18,9 @@
       {% </ui.tab_panel> %}
 
       {% <ui.tab_panel label="YouTube" id="youtube"> %}
-        {%- set videos = media.videos | sort(attribute="published") | reverse %}
-        {% <ui.paginated items={videos | length} page_size={12} label="Pages of videos"> %}
+        {% <ui.paginated items={media.videos | length} page_size={12} label="Pages of videos"> %}
           <ul class="cards cards--wide grid">
-            {%- for video in videos %}
+            {%- for video in media.videos %}
               {%- set date = <ui.eyebrow text={video.published | date(format="%B %Y")} /> %}
               {{ <ui.card title={video.title} href={"https://www.youtube.com/watch?v=" ~ video.id ~ "&list=" ~ media.youtube_playlist} image={"https://i.ytimg.com/vi/" ~ video.id ~ "/hqdefault.jpg"} eyebrow={date} new_tab={true} /> }}
             {%- endfor %}

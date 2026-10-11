@@ -98,15 +98,55 @@ show = "Thinking Elixir Podcast"
 title = "27: Ash Framework with Zach Daniel"
 url = "https://podcasts.apple.com/us/podcast/27-ash-framework-with-zach-daniel/id1516100616?i=1000503190100"
 
-# A selection of the videos in the YouTube playlist, newest first, with their titles as published
-# on YouTube.
+# A selection of the videos in the YouTube playlist, in the order the page shows them, with their
+# titles as published on YouTube.
 #
 # id:        the video's ID, from its URL (youtube.com/watch?v=<id>). The thumbnail comes from it.
-# published: the day it was uploaded, as YYYY-MM-DD. The page sorts by it.
+# published: the day it was uploaded, as YYYY-MM-DD. Each card shows its month.
+[[videos]]
+title = "Ash: The Story of a Function by Zach Daniel | ElixirConf EU 2024"
+id = "vjnPjrCF4rs"
+published = 2024-11-28
+
 [[videos]]
 title = "Keynote: Adoption of Ash in a Mature & Complex Codebase - Alykhan Jetha (AJ) | AshConf 2026"
 id = "HNEDyKY1Gcs"
 published = 2026-10-09
+
+[[videos]]
+title = "Writing the Book on Ash - Rebecca Le"
+id = "ChnPx3c3lUU"
+published = 2025-04-01
+
+[[videos]]
+title = "Ash Framework in 11 minutes"
+id = "dDP1I2d3CB4"
+published = 2026-06-25
+
+[[videos]]
+title = "Model the work: Real Life workloads with Ash & Oban - Zach Daniel | ElixirConf EU 2026"
+id = "ZhUfURGmlqY"
+published = 2026-09-09
+
+[[videos]]
+title = "Build a \"Code Mode\" MCP Server in Elixir"
+id = "xejfNsxjK3o"
+published = 2026-06-21
+
+[[videos]]
+title = "Hey Ash, Let’s Chat! - Building Conversational AI with Ash AI - Jinkyou Son | ElixirConf US 2025"
+id = "g9rWEbyHTRo"
+published = 2026-04-14
+
+[[videos]]
+title = "Stop Building APIs: Generate TypeScript from Ash"
+id = "t-hori2Io14"
+published = 2025-09-27
+
+[[videos]]
+title = "What are state machines? (feat. Ash Framework)"
+id = "_x6TE7hbE1k"
+published = 2025-07-20
 
 [[videos]]
 title = "A Complete AI Toolkit: Ash AI Demo"
@@ -129,14 +169,9 @@ id = "gZmNpatgMjw"
 published = 2025-01-12
 
 [[videos]]
-title = "Ash: The Story of a Function by Zach Daniel | ElixirConf EU 2024"
-id = "vjnPjrCF4rs"
-published = 2024-11-28
-
-[[videos]]
-title = "Zach Daniel, Creator of Ash Framework, The Story of a Function"
-id = "xNqbKtw6oJE"
-published = 2023-10-04
+title = "Ash Framework Q&A - Erlang & Elixir Asia"
+id = "zcEy0dcHpQ8"
+published = 2024-04-29
 
 [[videos]]
 title = "ElixirConf 2023 - Zach Daniel - Ash 3 0  Better Together"
