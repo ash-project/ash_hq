@@ -9,6 +9,7 @@
     border: 1px solid var(--border-subtle);
     border-top: 2px solid var(--accent);
     background: var(--surface-card);
+    container-type: inline-size;
   }
 
   .tour-result__title {
@@ -29,8 +30,12 @@
     gap: var(--space-4);
   }
 
-  .tour-result__blocks--grid {
-    grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+  /* Two columns where the panel is wide enough for the code in them not to scroll sideways, and
+     one otherwise. The panel's width doesn't follow the screen's, so it's a container query. */
+  @container (min-width: 36rem) {
+    .tour-result__blocks--grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   /* A labelled value on a sunken box */

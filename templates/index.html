@@ -22,6 +22,8 @@
 
   {#- One resource, built up stage by stage: data/tour.toml #}
   {%- set tour = load_data(path="data/tour.toml") %}
+  {%- set prev_step = <ui.button variant="secondary" size="sm" icon="arrow-left" label="Previous step" data_tab_prev="" hidden="" /> %}
+  {%- set next_step = <ui.button text="Next" variant="secondary" size="sm" icon_right="arrow-right" label="Next step" data_tab_next="" hidden="" /> %}
   {% <ui.section title="Discover Ash Features" id="features" class="home-tour"> %}
     {% <ui.tabs variant="steps"> %}
       {%- for stage in tour.stages %}
@@ -33,15 +35,14 @@
             <span aria-hidden="true">{% if loop.index < 10 %}0{% endif %}{{ loop.index }} / {% if tour.stages | length < 10 %}0{% endif %}{{ tour.stages | length }}</span>
             <span class="visually-hidden">Step {{ loop.index }} of {{ tour.stages | length }}</span>
           </p>
-          <div class="home-tour__nav">
-            {{ <ui.button variant="secondary" size="sm" icon="arrow-left" label="Previous step" data_tab_prev="" hidden="" /> }}
-            {{ <ui.button text="Next" variant="secondary" size="sm" icon_right="arrow-right" label="Next step" data_tab_next="" hidden="" /> }}
-          </div>
+          <div class="home-tour__nav">{{ prev_step | safe }}{{ next_step | safe }}</div>
           <p class="home-tour__description">{{ stage.description }}</p>
           <div class="home-tour__pair pair">
             {{ <ui.code_block code={stage.code} filename={filename} line_numbers={true} highlight={stage.highlight} /> }}
             {{ <ui.tour_result panel={stage.panel} /> }}
           </div>
+          {#- Again under the step on small screens, so there's no scrolling back up to move on #}
+          <div class="home-tour__nav home-tour__nav--end only-mobile">{{ prev_step | safe }}{{ next_step | safe }}</div>
         {% </ui.tab_panel> %}
       {%- endfor %}
     {% </ui.tabs> %}

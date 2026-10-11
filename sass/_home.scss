@@ -49,6 +49,11 @@
     gap: var(--space-3);
   }
 
+  .home-tour__nav--end {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+
   /* Shown above the step's heading, but after it in the page, so the heading is read first */
   .home-tour__count {
     order: -1;

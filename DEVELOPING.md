@@ -112,7 +112,7 @@ Only some new-tab links show an arrow (`arrow-up-right`): where leaving the site
 
 | Component | Use it for |
 |---|---|
-| `ui.tabs` and `ui.tab_panel` | Tabbed panels: `underline` tabs, or `steps` (the feature tour). Without JavaScript the panels show in turn. The selected tab goes in the URL hash, cleared while the page is scrolled past the tabs, or back up nearer its top than theirs. |
+| `ui.tabs` and `ui.tab_panel` | Tabbed panels: `underline` tabs, or `steps` (the feature tour). Without JavaScript the panels show in turn. The selected tab goes in the URL hash, cleared while the page is scrolled past the tabs, or back up nearer its top than theirs. Picking a step whose panel's top is scrolled off scrolls back up to it. |
 | `ui.segmented` | A choice of a few options, as native radios (the installer's New Project or Existing App) |
 | `ui.option_chip` | Toggle buttons with tooltips (the installer's presets and features) |
 | `ui.input` | A text input with its label (`hide_label` keeps it for screen readers only) |

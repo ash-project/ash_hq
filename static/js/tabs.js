@@ -12,6 +12,8 @@
 // the page than to them, clears the hash, so a reload or a shared link doesn't jump back to them,
 // and scrolling back puts it back.
 
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+
 for (const container of document.querySelectorAll("[data-tabs]")) {
   const panels = [...container.querySelectorAll(":scope > .tabs__panel")];
   const vertical = container.dataset.tabsOrientation === "vertical";
@@ -41,7 +43,7 @@ for (const container of document.querySelectorAll("[data-tabs]")) {
 
   let current = 0;
 
-  const select = (index, { focus = false, updateUrl = true } = {}) => {
+  const select = (index, { focus = false, updateUrl = true, reveal = false } = {}) => {
     current = index;
     tabs.forEach((tab, i) => {
       const selected = i === index;
@@ -51,6 +53,14 @@ for (const container of document.querySelectorAll("[data-tabs]")) {
     });
     if (focus) tabs[index].focus();
     if (updateUrl) history.replaceState(history.state, "", `#${panels[index].id}`);
+
+    // A sticky list of steps stays in view beside a long panel, and buttons can be at its bottom,
+    // so the new panel's top can be scrolled off: scroll back up to it, clear of the header (the
+    // page's scroll-padding-top). Smoothly, unless the reader prefers reduced motion.
+    const clear = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    if (reveal && panels[index].getBoundingClientRect().top < clear) {
+      panels[index].scrollIntoView({ behavior: reduceMotion.matches ? "auto" : "smooth" });
+    }
   };
 
   // The tab named by the URL's hash, if any
@@ -58,7 +68,7 @@ for (const container of document.querySelectorAll("[data-tabs]")) {
 
   list.addEventListener("click", (event) => {
     const index = tabs.indexOf(event.target.closest("[role=tab]"));
-    if (index >= 0) select(index);
+    if (index >= 0) select(index, { reveal: true });
   });
 
   addEventListener("hashchange", () => {
@@ -81,23 +91,24 @@ for (const container of document.querySelectorAll("[data-tabs]")) {
 
     if (next !== undefined) {
       event.preventDefault();
-      select(next, { focus: true });
+      select(next, { focus: true, reveal: true });
     }
   });
 
-  // Previous and next buttons, disabled at the ends. Focus moves to the same button in the newly
-  // shown panel, as the one pressed is hidden with its panel, or to the panel at either end.
+  // Previous and next buttons, disabled at the ends; a panel can have them at its top and its
+  // bottom. Pressing one shows the new panel from its top, and moves focus to the first of the
+  // same button in it, as the one pressed is hidden with its panel, or to the panel at either end.
   panels.forEach((panel, i) => {
     for (const [selector, step] of [["[data-tab-prev]", -1], ["[data-tab-next]", 1]]) {
-      const button = panel.querySelector(selector);
-      if (!button) continue;
-      button.hidden = false;
-      button.disabled = !panels[i + step];
-      button.addEventListener("click", () => {
-        select(current + step);
-        const same = panels[current].querySelector(selector);
-        (same && !same.disabled ? same : panels[current]).focus();
-      });
+      for (const button of panel.querySelectorAll(selector)) {
+        button.hidden = false;
+        button.disabled = !panels[i + step];
+        button.addEventListener("click", () => {
+          select(current + step, { reveal: true });
+          const same = panels[current].querySelector(selector);
+          (same && !same.disabled ? same : panels[current]).focus({ preventScroll: true });
+        });
+      }
     }
   });
 
