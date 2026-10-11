@@ -25,9 +25,19 @@
   src: url("/fonts/cormorant-garamond-italic.woff2") format("woff2");
 }
 
+// Safari ignores this and prints in whatever orientation its print dialog is set to. (Turning the
+// certificate in an (orientation: portrait) print query doesn't work: Safari ignores the query,
+// and Firefox matches it on landscape pages.)
 @page {
   size: 11in 8.5in;
   margin: 0;
+}
+
+// Everything in the certificate is sized in hundredths of its width, --u. On screen that's 1cqw,
+// so it scales with the window; in print it's a fixed 0.11in, as Firefox clips text sized in
+// container units when it prints this page.
+@function u($n) {
+  @return calc(#{$n} * var(--u));
 }
 
 // The page around the certificate
@@ -43,13 +53,13 @@
   width: min(100%, 11in);
 }
 
-// Everything in the certificate is sized in cqw, so it scales with the page on screen and in print
 .certificate-sheet {
   width: min(100%, 11in);
   container-type: inline-size;
 }
 
 .certificate {
+  --u: 1cqw;
   --red: #ff5757;
   --orange: #ff914d;
   --yellow: #ffbd59;
@@ -73,25 +83,25 @@
   .shard {
     position: absolute;
 
-    &.tl-1 { top: 0; left: 0; width: 26cqw; height: 18cqw; background: var(--yellow); clip-path: polygon(0 0, 100% 0, 0 100%); }
-    &.tl-2 { top: 0; left: 0; width: 14cqw; height: 24cqw; background: var(--red); clip-path: polygon(0 0, 100% 0, 0 100%); opacity: 0.92; }
-    &.tl-3 { top: 0; left: 0; width: 9cqw; height: 9cqw; background: var(--orange); clip-path: polygon(0 0, 100% 0, 0 100%); }
-    &.br-1 { right: 0; bottom: 0; width: 26cqw; height: 18cqw; background: var(--orange); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
-    &.br-2 { right: 0; bottom: 0; width: 14cqw; height: 24cqw; background: var(--red); clip-path: polygon(100% 0, 100% 100%, 0 100%); opacity: 0.92; }
-    &.br-3 { right: 0; bottom: 0; width: 9cqw; height: 9cqw; background: var(--yellow); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+    &.tl-1 { top: 0; left: 0; width: u(26); height: u(18); background: var(--yellow); clip-path: polygon(0 0, 100% 0, 0 100%); }
+    &.tl-2 { top: 0; left: 0; width: u(14); height: u(24); background: var(--red); clip-path: polygon(0 0, 100% 0, 0 100%); opacity: 0.92; }
+    &.tl-3 { top: 0; left: 0; width: u(9); height: u(9); background: var(--orange); clip-path: polygon(0 0, 100% 0, 0 100%); }
+    &.br-1 { right: 0; bottom: 0; width: u(26); height: u(18); background: var(--orange); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+    &.br-2 { right: 0; bottom: 0; width: u(14); height: u(24); background: var(--red); clip-path: polygon(100% 0, 100% 100%, 0 100%); opacity: 0.92; }
+    &.br-3 { right: 0; bottom: 0; width: u(9); height: u(9); background: var(--yellow); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
   }
 
   .frame {
     position: absolute;
-    inset: 3.6cqw;
-    border: 0.3cqw solid var(--ink);
+    inset: u(3.6);
+    border: u(0.3) solid var(--ink);
     background: var(--paper);
 
     &::after {
       content: "";
       position: absolute;
-      inset: 0.7cqw;
-      border: 0.1cqw solid var(--orange);
+      inset: u(0.7);
+      border: u(0.1) solid var(--orange);
     }
   }
 
@@ -99,19 +109,19 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 44cqw;
+    width: u(44);
     transform: translate(-50%, -48%);
     opacity: 0.045;
   }
 
   .content {
     position: absolute;
-    inset: 3.6cqw;
+    inset: u(3.6);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 3cqw 8cqw;
+    padding: u(3) u(8);
     text-align: center;
   }
 
@@ -125,16 +135,16 @@
   }
 
   .title__main {
-    font-size: 6.4cqw;
+    font-size: u(6.4);
     font-weight: 800;
     line-height: 1;
     letter-spacing: 0.06em;
   }
 
   .title__sub {
-    margin-top: 1cqw;
+    margin-top: u(1);
     margin-right: -0.55em;
-    font-size: 2cqw;
+    font-size: u(2);
     font-weight: 500;
     line-height: normal;
     letter-spacing: 0.55em;
@@ -142,15 +152,15 @@
 
   .rule {
     display: flex;
-    gap: 1.2cqw;
+    gap: u(1.2);
     align-items: center;
-    margin-top: 2.4cqw;
+    margin-top: u(2.4);
 
     &::before,
     &::after {
       content: "";
-      width: 9cqw;
-      height: 0.12cqw;
+      width: u(9);
+      height: u(0.12);
       background: linear-gradient(90deg, transparent, var(--orange));
     }
 
@@ -159,47 +169,47 @@
     }
 
     span {
-      width: 0.9cqw;
-      height: 0.9cqw;
+      width: u(0.9);
+      height: u(0.9);
       background: var(--red);
       transform: rotate(45deg);
     }
   }
 
   .awarded {
-    margin-top: 2.4cqw;
+    margin-top: u(2.4);
     color: var(--muted);
-    font-size: 1.25cqw;
+    font-size: u(1.25);
     font-weight: 600;
     letter-spacing: 0.3em;
     text-transform: uppercase;
   }
 
   .name {
-    margin-top: 0.8cqw;
-    padding: 0 2cqw 0.6cqw;
-    border-bottom: 0.12cqw solid var(--ink);
+    margin-top: u(0.8);
+    padding: 0 u(2) u(0.6);
+    border-bottom: u(0.12) solid var(--ink);
     font-family: var(--serif);
-    font-size: 6.6cqw;
+    font-size: u(6.6);
     font-weight: 600;
     line-height: 1.1;
   }
 
   .recognition {
-    max-width: 62cqw;
-    margin-top: 1.8cqw;
+    max-width: u(62);
+    margin-top: u(1.8);
     font-family: var(--serif);
-    font-size: 1.85cqw;
+    font-size: u(1.85);
     font-style: italic;
     line-height: 1.35;
   }
 
   .reason {
-    max-width: 60cqw;
-    margin-top: 1.4cqw;
+    max-width: u(60);
+    margin-top: u(1.4);
     color: #44403c;
     font-family: var(--serif);
-    font-size: 1.6cqw;
+    font-size: u(1.6);
     line-height: 1.4;
 
     &::before {
@@ -216,10 +226,10 @@
   .footer {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    gap: 4cqw;
+    gap: u(4);
     align-items: center;
     width: 100%;
-    max-width: 66cqw;
+    max-width: u(66);
     margin-top: auto;
   }
 
@@ -229,19 +239,19 @@
     align-items: center;
 
     .value {
-      min-width: 18cqw;
-      padding-bottom: 0.3cqw;
-      border-bottom: 0.12cqw solid var(--ink);
+      min-width: u(18);
+      padding-bottom: u(0.3);
+      border-bottom: u(0.12) solid var(--ink);
       font-family: var(--serif);
-      font-size: 2.3cqw;
+      font-size: u(2.3);
       font-style: italic;
       font-weight: 500;
     }
 
     .label {
-      margin-top: 0.6cqw;
+      margin-top: u(0.6);
       color: var(--muted);
-      font-size: 1cqw;
+      font-size: u(1);
       font-weight: 600;
       letter-spacing: 0.2em;
       text-transform: uppercase;
@@ -249,7 +259,7 @@
   }
 
   .seal {
-    width: 11cqw;
+    width: u(11);
     height: auto;
   }
 }
@@ -299,6 +309,7 @@
   }
 
   .certificate {
+    --u: 0.11in;
     width: 11in;
     height: 8.5in;
     aspect-ratio: auto;
