@@ -38,7 +38,7 @@ The tests need Deno; the scripts in `scripts/` need `curl` and `jq`. Nothing nee
 | `icons/` | Lucide icons, inlined into pages by the `ui.icon` component |
 | `highlighting/` | The syntax highlighting theme and the `iex` grammar |
 | `netlify/` | Edge functions: the installer scripts and the old docs redirects |
-| `scripts/` | Fetching the contributors and YouTube videos (see [Fetched data](#fetched-data)), and building the docs redirect table |
+| `scripts/` | Fetching the contributors, and building the docs redirect table |
 | `tests/` | Deno tests for the edge functions and the installer's commands |
 
 The design comes from the "Ash HQ" project in Claude Design. Its tokens (colours, type, spacing) are in `sass/_tokens.scss`; its components were rebuilt here as Tera components and CSS.
@@ -220,7 +220,7 @@ The newest is featured on the Community page. For the certificate's link preview
 
 | To change | Edit |
 |---|---|
-| Media page articles, podcasts, the YouTube playlist | `data/media.toml` |
+| Media page articles, podcasts and videos (see [Videos](#videos)) | `data/media.toml` |
 | Ecosystem packages (the first eight are on the home page) | `data/ecosystem.toml` |
 | Customer logos | `data/logos.toml`, with the image in `static/images/` |
 | Community channels and core team | `data/community.toml` |
@@ -229,26 +229,9 @@ The newest is featured on the Community page. For the certificate's link preview
 | Installer presets and features | `data/installer.toml`. Features are listed in install order. Run the tests afterwards: they check the generated commands. |
 | Book errata | `content/book-errata.md` |
 
-### Fetched data
+### Videos
 
-Two lists are fetched at build time, by `scripts/fetch-data.sh`, rather than kept in the repo. Both are optional: if a fetch fails, the build carries on, and the page falls back.
-
-| Data | Script | Needs | Without it |
-|---|---|---|---|
-| Contributors, for the Community page | `fetch-contributors.sh` → `data/contributors.json` | `GITHUB_TOKEN` (optional, raises GitHub's rate limit) | No avatar wall |
-| Videos in the YouTube playlist, for the Media page | `fetch-videos.sh` → `data/videos.json` | `YOUTUBE_API_KEY` | The playlist is embedded instead |
-
-The videos are the playlist's, newest first by upload date: to add one to the site, add it to the playlist (set in `data/media.toml`), and it appears after the next build.
-
-To create a YouTube API key:
-
-1. In the [Google Cloud console](https://console.cloud.google.com/), create a project (or pick the Ash one).
-2. Under **APIs & Services → Library**, enable the **YouTube Data API v3**.
-3. Under **APIs & Services → Credentials**, choose **Create credentials → API key**.
-4. Edit the key: under **API restrictions**, restrict it to the YouTube Data API v3. It only reads public data, but restricting it means a leaked key can't be used for anything else.
-5. Add it as `YOUTUBE_API_KEY` in the host's environment variables, and in your shell to fetch locally.
-
-Each fetch uses one unit of the key's free quota of 10,000 a day, for every 50 videos.
+The Media page lists a selection of the videos in the YouTube playlist, from `videos` in `data/media.toml`. To add one, give its title as published, its ID (from `youtube.com/watch?v=<id>`) and the day it was uploaded. The page sorts them newest first and takes each thumbnail from YouTube by the ID.
 
 ### Syntax highlighting
 
@@ -281,15 +264,15 @@ The site isn't live yet. Netlify builds and deploys it from the repo:
 
 - **Pushes to `main`** deploy to production.
 - **Pull requests** get a deploy preview, reported on the pull request as a check. A failed build never publishes: the live site stays as it was.
-- **Every six hours**, `.github/workflows/scheduled-rebuild.yml` calls a Netlify build hook, so the contributors, videos and event bar stay current.
+- **Every six hours**, `.github/workflows/scheduled-rebuild.yml` calls a Netlify build hook, so the contributors and event bar stay current.
 - **Pushes to `main` and pull requests** also run `.github/workflows/test.yml`: the Deno tests, and `zola check` for broken internal links, which Netlify's build doesn't check.
 
-`netlify.toml` has the build settings: Netlify fetches the contributors and videos, then builds with Zola, for each deploy's own URL (`DEPLOY_PRIME_URL`), so links on previews stay on them.
+`netlify.toml` has the build settings: Netlify fetches the contributors, then builds with Zola, for each deploy's own URL (`DEPLOY_PRIME_URL`), so links on previews stay on them.
 
 ### Setting it up
 
 1. In Netlify, add a site by importing the `ash-project/ash_hq` repository from GitHub, with `main` as the production branch. The build settings come from `netlify.toml`.
-2. In the site's environment variables, set `YOUTUBE_API_KEY` (see [Fetched data](#fetched-data)) and `GITHUB_TOKEN`: a fine-grained GitHub token with read-only access to public repositories, which raises GitHub's rate limit for the contributor fetch. Tokens expire, so note when it needs replacing.
+2. In the site's environment variables, set `GITHUB_TOKEN`: a fine-grained GitHub token with read-only access to public repositories, which raises GitHub's rate limit for the contributor fetch. Tokens expire, so note when it needs replacing.
 3. Under **Build & deploy → Build hooks**, add a hook for `main`. In the GitHub repository's **Settings → Secrets and variables → Actions**, add its URL as the `NETLIFY_BUILD_HOOK` secret. Anyone with the URL can trigger builds, so keep it secret.
 4. Run **Scheduled rebuild** from the repository's Actions tab, to check the hook works.
 

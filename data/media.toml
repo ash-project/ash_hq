@@ -1,6 +1,7 @@
 # The Media page: case studies, posts, videos and podcasts about Ash
 
-# The YouTube playlist of Ash talks and videos
+# The YouTube playlist of Ash talks and videos. Links to the videos below open them in it, so
+# YouTube plays the rest of the playlist after.
 youtube_playlist = "PLFiGINXG7oyFh5B_2SiHI9LtdQ_f1k7pz"
 
 # Case studies and articles, most of them on alembic.com.au. `kind` is "Case study" (highlighted),
@@ -96,3 +97,63 @@ url = "https://podcasts.apple.com/us/podcast/123-ash-framework-models-resources/
 show = "Thinking Elixir Podcast"
 title = "27: Ash Framework with Zach Daniel"
 url = "https://podcasts.apple.com/us/podcast/27-ash-framework-with-zach-daniel/id1516100616?i=1000503190100"
+
+# A selection of the videos in the YouTube playlist, newest first, with their titles as published
+# on YouTube.
+#
+# id:        the video's ID, from its URL (youtube.com/watch?v=<id>). The thumbnail comes from it.
+# published: the day it was uploaded, as YYYY-MM-DD. The page sorts by it.
+[[videos]]
+title = "Keynote: Adoption of Ash in a Mature & Complex Codebase - Alykhan Jetha (AJ) | AshConf 2026"
+id = "HNEDyKY1Gcs"
+published = 2026-10-09
+
+[[videos]]
+title = "A Complete AI Toolkit: Ash AI Demo"
+id = "4dzZ44-xVds"
+published = 2025-06-11
+
+[[videos]]
+title = "Ash AI Launch - Zach Daniel | ElixirConf EU 2025"
+id = "PSrzruaby1M"
+published = 2025-06-09
+
+[[videos]]
+title = "The Power of Declarative Design"
+id = "aknKAFzEsBg"
+published = 2025-06-03
+
+[[videos]]
+title = "Migrating to Elixir made easy with Ash by Barnabas Jovanovics | ElixirConf EU 2024"
+id = "gZmNpatgMjw"
+published = 2025-01-12
+
+[[videos]]
+title = "Ash: The Story of a Function by Zach Daniel | ElixirConf EU 2024"
+id = "vjnPjrCF4rs"
+published = 2024-11-28
+
+[[videos]]
+title = "Zach Daniel, Creator of Ash Framework, The Story of a Function"
+id = "xNqbKtw6oJE"
+published = 2023-10-04
+
+[[videos]]
+title = "ElixirConf 2023 - Zach Daniel - Ash 3 0  Better Together"
+id = "c4iou77kOFc"
+published = 2023-09-20
+
+[[videos]]
+title = "Jax Ex: Model Your Domain, Derive the Rest"
+id = "7P_crH_M_AE"
+published = 2023-04-18
+
+[[videos]]
+title = "Why I built Ash Authentication - James Harton"
+id = "QkKY0YJcRDg"
+published = 2023-03-16
+
+[[videos]]
+title = "Generate a GraphQL from your application for great good - Zach Daniel"
+id = "vHyxX2zkUOY"
+published = 2022-09-15
