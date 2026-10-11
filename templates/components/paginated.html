@@ -11,7 +11,7 @@
   label:     names the pagination for screen readers
   previous, next: the step buttons' text. Newer and Older suit lists sorted newest first.
 #}
-{% component ui.paginated(items: integer, page_size: integer, label: string, previous: string = "Newer", next: string = "Older") %}
+{% component ui.paginated(items: integer, page_size: integer, label: string, previous: string = "Previous", next: string = "Next") %}
   <div class="paginated" data-paginate data-page-size="{{ page_size }}">
     {{ body }}
     {%- if items > page_size %}
