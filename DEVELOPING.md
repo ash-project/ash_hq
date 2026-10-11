@@ -262,11 +262,12 @@ Zola 0.23 uses Tera 2, which differs from Tera 1 and from most examples online. 
 
 ## Deploying
 
-The site isn't live yet. Netlify builds and deploys it from the repo:
+Netlify builds and deploys the site from the repo:
 
 - **Pushes to `main`** deploy to production.
 - **Pull requests** get a deploy preview, reported on the pull request as a check. A failed build never publishes: the live site stays as it was.
-- **Every six hours**, `.github/workflows/scheduled-rebuild.yml` calls a Netlify build hook, so the contributors and event bar stay current.
+- **On Mondays, and the day after an event ends**, `.github/workflows/scheduled-rebuild.yml` calls a Netlify build hook, so the contributors and the events stay current. It checks daily, but only rebuilds then, as each production deploy costs Netlify credits.
+- **Commits that only change CI, tests or docs** (`.github/`, `tests/`, `DEVELOPING.md`, `README.md`, `LICENSE.md`) don't deploy: `ignore` in `netlify.toml` skips them.
 - **Pushes to `main` and pull requests** also run `.github/workflows/test.yml`: the Deno tests, and `zola check` for broken internal links, which Netlify's build doesn't check.
 
 `netlify.toml` has the build settings: Netlify fetches the contributors, then builds with Zola, for each deploy's own URL (`DEPLOY_PRIME_URL`), so links on previews stay on them.

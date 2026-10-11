@@ -1,5 +1,9 @@
-# Rebuilds the site every six hours, so the contributors and the event bar stay current, by calling
-# a Netlify build hook. Run it by hand from the Actions tab to rebuild now.
+# Rebuilds the site when the build would change it without a commit, by calling a Netlify build
+# hook. Each production deploy costs Netlify credits, so it checks daily but only rebuilds:
+# - on Mondays, so the contributors stay current
+# - the day after an event's last day, so it drops off the event bar and the Community page
+#   (base.html leaves out events from midnight UTC after their last day)
+# Run it by hand from the Actions tab to rebuild now.
 #
 # Needs the NETLIFY_BUILD_HOOK secret: the hook's URL, from Netlify's site configuration under
 # Build & deploy → Build hooks. Anyone with the URL can trigger builds, so keep it secret.
@@ -11,10 +15,11 @@ name: Scheduled rebuild
 
 on:
   schedule:
-    - cron: "17 */6 * * *"
+    - cron: "37 0 * * *"
   workflow_dispatch:
 
-permissions: {}
+permissions:
+  contents: read
 
 jobs:
   rebuild:
@@ -22,7 +27,36 @@ jobs:
     if: github.repository == 'ash-project/ash_hq'
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Decide whether to rebuild
+        id: check
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          python3 - <<'EOF' >> "$GITHUB_OUTPUT"
+          import datetime, os, sys, tomllib
+
+          today = datetime.datetime.now(datetime.timezone.utc).date()
+          yesterday = today - datetime.timedelta(days=1)
+          events = tomllib.load(open("data/events.toml", "rb"))["events"]
+          ended = [e["title"] for e in events if e.get("end_date", e["date"]) == yesterday]
+
+          if os.environ["EVENT_NAME"] == "workflow_dispatch":
+              reason = "run by hand"
+          elif today.weekday() == 0:
+              reason = "weekly contributors refresh"
+          elif ended:
+              reason = "ended yesterday: " + ", ".join(ended)
+          else:
+              reason = ""
+
+          print(reason or "Nothing to rebuild for", file=sys.stderr)
+          print(f"rebuild={'true' if reason else 'false'}")
+          EOF
+
       - name: Call the build hook
+        if: steps.check.outputs.rebuild == 'true'
         env:
           NETLIFY_BUILD_HOOK: ${{ secrets.NETLIFY_BUILD_HOOK }}
         run: |

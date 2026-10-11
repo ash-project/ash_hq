@@ -8,10 +8,15 @@
 # The contributors are optional: without them, the Community page leaves out its avatar wall. Set
 # GITHUB_TOKEN in the site's environment variables to avoid GitHub's rate limit for anonymous
 # requests, which Netlify's shared build servers can hit.
+#
+# Each production deploy costs Netlify credits, so `ignore` skips builds for commits that only
+# change files the site isn't built from (CI, tests and docs). Rebuilding the same commit, as
+# retries and build hooks do, always builds.
 
 [build]
 command = "(sh scripts/fetch-contributors.sh || echo 'Skipping contributors') && zola build --base-url \"${ZOLA_BASE_URL:-${URL:-https://ash-hq.org}}\""
 publish = "public"
+ignore = '[ "$CACHED_COMMIT_REF" != "$COMMIT_REF" ] && git diff --quiet "$CACHED_COMMIT_REF" "$COMMIT_REF" -- . ":!.github" ":!tests" ":!DEVELOPING.md" ":!README.md" ":!LICENSE.md" || exit 1'
 
 [context.deploy-preview]
 command = "(sh scripts/fetch-contributors.sh || echo 'Skipping contributors') && zola build --base-url \"${ZOLA_BASE_URL:-${DEPLOY_PRIME_URL:-https://ash-hq.org}}\""
