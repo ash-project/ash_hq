@@ -137,6 +137,8 @@ if (root) {
     await navigator.clipboard.writeText(commandEl.textContent);
     copyLabel.textContent = "Copied";
     status.textContent = "Copied the install command to the clipboard";
+    // A Plausible event, on the live site only (see base.html)
+    window.plausible?.("Install");
   });
 
   // Tooltips close with Escape, and stay closed until the pointer or focus leaves
