@@ -1,0 +1,38 @@
+{#
+  A long list, split into pages by static/js/paginate.js. Without the script, the whole list shows
+  and the pagination stays hidden. Wrap the list (a <ul>) in it:
+
+    {% <ui.paginated items={videos | length} page_size={12} label="Pages of videos"> %}
+      <ul class="cards grid">…</ul>
+    {% </ui.paginated> %}
+
+  items:     how many items the list has
+  page_size: items to a page. 12 fills grids of 2, 3 or 4 columns evenly.
+  label:     names the pagination for screen readers
+  previous, next: the step buttons' text. Newer and Older suit lists sorted newest first.
+#}
+{% component ui.paginated(items: integer, page_size: integer, label: string, previous: string = "Newer", next: string = "Older") %}
+  <div class="paginated" data-paginate data-page-size="{{ page_size }}">
+    {{ body }}
+    {%- if items > page_size %}
+      {%- set pages = range(end=items, step_by=page_size) | length %}
+      <nav class="pagination" aria-label="{{ label }}" data-pagination hidden>
+        {{ <ui.button text={previous} variant="secondary" icon="arrow-left" data_page_previous="" /> }}
+        {#- Every page's button. The script hides all but the first, last and those around the
+            current page, and shows a gap where it skips some. #}
+        <ol class="pagination__pages hide-mobile">
+          {%- for page in range(start=1, end=pages + 1) %}
+            <li><button class="pagination__page" type="button" data-page="{{ page }}"><span class="visually-hidden">Page </span>{{ page }}</button></li>
+            {%- if page == 1 or page == pages - 1 %}
+              <li class="pagination__gap" aria-hidden="true" data-page-gap hidden>…</li>
+            {%- endif %}
+          {%- endfor %}
+        </ol>
+        <p class="pagination__count only-mobile" data-page-count></p>
+        {{ <ui.button text={next} variant="secondary" icon_right="arrow-right" data_page_next="" /> }}
+        {#- Announces the page after each change #}
+        <p class="visually-hidden" role="status" data-page-status></p>
+      </nav>
+    {%- endif %}
+  </div>
+{%- endcomponent ui.paginated %}

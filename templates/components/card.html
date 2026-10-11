@@ -10,15 +10,20 @@
   title:   the card's name. With `href`, it's the link, and the whole card is clickable.
   heading: the title's heading element
   icon:    an icon name, shown in orange before the title
+  image:   an image URL, shown above everything else at 16:9, such as a video's thumbnail. It's
+           decorative: the title says what it shows.
   eyebrow: HTML above the title, such as a badge
   text:    a short description
   cta:     link text shown at the bottom, instead of the arrow beside the title
   compact: a smaller card with a monospaced title, for packages
   new_tab: opens the link in a new tab, and tells screen reader users it will
 #}
-{% component ui.card(title: string, href: string = "", heading: string = "h3", icon: string = "", eyebrow: string = "", text: string = "", cta: string = "", compact: bool = false, new_tab: bool = false) %}
+{% component ui.card(title: string, href: string = "", heading: string = "h3", icon: string = "", image: string = "", eyebrow: string = "", text: string = "", cta: string = "", compact: bool = false, new_tab: bool = false) %}
   {%- set external = href is starting_with(pat="http") -%}
   <li class="card{% if href %} card--link{% endif %}{% if compact %} card--compact{% endif %}">
+    {%- if image %}
+      <img class="card__image" src="{{ image }}" alt="" loading="lazy" />
+    {%- endif %}
     {%- if eyebrow %}
       <div class="card__eyebrow">{{ eyebrow | safe }}</div>
     {%- endif %}

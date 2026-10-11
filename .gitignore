@@ -1,8 +1,9 @@
 # Zola build output
 /public/
 
-# Generated at build time by scripts/fetch-contributors.sh
+# Generated at build time by scripts/fetch-contributors.sh and scripts/fetch-videos.sh
 /data/contributors.json
+/data/videos.json
 
 # Netlify
 /.netlify/

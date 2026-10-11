@@ -1,0 +1,70 @@
+/* Pagination (templates/components/paginated.html, static/js/paginate.js): previous and next at
+   either end, the pages between them, and on small screens "Page 2 of 5" instead */
+@layer components {
+  .paginated {
+    display: grid;
+    gap: var(--space-9);
+  }
+
+  .pagination {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--border-subtle);
+
+    [aria-disabled="true"] {
+      opacity: 0.5;
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  .pagination__pages {
+    display: flex;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pagination__page,
+  .pagination__gap {
+    display: inline-grid;
+    place-items: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 10px;
+    font: var(--fw-medium) var(--fs-small) / 1 var(--font-sans);
+  }
+
+  .pagination__page {
+    border: 1px solid var(--border-default);
+    background: transparent;
+    color: var(--text-body);
+    cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+
+    &:hover {
+      border-color: var(--border-strong);
+      color: var(--text-strong);
+    }
+
+    /* The current page: an orange border and wash, not just brighter text */
+    &[aria-current="page"] {
+      border-color: var(--accent);
+      background: var(--accent-wash);
+      color: var(--text-strong);
+    }
+  }
+
+  .pagination__gap {
+    color: var(--text-faint);
+  }
+
+  .pagination__count {
+    color: var(--text-muted);
+    font: var(--type-small);
+  }
+}

@@ -97,6 +97,23 @@ end" filename="lib/my_app/blog/post.ex" line_numbers={true} highlight="3-5" /> }
     </div>
   {% </ui.section> %}
 
+  {% <ui.section title="Cards and Pagination" description="Enough cards for ten pages, to show the gaps in the page numbers."> %}
+    <div class="styleguide">
+      <ul class="cards grid">
+        {{ <ui.card title="A card with an icon" href="#cards-and-pagination" icon="book-open" text="And a short description." cta="Read more" /> }}
+        {{ <ui.card title="A card with an image" href="#cards-and-pagination" image="https://i.ytimg.com/vi/4dzZ44-xVds/hqdefault.jpg" text="A video's thumbnail, cropped to 16:9." /> }}
+        {{ <ui.card title="A card without a link" text="It doesn't react to hover." /> }}
+      </ul>
+      {% <ui.paginated items={120} page_size={12} label="Pages of examples"> %}
+        <ul class="cards cards--compact grid">
+          {%- for i in range(start=1, end=121) %}
+            {{ <ui.card title={"Item " ~ i} href="#cards-and-pagination" compact={true} /> }}
+          {%- endfor %}
+        </ul>
+      {% </ui.paginated> %}
+    </div>
+  {% </ui.section> %}
+
   {% <ui.section title="A Band Section" variant="band" layout="split" eyebrow="Proud Partner" description="A full-bleed subtle surface, for a spotlight. At most two per page, never adjacent."> %}
     <p>Band content.</p>
   {% </ui.section> %}
@@ -109,4 +126,8 @@ end" filename="lib/my_app/blog/post.ex" line_numbers={true} highlight="3-5" /> }
   {% <ui.section title="A Plain Section After an Accent"> %}
     <p>No divider: only consecutive plain sections get one.</p>
   {% </ui.section> %}
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{{ get_url(path='js/paginate.js', cachebust=true) }}"></script>
 {% endblock %}

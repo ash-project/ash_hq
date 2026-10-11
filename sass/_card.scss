@@ -43,6 +43,17 @@
     transition: color var(--dur-fast) var(--ease-out);
   }
 
+  /* Framed like an embedded video. YouTube's thumbnails are 4:3 with black bars, so they're
+     cropped to 16:9. */
+  .card__image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin-bottom: var(--space-2);
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-sunken);
+    object-fit: cover;
+  }
+
   .card__icon {
     display: flex;
     color: var(--accent);

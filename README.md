@@ -13,10 +13,10 @@ zola serve --drafts --extra-watch-path data --extra-watch-path highlighting   # 
 deno test --allow-read tests/   # the installer scripts, install commands and docs redirects
 ```
 
-Optionally, fetch the contributors shown on the Community page (needs `curl` and `jq`):
+Optionally, fetch the contributors shown on the Community page and the videos on the Media page (needs `curl` and `jq`; the videos need a YouTube API key, see [DEVELOPING.md](DEVELOPING.md#fetched-data)):
 
 ```sh
-scripts/fetch-contributors.sh
+sh scripts/fetch-data.sh
 ```
 
 ## Working on it

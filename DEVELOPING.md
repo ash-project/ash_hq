@@ -38,7 +38,7 @@ The tests need Deno; the scripts in `scripts/` need `curl` and `jq`. Nothing nee
 | `icons/` | Lucide icons, inlined into pages by the `ui.icon` component |
 | `highlighting/` | The syntax highlighting theme and the `iex` grammar |
 | `netlify/` | Edge functions: the installer scripts and the old docs redirects |
-| `scripts/` | Fetching the contributors, and building the docs redirect table |
+| `scripts/` | Fetching the contributors and YouTube videos (see [Fetched data](#fetched-data)), and building the docs redirect table |
 | `tests/` | Deno tests for the edge functions and the installer's commands |
 
 The design comes from the "Ash HQ" project in Claude Design. Its tokens (colours, type, spacing) are in `sass/_tokens.scss`; its components were rebuilt here as Tera components and CSS.
@@ -75,9 +75,10 @@ Components are in `templates/components/`, one per file, each documented at the 
 | Component | Use it for |
 |---|---|
 | `ui.list_row` | Things over time or in sequence: posts, events, podcasts, contributors. Goes in a `<ul class="list-rows">`. A `lead` (a date or avatar) stays beside the content on small screens. |
-| `ui.card` | A set to browse: articles, channels, packages (`compact`). Goes in a `<ul class="cards grid">`. |
+| `ui.card` | A set to browse: articles, channels, packages (`compact`), videos (with an `image`, the thumbnail). Goes in a `<ul class="cards grid">`. |
 | `ui.person` | People, linking to their GitHub profile. Goes in a `<ul class="people grid">`. |
 | `ui.contributor_of_the_month` | A contributor of the month, as a list row linking to their certificate |
+| `ui.paginated` | Wraps a long list to split it into pages (the Media page's videos). Without JavaScript the whole list shows. |
 
 Linked rows, cards and person tiles are clickable as a whole, but only their title is the link (`.stretched-link`), so screen readers announce a short link name.
 
@@ -99,7 +100,7 @@ Links that open in a new tab (`new_tab` on Button, Card and ListRow) tell screen
 | `ui.figure` | An image in an article that's linked, captioned or `small` (covers, logos) |
 | `ui.code_block` | Highlighted code from a template, with a filename, line numbers and highlighted lines |
 | `ui.terminal` | A shell command |
-| `ui.video` | A YouTube video or playlist, from youtube-nocookie.com |
+| `ui.video` | A YouTube video or playlist to watch on the page, from youtube-nocookie.com. For several videos, use cards linking to YouTube instead: each embed loads YouTube's player. |
 | `ui.badge`, `ui.eyebrow` | Tags and types (`badge`); dates, months and other metadata labels (`eyebrow`) |
 | `ui.date_badge` | A date as a small calendar page, for events and posts |
 | `ui.avatar`, `ui.author_avatars` | Avatars from GitHub, in sizes `xs` to `xl`; blog authors' avatars from `extra.authors` in `zola.toml` |
@@ -151,6 +152,7 @@ Small modules in `static/js/`, loaded only by the pages that need them, with no 
 | `site-header.js` | The mobile menu toggle |
 | `tabs.js` | Tabs and the feature tour's steps |
 | `filter-list.js` | Filtering a list as you type (the Ecosystem page) |
+| `paginate.js` | Splitting a list into pages (`ui.paginated`) |
 | `installer.js` | The Installer page's options, using `installer-command.js` to build the command |
 
 Pages must work without JavaScript: anything a script adds is hidden until the script runs (the `hidden` attribute, removed by the script), and content is always in the HTML.
@@ -227,6 +229,27 @@ The newest is featured on the Community page. For the certificate's link preview
 | Installer presets and features | `data/installer.toml`. Features are listed in install order. Run the tests afterwards: they check the generated commands. |
 | Book errata | `content/book-errata.md` |
 
+### Fetched data
+
+Two lists are fetched at build time, by `scripts/fetch-data.sh`, rather than kept in the repo. Both are optional: if a fetch fails, the build carries on, and the page falls back.
+
+| Data | Script | Needs | Without it |
+|---|---|---|---|
+| Contributors, for the Community page | `fetch-contributors.sh` → `data/contributors.json` | `GITHUB_TOKEN` (optional, raises GitHub's rate limit) | No avatar wall |
+| Videos in the YouTube playlist, for the Media page | `fetch-videos.sh` → `data/videos.json` | `YOUTUBE_API_KEY` | The playlist is embedded instead |
+
+The videos are the playlist's, newest first by upload date: to add one to the site, add it to the playlist (set in `data/media.toml`), and it appears after the next build.
+
+To create a YouTube API key:
+
+1. In the [Google Cloud console](https://console.cloud.google.com/), create a project (or pick the Ash one).
+2. Under **APIs & Services → Library**, enable the **YouTube Data API v3**.
+3. Under **APIs & Services → Credentials**, choose **Create credentials → API key**.
+4. Edit the key: under **API restrictions**, restrict it to the YouTube Data API v3. It only reads public data, but restricting it means a leaked key can't be used for anything else.
+5. Add it as `YOUTUBE_API_KEY` in the host's environment variables, and in your shell to fetch locally.
+
+Each fetch uses one unit of the key's free quota of 10,000 a day, for every 50 videos.
+
 ### Syntax highlighting
 
 Code is highlighted by Zola, using the theme in `highlighting/ash.json`, written as classes into a generated `/giallo.css`. The theme takes hex colours only, so it duplicates the `--syn-*` tokens in `_tokens.scss`: change both together. Fence IEx sessions as ` ```iex ` to mute the prompt (`highlighting/iex.json`). With `--extra-watch-path highlighting`, `zola serve` picks up changes to either.
@@ -254,7 +277,7 @@ Zola 0.23 uses Tera 2, which differs from Tera 1 and from most examples online. 
 
 ## Deploying
 
-The site isn't live yet. `netlify.toml` has the build settings: Netlify fetches the contributors, then builds with Zola, for each deploy's own URL (`DEPLOY_PRIME_URL`), so links on test deploys stay on them. Set `GITHUB_TOKEN` in the site's environment variables, as Netlify's shared build servers can hit GitHub's limit for anonymous requests.
+The site isn't live yet. `netlify.toml` has the build settings: Netlify fetches the contributors and videos, then builds with Zola, for each deploy's own URL (`DEPLOY_PRIME_URL`), so links on test deploys stay on them. Set `GITHUB_TOKEN` and `YOUTUBE_API_KEY` in the site's environment variables (see [Fetched data](#fetched-data)).
 
 To deploy by hand, use the Netlify CLI from the repo root, with `--build`. That runs the build command from `netlify.toml` and bundles the edge functions; without it, the CLI only uploads `public/` as it is, with no edge functions.
 
@@ -273,4 +296,4 @@ Only use root-relative URLs (`/`) for drafts: canonical links, link previews and
 
 Uploading `public/` some other way skips the edge functions, and after only `zola serve`, `public/` holds just the static files: `zola serve` serves pages from memory.
 
-Still to come: a scheduled rebuild every six hours, to keep the contributors and events current, and a CI workflow running the tests.
+Still to come: a scheduled rebuild every six hours, to keep the contributors, videos and events current, and a CI workflow running the tests.
