@@ -1,0 +1,33 @@
+# Rebuilds the site every six hours, so the contributors, the YouTube videos and the event bar stay
+# current, by calling a Netlify build hook. Run it by hand from the Actions tab to rebuild now.
+#
+# Needs the NETLIFY_BUILD_HOOK secret: the hook's URL, from Netlify's site configuration under
+# Build & deploy → Build hooks. Anyone with the URL can trigger builds, so keep it secret.
+#
+# GitHub only runs schedules on the default branch, and pauses them after 60 days without any
+# activity in the repository; re-enable it from the Actions tab if that happens.
+
+name: Scheduled rebuild
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  rebuild:
+    # Not in forks, which won't have the hook
+    if: github.repository == 'ash-project/ash_hq'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call the build hook
+        env:
+          NETLIFY_BUILD_HOOK: ${{ secrets.NETLIFY_BUILD_HOOK }}
+        run: |
+          if [ -z "$NETLIFY_BUILD_HOOK" ]; then
+            echo "::error::The NETLIFY_BUILD_HOOK secret isn't set"
+            exit 1
+          fi
+          curl -fsS -X POST -d '{}' "$NETLIFY_BUILD_HOOK"

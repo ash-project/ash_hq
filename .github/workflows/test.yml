@@ -1,0 +1,52 @@
+# Builds the site, checks its internal links, and runs the Deno tests (the edge functions and the
+# installer's commands). Netlify builds and deploys the site itself; this catches what its build
+# doesn't.
+#
+# Actions are pinned to commits and Zola to a checksum, so a moved tag or a replaced download
+# can't change what runs. To upgrade, take the commit for a release tag (`git ls-remote --tags
+# <repo>`) and the release's SHA-256 digest from its GitHub page.
+
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Keep in step with ZOLA_VERSION in netlify.toml
+  ZOLA_VERSION: "0.23.6"
+  ZOLA_SHA256: "8f5132b3522412d04e395e0b25f6d68613ad272a873e54a2b3ebf664873024a4"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install Zola
+        run: |
+          archive="zola-v$ZOLA_VERSION-x86_64-unknown-linux-gnu.tar.gz"
+          curl -fsSL -o "$RUNNER_TEMP/$archive" "https://github.com/getzola/zola/releases/download/v$ZOLA_VERSION/$archive"
+          echo "$ZOLA_SHA256  $RUNNER_TEMP/$archive" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/bin"
+          tar -xzf "$RUNNER_TEMP/$archive" -C "$RUNNER_TEMP/bin"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+      - uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.5
+        with:
+          deno-version: "2.6.4"
+
+      - name: Build and check internal links
+        run: zola check --drafts --skip-external-links
+
+      - name: Run the tests
+        run: deno test --allow-read tests/

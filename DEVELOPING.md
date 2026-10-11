@@ -277,7 +277,27 @@ Zola 0.23 uses Tera 2, which differs from Tera 1 and from most examples online. 
 
 ## Deploying
 
-The site isn't live yet. `netlify.toml` has the build settings: Netlify fetches the contributors and videos, then builds with Zola, for each deploy's own URL (`DEPLOY_PRIME_URL`), so links on test deploys stay on them. Set `GITHUB_TOKEN` and `YOUTUBE_API_KEY` in the site's environment variables (see [Fetched data](#fetched-data)).
+The site isn't live yet. Netlify builds and deploys it from the repo:
+
+- **Pushes to `main`** deploy to production.
+- **Pull requests** get a deploy preview, reported on the pull request as a check. A failed build never publishes: the live site stays as it was.
+- **Every six hours**, `.github/workflows/scheduled-rebuild.yml` calls a Netlify build hook, so the contributors, videos and event bar stay current.
+- **Pushes to `main` and pull requests** also run `.github/workflows/test.yml`: the Deno tests, and `zola check` for broken internal links, which Netlify's build doesn't check.
+
+`netlify.toml` has the build settings: Netlify fetches the contributors and videos, then builds with Zola, for each deploy's own URL (`DEPLOY_PRIME_URL`), so links on previews stay on them.
+
+### Setting it up
+
+1. In Netlify, add a site by importing the `ash-project/ash_hq` repository from GitHub, with `main` as the production branch. The build settings come from `netlify.toml`.
+2. In the site's environment variables, set `YOUTUBE_API_KEY` (see [Fetched data](#fetched-data)) and `GITHUB_TOKEN`: a fine-grained GitHub token with read-only access to public repositories, which raises GitHub's rate limit for the contributor fetch. Tokens expire, so note when it needs replacing.
+3. Under **Build & deploy → Build hooks**, add a hook for `main`. In the GitHub repository's **Settings → Secrets and variables → Actions**, add its URL as the `NETLIFY_BUILD_HOOK` secret. Anyone with the URL can trigger builds, so keep it secret.
+4. Run **Scheduled rebuild** from the repository's Actions tab, to check the hook works.
+
+GitHub only runs schedules on the default branch, and pauses them after 60 days without activity in the repository. If the contributors stop updating, check the Actions tab.
+
+The workflows pin their actions to commits, and Zola to a checksum; the comments in `test.yml` say how to upgrade them. Keep the Zola version in `test.yml` in step with `ZOLA_VERSION` in `netlify.toml`.
+
+### Deploying by hand
 
 To deploy by hand, use the Netlify CLI from the repo root, with `--build`. That runs the build command from `netlify.toml` and bundles the edge functions; without it, the CLI only uploads `public/` as it is, with no edge functions.
 
@@ -295,5 +315,3 @@ ZOLA_BASE_URL=/ netlify deploy --build
 Only use root-relative URLs (`/`) for drafts: canonical links, link previews and the feed need absolute URLs.
 
 Uploading `public/` some other way skips the edge functions, and after only `zola serve`, `public/` holds just the static files: `zola serve` serves pages from memory.
-
-Still to come: a scheduled rebuild every six hours, to keep the contributors, videos and events current, and a CI workflow running the tests.
