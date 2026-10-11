@@ -9,11 +9,12 @@
   icon, icon_right: icon names, shown before and after the text
   label:    the accessible name, required when the button shows only an icon
   disabled: for buttons only; links can't be disabled
-  new_tab:  for links: opens in a new tab, and tells screen reader users it will
+  Links off the site open in a new tab, and tell screen reader users they will.
   Any other argument becomes an attribute, with _ in its name turned into -.
 #}
-{% component ui.button(text: string = "", href: string = "", variant: string = "primary", size: string = "md", icon: string = "", icon_right: string = "", label: string = "", full: bool = false, disabled: bool = false, new_tab: bool = false, ...attrs) %}
+{% component ui.button(text: string = "", href: string = "", variant: string = "primary", size: string = "md", icon: string = "", icon_right: string = "", label: string = "", full: bool = false, disabled: bool = false, ...attrs) %}
   {%- set class = "button button--" ~ variant ~ " button--" ~ size -%}
+  {%- set new_tab = href and <ui.is_external href={href} /> -%}
   {%- if full %}{% set class = class ~ " button--full" %}{% endif -%}
   {%- if href %}{% set tag = "a" %}{% else %}{% set tag = "button" %}{% endif -%}
   <{{ tag }} class="{{ class }}"

@@ -72,9 +72,20 @@
     }
   }
 
-  /* Arrows only show in the stacked mobile menu */
+  /* Arrows only show in the stacked mobile menu, apart from the one marking a link off the site,
+     which opens in a new tab */
   .site-nav__arrow {
     display: none;
+  }
+
+  .site-nav__link--external {
+    gap: var(--space-2);
+    --icon-size: 14px;
+
+    .site-nav__arrow {
+      display: flex;
+      color: var(--text-faint);
+    }
   }
 
   .site-header__actions {

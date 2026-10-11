@@ -1,0 +1,11 @@
+{#
+  "true" if a link leaves the site, otherwise nothing, for components to decide whether a link
+  opens in a new tab. Absolute links to the site's own pages (such as page.permalink) aren't
+  external.
+
+    {%- set external = <ui.is_external href={href} /> %}
+    {%- if external %}…{% endif %}
+#}
+{% component ui.is_external(href: string, @config) -%}
+  {%- if href is starting_with(pat="http") and not href is starting_with(pat=config.base_url) %}true{% endif -%}
+{%- endcomponent ui.is_external %}

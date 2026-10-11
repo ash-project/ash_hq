@@ -90,7 +90,9 @@ Linked rows, cards and person tiles are clickable as a whole, but only their tit
 | `ui.announcement` | The one "New" link near the top of the home page |
 | `ui.event_bar` | The bar above the header, rendered automatically for the next event |
 
-Links that open in a new tab (`new_tab` on Button, Card and ListRow) tell screen reader users so with `ui.new_tab_note`. Use them for links that leave the site to be read alongside it, such as package docs and podcasts, not as a default.
+Links that leave the site open in a new tab, so the site stays open behind them. Components with an `href` decide for themselves, using `ui.is_external` (absolute links to the site's own pages don't count). Plain `<a>` tags in templates need `target="_blank" rel="noopener"` and `ui.new_tab_note` inside, which tells screen reader users. Links in Markdown (blog posts, the errata) open in the same tab: Zola could add the target, but not the note.
+
+Only some new-tab links show an arrow (`arrow-up-right`): where leaving the site needs pointing out, such as Docs in the nav and the installer's docs links, and in components that already show an arrow. Don't add one to every link.
 
 ### Text and media
 

@@ -6,9 +6,11 @@
   label: the tag before the title
 #}
 {% component ui.announcement(title: string, href: string, label: string = "New") %}
-  <a class="announcement" href="{{ href }}">
+  {%- set external = <ui.is_external href={href} /> %}
+  {%- set arrow = "arrow-right" %}{% if external %}{% set arrow = "arrow-up-right" %}{% endif %}
+  <a class="announcement" href="{{ href }}"{% if external %} target="_blank" rel="noopener"{% endif %}>
     <span class="announcement__label">{{ label }}<span class="visually-hidden">:</span></span>
-    <span class="announcement__title">{{ title }}</span>
-    {{ <ui.icon name="arrow-right" /> }}
+    <span class="announcement__title">{{ title }}{% if external %}{{ <ui.new_tab_note /> }}{% endif %}</span>
+    {{ <ui.icon name={arrow} /> }}
   </a>
 {%- endcomponent ui.announcement %}

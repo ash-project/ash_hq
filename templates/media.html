@@ -22,7 +22,7 @@
           <ul class="cards cards--wide grid">
             {%- for video in media.videos %}
               {%- set date = <ui.eyebrow text={video.published | date(format="%B %Y")} /> %}
-              {{ <ui.card title={video.title} href={"https://www.youtube.com/watch?v=" ~ video.id ~ "&list=" ~ media.youtube_playlist} image={"https://i.ytimg.com/vi/" ~ video.id ~ "/hqdefault.jpg"} eyebrow={date} new_tab={true} /> }}
+              {{ <ui.card title={video.title} href={"https://www.youtube.com/watch?v=" ~ video.id ~ "&list=" ~ media.youtube_playlist} image={"https://i.ytimg.com/vi/" ~ video.id ~ "/hqdefault.jpg"} eyebrow={date} /> }}
             {%- endfor %}
           </ul>
         {% </ui.paginated> %}
@@ -32,7 +32,7 @@
         <ul class="list-rows">
           {%- for podcast in media.podcasts %}
             {%- set play = <ui.icon name="play" /> %}
-            {{ <ui.list_row title={podcast.title} href={podcast.url} new_tab={true} eyebrow={podcast.show} title_size="sm" action={play} hide_action_mobile={true} /> }}
+            {{ <ui.list_row title={podcast.title} href={podcast.url} eyebrow={podcast.show} title_size="sm" action={play} hide_action_mobile={true} /> }}
           {%- endfor %}
         </ul>
       {% </ui.tab_panel> %}

@@ -8,7 +8,7 @@
   <li class="person">
     {{ <ui.avatar name={name} github={github} decorative={true} /> }}
     <span class="person__text">
-      <a class="person__name stretched-link" href="https://github.com/{{ github }}">{{ name }}</a>
+      <a class="person__name stretched-link" href="https://github.com/{{ github }}" target="_blank" rel="noopener">{{ name }}{{ <ui.new_tab_note /> }}</a>
       <span class="person__handle">@{{ github }}</span>
     </span>
   </li>

@@ -58,8 +58,10 @@
     {%- endif %}
     <{{ heading }} class="section-header__title"{% if id %} id="{{ id }}"{% endif %}>
       {%- if image -%}
-        {%- if image_href %}<a class="section-header__image-link" href="{{ image_href }}">{% endif -%}
+        {%- set external = image_href and <ui.is_external href={image_href} /> -%}
+        {%- if image_href %}<a class="section-header__image-link" href="{{ image_href }}"{% if external %} target="_blank" rel="noopener"{% endif %}>{% endif -%}
         <img class="section-header__image" src="{{ image }}" alt="{{ title }}" />
+        {%- if external %}{{ <ui.new_tab_note /> }}{% endif -%}
         {%- if image_href %}</a>{% endif -%}
       {%- else -%}
         {{ title }}

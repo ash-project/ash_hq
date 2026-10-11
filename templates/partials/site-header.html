@@ -26,8 +26,9 @@
                   <span class="site-nav__arrow">{{ <ui.icon name="arrow-right" /> }}</span>
                 </a>
               {%- else %}
-                <a class="site-nav__link" href="{{ item.url }}">
+                <a class="site-nav__link site-nav__link--external" href="{{ item.url }}" target="_blank" rel="noopener">
                   {{- item.label -}}
+                  {{- <ui.new_tab_note /> -}}
                   <span class="site-nav__arrow">{{ <ui.icon name="arrow-up-right" /> }}</span>
                 </a>
               {%- endif %}

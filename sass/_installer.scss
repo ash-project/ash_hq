@@ -101,4 +101,10 @@
     padding: 0;
     list-style: none;
   }
+
+  /* Docs links, which open in a new tab, end in an arrow saying so */
+  .installer__doc-link .icon {
+    margin-left: 0.15em;
+    --icon-size: 0.85em;
+  }
 }

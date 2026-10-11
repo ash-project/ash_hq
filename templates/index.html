@@ -52,7 +52,7 @@
     <ul class="cards cards--compact grid">
       {%- for package in ecosystem.packages %}
         {%- if loop.index <= 8 %}
-          {{ <ui.card title={package.name} href={"https://hexdocs.pm/" ~ package.package ~ "/"} text={package.description} compact={true} new_tab={true} /> }}
+          {{ <ui.card title={package.name} href={"https://hexdocs.pm/" ~ package.package ~ "/"} text={package.description} compact={true} /> }}
         {%- endif %}
       {%- endfor %}
     </ul>
@@ -68,7 +68,7 @@
       {{ <ui.list_row title="Supporting the Community" text="Working groups for build tools, observability, education, ML, and infrastructure — plus fellowships, stipends, conferences, and the documentation that newcomers and experts rely on every day." /> }}
       {{ <ui.list_row title="Becoming a Member" text="Individuals and companies can join as members starting at modest annual dues. Membership funds the working groups directly, gives you a voice in governance, and keeps the BEAM independent and community-driven." /> }}
     </ul>
-    <p class="home-eef__more">Learn more at <a href="https://erlef.org/">erlef.org</a> — every contribution and member helps secure and sustain the BEAM.</p>
+    <p class="home-eef__more">Learn more at <a href="https://erlef.org/" target="_blank" rel="noopener">erlef.org{{ <ui.new_tab_note /> }}</a> — every contribution and member helps secure and sustain the BEAM.</p>
   {% </ui.section> %}
 
   {%- set install_actions %}
@@ -86,7 +86,7 @@
     <h2 class="home-logos__heading">Trusted in Production</h2>
     <ul class="home-logos__list">
       {%- for customer in customers.logos %}
-        <li><a href="{{ customer.href }}"><img src="{{ get_url(path='images/' ~ customer.src) }}" alt="{{ customer.name }}" title="{{ customer.name }}" loading="lazy" /></a></li>
+        <li><a href="{{ customer.href }}" target="_blank" rel="noopener"><img src="{{ get_url(path='images/' ~ customer.src) }}" alt="{{ customer.name }}" title="{{ customer.name }}" loading="lazy" />{{ <ui.new_tab_note /> }}</a></li>
       {%- endfor %}
     </ul>
   {% </ui.section> %}

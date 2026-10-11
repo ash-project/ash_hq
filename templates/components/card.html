@@ -7,7 +7,8 @@
       {{ <ui.card title="Discord" href="https://discord.gg/…" icon="message-circle" text="…" /> }}
     </ul>
 
-  title:   the card's name. With `href`, it's the link, and the whole card is clickable.
+  title:   the card's name. With `href`, it's the link, and the whole card is clickable. Links off
+           the site open in a new tab, and tell screen reader users they will.
   heading: the title's heading element
   icon:    an icon name, shown in orange before the title
   image:   an image URL, shown above everything else at 16:9, such as a video's thumbnail. It's
@@ -16,10 +17,9 @@
   text:    a short description
   cta:     link text shown at the bottom, instead of the arrow beside the title
   compact: a smaller card with a monospaced title, for packages
-  new_tab: opens the link in a new tab, and tells screen reader users it will
 #}
-{% component ui.card(title: string, href: string = "", heading: string = "h3", icon: string = "", image: string = "", eyebrow: string = "", text: string = "", cta: string = "", compact: bool = false, new_tab: bool = false) %}
-  {%- set external = href is starting_with(pat="http") -%}
+{% component ui.card(title: string, href: string = "", heading: string = "h3", icon: string = "", image: string = "", eyebrow: string = "", text: string = "", cta: string = "", compact: bool = false) %}
+  {%- set external = <ui.is_external href={href} /> -%}
   <li class="card{% if href %} card--link{% endif %}{% if compact %} card--compact{% endif %}">
     {%- if image %}
       <img class="card__image" src="{{ image }}" alt="" loading="lazy" />
@@ -30,9 +30,9 @@
     <{{ heading }} class="card__title">
       {%- if icon %}<span class="card__icon">{{ <ui.icon name={icon} /> }}</span>{% endif -%}
       {%- if href -%}
-        <a class="stretched-link" href="{{ href }}"{% if new_tab %} target="_blank" rel="noopener"{% endif %}>
+        <a class="stretched-link" href="{{ href }}"{% if external %} target="_blank" rel="noopener"{% endif %}>
           {{- title -}}
-          {%- if new_tab %}{{ <ui.new_tab_note /> }}{% endif -%}
+          {%- if external %}{{ <ui.new_tab_note /> }}{% endif -%}
         </a>
       {%- else -%}
         {{ title }}

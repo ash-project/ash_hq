@@ -81,14 +81,14 @@
           <ul class="installer__links">
             {%- for feature in installer.features %}
               {%- for link in feature.links %}
-                <li data-for="{{ feature.key }}" hidden><a href="{{ link | last }}" target="_blank" rel="noopener">{{ link | first }}{{ <ui.new_tab_note /> }}</a></li>
+                <li data-for="{{ feature.key }}" hidden><a class="installer__doc-link" href="{{ link | last }}" target="_blank" rel="noopener">{{ link | first }}{{ <ui.new_tab_note /> }}{{ <ui.icon name="arrow-up-right" /> }}</a></li>
               {%- endfor %}
             {%- endfor %}
           </ul>
           {%- for feature in installer.features %}
             {%- if feature.setup is defined %}
               <div data-for="{{ feature.key }}" hidden>
-                {% <ui.callout tone="note"> %}Requires setup: <a href="{{ feature.setup | last }}" target="_blank" rel="noopener">{{ feature.setup | first }}{{ <ui.new_tab_note /> }}</a>{% </ui.callout> %}
+                {% <ui.callout tone="note"> %}Requires setup: <a class="installer__doc-link" href="{{ feature.setup | last }}" target="_blank" rel="noopener">{{ feature.setup | first }}{{ <ui.new_tab_note /> }}{{ <ui.icon name="arrow-up-right" /> }}</a>{% </ui.callout> %}
               </div>
             {%- endif %}
           {%- endfor %}

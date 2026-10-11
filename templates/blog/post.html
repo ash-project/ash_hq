@@ -29,7 +29,7 @@
 
     <footer class="post__footer">
       <a class="quiet-link" href="{{ get_url(path='atom.xml', trailing_slash=false) }}">{{ <ui.icon name="rss" /> }} RSS</a>
-      <a class="quiet-link" href="{{ config.extra.discord }}">{{ <ui.icon name="message-circle" /> }} Discuss on Discord</a>
+      <a class="quiet-link" href="{{ config.extra.discord }}" target="_blank" rel="noopener">{{ <ui.icon name="message-circle" /> }} Discuss on Discord{{ <ui.new_tab_note /> }}</a>
     </footer>
   </article>
 {% endblock %}

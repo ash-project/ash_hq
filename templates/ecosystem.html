@@ -13,14 +13,14 @@
 
       <ul class="cards cards--compact grid" data-filter-items>
         {%- for package in ecosystem.packages %}
-          {{ <ui.card title={package.name} href={"https://hexdocs.pm/" ~ package.package ~ "/"} text={package.description} compact={true} new_tab={true} /> }}
+          {{ <ui.card title={package.name} href={"https://hexdocs.pm/" ~ package.package ~ "/"} text={package.description} compact={true} /> }}
         {%- endfor %}
       </ul>
 
       <p class="ecosystem__empty" data-filter-empty hidden>No packages match.</p>
       <p class="visually-hidden" aria-live="polite" data-filter-status></p>
 
-      {{ <ui.button text="And many more on Hex.pm!" href="https://hex.pm/packages?search=depends%3Ahexpm%3Aash&sort=total_downloads" variant="link" icon_right="arrow-up-right" new_tab={true} /> }}
+      {{ <ui.button text="And many more on Hex.pm!" href="https://hex.pm/packages?search=depends%3Ahexpm%3Aash&sort=total_downloads" variant="link" icon_right="arrow-up-right" /> }}
     </div>
   {% </ui.section> %}
 {% endblock %}

@@ -7,13 +7,15 @@
 {% component ui.event_bar(title: string, date: string, href: string, location: string = "", cta: string = "Details") %}
   <aside class="event-bar" aria-label="Upcoming event">
     <div class="container event-bar__inner">
-      <a class="event-bar__link" href="{{ href }}">
+      {%- set external = <ui.is_external href={href} /> %}
+      {%- set arrow = "arrow-right" %}{% if external %}{% set arrow = "arrow-up-right" %}{% endif %}
+      <a class="event-bar__link" href="{{ href }}"{% if external %} target="_blank" rel="noopener"{% endif %}>
         <strong class="event-bar__title">{{ title }}</strong>
         <span class="event-bar__date">{{ date }}</span>
         {%- if location %}
           <span class="event-bar__location hide-mobile">{{ location }}</span>
         {%- endif %}
-        <span class="event-bar__cta">{{ cta }} {{ <ui.icon name="arrow-right" /> }}</span>
+        <span class="event-bar__cta">{{ cta }}{% if external %}{{ <ui.new_tab_note /> }}{% endif %} {{ <ui.icon name={arrow} /> }}</span>
       </a>
       <a class="event-bar__all hide-mobile" href="/community/#upcoming-events">See all upcoming events</a>
     </div>
