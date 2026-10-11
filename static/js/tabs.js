@@ -8,7 +8,8 @@
 //
 // The selected tab is kept in the URL's hash (the panel's id), so it survives going back to the
 // page and can be linked to. It replaces the history entry rather than adding one, so Back leaves
-// the page instead of stepping through tabs.
+// the page instead of stepping through tabs. Scrolling the tabs out of view clears the hash, so a
+// reload or a shared link doesn't jump back to them, and scrolling back puts it back.
 
 for (const container of document.querySelectorAll("[data-tabs]")) {
   const panels = [...container.querySelectorAll(":scope > .tabs__panel")];
@@ -98,6 +99,23 @@ for (const container of document.querySelectorAll("[data-tabs]")) {
       });
     }
   });
+
+  // Only once the tabs have been in view, so the hash isn't cleared before the browser scrolls to
+  // it, and only the hash this script set
+  let seen = false;
+  let cleared = false;
+  new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      seen = true;
+      if (cleared) {
+        cleared = false;
+        history.replaceState(history.state, "", `#${panels[current].id}`);
+      }
+    } else if (seen && fromHash() >= 0) {
+      cleared = true;
+      history.replaceState(history.state, "", location.pathname + location.search);
+    }
+  }).observe(container);
 
   container.prepend(list);
   container.classList.add("tabs--enhanced");
