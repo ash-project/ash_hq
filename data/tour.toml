@@ -341,7 +341,7 @@ id = "ai-tools"
 name = "AI Tools"
 module = "MyApp.Blog.Post"
 description = "Add AI-powered actions and expose your domain as tools for LLMs. Ash AI lets you create prompt-backed actions that delegate to AI models, and exposes your existing actions as tools that AI agents can use. Perfect for building AI-powered features or MCP (Model Context Protocol) servers."
-highlight = "3-24"
+highlight = "3-28"
 code = '''
 defmodule MyApp.Blog.Post do
   use Ash.Resource
@@ -350,21 +350,25 @@ defmodule MyApp.Blog.Post do
       AshAi
     ]
 
+  # Expose actions as tools for agents
+  tools do
+    tool :read_posts, :read
+    tool :create_post, :create
+    tool :analyze_sentiment,
+      :analyze_sentiment
+  end
+
   actions do
     # AI-powered action
     action :analyze_sentiment, :atom do
-      constraints [
-        one_of: [:positive, :negative]
+      constraints one_of: [
+        :positive, :negative
       ]
 
       argument :content, :string,
         allow_nil?: false
 
-      run prompt(
-        ChatOpenAI.new!(
-          %{model: "gpt-4o"}
-        )
-      )
+      run prompt("openai:gpt-4o")
     end
   end
   #...
@@ -389,7 +393,7 @@ kind = "chips"
 label = "MCP Tools Exposed"
 icon = "wrench"
 mono = true
-items = ["create_post", "read_posts", "update_post", "analyze_sentiment"]
+items = ["read_posts", "create_post", "analyze_sentiment"]
 
 [[stages]]
 id = "authentication"
