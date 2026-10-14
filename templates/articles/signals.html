@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Introducing Signals · Ash Framework</title>
+    <meta name="description" content="Let one resource react to another, without either depending on the other." />
+    <meta property="og:title" content="Introducing Signals" />
+    <meta property="og:description" content="Let one resource react to another, without either depending on the other." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://ash-hq.org/blog/introducing-signals" />
+    <meta property="og:site_name" content="Ash Framework" />
+    <meta property="og:image" content="https://ash-hq.org/articles/signals/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Signals: let one resource react to another, without either depending on the other." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Introducing Signals" />
+    <meta name="twitter:description" content="Let one resource react to another, without either depending on the other." />
+    <meta name="twitter:image" content="https://ash-hq.org/articles/signals/og.png" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/articles/signals/article.css" />
+    <script type="module" src="/articles/signals/js/main.js"></script>
+  </head>
+  <body>
+    <nav class="site-nav">
+      <a href="/" class="site-home"><img src="/images/ash-logo-cropped.svg" alt="" />Ash Framework</a>
+      <a href="https://ashchronicle.substack.com/">Ash Chronicle</a>
+    </nav>
+
+    <header class="hero">
+      <div id="hero-graph" class="hero-graph" aria-hidden="true"></div>
+      <div class="hero-text">
+        <p class="eyebrow">Introducing</p>
+        <h1>Signals</h1>
+        <p class="byline">Zach Daniel · October 2026</p>
+      </div>
+    </header>
+
+    <main>
+      <article class="article">
+        <section class="prose">
+          <p class="lede">
+            Every app starts out with nice, tidy actions. Placing an order creates an order. Then the
+            loyalty program wants to award points when an order is placed. The warehouse wants a shipment. Someone has
+            to email a receipt, and finance wants the sale in their reports. Every one of those is a reasonable
+            request, and every one of them ends up as another line in your <code>:place</code> action. Fast forward a
+            year, and placing an order knows about half of your application, and you can't change how orders are
+            placed without reading all of it.
+          </p>
+          <p>
+            In practice, you don't want to adopt a complex system from the very beginning just to manage one or two side
+            effects. In Ash, we do our best to provide "progressive disclosure of complexity". What this means is that
+            simple apps can use simple things, and as your application starts to demand more, you have more rich and complex
+            tools to reach for to solve those problems. <code>Ash.Signals</code> is one of those features.
+          </p>
+          <p>
+            It's small, but it has a big impact.
+          </p>
+
+          <h2>Following the arrows</h2>
+          <p>
+            Here's a shop. Each arrow goes from one part of the app to a part it depends on (i.e. calls into). Scroll
+            along, and watch what happens to it as it grows.
+          </p>
+        </section>
+
+        <section id="untangle" class="scrolly">
+          <div class="scrolly-visual">
+            <div class="visual-frame">
+              <div id="graph-visual"></div>
+              <button type="button" class="replay" data-replay>↻ Replay</button>
+            </div>
+          </div>
+
+          <div class="scrolly-steps">
+            <div class="step" data-states="one">
+              <h3>One action</h3>
+              <p>
+                Placing an order creates an order. The shop doesn't depend on anything else, so it's easy to
+                understand, easy to test, and easy to change.
+              </p>
+              <pre data-lang="elixir"><code>
+create :place do
+  accept [:customer_id, :total]
+end</code></pre>
+            </div>
+
+            <div class="step" data-states="one calls">
+              <h3>Everyone wants to know</h3>
+              <p>
+                Then the requests start coming in. Each team adds a call to the order's action, and every one of those
+                calls is a dependency. To understand what placing an order actually does, you now have to read six
+                domains, and to test it, you have to set up six.
+              </p>
+              <pre data-lang="elixir"><code>
+change after_action(fn _changeset, order, _context -&gt;
+  Loyalty.award_points!(order)
+  Inventory.reserve_stock!(order)
+  Fulfillment.open_shipment!(order)
+  Notifications.send_receipt!(order)
+  Reporting.record_sale!(order)
+  {:ok, order}
+end)</code></pre>
+            </div>
+
+            <div class="step" data-states="calls cycles">
+              <h3>And they call back</h3>
+              <p>
+                Loyalty figures out a customer's tier from their orders, and fulfillment marks orders as shipped, so
+                they both call the shop too. Now the arrows go both ways, and you can't understand, test or move any
+                of these without dragging the others along.
+              </p>
+              <pre data-lang="elixir"><code>
+# in Loyalty
+Shop.list_orders!(customer_id)
+
+# in Fulfillment
+Shop.mark_shipped!(shipment.order_id)</code></pre>
+            </div>
+
+            <div class="step" data-states="cycles contract">
+              <h3>A contract in the middle</h3>
+              <p>
+                With signals, those five calls turn into one signal, and the shop only depends on its signal module.
+              </p>
+              <pre data-lang="elixir"><code>
+emit MyApp.Shop.Signals, :order_placed,
+  fields: [order_id: :id]</code></pre>
+              <p>
+                Loyalty and fulfillment still call the shop, and that's fine. Calling another resource directly is the
+                right tool when you need it to do something for you. What was hurting us was the arrows going both
+                ways, and now they only go one way.
+              </p>
+            </div>
+
+            <div class="step" data-states="contract inverted">
+              <h3>The arrows turn around</h3>
+              <p>
+                Each listener depends on the signal module too. So the arrows that used to point out from the shop now
+                point in, at the contract, and the shop doesn't know about any of them.
+              </p>
+              <pre data-lang="elixir"><code>
+signals_in do
+  from MyApp.Shop.Signals do
+    on :order_placed, :earn_points
+  end
+end</code></pre>
+            </div>
+
+            <div class="step" data-states="inverted flow">
+              <h3>At runtime</h3>
+              <p>
+                When an order is placed, the signal travels along those same arrows, just backwards: out of the shop,
+                through the contract, and off to every listener.
+              </p>
+              <pre data-lang="elixir"><code>MyApp.Shop.place_order!(customer, total)</code></pre>
+              <div class="returns">
+                <pre data-lang="elixir"><code>
+%Order{customer_id: ..., total: ..., ...}</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="prose">
+          <h2>What it looks like in code</h2>
+          <p>
+            It's three files. The order emits the signal, the loyalty program listens for it, and both of them depend
+            on the signal module in the middle, rather than on each other.
+          </p>
+        </section>
+
+        <div class="contract">
+          <figure class="code-card">
+            <figcaption>lib/my_app/shop/order.ex</figcaption>
+            <pre data-lang="elixir" data-highlight="4"><code>
+create :place do
+  accept [:customer_id, :total]
+
+  emit MyApp.Shop.Signals, :order_placed, fields: [order_id: :id]
+end
+</code></pre>
+          </figure>
+
+          <div class="contract-link" aria-hidden="true">
+            <svg viewBox="0 0 12 44"><path class="contract-link-line" d="M 6 0 V 35" /><path class="contract-link-head" d="M 1 33 L 6 43 L 11 33 Z" /></svg>
+            <span>depends on</span>
+          </div>
+
+          <figure class="code-card is-contract">
+            <figcaption>lib/my_app/shop/signals.ex</figcaption>
+            <pre data-lang="elixir"><code>
+defmodule MyApp.Shop.Signals do
+  use Ash.Signals
+
+  signals do
+    signal :order_placed do
+      argument :order_id, :uuid, allow_nil?: false
+      argument :customer_id, :uuid, allow_nil?: false
+      argument :total, :money
+    end
+  end
+end
+</code></pre>
+          </figure>
+
+          <div class="contract-link is-up" aria-hidden="true">
+            <svg viewBox="0 0 12 44"><path class="contract-link-line" d="M 6 0 V 35" /><path class="contract-link-head" d="M 1 33 L 6 43 L 11 33 Z" /></svg>
+            <span>depends on</span>
+          </div>
+
+          <figure class="code-card">
+            <figcaption>lib/my_app/loyalty/points_entry.ex</figcaption>
+            <pre data-lang="elixir" data-highlight="1-5"><code>
+signals_in do
+  from MyApp.Shop.Signals do
+    on :order_placed, :earn_points
+  end
+end
+
+actions do
+  create :earn_points do
+    accept [:customer_id, :order_id]
+    argument :total, :money, allow_nil?: false
+    change MyApp.Loyalty.Changes.CalculatePoints
+  end
+end
+</code></pre>
+          </figure>
+        </div>
+
+        <section class="prose">
+          <p>
+            The signal module is the contract. Each signal gets a struct (<code>MyApp.Shop.Signals.OrderPlaced</code>
+            here), and that's what listeners get handed. <code>emit</code> fills it in from the order:
+            <code>customer_id</code> and <code>total</code> come from the attributes with the same names, and
+            <code>fields</code> maps the rest. All of this is checked at compile time. If the signal doesn't exist, or
+            you set a field it doesn't have, or you forget a required one, you'll hear about it before anything runs.
+            And an action can only emit the signals it declares, so you can always read an action and see everything
+            it emits.
+          </p>
+          <p>
+            On the other side, the listener is just one of the loyalty program's own actions. It's a create action
+            here, so it creates a record for each signal, taking its inputs from the signal's fields with the same
+            names. The shop doesn't mention loyalty anywhere, and loyalty only knows about the shop's signals.
+          </p>
+
+          <h2>Where it really pays off</h2>
+          <p>
+            Say that a year from now, someone wants to reward whoever referred a customer, every time that customer
+            places an order. Here's what that pull request looks like, both ways:
+          </p>
+        </section>
+
+        <figure class="diff wide">
+          <div class="diff-head">
+            <p class="diff-title">Reward referrers when an order is placed</p>
+            <div class="segmented" role="radiogroup" aria-label="How the referral program finds out">
+              <label><input type="radio" name="diff" value="hook" checked /><span>With a hook</span></label>
+              <label><input type="radio" name="diff" value="signal" /><span>With a signal</span></label>
+            </div>
+          </div>
+
+          <div class="diff-version is-hook">
+            <p class="diff-stat"><span><strong>3 files</strong> changed, in Shop and Referrals</span></p>
+
+            <div class="diff-file">
+              <p class="diff-path"><span>lib/my_app/shop/order.ex</span><span class="diff-owner">Shop</span></p>
+              <pre data-lang="elixir" data-diff><code>
+ create :place do
+   accept [:customer_id, :total]
+
+   change after_action(fn _changeset, order, _context -&gt;
+     Loyalty.award_points!(order)
+     Inventory.reserve_stock!(order)
+     Fulfillment.open_shipment!(order)
+     Notifications.send_receipt!(order)
+     Reporting.record_sale!(order)
++    Referrals.reward_referrer!(order)
+     {:ok, order}
+   end)
+ end
+</code></pre>
+            </div>
+
+            <div class="diff-file">
+              <p class="diff-path"><span>lib/my_app/referrals.ex</span><span class="diff-owner">Referrals</span></p>
+              <pre data-lang="elixir" data-diff><code>
+ resources do
+   resource MyApp.Referrals.Reward do
++    define :reward_referrer, args: [:order]
+   end
+ end
+</code></pre>
+            </div>
+
+            <div class="diff-file">
+              <p class="diff-path"><span>lib/my_app/referrals/reward.ex</span><span class="diff-owner">Referrals</span></p>
+              <pre data-lang="elixir" data-diff><code>
+ actions do
++  action :reward_referrer do
++    argument :order, :struct, constraints: [instance_of: MyApp.Shop.Order]
++    run MyApp.Referrals.RewardReferrer
++  end
+ end
+</code></pre>
+            </div>
+          </div>
+
+          <div class="diff-version is-signal">
+            <p class="diff-stat"><span><strong>1 file</strong> changed, in Referrals</span></p>
+
+            <div class="diff-file">
+              <p class="diff-path"><span>lib/my_app/referrals/reward.ex</span><span class="diff-owner">Referrals</span></p>
+              <pre data-lang="elixir" data-diff><code>
++signals_in do
++  from MyApp.Shop.Signals do
++    on :order_placed, :reward_referrer
++  end
++end
++
+ actions do
++  action :reward_referrer do
++    argument :signal, MyApp.Shop.Signals.OrderPlaced, allow_nil?: false
++    run MyApp.Referrals.RewardReferrer
++  end
+ end
+</code></pre>
+            </div>
+          </div>
+        </figure>
+
+        <section class="prose">
+          <p>
+            With a hook, adding a reaction to orders is a change to orders. Someone who owns the shop has to review
+            it, and Referrals has to give the shop a function to call, which is one more thing the shop depends on.
+          </p>
+          <p>
+            With a signal, the whole change lives with the code that wanted it. Nobody working on orders has to review
+            it, or even know it happened. And if the referral program is removed later, deleting it is just as easy:
+            its listener goes with it, and nothing in the shop has to change.
+          </p>
+
+          <h2>Async signals with Oban</h2>
+          <p>
+            By default, listeners run <em>inline</em>. That means right away, as a nested action inside the order's
+            transaction. If one fails, the order fails, and everything gets rolled back. That's exactly what you want
+            for things that have to happen with the order or not at all, like reserving stock.
+          </p>
+          <p>
+            It's not what you want for sending email, though. So every listener gets a <code>delivery</code>, which
+            decides how signals reach it. It lives on the listener because the listener is the one that knows what it
+            does. The notifications team knows their listener sends email, and the order shouldn't have to know that.
+            If you use AshOban, the <code>AshOban.Signals</code> delivery runs a listener in an Oban job instead.
+          </p>
+          <p>
+            Go ahead and play with it. Make Reporting fail, and the order gets rolled back, but the receipt has
+            already gone out, and an email can't be rolled back. Then move Notifications into a job, and try again.
+          </p>
+        </section>
+
+        <figure id="delivery" class="delivery wide" hidden>
+          <div class="delivery-grid">
+            <div class="delivery-code">
+              <p class="playground-label">The listeners</p>
+              <pre class="playground-code" data-code data-lang="elixir"><code></code></pre>
+            </div>
+            <form class="delivery-controls">
+              <p class="playground-label">How each one runs</p>
+              <div class="listener-rows" data-listeners></div>
+              <div class="playground-actions">
+                <button type="submit" class="button-primary">Place an order</button>
+              </div>
+            </form>
+          </div>
+          <div class="timeline-lanes" data-timeline aria-hidden="true"></div>
+          <p class="delivery-legend" aria-hidden="true">
+            <span class="legend-item is-band">The order's transaction</span>
+            <span class="legend-item is-enqueue">A job inserted</span>
+            <span class="legend-item is-ok">Succeeded</span>
+            <span class="legend-item is-fail">Failed</span>
+            <span class="legend-item is-undone">Rolled back</span>
+          </p>
+          <p class="delivery-result" data-result aria-live="polite"></p>
+        </figure>
+
+        <section class="prose">
+          <p>
+            The jobs are inserted with Oban's repo, so if the order uses the same repo, they're inserted inside the
+            order's transaction. They only get committed if the order does, they only run once it has, and if they
+            fail, they get retried. Placing an order doesn't wait on them, and if your email provider is down, people
+            can still check out.
+          </p>
+        </section>
+
+        <figure class="code-card">
+          <figcaption>lib/my_app/notifications/receipt.ex</figcaption>
+          <pre data-lang="elixir" data-highlight="4"><code>
+signals_in do
+  from MyApp.Shop.Signals do
+    on :order_placed, :send_receipt,
+      delivery: {AshOban.Signals, queue: :mailers}
+  end
+end
+</code></pre>
+        </figure>
+
+        <section class="prose">
+          <p>
+            The order didn't change, and neither did any of the other listeners. You can start with everything inline,
+            and move a listener into a job when it needs to be.
+          </p>
+
+          <h2>Listeners are just actions</h2>
+          <p>
+            A listener is one of the listening resource's own actions, so everything you already know about actions
+            applies, like policies, validations, changes and bulk actions. What happens when a signal shows up depends
+            on what kind of action it is:
+          </p>
+        </section>
+
+        <figure class="code-card">
+          <figcaption>Four kinds of listener</figcaption>
+          <pre data-lang="elixir"><code>
+signals_in do
+  from MyApp.Shop.Signals do
+    # A generic action receives the signal struct, as its `signal` argument
+    on :order_placed, :send_receipt
+
+    # A create action creates a record from each signal
+    on :order_placed, :record_sale, action: :create
+
+    # An update or destroy action runs on the records it selects for each signal
+    on :order_placed, :mark_ordered, get_by: [id: :customer_id]
+
+    # With `batch?: true`, a generic action gets every signal emitted together
+    on :order_placed, :notify_warehouse, batch?: true
+  end
+end
+</code></pre>
+        </figure>
+
+        <section class="prose">
+          <p>
+            Listeners run as the actor that emitted the signal, with the same tenant, so their policies get checked
+            against whoever placed the order. And bulk actions emit their signals together, once per batch, so create,
+            update and destroy listeners get to handle them in bulk too.
+          </p>
+
+          <h2>So when should I use one?</h2>
+          <p>
+            Signals don't replace the other ways that parts of your app talk to each other. Here's how I think about
+            it:
+          </p>
+          <ul>
+            <li>
+              <strong>Call the other resource directly</strong> when you need something back from it. Signals are fire
+              and forget. The emitter gets nothing back from its listeners, which is exactly why it doesn't depend on
+              them.
+            </li>
+            <li>
+              <strong>Use a notifier</strong> for "at most once" side effects after the transaction commits, like
+              publishing to PubSub. Nothing a notifier does can roll the action back.
+            </li>
+            <li>
+              <strong>Emit a signal</strong> when other parts of your app need to react to an action, and the action
+              shouldn't have to know about them.
+            </li>
+          </ul>
+
+          <h2>What about tests?</h2>
+          <p>
+            Each side gets to test its own side. The order's tests can check what it promises (that it emits
+            <code>:order_placed</code>) without caring what anyone else does with it:
+          </p>
+        </section>
+
+        <figure class="code-card">
+          <figcaption>test/my_app/shop/order_test.exs</figcaption>
+          <pre data-lang="elixir"><code>
+import Ash.Signals.Test
+
+test "placing an order emits order_placed" do
+  order =
+    assert_emits_signal MyApp.Shop.Signals, :order_placed, %{order_id: order_id}, fn -&gt;
+      MyApp.Shop.place_order!(customer, 100)
+    end
+
+  assert order.id == order_id
+end
+</code></pre>
+        </figure>
+
+        <section class="prose">
+          <p>
+            Listeners still run when you place an order in a test, since signals change how your app is organized, but
+            not what it does. And since a listener is just an action, you test it like any other action.
+          </p>
+
+          <h2>Try it out</h2>
+          <p>
+            Signals are in Ash 3.36, and the <code>AshOban.Signals</code> delivery is in AshOban 0.10. Check out the
+            <a href="https://hexdocs.pm/ash/signals.html">signals guide</a> for the rest (emitting from your own
+            changes, generic actions, telemetry and more), and <a
+            href="https://hexdocs.pm/ash_oban/signals.html">AshOban's guide</a> for running listeners in jobs.
+          </p>
+          <p>
+            This is a brand new feature, so I'd love to hear how it goes for you. Come say hi in the
+            <a href="https://discord.gg/D7FNG2q">Discord</a>!
+          </p>
+        </section>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <a href="/">Ash Framework</a>
+      <a href="https://ashchronicle.substack.com/">Ash Chronicle</a>
+      <a href="https://github.com/ash-project">GitHub</a>
+    </footer>
+  </body>
+</html>

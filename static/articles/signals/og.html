@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!--
+  The article's social card, 1200×630, the way the Temporal Resources article's card looks.
+  It draws the hero's graph as it ends up, so it has to be served (it imports js/hero.js): render
+  it to og.png with a headless browser at that size, from http://127.0.0.1:1111/articles/signals/og.html.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #0a0a0d; }
+
+      .page {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        background:
+          radial-gradient(ellipse at 85% 50%, rgb(255 87 87 / 0.16), transparent 55%),
+          linear-gradient(rgb(254 19 19 / 0.14) 1px, transparent 1px),
+          linear-gradient(90deg, rgb(254 19 19 / 0.14) 1px, transparent 1px),
+          #0a0a0d;
+        background-size: auto, 40px 40px, 40px 40px, auto;
+      }
+
+      .card {
+        position: absolute;
+        inset: 40px;
+        overflow: hidden;
+        border-radius: 32px;
+        background: rgb(2 6 23 / 0.88);
+        box-shadow: 0 0 0 1.5px rgb(255 87 87 / 0.45), 0 0 80px rgb(255 87 87 / 0.18);
+      }
+
+      .graph { position: absolute; right: -10px; top: 50%; width: 560px; height: 560px; transform: translateY(-50%); }
+      .graph svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
+      .text { position: absolute; left: 72px; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; width: 600px; }
+
+      .brand { display: flex; align-items: center; gap: 14px; margin-bottom: 44px; font: 600 26px ui-sans-serif, system-ui, -apple-system, sans-serif; color: #f4f4f5; }
+      .brand img { width: 44px; height: 44px; }
+
+      .tag {
+        align-self: flex-start;
+        padding: 6px 18px;
+        border-radius: 9999px;
+        background: linear-gradient(90deg, #ff5757, #ff914d);
+        font: 700 22px ui-sans-serif, system-ui, -apple-system, sans-serif;
+        color: #fff;
+      }
+
+      h1 {
+        margin: 22px 0 0;
+        font: 300 120px/1 "Iowan Old Style", "New York", ui-serif, Georgia, serif;
+        letter-spacing: -0.02em;
+        background: linear-gradient(90deg, #ff5757, #ff914d, #ffbd59);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      p { max-width: 520px; margin: 26px 0 0; font: 400 30px/1.4 ui-sans-serif, system-ui, -apple-system, sans-serif; color: #fecaca; }
+
+      /* The hero graph's styles (see article.css) */
+      .hg-node rect { fill: #1e2026; stroke: rgb(255 255 255 / 0.32); stroke-width: 0.24; }
+      .hg-node.is-lit rect { fill: rgb(255 145 77 / 0.45); stroke: #ffbd59; }
+      .hg-line { fill: none; stroke-width: 0.24; stroke-linecap: round; stroke-dasharray: 1 1; }
+      .hg-clean .hg-line { stroke: rgb(255 145 77 / 0.6); }
+      .hg-clean .hg-head { fill: #ff914d; }
+      .hg-halo { fill: url(#hero-halo); }
+      .hg-core { fill: #3a2418; stroke: #ff914d; stroke-width: 0.35; filter: drop-shadow(0 0 5px rgb(255 145 77 / 0.7)); }
+      .hg-pulse { fill: #ffbd59; filter: drop-shadow(0 0 4px rgb(255 189 89 / 0.9)); }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="card">
+        <div class="graph" id="graph"></div>
+        <div class="text">
+          <div class="brand"><img src="../../images/ash-logo-cropped.svg" alt="" />Ash Framework</div>
+          <span class="tag">New</span>
+          <h1>Signals</h1>
+          <p>Let one resource react to another, without either depending on the other.</p>
+        </div>
+      </div>
+    </div>
+    <script type="module">
+      import {heroGraph} from "./js/hero.js"
+
+      heroGraph(document.getElementById("graph"), {still: true})
+    </script>
+  </body>
+</html>
