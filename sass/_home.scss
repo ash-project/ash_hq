@@ -6,6 +6,13 @@
     justify-items: start;
   }
 
+  /* The latest announcements, side by side, wrapping when there isn't room */
+  .home-hero__announcements {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
   .home-hero__title {
     font: var(--fw-semibold) var(--fs-hero) / 0.95 var(--font-sans);
     letter-spacing: -0.045em;

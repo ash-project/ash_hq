@@ -9,7 +9,10 @@
   {%- set customers = load_data(path="data/logos.toml") %}
 
   {% <ui.section class="home-hero"> %}
-    {{ <ui.announcement title="Temporal Resources" href="/blog/introducing-temporal-resources/" /> }}
+    <div class="home-hero__announcements">
+      {{ <ui.announcement title="Signals" href="/blog/introducing-signals/" /> }}
+      {{ <ui.announcement title="Temporal Resources" href="/blog/introducing-temporal-resources/" /> }}
+    </div>
     <h1 class="home-hero__title">Model your domain,<br /><span class="home-hero__accent">derive the rest</span></h1>
     <div class="home-hero__footer">
       <p class="home-hero__lede">Ash Framework is the Elixir backend framework for unparalleled productivity. Declarative tools that let you stop wasting time. Use with Phoenix LiveView or build APIs in minutes for your front-end of choice.</p>

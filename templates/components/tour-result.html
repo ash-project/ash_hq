@@ -81,7 +81,9 @@
           </div>
 
         {%- elif block.kind == "link" %}
-          <div>{{ <ui.button text={block.label} href={block.href} variant="link" icon="zap" icon_right="arrow-up-right" /> }}</div>
+          {%- set external = <ui.is_external href={block.href} /> %}
+          {%- set arrow = "arrow-right" %}{% if external %}{% set arrow = "arrow-up-right" %}{% endif %}
+          <div>{{ <ui.button text={block.label} href={block.href} variant="link" icon={block.icon | default(value="zap")} icon_right={arrow} /> }}</div>
         {%- endif %}
       {%- endfor %}
     </div>

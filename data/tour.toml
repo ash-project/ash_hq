@@ -10,7 +10,7 @@
 #            code (label, language, code), pairs (items: [label, value]), table (head, rows),
 #            endpoints (items: [method, path]), chips (label, icon, mono, items), flow (from, to:
 #            [label, value]), note (text), jobs (items: [title, description, name, schedule]),
-#            link (label, href)
+#            link (label, href, icon: defaults to zap)
 
 [[stages]]
 id = "resources-actions"
@@ -472,3 +472,46 @@ items = [["Triggers", "Run actions for records matching conditions on a schedule
 kind = "link"
 label = "Powered by Oban"
 href = "https://getoban.pro"
+
+[[stages]]
+id = "temporal"
+name = "Temporal Resources"
+module = "MyApp.Blog.Post"
+description = "Make a resource temporal, and it keeps its whole history. Every version of a post is stored with the period it was valid for, so you can read or write it as of any moment. Leave out as_of, and you're working with now, so code that doesn't care about time doesn't change."
+highlight = "5-8"
+code = '''
+defmodule MyApp.Blog.Post do
+  use Ash.Resource
+    data_layer: AshPostgres.DataLayer
+
+  temporal do
+    strategy :context
+    attribute :valid_at
+  end
+  # ...
+end
+'''
+
+[stages.panel]
+title = "Every Version, Over Time"
+icon = "calendar"
+
+[[stages.panel.blocks]]
+kind = "table"
+head = ["title", "status", "valid_at"]
+rows = [["Hello!", "draft", "[Jan 1, Jan 20)"], ["Hello!", "published", "[Jan 20, ∞)"]]
+
+[[stages.panel.blocks]]
+kind = "code"
+label = "Read it as of any moment"
+code = '''
+Ash.get!(MyApp.Blog.Post, id,
+  as_of: ~U[2026-01-10 00:00:00Z])
+→ %Post{status: :draft, ...}
+'''
+
+[[stages.panel.blocks]]
+kind = "link"
+label = "Introducing Temporal Resources"
+href = "/blog/introducing-temporal-resources/"
+icon = "book-open"

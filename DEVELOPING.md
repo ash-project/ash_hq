@@ -16,15 +16,16 @@ How the site fits together, which pieces to reach for, how to make everyday chan
 ## Running and testing
 
 ```sh
-zola serve --drafts --extra-watch-path data --extra-watch-path highlighting   # http://127.0.0.1:1111
+scripts/serve.sh   # http://127.0.0.1:1111
 deno test --allow-read tests/
 ```
 
-- `--drafts` builds the draft [styleguide](http://127.0.0.1:1111/styleguide/): every component in one place, for checking changes. It's never published.
-- `--extra-watch-path` reloads when files in `data/` (content) and `highlighting/` (the syntax theme and grammars) change. Zola doesn't watch either by default.
+- `scripts/serve.sh` runs `zola serve` with two extra flags, and passes on anything you add, like `--port 1112`:
+  - `--drafts` builds the draft [styleguide](http://127.0.0.1:1111/styleguide/): every component in one place, for checking changes. It's never published.
+  - `--extra-watch-path` reloads when files in `data/` (content) and `highlighting/` (the syntax theme and grammars) change. Zola doesn't watch either by default, and has no setting for it.
 - `zola check --drafts --skip-external-links` builds the site and checks internal links.
 
-The tests need Deno; the scripts in `scripts/` need `curl` and `jq`. Nothing needs Node or npm.
+The tests need Deno; the fetch scripts in `scripts/` need `curl` and `jq`. Nothing needs Node or npm.
 
 ## How it fits together
 
@@ -237,7 +238,7 @@ The Media page lists a selection of the videos in the YouTube playlist, from `vi
 
 ### Syntax highlighting
 
-Code is highlighted by Zola, using the theme in `highlighting/ash.json`, written as classes into a generated `/giallo.css`. The theme takes hex colours only, so it duplicates the `--syn-*` tokens in `_tokens.scss`: change both together. Fence IEx sessions as ` ```iex ` to mute the prompt (`highlighting/iex.json`). With `--extra-watch-path highlighting`, `zola serve` picks up changes to either.
+Code is highlighted by Zola, using the theme in `highlighting/ash.json`, written as classes into a generated `/giallo.css`. The theme takes hex colours only, so it duplicates the `--syn-*` tokens in `_tokens.scss`: change both together. Fence IEx sessions as ` ```iex ` to mute the prompt (`highlighting/iex.json`). `scripts/serve.sh` picks up changes to either.
 
 ## Tera 2 gotchas
 
