@@ -35,7 +35,7 @@ While there are far too many things to put them all here, I want to give those w
 
 ## How do I upgrade?
 
-It is **very important** that you read and follow the [upgrade guide](https://hexdocs.pm/ash/3.0.0/upgrade.html)! You will need to go through it section by section and consider if there are changes from that section that you must make. Don't forget that some packages have their own upgrade guides for breaking changes contained in that package. Links to those guides are at the top.
+It is **very important** that you read and follow the [upgrade guide](https://hexdocs.pm/ash/3.0.0/upgrading-to-3-0.html)! You will need to go through it section by section and consider if there are changes from that section that you must make. Don't forget that some packages have their own upgrade guides for breaking changes contained in that package. Links to those guides are at the top.
 
 ## What if I need help?
 
