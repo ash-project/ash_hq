@@ -8,7 +8,7 @@ authors = ["Zach Daniel"]
 tags = ["ash"]
 +++
 
-Peter Ullrich recently ran a massive AI driven security audit on Ash Framework and its package ecosystem. We’re still working through the “fringe” packages, but all of the issues for the headliners have been shared and patched.
+Peter Ullrich recently ran a massive AI driven security audit on Ash Framework and its package ecosystem. All of the issues have been shared and patched.
 
 Given the theme of vulnerabilities, I’m going to lead with some of my own, personal in nature. One of the hard parts of dealing with security issues is a combination of the urgency (we care deeply about our users’ security, and our users’ users security) and the effort to resolve. For me, however, that is not the hardest part.
 
