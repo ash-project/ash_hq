@@ -1,9 +1,8 @@
 +++
 title = "Concentrated Liability"
-description = ""
+description = "On the security issues from a recent audit of Ash, and why a framework like Ash is both a concentrated liability and a safety net."
 date = 2026-10-15T12:00:00Z
 authors = ["Zach Daniel"]
-draft = true
 
 [taxonomies]
 tags = ["ash"]
