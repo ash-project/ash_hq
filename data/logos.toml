@@ -75,3 +75,8 @@ src = "intcube.svg"
 name = "SalesHood"
 href = "https://saleshood.com/"
 src = "saleshood.png"
+
+[[logos]]
+name = "Treat Health"
+href = "https://treat.health/en/?utm_source=ash"
+src = "treat-health-logo.svg"
