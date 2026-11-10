@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{#- A post's own social card, from `extra.og_image` in its front matter: a path under static/,
+    1200×630. Without one, the site's default. #}
+{% block og_image %}
+  {%- if page.extra.og_image is defined %}{{ get_url(path=page.extra.og_image) }}{% else %}{{ config.extra.og_image }}{% endif -%}
+{% endblock %}
+
 {% block content %}
   <article class="container post">
     <header class="post__header">

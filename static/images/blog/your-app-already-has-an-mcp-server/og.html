@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<!--
+  The post's social card, 1200×630: a small version of its first figure, a tool beside the
+  definition AshAi lists for it. Render it to og.png with a headless browser at that size, from
+  http://127.0.0.1:1111/images/blog/your-app-already-has-an-mcp-server/og.html.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: "Instrument Sans";
+        src: url("../../../fonts/instrument-sans.woff2") format("woff2");
+        font-weight: 400 700;
+      }
+
+      :root {
+        --sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+        --mono: Menlo, Monaco, "SF Mono", monospace;
+      }
+
+      html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #0c0b0b; }
+
+      .page {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        background:
+          radial-gradient(ellipse at 80% 45%, rgb(255 145 77 / 0.14), transparent 60%),
+          linear-gradient(rgb(255 145 77 / 0.06) 1px, transparent 1px),
+          linear-gradient(90deg, rgb(255 145 77 / 0.06) 1px, transparent 1px),
+          #0c0b0b;
+        background-size: auto, 40px 40px, 40px 40px, auto;
+      }
+
+      .text {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 72px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 500px;
+      }
+
+      .brand { display: flex; gap: 14px; align-items: center; font: 600 26px var(--sans); color: #f7f6f5; }
+      .brand img { width: 44px; height: 44px; }
+
+      h1 {
+        margin: 52px 0 0;
+        font: 600 70px/1.02 var(--sans);
+        letter-spacing: -0.035em;
+        color: #f7f6f5;
+      }
+
+      h1 em {
+        font-style: normal;
+        background: linear-gradient(90deg, #ff5757, #ff914d, #ffbd59);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      p { margin: 28px 0 0; font: 400 26px/1.4 var(--sans); color: #b9b4ae; }
+
+      .figure { position: absolute; top: 50%; right: 64px; width: 520px; transform: translateY(-50%); }
+
+      .file {
+        position: relative;
+        border: 1px solid #232120;
+        background: #100f0e;
+        box-shadow: 0 24px 60px -20px rgb(0 0 0 / 0.8);
+      }
+
+      .file + .file { margin-top: 64px; margin-left: 56px; }
+
+      .path {
+        padding: 10px 16px;
+        border-bottom: 1px solid #232120;
+        font: 400 14px var(--mono);
+        color: #8f8983;
+      }
+
+      pre { margin: 0; padding: 14px 0; font: 400 17px/1.65 var(--mono); color: #edebe9; }
+
+      .line { display: block; padding: 0 18px; }
+      .line.lit { background: rgb(255 145 77 / 0.12); box-shadow: inset 3px 0 0 #ff914d; }
+
+      .k { color: #ffa266; }
+      .a { color: #b48ef0; }
+      .s { color: #4cc38a; }
+      .m { color: #6aa6f8; }
+      .p { color: #8f8983; }
+
+      .links { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+      .links path { fill: none; stroke: #ff914d; stroke-width: 2; }
+      .links circle { fill: #ff914d; }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="text">
+        <div class="brand"><img src="../../../images/ash-logo-cropped.svg" alt="" />Ash Framework</div>
+        <h1>Use Ash and get an <em>MCP</em> for free</h1>
+        <p>Your actions are already the tools. Model your domain, derive the rest.</p>
+      </div>
+
+      <div class="figure" id="figure">
+        <div class="file">
+          <div class="path">lib/my_app/blog.ex</div>
+          <pre><span class="line lit" id="from-name">tool <span class="a">:publish_post</span><span class="p">,</span> <span class="m">Post</span><span class="p">,</span> <span class="a">:publish</span><span class="p">,</span></span><span class="line lit" id="from-title">  <span class="a">title:</span> <span class="s">"Publish a post"</span></span></pre>
+        </div>
+        <div class="file">
+          <div class="path">tools/list</div>
+          <pre><span class="line"><span class="p">{</span></span><span class="line lit" id="to-name">  <span class="a">"name"</span><span class="p">:</span> <span class="s">"publish_post"</span><span class="p">,</span></span><span class="line lit" id="to-title">  <span class="a">"title"</span><span class="p">:</span> <span class="s">"Publish a post"</span><span class="p">,</span></span><span class="line">  <span class="a">"inputSchema"</span><span class="p">:</span> <span class="p">{</span> <span class="p">…</span> <span class="p">}</span></span><span class="line"><span class="p">}</span></span></pre>
+        </div>
+        <svg class="links" id="links" aria-hidden="true"></svg>
+      </div>
+    </div>
+
+    <script>
+      // Curves from each tool line, round the left of the definition, into the line it becomes
+      const figure = document.getElementById("figure");
+      const links = document.getElementById("links");
+      // Measured before the transform matters: both ends move with it
+      const box = figure.getBoundingClientRect();
+      const SVG = "http://www.w3.org/2000/svg";
+
+      const add = (name, attributes) => {
+        const element = document.createElementNS(SVG, name);
+        for (const [key, value] of Object.entries(attributes)) element.setAttribute(key, value);
+        links.append(element);
+      };
+
+      for (const [from, to, reach] of [["from-name", "to-name", 32], ["from-title", "to-title", 32]]) {
+        const a = document.getElementById(from).getBoundingClientRect();
+        const b = document.getElementById(to).getBoundingClientRect();
+        const x1 = a.left - box.left;
+        const y1 = a.top + a.height / 2 - box.top;
+        const x2 = b.left - box.left;
+        const y2 = b.top + b.height / 2 - box.top;
+        add("path", { d: `M${x1} ${y1} C${x1 - reach} ${y1} ${x2 - reach - 56} ${y2} ${x2} ${y2}` });
+        add("circle", { cx: x1, cy: y1, r: 4 });
+        add("circle", { cx: x2, cy: y2, r: 4 });
+      }
+    </script>
+  </body>
+</html>

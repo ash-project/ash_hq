@@ -8,6 +8,7 @@ authors = ["Zach Daniel"]
 tags = ["ash", "ai", "mcp"]
 
 [extra]
+og_image = "images/blog/your-app-already-has-an-mcp-server/og.png"
 scripts = ["js/tool-derivation.js", "js/tool-listing.js"]
 +++
 
