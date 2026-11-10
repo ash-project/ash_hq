@@ -16,4 +16,34 @@
     text-align: right;
     user-select: none;
   }
+
+  /* Code highlighted by hand, in figures whose lines need marking (see _code-figure.scss), in
+     the same colours as Zola's highlighter */
+  .syn-keyword {
+    color: var(--syn-keyword);
+  }
+
+  .syn-atom {
+    color: var(--syn-atom);
+  }
+
+  .syn-string {
+    color: var(--syn-string);
+  }
+
+  .syn-module {
+    color: var(--syn-module);
+  }
+
+  .syn-number {
+    color: var(--syn-number);
+  }
+
+  .syn-punct {
+    color: var(--syn-punct);
+  }
+
+  .syn-comment {
+    color: var(--syn-comment);
+  }
 }

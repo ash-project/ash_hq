@@ -1,0 +1,141 @@
+{#
+  A figure for the MCP post: a tool and its action, beside the definition AshAi lists for it, with
+  each part of the definition linked to the code it comes from. There are two tools to pick from,
+  switched in CSS.
+
+  The code is highlighted by hand, so its lines can be linked. The definitions are AshAi 1.5.2's
+  output for this resource, trimmed where marked with …, and with their keys reordered to follow
+  the code. The numbers in the gutters pair the lines up; static/js/tool-derivation.js highlights
+  a pair, and draws the lines between them, when a line is pointed at.
+
+    {{ <ui.tool_derivation /> }}
+#}
+{#- Trimmed at the start, and without blank lines: Markdown ends an HTML block at a blank line #}
+{% component ui.tool_derivation() -%}
+<figure class="code-figure tool-derivation" data-tool-derivation>
+<div class="code-figure__bar">
+<span class="code-figure__bar-label" aria-hidden="true">Tool</span>
+{{ <ui.segmented name="tool-derivation" legend="Tool" options={[["publish", "publish_post"], ["list", "list_posts"]]} value="publish" /> }}
+</div>
+<div class="tool-derivation__view" data-view="publish">
+<div class="code-pair">
+<div class="code-pair__pane">
+<p class="code-pair__label">You write</p>
+<div class="code-pair__file"><p class="code-pair__path">lib/my_app/blog.ex</p><pre class="code-pair__code"><code><span class="code-line" data-link="1"><span class="code-line__mark" aria-hidden="true">1</span>tool <span class="syn-atom">:publish_post</span><span class="syn-punct">,</span> <span class="syn-module">MyApp.Blog.Post</span><span class="syn-punct">,</span> <span class="syn-atom">:publish</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="2"><span class="code-line__mark" aria-hidden="true">2</span>  <span class="syn-atom">title:</span> <span class="syn-string">"Publish a post"</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="2"><span class="code-line__mark" aria-hidden="true"></span>  <span class="syn-atom">annotations:</span> <span class="syn-punct">[</span><span class="syn-atom">destructive_hint:</span> <span class="syn-keyword">false</span><span class="syn-punct">]</span></span></code></pre></div>
+<div class="code-pair__file"><p class="code-pair__path">lib/my_app/blog/post.ex</p><pre class="code-pair__code"><code><span class="code-line" data-link="4"><span class="code-line__mark" aria-hidden="true">4</span>update <span class="syn-atom">:publish</span> <span class="syn-keyword">do</span></span>
+<span class="code-line" data-link="3"><span class="code-line__mark" aria-hidden="true">3</span>  description <span class="syn-string">"Publish a draft post, so readers can see it."</span></span>
+<span class="code-line code-line--muted"><span class="code-line__mark" aria-hidden="true"></span>  accept <span class="syn-punct">[</span><span class="syn-punct">]</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true">5</span>  argument <span class="syn-atom">:audience</span><span class="syn-punct">,</span> <span class="syn-atom">:atom</span> <span class="syn-keyword">do</span></span>
+<span class="code-line" data-link="6"><span class="code-line__mark" aria-hidden="true">6</span>    allow_nil? <span class="syn-keyword">false</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true">5</span>    constraints <span class="syn-atom">one_of:</span> <span class="syn-punct">[</span><span class="syn-atom">:everyone</span><span class="syn-punct">,</span> <span class="syn-atom">:subscribers</span><span class="syn-punct">]</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>    description <span class="syn-string">"Who can read the post."</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>  <span class="syn-keyword">end</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span></span>
+<span class="code-line" data-link="7"><span class="code-line__mark" aria-hidden="true">7</span>  argument <span class="syn-atom">:publish_at</span><span class="syn-punct">,</span> <span class="syn-atom">:utc_datetime</span> <span class="syn-keyword">do</span></span>
+<span class="code-line" data-link="7"><span class="code-line__mark" aria-hidden="true"></span>    description <span class="syn-string">"When the post goes live. Defaults to now."</span></span>
+<span class="code-line" data-link="7"><span class="code-line__mark" aria-hidden="true"></span>  <span class="syn-keyword">end</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span></span>
+<span class="code-line code-line--muted"><span class="code-line__mark" aria-hidden="true"></span>  change set_attribute<span class="syn-punct">(</span><span class="syn-atom">:status</span><span class="syn-punct">,</span> <span class="syn-atom">:published</span><span class="syn-punct">)</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span><span class="syn-keyword">end</span></span></code></pre></div>
+</div>
+<div class="code-pair__pane">
+<p class="code-pair__label">The agent sees</p>
+<div class="code-pair__file"><p class="code-pair__path">tools/list</p><pre class="code-pair__code"><code><span class="code-line"><span class="code-line__mark" aria-hidden="true"></span><span class="syn-punct">{</span></span>
+<span class="code-line" data-link="1"><span class="code-line__mark" aria-hidden="true">1</span>  <span class="syn-atom">"name"</span><span class="syn-punct">:</span> <span class="syn-string">"publish_post"</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="2"><span class="code-line__mark" aria-hidden="true">2</span>  <span class="syn-atom">"title"</span><span class="syn-punct">:</span> <span class="syn-string">"Publish a post"</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="2"><span class="code-line__mark" aria-hidden="true"></span>  <span class="syn-atom">"annotations"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span> <span class="syn-atom">"destructiveHint"</span><span class="syn-punct">:</span> <span class="syn-keyword">false</span> <span class="syn-punct">}</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="3"><span class="code-line__mark" aria-hidden="true">3</span>  <span class="syn-atom">"description"</span><span class="syn-punct">:</span> <span class="syn-string">"Publish a draft post, so readers can see it."</span><span class="syn-punct">,</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>  <span class="syn-atom">"inputSchema"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>    <span class="syn-atom">"type"</span><span class="syn-punct">:</span> <span class="syn-string">"object"</span><span class="syn-punct">,</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>    <span class="syn-atom">"properties"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span></span>
+<span class="code-line" data-link="4"><span class="code-line__mark" aria-hidden="true">4</span>      <span class="syn-atom">"id"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span> <span class="syn-atom">"type"</span><span class="syn-punct">:</span> <span class="syn-string">"string"</span><span class="syn-punct">,</span> <span class="syn-atom">"format"</span><span class="syn-punct">:</span> <span class="syn-string">"uuid"</span> <span class="syn-punct">}</span><span class="syn-punct">,</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>      <span class="syn-atom">"input"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>        <span class="syn-atom">"type"</span><span class="syn-punct">:</span> <span class="syn-string">"object"</span><span class="syn-punct">,</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>        <span class="syn-atom">"properties"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true">5</span>          <span class="syn-atom">"audience"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>            <span class="syn-atom">"type"</span><span class="syn-punct">:</span> <span class="syn-string">"string"</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>            <span class="syn-atom">"enum"</span><span class="syn-punct">:</span> <span class="syn-punct">[</span><span class="syn-string">"everyone"</span><span class="syn-punct">,</span> <span class="syn-string">"subscribers"</span><span class="syn-punct">]</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>            <span class="syn-atom">"description"</span><span class="syn-punct">:</span> <span class="syn-string">"Who can read the post."</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>          <span class="syn-punct">}</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="7"><span class="code-line__mark" aria-hidden="true">7</span>          <span class="syn-atom">"publish_at"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span></span>
+<span class="code-line" data-link="7"><span class="code-line__mark" aria-hidden="true"></span>            <span class="syn-atom">"type"</span><span class="syn-punct">:</span> <span class="syn-string">"string"</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="7"><span class="code-line__mark" aria-hidden="true"></span>            <span class="syn-atom">"format"</span><span class="syn-punct">:</span> <span class="syn-string">"date-time"</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="7"><span class="code-line__mark" aria-hidden="true"></span>            <span class="syn-atom">"description"</span><span class="syn-punct">:</span> <span class="syn-string">"When the post goes live. Defaults to now."</span></span>
+<span class="code-line" data-link="7"><span class="code-line__mark" aria-hidden="true"></span>          <span class="syn-punct">}</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>        <span class="syn-punct">}</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="6"><span class="code-line__mark" aria-hidden="true">6</span>        <span class="syn-atom">"required"</span><span class="syn-punct">:</span> <span class="syn-punct">[</span><span class="syn-string">"audience"</span><span class="syn-punct">]</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>      <span class="syn-punct">}</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>    <span class="syn-punct">}</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="4"><span class="code-line__mark" aria-hidden="true">4</span>    <span class="syn-atom">"required"</span><span class="syn-punct">:</span> <span class="syn-punct">[</span><span class="syn-string">"id"</span><span class="syn-punct">,</span> <span class="syn-string">"input"</span><span class="syn-punct">]</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>  <span class="syn-punct">}</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span><span class="syn-punct">}</span></span></code></pre></div>
+</div>
+<svg class="tool-derivation__links" aria-hidden="true"></svg>
+</div>
+</div>
+<div class="tool-derivation__view" data-view="list">
+<div class="code-pair">
+<div class="code-pair__pane">
+<p class="code-pair__label">You write</p>
+<div class="code-pair__file"><p class="code-pair__path">lib/my_app/blog.ex</p><pre class="code-pair__code"><code><span class="code-line" data-link="1"><span class="code-line__mark" aria-hidden="true">1</span>tool <span class="syn-atom">:list_posts</span><span class="syn-punct">,</span> <span class="syn-module">MyApp.Blog.Post</span><span class="syn-punct">,</span> <span class="syn-atom">:read</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="2"><span class="code-line__mark" aria-hidden="true">2</span>  <span class="syn-atom">title:</span> <span class="syn-string">"List posts"</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="2"><span class="code-line__mark" aria-hidden="true"></span>  <span class="syn-atom">annotations:</span> <span class="syn-punct">[</span><span class="syn-atom">read_only_hint:</span> <span class="syn-keyword">true</span><span class="syn-punct">]</span></span></code></pre></div>
+<div class="code-pair__file"><p class="code-pair__path">lib/my_app/blog/post.ex</p><pre class="code-pair__code"><code><span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>attributes <span class="syn-keyword">do</span></span>
+<span class="code-line" data-link="4"><span class="code-line__mark" aria-hidden="true">4</span>  uuid_primary_key <span class="syn-atom">:id</span><span class="syn-punct">,</span> <span class="syn-atom">public?:</span> <span class="syn-keyword">true</span></span>
+<span class="code-line" data-link="4"><span class="code-line__mark" aria-hidden="true"></span>  attribute <span class="syn-atom">:title</span><span class="syn-punct">,</span> <span class="syn-atom">:string</span><span class="syn-punct">,</span> <span class="syn-atom">public?:</span> <span class="syn-keyword">true</span></span>
+<span class="code-line" data-link="4"><span class="code-line__mark" aria-hidden="true"></span>  attribute <span class="syn-atom">:body</span><span class="syn-punct">,</span> <span class="syn-atom">:string</span><span class="syn-punct">,</span> <span class="syn-atom">public?:</span> <span class="syn-keyword">true</span></span>
+<span class="code-line" data-link="4"><span class="code-line__mark" aria-hidden="true"></span>  attribute <span class="syn-atom">:status</span><span class="syn-punct">,</span> <span class="syn-atom">:atom</span><span class="syn-punct">,</span> <span class="syn-atom">public?:</span> <span class="syn-keyword">true</span></span>
+<span class="code-line" data-link="4"><span class="code-line__mark" aria-hidden="true"></span>  attribute <span class="syn-atom">:published_at</span><span class="syn-punct">,</span> <span class="syn-atom">:utc_datetime</span><span class="syn-punct">,</span> <span class="syn-atom">public?:</span> <span class="syn-keyword">true</span></span>
+<span class="code-line code-line--muted"><span class="code-line__mark" aria-hidden="true"></span>  attribute <span class="syn-atom">:internal_notes</span><span class="syn-punct">,</span> <span class="syn-atom">:string</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span><span class="syn-keyword">end</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>actions <span class="syn-keyword">do</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true">5</span>  read <span class="syn-atom">:read</span> <span class="syn-keyword">do</span></span>
+<span class="code-line" data-link="3"><span class="code-line__mark" aria-hidden="true">3</span>    description <span class="syn-string">"Search the blog's posts."</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true">5</span>  <span class="syn-keyword">end</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span><span class="syn-keyword">end</span></span></code></pre></div>
+</div>
+<div class="code-pair__pane">
+<p class="code-pair__label">The agent sees</p>
+<div class="code-pair__file"><p class="code-pair__path">tools/list</p><pre class="code-pair__code"><code><span class="code-line"><span class="code-line__mark" aria-hidden="true"></span><span class="syn-punct">{</span></span>
+<span class="code-line" data-link="1"><span class="code-line__mark" aria-hidden="true">1</span>  <span class="syn-atom">"name"</span><span class="syn-punct">:</span> <span class="syn-string">"list_posts"</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="2"><span class="code-line__mark" aria-hidden="true">2</span>  <span class="syn-atom">"title"</span><span class="syn-punct">:</span> <span class="syn-string">"List posts"</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="2"><span class="code-line__mark" aria-hidden="true"></span>  <span class="syn-atom">"annotations"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span> <span class="syn-atom">"readOnlyHint"</span><span class="syn-punct">:</span> <span class="syn-keyword">true</span> <span class="syn-punct">}</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="3"><span class="code-line__mark" aria-hidden="true">3</span>  <span class="syn-atom">"description"</span><span class="syn-punct">:</span> <span class="syn-string">"Search the blog's posts."</span><span class="syn-punct">,</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>  <span class="syn-atom">"inputSchema"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>    <span class="syn-atom">"type"</span><span class="syn-punct">:</span> <span class="syn-string">"object"</span><span class="syn-punct">,</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>    <span class="syn-atom">"properties"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true">5</span>      <span class="syn-atom">"filter"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>        <span class="syn-atom">"type"</span><span class="syn-punct">:</span> <span class="syn-string">"object"</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="4"><span class="code-line__mark" aria-hidden="true">4</span>        <span class="syn-atom">"description"</span><span class="syn-punct">:</span> <span class="syn-string">"… Fields: id, title, body, status, published_at."</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true">5</span>      <span class="syn-punct">}</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>      <span class="syn-atom">"sort"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>        <span class="syn-atom">"type"</span><span class="syn-punct">:</span> <span class="syn-string">"array"</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>        <span class="syn-atom">"items"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>          <span class="syn-atom">"type"</span><span class="syn-punct">:</span> <span class="syn-string">"object"</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>          <span class="syn-atom">"properties"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span></span>
+<span class="code-line" data-link="4"><span class="code-line__mark" aria-hidden="true">4</span>            <span class="syn-atom">"field"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span></span>
+<span class="code-line" data-link="4"><span class="code-line__mark" aria-hidden="true"></span>              <span class="syn-atom">"type"</span><span class="syn-punct">:</span> <span class="syn-string">"string"</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="4"><span class="code-line__mark" aria-hidden="true"></span>              <span class="syn-atom">"enum"</span><span class="syn-punct">:</span> <span class="syn-punct">[</span><span class="syn-string">"id"</span><span class="syn-punct">,</span> <span class="syn-string">"title"</span><span class="syn-punct">,</span> <span class="syn-string">"body"</span><span class="syn-punct">,</span> <span class="syn-string">"status"</span><span class="syn-punct">,</span> <span class="syn-string">"published_at"</span><span class="syn-punct">]</span></span>
+<span class="code-line" data-link="4"><span class="code-line__mark" aria-hidden="true"></span>            <span class="syn-punct">}</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true">5</span>            <span class="syn-atom">"direction"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span> <span class="syn-atom">"type"</span><span class="syn-punct">:</span> <span class="syn-string">"string"</span><span class="syn-punct">,</span> <span class="syn-atom">"enum"</span><span class="syn-punct">:</span> <span class="syn-punct">[</span><span class="syn-string">"asc"</span><span class="syn-punct">,</span> <span class="syn-string">"desc"</span><span class="syn-punct">]</span> <span class="syn-punct">}</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>          <span class="syn-punct">}</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>          <span class="syn-atom">"required"</span><span class="syn-punct">:</span> <span class="syn-punct">[</span><span class="syn-string">"field"</span><span class="syn-punct">,</span> <span class="syn-string">"direction"</span><span class="syn-punct">]</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>        <span class="syn-punct">}</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>      <span class="syn-punct">}</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>      <span class="syn-atom">"limit"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span> <span class="syn-atom">"type"</span><span class="syn-punct">:</span> <span class="syn-string">"integer"</span><span class="syn-punct">,</span> <span class="syn-atom">"default"</span><span class="syn-punct">:</span> <span class="syn-number">25</span><span class="syn-punct">,</span> <span class="syn-comment">…</span> <span class="syn-punct">}</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>      <span class="syn-atom">"offset"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span> <span class="syn-atom">"type"</span><span class="syn-punct">:</span> <span class="syn-string">"integer"</span><span class="syn-punct">,</span> <span class="syn-atom">"default"</span><span class="syn-punct">:</span> <span class="syn-number">0</span><span class="syn-punct">,</span> <span class="syn-comment">…</span> <span class="syn-punct">}</span><span class="syn-punct">,</span></span>
+<span class="code-line" data-link="5"><span class="code-line__mark" aria-hidden="true"></span>      <span class="syn-atom">"result_type"</span><span class="syn-punct">:</span> <span class="syn-punct">{</span> <span class="syn-atom">"default"</span><span class="syn-punct">:</span> <span class="syn-string">"run_query"</span><span class="syn-punct">,</span> <span class="syn-atom">"oneOf"</span><span class="syn-punct">:</span> <span class="syn-punct">[</span> <span class="syn-comment">…</span> <span class="syn-punct">]</span> <span class="syn-punct">}</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>    <span class="syn-punct">}</span><span class="syn-punct">,</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>    <span class="syn-atom">"required"</span><span class="syn-punct">:</span> <span class="syn-punct">[</span><span class="syn-punct">]</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span>  <span class="syn-punct">}</span></span>
+<span class="code-line"><span class="code-line__mark" aria-hidden="true"></span><span class="syn-punct">}</span></span></code></pre></div>
+</div>
+<svg class="tool-derivation__links" aria-hidden="true"></svg>
+</div>
+</div>
+</figure>
+{%- endcomponent ui.tool_derivation %}

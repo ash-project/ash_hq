@@ -1,0 +1,50 @@
+/* The MCP post's figure of a tool and the definition AshAi lists for it
+   (templates/components/tool-derivation.html, static/js/tool-derivation.js) */
+@layer components {
+  /* One tool at a time, picked with the radios. Without :has(), both show in turn. */
+  .tool-derivation:has([value="publish"]:checked) [data-view="list"],
+  .tool-derivation:has([value="list"]:checked) [data-view="publish"] {
+    display: none;
+  }
+
+  .tool-derivation__view {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  /* The pair being pointed at: an orange wash with a bar down the left edge, as in .code-block */
+  .tool-derivation .code-line.is-active {
+    background: var(--accent-wash);
+    box-shadow: inset 3px 0 0 var(--accent);
+
+    .code-line__mark {
+      color: var(--accent);
+    }
+  }
+
+  /* Everything else steps back while a pair is shown */
+  .tool-derivation__view.is-linking .code-line:not(.is-active),
+  .tool-derivation__view.is-linking .code-line:not(.is-active) * {
+    color: var(--text-faint);
+  }
+
+  /* Lines between the pair, drawn by the script across the gap between the sides */
+  .tool-derivation__links {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+
+    path {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 1.5;
+    }
+
+    circle {
+      fill: var(--accent);
+    }
+  }
+}

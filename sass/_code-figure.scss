@@ -1,0 +1,118 @@
+/* Figures of hand-highlighted code side by side, wider than the text on large screens: the MCP
+   post's tool figures (templates/components/tool-derivation.html and tool-listing.html). */
+@layer components {
+  .code-figure {
+    display: grid;
+    gap: var(--space-5);
+    min-width: 0;
+    margin-block: var(--space-4);
+  }
+
+  /* Wider than the text, out to the right, as far as the container allows. Below this the two
+     sides stack. */
+  @media (min-width: 1100px) {
+    .code-figure {
+      width: min(1104px, calc(100vw - 2 * var(--gutter) - 24px));
+    }
+  }
+
+  .code-figure__bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .code-figure__bar-label {
+    color: var(--text-muted);
+    font: var(--type-eyebrow);
+  }
+
+  .code-pair {
+    position: relative;
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 1100px) {
+    .code-pair {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      gap: var(--space-10);
+    }
+  }
+
+  .code-pair__pane {
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+    min-width: 0;
+  }
+
+  .code-pair__label {
+    margin: 0;
+    color: var(--text-muted);
+    font: var(--type-eyebrow);
+  }
+
+  .code-pair__file {
+    min-width: 0;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-code);
+
+    & + & {
+      margin-top: var(--space-3);
+    }
+  }
+
+  .code-pair__path {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1ch;
+    align-items: center;
+    min-height: 38px;
+    margin: 0;
+    padding: var(--space-2) 14px;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    font: var(--fw-regular) 0.75rem / 1.4 var(--font-mono);
+  }
+
+  /* Beats .prose pre, which would add its own box */
+  .code-pair__file .code-pair__code {
+    margin: 0;
+    padding: var(--space-4) 0;
+    overflow-x: auto;
+    border: 0;
+    background: none;
+    color: var(--syn-text);
+    font: var(--type-code);
+    font-size: 0.75rem;
+  }
+
+  /* Each line spans the block, so a marked line is marked edge to edge */
+  .code-line {
+    display: inline-block;
+    width: 100%;
+    min-height: 1lh;
+    padding-right: 18px;
+    transition:
+      background-color var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out),
+      color var(--dur-base) var(--ease-out);
+  }
+
+  /* A gutter, for the numbers that pair lines up */
+  .code-line__mark {
+    display: inline-block;
+    width: 3ch;
+    color: var(--accent-text);
+    text-align: center;
+    user-select: none;
+  }
+
+  /* Lines that aren't the point, greyed out: still readable (--text-faint passes AA) */
+  .code-line--muted,
+  .code-line--muted * {
+    color: var(--text-faint);
+  }
+}

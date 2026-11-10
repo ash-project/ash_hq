@@ -1,0 +1,45 @@
+{#
+  A figure for the MCP post: the same tools/list request made by a writer and by an editor, beside
+  the policies that decide which tools each of them sees. The actor is picked with radios and the
+  figure switches in CSS; static/js/tool-listing.js announces the change to screen readers.
+
+  The code is highlighted by hand, so its lines can be marked. The tools are the ones AshAi 1.5.2
+  lists for each actor, trimmed where marked with ….
+
+    {{ <ui.tool_listing /> }}
+#}
+{#- Trimmed at the start, and without blank lines: Markdown ends an HTML block at a blank line #}
+{% component ui.tool_listing() -%}
+<figure class="code-figure tool-listing" data-tool-listing>
+<div class="code-figure__bar">
+<span class="code-figure__bar-label" aria-hidden="true">Signed in as</span>
+{{ <ui.segmented name="tool-listing" legend="Signed in as" options={[["writer", "A writer"], ["editor", "An editor"]]} value="writer" /> }}
+</div>
+<div class="code-pair">
+<div class="code-pair__pane">
+<p class="code-pair__label">Your policies</p>
+<div class="code-pair__file"><p class="code-pair__path">lib/my_app/blog/post.ex</p><pre class="code-pair__code"><code><span class="code-line">policies <span class="syn-keyword">do</span></span>
+<span class="code-line code-line--read">  policy action_type<span class="syn-punct">(</span><span class="syn-atom">:read</span><span class="syn-punct">)</span> <span class="syn-keyword">do</span><span class="tool-listing__pill tool-listing__pill--pass">{{ <ui.icon name="check" /> }} passes</span></span>
+<span class="code-line code-line--read">    authorize_if always<span class="syn-punct">(</span><span class="syn-punct">)</span></span>
+<span class="code-line code-line--read">  <span class="syn-keyword">end</span></span>
+<span class="code-line"></span>
+<span class="code-line code-line--publish">  policy action<span class="syn-punct">(</span><span class="syn-atom">:publish</span><span class="syn-punct">)</span> <span class="syn-keyword">do</span><span class="tool-listing__pill tool-listing__pill--pass" data-when="editor">{{ <ui.icon name="check" /> }} passes</span><span class="tool-listing__pill tool-listing__pill--fail" data-when="writer">{{ <ui.icon name="x" /> }} doesn't pass</span></span>
+<span class="code-line code-line--publish">    authorize_if actor_attribute_equals<span class="syn-punct">(</span><span class="syn-atom">:role</span><span class="syn-punct">,</span> <span class="syn-atom">:editor</span><span class="syn-punct">)</span></span>
+<span class="code-line code-line--publish">  <span class="syn-keyword">end</span></span>
+<span class="code-line"><span class="syn-keyword">end</span></span></code></pre></div>
+</div>
+<div class="code-pair__pane">
+<p class="code-pair__label">The agent sees</p>
+<div class="code-pair__file"><p class="code-pair__path">tools/list <span class="tool-listing__actor" data-when="writer">as %User{role: :writer}</span><span class="tool-listing__actor" data-when="editor">as %User{role: :editor}</span></p><pre class="code-pair__code"><code><span class="code-line"><span class="syn-punct">{</span></span>
+<span class="code-line">  <span class="syn-atom">"tools"</span><span class="syn-punct">:</span> <span class="syn-punct">[</span></span>
+<span class="code-line">    <span class="syn-punct">{</span> <span class="syn-atom">"name"</span><span class="syn-punct">:</span> <span class="syn-string">"get_post"</span><span class="syn-punct">,</span> <span class="syn-atom">"title"</span><span class="syn-punct">:</span> <span class="syn-string">"Get a post"</span><span class="syn-punct">,</span> <span class="syn-comment">…</span> <span class="syn-punct">}</span><span class="syn-punct">,</span></span>
+<span class="code-line">    <span class="syn-punct">{</span> <span class="syn-atom">"name"</span><span class="syn-punct">:</span> <span class="syn-string">"list_posts"</span><span class="syn-punct">,</span> <span class="syn-atom">"title"</span><span class="syn-punct">:</span> <span class="syn-string">"List posts"</span><span class="syn-punct">,</span> <span class="syn-comment">…</span> <span class="syn-punct">}</span><span class="syn-punct tool-listing__comma">,</span></span>
+<span class="code-line code-line--gated">    <span class="syn-punct">{</span> <span class="syn-atom">"name"</span><span class="syn-punct">:</span> <span class="syn-string">"publish_post"</span><span class="syn-punct">,</span> <span class="syn-atom">"title"</span><span class="syn-punct">:</span> <span class="syn-string">"Publish a post"</span><span class="syn-punct">,</span> <span class="syn-comment">…</span> <span class="syn-punct">}</span><span class="tool-listing__pill tool-listing__pill--fail" data-when="writer">not listed</span></span>
+<span class="code-line">  <span class="syn-punct">]</span></span>
+<span class="code-line"><span class="syn-punct">}</span></span></code></pre></div>
+</div>
+</div>
+<p class="visually-hidden" aria-live="polite" data-tool-listing-status></p>
+<figcaption>The same request, from two people. Before listing a tool, AshAi checks whether the actor's policies allow its action.</figcaption>
+</figure>
+{%- endcomponent ui.tool_listing %}

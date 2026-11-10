@@ -1,0 +1,67 @@
+/* The MCP post's figure of the tools a writer and an editor are listed
+   (templates/components/tool-listing.html). It switches in CSS, on the radio that's checked;
+   without :has(), both actors' marks show. */
+@layer components {
+  .tool-listing:has([value="writer"]:checked) [data-when="editor"],
+  .tool-listing:has([value="editor"]:checked) [data-when="writer"] {
+    display: none;
+  }
+
+  /* A policy that passes, and the tool it lets through: a green wash with a bar down the edge */
+  .tool-listing .code-line--read,
+  .tool-listing:has([value="editor"]:checked) .code-line--publish,
+  .tool-listing:has([value="editor"]:checked) .code-line--gated {
+    background: var(--success-wash);
+    box-shadow: inset 3px 0 0 var(--success);
+  }
+
+  /* A policy that doesn't, in red */
+  .tool-listing:has([value="writer"]:checked) .code-line--publish {
+    background: var(--danger-wash);
+    box-shadow: inset 3px 0 0 var(--danger);
+  }
+
+  /* and the tool it keeps out, struck through. The real response leaves it out altogether, as
+     does the comma before it. */
+  .tool-listing:has([value="writer"]:checked) {
+    .code-line--gated,
+    .code-line--gated > :not(.tool-listing__pill) {
+      color: var(--text-faint);
+    }
+
+    .code-line--gated > :not(.tool-listing__pill) {
+      text-decoration: line-through;
+    }
+
+    .tool-listing__comma {
+      display: none;
+    }
+  }
+
+  /* Policy and tool lines are indented to make room for the bar */
+  .tool-listing .code-line {
+    padding-left: 14px;
+  }
+
+  .tool-listing__pill {
+    display: inline-flex;
+    gap: var(--space-2);
+    align-items: center;
+    margin-left: 2ch;
+    padding: 0 var(--space-3);
+    font: var(--fw-medium) 0.75rem / 1.6 var(--font-sans);
+    vertical-align: 1px;
+    user-select: none;
+    --icon-size: 12px;
+  }
+
+  .tool-listing .tool-listing__pill--pass {
+    background: var(--success-wash);
+    color: var(--success);
+  }
+
+  .tool-listing .tool-listing__pill--fail {
+    background: var(--danger-wash);
+    color: var(--danger);
+  }
+}

@@ -33,3 +33,10 @@
     </footer>
   </article>
 {% endblock %}
+
+{#- Scripts a post needs, from `extra.scripts` in its front matter: paths under static/ #}
+{% block scripts %}
+  {%- for script in page.extra.scripts | default(value=[]) %}
+    <script type="module" src="{{ get_url(path=script, cachebust=true) }}"></script>
+  {%- endfor %}
+{% endblock %}
